@@ -19,6 +19,7 @@ sql-versioning = { git = "https://github.com/bcgov/lear.git", subdirectory = "py
 sentry-sdk = "^1.24.0"
 flask-babel = "^3.1.0"
 flask-jwt-oidc = "^0.3.0"
+gunicorn = "^21.2.0"
 
 [tool.poetry.group.test.dependencies]
 freezegun = "^1.2.2"
