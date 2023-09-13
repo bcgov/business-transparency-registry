@@ -1,4 +1,4 @@
-Dockerfile
+btr-api/Dockerfile
 .dockerignore
 .env*
 __pycache__

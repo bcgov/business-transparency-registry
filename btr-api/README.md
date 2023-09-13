@@ -1,4 +1,4 @@
-[![License](https://img.shields.io/badge/License-BSD%203%20Clause-blue.svg)](LICENSE)
+[![License](https://img.shields.io/badge/License-BSD%203%20Clause-blue.svg)](../LICENSE)
 [![Lifecycle:Experimental](https://img.shields.io/badge/Lifecycle-Experimental-339999)](<Redirect-URL>)
 
 
