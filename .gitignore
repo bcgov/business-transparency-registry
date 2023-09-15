@@ -147,9 +147,5 @@ htmlcov/
 # IDEs
 .idea
 
-
 .env*
 !.env.sample
-.pytest_cache
-__pycache__
-venv
