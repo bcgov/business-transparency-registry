@@ -1,6 +1,6 @@
 <template>
   <!--  todo: implment me -->
-  <div>
+  <div id="bcros-main-footer">
     <h1>This is footer</h1>
   </div>
 </template>

@@ -1,5 +1,11 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
+  ui: {
+    icons: ['mdi'] // add here more icon sets from iconifiy if needed.
+  },
+  colorMode: {
+    preference: 'light'
+  },
   components: [
     {
       path: '~/components', // will get any components nested in let's say /components/test too
@@ -13,10 +19,9 @@ export default defineNuxtConfig({
   },
   devtools: { enabled: true },
   modules: [
+    '@nuxt/ui',
     '@nuxtjs/eslint-module',
-    '@nuxtjs/i18n',
     '@nuxtjs/stylelint-module',
-    '@nuxtjs/tailwindcss',
     '@pinia/nuxt',
     'nuxt-vitest'
   ],

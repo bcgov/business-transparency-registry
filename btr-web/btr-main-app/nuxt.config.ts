@@ -18,10 +18,9 @@ export default defineNuxtConfig({
   },
   devtools: { enabled: true },
   modules: [
+    '@nuxt/ui',
     '@nuxtjs/eslint-module',
-    '@nuxtjs/i18n',
     '@nuxtjs/stylelint-module',
-    '@nuxtjs/tailwindcss',
     '@pinia/nuxt',
     'nuxt-vitest'
   ],
