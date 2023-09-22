@@ -3,8 +3,8 @@
     <UTable :rows="individuals" :columns="headers" class="bg-white min-w-[30%]">
       <template #fullName-data="{ row }">
         <span class="font-bold text-black ">
-        <UIcon name="i-mdi-user" />
-        {{ row.fullName }}
+          <UIcon name="i-mdi-user" />
+          {{ row.fullName }}
         </span>
       </template>
 
@@ -16,9 +16,9 @@
       <template #details-data="{ row }">
         <div class="px-6 py-3 align-top min-w-[120px]">
           {{ row.details?.dateOfBirth }}<br>
-          <span v-for="taxResidency in row.details?.taxResidency">{{ taxResidency }}<br></span>
+          <span v-for="(residency, index) in row.details?.residency" :key="index">{{ residency }}<br></span>
           <!-- todo: internationalize tax resident -->
-          <span>Tax Resident</span>
+          <span v-if="row.details?.isTaxResident">Tax Resident</span>
         </div>
       </template>
 

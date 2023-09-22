@@ -3,6 +3,7 @@ export default defineNuxtConfig({
   extends: [
     '../btr-layouts'
   ],
+  ssr: false,
   components: [
     {
       path: '~/components', // will get any components nested in let's say /components/test too
@@ -14,7 +15,8 @@ export default defineNuxtConfig({
     }
   ],
   typescript: {
-    strict: true
+    strict: true,
+    includeWorkspace: true
   },
   devtools: { enabled: true },
   modules: [

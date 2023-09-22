@@ -4,7 +4,8 @@ export interface IndividualPersonInterface {
   address: string
   details?: {
     dateOfBirth?: string
-    taxResidency?: Array<string>
+    residency?: Array<string>
+    isTaxResident?: boolean
   }
   significanceDates: Array<string>
   controlsText: string

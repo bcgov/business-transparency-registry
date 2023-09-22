@@ -9,7 +9,8 @@ export const useIndividualPerson = defineStore('individualPerson', () => {
       controlsText: 'Registered owner of 25% or more of the shares. Direct control of the right to elect, appoint or remove a majority directors.',
       details: {
         dateOfBirth: '1970-12-12',
-        taxResidency: ['Canada', 'USA']
+        residency: ['Canada', 'USA'],
+        isTaxResident: true
       },
       fullName: 'Jim Halperst',
       significanceDates: ['2011-10-23'],
@@ -20,7 +21,8 @@ export const useIndividualPerson = defineStore('individualPerson', () => {
       controlsText: 'Registered owner of 25% or more of the shares. Direct control of the right to elect, appoint or remove a majority directors.',
       details: {
         dateOfBirth: '1980-02-16',
-        taxResidency: ['Canada']
+        residency: ['Canada'],
+        isTaxResident: true
       },
       fullName: 'Ed Truck',
       significanceDates: ['2010-03-02'],
@@ -31,7 +33,8 @@ export const useIndividualPerson = defineStore('individualPerson', () => {
       controlsText: 'Registered owner of 25% or more of the shares.',
       details: {
         dateOfBirth: '1980-02-16',
-        taxResidency: ['Canada']
+        residency: ['Canada'],
+        isTaxResident: false
       },
       fullName: 'Dunder Mifflin Paper Company INC.',
       significanceDates: ['2010-03-02'],

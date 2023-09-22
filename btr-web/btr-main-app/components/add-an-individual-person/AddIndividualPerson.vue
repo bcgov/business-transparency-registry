@@ -16,13 +16,13 @@
       <span class="font-bold py-5">Email Address</span>
       <UInput v-model="email" type="text" variant="none" class="bg-gray-100 border-b-2" />
     </div>
-    <div v-if="!showAddInfoManually" class="text-blue-700 py-5 align-middle">
-      <a href=""  @click.prevent="showAddInfoManually=true" class="p-1 underline">Add transparency register information manually</a>
+    <div class="text-blue-700 py-5 align-middle">
+      <a href="" data-cy="showAddIndividualPersonManually" @click.prevent="showAddInfoManually=!showAddInfoManually" class="p-1 underline">
+        <UIcon name="i-mdi-close" v-if="showAddInfoManually" />
+        {{ showAddInfoManually ? 'Cancel transparent register information' : 'Add transparency register information manually' }}
+      </a>
     </div>
     <template v-if="showAddInfoManually">
-      <div class="text-blue-700 py-5 align-middle">
-        <a href="" @click.prevent="showAddInfoManually=false" class="p-1 underline"><UIcon name="i-mdi-close" /> Cancel transparent register information</a>
-      </div>
       <div class="flex-col py-5">
         <p class="font-bold py-3">Beneficial Ownership Assessment</p>
         <p class="text-justify">
@@ -31,7 +31,6 @@
 
           Complete following assessment to determine this person’s beneficial ownership status.
         </p>
-
       </div>
       <div class="flex-col py-5">
         <p class="font-bold py-5">Control of Shares and Votes</p>
