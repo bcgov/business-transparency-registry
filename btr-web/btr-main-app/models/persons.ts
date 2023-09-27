@@ -10,7 +10,3 @@ export interface IndividualPersonInterface {
   significanceDates: Array<string>
   controlsText: string
 }
-
-export interface Vaboo {
-  uuid: string
-}
