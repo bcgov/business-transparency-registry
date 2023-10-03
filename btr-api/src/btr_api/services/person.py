@@ -65,5 +65,5 @@ class PersonService(object):
             person_dict = submission_dict['person']
             person: PersonModel = PersonSerializer.from_dict(person_dict)
             return person
-        print('bla')
+
         return None

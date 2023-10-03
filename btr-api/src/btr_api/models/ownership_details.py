@@ -17,10 +17,11 @@ class OwnershipDetails(db.Model, BtrModelBase):
     additional_text = Column(String(2000), nullable=True)
 
     # Relationships
-    # entity_id = db.Column('entity_id', db.Integer, db.ForeignKey('entity.id'))
-
     person_id = db.Column('person_id', db.Integer, db.ForeignKey('persons.id'))
-    person = db.relationship('Person', backref=backref('filing_submitter', uselist=False), foreign_keys=[person_id])
+    person = db.relationship('Person', backref=backref('person', uselist=False), foreign_keys=[person_id])
+
+    submission_id = db.Column('submission_id', db.Integer, db.ForeignKey('submission.id'))
+    submission = db.relationship('Submission', backref=backref('submission', uselist=False), foreign_keys=[submission_id])
 
     @classmethod
     def find_by_id(cls, search_id: int):

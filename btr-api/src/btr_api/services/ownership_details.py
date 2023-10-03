@@ -31,8 +31,6 @@
 # CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
-import json
-
 from btr_api.models import OwnershipDetails as OwnershipDetailsModel
 
 
@@ -42,6 +40,7 @@ class OwnershipDetailsSerializer(object):
         """Create Person from json dict"""
         ownership_details = OwnershipDetailsModel()
         ownership_details.business_identifier = json_dict['business_identifier']
+        ownership_details.submission_id = json_dict['submission_id']
 
         ownership_details.person_id = json_dict.get('person_id')
         ownership_details.additional_text = json_dict.get('additional_text')
@@ -54,9 +53,11 @@ class OwnershipDetailsSerializer(object):
 class OwnershipDetailsService(object):
     @staticmethod
     def save_ownership_details_from_submission(submission_dict: dict,
+                                               submission_id: int,
                                                person_id: int | None) -> OwnershipDetailsModel | None:
         if 'ownership_details' in submission_dict:
             ownership_dict = submission_dict['ownership_details']
+            ownership_dict['submission_id'] = submission_id
             if ownership_dict.get('id') is None and person_id is not None:
                 ownership_dict['id'] = person_id
             ownership_details = OwnershipDetailsSerializer.from_dict(ownership_dict)

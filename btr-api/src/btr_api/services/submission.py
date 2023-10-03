@@ -31,7 +31,7 @@
 # CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
-from btr_api.models import Submission as SubmissionModel
+from btr_api.models import Submission as SubmissionModel, Person as PersonModel
 from btr_api.services.ownership_details import OwnershipDetailsService
 from btr_api.services.person import PersonService
 
@@ -44,9 +44,15 @@ class SubmissionService(object):
         submission.payload = submission_dict
         submission.save()
 
-        person = PersonService.save_person_from_submission(submission_dict=submission_dict)
+        if 'person' in submission_dict and submission_dict['person'].get('uuid'):
+            person_uuid = submission_dict['person'].get('uuid')
+            person = PersonModel.find_by_uuid(person_uuid)
+        else:
+            person = PersonService.save_person_from_submission(submission_dict=submission_dict)
+
         person_id = person.id if person else None
         OwnershipDetailsService.save_ownership_details_from_submission(submission_dict=submission_dict,
+                                                                       submission_id=submission.id,
                                                                        person_id=person_id)
 
         return submission
