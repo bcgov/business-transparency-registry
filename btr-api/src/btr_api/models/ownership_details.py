@@ -28,6 +28,11 @@ class OwnershipDetails(db.Model, BtrModelBase):
         """Return a OwnershipDetails if they exist, filtered by search_id."""
         return cls.query.filter_by(id=search_id).one_or_none()
 
+    @classmethod
+    def find_by_submission_id(cls, search_id: int):
+        """Return a OwnershipDetails if they exist, filtered by submission_id."""
+        return cls.query.filter_by(submission_id=search_id).one_or_none()
+
     def save(self):
         """Save and commit immediately."""
         db.session.add(self)
