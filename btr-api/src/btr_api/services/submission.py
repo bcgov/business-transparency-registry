@@ -31,39 +31,22 @@
 # CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
-from http import HTTPStatus
-
-from flask import Blueprint
-from flask import jsonify
-from flask import request
-
-from btr_api.models import Submission
-from btr_api.services.submission import SubmissionService
+from btr_api.models import Submission as SubmissionModel
+from btr_api.services.ownership_details import OwnershipDetailsService
+from btr_api.services.person import PersonService
 
 
-bp = Blueprint("submission", __name__)
+class SubmissionService(object):
 
+    @staticmethod
+    def save_submission(submission_dict: dict) -> SubmissionModel:
+        submission = SubmissionModel()
+        submission.payload = submission_dict
+        submission.save()
 
-@bp.route("/", methods=("GET",))
-@bp.route("/<id>", methods=("GET",))
-def registers(id: int | None = None):
-    """Get the submissions, or sepcific submission by id."""
-    if id:
-        if submission := Submission.find_by_id(id):
-            return jsonify(type=submission.type, submission=submission.payload)
-        return {}, HTTPStatus.NOT_FOUND
+        person = PersonService.save_person_from_submission(submission_dict=submission_dict)
+        person_id = person.id if person else None
+        OwnershipDetailsService.save_ownership_details_from_submission(submission_dict=submission_dict,
+                                                                       person_id=person_id)
 
-    submissions = Submission.get_filtered_submissions()
-
-    return jsonify(submissions)
-
-
-@bp.route("/", methods=("POST",))
-def create_register():
-    if json_input := request.get_json():
-        # normally do some validation here
-        submission = SubmissionService.save_submission(json_input)
-
-        return jsonify(id=submission.id), HTTPStatus.CREATED
-
-    return {}, HTTPStatus.BAD_REQUEST
+        return submission
