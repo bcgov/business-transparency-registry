@@ -31,39 +31,39 @@
 # CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
-from http import HTTPStatus
+import json
 
-from flask import Blueprint
-from flask import jsonify
-from flask import request
+from sqlalchemy import DateTime
 
-from btr_api.models import Submission
-from btr_api.services.submission import SubmissionService
+from btr_api.models import Person as PersonModel
 
 
-bp = Blueprint("submission", __name__)
+class PersonSerializer(object):
+    @staticmethod
+    def from_dict(json_dict: dict) -> PersonModel:
+        """Create Person from json dict"""
+        person = PersonModel()
+        person.full_name = json_dict.get('full_name')
+        person.family_name = json_dict.get('family_name')
+        person.given_name = json_dict.get('given_name')
+        person.patronymic_name = json_dict.get('patronymic_name')
+
+        date_of_birth_str = json_dict.get('date_of_birth')
+        person.date_of_birth = date_of_birth_str if date_of_birth_str else None
+
+        person.is_permanent_resident = json_dict.get('is_permanent_resident', False)
+        person.is_canadian_citizen = json_dict.get('is_canadian_citizen', False)
+        person.is_canadian_tax_resident = json_dict.get('is_canadian_tax_resident', False)
+
+        return person
 
 
-@bp.route("/", methods=("GET",))
-@bp.route("/<id>", methods=("GET",))
-def registers(id: int | None = None):
-    """Get the submissions, or sepcific submission by id."""
-    if id:
-        if submission := Submission.find_by_id(id):
-            return jsonify(type=submission.type, submission=submission.payload)
-        return {}, HTTPStatus.NOT_FOUND
+class PersonService(object):
+    @staticmethod
+    def save_person_from_submission(submission_dict: dict) -> PersonModel | None:
+        if 'person' in submission_dict:
+            person_dict = submission_dict['person']
+            person: PersonModel = PersonSerializer.from_dict(person_dict)
+            return person
 
-    submissions = Submission.get_filtered_submissions()
-
-    return jsonify(submissions)
-
-
-@bp.route("/", methods=("POST",))
-def create_register():
-    if json_input := request.get_json():
-        # normally do some validation here
-        submission = SubmissionService.save_submission(json_input)
-
-        return jsonify(id=submission.id), HTTPStatus.CREATED
-
-    return {}, HTTPStatus.BAD_REQUEST
+        return None
