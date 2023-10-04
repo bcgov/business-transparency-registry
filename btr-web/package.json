@@ -9,6 +9,9 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@iconify/json": "^2.2.115"
+    "@iconify/json": "^2.2.124"
+  },
+  "dependencies": {
+    "valibot": "^0.18.0"
   }
 }

@@ -1,35 +1,26 @@
 {
-  "name": "btr-main-app",
+  "name": "nuxt-app",
   "private": true,
   "type": "module",
-  "version": "0.0.1",
-  "packageManager": "pnpm@8.6.12",
-  "description": "Beneficial Ownership Registry UI - Main repo",
   "scripts": {
-    "preinstall": "npx only-allow pnpm",
     "build": "nuxt build",
-    "dev": "nuxt dev",
-    "cypress:open": "cypress open",
+    "dev": "nuxt dev --port=3050",
     "generate": "nuxt generate",
-    "lint": "eslint --cache .",
-    "lint:fix": "nr lint --fix",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
-    "test": "vitest",
-    "test:cov": "vitest run --coverage"
+    "lint": "eslint"
   },
   "devDependencies": {
     "@nuxt/devtools": "latest",
     "@nuxt/test-utils": "^3.7.4",
     "@nuxt/ui": "^2.9.0",
-    "@nuxtjs/i18n": "^8.0.0-rc.5",
     "@nuxtjs/eslint-config-typescript": "^12.1.0",
     "@nuxtjs/eslint-module": "^4.1.0",
+    "@nuxtjs/i18n": "8.0.0-rc.5",
     "@nuxtjs/stylelint-module": "^5.1.0",
     "@pinia/nuxt": "^0.4.11",
     "cypress": "^13.3.0",
     "eslint": "^8.50.0",
-    "happy-dom": "^11.2.0",
     "nuxt": "^3.7.4",
     "nuxt-vitest": "^0.10.5",
     "postcss-html": "^1.5.0",
@@ -39,13 +30,5 @@
     "stylelint-config-recommended-vue": "^1.5.0",
     "typescript": "^5.2.2",
     "vitest": "^0.33.0"
-  },
-  "simple-git-hooks": {
-    "pre-commit": "npx lint-staged"
-  },
-  "lint-staged": {
-    "*.{js,ts,tsx,vue,md}": [
-      "eslint --cache --fix"
-    ]
   }
 }

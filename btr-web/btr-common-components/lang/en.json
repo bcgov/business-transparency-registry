@@ -1,0 +1,8 @@
+{
+  "labels": {
+    "email": "Email"
+  },
+  "errors": {
+    "invalidEmail": "Invalid email"
+  }
+}
