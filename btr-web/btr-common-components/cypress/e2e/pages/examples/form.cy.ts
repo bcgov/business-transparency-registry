@@ -18,8 +18,6 @@ describe('forms -> validate that form component work inside form', () => {
     // valid email
     cy.get('#testEmail').type('hrvoje.fekete@gmail.com').blur()
     cy.contains('Invalid email').should('not.exist')
-
-
   })
 
   it('verify summary table is rendered', () => {
