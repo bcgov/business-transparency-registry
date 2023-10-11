@@ -1,8 +1,11 @@
 {
   "labels": {
-    "email": "Email"
+    "emailAddress": "Email address: "
   },
   "errors": {
-    "invalidEmail": "Invalid email"
+    "validation": {
+      "invalidEmail": "Invalid email",
+      "sizeToLong": "Input to long"
+    }
   }
 }

@@ -12,6 +12,6 @@
     "@iconify/json": "^2.2.124"
   },
   "dependencies": {
-    "valibot": "^0.18.0"
+    "zod": "^3.22.4"
   }
 }

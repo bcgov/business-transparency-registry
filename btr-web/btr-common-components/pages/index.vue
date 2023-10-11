@@ -1,15 +1,9 @@
-<!-- BCROS INPUT FIELDS component examples-->
 <template>
-<div class="m-10">
-  <BcrosEmailField id="bla-bla" v-model="testVal" />
-  {{ testVal }}
-</div>
+  <div class="m-10">
+    <h1>Links ot examples:</h1>
+    <br>
+    <NuxtLink to="/examples/forms">
+      Forms example
+    </NuxtLink>
+  </div>
 </template>
-
-<script setup lang="ts">
-const testVal = ref()
-</script>
-
-<style scoped>
-
-</style>

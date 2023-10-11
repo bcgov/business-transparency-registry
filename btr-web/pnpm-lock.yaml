@@ -5,9 +5,9 @@ settings:
   excludeLinksFromLockfile: false
 
 dependencies:
-  valibot:
-    specifier: ^0.18.0
-    version: 0.18.0
+  zod:
+    specifier: ^3.22.4
+    version: 3.22.4
 
 devDependencies:
   '@iconify/json':
@@ -31,6 +31,6 @@ packages:
     resolution: {integrity: sha512-d+RQGp0MAYTIaDBIMmOfMwz3E+LOZnxx1HZd5R18mmCZY0QBlK0LDZfPc8FW8Ed2DlvsuE6PRjroDY+wg4+j/Q==}
     dev: true
 
-  /valibot@0.18.0:
-    resolution: {integrity: sha512-JpJ1ITTIAA4kuLDX5ygnjuMdeHryNI4cqx3vWQFisytTzH3/RBcTYJO336RSd/gRRRrYhIWf2RuST76p4TbdBw==}
+  /zod@3.22.4:
+    resolution: {integrity: sha512-iC+8Io04lddc+mVqQ9AZ7OQ2MrUKGN+oIQyq1vemgt46jwCwLfhq7/pwnBnNXXXZb8VTVLKwp9EDkx+ryxIWmg==}
     dev: false
