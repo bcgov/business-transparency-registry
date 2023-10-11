@@ -25,3 +25,6 @@ logs
 
 # other
 .eslintcache
+
+# cypress
+**/cypress/screenshots

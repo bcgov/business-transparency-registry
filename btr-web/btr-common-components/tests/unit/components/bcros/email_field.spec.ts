@@ -9,8 +9,8 @@ describe('Tests for app.vue', async () => {
   })
 
   test('header and footer initialized', () => {
-    const wrapper = mount(EmailField)
-    expect(wrapper.find('#bcros-main-header')).toBeTruthy()
-    expect(wrapper.find('#bcros-main-footer')).toBeTruthy()
+    const wrapper = mount(EmailField, { context: { label: 'testEmailFieldLbl', id: 'testEmailFieldId' } })
+    expect(wrapper.find('#testEmailFieldId')).toBeTruthy()
+    expect(wrapper.find('testEmailFieldLbl')).toBeTruthy()
   })
 })

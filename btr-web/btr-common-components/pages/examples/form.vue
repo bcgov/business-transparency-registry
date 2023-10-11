@@ -10,6 +10,8 @@
       @submit="submit"
     >
       <BcrosEmailField id="testEmail" v-model="state.email" :label="$t('labels.emailAddress')" data-cy="testEmail" />
+      <br>
+      <UButton id="exampleSubmitButton" type="submit" data-cy="submit-button">Submit</UButton>
     </UForm>
   </div>
 </template>
