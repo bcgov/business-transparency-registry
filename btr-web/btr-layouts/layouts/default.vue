@@ -2,11 +2,14 @@
   <div>
     <BcrosHeader />
     <slot />
-    <BcrosFooter />
+    <BcrosFooter :appVersion="appVersion"/>
   </div>
 </template>
 
 <script setup lang="ts">
+import pkg from '../../package.json'
+
+const appVersion = pkg.version
 </script>
 
 <style scoped>

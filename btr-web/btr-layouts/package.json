@@ -28,6 +28,7 @@
     "@pinia/nuxt": "^0.4.11",
     "cypress": "^13.1.0",
     "eslint": "^8.48.0",
+    "happy-dom": "^11.0.0",
     "nuxt": "^3.7.3",
     "nuxt-vitest": "^0.10.5",
     "postcss-html": "^1.5.0",

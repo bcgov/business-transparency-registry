@@ -1,25 +1,15 @@
 <template>
-  <footer id="bcros-main-footer" class="app-footer flex items-center min-h-[3.5rem]">
+  <footer id="bcros-main-footer" class="app-footer flex items-center h-[56px]">
     <div class="container m-auto w-[1360px] max-w-full h-[30.5px]">
-      <nav class="flex justify-between w-[1360px] max-w-full h-[30.5px] mx-auto">
+      <nav class="flex justify-between">
         <ul class="p-0 list-none">
-          <li class="inline-block mr-1">
-            <a class="block py-1 px-2 text-white hover:underline" href="/">Home</a>
-          </li>
-          <li class="inline-block mr-1">
-            <a class="block py-1 px-2 text-white hover:underline" href="https://www2.gov.bc.ca/gov/content/home/disclaimer" target="_blank">Disclaimer</a>
-          </li>
-          <li class="inline-block mr-1">
-            <a class="block py-1 px-2 text-white hover:underline" href="https://www2.gov.bc.ca/gov/content/home/privacy" target="_blank">Privacy</a>
-          </li>
-          <li class="inline-block mr-1">
-            <a class="block py-1 px-2 text-white hover:underline" href="https://www2.gov.bc.ca/gov/content/home/accessibility" target="_blank">Accessibility</a>
-          </li>
-          <li class="inline-block mr-1">
-            <a class="block py-1 px-2 text-white hover:underline" href="https://www2.gov.bc.ca/gov/content/home/copyright" target="_blank">Copyright</a>
+          <li v-for="link in links" :key="link.text" class="inline-block mr-1">
+            <a class="block py-1 px-2 text-white hover:underline" :href="link.href" :target="link.newTab ? '_blank' : '_self'">
+              {{ link.text }}
+            </a>
           </li>
         </ul>
-        <UTooltip class="footer-tooltip mr-3 mt-1" :text="`Search UI v${appVersion}`">
+        <UTooltip id="footer-tooltip" class="footer-tooltip mr-3 mt-1" :text="`Search UI v${appVersion}`">
           <div class="icon-container" role="img" tabindex="0">
             <UIcon class="text-2xl tooltip-icon" name="i-mdi-information-outline" />
           </div>
@@ -29,17 +19,22 @@
   </footer>
 </template>
 
-<script lang="ts">
-import pkg from '../../package.json'
-
-export default {
-  setup () {
-    const appVersion = pkg.version
-    return {
-      appVersion
-    }
+<script setup lang="ts">
+const { appVersion } = defineProps({
+  appVersion: {
+    type: String,
+    required: true,
+    default: ''
   }
-}
+})
+
+const links = [
+  { text: 'Home', href: '/', newTab: false },
+  { text: 'Disclaimer', href: 'https://www2.gov.bc.ca/gov/content/home/disclaimer', newTab: true },
+  { text: 'Privacy', href: 'https://www2.gov.bc.ca/gov/content/home/privacy', newTab: true },
+  { text: 'Accessibility', href: 'https://www2.gov.bc.ca/gov/content/home/accessibility', newTab: true },
+  { text: 'Copyright', href: 'https://www2.gov.bc.ca/gov/content/home/copyright', newTab: true }
+]
 </script>
 
 <style scoped>
