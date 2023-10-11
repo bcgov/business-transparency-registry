@@ -1,21 +1,36 @@
 {
-  "name": "nuxt-app",
+  "name": "btr-common-components",
   "private": true,
   "type": "module",
+  "version": "0.0.1",
+  "packageManager": "pnpm@8.6.12",
+  "description": "Beneficial Ownership Registry UI - Components app",
   "scripts": {
+    "preinstall": "npx only-allow pnpm",
     "build": "nuxt build",
     "dev": "nuxt dev --port=3050",
     "generate": "nuxt generate",
+    "lint": "eslint --cache .",
+    "lint:fix": "nr lint --fix",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
-    "lint": "eslint",
     "test": "vitest",
     "test:cov": "vitest run --coverage",
     "test:e2e": "cypress open",
     "test:e2e:firefox": "cypress run firefox",
     "test:e2e:chrome": "cypress run chrome"
   },
+  "simple-git-hooks": {
+    "pre-commit": "npx lint-staged"
+  },
+  "lint-staged": {
+    "*.{js,ts,tsx,vue,md}": [
+      "eslint --cache --fix"
+    ]
+  },
   "devDependencies": {
-    "vue-i18n": "^9.5.0"
+    "@nuxtjs/i18n": "^8.0.0-rc.5",
+    "@nuxt/test-utils": "^3.7.4",
+    "vitest-environment-nuxt": "0.11.0"
   }
 }

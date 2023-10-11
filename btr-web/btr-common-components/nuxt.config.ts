@@ -6,17 +6,17 @@ export default defineNuxtConfig({
   colorMode: {
     preference: 'light'
   },
-  devtools: { enabled: true },
   typescript: {
     strict: true,
     includeWorkspace: true
   },
+  devtools: { enabled: true },
   modules: [
     '@nuxt/ui',
     '@nuxtjs/eslint-module',
     '@nuxtjs/stylelint-module',
-    'nuxt-vitest',
-    '@nuxtjs/i18n'
+    '@pinia/nuxt',
+    'nuxt-vitest'
   ],
   i18n: {
     lazy: true,
@@ -34,5 +34,8 @@ export default defineNuxtConfig({
   stylelint: {
     /* module options */
     lintOnStart: false
+  },
+  pinia: {
+    /* pinia module options */
   }
 })

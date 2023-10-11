@@ -1,15 +1,11 @@
 import { expect, describe, test } from 'vitest'
-import { setup } from '@nuxt/test-utils'
-import { mount } from '@vue/test-utils'
 import LandingPage from '~/pages/index.vue'
+import { mountSuspended } from 'vitest-environment-nuxt/utils'
 
 describe('Tests for app.vue', async () => {
-  await setup({
-    // test context options
-  })
 
-  test('header and footer initialized', () => {
-    const wrapper = mount(LandingPage)
+  test('header and footer initialized', async () => {
+    const wrapper = await mountSuspended(LandingPage)
     expect(wrapper.find('#bcros-main-header')).toBeTruthy()
     expect(wrapper.find('#bcros-main-footer')).toBeTruthy()
   })
