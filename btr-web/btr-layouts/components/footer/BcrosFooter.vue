@@ -1,17 +1,17 @@
 <template>
-  <footer id="bcros-main-footer" class="app-footer flex items-center h-[56px]">
+  <footer id="bcros-main-footer" class="flex items-center h-[56px] border-t-2 border-yellow-400 bg-blue-900 text-sm">
     <div class="container m-auto w-[1360px] max-w-full h-[30.5px]">
       <nav class="flex justify-between">
         <ul class="p-0 list-none">
-          <li v-for="link in links" :key="link.text" class="inline-block mr-1">
+          <li v-for="link in links" :key="link.text" class="inline-block mr-2 pr-2 border-r last:mr-0 last:border-r-0">
             <a class="block py-1 px-2 text-white hover:underline" :href="link.href" :target="link.newTab ? '_blank' : '_self'">
               {{ link.text }}
             </a>
           </li>
         </ul>
-        <UTooltip id="footer-tooltip" class="footer-tooltip mr-3 mt-1" :text="`Search UI v${appVersion}`">
+        <UTooltip id="footer-tooltip" class="mr-3 mt-1" :text="`BTR UI v${appVersion}`">
           <div class="icon-container" role="img" tabindex="0">
-            <UIcon class="text-2xl tooltip-icon" name="i-mdi-information-outline" />
+            <UIcon class="text-2xl text-white" name="i-mdi-information-outline" />
           </div>
         </UTooltip>
       </nav>
@@ -20,13 +20,7 @@
 </template>
 
 <script setup lang="ts">
-const { appVersion } = defineProps({
-  appVersion: {
-    type: String,
-    required: true,
-    default: ''
-  }
-})
+defineProps<{appVersion: string}>()
 
 const links = [
   { text: 'Home', href: '/', newTab: false },
@@ -38,31 +32,4 @@ const links = [
 </script>
 
 <style scoped>
-.app-footer {
-  border-top: 2px solid #fcba19;
-  background-color: #003366;
-  font-size: 0.9735rem;
-}
-
-.tooltip-icon {
-  color: #8099b3;
-}
-
-@media (min-width: 960px) {
-  nav {
-    li {
-      margin-right: 0.5rem;
-      padding-right: 0.5rem;
-      border-right: 1px solid #4d7094;
-      a {
-        padding: 0.25rem 0.5rem;
-      }
-    }
-
-    li:last-child {
-      margin-right: 0;
-      border-right: none;
-    }
-  }
-}
 </style>
