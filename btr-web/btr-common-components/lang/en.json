@@ -1,0 +1,11 @@
+{
+  "labels": {
+    "emailAddress": "Email address: "
+  },
+  "errors": {
+    "validation": {
+      "invalidEmail": "Invalid email",
+      "maxLengthExceeded": "Max length exceeded"
+    }
+  }
+}
