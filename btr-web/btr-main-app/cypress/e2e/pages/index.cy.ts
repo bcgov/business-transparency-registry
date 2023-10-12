@@ -15,6 +15,7 @@ describe('pages -> Add individual', () => {
     cy.contains('Cancel transparent register information')
     cy.contains('Beneficial Ownership Assessment')
     cy.contains('Control of Shares and Votes')
+    cy.contains('Birthdate')
   })
 
   it('verify summary table is rendered', () => {

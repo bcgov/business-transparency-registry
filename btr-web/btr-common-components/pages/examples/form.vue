@@ -11,6 +11,7 @@
     >
       <BcrosEmailField id="testEmail" v-model="state.email" :label="$t('labels.emailAddress')" data-cy="testEmail" />
       <br>
+      <BcrosInputsDateSelect id="testDateSelect" data-cy="testDateSelect" />
       <UButton id="exampleSubmitButton" type="submit" data-cy="submit-button">
         Submit
       </UButton>

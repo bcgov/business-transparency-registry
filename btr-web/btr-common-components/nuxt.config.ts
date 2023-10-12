@@ -14,6 +14,7 @@ export default defineNuxtConfig({
   modules: [
     '@nuxt/ui',
     '@nuxtjs/eslint-module',
+    '@nuxtjs/i18n',
     '@nuxtjs/stylelint-module',
     '@pinia/nuxt',
     'nuxt-vitest'
@@ -37,5 +38,14 @@ export default defineNuxtConfig({
   },
   pinia: {
     /* pinia module options */
+  },
+  vite: {
+    css: {
+      preprocessorOptions: {
+        scss: {
+          additionalData: '@use "~/assets/styles/theme.scss" as *;'
+        }
+      }
+    }
   }
 })

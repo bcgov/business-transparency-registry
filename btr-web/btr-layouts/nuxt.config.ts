@@ -36,5 +36,14 @@ export default defineNuxtConfig({
   },
   pinia: {
     /* pinia module options */
+  },
+  vite: {
+    css: {
+      preprocessorOptions: {
+        scss: {
+          additionalData: '@use "../btr-common-components/assets/styles/theme.scss" as *;'
+        }
+      }
+    }
   }
 })

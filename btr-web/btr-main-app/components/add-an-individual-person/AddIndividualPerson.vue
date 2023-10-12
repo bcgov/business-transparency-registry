@@ -2,16 +2,19 @@
   <div class="flex-col w-full">
     <div>
       <p class="text-justify">
-        To add a person to the transparency register of this business, enter their name and email address. A request will be
-        sent to the person at
-        their email address and they will have the ability to accept or decline the addition of their information to the transparency register of the
-        business. If they accept, their information will automatically be added to the transparency register. If you don’t want to send an invitation,
-        you can add the person’s transparency information manually.
+        To add a person to the transparency register of this business,
+        enter their name and email address. A request will be sent to the person at
+        their email address and they will have the ability to accept or decline the addition
+        of their information to the transparency register of the business.
+        If they accept, their information will automatically be added to the transparency register.
+        If you don’t want to send an invitation, you can add the person’s transparency information manually.
       </p>
     </div>
     <div class="flex-col py-5">
-      <label for="individual-full-name" class="font-bold py-5">Person’s Full Legal Name</label> (or English phonetic pronunciation for character based
-      languages)
+      <label for="individual-full-name" class="font-bold py-5">
+        Person’s Full Legal Name
+      </label>
+      (or English phonetic pronunciation for character based languages)
       <UInput id="individual-full-name" v-model="fullName" type="text" variant="none" class="bg-gray-100 border-b-2" />
     </div>
     <div class="">
@@ -19,9 +22,15 @@
       <UInput v-model="email" type="text" variant="none" class="bg-gray-100 border-b-2" />
     </div>
     <div class="text-blue-700 py-5 align-middle">
-      <a href="" data-cy="showAddIndividualPersonManually" class="p-1 underline" @click.prevent="showAddInfoManually=!showAddInfoManually">
+      <a
+        id="add-person-manually-toggle"
+        href=""
+        data-cy="showAddIndividualPersonManually"
+        class="p-1 underline"
+        @click.prevent="showAddInfoManually=!showAddInfoManually"
+      >
         <UIcon v-if="showAddInfoManually" name="i-mdi-close" />
-        {{ showAddInfoManually ? 'Cancel transparent register information' : 'Add transparency register information manually' }}
+        {{ showAddInfoManuallyText }}
       </a>
     </div>
     <template v-if="showAddInfoManually">
@@ -30,8 +39,8 @@
           Beneficial Ownership Assessment
         </p>
         <p class="text-justify">
-          Beneficial Ownership is determined by the control of of shares and/or votes at general meetings, and control of the right to elect, appoint,
-          or remove directors of the business.
+          Beneficial Ownership is determined by the control of of shares and/or votes at general meetings,
+          and control of the right to elect, appoint, or remove directors of the business.
 
           Complete following assessment to determine this person’s beneficial ownership status.
         </p>
@@ -41,34 +50,62 @@
           Control of Shares and Votes
         </p>
         <p class="text-justify">
-          Enter the percentage of shares and/or shares entitled to votes at general meetings this person owns or ultimately controls (or can exercise
-          ultimate effective control over).
+          Enter the percentage of shares and/or shares entitled to votes at general meetings
+          this person owns or ultimately controls (or can exercise ultimate effective control over).
         </p>
       </div>
       <div class="flex-col py-5">
-        <UInput v-model="percentOfShares" placeholder="Percent of Shares" type="text" variant="none" class="w-1/5 bg-gray-100 border-b-2 my-5 p-2">
+        <UInput
+          v-model="percentOfShares"
+          placeholder="Percent of Shares"
+          type="text"
+          variant="none"
+          class="w-1/5 bg-gray-100 border-b-2 my-5 p-2"
+        >
           <template #trailing>
             <span class="text-gray-500 dark:text-gray-400 text-xs">%</span>
           </template>
         </UInput>
-        <UInput v-model="percentOfVotes" placeholder="Percent of Votes" type="text" variant="none" class="w-1/5 bg-gray-100 border-b-2 my-5 p-2">
+        <UInput
+          v-model="percentOfVotes"
+          placeholder="Percent of Votes"
+          type="text"
+          variant="none"
+          class="w-1/5 bg-gray-100 border-b-2 my-5 p-2"
+        >
           <template #trailing>
             <span class="text-gray-500 dark:text-gray-400 text-xs">%</span>
           </template>
         </UInput>
+      </div>
+      <div>
+        <p class="font-bold mt-5">
+          Birthdate
+        </p>
+        <BcrosInputsDateSelect class="mt-5" :max-date="maxDate" @selection="birthdate = $event" />
       </div>
     </template>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { Ref, ref } from 'vue'
 
 const fullName = ref('')
 const email = ref('')
 const showAddInfoManually = ref(false)
-const percentOfShares = ref<Number>(undefined)
-const percentOfVotes = ref<Number>(undefined)
+const showAddInfoManuallyText = computed(() => {
+  if (showAddInfoManually.value) {
+    return 'Cancel transparent register information'
+  }
+  return 'Add transparency register information manually'
+})
+const percentOfShares: Ref<number | undefined> = ref(undefined)
+const percentOfVotes: Ref<number | undefined> = ref(undefined)
+
+// birthdate
+const maxDate = new Date()
+const birthdate: Ref<Date | null> = ref(null)
 </script>
 
 <style scoped>
