@@ -5,7 +5,7 @@
   "errors": {
     "validation": {
       "invalidEmail": "Invalid email",
-      "sizeToLong": "Input to long"
+      "maxLengthExceeded": "Max length exceeded"
     }
   }
 }
