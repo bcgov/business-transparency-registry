@@ -2,7 +2,7 @@
   <div>
     <BcrosHeader />
     <slot />
-    <BcrosFooter :appVersion="appVersion"/>
+    <BcrosFooter :app-version="appVersion" />
   </div>
 </template>
 

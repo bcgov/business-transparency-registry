@@ -4,7 +4,11 @@
       <nav class="flex justify-between">
         <ul class="p-0 list-none">
           <li v-for="link in links" :key="link.text" class="inline-block mr-2 pr-2 border-r last:mr-0 last:border-r-0">
-            <a class="block py-1 px-2 text-white hover:underline" :href="link.href" :target="link.newTab ? '_blank' : '_self'">
+            <a
+              class="block py-1 px-2 text-white hover:underline"
+              :href="link.href"
+              :target="link.newTab ? '_blank' : '_self'"
+            >
               {{ link.text }}
             </a>
           </li>

@@ -86,7 +86,7 @@ watch(() => props.setMinDate, (val) => { minDate.value = val || null })
 
   .dp__theme_light {
     --dp-background-color: #ffffff;
-    --dp-text-color: $app-blue;
+    --dp-text-color: #495057;
     --dp-hover-color: #E4EDF7;
     --dp-hover-text-color: #495057;
     --dp-hover-icon-color: #495057;
