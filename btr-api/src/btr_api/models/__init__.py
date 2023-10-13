@@ -37,6 +37,8 @@ from .submission import Submission
 from .submission import SubmissionType
 from .user import User
 from .user import UserRoles
+from .person import Person
+from .ownership_details import OwnershipDetails
 
 
 __all__ = (
@@ -45,4 +47,6 @@ __all__ = (
     "SubmissionType",
     "User",
     "UserRoles",
+    "OwnershipDetails",
+    "Person",
 )

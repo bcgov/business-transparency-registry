@@ -1,20 +1,11 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  extends: [
-    '../btr-layouts',
-    '../btr-common-components'
-  ],
-  ssr: false,
-  components: [
-    {
-      path: '~/components', // will get any components nested in let's say /components/test too
-      pathPrefix: false
-    },
-    {
-      path: '../btr-layouts/components', // will get any components nested in let's say /components/test too
-      pathPrefix: false
-    }
-  ],
+  ui: {
+    icons: ['mdi'] // add here more icon sets from iconifiy if needed.
+  },
+  colorMode: {
+    preference: 'light'
+  },
   typescript: {
     strict: true,
     includeWorkspace: true
@@ -27,6 +18,14 @@ export default defineNuxtConfig({
     '@pinia/nuxt',
     'nuxt-vitest'
   ],
+  i18n: {
+    lazy: true,
+    defaultLocale: 'en',
+    langDir: './lang',
+    locales: [
+      { code: 'en', file: 'en.json' }
+    ]
+  },
   eslint: {
     /* module options */
     lintOnStart: false,

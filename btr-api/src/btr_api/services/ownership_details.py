@@ -31,39 +31,37 @@
 # CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
-from http import HTTPStatus
-
-from flask import Blueprint
-from flask import jsonify
-from flask import request
-
-from btr_api.models import Submission
-from btr_api.services.submission import SubmissionService
+from btr_api.models import OwnershipDetails as OwnershipDetailsModel
 
 
-bp = Blueprint("submission", __name__)
+class OwnershipDetailsSerializer(object):
+    @staticmethod
+    def from_dict(json_dict: dict) -> OwnershipDetailsModel:
+        """Create Person from json dict"""
+        ownership_details = OwnershipDetailsModel()
+        ownership_details.business_identifier = json_dict['business_identifier']
+        ownership_details.submission_id = json_dict['submission_id']
+
+        ownership_details.person_id = json_dict.get('person_id')
+        ownership_details.additional_text = json_dict.get('additional_text')
+        ownership_details.control_type = json_dict.get('control_type')
+        ownership_details.control_percent = json_dict.get('control_percent')
+
+        return ownership_details
 
 
-@bp.route("/", methods=("GET",))
-@bp.route("/<id>", methods=("GET",))
-def registers(id: int | None = None):
-    """Get the submissions, or sepcific submission by id."""
-    if id:
-        if submission := Submission.find_by_id(id):
-            return jsonify(type=submission.type, submission=submission.payload)
-        return {}, HTTPStatus.NOT_FOUND
+class OwnershipDetailsService(object):
+    @staticmethod
+    def save_ownership_details_from_submission(submission_dict: dict,
+                                               submission_id: int,
+                                               person_id: int | None) -> OwnershipDetailsModel | None:
+        if 'ownership_details' in submission_dict:
+            ownership_dict = submission_dict['ownership_details']
+            ownership_dict['submission_id'] = submission_id
+            if ownership_dict.get('id') is None and person_id is not None:
+                ownership_dict['id'] = person_id
+            ownership_details = OwnershipDetailsSerializer.from_dict(ownership_dict)
+            ownership_details.save()
+            return ownership_details
 
-    submissions = Submission.get_filtered_submissions()
-
-    return jsonify(submissions)
-
-
-@bp.route("/", methods=("POST",))
-def create_register():
-    if json_input := request.get_json():
-        # normally do some validation here
-        submission = SubmissionService.save_submission(json_input)
-
-        return jsonify(id=submission.id), HTTPStatus.CREATED
-
-    return {}, HTTPStatus.BAD_REQUEST
+        return None

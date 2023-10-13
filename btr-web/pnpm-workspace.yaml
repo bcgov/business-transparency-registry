@@ -2,3 +2,4 @@
 packages:
   - 'btr-layouts/**'
   - 'btr-main-app/**'
+  - 'btr-common-components/**'
