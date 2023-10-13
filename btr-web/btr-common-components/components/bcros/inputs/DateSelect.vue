@@ -4,7 +4,7 @@
       <UInput
         :model-value="selectedDateDisplay"
         icon="i-mdi-calendar"
-        placeholder="Select Date"
+        :placeholder="$t('placeholders.dateSelect')"
         trailing
         type="text"
         variant="none"

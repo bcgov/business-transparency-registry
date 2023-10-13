@@ -2,6 +2,9 @@
   "labels": {
     "emailAddress": "Email address: "
   },
+  "placeholders": {
+    "dateSelect": "Select Date"
+  },
   "errors": {
     "validation": {
       "invalidEmail": "Invalid email",

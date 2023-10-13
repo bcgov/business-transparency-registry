@@ -22,7 +22,6 @@
 <script setup lang="ts">
 import { Ref, ref, watch } from 'vue'
 import VueDatePicker from '@vuepic/vue-datepicker'
-import '@vuepic/vue-datepicker/dist/main.css'
 
 // props / emits
 const props = defineProps<{
@@ -39,13 +38,15 @@ watch(() => selectedDate.value, val => emit('selectedDate', val))
 
 // max/min
 const maxDate: Ref<Date | null> = ref(props.setMaxDate || null)
-watch(() => props.setMaxDate, val => maxDate.value = val || null)
+watch(() => props.setMaxDate, (val) => { maxDate.value = val || null })
 
 const minDate: Ref<Date | null> = ref(props.setMinDate || null)
-watch(() => props.setMinDate, val => minDate.value = val || null)
+watch(() => props.setMinDate, (val) => { minDate.value = val || null })
 
 </script>
 <style lang="scss">
+@import '@vuepic/vue-datepicker/dist/main.css';
+
 .bcros-date-picker {
   width: 300px;
 
@@ -85,7 +86,7 @@ watch(() => props.setMinDate, val => minDate.value = val || null)
 
   .dp__theme_light {
     --dp-background-color: #ffffff;
-    --dp-text-color: #495057;
+    --dp-text-color: $app-blue;
     --dp-hover-color: #E4EDF7;
     --dp-hover-text-color: #495057;
     --dp-hover-icon-color: #495057;
