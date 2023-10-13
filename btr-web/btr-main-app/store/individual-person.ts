@@ -1,12 +1,13 @@
 import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
-import { IndividualPersonInterface } from '~/models/persons'
+import { IndividualPersonInterface } from '@/models/persons'
 
 export const useIndividualPerson = defineStore('individualPerson', () => {
   const individualPersons = ref<Array<IndividualPersonInterface>>([
     {
       address: '231-5600 Andres Rd Richmond BC V7E 6N1 Canada',
-      controlsText: 'Registered owner of 25% or more of the shares. Direct control of the right to elect, appoint or remove a majority directors.',
+      controlsText: 'Registered owner of 25% or more of the shares. ' +
+        'Direct control of the right to elect, appoint or remove a majority directors.',
       details: {
         dateOfBirth: '1970-12-12',
         residency: ['Canada', 'USA'],
@@ -18,7 +19,8 @@ export const useIndividualPerson = defineStore('individualPerson', () => {
     },
     {
       address: '1231-5600 Andres Rd Richmond BC V7E 6N1 Canada',
-      controlsText: 'Registered owner of 25% or more of the shares. Direct control of the right to elect, appoint or remove a majority directors.',
+      controlsText: 'Registered owner of 25% or more of the shares. ' +
+        'Direct control of the right to elect, appoint or remove a majority directors.',
       details: {
         dateOfBirth: '1980-02-16',
         residency: ['Canada'],
