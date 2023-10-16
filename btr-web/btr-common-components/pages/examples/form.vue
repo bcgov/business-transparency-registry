@@ -3,16 +3,27 @@
   <div class="m-10">
     <h1>Common components Form example</h1>
     <hr>
-    <br>
+    <!-- example using custom tailwind colors -->
+    <div class="bg-bcGovColor-error h-5" />
+    <!-- example using custom tailwind colors -->
+    <div class="bg-bcGovGray-200 h-5" />
+    <!-- example using custom tailwind colors by using theme in class -->
+    <div class="bgBlueAPp h-5" />
     <UForm
       :schema="schema"
       :state="state"
       @submit="submit"
     >
-      <BcrosEmailField id="testEmail" v-model="state.email" :label="$t('labels.emailAddress')" data-cy="testEmail" />
+      <BcrosInputsEmailField
+        id="testEmail"
+        v-model="state.email"
+        :label="$t('labels.emailAddress')"
+        data-cy="testEmail"
+      />
       <br>
       <BcrosInputsDateSelect id="testDateSelect" data-cy="testDateSelect" />
-      <UButton id="exampleSubmitButton" type="submit" data-cy="submit-button">
+      <br>
+      <UButton id="exampleSubmitButton" class="bg-app-blue" type="submit" data-cy="submit-button">
         Submit
       </UButton>
     </UForm>
@@ -39,3 +50,15 @@ function submit (event: FormSubmitEvent<Schema>) {
   console.log(event.data)
 }
 </script>
+
+<style lang="scss">
+@import 'tailwindcss/base.css';
+@import 'tailwindcss/components.css';
+@import 'tailwindcss/utilities.css';
+
+.bgBlueAPp {
+  // example using tailwind colors inside scss
+  background-color: theme('colors.bcGovColor.footer');
+}
+
+</style>
