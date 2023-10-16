@@ -29,6 +29,6 @@ jobs:
         tagname: ${{ inputs.tagname }}
         working_directory: "./btr-web/btr-main-app"
     secrets:
-        APP_NAME: "btr-ui-main"
+        APP_NAME: "btr-ui"
         OP_CONNECT_URL: ${{ secrets.OP_CONNECT_URL }}
         OP_CONNECT_TOKEN: ${{ secrets.OP_CONNECT_TOKEN }}
