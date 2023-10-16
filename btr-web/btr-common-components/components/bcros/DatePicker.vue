@@ -46,14 +46,17 @@ watch(() => props.setMinDate, (val) => { minDate.value = val || null })
 </script>
 <style lang="scss">
 @import '@vuepic/vue-datepicker/dist/main.css';
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
 
 .bcros-date-picker {
   width: 300px;
 
   &__err {
-    border: 1px solid $error;
+    border: 1px solid theme('colors.bcGovColor.error');
     border-radius: 10px;
-    box-shadow: 0px 0px 3px $error;
+    box-shadow: 0px 0px 3px theme('colors.bcGovColor.error');
   }
 
   &__calendar {
@@ -68,7 +71,7 @@ watch(() => props.setMinDate, (val) => { minDate.value = val || null })
       .dp__calendar_header_item {
         font-size: 12px;
         font-weight: 500;
-        color: $gray9 !important;
+        color: theme('colors.bcGovColor.darkGray') !important;
         padding: 4px 0 0 0;
         width: 40px;
       }

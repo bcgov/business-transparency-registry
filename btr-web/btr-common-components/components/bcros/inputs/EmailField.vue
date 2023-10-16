@@ -2,7 +2,7 @@
   <UFormGroup :label="label" name="email">
     <UInput
       :id="id"
-      type="email"
+      type="text"
       v-bind="$attrs"
       :value="modelValue"
       color="gray"

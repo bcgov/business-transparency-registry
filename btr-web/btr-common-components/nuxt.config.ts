@@ -15,7 +15,6 @@ export default defineNuxtConfig({
     '@nuxt/ui',
     '@nuxtjs/eslint-module',
     '@nuxtjs/i18n',
-    '@nuxtjs/stylelint-module',
     '@pinia/nuxt',
     'nuxt-vitest'
   ],
