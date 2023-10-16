@@ -7,7 +7,8 @@
   "description": "Beneficial Ownership Registry UI - Main repo",
   "scripts": {
     "preinstall": "npx only-allow pnpm",
-    "build": "nuxt build",
+    "build": "nuxt generate",
+    "build:local": "nuxt build",
     "dev": "nuxt dev --port=3000",
     "generate": "nuxt generate",
     "lint": "eslint --cache .",
