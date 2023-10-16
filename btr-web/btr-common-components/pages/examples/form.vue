@@ -14,12 +14,8 @@
       :state="state"
       @submit="submit"
     >
-      <BcrosInputsEmailField
-        id="testEmail"
-        v-model="state.email"
-        :label="$t('labels.emailAddress')"
-        data-cy="testEmail"
-      />
+      <BcrosInputsFullNameField id="testFullName" v-model="state.fullName" :label="$t('labels.fullName')" data-cy="testFullName" />
+      <BcrosInputsEmailField id="testEmail" v-model="state.email" :label="$t('labels.emailAddress')" data-cy="testEmail" />
       <br>
       <BcrosInputsDateSelect id="testDateSelect" data-cy="testDateSelect" />
       <br>
@@ -34,16 +30,26 @@
 import { ref } from 'vue'
 import { z } from 'zod'
 import type { FormSubmitEvent } from '@nuxt/ui/dist/runtime/types'
-import { validateEmailRfc6532Regex } from '~/utils/validation/form_inputs'
+import { normalizeName, validateNameCharacters } from '~/utils/validation/form_inputs';
+
+const minNameLength = 1;
+const maxNameLength = 150;
 
 const { t } = useI18n()
 const schema = z.object({
-  email: z.string().refine(validateEmailRfc6532Regex, t('errors.validation.invalidEmail'))
+  email: z.string().email(t('errors.validation.invalidEmail')),
+  fullName: z.preprocess(normalizeName, 
+    z.string()
+      .min(minNameLength, t('errors.validation.emptyName'))
+      .max(maxNameLength, t('errors.validation.maxNameLengthExceeded'))
+      .refine(validateNameCharacters, t('errors.validation.specialCharacter'))
+  )
 })
 
 type Schema = z.output<typeof schema>
 const state = ref({
-  email: undefined
+  email: undefined,
+  fullName: undefined
 })
 
 function submit (event: FormSubmitEvent<Schema>) {

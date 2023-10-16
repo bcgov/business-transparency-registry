@@ -26,3 +26,24 @@ export const validateEmailRfc6532Regex = (email: string): boolean => {
     // eslint-disable-next-line no-useless-escape
     /^("(?:[!#-\[\]-\u{10FFFF}]|\\[\t -\u{10FFFF}])*"|[!#-'*+\-/-9=?A-Z\^-\u{10FFFF}](?:\.?[!#-'*+\-/-9=?A-Z\^-\u{10FFFF}])*)@([!#-'*+\-/-9=?A-Z\^-\u{10FFFF}](?:\.?[!#-'*+\-/-9=?A-Z\^-\u{10FFFF}])*|\[[!-Z\^-\u{10FFFF}]*\])$/u.test(email) // NOSONAR
 }
+
+/**
+ * Validates the characters of a name string to ensure that the name only consists of Unicode letters and whitespace
+ * @param {string} name - string representation of the name input
+ */
+export const validateNameCharacters = (name: string): boolean => {
+  return /^[\p{L}\p{Zs}]+$/u.test(name);
+};
+
+/**
+ * Normalizes a name string.
+ * If the name is provided, it removes leading, trailing, and extra spaces within the name.
+ * If the name is undefined, it returns an empty string.
+* @param {string | undefined} name - the name input to normalize.
+*/
+export const normalizeName = (name?: string): string => {
+  if (name === undefined) {
+    return '';
+  }
+  return name.trim().replace(/\s+/g, ' ');
+};
