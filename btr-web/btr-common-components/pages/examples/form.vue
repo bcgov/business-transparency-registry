@@ -34,10 +34,11 @@
 import { ref } from 'vue'
 import { z } from 'zod'
 import type { FormSubmitEvent } from '@nuxt/ui/dist/runtime/types'
+import { validateEmailRfc6532Regex } from '~/utils/validation/form_inputs'
 
 const { t } = useI18n()
 const schema = z.object({
-  email: z.string().email(t('errors.validation.invalidEmail'))
+  email: z.string().refine(validateEmailRfc6532Regex, t('errors.validation.invalidEmail'))
 })
 
 type Schema = z.output<typeof schema>
