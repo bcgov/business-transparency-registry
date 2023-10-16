@@ -1,5 +1,5 @@
 <template>
-  <footer id="bcros-main-footer" class="flex items-center h-[56px] border-t-2 border-yellow-400 bg-blue-900 text-sm">
+  <footer id="bcros-main-footer" class="flex items-center h-[56px] border-t-2 border-bcGovColor-navDivider bg-bcGovColor-footer text-sm">
     <div class="container m-auto w-[1360px] max-w-full h-[30.5px]">
       <nav class="flex justify-between">
         <ul class="p-0 list-none">

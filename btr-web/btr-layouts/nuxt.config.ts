@@ -1,5 +1,8 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
+  extends:[
+    '../btr-common-components'
+  ],
   ui: {
     icons: ['mdi'] // add here more icon sets from iconifiy if needed.
   },
