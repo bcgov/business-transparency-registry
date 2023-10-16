@@ -54,12 +54,12 @@ export default <Partial<Config>>{
           800: '#343a40',
           900: '#212529'
         },
-        blue: {
+        bcGovBlue: {
           50: '#e0e7ed',
           100: '#b3c2d1',
           200: '#8099b3',
           300: '#4d7094',
-          // $BCgovBlue3-5: #38598a;
+          350: '#38598a',
           400: '#26527d',
           500: '#1669bb', // '#003366',
           // $BCgovBlue5O: #01336626; // LOW OPACITY

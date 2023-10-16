@@ -71,7 +71,7 @@ watch(() => props.setMinDate, (val) => { minDate.value = val || null })
       .dp__calendar_header_item {
         font-size: 12px;
         font-weight: 500;
-        color: $gray9 !important;
+        color: theme('colors.bcGovColor.darkGray') !important;
         padding: 4px 0 0 0;
         width: 40px;
       }

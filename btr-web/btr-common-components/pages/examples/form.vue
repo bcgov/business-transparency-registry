@@ -23,7 +23,7 @@
       <br>
       <BcrosInputsDateSelect id="testDateSelect" data-cy="testDateSelect" />
       <br>
-      <UButton id="exampleSubmitButton" class="bg-app-blue" type="submit" data-cy="submit-button">
+      <UButton id="exampleSubmitButton" type="submit" data-cy="submit-button">
         Submit
       </UButton>
     </UForm>
