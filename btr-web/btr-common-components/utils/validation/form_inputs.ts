@@ -39,8 +39,8 @@ export const validateNameCharacters = (name: string): boolean => {
  * Normalizes a name string.
  * If the name is provided, it removes leading, trailing, and extra spaces within the name.
  * If the name is undefined, it returns an empty string.
-* @param {string | undefined} name - the name input to normalize.
-*/
+ * @param {string | undefined} name - the name input to normalize.
+ */
 export const normalizeName = (name?: string): string => {
   if (name === undefined) {
     return ''

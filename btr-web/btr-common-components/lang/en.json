@@ -8,11 +8,15 @@
   },
   "errors": {
     "validation": {
-      "invalidEmail": "Invalid email",
-      "maxLengthExceeded": "Max length exceeded",
-      "emptyName": "The legal name should contain at least one character",
-      "maxNameLengthExceeded": "The legal name must not exceed 150 characters",
-      "specialCharacter": "The legal name should not contain special character"
+      "email": {
+        "invalid": "Invalid email",
+        "maxLengthExceeded": "Email too long"
+      },
+      "fullName": {
+        "empty": "The legal name should contain at least one character",
+        "maxLengthExceeded": "The legal name must not exceed 150 characters",
+        "specialCharacter": "The legal name should not contain special character"
+      }
     }
   }
 }

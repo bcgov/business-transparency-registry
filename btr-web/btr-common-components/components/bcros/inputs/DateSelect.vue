@@ -32,9 +32,10 @@
 <script setup lang="ts">
 import { ComputedRef, Ref, computed, ref, watch } from 'vue'
 import { Popover, PopoverButton, PopoverPanel } from '@headlessui/vue'
-defineProps<{maxDate?: Date}>()
 
-const emit = defineEmits<{(e: 'selection', value: Date | null): void}>()
+defineProps<{ maxDate?: Date }>()
+
+const emit = defineEmits<{(e: 'selection', value: Date | null): void }>()
 
 const selectedDate: Ref<Date | null> = ref(null)
 watch(() => selectedDate.value, val => emit('selection', val))
