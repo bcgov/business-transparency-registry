@@ -32,8 +32,8 @@ export const validateEmailRfc6532Regex = (email: string): boolean => {
  * @param {string} name - string representation of the name input
  */
 export const validateNameCharacters = (name: string): boolean => {
-  return /^[\p{L}\p{Zs}]+$/u.test(name);
-};
+  return /^[\p{L}\p{Zs}]+$/u.test(name)
+}
 
 /**
  * Normalizes a name string.
@@ -43,7 +43,7 @@ export const validateNameCharacters = (name: string): boolean => {
 */
 export const normalizeName = (name?: string): string => {
   if (name === undefined) {
-    return '';
+    return ''
   }
-  return name.trim().replace(/\s+/g, ' ');
-};
+  return name.trim().replace(/\s+/g, ' ')
+}
