@@ -14,7 +14,12 @@
       :state="state"
       @submit="submit"
     >
-      <BcrosInputsFullNameField id="testFullName" v-model="state.fullName" :label="$t('labels.fullName')" data-cy="testFullName" />
+      <BcrosInputsFullNameField
+        id="testFullName"
+        v-model="state.fullName"
+        :label="$t('labels.fullName')"
+        data-cy="testFullName"
+      />
       <BcrosInputsEmailField
         id="testEmail"
         v-model="state.email"
@@ -36,11 +41,10 @@ import { ref } from 'vue'
 import { z } from 'zod'
 import type { FormSubmitEvent } from '@nuxt/ui/dist/runtime/types'
 
-import { normalizeName, validateNameCharacters , validateEmailRfc6532Regex} from '~/utils/validation/form_inputs';
+import { normalizeName, validateNameCharacters, validateEmailRfc6532Regex } from '~/utils/validation/form_inputs'
 
-
-const minNameLength = 1;
-const maxNameLength = 150;
+const minNameLength = 1
+const maxNameLength = 150
 
 const { t } = useI18n()
 const schema = z.object({
