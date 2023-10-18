@@ -9,6 +9,7 @@
   "errors": {
     "validation": {
       "email": {
+        "empty": "Email is required field",
         "invalid": "Invalid email",
         "maxLengthExceeded": "Email too long"
       },

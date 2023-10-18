@@ -49,8 +49,8 @@ const maxNameLength = 150
 const { t } = useI18n()
 const schema = z.object({
   email: z.string()
-    .length(253, 'errors.validation.email.maxLengthExceeded')
-    .refine(validateEmailRfc6532Regex, t('errors.validation.email.invalidEmail')),
+    .length(254, 'errors.validation.email.maxLengthExceeded')
+    .refine(validateEmailRfc6532Regex, t('errors.validation.email.invalid')),
   fullName: z.preprocess(normalizeName,
     z.string()
       .min(minNameLength, t('errors.validation.fullName.empty'))
