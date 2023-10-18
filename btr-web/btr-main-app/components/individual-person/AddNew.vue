@@ -1,5 +1,5 @@
 <template>
-  <div class="flex-col w-full">
+  <div data-test="addIndividualPerson" class="flex-col w-full">
     <div>
       <p class="text-justify">
         To add a person to the transparency register of this business,
