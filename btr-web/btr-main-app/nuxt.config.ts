@@ -9,10 +9,6 @@ export default defineNuxtConfig({
     {
       path: '~/components', // will get any components nested in let's say /components/test too
       pathPrefix: false
-    },
-    {
-      path: '../btr-layouts/components', // will get any components nested in let's say /components/test too
-      pathPrefix: false
     }
   ],
   typescript: {
