@@ -41,8 +41,6 @@ import { ref } from 'vue'
 import { z } from 'zod'
 import type { FormSubmitEvent } from '@nuxt/ui/dist/runtime/types'
 
-import { normalizeName, validateNameCharacters, validateEmailRfc6532Regex } from '~/utils/validation/form_inputs'
-
 const minNameLength = 1
 const maxNameLength = 150
 

@@ -102,10 +102,6 @@
 import { Ref, ref } from 'vue'
 import { z } from 'zod'
 
-import type { FormSubmitEvent } from '@nuxt/ui/dist/runtime/types'
-
-import { normalizeName, validateNameCharacters, validateEmailRfc6532Regex } from '../../../btr-common-components/utils/validation/form_inputs'
-
 const showAddInfoManually = ref(false)
 const showAddInfoManuallyText = computed(() => {
   if (showAddInfoManually.value) {
@@ -135,11 +131,9 @@ const schema = z.object({
   email: z.string()
     .min(1, t('errors.validation.email.empty'))
     .max(254, 'errors.validation.email.maxLengthExceeded')
-    .refine(validateEmailRfc6532Regex, t('errors.validation.email.invalid')),
-
+    .refine(validateEmailRfc6532Regex, t('errors.validation.email.invalid'))
 })
 
-type Schema = z.output<typeof schema>
 const state = reactive({
   email: undefined,
   fullName: undefined
