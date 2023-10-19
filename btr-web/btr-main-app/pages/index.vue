@@ -5,10 +5,10 @@
         <span class="font-bold">Add an individual person</span>
       </div>
       <div class="p-5 flex-none w-4/5">
-        <AddIndividualPerson />
+        <IndividualPersonAddNew />
       </div>
     </div>
-    <NUIndividualPersonSummaryTable :individuals="individuals" />
+    <IndividualPersonSummaryTable :individuals="individuals" />
   </div>
 </template>
 

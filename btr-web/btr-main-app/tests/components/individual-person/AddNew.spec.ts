@@ -1,17 +1,25 @@
 import { describe, it, expect } from 'vitest'
 import { VueWrapper, flushPromises, mount } from '@vue/test-utils'
+import { createI18n } from 'vue-i18n'
 
-import { AddIndividualPerson, BcrosInputsDateSelect } from '#components'
+import { IndividualPersonAddNew, BcrosInputsDateSelect } from '#components'
 
+const i18n = createI18n({
+  // vue-i18n options here ...
+})
 describe('AddIndividualPerson tests', () => {
   let wrapper: VueWrapper<any>
 
-  beforeEach(() => { wrapper = mount(AddIndividualPerson) })
-  afterEach(() => { wrapper.unmount() })
+  beforeEach(() => {
+    wrapper = mount(IndividualPersonAddNew, { global: { plugins: [i18n] } })
+  })
+  afterEach(() => {
+    wrapper.unmount()
+  })
 
   it('renders AddIndividualPerson', () => {
     // test everything renders
-    expect(wrapper.findComponent(AddIndividualPerson).exists()).toBe(true)
+    expect(wrapper.findComponent(IndividualPersonAddNew).exists()).toBe(true)
     // FUTURE: add in other pieces
     // add manually should be false
     expect(wrapper.vm.showAddInfoManually).toBe(false)

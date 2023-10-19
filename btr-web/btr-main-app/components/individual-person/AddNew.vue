@@ -1,5 +1,5 @@
 <template>
-  <div class="flex-col w-full">
+  <div data-test="addIndividualPerson" class="flex-col w-full">
     <div>
       <p class="text-justify">
         To add a person to the transparency register of this business,
@@ -10,17 +10,27 @@
         If you don’t want to send an invitation, you can add the person’s transparency information manually.
       </p>
     </div>
-    <div class="flex-col py-5">
-      <label for="individual-full-name" class="font-bold py-5">
-        Person’s Full Legal Name
-      </label>
-      (or English phonetic pronunciation for character based languages)
-      <UInput id="individual-full-name" v-model="fullName" type="text" variant="none" class="bg-gray-100 border-b-2" />
-    </div>
-    <div class="">
-      <span class="font-bold py-5">Email Address</span>
-      <UInput v-model="email" type="text" variant="none" class="bg-gray-100 border-b-2" />
-    </div>
+    <UForm
+      :schema="schema"
+      :state="state"
+    >
+      <div class="flex-col py-5">
+        <BcrosInputsFullNameField
+          id="individual-person-full-name"
+          v-model="state.fullName"
+          :label="$t('labels.fullName')"
+          data-cy="testFullName"
+        />
+      </div>
+      <div class="">
+        <BcrosInputsEmailField
+          id="individual-person-email"
+          v-model="state.email"
+          :label="$t('labels.emailAddress')"
+          data-cy="testEmail"
+        />
+      </div>
+    </UForm>
     <div class="text-blue-700 py-5 align-middle">
       <a
         id="add-person-manually-toggle"
@@ -90,9 +100,8 @@
 
 <script setup lang="ts">
 import { Ref, ref } from 'vue'
+import { z } from 'zod'
 
-const fullName = ref('')
-const email = ref('')
 const showAddInfoManually = ref(false)
 const showAddInfoManuallyText = computed(() => {
   if (showAddInfoManually.value) {
@@ -106,8 +115,29 @@ const percentOfVotes: Ref<number | undefined> = ref(undefined)
 // birthdate
 const maxDate = new Date()
 const birthdate: Ref<Date | null> = ref(null)
+
+// full name
+const minNameLength = 1
+const maxNameLength = 150
+
+const { t } = useI18n()
+const schema = z.object({
+  fullName: z.preprocess(normalizeName,
+    z.string()
+      .min(minNameLength, t('errors.validation.fullName.empty'))
+      .max(maxNameLength, t('errors.validation.fullName.maxLengthExceeded'))
+      .refine(validateNameCharacters, t('errors.validation.fullName.specialCharacter'))
+  ),
+  email: z.string()
+    .min(1, t('errors.validation.email.empty'))
+    .max(254, 'errors.validation.email.maxLengthExceeded')
+    .refine(validateEmailRfc6532Regex, t('errors.validation.email.invalid'))
+})
+
+const state = reactive({
+  email: undefined,
+  fullName: undefined
+})
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

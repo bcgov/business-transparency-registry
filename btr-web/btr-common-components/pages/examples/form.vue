@@ -41,19 +41,19 @@ import { ref } from 'vue'
 import { z } from 'zod'
 import type { FormSubmitEvent } from '@nuxt/ui/dist/runtime/types'
 
-import { normalizeName, validateNameCharacters, validateEmailRfc6532Regex } from '~/utils/validation/form_inputs'
-
 const minNameLength = 1
 const maxNameLength = 150
 
 const { t } = useI18n()
 const schema = z.object({
-  email: z.string().refine(validateEmailRfc6532Regex, t('errors.validation.invalidEmail')),
+  email: z.string()
+    .length(254, 'errors.validation.email.maxLengthExceeded')
+    .refine(validateEmailRfc6532Regex, t('errors.validation.email.invalid')),
   fullName: z.preprocess(normalizeName,
     z.string()
-      .min(minNameLength, t('errors.validation.emptyName'))
-      .max(maxNameLength, t('errors.validation.maxNameLengthExceeded'))
-      .refine(validateNameCharacters, t('errors.validation.specialCharacter'))
+      .min(minNameLength, t('errors.validation.fullName.empty'))
+      .max(maxNameLength, t('errors.validation.fullName.maxLengthExceeded'))
+      .refine(validateNameCharacters, t('errors.validation.fullName.specialCharacter'))
   )
 })
 

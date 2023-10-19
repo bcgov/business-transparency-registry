@@ -9,8 +9,8 @@
       <h1 class="text-white text-xl my-2 ml-5 font-bold">BC Registries and Online Services</h1>
     </a>
     <div id="header-actions" class="float-right flex h-full">
-      <BcrosButtonPrimary button-text="Btn1" :button-action="()=>{}" />
-      <BcrosButtonPrimary button-text="Btn2" :button-action="()=>{}" />
+      <BcrosButtonsPrimary button-text="Btn1" :button-action="()=>{}" />
+      <BcrosButtonsPrimary button-text="Btn2" :button-action="()=>{}" />
     </div>
   </div>
 </template>
