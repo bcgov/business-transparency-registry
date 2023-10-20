@@ -6,16 +6,15 @@
       </div>
       <div class="p-5 flex-none w-4/5">
         <IndividualPersonAddNew />
-      </div></div><     IndividualPersonSummaryTable :individuals="individuals"/>
+      </div></div><IndividualPersonSummaryTable :individuals="individuals"/>
   </div>
 </template>
 
 <script setup lang="ts">
-import { useIndividualPerson } from '~/store/individual-person'
+import { useIndividualPerson } from '~/store/individual-person';     
 
-const individualPersonStore = useIndividualPerson()
-
-const individuals = computed(() => individualPersonStore.getIndividualPersons)
+const individualPersonStore = useIndividualPerson();   
+const individuals = computed(() => individualPersonStore.getIndividualPersons);   
 
 </script>
 
