@@ -27,7 +27,8 @@ jobs:
     with:
         environment: ${{ inputs.environment }}
         tagname: ${{ inputs.tagname }}
-        working_directory: "./btr-web/btr-main-app"
+        working_directory: "./btr-web"
+        package_name: "btr-main-app"
     secrets:
         APP_NAME: "btr-ui"
         OP_CONNECT_URL: ${{ secrets.OP_CONNECT_URL }}
