@@ -117,5 +117,8 @@
 html,
 body {
   min-height: 100vh;
-  font-family: 'BCSans', Verdana, Arial, sans-serif;
+  font-family: 'BCSans', Verdana, Arial, sans-serif !important;
+  font-size: 1rem;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
 }

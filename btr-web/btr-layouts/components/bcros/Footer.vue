@@ -1,8 +1,11 @@
 <template>
-  <footer id="bcros-main-footer" class="flex items-center h-[56px] border-t-2 border-bcGovColor-navDivider bg-bcGovColor-footer text-sm">
-    <div class="container m-auto w-[1360px] max-w-full h-[30.5px]">
-      <nav class="flex justify-between">
-        <ul class="p-0 list-none">
+  <footer
+    id="bcros-main-footer"
+    class="flex items-center h-[56px] border-t-2 border-bcGovColor-navDivider bg-bcGovColor-footer text-sm"
+  >
+    <div class="m-auto px-4 h-[30.5px] w-full max-w-[1360px]">
+      <nav class="flex flex-grow">
+        <ul class="p-0 -ml-2 list-none">
           <li v-for="link in links" :key="link.text" class="inline-block mr-2 pr-2 border-r last:mr-0 last:border-r-0">
             <a
               class="block py-1 px-2 text-white hover:underline"
@@ -13,11 +16,13 @@
             </a>
           </li>
         </ul>
-        <UTooltip id="footer-tooltip" class="mr-3 mt-1" :text="`BTR UI v${appVersion}`">
-          <div class="icon-container" role="img" tabindex="0">
-            <UIcon class="text-2xl text-white" name="i-mdi-information-outline" />
-          </div>
-        </UTooltip>
+        <div class="flex flex-auto justify-end">
+          <UTooltip id="footer-tooltip" class="mt-1" :text="`BTR UI v${appVersion}`">
+            <div class="icon-container" role="img" tabindex="0">
+              <UIcon class="text-2xl text-white" name="i-mdi-information-outline" />
+            </div>
+          </UTooltip>
+        </div>
       </nav>
     </div>
   </footer>

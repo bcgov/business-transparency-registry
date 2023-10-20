@@ -1,6 +1,6 @@
 <template>
-  <div class="mx-10">
-    <div class="mx-5 my-5 p-10 bg-white rounded flex">
+  <div class="my-[60px]">
+    <div class="p-10 bg-white rounded flex">
       <div class="p-5 flex-none w-1/5 col-auto">
         <span class="font-bold">Add an individual person</span>
       </div>
@@ -8,7 +8,7 @@
         <IndividualPersonAddNew />
       </div>
     </div>
-    <IndividualPersonSummaryTable :individuals="individuals" />
+    <IndividualPersonSummaryTable class="mt-5" :individuals="individuals" />
   </div>
 </template>
 
