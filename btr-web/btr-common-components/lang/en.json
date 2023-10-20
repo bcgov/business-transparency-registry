@@ -19,5 +19,27 @@
         "specialCharacter": "The legal name should not contain special character"
       }
     }
+  },
+  "header": {
+    "title": "BC Registry and Online Services",
+    "buttons": {
+      "createAccount": "Create account"
+    },
+    "menus": {
+      "headers": {
+        "accountSettings": "Account Settings",
+        "selectLogin": "Select log in method",
+        "switchAccount": "Switch Account"
+      },
+      "labels": {
+        "accountInfo": "Account Info",
+        "bcsc": "BC Services Card",
+        "createAccount": "Create Account",
+        "editProfile": "Edit Profile",
+        "logOut": "Log Out",
+        "teamMembers": "Team Members",
+        "transactions": "Transactions"
+      }
+    }
   }
 }

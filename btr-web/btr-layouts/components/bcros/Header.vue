@@ -17,7 +17,7 @@
             class="flex flex-wrap content-center font-bold ml-5 text-white text-lg"
             style="letter-spacing: -.03rem;"
           >
-            BC Registries and Online Services
+            {{ t('header.title') }}
           </span>
         </a>
         <div
@@ -43,7 +43,7 @@
           <div v-else class="flex flex-wrap self-center text-sm h-[36px]">
             <BcrosHeaderMenu :menu-button-text="'Log in'" :menu-lists="loggedOutMenuOptions" />
             <button class="text-white ml-2 p-2 hover:bg-bcGovColor-activeBlue/[0.2]" @click="goToCreateAccount()">
-              Create account
+              {{ t('buttons.createAccount') }}
             </button>
           </div>
         </div>
@@ -53,6 +53,8 @@
 </template>
 
 <script setup lang="ts">
+
+const { t } = useI18n()
 
 const isAuthenticated = ref(true)
 const username = ref('Developer Test')
@@ -64,25 +66,25 @@ const goToHome = () => {}
 const goToCreateAccount = () => {}
 
 const loginOptions = [
-  { label: 'BC Services Card', icon: 'i-mdi-account-card-details-outline', action: goToLogin },
+  { label: t('header.menus.labels.bcsc'), icon: 'i-mdi-account-card-details-outline', action: goToLogin },
   { label: 'BCeID', icon: 'i-mdi-two-factor-authentication', action: goToLogin },
   { label: 'IDIR', icon: 'i-mdi-account-group-outline', action: goToLogin }
 ]
 
 const loggedOutMenuOptions = [
-  { header: 'Select login method' },
+  { header: t('header.menus.headers.selectLogin') },
   { items: loginOptions }
 ]
 
 const basicAccountOptions = [
-  { label: 'Edit Profile', icon: 'i-mdi-account-outline' },
-  { label: 'Log out', icon: 'i-mdi-logout-variant', action: goToLogout }
+  { label: t('header.menus.labels.editProfile'), icon: 'i-mdi-account-outline' },
+  { label: t('header.menus.labels.logOut'), icon: 'i-mdi-logout-variant', action: goToLogout }
 ]
 
 const accountSettingsOptions = [
-  { label: 'Account Info', icon: 'i-mdi-information-outline' },
-  { label: 'Team Members', icon: 'i-mdi-account-group-outline' },
-  { label: 'Transactions', icon: 'i-mdi-file-document-outline' }
+  { label: t('header.menus.labels.accountInfo'), icon: 'i-mdi-information-outline' },
+  { label: t('header.menus.labels.teamMembers'), icon: 'i-mdi-account-group-outline' },
+  { label: t('header.menus.labels.transactions'), icon: 'i-mdi-file-document-outline' }
 ]
 
 const switchAccountOptions = [
@@ -92,13 +94,13 @@ const switchAccountOptions = [
 ]
 
 const createOptions = [
-  { label: 'Create Account', icon: 'i-mdi-plus' }
+  { label: t('header.menus.labels.createAccount'), icon: 'i-mdi-plus' }
 ]
 
 const loggedInMenuOptions = [
   { items: basicAccountOptions },
-  { header: 'Account Settings', items: accountSettingsOptions },
-  { header: 'Switch Account', items: switchAccountOptions },
+  { header: t('header.menus.headers.accountSettings'), items: accountSettingsOptions },
+  { header: t('header.menus.headers.switchAccount'), items: switchAccountOptions },
   { items: createOptions }
 ]
 </script>
