@@ -1,7 +1,7 @@
 <template>
   <div data-test="addIndividualPerson" class="flex-col w-full">
     <div>
-      <p class="text-justify">
+      <p class="text-justify"   >
         To add a person to the transparency register of this business,
         enter their name and email address. A request will be sent to the person at
         their email address and they will have the ability to accept or decline the addition
