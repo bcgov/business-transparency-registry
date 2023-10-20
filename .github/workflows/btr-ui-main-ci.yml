@@ -1,0 +1,73 @@
+name: BTR UI CI
+
+on:
+  pull_request:
+    types: [assigned, synchronize]
+    paths:
+      - "btr-web/btr-main-app/**"
+
+defaults:
+  run:
+    shell: bash
+    working-directory: ./btr-web/btr-main-app
+
+
+jobs:
+  setup-job:
+    runs-on: ubuntu-20.04
+    # if: github.repository == ' '
+
+    steps:
+      - uses: actions/checkout@v3
+      - run: "true"
+
+  linting:
+    needs: setup-job
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install dependencies
+        run: pnpm install
+      - name: Run linting
+        run: pnpm run lint
+
+  unit-test:
+    needs: setup-job
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install dependencies
+        run: pnpm install
+      - name: Run unit tests
+        run: pnpm run test
+
+  cypress-e2e-test:
+    needs: setup-job
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install dependencies
+        run: pnpm install
+      - name: Run Cypress E2E Tests
+        run: "true"
+
+  testing-coverage:
+    needs: setup-job
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install dependencies
+        run: pnpm install
+      - name: Run unit tests and check coverage
+        run: pnpm run test --coverage
+
+  build-check:
+    needs: setup-job
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install dependencies
+        run: pnpm install
+      - name: Build Check
+        run: pnpm build
+      
