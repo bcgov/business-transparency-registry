@@ -6,9 +6,7 @@
       </div>
       <div class="p-5 flex-none w-4/5">
         <IndividualPersonAddNew />
-      </div>
-    </div>
-    <IndividualPersonSummaryTable :individuals="individuals" />
+      </div></div><     IndividualPersonSummaryTable :individuals="individuals"/>
   </div>
 </template>
 
