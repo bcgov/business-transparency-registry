@@ -29,6 +29,10 @@
       <br>
       <BcrosInputsDateSelect id="testDateSelect" data-cy="testDateSelect" />
       <br>
+      <BcrosInputsAddress v-model="address" :label="$t('labels.address')" id="testDateAddress" data-cy="testDateAddress" />
+      <br>
+      {{ addr.line1 + ', ' + addr.line2 + ', ' + addr.country + ', ' + addr.postalCode + ', ' + addr.city + ', ' + addr.region }}
+      <br>
       <UButton id="exampleSubmitButton" type="submit" data-cy="submit-button">
         Submit
       </UButton>
@@ -40,6 +44,8 @@
 import { ref } from 'vue'
 import { z } from 'zod'
 import type { FormSubmitEvent } from '@nuxt/ui/dist/runtime/types'
+import { BtrAddress } from '~/interfaces/btrAddress'
+import { validateEmailRfc5322Regex } from '~/utils/validation/form_inputs'
 
 const minNameLength = 1
 const maxNameLength = 150
@@ -47,8 +53,8 @@ const maxNameLength = 150
 const { t } = useI18n()
 const schema = z.object({
   email: z.string()
-    .length(254, 'errors.validation.email.maxLengthExceeded')
-    .refine(validateEmailRfc6532Regex, t('errors.validation.email.invalid')),
+    .max(254, 'errors.validation.email.maxLengthExceeded')
+    .refine(validateEmailRfc5322Regex, t('errors.validation.email.invalid')),
   fullName: z.preprocess(normalizeName,
     z.string()
       .min(minNameLength, t('errors.validation.fullName.empty'))
@@ -62,6 +68,11 @@ const state = ref({
   email: undefined,
   fullName: undefined
 })
+
+const addr: BtrAddress = {
+  city: '', country: '', line1: '', postalCode: '', region: '', line2: undefined, locationDescription: undefined
+}
+const address: Ref<BtrAddress> = ref(addr)
 
 function submit (event: FormSubmitEvent<Schema>) {
   // eslint-disable-next-line no-console

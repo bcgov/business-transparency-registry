@@ -1,7 +1,9 @@
 {
   "labels": {
     "emailAddress": "Email address: ",
-    "fullName": "Full Legal Name: "
+    "fullName": "Full Legal Name: ",
+    "address": "Address: ",
+    "state": "State"
   },
   "placeholders": {
     "dateSelect": "Select Date"
