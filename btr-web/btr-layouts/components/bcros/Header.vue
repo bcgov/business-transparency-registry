@@ -43,7 +43,7 @@
           <div v-else class="flex flex-wrap self-center text-sm h-[36px]">
             <BcrosHeaderMenu :menu-button-text="'Log in'" :menu-lists="loggedOutMenuOptions" />
             <button class="text-white ml-2 p-2 hover:bg-bcGovColor-activeBlue/[0.2]" @click="goToCreateAccount()">
-              {{ t('buttons.createAccount') }}
+              {{ t('header.buttons.createAccount') }}
             </button>
           </div>
         </div>
