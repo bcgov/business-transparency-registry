@@ -29,7 +29,7 @@
       <br>
       <BcrosInputsDateSelect id="testDateSelect" data-cy="testDateSelect" />
       <br>
-      <BcrosInputsAddress v-model="address" :label="$t('labels.address')" id="testDateAddress" data-cy="testDateAddress" />
+      <BcrosInputsAddress id="testDateAddress" v-model="address" :label="$t('labels.address')" data-cy="testDateAddress" />
       <br>
       {{ addr.line1 + ', ' + addr.line2 + ', ' + addr.country + ', ' + addr.postalCode + ', ' + addr.city + ', ' + addr.region }}
       <br>

@@ -14,7 +14,7 @@ export default <Partial<Config>>{
           footer: '#003366',
           header: '#003366',
           navDivider: '#FCBA19',
-          //LINK COLOURS
+          // LINK COLOURS
           activeBlue: '#1669BB',
           // TEXT/NON-CLICKABLE COLOURS
           darkGray: '#212529',
@@ -30,7 +30,7 @@ export default <Partial<Config>>{
           hairlinesOnWhite: '#DEE2E6',
           specialityDottedLines: '#899EB2',
           formFieldLines: '#6F7780',
-          //RESULT COLOURS
+          // RESULT COLOURS
           caution: '#F8661A', // use on Caution Icon or Large 19px bold+ text only (on white backgrounds only). Not for small text.
           error: '#d3272c' // ok for error text or icons)
 

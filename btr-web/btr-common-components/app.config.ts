@@ -20,7 +20,7 @@ export default defineAppConfig({
         rounded: 'rounded-none'
       },
       variant: {
-        bcGov: 'bg-gray-100 border-b-2 focus:ring-0'
+        bcGov: 'bg-gray-100 border-b-2 focus:ring-0 text-gray-900'
       }
     }
   }

@@ -10,6 +10,7 @@
         :options="countries"
         variant="bcGov"
         @change="$emit('update:modelValue', address)"
+        option-attribute="name"
       />
     </div>
     <div class="flex py-2">
@@ -44,6 +45,7 @@
 <script setup lang="ts">
 import { ref, Ref } from 'vue'
 import type { PropType } from 'vue'
+
 import type { BtrAddress } from '~/interfaces/btrAddress'
 
 defineEmits<{ 'update:modelValue': [value: string] }>()
@@ -53,10 +55,8 @@ const props = defineProps({
   modelValue: { type: Object as PropType<BtrAddress>, required: true }
 })
 
-const countries: string[] = ['Canada', 'US', '3']
+const countries = isoCountriesList
 const address: Ref<BtrAddress> = ref(props.modelValue)
 
-
-//validations
-
+// todo: add validations
 </script>
