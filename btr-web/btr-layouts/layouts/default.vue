@@ -1,7 +1,9 @@
 <template>
   <div>
     <BcrosHeader />
-    <slot />
+    <div class="mx-auto px-4 w-full max-w-[1360px]">
+      <slot />
+    </div>
     <BcrosFooter :app-version="appVersion" />
   </div>
 </template>

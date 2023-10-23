@@ -1,0 +1,25 @@
+<template>
+  <div class="flex self-center h-[32px] w-[32px] bg-bcGovBlue-300">
+    <p class="m-auto self-center text-xl font-bold" :class="avatarClasses">
+      {{ username.slice(0,1) }}
+    </p>
+  </div>
+  <div class="ml-3 text-left">
+    <p>{{ username }}</p>
+    <p class="text-xs opacity-75">
+      {{ accountName }}
+    </p>
+  </div>
+</template>
+
+<script setup lang="ts">
+defineProps({
+  avatarClasses: { default: '', type: String },
+  accountName: { default: 'N/A', type: String },
+  username: { default: 'N/A', type: String }
+})
+
+</script>
+
+<style scoped>
+</style>

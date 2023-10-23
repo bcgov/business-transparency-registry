@@ -1,5 +1,5 @@
 <template>
-  <div data-cy="individualsSummaryTable" class="mx-5 bg-white rounded-[5px] px-10 py-5">
+  <div data-cy="individualsSummaryTable" class="bg-white rounded-[5px] px-10 py-5">
     <UTable :rows="individuals" :columns="headers" class="bg-white min-w-[30%]">
       <template #fullName-data="{ row }">
         <span class="font-bold text-black ">
