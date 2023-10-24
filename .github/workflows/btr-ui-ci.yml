@@ -1,0 +1,155 @@
+name: BTR UI CI
+
+on:
+  pull_request:
+    types: [assigned, synchronize]
+    paths:
+      - "btr-web/**"
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  setup-job:
+    runs-on: ubuntu-20.04
+
+    steps:
+      - uses: actions/checkout@v3
+      - run: "true"
+
+  linting:
+    needs: setup-job
+    runs-on: ubuntu-20.04
+
+    strategy:
+      matrix:
+        project: ["btr-main-app", "btr-common-components", "btr-layouts"]
+      fail-fast: false
+
+    defaults:
+      run:
+        working-directory: btr-web/${{ matrix.project }}
+  
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 16
+        
+      - name: Install pnpm
+        run: npm install -g pnpm
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Run linting
+        run: pnpm run lint
+
+
+  unit-testing:
+    needs: setup-job
+    runs-on: ubuntu-20.04
+    
+    strategy:
+      matrix:
+        project: ["btr-main-app", "btr-common-components", "btr-layouts"]
+      fail-fast: false
+
+    defaults:
+      run:
+        working-directory: btr-web/${{ matrix.project }}
+  
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+          run_install: false
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Run unit tests
+        run: pnpm test:cov
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v3
+        with: 
+          files: ./btr-web/btr-main-app/coverage/clover.xml
+
+  cypress-e2e-test:
+    needs: setup-job
+    runs-on: ubuntu-20.04
+    
+    strategy:
+      matrix:
+        project: ["btr-main-app", "btr-common-components", "btr-layouts"]
+      fail-fast: false
+
+    defaults:
+      run:
+        working-directory: btr-web/${{ matrix.project }}
+  
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+          run_install: false
+
+      - name: Cypress run
+        uses: cypress-io/github-action@v6
+        with:
+          working-directory: btr-web/${{ matrix.project }}
+          build: pnpm run build
+          start: pnpm start
+  
+  build-check:
+    needs: setup-job
+    runs-on: ubuntu-20.04
+    
+    strategy:
+      matrix:
+        project: ["btr-main-app", "btr-common-components", "btr-layouts"]
+      fail-fast: false
+
+    defaults:
+      run:
+        working-directory: btr-web/${{ matrix.project }}
+  
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+          run_install: false
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Build Check
+        run: pnpm build
