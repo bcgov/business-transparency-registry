@@ -11,12 +11,16 @@
     "dev": "nuxt dev",
     "cypress:open": "cypress open",
     "generate": "nuxt generate",
-    "lint": "eslint --cache .",
+    "lint": "eslint --cache . --max-warnings 0",
     "lint:fix": "nr lint --fix",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
     "test": "vitest",
-    "test:cov": "vitest run --coverage"
+    "test:cov": "vitest run --coverage",
+    "test:e2e": "cypress open",
+    "test:e2e:firefox": "cypress run firefox",
+    "test:e2e:chrome": "cypress run chrome",
+    "start": "nuxt start"
   },
   "simple-git-hooks": {
     "pre-commit": "npx lint-staged"
@@ -25,5 +29,8 @@
     "*.{js,ts,tsx,vue,md}": [
       "eslint --cache --fix"
     ]
+  },
+  "devDependencies": {
+    "@vitest/coverage-v8": "^0.34.6"
   }
 }

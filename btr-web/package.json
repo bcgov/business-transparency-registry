@@ -3,6 +3,8 @@
   "version": "0.1.0",
   "description": "Beneficial Ownership Registry UI - Mono repo workspace",
   "scripts": {
+    "build": "pnpm --filter-prod btr-main-app build",
+    "build:btr-main-app": "pnpm --filter-prod btr-main-app build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],

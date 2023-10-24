@@ -11,7 +11,7 @@
     "build:local": "nuxt build",
     "dev": "nuxt dev --port=3000",
     "generate": "nuxt generate",
-    "lint": "eslint --cache .",
+    "lint": "eslint --cache . --max-warnings 0",
     "lint:fix": "nr lint --fix",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
@@ -19,7 +19,8 @@
     "test:cov": "vitest run --coverage",
     "test:e2e": "cypress open",
     "test:e2e:firefox": "cypress run firefox",
-    "test:e2e:chrome": "cypress run chrome"
+    "test:e2e:chrome": "cypress run chrome",
+    "start": "nuxt start"
   },
   "simple-git-hooks": {
     "pre-commit": "npx lint-staged"
@@ -36,6 +37,7 @@
     "vitest-environment-nuxt": "0.11.0"
   },
   "dependencies": {
-    "nuxt": "^3.7.4"
+    "nuxt": "^3.7.4",
+    "pinia": "^2.1.7"
   }
 }
