@@ -15,12 +15,13 @@
     </div>
     <div class="flex py-2">
       <!--  address line 1 -->
-      <UInput
-        v-model="address.line1"
-        class="w-full flex-1"
-        variant="bcGov"
-        @change="$emit('update:modelValue', address)"
-      />
+      <BcrosInputsAddressLine1Autocomplete :countryIso3166Alpha2="address.country.alpha_2"/>
+<!--      <UInput-->
+<!--        v-model="address.line1"-->
+<!--        class="w-full flex-1"-->
+<!--        variant="bcGov"-->
+<!--        @change="$emit('update:modelValue', address)"-->
+<!--      />-->
     </div>
     <div class="flex py-2">
       <!--  address line 2 optional -->
@@ -48,7 +49,7 @@ import type { PropType } from 'vue'
 
 import type { BtrAddress } from '~/interfaces/btrAddress'
 
-defineEmits<{ 'update:modelValue': [value: string] }>()
+defineEmits<{ 'update:modelValue': [value: BtrAddress] }>()
 const props = defineProps({
   label: { type: String, default: '' },
   id: { type: String, required: true },

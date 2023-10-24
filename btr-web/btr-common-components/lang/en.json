@@ -3,7 +3,8 @@
     "emailAddress": "Email address: ",
     "fullName": "Full Legal Name: ",
     "address": "Address: ",
-    "state": "State"
+    "state": "State",
+    "country": "Country"
   },
   "placeholders": {
     "dateSelect": "Select Date"
