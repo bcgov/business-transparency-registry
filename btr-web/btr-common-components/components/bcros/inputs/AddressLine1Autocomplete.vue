@@ -1,18 +1,16 @@
 <template>
-  <div class="relative w-72 z-10">
+  <div class="relative w-full z-10">
     <Combobox v-model="selectedAddress">
       <div class="relative mt-1">
         <div
-          class="relative w-full cursor-default overflow-hidden rounded-lg bg-white text-left shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-teal-300 sm:text-sm"
+          class="relative w-full cursor-default overflow-hidden bg-gray-100 text-left border-b-2 border-gray-500 focus:outline-none sm:text-sm"
         >
           <ComboboxInput
-            class="w-full border-none py-2 pl-3 pr-10 text-sm leading-5 text-gray-900 focus:ring-0"
+            class="w-full border-none py-2 pl-3 pr-10 text-sm leading-5 bg-gray-100 text-gray-900 focus:ring-0"
             :displayValue="(addr) => addr ? addr.Text: ''"
             @keyup="doTheSearch($event.target.value)"
           />
-          <ComboboxButton
-            class="absolute inset-y-0 right-0 flex items-center pr-2"
-          >
+          <ComboboxButton class="absolute inset-y-0 right-0 flex items-center pr-2">
             <UIcon class="ml-1 self-center text-xl" name="i-mdi-chevron-down" />
           </ComboboxButton>
         </div>
@@ -22,9 +20,7 @@
           leaveTo="opacity-0"
           @after-leave="query = ''"
         >
-          <ComboboxOptions
-            class="absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm"
-          >
+          <ComboboxOptions class="absolute mt-1 max-h-60 w-full overflow-auto bg-white py-1 text-base shadow-lg focus:outline-none sm:text-sm">
             <ComboboxOption
               v-for="address in suggestedAddresses"
               :key="address.Id"

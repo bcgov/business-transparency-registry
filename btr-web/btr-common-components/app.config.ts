@@ -17,8 +17,14 @@ export default defineAppConfig({
     selectMenu: {
       rounded: 'rounded-none',
       option: {
-        rounded: 'rounded-none'
+        rounded: 'rounded-none text-gray-900'
       },
+      variant: {
+        bcGov: 'bg-gray-100 border-b-2 focus:ring-0 text-gray-900'
+      }
+    },
+    textarea: {
+      rounded: 'rounded-none',
       variant: {
         bcGov: 'bg-gray-100 border-b-2 focus:ring-0 text-gray-900'
       }
