@@ -1,0 +1,60 @@
+{
+  "Items": [
+    {
+      "Id": "CA|CP|A|19675",
+      "Text": "A-18 Churchill St",
+      "Highlight": "0-1",
+      "Cursor": 0,
+      "Description": "Bridgewater, NS, B4V 1R7",
+      "Next": "Retrieve"
+    },
+    {
+      "Id": "CA|CP|A|18800",
+      "Text": "A-301 Main St",
+      "Highlight": "0-1",
+      "Cursor": 0,
+      "Description": "Shediac, NB, E4P 2A9",
+      "Next": "Retrieve"
+    },
+    {
+      "Id": "CA|CP|A|539",
+      "Text": "A-2340 Main St",
+      "Highlight": "0-1",
+      "Cursor": 0,
+      "Description": "Belledune, NB, E8G 2M5",
+      "Next": "Retrieve"
+    },
+    {
+      "Id": "CA|CP|A|18801",
+      "Text": "A-333 Main St",
+      "Highlight": "0-1",
+      "Cursor": 0,
+      "Description": "Shediac, NB, E4P 2B2",
+      "Next": "Retrieve"
+    },
+    {
+      "Id": "CA|CP|A|103899",
+      "Text": "A-7787 Kipling Ave",
+      "Highlight": "0-1",
+      "Cursor": 0,
+      "Description": "Woodbridge, ON, L4L 1Z1",
+      "Next": "Retrieve"
+    },
+    {
+      "Id": "CA|CP|A|19661",
+      "Text": "A-300 Anemki Pl",
+      "Highlight": "0-1",
+      "Cursor": 0,
+      "Description": "Fort William First Nation, ON, P7J 1H9",
+      "Next": "Retrieve"
+    },
+    {
+      "Id": "CA|CP|A|84687",
+      "Text": "A-813 6th St",
+      "Highlight": "0-1",
+      "Cursor": 0,
+      "Description": "Castlegar, BC, V1N 2E7",
+      "Next": "Retrieve"
+    }
+  ]
+}

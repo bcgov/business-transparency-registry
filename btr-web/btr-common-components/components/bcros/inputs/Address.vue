@@ -15,13 +15,10 @@
     </div>
     <div class="flex py-2">
       <!--  address line 1 -->
-      <BcrosInputsAddressLine1Autocomplete :countryIso3166Alpha2="address.country.alpha_2"/>
-<!--      <UInput-->
-<!--        v-model="address.line1"-->
-<!--        class="w-full flex-1"-->
-<!--        variant="bcGov"-->
-<!--        @change="$emit('update:modelValue', address)"-->
-<!--      />-->
+      <BcrosInputsAddressLine1Autocomplete
+        :countryIso3166Alpha2="address.country.alpha_2"
+        @addrAutoCompleted="addrAutoCompleted"
+      />
     </div>
     <div class="flex py-2">
       <!--  address line 2 optional -->
@@ -58,6 +55,10 @@ const props = defineProps({
 
 const countries = isoCountriesList
 const address: Ref<BtrAddress> = ref(props.modelValue)
+
+const addrAutoCompleted = (selectedAddr: BtrAddress) => {
+  Object.assign(address.value, selectedAddr)
+}
 
 // todo: add validations
 </script>

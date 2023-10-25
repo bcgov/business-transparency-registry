@@ -1,6 +1,5 @@
 <template>
   <div class="relative w-72 z-10">
-    {{ selectedAddress }}
     <Combobox v-model="selectedAddress">
       <div class="relative mt-1">
         <div
@@ -9,7 +8,7 @@
           <ComboboxInput
             class="w-full border-none py-2 pl-3 pr-10 text-sm leading-5 text-gray-900 focus:ring-0"
             :displayValue="(addr) => addr ? addr.Text: ''"
-            @keyup="findAddress($event.target.value)"
+            @keyup="doTheSearch($event.target.value)"
           />
           <ComboboxButton
             class="absolute inset-y-0 right-0 flex items-center pr-2"
@@ -39,13 +38,13 @@
                   'bg-teal-600 text-white': active,
                   'text-gray-900': !active,
                 }"
-                @click="refreshIfFind(address, $event)"
+                @click="expandWhenMoreAddresses(address, $event)"
               >
                 <span
                   class="block"
                   :class="{ 'font-medium': selected, 'font-normal': !selected }"
                 >
-                  {{ address.Text }} &nbsp; {{ address.Description}}
+                  {{ address.Text }} &nbsp; {{ address.Description }}
                 </span>
               </li>
             </ComboboxOption>
@@ -57,144 +56,67 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, Ref } from 'vue'
-import {
-  Combobox,
-  ComboboxInput,
-  ComboboxOptions,
-  ComboboxOption, ComboboxButton, TransitionRoot
-} from '@headlessui/vue'
-import { BtrAddress } from '~/interfaces/btrAddress'
+import { ref, Ref } from 'vue'
+import { Combobox, ComboboxButton, ComboboxInput, ComboboxOption, ComboboxOptions, TransitionRoot } from '@headlessui/vue'
+import type { BtrAddress } from '~/interfaces/btrAddress'
 
-//https://www.canadapost-postescanada.ca/ac/support/api/addresscomplete-interactive-find/#responses
-type CanadaPostApiFindResponseItem = {
-  Id: string // use as LastId in find method or as id to select the item with retrieve
-  Text: string // suggestion text
-  Highlight: string
-  Cursor: Number
-  Description: string
-  Next: 'Find' | 'Retrieve'
-}
-// https://www.canadapost-postescanada.ca/ac/support/api/addresscomplete-interactive-find/#parameters
-// API : Find (v2.10)
-type CanadaPostApiFindParams = {
-  // mandatory, error if not provided
-  Key: string
-  SearchTerm: string
+const emit = defineEmits<{ addrAutoCompleted: [value: BtrAddress] }>()
+const runtimeConfig = useRuntimeConfig()
 
-  // with defaults if not provided
-  LastId?: string // default ''
-  Country?: string // default 'CAN'
-  LanguagePreference?: string // default 'en'
-  MaxSuggestions?: Number // default 7
-
-  // in examples, but could not find description of it
-  SearchFor?: string
-  MaxResults?: Number
-  Origin?: string
-  Bias?: string
-  Filters?: string
-  GeoFence?: string
-}
 
 const props = defineProps({
   countryIso3166Alpha2: { type: String, required: false, default: 'CA' },
   maxSuggestions: { type: Number, required: false, default: 7 },
-  langCode: { type: String, required: false, default: 'en' }
+  langCode: { type: String, required: false, default: 'ENG' }
 })
 
-const canadaPostApiFind = 'https://ws1.postescanada-canadapost.ca/AddressComplete/Interactive/Find/v2.10/json3.ws'
-const canadaPostApiRetrieve = 'https://ws1.postescanada-canadapost.ca/AddressComplete/Interactive/Retrieve/v2.11/json3.ws'
-
-// const resp = {
-//   "Items": [
-//     {
-//       "Id": "CA|CP|A|19675",
-//       "Text": "A-18 Churchill St",
-//       "Highlight": "0-1",
-//       "Cursor": 0,
-//       "Description": "Bridgewater, NS, B4V 1R7",
-//       "Next": "Retrieve"
-//     },
-//     {
-//       "Id": "CA|CP|A|18800",
-//       "Text": "A-301 Main St",
-//       "Highlight": "0-1",
-//       "Cursor": 0,
-//       "Description": "Shediac, NB, E4P 2A9",
-//       "Next": "Retrieve"
-//     },
-//     {
-//       "Id": "CA|CP|A|539",
-//       "Text": "A-2340 Main St",
-//       "Highlight": "0-1",
-//       "Cursor": 0,
-//       "Description": "Belledune, NB, E8G 2M5",
-//       "Next": "Retrieve"
-//     },
-//     {
-//       "Id": "CA|CP|A|18801",
-//       "Text": "A-333 Main St",
-//       "Highlight": "0-1",
-//       "Cursor": 0,
-//       "Description": "Shediac, NB, E4P 2B2",
-//       "Next": "Retrieve"
-//     },
-//     {
-//       "Id": "CA|CP|A|103899",
-//       "Text": "A-7787 Kipling Ave",
-//       "Highlight": "0-1",
-//       "Cursor": 0,
-//       "Description": "Woodbridge, ON, L4L 1Z1",
-//       "Next": "Retrieve"
-//     },
-//     {
-//       "Id": "CA|CP|A|19661",
-//       "Text": "A-300 Anemki Pl",
-//       "Highlight": "0-1",
-//       "Cursor": 0,
-//       "Description": "Fort William First Nation, ON, P7J 1H9",
-//       "Next": "Retrieve"
-//     },
-//     {
-//       "Id": "CA|CP|A|84687",
-//       "Text": "A-813 6th St",
-//       "Highlight": "0-1",
-//       "Cursor": 0,
-//       "Description": "Castlegar, BC, V1N 2E7",
-//       "Next": "Retrieve"
-//     }
-//   ]
-// }
-//
-// const searchText: Ref<string> = ref('')
 const selectedAddress: Ref<CanadaPostApiFindResponseItem | null> = ref(null)
 const suggestedAddresses: Ref<Array<CanadaPostApiFindResponseItem>> = ref([])
 const query = ref('')
-
-const refreshIfFind = (address: CanadaPostApiFindResponseItem, event: Event) => {
-  if(address?.Next === 'Find') {
-    findAddress(query, address.Id)
+const canadaPostApiKey = runtimeConfig.public.addressCompleteKey
+const expandWhenMoreAddresses = async (address: CanadaPostApiFindResponseItem, event: Event) => {
+  if (address?.Next === 'Find') {
     event.stopPropagation()
     event.preventDefault()
+    // @ts-ignore
+    suggestedAddresses.value = await findAddress(query, address.Id, props, canadaPostApiKey)
   }
 }
 
-const findAddress = async (searchTerm, lastId) => {
-  query.value = searchTerm
+const convertToBtrAddress = (addr: CanadaPostRetrieveItem): BtrAddress => {
+  return {
+    country: { alpha_2: addr.CountryIso2, name: addr.CountryName },
+    line1: addr.Line1,
+    line2: addr.Line2,
+    city: addr.City,
+    region: addr.Province,
+    postalCode: addr.PostalCode,
+    locationDescription: ''
+  }
+}
+
+const doTheSearch = async (searchTerm) => {
   //todo: add debounce
-  const searchParams: CanadaPostApiFindParams = {
-    Key: 'RH99-RN99-GB72-FW86',
-    SearchTerm: searchTerm,
-    LastId: lastId ? lastId: '',
-    MaxSuggestions: props.maxSuggestions,
-    LanguagePreference: props.langCode,
-    Country: props.countryIso3166Alpha2
-  }
-
-  const urlFind = canadaPostApiFind + '?' + new URLSearchParams(searchParams)
-  const resp = await $fetch(urlFind)
-  suggestedAddresses.value = resp.Items
+  query.value = searchTerm
+  // @ts-ignore
+  suggestedAddresses.value = await findAddress(searchTerm, '', props, canadaPostApiKey)
 }
+
+watch(selectedAddress, async (newAddress: CanadaPostApiFindResponseItem, oldAddress: CanadaPostApiFindResponseItem) => {
+  if (newAddress?.Id !== oldAddress?.Id) {
+    const retrievedAddresses = await retrieveAddress(newAddress.Id, canadaPostApiKey)
+    const addrForLang = retrievedAddresses.find(addr => addr.Language === props.langCode)
+    // const addrDefaultLang = retrievedAddresses.find(addr => addr.Language === 'ENG')
+    console.log(addrForLang)
+    // @ts-ignore
+    const addr: CanadaPostRetrieveItem = addrForLang // | addrDefaultLang // | forSureAddr
+
+    if (addr) {
+      const btrAddr: BtrAddress = convertToBtrAddress(addr)
+      emit('addrAutoCompleted', btrAddr)
+    }
+  }
+})
+
 
 </script>

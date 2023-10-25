@@ -69,9 +69,26 @@ const state = ref({
   fullName: undefined
 })
 
-const addr: BtrAddress = {
-  city: '', country: '', line1: '', postalCode: '', region: '', line2: undefined, locationDescription: undefined
+export interface AddressIF {
+  city: string
+  country: string
+  street: string
+  streetAdditional?: string
+  region: string
+  postalCode: string
+  deliveryInstructions?: string
 }
+
+const addr: BtrAddress = {
+  city: '',
+  country: {name:'', alpha_2:''},
+  line1: '',
+  postalCode: '',
+  region: '',
+  line2: undefined,
+  locationDescription: undefined
+}
+
 const address: Ref<BtrAddress> = ref(addr)
 
 function submit (event: FormSubmitEvent<Schema>) {
