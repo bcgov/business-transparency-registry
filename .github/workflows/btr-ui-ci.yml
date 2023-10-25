@@ -37,7 +37,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: 16
+          node-version: 20
         
       - name: Install pnpm
         run: npm install -g pnpm
@@ -68,7 +68,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 16
+          node-version: 20
 
       - name: Install pnpm
         uses: pnpm/action-setup@v2
@@ -106,7 +106,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 16
+          node-version: 20
 
       - name: Install pnpm
         uses: pnpm/action-setup@v2
@@ -140,7 +140,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 16
+          node-version: 20
 
       - name: Install pnpm
         uses: pnpm/action-setup@v2
@@ -153,3 +153,31 @@ jobs:
 
       - name: Build Check
         run: pnpm build
+
+  build-check-for-deployment:
+    needs: setup-job
+    runs-on: ubuntu-20.04
+    
+    defaults:
+      run:
+        working-directory: btr-web
+  
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+          run_install: false
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Build Check
+        run: pnpm build:btr-main-app
