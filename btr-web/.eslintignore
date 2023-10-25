@@ -5,7 +5,7 @@ patches/
 types/
 cache/
 !packages/.vitepress
-!/.eslintrc.js
+!/.eslintrc
 !/rollup.config.js
 !.test
 .temp

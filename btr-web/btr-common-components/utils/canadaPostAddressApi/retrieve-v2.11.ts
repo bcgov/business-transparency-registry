@@ -1,4 +1,5 @@
-const CANADA_POST_RETRIEVE_API_URL = 'https://ws1.postescanada-canadapost.ca/AddressComplete/Interactive/Retrieve/v2.11/json3.ws'
+const CANADA_POST_RETRIEVE_API_URL =
+  'https://ws1.postescanada-canadapost.ca/AddressComplete/Interactive/Retrieve/v2.11/json3.ws'
 
 // https://www.canadapost-postescanada.ca/ac/support/api/addresscomplete-interactive-retrieve/#parameters
 // API : Retrieve (v2.11)
@@ -47,7 +48,7 @@ export type CanadaPostRetrieveItem = {
   Label: string
   Type: string
   DataLevel: 'Unknown' | 'Premise' | 'RangedPremise' | 'Street' | 'City'
-  //not in docs but found in response
+  // not in docs but found in response
   AcMua: string
   AcRbdi: string
 }

@@ -1,12 +1,12 @@
 export function debounce (func: Function, timeout = 250) {
-  let timer: string | number | NodeJS.Timeout | undefined;
+  let timer: string | number | NodeJS.Timeout | undefined
   return (...args: any) => {
-    clearTimeout(timer);
+    clearTimeout(timer)
     timer = setTimeout(() => {
       // @ts-ignore
-      func.apply(this, args);
-    }, timeout);
-  };
+      func.apply(this, args)
+    }, timeout)
+  }
 }
 
 // example

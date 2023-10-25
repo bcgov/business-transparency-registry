@@ -29,9 +29,21 @@
       <br>
       <BcrosInputsDateSelect id="testDateSelect" data-cy="testDateSelect" />
       <br>
-      <BcrosInputsAddress id="testDateAddress" v-model="address" :label="$t('labels.address')" data-cy="testDateAddress" />
+      <BcrosInputsAddress
+        id="testDateAddress"
+        v-model="address"
+        :label="$t('labels.address')"
+        data-cy="testDateAddress"
+      />
       <br>
-      {{ addr.line1 + ', ' + addr.line2 + ', ' + addr.country + ', ' + addr.postalCode + ', ' + addr.city + ', ' + addr.region }}
+      {{
+        addr.line1 + ', '
+          + addr.line2 + ', '
+          + addr.country + ', '
+          + addr.postalCode + ', '
+          + addr.city + ', '
+          + addr.region
+      }}
       <br>
       <UButton id="exampleSubmitButton" type="submit" data-cy="submit-button">
         Submit
@@ -81,7 +93,7 @@ export interface AddressIF {
 
 const addr: BtrAddress = {
   city: '',
-  country: {name:'', alpha_2:''},
+  country: { name: '', alpha_2: '' },
   line1: '',
   postalCode: '',
   region: '',

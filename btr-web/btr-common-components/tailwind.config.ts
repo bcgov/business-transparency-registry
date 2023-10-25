@@ -1,13 +1,13 @@
 /* eslint-disable */
 import type { Config } from 'tailwindcss'
-import colors from 'tailwindcss/colors'
 
 export default <Partial<Config>>{
   theme: {
     extend: {
       colors: {
         bcGovColor: {
-          // these colors are as defined in styleguide: https://preview.uxpin.com/73eb31e6346bc2863a066f02218a3af289325619#/pages/138840439/simulate/sitemap?mode=i
+          // these colors are as defined in styleguide:
+          // https://preview.uxpin.com/73eb31e6346bc2863a066f02218a3af289325619#/pages/138840439/simulate/sitemap?mode=i
           // for more details see previous link
           // last updated on (2023-10-16)
           // PRIMARY COLOURS

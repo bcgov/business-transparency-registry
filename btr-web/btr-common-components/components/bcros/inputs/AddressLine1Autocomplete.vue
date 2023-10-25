@@ -27,8 +27,8 @@
           >
             <ComboboxOption
               v-for="address in suggestedAddresses"
-              as="template"
               :key="address.Id"
+              as="template"
               :value="address"
               v-slot="{ selected, active }"
             >
@@ -57,23 +57,29 @@
 
 <script setup lang="ts">
 import { ref, Ref } from 'vue'
-import { Combobox, ComboboxButton, ComboboxInput, ComboboxOption, ComboboxOptions, TransitionRoot } from '@headlessui/vue'
+import {
+  Combobox,
+  ComboboxButton,
+  ComboboxInput,
+  ComboboxOption,
+  ComboboxOptions,
+  TransitionRoot
+} from '@headlessui/vue'
 import type { BtrAddress } from '~/interfaces/btrAddress'
 
-const emit = defineEmits<{ addrAutoCompleted: [value: BtrAddress] }>()
 const runtimeConfig = useRuntimeConfig()
 
-
+const emit = defineEmits<{ addrAutoCompleted: [value: BtrAddress] }>()
 const props = defineProps({
   countryIso3166Alpha2: { type: String, required: false, default: 'CA' },
   maxSuggestions: { type: Number, required: false, default: 7 },
   langCode: { type: String, required: false, default: 'ENG' }
 })
 
+const canadaPostApiKey = runtimeConfig.public.addressCompleteKey
 const selectedAddress: Ref<CanadaPostApiFindResponseItem | null> = ref(null)
 const suggestedAddresses: Ref<Array<CanadaPostApiFindResponseItem>> = ref([])
 const query = ref('')
-const canadaPostApiKey = runtimeConfig.public.addressCompleteKey
 const expandWhenMoreAddresses = async (address: CanadaPostApiFindResponseItem, event: Event) => {
   if (address?.Next === 'Find') {
     event.stopPropagation()
@@ -96,7 +102,7 @@ const convertToBtrAddress = (addr: CanadaPostRetrieveItem): BtrAddress => {
 }
 
 const doTheSearch = async (searchTerm) => {
-  //todo: add debounce
+  // todo: add debounce
   query.value = searchTerm
   // @ts-ignore
   suggestedAddresses.value = await findAddress(searchTerm, '', props, canadaPostApiKey)
@@ -105,11 +111,15 @@ const doTheSearch = async (searchTerm) => {
 watch(selectedAddress, async (newAddress: CanadaPostApiFindResponseItem, oldAddress: CanadaPostApiFindResponseItem) => {
   if (newAddress?.Id !== oldAddress?.Id) {
     const retrievedAddresses = await retrieveAddress(newAddress.Id, canadaPostApiKey)
-    const addrForLang = retrievedAddresses.find(addr => addr.Language === props.langCode)
-    // const addrDefaultLang = retrievedAddresses.find(addr => addr.Language === 'ENG')
-    console.log(addrForLang)
+    let addrForLang = retrievedAddresses.find(addr => addr.Language === props.langCode)
+    if (!addrForLang && retrievedAddresses) {
+      addrForLang =
+        retrievedAddresses.find(addr => addr.Language === 'ENG') ||
+        retrievedAddresses[0]
+    }
+    // const addrDefaultLang =
     // @ts-ignore
-    const addr: CanadaPostRetrieveItem = addrForLang // | addrDefaultLang // | forSureAddr
+    const addr: CanadaPostRetrieveItem = addrForLang
 
     if (addr) {
       const btrAddr: BtrAddress = convertToBtrAddress(addr)
@@ -117,6 +127,4 @@ watch(selectedAddress, async (newAddress: CanadaPostApiFindResponseItem, oldAddr
     }
   }
 })
-
-
 </script>
