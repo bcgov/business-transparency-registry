@@ -19,6 +19,7 @@
       <BcrosInputsAddressLine1Autocomplete
         :countryIso3166Alpha2="address.country.alpha_2"
         @addrAutoCompleted="addrAutoCompleted"
+        @addrLine1Update="addrLine1Updated"
       />
     </div>
     <div class="flex py-2">
@@ -105,6 +106,9 @@ const regions: Ref<Array<BtrCountrySubdivision>> = ref([])
 const addrAutoCompleted = (selectedAddr: BtrAddress) => {
   Object.assign(address.value, selectedAddr)
   emit('update:modelValue', address.value)
+}
+const addrLine1Updated = (addressLine1: string) => {
+  Object.assign(address.value, { line1: addressLine1 })
 }
 
 // todo: add validations

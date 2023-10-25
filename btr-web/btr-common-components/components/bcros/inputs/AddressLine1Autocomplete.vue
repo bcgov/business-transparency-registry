@@ -65,7 +65,10 @@ import type { BtrAddress } from '~/interfaces/btrAddress'
 
 const runtimeConfig = useRuntimeConfig()
 
-const emit = defineEmits<{ addrAutoCompleted: [value: BtrAddress] }>()
+const emit = defineEmits<{
+  addrAutoCompleted: [value: BtrAddress]
+  addrLine1Update: [value: string]
+}>()
 const props = defineProps({
   countryIso3166Alpha2: { type: String, required: false, default: 'CA' },
   maxSuggestions: { type: Number, required: false, default: 7 },
@@ -100,12 +103,15 @@ const convertToBtrAddress = (addr: CanadaPostRetrieveItem): BtrAddress => {
 const doTheSearch = async (searchTerm) => {
   // todo: add debounce
   query.value = searchTerm
-  // @ts-ignore
-  suggestedAddresses.value = await findAddress(searchTerm, '', props, canadaPostApiKey)
+  // append currently typed value as first item to allow usage of this as a value
+  const typedAddress: CanadaPostApiFindResponseItem = { Cursor: 0, Description: undefined, Highlight: undefined, Id: undefined, Next: undefined, Text: searchTerm }
+  const found = await findAddress(searchTerm, '', props, canadaPostApiKey)
+  suggestedAddresses.value = [typedAddress].concat(found)
 }
 
 watch(selectedAddress, async (newAddress: CanadaPostApiFindResponseItem, oldAddress: CanadaPostApiFindResponseItem) => {
   if (newAddress?.Id !== oldAddress?.Id) {
+    console.log('I am here ...')
     const retrievedAddresses = await retrieveAddress(newAddress.Id, canadaPostApiKey)
     let addrForLang = retrievedAddresses.find(addr => addr.Language === props.langCode)
     if (!addrForLang && retrievedAddresses) {
@@ -113,7 +119,6 @@ watch(selectedAddress, async (newAddress: CanadaPostApiFindResponseItem, oldAddr
         retrievedAddresses.find(addr => addr.Language === 'ENG') ||
         retrievedAddresses[0]
     }
-    // const addrDefaultLang =
     // @ts-ignore
     const addr: CanadaPostRetrieveItem = addrForLang
 
@@ -121,6 +126,8 @@ watch(selectedAddress, async (newAddress: CanadaPostApiFindResponseItem, oldAddr
       const btrAddr: BtrAddress = convertToBtrAddress(addr)
       emit('addrAutoCompleted', btrAddr)
     }
+  } else if (!newAddress?.Id) {
+    emit('addrLine1Update', newAddress.Text)
   }
 })
 </script>

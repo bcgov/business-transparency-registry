@@ -33,13 +33,13 @@
         id="testDateAddress"
         v-model="addr"
         :label="$t('labels.address')"
-      ss  data-cy="testDateAddress"
+        data-cy="testDateAddress"
       />
       <br>
       {{
         addr.line1 + ', '
           + addr.line2 + ', '
-          + addr.country + ', '
+          + addr.country.name + ', '
           + addr.postalCode + ', '
           + addr.city + ', '
           + addr.region
@@ -80,16 +80,6 @@ const state = ref({
   email: undefined,
   fullName: undefined
 })
-
-export interface AddressIF {
-  city: string
-  country: string
-  street: string
-  streetAdditional?: string
-  region: string
-  postalCode: string
-  deliveryInstructions?: string
-}
 
 const addr: BtrAddress = {
   city: '',
