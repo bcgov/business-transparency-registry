@@ -34,9 +34,27 @@ jobs:
           poetry run pylint --rcfile=setup.cfg src/btr_api
           poetry run flake8 src/btr_api
 
-
   unit-testing:
+    env:
+      DATABASE_TEST_USERNAME: postgres
+      DATABASE_TEST_PASSWORD: postgres
+      DATABASE_TEST_NAME: btr_test
+      DATABASE_TEST_HOST: db
+      DATABASE_TEST_PORT: 5432
+
     runs-on: ubuntu-20.04
+    
+    services:
+      postgres:
+        image: postgres:12
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: postgres
+        ports:
+          - 5432:5432
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -51,6 +69,12 @@ jobs:
 
       - name: Install dependencies
         run: poetry install
+      
+      - name: Update db
+        run: |
+          poetry shell
+          flask db upgrade
+          flask db migrate
 
       - name: Run tests
         run: poetry run pytest --cov=./ --cov-report=xml
