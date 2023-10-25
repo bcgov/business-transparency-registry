@@ -86,6 +86,9 @@ jobs:
         uses: codecov/codecov-action@v3
         with: 
           files: ./btr-web/btr-main-app/coverage/clover.xml
+          flags: btr-ui
+          name: codecov-btr-ui
+          fail_ci_if_error: false
 
   cypress-e2e-test:
     needs: setup-job
