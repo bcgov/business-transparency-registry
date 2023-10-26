@@ -1,20 +1,20 @@
 /* eslint-disable */
 import type { Config } from 'tailwindcss'
-import colors from 'tailwindcss/colors'
 
 export default <Partial<Config>>{
   theme: {
     extend: {
       colors: {
         bcGovColor: {
-          // these colors are as defined in styleguide: https://preview.uxpin.com/73eb31e6346bc2863a066f02218a3af289325619#/pages/138840439/simulate/sitemap?mode=i
+          // these colors are as defined in styleguide:
+          // https://preview.uxpin.com/73eb31e6346bc2863a066f02218a3af289325619#/pages/138840439/simulate/sitemap?mode=i
           // for more details see previous link
           // last updated on (2023-10-16)
           // PRIMARY COLOURS
           footer: '#003366',
           header: '#003366',
           navDivider: '#FCBA19',
-          //LINK COLOURS
+          // LINK COLOURS
           activeBlue: '#1669BB',
           // TEXT/NON-CLICKABLE COLOURS
           darkGray: '#212529',
@@ -30,7 +30,7 @@ export default <Partial<Config>>{
           hairlinesOnWhite: '#DEE2E6',
           specialityDottedLines: '#899EB2',
           formFieldLines: '#6F7780',
-          //RESULT COLOURS
+          // RESULT COLOURS
           caution: '#F8661A', // use on Caution Icon or Large 19px bold+ text only (on white backgrounds only). Not for small text.
           error: '#d3272c' // ok for error text or icons)
 

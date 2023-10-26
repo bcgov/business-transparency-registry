@@ -31,10 +31,6 @@ export default defineNuxtConfig({
     lintOnStart: false,
     include: ['/**/*.{js,jsx,ts,tsx,vue}']
   },
-  stylelint: {
-    /* module options */
-    lintOnStart: false
-  },
   pinia: {
     /* pinia module options */
   },
@@ -45,6 +41,12 @@ export default defineNuxtConfig({
           additionalData: '@use "~/assets/styles/theme.scss" as *;'
         }
       }
+    }
+  },
+  runtimeConfig: {
+    public: {
+      // Keys within public, will be also exposed to the client-side
+      addressCompleteKey: process.env.ADDRESS_COMPLETE_KEY
     }
   }
 })

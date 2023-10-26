@@ -5,9 +5,7 @@
       type="text"
       v-bind="$attrs"
       :value="modelValue"
-      color="gray"
-      class="border-b-[2px] bg-gray-100"
-      variant="none"
+      variant="bcGov"
       @input="$emit('update:modelValue', $event.target.value)"
     />
   </UFormGroup>
