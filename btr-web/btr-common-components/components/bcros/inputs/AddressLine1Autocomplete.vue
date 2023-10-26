@@ -62,6 +62,7 @@ import {
   TransitionRoot
 } from '@headlessui/vue'
 import type { BtrAddress } from '~/interfaces/btrAddress'
+import { CanadaPostApiFindResponseItem, CanadaPostRetrieveItem } from '~/utils'
 
 const runtimeConfig = useRuntimeConfig()
 
@@ -83,7 +84,7 @@ const expandWhenMoreAddresses = async (address: CanadaPostApiFindResponseItem, e
   if (address?.Next === 'Find') {
     event.stopPropagation()
     event.preventDefault()
-    // @ts-ignore
+
     suggestedAddresses.value = await findAddress(query, address.Id, props, canadaPostApiKey)
   }
 }
@@ -111,7 +112,6 @@ const doTheSearch = async (searchTerm) => {
 
 watch(selectedAddress, async (newAddress: CanadaPostApiFindResponseItem, oldAddress: CanadaPostApiFindResponseItem) => {
   if (newAddress?.Id !== oldAddress?.Id) {
-    console.log('I am here ...')
     const retrievedAddresses = await retrieveAddress(newAddress.Id, canadaPostApiKey)
     let addrForLang = retrievedAddresses.find(addr => addr.Language === props.langCode)
     if (!addrForLang && retrievedAddresses) {
@@ -119,7 +119,7 @@ watch(selectedAddress, async (newAddress: CanadaPostApiFindResponseItem, oldAddr
         retrievedAddresses.find(addr => addr.Language === 'ENG') ||
         retrievedAddresses[0]
     }
-    // @ts-ignore
+
     const addr: CanadaPostRetrieveItem = addrForLang
 
     if (addr) {

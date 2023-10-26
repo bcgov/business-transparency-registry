@@ -1,5 +1,4 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
-// @ts-ignore
 export default defineNuxtConfig({
   ui: {
     icons: ['mdi'] // add here more icon sets from iconifiy if needed.
@@ -31,11 +30,6 @@ export default defineNuxtConfig({
     /* module options */
     lintOnStart: false,
     include: ['/**/*.{js,jsx,ts,tsx,vue}']
-  },
-  // @ts-ignore
-  stylelint: {
-    /* module options */
-    lintOnStart: false
   },
   pinia: {
     /* pinia module options */
