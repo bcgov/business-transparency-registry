@@ -34,60 +34,64 @@ jobs:
           poetry run pylint --rcfile=setup.cfg src/btr_api
           poetry run flake8 src/btr_api
 
-  # unit-testing:
-  #   env:
-  #     DATABASE_TEST_USERNAME: postgres
-  #     DATABASE_TEST_PASSWORD: postgres
-  #     DATABASE_TEST_NAME: btr_test
-  #     DATABASE_TEST_HOST: db
-  #     DATABASE_TEST_PORT: 5432
+  unit-testing:
+    env:
+      DATABASE_TEST_USERNAME: postgres
+      DATABASE_TEST_PASSWORD: postgres
+      DATABASE_TEST_NAME: btr
+      DATABASE_TEST_HOST: localhost
+      DATABASE_TEST_PORT: 5432
+      DATABASE_USERNAME: postgres
+      DATABASE_PASSWORD: postgres
+      DATABASE_HOST: localhost
+      DATABASE_PORT: 5432
 
-  #   runs-on: ubuntu-20.04
+    runs-on: ubuntu-20.04
     
-  #   services:
-  #     postgres:
-  #       image: postgres:12
-  #       env:
-  #         POSTGRES_USER: postgres
-  #         POSTGRES_PASSWORD: postgres
-  #         POSTGRES_DB: postgres
-  #       ports:
-  #         - 5432:5432
-  #       options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+    services:
+      postgres:
+        image: postgres:12
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: btr
+        ports:
+          - 5432:5432
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
 
-  #   steps:
-  #     - name: Checkout code
-  #       uses: actions/checkout@v3
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-  #     - name: Set up Python
-  #       uses: actions/setup-python@v2
-  #       with:
-  #         python-version: 3.11
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.11
 
-  #     - name: Install Poetry
-  #       uses: snok/install-poetry@v1
+      - name: Install Poetry
+        uses: snok/install-poetry@v1
 
-  #     - name: Install dependencies
-  #       run: poetry install
+      - name: Install dependencies
+        run: poetry install
       
-  #     - name: Update db
-  #       run: |
-  #         poetry run flask db upgrade
-  #         poetry run flask db migrate
+      - name: Update db
+        run: |
+          poetry run flask db upgrade
+          poetry run flask db migrate
 
-  #     - name: Run tests
-  #       run: poetry run pytest --cov=./ --cov-report=xml
+      - name: Run tests
+        run: poetry run pytest --cov=./ --cov-report=xml
 
-  #     - name: Check coverage
-  #       run: poetry run coverage report --fail-under=80
+      - name: Check coverage
+        run: poetry run coverage report --fail-under=80
     
-  #     - name: Upload coverage to Codecov
-  #       uses: codecov/codecov-action@v3
-  #       with:
-  #         file: ./btr-api/coverage.xml
-  #         flags: btr-api
-  #         name: codecov-btr-api
-  #         fail_ci_if_error: false
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          file: ./btr-api/coverage.xml
+          flags: btr-api
+          name: codecov-btr-api
+          fail_ci_if_error: false
 
   build:
     runs-on: ubuntu-20.04
