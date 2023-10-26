@@ -56,7 +56,7 @@
 import { ref } from 'vue'
 import { z } from 'zod'
 import type { FormSubmitEvent } from '@nuxt/ui/dist/runtime/types'
-import { BtrAddress } from '~/interfaces/btrAddress'
+import { BtrAddressI } from '~/interfaces/btrAddressI'
 import { validateEmailRfc5322Regex } from '~/utils/validation/form_inputs'
 
 const minNameLength = 1
@@ -81,7 +81,7 @@ const state = ref({
   fullName: undefined
 })
 
-const addr: BtrAddress = {
+const addr: BtrAddressI = {
   city: '',
   country: { name: '', alpha_2: '' },
   line1: '',
@@ -91,7 +91,7 @@ const addr: BtrAddress = {
   locationDescription: undefined
 }
 
-const address: Ref<BtrAddress> = ref(addr)
+const address: Ref<BtrAddressI> = ref(addr)
 
 function submit (event: FormSubmitEvent<Schema>) {
   // eslint-disable-next-line no-console

@@ -3,14 +3,14 @@ const CANADA_POST_RETRIEVE_API_URL =
 
 // https://www.canadapost-postescanada.ca/ac/support/api/addresscomplete-interactive-retrieve/#parameters
 // API : Retrieve (v2.11)
-export type CanadaPostApiRetrieveParams = {
+export interface CanadaPostApiRetrieveParamsI {
   Key: string
   Id: string
 }
 
 // https://www.canadapost-postescanada.ca/ac/support/api/addresscomplete-interactive-retrieve/#responses
 // API : Retrieve (v2.11)
-export type CanadaPostRetrieveItem = {
+export interface CanadaPostRetrieveItemI {
   Id: string
   DomesticId: string
   Language: string
@@ -53,11 +53,13 @@ export type CanadaPostRetrieveItem = {
   AcRbdi: string
 }
 
-export const retrieveAddress = async (id: string, canadaPostApiKey: string): Promise<CanadaPostRetrieveItem[]> => {
-  const retrieveParams: CanadaPostApiRetrieveParams = {
+export const retrieveAddress = async (id: string, canadaPostApiKey: string): Promise<CanadaPostRetrieveItemI[]> => {
+  const retrieveParams: CanadaPostApiRetrieveParamsI = {
     Key: canadaPostApiKey,
     Id: id
   }
+
+  // @ts-ignore
   const retrieveUrl = CANADA_POST_RETRIEVE_API_URL + '?' + new URLSearchParams(retrieveParams)
   const retrieveResp =
     await $fetch(retrieveUrl).catch((error) => {

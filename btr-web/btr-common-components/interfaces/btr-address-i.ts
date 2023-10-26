@@ -1,10 +1,10 @@
-export type BtrCountry = {
+export interface BtrCountryI {
   name: string
   alpha_2: string // The 2-letter country code (ISO 3166-1)
 }
 
-export type BtrAddress = {
-  country: BtrCountry
+export interface BtrAddressI {
+  country: BtrCountryI
   line1: string
   line2?: string
   city: string
@@ -13,7 +13,7 @@ export type BtrAddress = {
   locationDescription?: string
 }
 
-export type BtrCountrySubdivision = {
+export interface BtrCountrySubdivisionI {
   name: string
   code: string
   type: string

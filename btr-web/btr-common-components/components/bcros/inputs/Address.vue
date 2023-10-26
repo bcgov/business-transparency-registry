@@ -10,8 +10,8 @@
         :placeholder="$t('labels.country')"
         :options="countries"
         variant="bcGov"
-        @change="$emit('update:modelValue', address)"
         option-attribute="name"
+        @change="$emit('update:modelValue', address)"
       />
     </div>
     <div class="flex py-2">
@@ -36,10 +36,11 @@
     <div class="flex flex-col sm:flex-row py-2">
       <UInput
         v-model="address.city"
-        type="text" class="pr-4 w-full"
+        :placeholder="$t('labels.city')"
+        type="text"
+        class="pr-4 w-full"
         variant="bcGov"
         @change="$emit('update:modelValue', address)"
-        :placeholder="$t('labels.city')"
       />
       <USelectMenu
         v-if="address?.country.alpha_2==='US' || address?.country.alpha_2==='CA'"
@@ -84,26 +85,25 @@
 import { ref, Ref } from 'vue'
 import type { PropType } from 'vue'
 
-import type { BtrAddress, BtrCountry } from '~/interfaces/btrAddress'
-import { BtrCountrySubdivision } from '~/interfaces/btrAddress'
+import { BtrAddressI, BtrCountryI, BtrCountrySubdivisionI } from '~/interfaces/btr-address-i'
 
-const emit = defineEmits<{ 'update:modelValue': [value: BtrAddress] }>()
+const emit = defineEmits<{ 'update:modelValue': [value: BtrAddressI] }>()
 const props = defineProps({
   label: { type: String, default: '' },
   id: { type: String, required: true },
-  modelValue: { type: Object as PropType<BtrAddress>, required: true }
+  modelValue: { type: Object as PropType<BtrAddressI>, required: true }
 })
 
 const country = ref(null)
-watch(country, (newCountry: BtrCountry, oldCountry: BtrCountry) => {
+watch(country, (newCountry: BtrCountryI, _: BtrCountryI) => {
   address.value.country = newCountry
 })
 
 const countries = isoCountriesList
-const address: Ref<BtrAddress> = ref(props.modelValue)
-const regions: Ref<Array<BtrCountrySubdivision>> = ref([])
+const address: Ref<BtrAddressI> = ref(props.modelValue)
+const regions: Ref<Array<BtrCountrySubdivisionI>> = ref([])
 
-const addrAutoCompleted = (selectedAddr: BtrAddress) => {
+const addrAutoCompleted = (selectedAddr: BtrAddressI) => {
   Object.assign(address.value, selectedAddr)
   emit('update:modelValue', address.value)
 }

@@ -25,8 +25,8 @@
               v-for="address in suggestedAddresses"
               :key="address.Id"
               as="template"
-              :value="address"
               v-slot="{ selected, active }"
+              :value="address"
             >
               <li
                 class="relative cursor-default select-none py-2 pl-10 pr-4"
@@ -61,13 +61,11 @@ import {
   ComboboxOptions,
   TransitionRoot
 } from '@headlessui/vue'
-import type { BtrAddress } from '~/interfaces/btrAddress'
-import { CanadaPostApiFindResponseItem, CanadaPostRetrieveItem } from '~/utils'
 
 const runtimeConfig = useRuntimeConfig()
 
 const emit = defineEmits<{
-  addrAutoCompleted: [value: BtrAddress]
+  addrAutoCompleted: [value: BtrAddressI]
   addrLine1Update: [value: string]
 }>()
 const props = defineProps({
@@ -77,10 +75,10 @@ const props = defineProps({
 })
 
 const canadaPostApiKey = runtimeConfig.public.addressCompleteKey
-const selectedAddress: Ref<CanadaPostApiFindResponseItem | null> = ref(null)
-const suggestedAddresses: Ref<Array<CanadaPostApiFindResponseItem>> = ref([])
+const selectedAddress: Ref<CanadaPostApiFindResponseItemI | null> = ref(null)
+const suggestedAddresses: Ref<Array<CanadaPostApiFindResponseItemI>> = ref([])
 const query = ref('')
-const expandWhenMoreAddresses = async (address: CanadaPostApiFindResponseItem, event: Event) => {
+const expandWhenMoreAddresses = async (address: CanadaPostApiFindResponseItemI, event: Event) => {
   if (address?.Next === 'Find') {
     event.stopPropagation()
     event.preventDefault()
@@ -89,7 +87,7 @@ const expandWhenMoreAddresses = async (address: CanadaPostApiFindResponseItem, e
   }
 }
 
-const convertToBtrAddress = (addr: CanadaPostRetrieveItem): BtrAddress => {
+const convertToBtrAddress = (addr: CanadaPostRetrieveItemI): BtrAddressI => {
   return {
     country: { alpha_2: addr.CountryIso2, name: addr.CountryName },
     line1: addr.Line1,
@@ -105,12 +103,12 @@ const doTheSearch = async (searchTerm) => {
   // todo: add debounce
   query.value = searchTerm
   // append currently typed value as first item to allow usage of this as a value
-  const typedAddress: CanadaPostApiFindResponseItem = { Cursor: 0, Description: undefined, Highlight: undefined, Id: undefined, Next: undefined, Text: searchTerm }
+  const typedAddress: CanadaPostApiFindResponseItemI = { Cursor: 0, Description: undefined, Highlight: undefined, Id: undefined, Next: undefined, Text: searchTerm }
   const found = await findAddress(searchTerm, '', props, canadaPostApiKey)
   suggestedAddresses.value = [typedAddress].concat(found)
 }
 
-watch(selectedAddress, async (newAddress: CanadaPostApiFindResponseItem, oldAddress: CanadaPostApiFindResponseItem) => {
+watch(selectedAddress, async (newAddress: CanadaPostApiFindResponseItemI, oldAddress: CanadaPostApiFindResponseItemI) => {
   if (newAddress?.Id !== oldAddress?.Id) {
     const retrievedAddresses = await retrieveAddress(newAddress.Id, canadaPostApiKey)
     let addrForLang = retrievedAddresses.find(addr => addr.Language === props.langCode)
@@ -120,10 +118,10 @@ watch(selectedAddress, async (newAddress: CanadaPostApiFindResponseItem, oldAddr
         retrievedAddresses[0]
     }
 
-    const addr: CanadaPostRetrieveItem = addrForLang
+    const addr: CanadaPostRetrieveItemI = addrForLang
 
     if (addr) {
-      const btrAddr: BtrAddress = convertToBtrAddress(addr)
+      const btrAddr: BtrAddressI = convertToBtrAddress(addr)
       emit('addrAutoCompleted', btrAddr)
     }
   } else if (!newAddress?.Id) {

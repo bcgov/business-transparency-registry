@@ -3,7 +3,7 @@ const CANADA_POST_FIND_API_URL =
 
 // https://www.canadapost-postescanada.ca/ac/support/api/addresscomplete-interactive-find/#parameters
 // API : Find (v2.10)
-export type CanadaPostApiFindParams = {
+export interface CanadaPostApiFindParamsI {
   // mandatory, error if not provided
   Key: string
   SearchTerm: string
@@ -25,7 +25,7 @@ export type CanadaPostApiFindParams = {
 
 // https://www.canadapost-postescanada.ca/ac/support/api/addresscomplete-interactive-find/#responses
 // API : Find (v2.10)
-export type CanadaPostApiFindResponseItem = {
+export interface CanadaPostApiFindResponseItemI {
   Id: string // use as LastId in find method or as id to select the item with retrieve
   Text: string // suggestion text
   Highlight: string
@@ -34,14 +34,17 @@ export type CanadaPostApiFindResponseItem = {
   Next: 'Find' | 'Retrieve'
 }
 
-export const findAddress = async (searchTerm: string,
+export const findAddress = async (
+  searchTerm: string,
   lastId: string,
   props: { countryIso3166Alpha2: string, maxSuggestions: Number, langCode: string },
-  canadaPostApiKey: string) => {
+  canadaPostApiKey: string
+): Promise<CanadaPostApiFindResponseItemI[]> => {
   if (!searchTerm) {
-    return
+    return []
   }
-  const searchParams: CanadaPostApiFindParams = {
+
+  const searchParams: CanadaPostApiFindParamsI = {
     Key: canadaPostApiKey,
     SearchTerm: searchTerm,
     LastId: lastId || '',
