@@ -17,7 +17,7 @@
     <div class="flex py-2">
       <!--  address line 1 -->
       <BcrosInputsAddressLine1Autocomplete
-        :countryIso3166Alpha2="address.country.alpha_2"
+        :countryIso3166Alpha2="address?.country.alpha_2"
         @addrAutoCompleted="addrAutoCompleted"
         @addrLine1Update="addrLine1Updated"
       />
@@ -43,12 +43,14 @@
         @change="$emit('update:modelValue', address)"
       />
       <USelectMenu
-        v-if="address?.country.alpha_2==='US' || address?.country.alpha_2==='CA'"
+        v-if="address.country.alpha_2==='US' || address?.country.alpha_2==='CA'"
         v-model="address.region"
         :options="regions"
         :placeholder="$t('labels.state')"
         class="pr-4 w-full"
         variant="bcGov"
+        option-attribute="name"
+        value-attribute="code"
         @change="$emit('update:modelValue', address)"
       />
       <UInput
@@ -86,6 +88,7 @@ import { ref, Ref } from 'vue'
 import type { PropType } from 'vue'
 
 import { BtrAddressI, BtrCountryI, BtrCountrySubdivisionI } from '~/interfaces/btr-address-i'
+import { countrySubdivisions } from '~/utils/isoCountriesList'
 
 const emit = defineEmits<{ 'update:modelValue': [value: BtrAddressI] }>()
 const props = defineProps({
@@ -101,7 +104,16 @@ watch(country, (newCountry: BtrCountryI, _: BtrCountryI) => {
 
 const countries = isoCountriesList
 const address: Ref<BtrAddressI> = ref(props.modelValue)
-const regions: Ref<Array<BtrCountrySubdivisionI>> = ref([])
+const regions = computed(() => {
+  switch (address.value.country.alpha_2) {
+    case 'US':
+      return countrySubdivisions.us
+    case 'CA':
+      return countrySubdivisions.ca
+    default:
+      return []
+  }
+})
 
 const addrAutoCompleted = (selectedAddr: BtrAddressI) => {
   Object.assign(address.value, selectedAddr)

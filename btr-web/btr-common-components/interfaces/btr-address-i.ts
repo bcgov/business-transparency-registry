@@ -16,5 +16,4 @@ export interface BtrAddressI {
 export interface BtrCountrySubdivisionI {
   name: string
   code: string
-  type: string
 }
