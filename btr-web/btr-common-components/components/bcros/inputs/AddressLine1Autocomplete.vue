@@ -11,9 +11,6 @@
             :displayValue="(addr) => addr ? addr.Text: ''"
             @keyup="doTheSearch($event.target.value)"
           />
-          <ComboboxButton class="absolute inset-y-0 right-0 flex items-center pr-2">
-            <UIcon class="ml-1 self-center text-xl" name="i-mdi-chevron-down" />
-          </ComboboxButton>
         </div>
         <TransitionRoot
           leave="transition ease-in duration-100"
