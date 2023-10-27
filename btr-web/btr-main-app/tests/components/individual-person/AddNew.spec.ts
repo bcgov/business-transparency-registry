@@ -3,7 +3,8 @@ import { VueWrapper, flushPromises } from '@vue/test-utils'
 import { createI18n } from 'vue-i18n'
 import { mountSuspended } from 'vitest-environment-nuxt/utils'
 
-import { IndividualPersonAddNew, BcrosInputsDateSelect } from '#components'
+import { IndividualPersonAddNew, BcrosInputsDateSelect, BcrosInputsAddress } from '#components'
+import { as } from 'vitest/dist/reporters-5f784f42'
 
 const i18n = createI18n({
   // vue-i18n options here ...
@@ -37,5 +38,19 @@ describe('AddIndividualPerson tests', () => {
     await flushPromises()
     // FUTURE: replace this with cypress test
     // expect(wrapper.vm.birthdate).toBe(newDate)
+  })
+
+  it('renders the address component', async () => {
+    await wrapper.find('#add-person-manually-toggle').trigger('click')
+    await flushPromises()
+    expect(wrapper.findComponent(BcrosInputsAddress).exists()).toBe(true)
+
+    expect(wrapper.find('[data-cy="address-country"]').exists()).toBe(true)
+    expect(wrapper.find('[data-cy="address-line1-autocomplete"]').exists()).toBe(true)
+    expect(wrapper.find('[data-cy="address-line2"]').exists()).toBe(true)
+    expect(wrapper.find('[data-cy="address-city"]').exists()).toBe(true)
+    expect(wrapper.find('[data-cy="address-region-input"]').exists()).toBe(true)
+    expect(wrapper.find('[data-cy="address-postal-code"]').exists()).toBe(true)
+    expect(wrapper.find('[data-cy="address-location-description"]').exists()).toBe(true)
   })
 })

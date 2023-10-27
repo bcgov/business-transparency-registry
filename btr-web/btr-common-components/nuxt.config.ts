@@ -46,7 +46,7 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       // Keys within public, will be also exposed to the client-side
-      addressCompleteKey: process.env.ADDRESS_COMPLETE_KEY
+      addressCompleteKey: process.env.VUE_APP_ADDRESS_COMPLETE_KEY
     }
   }
 })

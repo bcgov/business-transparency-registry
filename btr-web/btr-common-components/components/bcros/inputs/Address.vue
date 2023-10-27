@@ -11,15 +11,17 @@
         :options="countries"
         variant="bcGov"
         option-attribute="name"
-        @change="$emit('update:modelValue', address)"
+        @change="changeCountry"
+        data-cy="address-country"
       />
     </div>
     <div class="flex py-2">
       <!--  address line 1 -->
       <BcrosInputsAddressLine1Autocomplete
-        :countryIso3166Alpha2="address.country.alpha_2"
+        v-model="address.line1"
+        :countryIso3166Alpha2="address?.country.alpha_2"
         @addrAutoCompleted="addrAutoCompleted"
-        @addrLine1Update="addrLine1Updated"
+        data-cy="address-line1-autocomplete"
       />
     </div>
     <div class="flex py-2">
@@ -30,6 +32,7 @@
         class="w-full flex-1"
         variant="bcGov"
         @change="$emit('update:modelValue', address)"
+        data-cy="address-line2"
       />
     </div>
     <!--  city; region combo; postal code -->
@@ -41,15 +44,19 @@
         class="pr-4 w-full"
         variant="bcGov"
         @change="$emit('update:modelValue', address)"
+        data-cy="address-city"
       />
       <USelectMenu
-        v-if="address?.country.alpha_2==='US' || address?.country.alpha_2==='CA'"
+        v-if="address.country.alpha_2==='US' || address?.country.alpha_2==='CA'"
         v-model="address.region"
         :options="regions"
         :placeholder="$t('labels.state')"
         class="pr-4 w-full"
         variant="bcGov"
+        option-attribute="name"
+        value-attribute="code"
         @change="$emit('update:modelValue', address)"
+        data-cy="address-region-select"
       />
       <UInput
         v-else
@@ -58,6 +65,7 @@
         class="pr-4 w-full"
         variant="bcGov"
         @change="$emit('update:modelValue', address)"
+        data-cy="address-region-input"
       />
       <UInput
         v-model="address.postalCode"
@@ -66,6 +74,7 @@
         class="w-full"
         variant="bcGov"
         @change="$emit('update:modelValue', address)"
+        data-cy="address-postal-code"
       />
     </div>
     <!--  location description optional -->
@@ -76,6 +85,7 @@
         class="w-full"
         variant="bcGov"
         @change="$emit('update:modelValue', address)"
+        data-cy="address-location-description"
       />
     </div>
   </UFormGroup>
@@ -86,6 +96,7 @@ import { ref, Ref } from 'vue'
 import type { PropType } from 'vue'
 
 import { BtrAddressI, BtrCountryI, BtrCountrySubdivisionI } from '~/interfaces/btr-address-i'
+import { countrySubdivisions } from '~/utils/isoCountriesList'
 
 const emit = defineEmits<{ 'update:modelValue': [value: BtrAddressI] }>()
 const props = defineProps({
@@ -101,7 +112,25 @@ watch(country, (newCountry: BtrCountryI, _: BtrCountryI) => {
 
 const countries = isoCountriesList
 const address: Ref<BtrAddressI> = ref(props.modelValue)
-const regions: Ref<Array<BtrCountrySubdivisionI>> = ref([])
+const regions = computed(() => {
+  switch (address.value.country.alpha_2) {
+    case 'US':
+      return countrySubdivisions.us
+    case 'CA':
+      return countrySubdivisions.ca
+    default:
+      return []
+  }
+})
+
+const clearAddressForm = () => {
+  Object.assign(address.value, { city: '', line1: '', line2: '', locationDescription: '', postalCode: '', region: '', country: country.value })
+}
+
+const changeCountry = (country) => {
+  clearAddressForm()
+  emit('update:modelValue', address.value)
+}
 
 const addrAutoCompleted = (selectedAddr: BtrAddressI) => {
   Object.assign(address.value, selectedAddr)

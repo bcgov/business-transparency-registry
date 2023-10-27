@@ -2,6 +2,9 @@ export default defineAppConfig({
   ui: {
     primary: 'bcGovBlue',
     gray: 'bcGovGray',
+    formGroup: {
+      label: { base: 'block text-base font-bold text-gray-700 dark:text-gray-200' }
+    },
     input: {
       rounded: 'rounded-none',
       variant: {

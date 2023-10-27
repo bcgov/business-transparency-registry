@@ -1,6 +1,7 @@
 <template>
   <div data-test="addIndividualPerson" class="flex-col w-full">
     <div>
+      <!-- todo: move this to lang file -->
       <p class="text-justify">
         To add a person to the transparency register of this business,
         enter their name and email address. A request will be sent to the person at
@@ -46,9 +47,11 @@
     <template v-if="showAddInfoManually">
       <div class="flex-col py-5">
         <p class="font-bold py-3">
+          <!-- todo: move this to lang file -->
           Beneficial Ownership Assessment
         </p>
         <p class="text-justify">
+          <!-- todo: move this to lang file -->
           Beneficial Ownership is determined by the control of of shares and/or votes at general meetings,
           and control of the right to elect, appoint, or remove directors of the business.
 
@@ -90,9 +93,13 @@
       </div>
       <div>
         <p class="font-bold mt-5">
+          <!-- todo: move this to lang file -->
           Birthdate
         </p>
         <BcrosInputsDateSelect class="mt-5" :max-date="maxDate" @selection="birthdate = $event" />
+      </div>
+      <div class="my-10">
+        <BcrosInputsAddress id="addNewPersonLastKnownAddress" :label="$t('labels.lastKnownAddress')" v-model="lastKnownAddress"/>
       </div>
     </template>
   </div>
@@ -115,6 +122,9 @@ const percentOfVotes: Ref<number | undefined> = ref(undefined)
 // birthdate
 const maxDate = new Date()
 const birthdate: Ref<Date | null> = ref(null)
+const lastKnownAddress: Ref<BtrAddressI> = ref({
+  city: '', country: { name: '', alpha_2: '' }, line1: '', postalCode: '', region: '', line2: '', locationDescription: ''
+})
 
 // full name
 const minNameLength = 1
