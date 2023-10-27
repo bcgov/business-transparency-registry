@@ -1,5 +1,5 @@
 <template>
-  <UFormGroup :label="label" name="fullName">
+  <UFormGroup :label="label" name="preferredName">
     <UInput
       :id="id"
       type="text"
