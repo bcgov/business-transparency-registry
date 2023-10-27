@@ -12,6 +12,7 @@
         variant="bcGov"
         option-attribute="name"
         @change="$emit('update:modelValue', address)"
+        data-cy="address-country"
       />
     </div>
     <div class="flex py-2">
@@ -20,6 +21,8 @@
         :countryIso3166Alpha2="address?.country.alpha_2"
         @addrAutoCompleted="addrAutoCompleted"
         @addrLine1Update="addrLine1Updated"
+        data-cy="address-line1-autocomplete"
+        id="123"
       />
     </div>
     <div class="flex py-2">
@@ -30,6 +33,7 @@
         class="w-full flex-1"
         variant="bcGov"
         @change="$emit('update:modelValue', address)"
+        data-cy="address-line2"
       />
     </div>
     <!--  city; region combo; postal code -->
@@ -41,6 +45,7 @@
         class="pr-4 w-full"
         variant="bcGov"
         @change="$emit('update:modelValue', address)"
+        data-cy="address-city"
       />
       <USelectMenu
         v-if="address.country.alpha_2==='US' || address?.country.alpha_2==='CA'"
@@ -52,6 +57,7 @@
         option-attribute="name"
         value-attribute="code"
         @change="$emit('update:modelValue', address)"
+        data-cy="address-region-select"
       />
       <UInput
         v-else
@@ -60,6 +66,7 @@
         class="pr-4 w-full"
         variant="bcGov"
         @change="$emit('update:modelValue', address)"
+        data-cy="address-region-input"
       />
       <UInput
         v-model="address.postalCode"
@@ -68,6 +75,7 @@
         class="w-full"
         variant="bcGov"
         @change="$emit('update:modelValue', address)"
+        data-cy="address-postal-code"
       />
     </div>
     <!--  location description optional -->
@@ -78,6 +86,7 @@
         class="w-full"
         variant="bcGov"
         @change="$emit('update:modelValue', address)"
+        data-cy="address-location-description"
       />
     </div>
   </UFormGroup>
