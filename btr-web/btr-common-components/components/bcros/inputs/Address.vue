@@ -22,7 +22,6 @@
         @addrAutoCompleted="addrAutoCompleted"
         @addrLine1Update="addrLine1Updated"
         data-cy="address-line1-autocomplete"
-        id="123"
       />
     </div>
     <div class="flex py-2">
