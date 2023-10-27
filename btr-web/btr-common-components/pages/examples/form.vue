@@ -33,7 +33,7 @@
         id="testDateAddress"
         v-model="addr"
         :label="$t('labels.address')"
-      ss  data-cy="testDateAddress"
+        data-cy="testDateAddress"
       />
       <br>
       {{

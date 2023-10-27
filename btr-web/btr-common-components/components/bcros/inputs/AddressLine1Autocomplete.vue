@@ -107,8 +107,12 @@ const getExactAddress = async (searchAddressId: string): Promise<CanadaPostRetri
   return addrForLang
 }
 
-watch(line1, async (newLine1: string, _: string) => {
+watch(line1, (newLine1: string, _: string) => {
   emit('update:modelValue', newLine1)
+})
+
+watch(() => props.modelValue, (newValue: string) => {
+  line1.value = newValue
 })
 
 </script>

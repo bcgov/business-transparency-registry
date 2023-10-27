@@ -9,7 +9,8 @@ describe('forms -> email -> validate that email component work inside example fo
 
     // invalid email
     cy.get('#testEmail').type('hrvoje..fekete@gmail.com').blur()
-    // cy.get('#exampleSubmitButton').click() // todo: investigate why is there uncaught error for zod form schema validation if we will use schema validation
+    // todo: investigate why is there uncaught error for zod form schema validation if we will use schema validation
+    // cy.get('#exampleSubmitButton').click()
     cy.contains('Invalid email').should('exist')
 
     // clear, required

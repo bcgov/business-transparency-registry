@@ -11,7 +11,7 @@
         :options="countries"
         variant="bcGov"
         option-attribute="name"
-        @change="$emit('update:modelValue', address)"
+        @change="changeCountry"
         data-cy="address-country"
       />
     </div>
@@ -122,6 +122,15 @@ const regions = computed(() => {
       return []
   }
 })
+
+const clearAddressForm = () => {
+  Object.assign(address.value, { city: '', line1: '', line2: '', locationDescription: '', postalCode: '', region: '', country: country.value })
+}
+
+const changeCountry = (country) => {
+  clearAddressForm()
+  emit('update:modelValue', address.value)
+}
 
 const addrAutoCompleted = (selectedAddr: BtrAddressI) => {
   Object.assign(address.value, selectedAddr)
