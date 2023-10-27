@@ -1,6 +1,6 @@
 <template>
   <div class="relative w-full z-10">
-    <Combobox v-model="selectedAddress">
+    <Combobox v-model="line1">
       <div class="relative mt-1">
         <div
           class="relative w-full cursor-default overflow-hidden bg-gray-100 text-left border-b-2 border-gray-500 focus:outline-none sm:text-sm"
@@ -8,42 +8,34 @@
           <ComboboxInput
             :placeholder="$t('labels.line1')"
             class="w-full border-none py-2 pl-3 pr-10 text-sm leading-5 bg-gray-100 text-gray-900 focus:ring-0"
-            :displayValue="(addr) => addr ? addr.Text: ''"
             @keyup="doTheSearch($event.target.value)"
           />
         </div>
-        <TransitionRoot
-          leave="transition ease-in duration-100"
-          leaveFrom="opacity-100"
-          leaveTo="opacity-0"
-          @after-leave="query = ''"
-        >
-          <ComboboxOptions class="absolute mt-1 max-h-60 w-full overflow-auto bg-white py-1 text-base shadow-lg focus:outline-none sm:text-sm">
-            <ComboboxOption
-              v-for="address in suggestedAddresses"
-              :key="address.Id"
-              as="template"
-              v-slot="{ selected, active }"
-              :value="address"
-            >
-              <li
-                class="relative cursor-default select-none py-2 pl-10 pr-4"
-                :class="{
+        <ComboboxOptions class="absolute mt-1 max-h-60 w-full overflow-auto bg-white py-1 text-base shadow-lg focus:outline-none sm:text-sm">
+          <ComboboxOption
+            v-for="address in suggestedAddresses"
+            :key="address.Id"
+            as="template"
+            v-slot="{ selected, active }"
+            :value="address"
+          >
+            <li
+              class="relative cursor-default select-none py-2 pl-10 pr-4"
+              :class="{
                   'bg-teal-600 text-white': active,
                   'text-gray-900': !active,
                 }"
-                @click="expandWhenMoreAddresses(address, $event)"
-              >
+              @click="selectFromDropdown(address, $event)"
+            >
                 <span
                   class="block"
                   :class="{ 'font-medium': selected, 'font-normal': !selected }"
                 >
                   {{ address.Text }} &nbsp; {{ address.Description }}
                 </span>
-              </li>
-            </ComboboxOption>
-          </ComboboxOptions>
-        </TransitionRoot>
+            </li>
+          </ComboboxOption>
+        </ComboboxOptions>
       </div>
     </Combobox>
   </div>
@@ -51,37 +43,38 @@
 
 <script setup lang="ts">
 import { ref, Ref } from 'vue'
-import {
-  Combobox,
-  ComboboxButton,
-  ComboboxInput,
-  ComboboxOption,
-  ComboboxOptions,
-  TransitionRoot
-} from '@headlessui/vue'
+import { Combobox, ComboboxInput, ComboboxOption, ComboboxOptions } from '@headlessui/vue'
+import { CanadaPostApiFindResponseItemI, CanadaPostRetrieveItemI } from '~/utils'
+import { BtrAddressI } from '~/interfaces/btr-address-i'
 
 const runtimeConfig = useRuntimeConfig()
 
 const emit = defineEmits<{
   addrAutoCompleted: [value: BtrAddressI]
-  addrLine1Update: [value: string]
+  'update:modelValue': [value: string]
 }>()
 const props = defineProps({
   countryIso3166Alpha2: { type: String, required: false, default: 'CA' },
   maxSuggestions: { type: Number, required: false, default: 7 },
-  langCode: { type: String, required: false, default: 'ENG' }
+  langCode: { type: String, required: false, default: 'ENG' },
+  modelValue: { type: String, required: true }
 })
 
 const canadaPostApiKey = runtimeConfig.public.addressCompleteKey
-const selectedAddress: Ref<CanadaPostApiFindResponseItemI | null> = ref(null)
 const suggestedAddresses: Ref<Array<CanadaPostApiFindResponseItemI>> = ref([])
-const query = ref('')
-const expandWhenMoreAddresses = async (address: CanadaPostApiFindResponseItemI, event: Event) => {
+// @ts-ignore
+const line1: Ref<string> = ref(props.modelValue)
+const selectFromDropdown = async (address: CanadaPostApiFindResponseItemI, event: Event) => {
   if (address?.Next === 'Find') {
     event.stopPropagation()
     event.preventDefault()
 
-    suggestedAddresses.value = await findAddress(query, address.Id, props, canadaPostApiKey)
+    suggestedAddresses.value = await findAddress(line1, address.Id, props, canadaPostApiKey)
+  } else {
+    const address1 = await getExactAddress(address.Id)
+    line1.value = address1.Line1
+    const btrAddr: BtrAddressI = convertToBtrAddress(address1)
+    emit('addrAutoCompleted', btrAddr)
   }
 }
 
@@ -99,31 +92,23 @@ const convertToBtrAddress = (addr: CanadaPostRetrieveItemI): BtrAddressI => {
 
 const doTheSearch = async (searchTerm) => {
   // todo: add debounce
-  query.value = searchTerm
-  // append currently typed value as first item to allow usage of this as a value
-  const typedAddress: CanadaPostApiFindResponseItemI = { Cursor: 0, Description: undefined, Highlight: undefined, Id: undefined, Next: undefined, Text: searchTerm }
-  const found = await findAddress(searchTerm, '', props, canadaPostApiKey)
-  suggestedAddresses.value = [typedAddress].concat(found)
+  line1.value = searchTerm
+  suggestedAddresses.value = await findAddress(searchTerm, '', props, canadaPostApiKey)
 }
 
-watch(selectedAddress, async (newAddress: CanadaPostApiFindResponseItemI, oldAddress: CanadaPostApiFindResponseItemI) => {
-  if (newAddress?.Id !== oldAddress?.Id) {
-    const retrievedAddresses = await retrieveAddress(newAddress.Id, canadaPostApiKey)
-    let addrForLang = retrievedAddresses.find(addr => addr.Language === props.langCode)
-    if (!addrForLang && retrievedAddresses) {
-      addrForLang =
-        retrievedAddresses.find(addr => addr.Language === 'ENG') ||
-        retrievedAddresses[0]
-    }
-
-    const addr: CanadaPostRetrieveItemI = addrForLang
-
-    if (addr) {
-      const btrAddr: BtrAddressI = convertToBtrAddress(addr)
-      emit('addrAutoCompleted', btrAddr)
-    }
-  } else if (!newAddress?.Id) {
-    emit('addrLine1Update', newAddress.Text)
+const getExactAddress = async (searchAddressId: string): Promise<CanadaPostRetrieveItemI> => {
+  const retrievedAddresses = await retrieveAddress(searchAddressId, canadaPostApiKey)
+  let addrForLang = retrievedAddresses.find(addr => addr.Language === props.langCode)
+  if (!addrForLang && retrievedAddresses) {
+    addrForLang =
+      retrievedAddresses.find(addr => addr.Language === 'ENG') ||
+      retrievedAddresses[0]
   }
+  return addrForLang
+}
+
+watch(line1, async (newLine1: string, _: string) => {
+  emit('update:modelValue', newLine1)
 })
+
 </script>

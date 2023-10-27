@@ -18,9 +18,9 @@
     <div class="flex py-2">
       <!--  address line 1 -->
       <BcrosInputsAddressLine1Autocomplete
+        v-model="address.line1"
         :countryIso3166Alpha2="address?.country.alpha_2"
         @addrAutoCompleted="addrAutoCompleted"
-        @addrLine1Update="addrLine1Updated"
         data-cy="address-line1-autocomplete"
       />
     </div>
