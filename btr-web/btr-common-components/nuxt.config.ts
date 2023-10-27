@@ -18,6 +18,9 @@ export default defineNuxtConfig({
     '@pinia/nuxt',
     'nuxt-vitest'
   ],
+  imports: {
+    dirs: ['enums', 'interfaces', 'stores']
+  },
   i18n: {
     lazy: true,
     defaultLocale: 'en',
@@ -33,6 +36,17 @@ export default defineNuxtConfig({
   },
   pinia: {
     /* pinia module options */
+  },
+  runtimeConfig: {
+    public: {
+      // Keys within public, will be also exposed to the client-side
+      authApiURL: `${process.env.VUE_APP_AUTH_API_URL || ''}${process.env.VUE_APP_AUTH_API_VERSION || ''}`,
+      authWebURL: process.env.VUE_APP_AUTH_WEB_URL || '',
+      registryHomeURL: process.env.VUE_APP_REGISTRY_HOME_URL || '',
+      kcURL: process.env.VUE_APP_KEYCLOAK_AUTH_URL || '',
+      kcRealm: process.env.VUE_APP_KEYCLOAK_REALM || '',
+      kcClient: 'business-search-web'
+    }
   },
   vite: {
     css: {

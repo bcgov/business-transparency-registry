@@ -42,7 +42,7 @@ defineProps<{
   menuButtonText?: string
   menuLists?: {
     header?: string,
-    items?: { label: string, icon?: string, action?:() => any }[]
+    items?: HeaderMenuItemI[]
   }[]
 }>()
 

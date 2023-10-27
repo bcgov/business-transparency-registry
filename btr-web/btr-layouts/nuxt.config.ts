@@ -21,6 +21,9 @@ export default defineNuxtConfig({
     '@pinia/nuxt',
     'nuxt-vitest'
   ],
+  imports: {
+    dirs: ['enums', 'interfaces', 'stores']
+  },
   eslint: {
     /* module options */
     lintOnStart: false,

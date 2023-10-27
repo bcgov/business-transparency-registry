@@ -25,6 +25,9 @@ export default defineNuxtConfig({
       { code: 'en', file: 'en.json' }
     ]
   },
+  imports: {
+    dirs: ['enums', 'interfaces', 'stores']
+  },
   eslint: {
     /* module options */
     lintOnStart: false,

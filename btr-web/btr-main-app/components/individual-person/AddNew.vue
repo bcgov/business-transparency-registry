@@ -93,8 +93,7 @@
       </div>
       <div>
         <p class="font-bold mt-5">
-          <!-- todo: move this to lang file -->
-          Birthdate
+          {{ $t('labels.birthdate') }}
         </p>
         <BcrosInputsDateSelect class="mt-5" :max-date="maxDate" @selection="birthdate = $event" />
       </div>

@@ -1,5 +1,6 @@
 {
   "labels": {
+    "birthdate": "Birthdate",
     "emailAddress": "Email address: ",
     "fullName": "Full Legal Name: ",
     "address": "Address: ",
@@ -10,7 +11,12 @@
     "city": "City",
     "region": "Region (Optional)",
     "postalCode": "Postal Code",
-    "locationDescription": "Location Description (Optional)"
+    "locationDescription": "Location Description (Optional)",
+    "services": {
+      "bcsc": "BC Services Card",
+      "bceid": "BCeID",
+      "idir": "IDIR"
+    }
   },
   "placeholders": {
     "dateSelect": "Select Date"
@@ -42,7 +48,6 @@
       },
       "labels": {
         "accountInfo": "Account Info",
-        "bcsc": "BC Services Card",
         "createAccount": "Create Account",
         "editProfile": "Edit Profile",
         "logOut": "Log Out",
