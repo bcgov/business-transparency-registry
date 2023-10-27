@@ -1,21 +1,21 @@
 import { expect, describe, test } from 'vitest'
 import { setup } from '@nuxt/test-utils'
 import { mount } from '@vue/test-utils'
-import BcrosFooter from '../../../components/footer/BcrosFooter.vue'
+import Footer from '../../../components/bcros/Footer.vue'
 
-describe('Tests for BcrosFooter.vue', async () => {
+describe('Tests for Footer.vue', async () => {
   await setup({
     // Test context options
   })
 
   test('UTooltip component rendered', () => {
-    const wrapper = mount(BcrosFooter)
+    const wrapper = mount(Footer)
     const tooltip = wrapper.find('#footer-tooltip')
     expect(tooltip.exists()).toBeTruthy()
   })
 
   test('footer nav links rendered', () => {
-    const wrapper = mount(BcrosFooter)
+    const wrapper = mount(Footer)
 
     const expectedTexts = ['Home', 'Disclaimer', 'Privacy', 'Accessibility', 'Copyright']
     const expectedHrefs = [
