@@ -23,7 +23,15 @@
           data-cy="testFullName"
         />
       </div>
-      <div class="">
+      <div class="flex-col py-5">
+        <BcrosInputsPreferredNameField
+          id="individual-person-preferred-name"
+          v-model="state.preferredName"
+          :label="$t('labels.preferredName')"
+          data-cy="testPreferredName"
+        />
+      </div>
+      <div class="flex-col py-5">
         <BcrosInputsEmailField
           id="individual-person-email"
           v-model="state.email"
@@ -138,6 +146,11 @@ const schema = z.object({
       .max(maxNameLength, t('errors.validation.fullName.maxLengthExceeded'))
       .refine(validateNameCharacters, t('errors.validation.fullName.specialCharacter'))
   ),
+  preferredName: z.preprocess(normalizeName,
+    z.string()
+      .max(maxNameLength, t('errors.validation.preferredName.maxLengthExceeded'))
+      .refine(validatePreferredName, t('errors.validation.preferredName.specialCharacter'))
+  ),
   email: z.string()
     .min(1, t('errors.validation.email.empty'))
     .max(254, 'errors.validation.email.maxLengthExceeded')
@@ -146,7 +159,8 @@ const schema = z.object({
 
 const state = reactive({
   email: undefined,
-  fullName: undefined
+  fullName: undefined,
+  preferredName: undefined
 })
 </script>
 
