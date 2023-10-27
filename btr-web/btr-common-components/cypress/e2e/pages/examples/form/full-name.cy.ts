@@ -43,7 +43,6 @@ describe('forms -> preferred name -> validate that the preferred name component 
     const invalidName = 'first - last'
     const validName = 'first last'
 
-
     cy.get('#testFullName').type(invalidName).blur()
     cy.contains('The legal name should not contain special character').should('exist')
 
