@@ -11,7 +11,7 @@
     "build:local": "nuxt build",
     "dev": "nuxt dev --port=3000",
     "generate": "nuxt generate",
-    "lint": "eslint --cache . --max-warnings 0",
+    "lint": "eslint --cache --ext '.ts,.vue' . --max-warnings 0",
     "lint:fix": "nr lint --fix",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
