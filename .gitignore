@@ -149,5 +149,4 @@ htmlcov/
 # IDEs
 .idea
 
-.env*
-!.env.sample
+.env
