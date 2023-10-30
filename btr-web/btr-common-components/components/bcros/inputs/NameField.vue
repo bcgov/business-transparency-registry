@@ -1,5 +1,5 @@
 <template>
-  <UFormGroup :label="label" name="preferredName">
+  <UFormGroup :label="label" :name="name">
     <UInput
       :id="id"
       type="text"
@@ -20,6 +20,7 @@ const emit = defineEmits<{(e: 'update:modelValue', value: string): void}>()
 const props = defineProps({
   label: { type: [String], default: '' },
   id: { type: String, required: true },
+  name: { type: String, default: 'name' },
   modelValue: { type: String, default: '' }
 })
 

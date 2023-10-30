@@ -14,15 +14,18 @@
       :state="state"
       @submit="submit"
     >
-      <BcrosInputsFullNameField
+      <BcrosInputsNameField
         id="testFullName"
         v-model="state.fullName"
+        name="fullName"
         :label="$t('labels.fullName')"
         data-cy="testFullName"
       />
-      <BcrosInputsPreferredNameField
+
+      <BcrosInputsNameField
         id="testPreferredName"
         v-model="state.preferredName"
+        name="preferredName"
         :label="$t('labels.preferredName')"
         data-cy="testPreferredName"
       />

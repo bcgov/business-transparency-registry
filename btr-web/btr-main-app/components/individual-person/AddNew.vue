@@ -16,17 +16,19 @@
       :state="state"
     >
       <div class="flex-col py-5">
-        <BcrosInputsFullNameField
+        <BcrosInputsNameField
           id="individual-person-full-name"
           v-model="state.fullName"
+          name="fullName"
           :label="$t('labels.fullName')"
           data-cy="testFullName"
         />
       </div>
       <div class="flex-col py-5">
-        <BcrosInputsPreferredNameField
+        <BcrosInputsNameField
           id="individual-person-preferred-name"
           v-model="state.preferredName"
+          name="preferredName"
           :label="$t('labels.preferredName')"
           data-cy="testPreferredName"
         />
