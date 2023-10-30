@@ -9,6 +9,7 @@ steps:
       pnpm build
   # setup .env
   - name: 'bash'
+    dir: btr-web/btr-main-app
     script: |
       #!/usr/bin/env bash
       cp .env.example .env
