@@ -96,7 +96,7 @@ export const useBcrosAccount = defineStore('bcros/account', () => {
     let currentAccountId = route.params?.accountid as string
     if (!currentAccountId) {
       // get id from existing session storage
-      currentAccountId = JSON.parse(sessionStorage.getItem(SessionStorageKeyE.CurrentAccount) || '{}').id
+      currentAccountId = JSON.parse(sessionStorage.getItem(SessionStorageKeyE.CURRENT_ACCOUNT) || '{}').id
     }
     if (user.value?.keycloakGuid) {
       userAccounts.value = await getUserAccounts(user.value?.keycloakGuid) || []
@@ -106,7 +106,7 @@ export const useBcrosAccount = defineStore('bcros/account', () => {
           // if previous current account id selection information available set this as current account
           currentAccount.value = userAccounts.value.find(account => account.id === currentAccountId) || {} as AccountI
         }
-        sessionStorage.setItem(SessionStorageKeyE.CurrentAccount, JSON.stringify(currentAccount.value))
+        sessionStorage.setItem(SessionStorageKeyE.CURRENT_ACCOUNT, JSON.stringify(currentAccount.value))
       }
     }
   }
@@ -118,7 +118,7 @@ export const useBcrosAccount = defineStore('bcros/account', () => {
         currentAccount.value = userAccounts.value[i]
       }
     }
-    sessionStorage.setItem(SessionStorageKeyE.CurrentAccount, JSON.stringify(currentAccount.value))
+    sessionStorage.setItem(SessionStorageKeyE.CURRENT_ACCOUNT, JSON.stringify(currentAccount.value))
   }
 
   return {

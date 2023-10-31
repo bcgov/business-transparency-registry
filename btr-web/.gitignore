@@ -20,6 +20,7 @@ logs
 
 # Local env files
 .env
+*.firebase
 
 # other
 .eslintcache

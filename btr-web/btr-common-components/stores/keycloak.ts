@@ -34,21 +34,21 @@ export const useBcrosKeycloak = defineStore('bcros/keycloak', () => {
 
   function clearSession () {
     kc.value = {} as Keycloak
-    sessionStorage.removeItem(SessionStorageKeyE.KeyCloakToken)
-    sessionStorage.removeItem(SessionStorageKeyE.KeyCloakTokenRefresh)
-    sessionStorage.removeItem(SessionStorageKeyE.KeyCloakTokenId)
-    sessionStorage.removeItem(SessionStorageKeyE.KeycloakSynced)
+    sessionStorage.removeItem(SessionStorageKeyE.KEYCLOAK_TOKEN)
+    sessionStorage.removeItem(SessionStorageKeyE.KEYCLOAK_TOKEN_REFRESH)
+    sessionStorage.removeItem(SessionStorageKeyE.KEYCLOAK_TOKEN_ID)
+    sessionStorage.removeItem(SessionStorageKeyE.KEYCLOAK_SYNCED)
   }
 
   function syncSessionStorage () {
     if (!kc.value) {
-      sessionStorage.setItem(SessionStorageKeyE.KeycloakSynced, 'false')
+      sessionStorage.setItem(SessionStorageKeyE.KEYCLOAK_SYNCED, 'false')
       return
     }
-    sessionStorage.setItem(SessionStorageKeyE.KeyCloakToken, kc.value?.token || '')
-    sessionStorage.setItem(SessionStorageKeyE.KeyCloakTokenRefresh, kc.value?.refreshToken || '')
-    sessionStorage.setItem(SessionStorageKeyE.KeyCloakTokenId, kc.value?.idToken || '')
-    sessionStorage.setItem(SessionStorageKeyE.KeycloakSynced, 'true')
+    sessionStorage.setItem(SessionStorageKeyE.KEYCLOAK_TOKEN, kc.value?.token || '')
+    sessionStorage.setItem(SessionStorageKeyE.KEYCLOAK_TOKEN_REFRESH, kc.value?.refreshToken || '')
+    sessionStorage.setItem(SessionStorageKeyE.KEYCLOAK_TOKEN_ID, kc.value?.idToken || '')
+    sessionStorage.setItem(SessionStorageKeyE.KEYCLOAK_SYNCED, 'true')
   }
 
   async function initKeyCloak (
@@ -59,7 +59,6 @@ export const useBcrosKeycloak = defineStore('bcros/keycloak', () => {
     idpHint?: string,
     forceLogin?: boolean
   ) {
-    // clearSession()
     kc.value = new Keycloak(config)
     if (kc.value) {
       // add idpHint to login options
@@ -103,8 +102,8 @@ export const useBcrosKeycloak = defineStore('bcros/keycloak', () => {
     }, timeout)
   }
 
-  async function logout () {
-    await kc.value?.logout()
+  async function logout (redirect: string) {
+    await kc.value?.logout({ redirectUri: redirect })
     clearSession()
   }
 

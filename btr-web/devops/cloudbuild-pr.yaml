@@ -1,18 +1,24 @@
 steps:
+  # setup .env
+  - name: 'gcr.io/cloud-builders/gcloud'
+    dir: btr-web/btr-main-app
+    entrypoint: bash
+    args: ['-c', 'cp .env.example .env']
   # install deps
   - name: 'node:20.6.1'
-    dir: btr-web/btr-main-app
+    dir: btr-web
+    env:
+      - 'VUE_APP_ADDRESS_COMPLETE_KEY=$_VUE_APP_ADDRESS_COMPLETE_KEY'
     script: |
       #!/usr/bin/env bash
       npm install --global pnpm
       pnpm install
-      pnpm build
-  # setup .env
-  - name: 'bash'
-    dir: btr-web/btr-main-app
-    script: |
-      #!/usr/bin/env bash
-      cp .env.example .env
+      pnpm build:btr-main-app
+  # mv dist folder root
+  - name: 'gcr.io/cloud-builders/gcloud'
+    dir: btr-web
+    entrypoint: bash
+    args: ['-c', 'mv btr-main-app/dist .']
   # deploy
   - name: gcr.io/yfthig-dev/firebase
     args:

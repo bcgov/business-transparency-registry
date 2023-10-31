@@ -5,6 +5,7 @@
   "scripts": {
     "build": "pnpm --filter-prod btr-main-app build",
     "build:btr-main-app": "pnpm --filter-prod btr-main-app build",
+    "dev": "pnpm -F btr-main-app dev",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],

@@ -5,19 +5,31 @@ export const useAuth = () => {
   const config = useRuntimeConfig()
   const keycloak = useBcrosKeycloak()
   const account = useBcrosAccount()
+  const { redirect, goToSetupAccount, goToCreateAccount } = useNavigate()
   const authenticated = ref(false)
 
-  /** Redirect to bcros login page given the login type. */
-  function goToLogin (idpHint: string) {
-    const loginURL = config.public.registryHomeURL + 'signin'
-    window.location.assign(`${loginURL}/${idpHint}`)
+  /** redirect to the correct creation screen based on auth state */
+  function createAccount () {
+    if (authenticated.value) {
+      goToSetupAccount()
+    } else {
+      goToCreateAccount()
+    }
   }
 
   /** Logout and then redirect to given page (if redirect provided). */
-  function logout (redirect: string) {
-    keycloak.logout()
-    if (redirect) {
-      window.location.assign(redirect)
+  async function logout (redirect: string) { await keycloak.logout(redirect) }
+
+  /** redirect if account status is suspended */
+  function verifyAccountStatus () {
+    const accountStatus = account.currentAccount?.accountStatus
+    if (accountStatus) {
+      if ([AccountStatusE.NSF_SUSPENDED, AccountStatusE.SUSPENDED].includes(accountStatus)) {
+        redirect(`${config.public.authWebURL}/account-freeze`)
+      } else if (accountStatus === AccountStatusE.PENDING_STAFF_REVIEW) {
+        const accountName = encodeURIComponent(btoa(account.currentAccountName || ''))
+        redirect(`${config.public.authWebURL}/pendingapproval/${accountName}/true`)
+      }
     }
   }
 
@@ -25,9 +37,9 @@ export const useAuth = () => {
   async function setupAuth (kcConfig: KeycloakConfig) {
     if (!authenticated.value) {
       console.info('Initializing auth setup...')
-      const token = sessionStorage.getItem(SessionStorageKeyE.KeyCloakToken) || undefined
-      const refreshToken = sessionStorage.getItem(SessionStorageKeyE.KeyCloakTokenRefresh) || undefined
-      const idToken = sessionStorage.getItem(SessionStorageKeyE.KeyCloakTokenId) || undefined
+      const token = sessionStorage.getItem(SessionStorageKeyE.KEYCLOAK_TOKEN) || undefined
+      const refreshToken = sessionStorage.getItem(SessionStorageKeyE.KEYCLOAK_TOKEN_REFRESH) || undefined
+      const idToken = sessionStorage.getItem(SessionStorageKeyE.KEYCLOAK_TOKEN_ID) || undefined
       // initialize keycloak with user token
       console.info('Initializing Keycloak...')
       authenticated.value = await keycloak.initKeyCloak(kcConfig, token, refreshToken, idToken)
@@ -43,16 +55,8 @@ export const useAuth = () => {
         await account.setAccountInfo()
         // check account status
         console.info('Checking account status...')
-        // redirect if account status is suspended
-        const accountStatus = account.currentAccount?.accountStatus
-        if (accountStatus) {
-          if ([AccountStatusE.NSF_SUSPENDED, AccountStatusE.SUSPENDED].includes(accountStatus)) {
-            window.location.assign(`${config.public.authWebURL}/account-freeze`)
-          } else if (accountStatus === AccountStatusE.PENDING_STAFF_REVIEW) {
-            const accountName = encodeURIComponent(btoa(account.currentAccountName || ''))
-            window.location.assign(`${config.public.authWebURL}/pendingapproval/${accountName}/true`)
-          }
-        }
+        // verify account status
+        verifyAccountStatus()
         console.info('Auth setup complete.')
       }
     }
@@ -60,7 +64,7 @@ export const useAuth = () => {
 
   return {
     authenticated,
-    goToLogin,
+    createAccount,
     logout,
     setupAuth
   }

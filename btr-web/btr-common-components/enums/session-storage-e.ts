@@ -1,7 +1,7 @@
 export enum SessionStorageKeyE {
-  CurrentAccount = 'CURRENT_ACCOUNT',
-  KeycloakSynced = 'synced',
-  KeyCloakToken = 'KEYCLOAK_TOKEN',
-  KeyCloakTokenId = 'KEYCLOAK_ID_TOKEN',
-  KeyCloakTokenRefresh = 'KEYCLOAK_REFRESH_TOKEN',
+  CURRENT_ACCOUNT = 'CURRENT_ACCOUNT',
+  KEYCLOAK_SYNCED = 'synced',
+  KEYCLOAK_TOKEN = 'KEYCLOAK_TOKEN',
+  KEYCLOAK_TOKEN_ID = 'KEYCLOAK_ID_TOKEN',
+  KEYCLOAK_TOKEN_REFRESH = 'KEYCLOAK_REFRESH_TOKEN',
 }
