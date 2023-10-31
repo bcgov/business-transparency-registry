@@ -5,6 +5,7 @@
   "scripts": {
     "build": "pnpm --filter-prod btr-main-app build",
     "build:btr-main-app": "pnpm --filter-prod btr-main-app build",
+    "dev": "pnpm -F btr-main-app dev",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -19,23 +20,25 @@
     "@nuxtjs/i18n": "^8.0.0-rc.5",
     "@nuxtjs/stylelint-module": "^5.1.0",
     "@pinia/nuxt": "^0.4.11",
+    "@testing-library/vue": "7.0.0",
     "cypress": "^13.3.0",
     "eslint": "^8.50.0",
-    "nuxt": "^3.7.4",
     "happy-dom": "12.1.2",
     "jsdom": "22.1.0",
-    "postcss-html": "^1.5.0",
+    "nuxt": "^3.7.4",
     "nuxt-vitest": "0.11.0",
+    "postcss-html": "^1.5.0",
     "sass": "^1.68.0",
     "sass-loader": "^13.3.2",
     "stylelint": "^15.10.3",
     "stylelint-config-recommended-vue": "^1.5.0",
     "typescript": "^5.2.2",
     "vitest": "^0.33.0",
-    "@testing-library/vue": "7.0.0",
     "vue-tsc": "1.8.15"
   },
   "dependencies": {
+    "axios": "^1.5.1",
+    "http-status-codes": "^2.3.0",
     "zod": "^3.22.4"
   }
 }

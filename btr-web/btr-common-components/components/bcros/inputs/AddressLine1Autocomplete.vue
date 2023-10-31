@@ -1,9 +1,9 @@
 <template>
   <div class="relative w-full z-10">
     <Combobox v-model="line1">
-      <div class="relative mt-1">
+      <div class="mt-1">
         <div
-          class="relative w-full cursor-default overflow-hidden bg-gray-100 text-left border-b-2 border-gray-500 focus:outline-none sm:text-sm"
+          class="w-full cursor-default overflow-hidden bg-gray-100 text-left border-b-2 border-gray-500 focus:outline-none sm:text-sm"
         >
           <ComboboxInput
             :placeholder="$t('labels.line1')"
@@ -20,7 +20,7 @@
             :value="address"
           >
             <li
-              class="relative cursor-default select-none py-2 pl-10 pr-4"
+              class="cursor-default select-none py-2 pl-10 pr-4"
               :class="{
                   'bg-teal-600 text-white': active,
                   'text-gray-900': !active,

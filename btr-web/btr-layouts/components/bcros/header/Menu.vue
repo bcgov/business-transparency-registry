@@ -17,7 +17,7 @@
       leave-to-class="transform scale-95 opacity-0"
     >
       <MenuItems :class="menuItemsClasses">
-        <div class="divide-y-2 divide-bcGovGray-100 text-bcGovGray-700 w-[250px]">
+        <div class="divide-y-2 divide-bcGovGray-100 text-bcGovGray-700 min-w-[300px]">
           <div v-for="menuList, i in menuLists" :key="(menuList.header || '') + i" class="py-3">
             <slot :name="'menu-list-header-' + i">
               <h3 v-if="menuList.header" class="px-4 pb-2 font-bold text-bcGovGray-900">
@@ -42,7 +42,7 @@ defineProps<{
   menuButtonText?: string
   menuLists?: {
     header?: string,
-    items?: { label: string, icon?: string, action?:() => any }[]
+    items?: HeaderMenuItemI[]
   }[]
 }>()
 

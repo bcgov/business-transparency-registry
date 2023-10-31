@@ -8,7 +8,7 @@
       "warn",
       { "code": 120, "ignoreRegExpLiterals": true, "ignoreTrailingComments": true }
     ],
-    "no-console": ["error", { "allow": ["warn", "error"] }],
+    "no-console": ["error", { "allow": ["warn", "error", "info"] }],
     // "no-return-assign": "off",
     "vue/multi-word-component-names": "off",
     "vue/no-unused-vars": "warn",

@@ -18,7 +18,7 @@
       leave-from-class="translate-y-0 opacity-100"
       leave-to-class="translate-y-1 opacity-0"
     >
-      <PopoverPanel class="absolute z-10 mt-12">
+      <PopoverPanel class="absolute z-20 mt-12">
         <BcrosDatePicker
           :default-selected-date="selectedDate"
           :set-max-date="maxDate"

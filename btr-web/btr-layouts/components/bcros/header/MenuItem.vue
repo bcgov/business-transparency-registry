@@ -14,13 +14,15 @@
 
 <script setup lang="ts">
 import { MenuItem } from '@headlessui/vue'
-const props = defineProps<{
-  itemInfo: { label: string, icon?: string, setActive?: boolean, action?:() => any }
-}>()
+const props = defineProps<{ itemInfo: HeaderMenuItemI }>()
 
 const executeAction = () => {
   if (props.itemInfo.action) {
-    props.itemInfo.action()
+    if (props.itemInfo.args) {
+      props.itemInfo.action(props.itemInfo.args)
+    } else {
+      props.itemInfo.action()
+    }
   }
 }
 </script>
