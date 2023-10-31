@@ -4,7 +4,6 @@ import { createI18n } from 'vue-i18n'
 import { mountSuspended } from 'vitest-environment-nuxt/utils'
 
 import { IndividualPersonAddNew, BcrosInputsDateSelect, BcrosInputsAddress } from '#components'
-import { as } from 'vitest/dist/reporters-5f784f42'
 
 const i18n = createI18n({
   // vue-i18n options here ...

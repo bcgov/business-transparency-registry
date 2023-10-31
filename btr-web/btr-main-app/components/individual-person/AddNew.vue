@@ -108,7 +108,11 @@
         <BcrosInputsDateSelect class="mt-5" :max-date="maxDate" @selection="birthdate = $event" />
       </div>
       <div class="my-10">
-        <BcrosInputsAddress id="addNewPersonLastKnownAddress" :label="$t('labels.lastKnownAddress')" v-model="lastKnownAddress"/>
+        <BcrosInputsAddress
+          id="addNewPersonLastKnownAddress"
+          v-model="lastKnownAddress"
+          :label="$t('labels.lastKnownAddress')"
+        />
       </div>
     </template>
   </div>
@@ -132,7 +136,13 @@ const percentOfVotes: Ref<number | undefined> = ref(undefined)
 const maxDate = new Date()
 const birthdate: Ref<Date | null> = ref(null)
 const lastKnownAddress: Ref<BtrAddressI> = ref({
-  city: '', country: { name: '', alpha_2: '' }, line1: '', postalCode: '', region: '', line2: '', locationDescription: ''
+  city: '',
+  country: { name: '', alpha_2: '' },
+  line1: '',
+  postalCode: '',
+  region: '',
+  line2: '',
+  locationDescription: ''
 })
 
 // full name

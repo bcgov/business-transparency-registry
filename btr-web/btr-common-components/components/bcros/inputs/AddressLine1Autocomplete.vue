@@ -3,7 +3,16 @@
     <Combobox v-model="line1">
       <div class="mt-1">
         <div
-          class="w-full cursor-default overflow-hidden bg-gray-100 text-left border-b-2 border-gray-500 focus:outline-none sm:text-sm"
+          :class="[
+            'w-full',
+            'cursor-default',
+            'overflow-hidden',
+            'bg-gray-100',
+            'text-left',
+            'border-b-2',
+            'border-gray-500',
+            'focus:outline-none',
+            'sm:text-sm']"
         >
           <ComboboxInput
             :placeholder="$t('labels.line1')"
@@ -11,28 +20,42 @@
             @keyup="doTheSearch($event.target.value)"
           />
         </div>
-        <ComboboxOptions class="absolute mt-1 max-h-60 w-full overflow-auto bg-white py-1 text-base shadow-lg focus:outline-none sm:text-sm z-10">
+        <ComboboxOptions
+          :class="[
+            'absolute',
+            'mt-1',
+            'max-h-60',
+            'w-full',
+            'overflow-auto',
+            'bg-white',
+            'py-1',
+            'text-base',
+            'shadow-lg',
+            'focus:outline-none',
+            'sm:text-sm',
+            'z-10']"
+        >
           <ComboboxOption
             v-for="address in suggestedAddresses"
             :key="address.Id"
-            as="template"
             v-slot="{ selected, active }"
+            as="template"
             :value="address"
           >
             <li
               class="cursor-default select-none py-2 pl-10 pr-4"
               :class="{
-                  'bg-teal-600 text-white': active,
-                  'text-gray-900': !active,
-                }"
+                'bg-teal-600 text-white': active,
+                'text-gray-900': !active,
+              }"
               @click="selectFromDropdown(address, $event)"
             >
-                <span
-                  class="block"
-                  :class="{ 'font-medium': selected, 'font-normal': !selected }"
-                >
-                  {{ address.Text }} &nbsp; {{ address.Description }}
-                </span>
+              <span
+                class="block"
+                :class="{ 'font-medium': selected, 'font-normal': !selected }"
+              >
+                {{ address.Text }} &nbsp; {{ address.Description }}
+              </span>
             </li>
           </ComboboxOption>
         </ComboboxOptions>
