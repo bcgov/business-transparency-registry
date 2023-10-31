@@ -1,5 +1,5 @@
 <template>
-  <div class="relative w-full z-10">
+  <div class="relative w-full">
     <Combobox v-model="line1">
       <div class="mt-1">
         <div
@@ -11,7 +11,7 @@
             @keyup="doTheSearch($event.target.value)"
           />
         </div>
-        <ComboboxOptions class="absolute mt-1 max-h-60 w-full overflow-auto bg-white py-1 text-base shadow-lg focus:outline-none sm:text-sm">
+        <ComboboxOptions class="absolute mt-1 max-h-60 w-full overflow-auto bg-white py-1 text-base shadow-lg focus:outline-none sm:text-sm z-10">
           <ComboboxOption
             v-for="address in suggestedAddresses"
             :key="address.Id"
