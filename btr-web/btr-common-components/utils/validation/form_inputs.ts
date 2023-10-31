@@ -36,6 +36,15 @@ export const validateNameCharacters = (name: string): boolean => {
 }
 
 /**
+ * Validates a preferred name to ensure that it only consists of Unicode letters and whitespace.
+ * An empty string is also valid.
+ * @param {string} name - string representation of the name input
+ */
+export const validatePreferredName = (name: string): boolean => {
+  return name === '' || validateNameCharacters(name)
+}
+
+/**
  * Normalizes a name string.
  * If the name is provided, it removes leading, trailing, and extra spaces within the name.
  * If the name is undefined, it returns an empty string.

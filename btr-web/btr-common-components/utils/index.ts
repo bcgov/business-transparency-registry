@@ -1,4 +1,5 @@
-export { validateEmailRfc6532Regex, validateNameCharacters, normalizeName } from './validation/form_inputs'
+export { validateEmailRfc6532Regex, validateNameCharacters, validatePreferredName, normalizeName }
+  from './validation/form_inputs'
 
 // canada post retrieve api
 export type { CanadaPostRetrieveItemI, CanadaPostApiRetrieveParamsI } from './canadaPostAddressApi/retrieve-v2.11'

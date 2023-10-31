@@ -14,11 +14,20 @@
       :state="state"
       @submit="submit"
     >
-      <BcrosInputsFullNameField
+      <BcrosInputsNameField
         id="testFullName"
         v-model="state.fullName"
+        name="fullName"
         :label="$t('labels.fullName')"
         data-cy="testFullName"
+      />
+
+      <BcrosInputsNameField
+        id="testPreferredName"
+        v-model="state.preferredName"
+        name="preferredName"
+        :label="$t('labels.preferredName')"
+        data-cy="testPreferredName"
       />
       <BcrosInputsEmailField
         id="testEmail"
@@ -64,21 +73,27 @@ const maxNameLength = 150
 
 const { t } = useI18n()
 const schema = z.object({
-  email: z.string()
-    .max(254, 'errors.validation.email.maxLengthExceeded')
-    .refine(validateEmailRfc5322Regex, t('errors.validation.email.invalid')),
   fullName: z.preprocess(normalizeName,
     z.string()
       .min(minNameLength, t('errors.validation.fullName.empty'))
       .max(maxNameLength, t('errors.validation.fullName.maxLengthExceeded'))
       .refine(validateNameCharacters, t('errors.validation.fullName.specialCharacter'))
-  )
+  ),
+  preferredName: z.preprocess(normalizeName,
+    z.string()
+      .max(maxNameLength, t('errors.validation.preferredName.maxLengthExceeded'))
+      .refine(validatePreferredName, t('errors.validation.preferredName.specialCharacter'))
+  ),
+  email: z.string()
+    .max(254, 'errors.validation.email.maxLengthExceeded')
+    .refine(validateEmailRfc5322Regex, t('errors.validation.email.invalid'))
 })
 
 type Schema = z.output<typeof schema>
 const state = ref({
   email: undefined,
-  fullName: undefined
+  fullName: undefined,
+  preferredName: undefined
 })
 
 const addr: Ref<BtrAddressI> = ref({

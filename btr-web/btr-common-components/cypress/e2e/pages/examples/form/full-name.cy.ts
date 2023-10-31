@@ -1,4 +1,4 @@
-describe('forms -> full name -> validate that full name component work inside example form', () => {
+describe('forms -> preferred name -> validate that the preferred name component work inside example form', () => {
   beforeEach(() => {
     // navigate to index page and check footer and header exist
     cy.visit('/examples/form')
@@ -10,17 +10,13 @@ describe('forms -> full name -> validate that full name component work inside ex
       return false
     })
 
-    const email = 'abc@email.com'
     const invalidLongName = 'a'.repeat(151)
     const validLongName = '  ' + 'a'.repeat(150) + '  '
-    cy.get('#testEmail').type(email)
 
-    cy.get('#testFullName').type(invalidLongName)
-    cy.get('#exampleSubmitButton').click()
+    cy.get('#testFullName').type(invalidLongName).blur()
     cy.contains('The legal name must not exceed 150 characters').should('exist')
 
     cy.get('#testFullName').clear().type(validLongName).blur()
-    cy.get('#exampleSubmitButton').click()
     cy.contains('The legal name must not exceed 150 characters').should('not.exist')
   })
 
@@ -30,16 +26,12 @@ describe('forms -> full name -> validate that full name component work inside ex
       return false
     })
 
-    const email = 'abc@email.com'
     const singleCharacter = 'a'
-    cy.get('#testEmail').type(email)
-
-    cy.get('#exampleSubmitButton').click()
-    cy.contains('The legal name should contain at least one character').should('exist')
-
     cy.get('#testFullName').type(singleCharacter).blur()
-    cy.get('#exampleSubmitButton').click()
     cy.contains('The legal name should contain at least one character').should('not.exist')
+
+    cy.get('#testFullName').clear().blur()
+    cy.contains('The legal name should contain at least one character').should('exist')
   })
 
   it('test the validation rule for special character', () => {
@@ -48,17 +40,13 @@ describe('forms -> full name -> validate that full name component work inside ex
       return false
     })
 
-    const email = 'abc@email.com'
     const invalidName = 'first - last'
     const validName = 'first last'
-    cy.get('#testEmail').type(email)
 
-    cy.get('#testFullName').type(invalidName)
-    cy.get('#exampleSubmitButton').click()
+    cy.get('#testFullName').type(invalidName).blur()
     cy.contains('The legal name should not contain special character').should('exist')
 
     cy.get('#testFullName').clear().type(validName).blur()
-    cy.get('#exampleSubmitButton').click()
     cy.contains('The legal name should not contain special character').should('not.exist')
   })
 
@@ -77,9 +65,6 @@ describe('forms -> full name -> validate that full name component work inside ex
   })
 
   it('the displayed name should be normalized', () => {
-    const email = 'abc@email.com'
-    cy.get('#testEmail').type(email)
-
     const name = '    First name   M    Last   name    '
     const normailizeName = 'First name M Last name'
     cy.get('#testFullName').type(name)
