@@ -1,6 +1,7 @@
 import { expect, describe, test } from 'vitest'
-import Footer from '../../../components/bcros/Footer.vue'
 import { mountSuspended } from 'vitest-environment-nuxt/utils'
+
+import Footer from '../../../components/bcros/Footer.vue'
 
 describe('Tests for Footer.vue', () => {
   test('UTooltip component rendered', async () => {
