@@ -105,7 +105,7 @@ const props = defineProps({
   modelValue: { type: Object as PropType<BtrAddressI>, required: true }
 })
 
-const country = ref(null)
+const country: Ref<BtrCountryI | null> = ref(null)
 watch(country, (newCountry: BtrCountryI, _: BtrCountryI) => {
   address.value.country = newCountry
 })
@@ -137,6 +137,7 @@ const changeCountry = () => {
 
 const addrAutoCompleted = (selectedAddr: BtrAddressI) => {
   Object.assign(address.value, selectedAddr)
+  country.value = address.value.country
   emit('update:modelValue', address.value)
 }
 
