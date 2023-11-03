@@ -110,7 +110,7 @@ watch(country, (newCountry: BtrCountryI, _: BtrCountryI) => {
   address.value.country = newCountry
 })
 
-const countries = isoCountriesList
+const countries = iscCountriesListSortedByName
 const address: Ref<BtrAddressI> = ref(props.modelValue)
 const regions = computed(() => {
   switch (address.value.country.alpha_2) {

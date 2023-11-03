@@ -54,6 +54,12 @@
           + addr.region
       }}
       <br>
+      <!--      <br>-->
+      <!--      <BcrosInputsCountryCitizenship />-->
+      <br>
+      <BcrosInputsCountryCitizenshipDropdown v-model="citizenships" />
+      {{ citizenships }}
+      <br>
       <UButton id="exampleSubmitButton" type="submit" data-cy="submit-button">
         Submit
       </UButton>
@@ -95,6 +101,8 @@ const state = ref({
   fullName: undefined,
   preferredName: undefined
 })
+
+const citizenships = ref([])
 
 const addr: Ref<BtrAddressI> = ref({
   city: '',

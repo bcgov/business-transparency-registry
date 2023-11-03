@@ -12,7 +12,9 @@
             'border-b-2',
             'border-gray-500',
             'focus:outline-none',
-            'sm:text-sm']"
+            'sm:text-sm',
+            'h-[46px]'
+          ]"
         >
           <ComboboxInput
             :placeholder="$t('labels.line1')"
