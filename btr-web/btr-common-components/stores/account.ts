@@ -58,7 +58,7 @@ export const useBcrosAccount = defineStore('bcros/account', () => {
   async function setUserName () {
     if (user.value?.loginSource === LoginSourceE.BCEID) {
       // get from auth
-      const authUserInfo = await getAuthUserProfile('me')
+      const authUserInfo = await getAuthUserProfile('@me')
       if (authUserInfo) {
         userFirstName.value = authUserInfo.firstName
         userLastName.value = authUserInfo.lastName
@@ -71,7 +71,6 @@ export const useBcrosAccount = defineStore('bcros/account', () => {
 
   /** Get the user's account list */
   async function getUserAccounts (keycloakGuid: string) {
-    const axios = addAxiosInterceptors(Axios.create())
     const apiURL = useRuntimeConfig().public.authApiURL
     return await axios.get<UserSettingsI[]>(`${apiURL}/users/${keycloakGuid}/settings`)
       .then((response) => {

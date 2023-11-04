@@ -42,22 +42,26 @@ export const useAuth = () => {
       const idToken = sessionStorage.getItem(SessionStorageKeyE.KEYCLOAK_TOKEN_ID) || undefined
       // initialize keycloak with user token
       console.info('Initializing Keycloak...')
-      authenticated.value = await keycloak.initKeyCloak(kcConfig, token, refreshToken, idToken)
-      if (authenticated.value) {
-        // successfully initialized so setup other pieces
-        keycloak.syncSessionStorage()
-        keycloak.scheduleRefreshToken()
-        // set user info
-        console.info('Setting user name...')
-        await account.setUserName()
-        // set account info
-        console.info('Setting user account information...')
-        await account.setAccountInfo()
-        // check account status
-        console.info('Checking account status...')
-        // verify account status
-        verifyAccountStatus()
-        console.info('Auth setup complete.')
+      try {
+        authenticated.value = await keycloak.initKeyCloak(kcConfig, token, refreshToken, idToken)
+        if (authenticated.value) {
+          // successfully initialized so setup other pieces
+          keycloak.syncSessionStorage()
+          keycloak.scheduleRefreshToken()
+          // set user info
+          console.info('Setting user name...')
+          await account.setUserName()
+          // set account info
+          console.info('Setting user account information...')
+          await account.setAccountInfo()
+          // check account status
+          console.info('Checking account status...')
+          // verify account status
+          verifyAccountStatus()
+          console.info('Auth setup complete.')
+        }
+      } catch (error) {
+        console.warn('Keycloak initialization failed:', error)
       }
     }
   }

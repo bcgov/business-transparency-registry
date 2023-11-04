@@ -18,9 +18,9 @@
     >
       <MenuItems :class="menuItemsClasses">
         <div class="divide-y-2 divide-bcGovGray-100 text-bcGovGray-700 min-w-[300px]">
-          <div v-for="menuList, i in menuLists" :key="(menuList.header || '') + i" class="py-3">
+          <div v-for="menuList, i in menuLists" :key="(menuList.header || '') + i" class="py-3" data-cy="menu-list">
             <slot :name="'menu-list-header-' + i">
-              <h3 v-if="menuList.header" class="px-4 pb-2 font-bold text-bcGovGray-900">
+              <h3 v-if="menuList.header" class="px-4 pb-2 font-bold text-bcGovGray-900" data-cy="menu-list-header">
                 {{ menuList.header }}
               </h3>
             </slot>

@@ -26,7 +26,7 @@
           class="flex flex-auto justify-end h-full text-white"
         >
           <div v-if="authenticated" class="flex flex-wrap self-center text-sm">
-            <BcrosHeaderMenu :menu-lists="loggedInMenuOptions">
+            <BcrosHeaderMenu data-cy="logged-in-menu" :menu-lists="loggedInMenuOptions">
               <template #menu-button-text>
                 <BcrosHeaderAccountLabel :account-name="currentAccountName" :username="userFullName" />
               </template>
@@ -42,8 +42,16 @@
             </BcrosHeaderMenu>
           </div>
           <div v-else class="flex flex-wrap self-center text-sm h-[36px]">
-            <BcrosHeaderMenu :menu-button-text="'Log in'" :menu-lists="loggedOutMenuOptions" />
-            <button class="text-white ml-2 p-2 hover:bg-bcGovColor-activeBlue/[0.2]" @click="createAccount()">
+            <BcrosHeaderMenu
+              data-cy="logged-out-menu"
+              :menu-button-text="'Log in'"
+              :menu-lists="loggedOutMenuOptions"
+            />
+            <button
+              class="text-white ml-2 p-2 hover:bg-bcGovColor-activeBlue/[0.2]"
+              data-cy="logged-out-create-accnt"
+              @click="createAccount()"
+            >
               {{ t('header.buttons.createAccount') }}
             </button>
           </div>

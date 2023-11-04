@@ -1,10 +1,6 @@
 describe('pages -> Add individual', () => {
   beforeEach(() => {
-    // navigate to index page and check footer and header exist
-    cy.visit('http://localhost:3000')
-
-    cy.get('#bcros-main-header')
-    cy.get('#bcros-main-footer')
+    cy.visit('/')
   })
 
   it('verify all parts visible when manual entry clicked', () => {
