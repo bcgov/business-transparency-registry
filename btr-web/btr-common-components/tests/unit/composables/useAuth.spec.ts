@@ -1,5 +1,6 @@
 import { describe, expect, it, vi } from 'vitest'
 import { setActivePinia, createPinia } from 'pinia'
+import { axiosDefaultMock } from '../utils/mockedAxios'
 import { testParsedToken, testUserSettings } from '../utils/mockedData'
 import { useAuth } from '@/composables/useAuth'
 import { useBcrosAccount } from '@/stores/account'
@@ -11,32 +12,8 @@ describe('useAuth Tests', () => {
   const testToken = 'qjduwe'
   const testTokenRefresh = 'qjduwwewvwe'
   const testTokenId = '12322frwr'
-  // axios mocks
-  const axiosMocks = vi.hoisted(() => ({
-    get: vi.fn().mockImplementation((url: string) => {
-      if (url.includes('/users/@me')) {
-        return new Promise(resolve => resolve({ data: { firstName: 'Test', lastName: 'TEST' } }))
-      } else if (url.includes('settings')) {
-        return new Promise(resolve => resolve({ data: testUserSettings }))
-      }
-    }),
-    post: vi.fn()
-  }))
-
-  vi.mock('Axios', async (importActual) => {
-    const actual = await importActual<typeof import('axios')>()
-    const mockAxios = {
-      default: {
-        ...actual.default,
-        create: vi.fn(() => ({
-          ...actual.default.create(),
-          get: axiosMocks.get,
-          post: axiosMocks.post
-        }))
-      }
-    }
-    return mockAxios
-  })
+  // axios mock
+  vi.mock('axios', () => { return { default: { ...axiosDefaultMock } } })
 
   beforeEach(() => {
     setActivePinia(createPinia())

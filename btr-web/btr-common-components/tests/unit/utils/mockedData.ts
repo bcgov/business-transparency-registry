@@ -9,6 +9,8 @@ export const testParsedToken = {
   realm_access: { roles: ['role1', 'role2'] }
 }
 
+export const testProfile = { firstName: 'Test', lastName: 'TEST' }
+
 export const testUserSettings = [
   {
     accountStatus: AccountStatusE.ACTIVE,
