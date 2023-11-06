@@ -1,6 +1,6 @@
 <template>
   <div class="relative w-full">
-    <Listbox
+    <Combobox
       v-model="nonCaCitizenships"
       as="div"
       multiple
@@ -15,8 +15,10 @@
         'focus:outline-none',
         'sm:text-sm',
         'h-[46px]']"
+      v-slot="{ open }"
+      :disabled="disabled"
     >
-      <ListboxButton class="w-full h-11">
+      <ComboboxButton class="w-full h-11">
         <span v-if="nonCaCitizenships.length === 0">
           {{ placeholder }}
         </span>
@@ -31,39 +33,50 @@
           />
         </span>
         <UIcon class="float-right text-2xl " name="i-mdi-chevron-down" />
-      </ListboxButton>
-      <ListboxOptions
-        :class="[
-          'absolute',
-          'mt-1',
-          'max-h-60',
-          'w-full',
-          'overflow-auto',
-          'bg-white',
-          'py-1',
-          'text-base',
-          'shadow-lg',
-          'focus:outline-none',
-          'sm:text-sm',
-          'bg-gray-500',
-          'z-10']"
-      >
-        <ListboxOption
-          v-for="country in countriesWithoutCa"
-          :key="country.alpha_2"
-          v-slot="{ active, selected }"
-          :value="country"
-          as="ul"
-        >
-          <li
-            class="cursor-default select-none py-2 pl-10 pr-4"
-            :class="{
-              'bg-primary text-white': active,
-              'text-gray-900': !active,
-            }"
+      </ComboboxButton>
+      <div v-show="open" class="absolute z-10 w-full">
+        <ul>
+          <ComboboxInput
+            :placeholder="$t('labels.line1')"
+            :class="[
+              'w-full',
+              'focus:outline-none',
+              'sm:text-sm',
+              'p-3',
+              'bg-gray-100',
+              'border-b-1'
+            ]"
+            @keyup="filterCountries"
+          />
+          <ComboboxOptions
+            :class="[
+              'relative',
+              'max-h-60',
+              'w-full',
+              'overflow-auto',
+              'bg-white',
+              'py-1',
+              'text-base',
+              'shadow-lg',
+              'focus:outline-none',
+              'sm:text-sm',
+              'bg-gray-500',
+              'z-10'
+            ]"
+            as="div"
           >
-            <div>
-              <span v-if="selected" class="float-right text-outcomes-approved">
+            <ComboboxOption
+              v-for="country in countriesWithoutCa"
+              :key="country.alpha_2"
+              v-slot="{ active }"
+              :value="country"
+              as="template"
+            >
+              <li
+                class="cursor-default select-none py-2 pl-10 pr-4"
+                :class="{ 'bg-gray-100': active }"
+              >
+              <span v-if="isInSelected(country)" class="float-right text-outcomes-approved">
                 <UIcon name="i-mdi-check" />
                 {{ $t('labels.countryOfCitizenship.selected') }}
               </span>
@@ -74,27 +87,28 @@
               <span>
                 {{ country.name }}
               </span>
-            </div>
-          </li>
-        </ListboxOption>
-      </ListboxOptions>
-    </Listbox>
+              </li>
+            </ComboboxOption>
+          </ComboboxOptions>
+        </ul>
+      </div>
+    </Combobox>
   </div>
 </template>
 
 <script setup lang="ts">
-import { Listbox, ListboxButton, ListboxOption, ListboxOptions } from '@headlessui/vue'
+// import { Listbox, ListboxButton, ListboxOption, ListboxOptions } from '@headlessui/vue'
+import { Combobox, ComboboxInput, ComboboxButton, ComboboxOption, ComboboxOptions } from '@headlessui/vue'
 
 import { BtrCountryI } from '~/interfaces/btr-address-i'
-import { iscCountriesListSortedByName } from '~/utils/isoCountriesList'
 
 const emit = defineEmits<{ 'update:modelValue': [value: Array<BtrCountryI>] }>()
 const props = defineProps({
   placeholder: { type: String, default: '' },
+  disabled: { type: Boolean, default: false },
   modelValue: { type: Array<BtrCountryI>, required: true }
 })
 
-// const nonCaCitizenships: Ref<Array<BtrCountryI>> = ref(props.modelValue)
 const nonCaCitizenships = computed({
   get () {
     return props.modelValue
@@ -103,7 +117,9 @@ const nonCaCitizenships = computed({
     emit('update:modelValue', value)
   }
 })
-const countriesWithoutCa = iscCountriesListSortedByName.filter(country => country.alpha_2 !== 'CA')
+
+const allCountriesWithoutCa: Array<BtrCountryI> = iscCountriesListSortedByName.filter(country => country.alpha_2 !== 'CA')
+const countriesWithoutCa = ref(allCountriesWithoutCa)
 
 const removeCitizenship = (country: BtrCountryI) => {
   const index = nonCaCitizenships.value.indexOf(country)
@@ -112,5 +128,20 @@ const removeCitizenship = (country: BtrCountryI) => {
   }
 }
 
-// watch(() => props.modelValue, () => { emit('update:modelValue', nonCaCitizenships.value) })
+const filterCountries = (e: Event) => {
+  const text = e.target.value.toLowerCase()
+  if (text) {
+    countriesWithoutCa.value =
+      allCountriesWithoutCa.filter(
+        value => value.name.toLowerCase().includes(text)
+      )
+  } else {
+    countriesWithoutCa.value = allCountriesWithoutCa
+  }
+}
+
+const isInSelected = (country) => {
+  return nonCaCitizenships.value?.findIndex((c) => c.alpha_2 === country.alpha_2) !== -1
+}
+
 </script>

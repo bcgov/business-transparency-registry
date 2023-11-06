@@ -54,11 +54,13 @@
           + addr.region
       }}
       <br>
-      <!--      <br>-->
-      <!--      <BcrosInputsCountryCitizenship />-->
+      <br>
+      <BcrosInputsCountryCitizenship />
+      <br>
       <br>
       <BcrosInputsCountryCitizenshipDropdown v-model="citizenships" />
       {{ citizenships }}
+      <br>
       <br>
       <UButton id="exampleSubmitButton" type="submit" data-cy="submit-button">
         Submit
