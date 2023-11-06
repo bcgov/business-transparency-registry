@@ -16,23 +16,43 @@ describe('Account Store Tests', () => {
       } else if (url.includes('settings')) {
         return new Promise(resolve => resolve({ data: testUserSettings }))
       }
-    }),
-    post: vi.fn()
+    })
   }))
 
-  vi.mock('Axios', async (importActual) => {
-    const actual = await importActual<typeof import('axios')>()
-    const mockAxios = {
+  // vi.mock('Axios', async (importActual) => {
+  //   const actual = await importActual<typeof import('axios')>()
+  //   const mockAxios = {
+  //     default: {
+  //       ...actual.default,
+  //       create: vi.fn(() => ({
+  //         ...actual.default.create(),
+  //         get: axiosMocks.get,
+  //         post: axiosMocks.post
+  //       }))
+  //     }
+  //   }
+  //   return mockAxios
+  // })
+  vi.mock('axios', () => {
+    return {
       default: {
-        ...actual.default,
-        create: vi.fn(() => ({
-          ...actual.default.create(),
-          get: axiosMocks.get,
-          post: axiosMocks.post
-        }))
+        post: vi.fn(),
+        get: axiosMocks.get,
+        delete: vi.fn(),
+        put: vi.fn(),
+        create: vi.fn().mockReturnThis(),
+        interceptors: {
+          request: {
+            use: vi.fn(),
+            eject: vi.fn()
+          },
+          response: {
+            use: vi.fn(),
+            eject: vi.fn()
+          }
+        }
       }
     }
-    return mockAxios
   })
 
   beforeEach(() => {
