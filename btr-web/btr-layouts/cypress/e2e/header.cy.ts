@@ -39,7 +39,7 @@ describe('Layout -> Header (logged out)', () => {
   })
 
   it('redirects to services card login when clicked', () => {
-    Cypress.config('defaultCommandTimeout', 10000)
+    Cypress.config('defaultCommandTimeout', 20000)
     cy.get('[data-cy=logged-out-menu]').click()
     cy.get('[data-cy="menu-item"]').eq(0).click()
     cy.origin('https://idtest.gov.bc.ca', () => {
@@ -48,7 +48,7 @@ describe('Layout -> Header (logged out)', () => {
   })
 
   it('redirects to bceid login when clicked', () => {
-    Cypress.config('defaultCommandTimeout', 10000)
+    Cypress.config('defaultCommandTimeout', 20000)
     cy.get('[data-cy=logged-out-menu]').click()
     cy.get('[data-cy="menu-item"]').eq(1).click()
     cy.origin('https://logontest7.gov.bc.ca', () => {
@@ -57,7 +57,7 @@ describe('Layout -> Header (logged out)', () => {
   })
 
   it('redirects to idir login when clicked', () => {
-    Cypress.config('defaultCommandTimeout', 10000)
+    Cypress.config('defaultCommandTimeout', 20000)
     cy.get('[data-cy=logged-out-menu]').click()
     cy.get('[data-cy="menu-item"]').eq(2).click()
     cy.origin('https://logontest7.gov.bc.ca', () => {
@@ -66,7 +66,7 @@ describe('Layout -> Header (logged out)', () => {
   })
 
   it('redirects to create account when clicked', () => {
-    Cypress.config('defaultCommandTimeout', 10000)
+    Cypress.config('defaultCommandTimeout', 20000)
     cy.get('[data-cy=logged-out-create-accnt]').click()
     cy.origin('https://dev.account.bcregistry.gov.bc.ca', () => {
       cy.url().should('include', 'choose-authentication-method')
