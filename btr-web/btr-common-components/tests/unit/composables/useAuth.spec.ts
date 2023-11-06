@@ -46,6 +46,7 @@ describe('useAuth Tests', () => {
       keycloak.kc.idToken = testTokenId
       keycloak.kc.refreshToken = testTokenRefresh
       keycloak.kc.tokenParsed = testParsedToken
+      keycloak.kc.isTokenExpired = vi.fn()
       return true
     })
 
