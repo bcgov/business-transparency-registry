@@ -1,5 +1,9 @@
 <template>
-  <URadioGroup v-model="citizenshipType" :options="options" class="w-full" as="template">
+  <URadioGroup v-model="citizenshipType"
+               :options="options"
+               as="template"
+               id="countryOfCitizenship"
+  >
     <template #label="{ option }">
       <div v-if="option.value==='other'" class="w-full h-14">
         {{ option.label }}
@@ -40,23 +44,4 @@ const options = [{
 </script>
 
 <style scoped>
-div >>> fieldset {
-  width: 100%;
-}
-
-div fieldset div div  {
-  width: 100%;
-}
-
-div fieldset div div div button{
-  width: 100%;
-}
-
-div label {
-  width: 100%;
-}
-
-div .h-5 {
-  width: 1.25rem;
-}
 </style>

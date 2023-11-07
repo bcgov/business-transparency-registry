@@ -18,9 +18,9 @@
       v-slot="{ open }"
       :disabled="disabled"
     >
-      <ComboboxButton class="w-full h-11">
-        <span v-if="nonCaCitizenships.length === 0">
-          {{ placeholder }}
+      <ComboboxButton class="w-full h-11 text-left p-3" :class="{ 'text-gray-300': disabled }">
+        <span v-if="nonCaCitizenships.length === 0" class="w-full text-gray-400 text-thin">
+          {{ $t('labels.countryOfCitizenship.placeholder') }}
         </span>
         <span v-else class="align-middle">
           <BcrosChips
@@ -37,7 +37,7 @@
       <div v-show="open" class="absolute z-10 w-full">
         <ul>
           <ComboboxInput
-            :placeholder="$t('labels.line1')"
+            :placeholder="$t('labels.countryOfCitizenship.findCountry')"
             :class="[
               'w-full',
               'focus:outline-none',
@@ -76,17 +76,17 @@
                 class="cursor-default select-none py-2 pl-10 pr-4"
                 :class="{ 'bg-gray-100': active }"
               >
-              <span v-if="isInSelected(country)" class="float-right text-outcomes-approved">
-                <UIcon name="i-mdi-check" />
-                {{ $t('labels.countryOfCitizenship.selected') }}
-              </span>
-              <span v-else class="float-right text-primary">
+                <span v-if="isInSelected(country)" class="float-right text-outcomes-approved">
+                  <UIcon name="i-mdi-check" />
+                  {{ $t('labels.countryOfCitizenship.selected') }}
+                </span>
+                  <span v-else class="float-right text-primary">
                 <UIcon name="i-mdi-add" />
-                {{ $t('labels.countryOfCitizenship.select') }}
-              </span>
-              <span>
-                {{ country.name }}
-              </span>
+                  {{ $t('labels.countryOfCitizenship.select') }}
+                </span>
+                <span>
+                  {{ country.name }}
+                </span>
               </li>
             </ComboboxOption>
           </ComboboxOptions>
