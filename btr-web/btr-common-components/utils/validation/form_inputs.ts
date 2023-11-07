@@ -56,3 +56,72 @@ export const normalizeName = (name?: string): string => {
   }
   return name.trim().replace(/\s+/g, ' ')
 }
+
+/**
+ * Check a tax number to ensure that it only consists of digits and whitespace.
+ * @param {string} taxNumber - string representation of the tax number input
+ */
+export const checkSpecialCharacters = (taxNumber: string): boolean => {
+  return /^[\d\s]*$/.test(taxNumber)
+}
+
+/**
+ * Check if the tax number has 9 digits
+ * @param {string} taxNumber - string representation of the tax number input
+ */
+export const checkTaxNumberLength = (taxNumber: string): boolean => {
+  const digits = taxNumber.replace(/\s+/g, '')
+  return digits.length === 9
+}
+
+/**
+ * Check if the tax number is valid
+ * @param {string} taxNumber - string representation of the tax number input
+ */
+export const validateTaxNumber = (taxNumber: string): boolean => {
+  // TODO: To confirm the validation algorithms for SIN, ITN, and TTN
+
+  // const digits = taxNumber.replace(/\s+/g, '')
+
+  // if (digits.length !== 9) {
+  //   return false
+  // }
+
+  // let checkSum = 0
+  // for (let i = 0; i < 9; i++) {
+  //   const digit = parseInt(digits[i])
+  //   if (i % 2 === 0) {
+  //     checkSum += digit
+  //   } else {
+  //     checkSum += digit * 2
+  //   }
+  // }
+
+  // return checkSum % 10 === 0
+
+  return typeof taxNumber === 'string' // placeholder -- this will always return true
+}
+
+/**
+ * Format the tax number to "xxx xxx xxx"
+ * @param {string} taxNumber - string representation of the tax number input
+ */
+export const formatTaxNumber = (taxNumber: string): string => {
+  // if the tax number cannot pass the above validation checks, it will not be formatted
+  if (!checkSpecialCharacters(taxNumber) || !checkTaxNumberLength(taxNumber) || !validateTaxNumber(taxNumber)) {
+    return taxNumber
+  }
+
+  const digits = taxNumber.replace(/\s+/g, '')
+
+  let formattedNumber: string = ''
+
+  for (let i = 0; i < 9; i++) {
+    formattedNumber += digits[i]
+    if (i === 2 || i === 5) {
+      formattedNumber += ' '
+    }
+  }
+
+  return formattedNumber
+}

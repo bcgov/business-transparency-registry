@@ -36,7 +36,7 @@ describe('forms -> preferred name -> validate that the preferred name component 
 
   it('test the validation rule for special character', () => {
     cy.on('uncaught:exception', (err) => {
-      expect(err.message).to.include('The legal name should not contain special character')
+      expect(err.message).to.include('The legal name should not contain special characters')
       return false
     })
 
@@ -44,10 +44,10 @@ describe('forms -> preferred name -> validate that the preferred name component 
     const validName = 'first last'
 
     cy.get('#testFullName').type(invalidName).blur()
-    cy.contains('The legal name should not contain special character').should('exist')
+    cy.contains('The legal name should not contain special characters').should('exist')
 
     cy.get('#testFullName').clear().type(validName).blur()
-    cy.contains('The legal name should not contain special character').should('not.exist')
+    cy.contains('The legal name should not contain special characters').should('not.exist')
   })
 
   it('the full name field should accept UTF-8 characters', () => {

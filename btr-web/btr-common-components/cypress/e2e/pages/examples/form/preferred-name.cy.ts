@@ -32,7 +32,7 @@ describe('forms -> preferred name -> validate that the preferred name component 
 
   it('test the validation rule for special character', () => {
     cy.on('uncaught:exception', (err) => {
-      expect(err.message).to.include('The preferred name should not contain special character')
+      expect(err.message).to.include('The preferred name should not contain special characters')
       return false
     })
 
@@ -42,16 +42,16 @@ describe('forms -> preferred name -> validate that the preferred name component 
     const unicodeName2 = 'José 玛丽'
 
     cy.get('#testPreferredName').type(invalidName).blur()
-    cy.contains('The preferred name should not contain special character').should('exist')
+    cy.contains('The preferred name should not contain special characters').should('exist')
 
     cy.get('#testPreferredName').clear().type(validName).blur()
-    cy.contains('The preferred name should not contain special character').should('not.exist')
+    cy.contains('The preferred name should not contain special characters').should('not.exist')
 
     cy.get('#testPreferredName').clear().type(unicodeName1).blur()
-    cy.contains('The preferred name should not contain special character').should('not.exist')
+    cy.contains('The preferred name should not contain special characters').should('not.exist')
 
     cy.get('#testPreferredName').clear().type(unicodeName2).blur()
-    cy.contains('The preferred name should not contain special character').should('not.exist')
+    cy.contains('The preferred name should not contain special characters').should('not.exist')
   })
 
   it('the displayed name should be normalized', () => {

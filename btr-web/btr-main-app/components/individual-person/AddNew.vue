@@ -125,6 +125,11 @@
           id="countriesOfCitizenship"
           v-model:canadianCitizenship="citizenshipOrPermanentResidency"
           v-model:citizenships="citizenships"
+      <h1>Here</h1>
+      <div class="my-10">
+        1
+        <BcrosInputsTaxResidency
+
         />
       </div>
     </template>

@@ -28,7 +28,9 @@
       "bcsc": "BC Services Card",
       "bceid": "BCeID",
       "idir": "IDIR"
-    }
+    },
+    "taxNumber": "Canada Revenue Agency (CRA) Tax Number: ",
+    "taxResidency": "Tax Residency: "
   },
   "placeholders": {
     "dateSelect": "Select Date"
@@ -43,11 +45,16 @@
       "fullName": {
         "empty": "The legal name should contain at least one character",
         "maxLengthExceeded": "The legal name must not exceed 150 characters",
-        "specialCharacter": "The legal name should not contain special character"
+        "specialCharacter": "The legal name should not contain special characters"
       },
       "preferredName": {
         "maxLengthExceeded": "The preferred name must not exceed 150 characters",
-        "specialCharacter": "The preferred name should not contain special character"
+        "specialCharacter": "The preferred name should not contain special characters"
+      },
+      "taxNumber": {
+        "specialCharacter": "The CRA tax number should not contain special characters",
+        "invalidLength": "The CRA tax number should be 9 digits long",
+        "invalidNumber": "The CRA tax number is invalid"
       }
     }
   },
