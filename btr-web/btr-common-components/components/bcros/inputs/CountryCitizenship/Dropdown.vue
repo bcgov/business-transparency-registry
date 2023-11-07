@@ -1,6 +1,7 @@
 <template>
   <div class="relative w-full">
     <Combobox
+      v-slot="{ open }"
       v-model="nonCaCitizenships"
       as="div"
       multiple
@@ -15,7 +16,6 @@
         'focus:outline-none',
         'sm:text-sm',
         'h-[46px]']"
-      v-slot="{ open }"
       :disabled="disabled"
     >
       <ComboboxButton class="w-full h-11 text-left p-3" :class="{ 'text-gray-300': disabled }">
@@ -80,8 +80,8 @@
                   <UIcon name="i-mdi-check" />
                   {{ $t('labels.countryOfCitizenship.selected') }}
                 </span>
-                  <span v-else class="float-right text-primary">
-                <UIcon name="i-mdi-add" />
+                <span v-else class="float-right text-primary">
+                  <UIcon name="i-mdi-add" />
                   {{ $t('labels.countryOfCitizenship.select') }}
                 </span>
                 <span>
@@ -118,7 +118,8 @@ const nonCaCitizenships = computed({
   }
 })
 
-const allCountriesWithoutCa: Array<BtrCountryI> = iscCountriesListSortedByName.filter(country => country.alpha_2 !== 'CA')
+const allCountriesWithoutCa: Array<BtrCountryI> =
+        iscCountriesListSortedByName.filter(country => country.alpha_2 !== 'CA')
 const countriesWithoutCa = ref(allCountriesWithoutCa)
 
 const removeCitizenship = (country: BtrCountryI) => {
@@ -141,7 +142,7 @@ const filterCountries = (e: Event) => {
 }
 
 const isInSelected = (country) => {
-  return nonCaCitizenships.value?.findIndex((c) => c.alpha_2 === country.alpha_2) !== -1
+  return nonCaCitizenships.value?.findIndex(c => c.alpha_2 === country.alpha_2) !== -1
 }
 
 </script>

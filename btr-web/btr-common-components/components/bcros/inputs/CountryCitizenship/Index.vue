@@ -1,8 +1,9 @@
 <template>
-  <URadioGroup v-model="citizenshipType"
-               :options="options"
-               as="template"
-               id="countryOfCitizenship"
+  <URadioGroup
+    id="countryOfCitizenship"
+    v-model="citizenshipType"
+    :options="options"
+    as="template"
   >
     <template #label="{ option }">
       <div v-if="option.value==='other'" class="w-full h-14">
