@@ -46,7 +46,8 @@
               'bg-gray-100',
               'border-b-1'
             ]"
-            @keyup="filterCountries"
+            @keyup="filterCountries($event.target.value)"
+            @blur="filterCountries('')"
           />
           <ComboboxOptions
             :class="[
@@ -129,8 +130,8 @@ const removeCitizenship = (country: BtrCountryI) => {
   }
 }
 
-const filterCountries = (e: Event) => {
-  const text = e.target.value.toLowerCase()
+const filterCountries = (searchText: string) => {
+  const text = searchText.toLowerCase()
   if (text) {
     countriesWithoutCa.value =
       allCountriesWithoutCa.filter(

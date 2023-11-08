@@ -59,10 +59,13 @@
       {{ citizenships }}
       <br>
       <br>
-      <BcrosInputsCountriesOfCitizenship :canadianCitizenship="citizenshipType" v-model="citizenships2" />
-      {{citizenshipType}}
+      <BcrosInputsCountriesOfCitizenship
+        v-model:canadianCitizenship="citizenshipType"
+        v-model:citizenships="citizenships2"
+      />
+      {{ citizenshipType }}
       <br>
-      {{citizenships2}}
+      {{ citizenships2 }}
       <br>
       <br>
       <UButton id="exampleSubmitButton" type="submit" data-cy="submit-button">
@@ -78,12 +81,11 @@ import { z } from 'zod'
 import type { FormSubmitEvent } from '@nuxt/ui/dist/runtime/types'
 import { BtrAddressI } from '~/interfaces/btr-address-i'
 import { validateEmailRfc5322Regex } from '~/utils/validation/form_inputs'
-import { CANADIAN_CITIZENSHIP_E } from '~/interfaces/canadian-citizenship-e'
 
 const minNameLength = 1
 const maxNameLength = 150
 
-const citizenshipType: Ref<CANADIAN_CITIZENSHIP_E | null> = ref(null)
+const citizenshipType = ref('')
 const citizenships2 = ref([])
 
 const { t } = useI18n()
