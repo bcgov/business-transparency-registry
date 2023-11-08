@@ -1,9 +1,9 @@
 // @vitest-environment nuxt
 import { it, expect } from 'vitest'
 import { mountSuspended } from 'vitest-environment-nuxt/utils'
+import { createI18n } from 'vue-i18n'
 
 import { BcrosInputsCountriesOfCitizenship, BcrosInputsCountriesOfCitizenshipDropdown } from '#components'
-import { createI18n } from 'vue-i18n'
 
 const i18n = createI18n({
   // vue-i18n options here ...

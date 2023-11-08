@@ -115,8 +115,12 @@
         />
       </div>
       <div class="my-10">
-        <p class="font-bold my-2">{{ $t('labels.citizenshipPermanentResidency') }}</p>
-        <p class="mb-5">{{ $t('texts.citizenshipPermanentResidency') }}</p>
+        <p class="font-bold my-2">
+          {{ $t('labels.citizenshipPermanentResidency') }}
+        </p>
+        <p class="mb-5">
+          {{ $t('texts.citizenshipPermanentResidency') }}
+        </p>
         <BcrosInputsCountriesOfCitizenship
           id="countriesOfCitizenship"
           v-model:canadianCitizenship="citizenshipOrPermanentResidency"
