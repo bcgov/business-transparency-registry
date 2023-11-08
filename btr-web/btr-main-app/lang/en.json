@@ -1,5 +1,9 @@
 {
   "labels": {
-    "lastKnownAddress": "Last Known Address"
+    "lastKnownAddress": "Last Known Address",
+    "citizenshipPermanentResidency": "Citizenship / Permanent Residency",
+  },
+  "texts": {
+    "citizenshipPermanentResidency": "Indicate if this person is a citizen or permanent resident of Canada, or list all of the non-Canadian citizenship(s) of this person. If this person is a Citizen or Permanent resident of Canada, listing of multiple citizenships is not required."
   }
 }

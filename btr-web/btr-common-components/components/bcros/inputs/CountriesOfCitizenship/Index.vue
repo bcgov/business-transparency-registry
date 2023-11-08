@@ -21,10 +21,6 @@
       </div>
     </template>
   </URadioGroup>
-  <br>
-  <br>
-  <br>
-  ~~~~~~~~~~~~~~~~~~{{ citizenshipType }}~~~~~~~~~~~~~~~~~~~~~
 </template>
 
 <script setup lang="ts">
@@ -44,6 +40,9 @@ const citizenshipType = computed({
     return props.canadianCitizenship
   },
   set (value) {
+    if (value !== 'other') {
+      citizenshipsInternal.value = []
+    }
     emit('update:canadianCitizenship', value)
   }
 })

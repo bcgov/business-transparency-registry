@@ -114,6 +114,15 @@
           :label="$t('labels.lastKnownAddress')"
         />
       </div>
+      <div class="my-10">
+        <p class="font-bold my-2">{{ $t('labels.citizenshipPermanentResidency') }}</p>
+        <p class="mb-5">{{ $t('texts.citizenshipPermanentResidency') }}</p>
+        <BcrosInputsCountriesOfCitizenship
+          id="countriesOfCitizenship"
+          v-model:canadianCitizenship="citizenshipOrPermanentResidency"
+          v-model:citizenships="citizenships"
+        />
+      </div>
     </template>
   </div>
 </template>
@@ -144,6 +153,10 @@ const lastKnownAddress: Ref<BtrAddressI> = ref({
   line2: '',
   locationDescription: ''
 })
+
+// citizenships or permanent residency
+const citizenshipOrPermanentResidency = ref('')
+const citizenships = ref([])
 
 // full name
 const minNameLength = 1
