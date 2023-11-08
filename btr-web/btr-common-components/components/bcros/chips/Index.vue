@@ -1,5 +1,8 @@
 <template>
-  <div class="grid grid-flow-col gap-1 py-0.5 px-2.5 m-1 rounded-lg bg-primary text-white text-sm">
+  <div
+    class="grid grid-flow-col gap-1 py-0.5 px-2.5 m-1 rounded-lg bg-primary text-white text-sm"
+    data-cy="bcrosChip"
+  >
     <div>
       <slot name="col-span-4">
         <span class="align-middle">

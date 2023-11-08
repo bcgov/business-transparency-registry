@@ -18,7 +18,11 @@
         'h-[46px]']"
       :disabled="disabled"
     >
-      <ComboboxButton class="w-full h-11 text-left p-3" :class="{ 'text-gray-300': disabled }">
+      <ComboboxButton
+        class="w-full h-11 text-left p-3"
+        :class="{ 'text-gray-300': disabled }"
+        data-cy="countryOfCitizenshipDropdownButton"
+      >
         <span v-if="nonCaCitizenships.length === 0" class="w-full text-gray-400 text-thin">
           {{ $t('labels.countryOfCitizenship.placeholder') }}
         </span>
@@ -30,6 +34,7 @@
             class="float-left z-20"
             :has-close="true"
             @chipCloseClicked="removeCitizenship(country)"
+            data-cy="countryOfCitizenshipDropdownChip"
           />
         </span>
         <UIcon class="float-right text-2xl " name="i-mdi-chevron-down" />
@@ -46,8 +51,8 @@
               'bg-gray-100',
               'border-b-1'
             ]"
-            @keyup="filterCountries($event.target.value)"
-            @blur="filterCountries('')"
+            @change="filterCountries($event.target.value)"
+            data-cy="countryOfCitizenshipDropdownFilter"
           />
           <ComboboxOptions
             :class="[
@@ -76,6 +81,7 @@
               <li
                 class="cursor-default select-none py-2 pl-10 pr-4"
                 :class="{ 'bg-gray-100': active }"
+                data-cy="countryOfCitizenshipDropdownOption"
               >
                 <span v-if="isInSelected(country)" class="float-right text-outcomes-approved">
                   <UIcon name="i-mdi-check" />
