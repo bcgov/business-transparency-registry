@@ -1,5 +1,5 @@
 <template>
-  <div class="relative w-full">
+  <div class="relative w-full" data-cy="countryOfCitizenshipDropdown">
     <Combobox
       v-slot="{ open }"
       v-model="nonCaCitizenships"

@@ -4,6 +4,7 @@
     v-model="citizenshipType"
     :options="options"
     as="template"
+    data-cy="countryOfCitizenshipRadioGroup"
   >
     <template #label="{ option }">
       <div v-if="option.value === 'other'" class="w-full h-14">
