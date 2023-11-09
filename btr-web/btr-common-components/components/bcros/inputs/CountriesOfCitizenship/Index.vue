@@ -7,14 +7,14 @@
     data-cy="countryOfCitizenshipRadioGroup"
   >
     <template #label="{ option }">
-      <div v-if="option.value === 'other'" class="w-full h-14">
+      <div v-if="option.value === VALUE_OTHER" class="w-full h-14">
         {{ option.label }}
         <br>
         <label>{{ $t('labels.countryOfCitizenship.selectAll') }}</label>
         <br>
         <BcrosInputsCountriesOfCitizenshipDropdown
           v-model="citizenshipsInternal"
-          :disabled="citizenshipType !== 'other'"
+          :disabled="citizenshipType !== VALUE_OTHER"
         />
       </div>
       <div v-else class="w-full h-14">
@@ -25,6 +25,7 @@
 </template>
 
 <script setup lang="ts">
+const VALUE_OTHER = 'other'
 
 const { t } = useI18n()
 const emit = defineEmits<{
@@ -41,7 +42,7 @@ const citizenshipType = computed({
     return props.canadianCitizenship
   },
   set (value) {
-    if (value !== 'other') {
+    if (value !== VALUE_OTHER) {
       citizenshipsInternal.value = []
     }
     emit('update:canadianCitizenship', value)
@@ -64,7 +65,7 @@ const options = [{
   value: 'pr',
   label: t('labels.countryOfCitizenship.pr')
 }, {
-  value: 'other',
+  value: VALUE_OTHER,
   label: t('labels.countryOfCitizenship.others')
 }]
 </script>
