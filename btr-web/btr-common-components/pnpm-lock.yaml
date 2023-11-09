@@ -11,6 +11,9 @@ dependencies:
   keycloak-js:
     specifier: ^22.0.5
     version: 22.0.5
+  nuxt-storage:
+    specifier: ^1.2.2
+    version: 1.2.2
 
 devDependencies:
   '@nuxtjs/i18n':
@@ -2158,6 +2161,10 @@ packages:
     dependencies:
       path-key: 3.1.1
     dev: true
+
+  /nuxt-storage@1.2.2:
+    resolution: {integrity: sha512-quJbZ87NO7QRCSp7YZolot6VwktciSLuTS/sRl8NPz5rAWA84U5Py0y9FmAsbKTiaqJtFcCKSaJGzky948jA3w==}
+    dev: false
 
   /ofetch@1.3.3:
     resolution: {integrity: sha512-s1ZCMmQWXy4b5K/TW9i/DtiN8Ku+xCiHcjQ6/J/nDdssirrQNOoB165Zu8EqLMA2lln1JUth9a0aW9Ap2ctrUg==}

@@ -1,16 +1,16 @@
 import { KeycloakConfig } from 'keycloak-js'
+import { getData } from 'nuxt-storage/session-storage'
 
 /** Manages auth flows */
-export const useAuth = () => {
+export const useBcrosAuth = () => {
   const config = useRuntimeConfig()
   const keycloak = useBcrosKeycloak()
   const account = useBcrosAccount()
-  const { redirect, goToSetupAccount, goToCreateAccount } = useNavigate()
-  const authenticated = ref(false)
+  const { redirect, goToSetupAccount, goToCreateAccount } = useBcrosNavigate()
 
   /** redirect to the correct creation screen based on auth state */
   function createAccount () {
-    if (authenticated.value) {
+    if (keycloak.kc.authenticated) {
       goToSetupAccount()
     } else {
       goToCreateAccount()
@@ -35,16 +35,16 @@ export const useAuth = () => {
 
   /** Setup keycloak / user auth pieces */
   async function setupAuth (kcConfig: KeycloakConfig) {
-    if (!authenticated.value) {
+    if (!keycloak.kc.authenticated) {
       console.info('Initializing auth setup...')
-      const token = sessionStorage.getItem(SessionStorageKeyE.KEYCLOAK_TOKEN) || undefined
-      const refreshToken = sessionStorage.getItem(SessionStorageKeyE.KEYCLOAK_TOKEN_REFRESH) || undefined
-      const idToken = sessionStorage.getItem(SessionStorageKeyE.KEYCLOAK_TOKEN_ID) || undefined
+      const token = getData(SessionStorageKeyE.KEYCLOAK_TOKEN) || undefined
+      const refreshToken = getData(SessionStorageKeyE.KEYCLOAK_TOKEN_REFRESH) || undefined
+      const idToken = getData(SessionStorageKeyE.KEYCLOAK_TOKEN_ID) || undefined
       // initialize keycloak with user token
       console.info('Initializing Keycloak...')
       try {
-        authenticated.value = await keycloak.initKeyCloak(kcConfig, token, refreshToken, idToken)
-        if (authenticated.value) {
+        await keycloak.initKeyCloak(kcConfig, token, refreshToken, idToken)
+        if (keycloak.kc.authenticated) {
           // successfully initialized so setup other pieces
           keycloak.syncSessionStorage()
           keycloak.scheduleRefreshToken()
@@ -67,7 +67,6 @@ export const useAuth = () => {
   }
 
   return {
-    authenticated,
     createAccount,
     logout,
     setupAuth

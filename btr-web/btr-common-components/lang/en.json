@@ -1,4 +1,9 @@
 {
+  "breadcrumbs": {
+    "registryDashboard": "BC Registries Dashboard",
+    "beneficialOwnerChange": "Beneficial Owner Change",
+    "businessDashboard": "My Business Registry"
+  },
   "labels": {
     "birthdate": "Birthdate",
     "emailAddress": "Email address: ",

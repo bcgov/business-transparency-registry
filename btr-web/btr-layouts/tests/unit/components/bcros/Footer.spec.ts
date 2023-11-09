@@ -5,13 +5,13 @@ import { BcrosFooter } from '#components'
 
 describe('Tests for Footer.vue', () => {
   test('UTooltip component rendered', async () => {
-    const wrapper = await mountSuspended(BcrosFooter)
+    const wrapper = await mountSuspended(BcrosFooter, { props: { appVersion: '1' } })
     const tooltip = wrapper.find('#footer-tooltip')
     expect(tooltip.exists()).toBeTruthy()
   })
 
   test('footer nav links rendered', async () => {
-    const wrapper = await mountSuspended(BcrosFooter)
+    const wrapper = await mountSuspended(BcrosFooter, { props: { appVersion: '1' } })
 
     const expectedTexts = ['Home', 'Disclaimer', 'Privacy', 'Accessibility', 'Copyright']
     const expectedHrefs = [

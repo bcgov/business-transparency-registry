@@ -1,4 +1,4 @@
-export const useNavigate = () => {
+export const useBcrosNavigate = () => {
   const config = useRuntimeConfig()
   const account = useBcrosAccount()
 

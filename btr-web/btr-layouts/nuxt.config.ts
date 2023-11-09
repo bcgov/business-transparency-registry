@@ -36,6 +36,12 @@ export default defineNuxtConfig({
   pinia: {
     /* pinia module options */
   },
+  runtimeConfig: {
+    public: {
+      // Keys within public, will be also exposed to the client-side
+      version: process.env.npm_package_version || ''
+    }
+  },
   vite: {
     css: {
       preprocessorOptions: {

@@ -21,7 +21,6 @@
           </span>
         </a>
         <div
-          v-if="setupComplete"
           id="bcros-main-header__container__actions__menus"
           class="flex flex-auto justify-end h-full text-white"
         >
@@ -73,28 +72,20 @@ const {
   goToEditProfile,
   goToTeamMembers,
   goToTransactions
-} = useNavigate()
+} = useBcrosNavigate()
 // account / user
 const account = useBcrosAccount()
 const { currentAccount, currentAccountName, userFullName, userAccounts } = storeToRefs(account)
 // kc / auth
 const keycloak = useBcrosKeycloak()
-const { authenticated, createAccount, logout, setupAuth } = useAuth()
-
-const setupComplete = ref(false)
+const authenticated = computed(() => keycloak.kc.authenticated)
+const { createAccount, logout } = useBcrosAuth()
 
 function switchAccount (accountId: string) {
   account.switchCurrentAccount(accountId)
   // refresh the page so that account based checks are rerun
   window.location.reload()
 }
-
-onMounted(async () => {
-  setupComplete.value = false
-  const { kcURL, kcRealm, kcClient } = config.public
-  await setupAuth({ url: kcURL, realm: kcRealm, clientId: kcClient })
-  setupComplete.value = true
-})
 
 // logged out menu options
 const loginOptions = [
@@ -182,22 +173,28 @@ const createOptions = computed((): HeaderMenuItemI[] => {
 
 const loggedInMenuOptions: Ref<HeaderMenuItemI[]> = ref([])
 
+function updateLoggedInMenuOptions () {
+  const options: HeaderMenuItemI[] = [{ items: basicAccountOptions.value }]
+  if (accountSettingsOptions.value.length > 0) {
+    options.push({ header: t('header.menus.headers.accountSettings'), items: accountSettingsOptions.value })
+  }
+  if (switchAccountOptions.value.length > 1) {
+    options.push({ header: t('header.menus.headers.switchAccount'), items: switchAccountOptions.value })
+  }
+  if (createOptions.value.length > 0) {
+    options.push({ items: createOptions.value })
+  }
+  loggedInMenuOptions.value = options
+}
+
+onBeforeMount(() => { updateLoggedInMenuOptions() })
+
 watch(() => currentAccount.value, (val) => {
   // update loggedInMenuOptions (header menu)
   if (!val) {
     loggedInMenuOptions.value = []
   } else {
-    const options: HeaderMenuItemI[] = [{ items: basicAccountOptions.value }]
-    if (accountSettingsOptions.value.length > 0) {
-      options.push({ header: t('header.menus.headers.accountSettings'), items: accountSettingsOptions.value })
-    }
-    if (switchAccountOptions.value.length > 1) {
-      options.push({ header: t('header.menus.headers.switchAccount'), items: switchAccountOptions.value })
-    }
-    if (createOptions.value.length > 0) {
-      options.push({ items: createOptions.value })
-    }
-    loggedInMenuOptions.value = options
+    updateLoggedInMenuOptions()
   }
 })
 </script>

@@ -1,17 +1,19 @@
 <template>
   <div>
     <BcrosHeader />
+    <BcrosBreadcrumb v-if="crumbConstructors.length > 0" :crumb-constructors="crumbConstructors" />
     <div class="mx-auto px-4 w-full max-w-[1360px]">
       <slot />
     </div>
-    <BcrosFooter :app-version="appVersion" />
+    <BcrosFooter :app-version="version" />
   </div>
 </template>
 
 <script setup lang="ts">
-import pkg from '../../package.json'
+const route = useRoute()
+const crumbConstructors = computed(() => (route?.meta?.breadcrumbs || []) as (() => BreadcrumbI)[])
 
-const appVersion = pkg.version
+const version = useRuntimeConfig().public.version
 </script>
 
 <style scoped>

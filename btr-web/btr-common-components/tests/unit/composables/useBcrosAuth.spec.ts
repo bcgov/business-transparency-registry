@@ -2,11 +2,11 @@ import { describe, expect, it, vi } from 'vitest'
 import { setActivePinia, createPinia } from 'pinia'
 import { axiosDefaultMock } from '../utils/mockedAxios'
 import { testParsedToken, testUserSettings } from '../utils/mockedData'
-import { useAuth } from '@/composables/useAuth'
+import { useBcrosAuth } from '@/composables/useBcrosAuth'
 import { useBcrosAccount } from '@/stores/account'
 import { useBcrosKeycloak } from '@/stores/keycloak'
 
-describe('useAuth Tests', () => {
+describe('useBcrosAuth Tests', () => {
   let account: any
   let keycloak: any
   const testToken = 'qjduwe'
@@ -24,6 +24,7 @@ describe('useAuth Tests', () => {
       keycloak.kc.refreshToken = testTokenRefresh
       keycloak.kc.tokenParsed = testParsedToken
       keycloak.kc.isTokenExpired = vi.fn()
+      keycloak.kc.authenticated = true
       return true
     })
 
@@ -40,7 +41,7 @@ describe('useAuth Tests', () => {
     // verify setup
     expect(keycloak.kcUser).toEqual({})
     expect(account.user).toEqual({})
-    const { setupAuth } = useAuth()
+    const { setupAuth } = useBcrosAuth()
     // execute setupAuth
     await setupAuth({ url: 'kcurl', realm: 'realm', clientId: 'id' })
     // verify things are setup
