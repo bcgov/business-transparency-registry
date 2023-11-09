@@ -28,9 +28,7 @@
       "bcsc": "BC Services Card",
       "bceid": "BCeID",
       "idir": "IDIR"
-    },
-    "taxNumber": "Canada Revenue Agency (CRA) Tax Number: ",
-    "taxResidency": "Tax Residency: "
+    }
   },
   "placeholders": {
     "dateSelect": "Select Date"

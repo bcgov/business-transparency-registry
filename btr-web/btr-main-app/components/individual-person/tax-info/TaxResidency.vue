@@ -1,16 +1,14 @@
 <template>
-  <UFormGroup :label="label" name="taxResidency" class="flex flex-col">
-    <p>Indicate if this person is a resident of Canada for Income Tax purposes.</p>
-    <URadio
-      v-for="(option, index) in options"
-      :id="`${id}-${option.value}`"
-      :key="index"
-      v-model="selectedValue"
-      name="taxResidency"
-      :value="option.value"
-      :label="option.label"
-      class="flex items-center mb-2"
-    />
+  <UFormGroup :label="label" name="taxResidency" class="flex flex-col py-5">
+    <div v-for="(option, index) in options" :key="index" class="flex items-center mb-2 py-1">
+      <URadio
+        :id="`${id}-${option.value}`"
+        v-model="selectedValue"
+        name="taxResidency"
+        :value="option.value"
+      />
+      <label class="ml-5"> {{ option.label }} </label>
+    </div>
   </UFormGroup>
 </template>
 

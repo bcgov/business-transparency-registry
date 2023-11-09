@@ -41,6 +41,110 @@
           data-cy="testEmail"
         />
       </div>
+      <div class="text-blue-700 py-5 align-middle">
+        <a
+          id="add-person-manually-toggle"
+          href=""
+          data-cy="showAddIndividualPersonManually"
+          class="p-1 underline"
+          @click.prevent="showAddInfoManually=!showAddInfoManually"
+        >
+          <UIcon v-if="showAddInfoManually" name="i-mdi-close" />
+          {{ showAddInfoManuallyText }}
+        </a>
+      </div>
+      <template v-if="showAddInfoManually">
+        <div class="flex-col py-5">
+          <p class="font-bold py-3">
+            <!-- todo: move this to lang file -->
+            Beneficial Ownership Assessment
+          </p>
+          <p class="text-justify">
+            <!-- todo: move this to lang file -->
+            Beneficial Ownership is determined by the control of of shares and/or votes at general meetings,
+            and control of the right to elect, appoint, or remove directors of the business.
+
+            Complete following assessment to determine this person’s beneficial ownership status.
+          </p>
+        </div>
+        <div class="flex-col py-5">
+          <p class="font-bold py-5">
+            Control of Shares and Votes
+          </p>
+          <p class="text-justify">
+            Enter the percentage of shares and/or shares entitled to votes at general meetings
+            this person owns or ultimately controls (or can exercise ultimate effective control over).
+          </p>
+        </div>
+        <div class="flex-col py-5">
+          <UInput
+            v-model="percentOfShares"
+            placeholder="Percent of Shares"
+            type="text"
+            variant="none"
+            class="w-1/5 bg-gray-100 border-b-2 my-5 p-2"
+          >
+            <template #trailing>
+              <span class="text-gray-500 dark:text-gray-400 text-xs">%</span>
+            </template>
+          </UInput>
+          <UInput
+            v-model="percentOfVotes"
+            placeholder="Percent of Votes"
+            type="text"
+            variant="none"
+            class="w-1/5 bg-gray-100 border-b-2 my-5 p-2"
+          >
+            <template #trailing>
+              <span class="text-gray-500 dark:text-gray-400 text-xs">%</span>
+            </template>
+          </UInput>
+        </div>
+        <div>
+          <p class="font-bold mt-5">
+            {{ $t('labels.birthdate') }}
+          </p>
+          <BcrosInputsDateSelect class="mt-5" :max-date="maxDate" @selection="birthdate = $event" />
+        </div>
+
+        <div class="my-10">
+          <BcrosInputsAddress
+            id="addNewPersonLastKnownAddress"
+            v-model="lastKnownAddress"
+            :label="$t('labels.lastKnownAddress')"
+          />
+        </div>
+
+        <div>
+          <p class="font-bold py-5">
+            {{ $t('labels.taxNumber') }}
+          </p>
+          <p class="text-justify">
+            A Social Insurance Number (SIN), an Individual Tax Number (ITN), or a Temporary
+            Taxation Number (TTN) is required if this person has one.
+          </p>
+          <IndividualPersonTaxInfoTaxNumber
+            id="addNewPersonTaxNumber"
+            v-model="taxInfoModel"
+            name="taxNumber"
+            :label="$t('labels.taxNumber')"
+            data-cy="testTaxNumber"
+          />
+        </div>
+
+        <div>
+          <p class="font-bold py-5">
+            {{ $t('labels.taxResidency') }}
+          </p>
+          <p class="text-justify">
+            Indicate if this person is a resident of Canada for Income Tax purposes.
+          </p>
+          <IndividualPersonTaxInfoTaxResidency
+            id="addNewPersonTaxResidency"
+            v-model="isTaxResident"
+          />
+        </div>
+      </template>
     </UForm>
     <div class="text-blue-700 py-5 align-middle">
       <a
@@ -137,7 +241,7 @@
 </template>
 
 <script setup lang="ts">
-import { Ref, ref } from 'vue'
+import { Ref, ref, computed } from 'vue'
 import { z } from 'zod'
 
 const showAddInfoManually = ref(false)
@@ -187,14 +291,40 @@ const schema = z.object({
   email: z.string()
     .min(1, t('errors.validation.email.empty'))
     .max(254, 'errors.validation.email.maxLengthExceeded')
-    .refine(validateEmailRfc6532Regex, t('errors.validation.email.invalid'))
+    .refine(validateEmailRfc6532Regex, t('errors.validation.email.invalid')),
+  hasTaxNumber: z.boolean(),
+  taxNumber: z.union([
+    z.literal('No Tax Number'),
+    z.string()
+      .refine(checkSpecialCharacters, t('errors.validation.taxNumber.specialCharacter'))
+      .refine(checkTaxNumberLength, t('errors.validation.taxNumber.invalidLength'))
+      .refine(validateTaxNumber, t('errors.validation.taxNumber.invalidNumber'))
+  ])
 })
 
 const state = reactive({
   email: undefined,
   fullName: undefined,
-  preferredName: undefined
+  preferredName1: undefined,
+  hasTaxNumber: false,
+  taxNumber: ''
 })
+
+const taxInfoModel = computed({
+  get () {
+    return {
+      hasTaxNumber: state.hasTaxNumber || false,
+      taxNumber: state.taxNumber || ''
+    }
+  },
+  set (value) {
+    state.hasTaxNumber = value.hasTaxNumber
+    state.taxNumber = value.taxNumber
+  }
+})
+
+// tax residency
+const isTaxResident: Ref<string | undefined> = ref(undefined)
 </script>
 
 <style scoped></style>

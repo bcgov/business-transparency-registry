@@ -94,8 +94,7 @@ import { Ref, ref } from 'vue'
 import { z } from 'zod'
 import type { FormSubmitEvent } from '@nuxt/ui/dist/runtime/types'
 import { BtrAddressI } from '~/interfaces/btr-address-i'
-import { validateEmailRfc5322Regex, checkSpecialCharacters, checkTaxNumberLength, validateTaxNumber }
-  from '~/utils/validation/form_inputs'
+import { validateEmailRfc5322Regex } from '~/utils/validation/form_inputs'
 
 const minNameLength = 1
 const maxNameLength = 150
@@ -118,22 +117,14 @@ const schema = z.object({
   ),
   email: z.string()
     .max(254, 'errors.validation.email.maxLengthExceeded')
-    .refine(validateEmailRfc5322Regex, t('errors.validation.email.invalid')),
-  taxNumber: z.union([
-    z.literal('No Tax Number'),
-    z.string()
-      .refine(checkSpecialCharacters, t('errors.validation.taxNumber.specialCharacter'))
-      .refine(checkTaxNumberLength, t('errors.validation.taxNumber.invalidLength'))
-      .refine(validateTaxNumber, t('errors.validation.taxNumber.invalidNumber'))
-  ])
+    .refine(validateEmailRfc5322Regex, t('errors.validation.email.invalid'))
 })
 
 type Schema = z.output<typeof schema>
 const state = ref({
   email: undefined,
   fullName: undefined,
-  preferredName: undefined,
-  taxNumber: undefined
+  preferredName: undefined
 })
 
 const citizenships = ref([])
@@ -147,8 +138,6 @@ const addr: Ref<BtrAddressI> = ref({
   line2: undefined,
   locationDescription: undefined
 })
-
-const isTaxResident = ref('')
 
 function submit (event: FormSubmitEvent<Schema>) {
   // eslint-disable-next-line no-console
