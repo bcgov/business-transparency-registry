@@ -33,8 +33,8 @@
             :label="country.name"
             class="float-left z-20"
             :has-close="true"
-            @chipCloseClicked="removeCitizenship(country)"
             data-cy="countryOfCitizenshipDropdownChip"
+            @chipCloseClicked="removeCitizenship(country)"
           />
         </span>
         <UIcon class="float-right text-2xl " name="i-mdi-chevron-down" />
@@ -51,8 +51,8 @@
               'bg-gray-100',
               'border-b-1'
             ]"
-            @change="filterCountries($event.target.value)"
             data-cy="countryOfCitizenshipDropdownFilter"
+            @change="filterCountries($event.target.value)"
           />
           <ComboboxOptions
             :class="[
