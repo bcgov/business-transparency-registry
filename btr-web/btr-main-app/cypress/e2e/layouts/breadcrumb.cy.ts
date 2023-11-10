@@ -2,8 +2,7 @@ describe('Layout -> Breadcrumb', () => {
   const identifier = 'BC0871427'
 
   it('shows expected header information for owner change page (NO business mock)', () => {
-    cy.visit(`/${identifier}/beneficial-owner-change`)
-    cy.wait(1000)
+    cy.visit('/')
     cy.get('#bcros-breadcrumb')
     // shows the expected breadcrumbs for owner change
     cy.get('[data-cy="crumb-link"]').should('have.length', 4)
@@ -21,8 +20,7 @@ describe('Layout -> Breadcrumb', () => {
       `https://legal-api-dev.apps.silver.devops.gov.bc.ca/api/v2/businesses/${identifier}?slim=true`,
       { fixture: 'business.json' })
     // execute test
-    cy.visit(`/${identifier}/beneficial-owner-change`)
-    cy.wait(1000)
+    cy.visit('/')
     // sanity check (previous test already confirmed)
     cy.get('[data-cy="crumb-link"]').should('have.length', 4)
     // breadcrumb should now reflect the business name from the mock response
