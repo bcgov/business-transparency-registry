@@ -54,6 +54,20 @@
           + addr.region
       }}
       <br>
+      <br>
+      <BcrosInputsCountriesOfCitizenshipDropdown v-model="citizenships" />
+      {{ citizenships }}
+      <br>
+      <br>
+      <BcrosInputsCountriesOfCitizenship
+        v-model:canadianCitizenship="citizenshipType"
+        v-model:citizenships="citizenships2"
+      />
+      {{ citizenshipType }}
+      <br>
+      {{ citizenships2 }}
+      <br>
+      <br>
       <UButton id="exampleSubmitButton" type="submit" data-cy="submit-button">
         Submit
       </UButton>
@@ -70,6 +84,9 @@ import { validateEmailRfc5322Regex } from '~/utils/validation/form_inputs'
 
 const minNameLength = 1
 const maxNameLength = 150
+
+const citizenshipType = ref('')
+const citizenships2 = ref([])
 
 const { t } = useI18n()
 const schema = z.object({
@@ -95,6 +112,8 @@ const state = ref({
   fullName: undefined,
   preferredName: undefined
 })
+
+const citizenships = ref([])
 
 const addr: Ref<BtrAddressI> = ref({
   city: '',

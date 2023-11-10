@@ -34,9 +34,9 @@ export default <Partial<Config>>{
           error: '#d3272c' // ok for error text or icons)
 
         },
-        red: {
-          approvedGreen: '#2E8540',
-          errorRed: '#D3272C',
+        outcomes: {
+          approved: '#2E8540',
+          error: '#D3272C',
           caution: '#F8661A' // caution icon or large text
         },
         // aka "gray"... nuxt-ui renames gray to cool

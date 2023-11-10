@@ -12,11 +12,13 @@
             'border-b-2',
             'border-gray-500',
             'focus:outline-none',
-            'sm:text-sm']"
+            'sm:text-sm',
+            'h-[46px]'
+          ]"
         >
           <ComboboxInput
             :placeholder="$t('labels.line1')"
-            class="w-full border-none py-2 pl-3 pr-10 text-sm leading-5 bg-gray-100 text-gray-900 focus:ring-0"
+            class="w-full border-none p-3 text-sm leading-5 bg-gray-100 text-gray-900 focus:outline-none"
             @keyup="doTheSearch($event.target.value)"
           />
         </div>

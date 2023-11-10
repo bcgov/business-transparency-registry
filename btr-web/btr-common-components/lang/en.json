@@ -13,6 +13,17 @@
     "region": "Region (Optional)",
     "postalCode": "Postal Code",
     "locationDescription": "Location Description (Optional)",
+    "countryOfCitizenship": {
+      "citizen": "Citizen of Canada",
+      "pr": "Permanent resident of Canada",
+      "others": "Other citizenship(s)",
+      "selectAll": "Select all countries of which this person is a citizen.",
+      "placeholder": "Countries of Citizenship",
+      "findCountry": "Find a Country",
+      "select": "Select",
+      "selected": "Selected"
+    },
+    "findACountry": "Find a country",
     "services": {
       "bcsc": "BC Services Card",
       "bceid": "BCeID",
