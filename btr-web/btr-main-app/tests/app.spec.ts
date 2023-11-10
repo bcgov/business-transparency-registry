@@ -1,23 +1,14 @@
-import { expect, describe, test, vi } from 'vitest'
-import { VueWrapper, mount } from '@vue/test-utils'
+import { expect, describe, test } from 'vitest'
+import { VueWrapper } from '@vue/test-utils'
 import { mountSuspended } from 'vitest-environment-nuxt/utils'
-import { createI18n } from 'vue-i18n'
-import { RouterHistory, RouteLocation, RouteLocationNormalized, useRoute, createRouter, createWebHistory } from 'vue-router'
-import en from '../../btr-common-components/lang/en.json'
+import { mockedI18n } from '../../btr-common-components/tests/unit/utils/mockedi18n'
 import app from '~/app.vue'
-import ownerChange from '~/pages/ownerChange.vue'
-import { RouteNameE } from '~/enums/route-name-e'
-import routes from '~/app/router.options'
 
-const i18n = createI18n({
-  locale: 'en',
-  messages: { en }
-})
 describe('Tests for owner change page', () => {
   let wrapper: VueWrapper<any>
 
   beforeEach(async () => {
-    wrapper = await mountSuspended(app, { global: { plugins: [i18n] } })
+    wrapper = await mountSuspended(app, { global: { plugins: [mockedI18n] } })
   })
   afterEach(() => { wrapper.unmount() })
 

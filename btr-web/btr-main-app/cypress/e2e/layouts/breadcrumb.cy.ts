@@ -15,7 +15,10 @@ describe('Layout -> Breadcrumb', () => {
 
   it('shows expected header information for owner change page (business mock)', () => {
     // setup intercept
-    cy.intercept('GET', `*/businesses/${identifier}?slim=true`, { fixture: 'business.json' })
+    cy.intercept(
+      'GET',
+      `https://legal-api-dev.apps.silver.devops.gov.bc.ca/api/v2/businesses/${identifier}?slim=true`,
+      { fixture: 'business.json' })
     // execute test
     cy.visit(`/${identifier}/beneficial-owner-change`)
     // sanity check (previous test already confirmed)

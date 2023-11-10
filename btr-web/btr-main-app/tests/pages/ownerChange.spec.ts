@@ -1,18 +1,13 @@
 import { expect, describe, test } from 'vitest'
 import { VueWrapper, mount } from '@vue/test-utils'
-import { createI18n } from 'vue-i18n'
-import en from '../../../btr-common-components/lang/en.json'
+import { mockedI18n } from '../../../btr-common-components/tests/unit/utils/mockedi18n'
 import ownerChange from '~/pages/ownerChange.vue'
 
-const i18n = createI18n({
-  locale: 'en',
-  messages: { en }
-})
 describe('Tests for owner change page', () => {
   let wrapper: VueWrapper<any>
 
   beforeEach(() => {
-    wrapper = mount(ownerChange, { global: { plugins: [i18n] } })
+    wrapper = mount(ownerChange, { global: { plugins: [mockedI18n] } })
   })
   afterEach(() => { wrapper.unmount() })
 
