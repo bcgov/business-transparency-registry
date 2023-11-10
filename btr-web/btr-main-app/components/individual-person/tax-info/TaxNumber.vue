@@ -71,7 +71,7 @@ const handleRadioButtonChange = (value) => {
   if (value === NO_TAX_NUMBER) {
     taxNumber.value = ''
     emit('update:modelValue', { hasTaxNumber: false, taxNumber: undefined })
-  } else if (value === HAS_TAX_NUMBER) {
+  } else {
     emit('update:modelValue', { hasTaxNumber: true, taxNumber: taxNumber.value })
   }
 }
