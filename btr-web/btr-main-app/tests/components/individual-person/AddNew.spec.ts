@@ -3,7 +3,10 @@ import { VueWrapper, flushPromises } from '@vue/test-utils'
 import { createI18n } from 'vue-i18n'
 import { mountSuspended } from 'vitest-environment-nuxt/utils'
 
-import { IndividualPersonAddNew, BcrosInputsDateSelect, BcrosInputsAddress } from '#components'
+import {
+  IndividualPersonAddNew, BcrosInputsDateSelect, BcrosInputsAddress,
+  IndividualPersonTaxInfoTaxNumber, IndividualPersonTaxInfoTaxResidency
+} from '#components'
 
 const i18n = createI18n({
   // vue-i18n options here ...
@@ -51,5 +54,17 @@ describe('AddIndividualPerson tests', () => {
     expect(wrapper.find('[data-cy="address-region-input"]').exists()).toBe(true)
     expect(wrapper.find('[data-cy="address-postal-code"]').exists()).toBe(true)
     expect(wrapper.find('[data-cy="address-location-description"]').exists()).toBe(true)
+  })
+
+  it('renders the tax number component', async () => {
+    await wrapper.find('#add-person-manually-toggle').trigger('click')
+    await flushPromises()
+    expect(wrapper.findComponent(IndividualPersonTaxInfoTaxNumber).exists()).toBe(true)
+  })
+
+  it('renders the tax residency component', async () => {
+    await wrapper.find('#add-person-manually-toggle').trigger('click')
+    await flushPromises()
+    expect(wrapper.findComponent(IndividualPersonTaxInfoTaxResidency).exists()).toBe(true)
   })
 })

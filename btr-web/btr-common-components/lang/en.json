@@ -48,11 +48,6 @@
       "preferredName": {
         "maxLengthExceeded": "The preferred name must not exceed 150 characters",
         "specialCharacter": "The preferred name should not contain special characters"
-      },
-      "taxNumber": {
-        "specialCharacter": "The CRA tax number should not contain special characters",
-        "invalidLength": "The CRA tax number should be 9 digits long",
-        "invalidNumber": "The CRA tax number is invalid"
       }
     }
   },

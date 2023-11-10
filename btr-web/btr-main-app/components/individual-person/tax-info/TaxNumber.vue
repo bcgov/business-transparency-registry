@@ -4,14 +4,14 @@
       <URadio
         id="taxNumberRadioButton"
         v-model="selectedButton"
-        :value="`CRA Tax Number`"
-        @change="handleRadioButtonChange(`CRA Tax Number`)"
+        :value="HAS_TAX_NUMBER"
+        @change="handleRadioButtonChange(HAS_TAX_NUMBER)"
       />
       <UFormGroup :name="name" class="ml-5">
         <UInput
           v-model="taxNumber"
           type="text"
-          :disabled="selectedButton !== 'CRA Tax Number'"
+          :disabled="selectedButton !== HAS_TAX_NUMBER"
           variant="bcGov"
           :placeholder="$t('placeholders.taxNumber')"
           class="w-80"
@@ -23,16 +23,17 @@
       <URadio
         id="noTaxNumberRadioButton"
         v-model="selectedButton"
-        :value="`No Tax Number`"
-        @change="handleRadioButtonChange(`No Tax Number`)"
+        :value="NO_TAX_NUMBER"
+        @change="handleRadioButtonChange(NO_TAX_NUMBER)"
       />
-      <label class="ml-5"> This person does not have a CRA Tax Number </label>
+      <label class="ml-5"> {{ $t('labels.noTaxNumberLabel') }} </label>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, defineProps, defineEmits, watch } from 'vue'
+const HAS_TAX_NUMBER = 'hasTaxNumber'
+const NO_TAX_NUMBER = 'noTaxNumber'
 
 defineProps({
   id: { type: String, required: true },
@@ -40,14 +41,15 @@ defineProps({
   modelValue: {
     type: Object,
     default: () => ({
-      hasTaxNumber: false,
-      taxNumber: ''
+      hasTaxNumber: undefined,
+      taxNumber: undefined
     })
-  },
-  label: { type: String, default: '' }
+  }
 })
 
-const emit = defineEmits<{(e: 'update:modelValue', value: { hasTaxNumber: boolean; taxNumber: string }): void}> ()
+const emit = defineEmits<{
+  'update:modelValue': [value: { hasTaxNumber: boolean; taxNumber: string | undefined }]
+}>()
 
 // Indicate which radio button is selected.
 const selectedButton = ref('')
@@ -57,19 +59,17 @@ const taxNumber = ref('')
 
 // Watch the selected radio button value to update the taxNumber value and emit the parent's `v-model`.
 watch(() => selectedButton.value, (button) => {
-  if (button === 'No Tax Number') {
-    emit('update:modelValue', { hasTaxNumber: false, taxNumber: 'No Tax Number' })
+  if (button === NO_TAX_NUMBER) {
+    emit('update:modelValue', { hasTaxNumber: false, taxNumber: undefined })
     taxNumber.value = ''
-  } else if (taxNumber.value) {
-    emit('update:modelValue', { hasTaxNumber: true, taxNumber: taxNumber.value })
   } else {
-    emit('update:modelValue', { hasTaxNumber: true, taxNumber: '' })
+    emit('update:modelValue', { hasTaxNumber: true, taxNumber: taxNumber.value })
   }
 })
 
 // Watch the taxNumber value to update the parent's `v-model` only if the selected radio button is 'CRA Tax Number'.
 watch(() => taxNumber.value, (newTaxNumber) => {
-  if (selectedButton.value === 'CRA Tax Number') {
+  if (selectedButton.value === HAS_TAX_NUMBER) {
     emit('update:modelValue', { hasTaxNumber: true, taxNumber: newTaxNumber })
   }
 })

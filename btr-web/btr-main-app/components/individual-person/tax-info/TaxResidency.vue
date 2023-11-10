@@ -17,17 +17,17 @@ import { ref, watch, defineProps, defineEmits } from 'vue'
 
 const props = defineProps({
   id: { type: String, required: true },
-  modelValue: { type: String, default: '' },
-  label: { type: String, default: '' }
+  modelValue: { type: String, default: '' }
 })
 
 const emit = defineEmits<{(e: 'update:modelValue', value: string): void}>()
 
 const selectedValue = ref(props.modelValue)
 
+const { t } = useI18n()
 const options = [
-  { value: 'true', label: 'Canada tax resident' },
-  { value: 'false', label: 'Not a Canada tax resident' }
+  { value: 'true', label: t('labels.isTaxResident') },
+  { value: 'false', label: t('labels.notTaxResident') }
 ]
 
 watch(selectedValue, (newValue) => {

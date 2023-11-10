@@ -2,11 +2,16 @@
   "labels": {
     "lastKnownAddress": "Last Known Address",
     "citizenshipPermanentResidency": "Citizenship / Permanent Residency",
+    "taxNumber": "Canada Revenue Agency (CRA) Tax Number",
+    "noTaxNumberLabel": "This person does not have a CRA Tax Number",
+    "taxResidency": "Tax Residency",
+    "isTaxResident": "Canada tax resident",
+    "notTaxResident": "Not a Canada tax resident"
   },
   "texts": {
     "citizenshipPermanentResidency": "Indicate if this person is a citizen or permanent resident of Canada, or list all of the non-Canadian citizenship(s) of this person. If this person is a Citizen or Permanent resident of Canada, listing of multiple citizenships is not required.",
-    "taxNumber": "Canada Revenue Agency (CRA) Tax Number",
-    "taxResidency": "Tax Residency"
+    "taxNumber": "A Social Insurance Number (SIN), an Individual Tax Number (ITN), or a Temporary Taxation Number (TTN) is required if this person has one.",
+    "taxResidency": "Indicate if this person is a resident of Canada for Income Tax purposes."
   },
   "placeholders": {
     "taxNumber": "CRA Tax Number (SIN, ITN, or TTN)"

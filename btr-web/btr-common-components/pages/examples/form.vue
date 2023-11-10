@@ -68,20 +68,6 @@
       {{ citizenships2 }}
       <br>
       <br>
-      <BcrosInputsTaxNumber
-        id="testTaxNumber"
-        v-model="state.taxNumber"
-        :label="$t('labels.taxNumber')"
-        data-cy="testTaxNumber"
-      />
-      <p>taxNumber: {{ state.taxNumber }}</p>
-      <BcrosInputsTaxResidency
-        id="testTaxResidency"
-        v-model="isTaxResident"
-        :label="$t('labels.taxResidency')"
-        data-cy="testTaxResidency"
-      />
-      <p>This person is a Canadian tax resident: {{ isTaxResident }}</p>
       <UButton id="exampleSubmitButton" type="submit" data-cy="submit-button">
         Submit
       </UButton>
