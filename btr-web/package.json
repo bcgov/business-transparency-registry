@@ -26,7 +26,7 @@
     "eslint": "^8.50.0",
     "happy-dom": "12.1.2",
     "jsdom": "22.1.0",
-    "nuxt": "^3.7.4",
+    "nuxt": "^3.8.1",
     "nuxt-vitest": "0.11.0",
     "postcss-html": "^1.5.0",
     "sass": "^1.68.0",
