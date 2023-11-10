@@ -16,6 +16,7 @@
           :placeholder="$t('placeholders.taxNumber')"
           class="w-80"
           @blur="formatInput"
+          @focus="handleInputFocus"
         />
       </UFormGroup>
     </div>
@@ -72,6 +73,12 @@ const handleRadioButtonChange = (value) => {
     emit('update:modelValue', { hasTaxNumber: false, taxNumber: undefined })
   } else if (value === HAS_TAX_NUMBER) {
     emit('update:modelValue', { hasTaxNumber: true, taxNumber: taxNumber.value })
+  }
+}
+
+const handleInputFocus = () => {
+  if (selectedButton.value !== HAS_TAX_NUMBER) {
+    selectedButton.value = HAS_TAX_NUMBER
   }
 }
 

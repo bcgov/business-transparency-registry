@@ -25,12 +25,9 @@ describe('pages -> Add individual', () => {
     })
 
     cy.get('[data-cy="showAddIndividualPersonManually"]').trigger('click')
-
-    const radioGroup = cy.get('[data-cy="testTaxNumber"]')
-
-    radioGroup.get('[type="radio"][value="hasTaxNumber"]').check()
-
+    cy.get('[name="taxNumber"]').type('00').blur()
     cy.contains(en.errors.validation.taxNumber.invalidLength).should('exist')
+    cy.get('[type="radio"][value="hasTaxNumber"]').should('be.checked')
   })
 
   it('test the error message for special characters in tax number', () => {
@@ -40,13 +37,9 @@ describe('pages -> Add individual', () => {
     })
 
     cy.get('[data-cy="showAddIndividualPersonManually"]').trigger('click')
-
-    const radioGroup = cy.get('[data-cy="testTaxNumber"]')
-
-    radioGroup.get('[type="radio"][value="hasTaxNumber"]').check()
     cy.get('[name="taxNumber"]').type('a').blur()
-
     cy.contains(en.errors.validation.taxNumber.specialCharacter).should('exist')
+    cy.get('[type="radio"][value="hasTaxNumber"]').should('be.checked')
   })
 
   it('test the error message for invalid tax number', () => {
@@ -56,12 +49,8 @@ describe('pages -> Add individual', () => {
     })
 
     cy.get('[data-cy="showAddIndividualPersonManually"]').trigger('click')
-
-    const radioGroup = cy.get('[data-cy="testTaxNumber"]')
-
-    radioGroup.get('[type="radio"][value="hasTaxNumber"]').check()
     cy.get('[name="taxNumber"]').type('111222333').blur()
-
     cy.contains(en.errors.validation.taxNumber.invalidNumber).should('exist')
+    cy.get('[type="radio"][value="hasTaxNumber"]').should('be.checked')
   })
 })
