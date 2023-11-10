@@ -3,6 +3,7 @@ describe('Layout -> Breadcrumb', () => {
 
   it('shows expected header information for owner change page (NO business mock)', () => {
     cy.visit(`/${identifier}/beneficial-owner-change`)
+    cy.wait(1000)
     cy.get('#bcros-breadcrumb')
     // shows the expected breadcrumbs for owner change
     cy.get('[data-cy="crumb-link"]').should('have.length', 4)
@@ -21,6 +22,7 @@ describe('Layout -> Breadcrumb', () => {
       { fixture: 'business.json' })
     // execute test
     cy.visit(`/${identifier}/beneficial-owner-change`)
+    cy.wait(1000)
     // sanity check (previous test already confirmed)
     cy.get('[data-cy="crumb-link"]').should('have.length', 4)
     // breadcrumb should now reflect the business name from the mock response
