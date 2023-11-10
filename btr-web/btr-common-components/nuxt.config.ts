@@ -43,10 +43,11 @@ export default defineNuxtConfig({
       addressCompleteKey: process.env.VUE_APP_ADDRESS_COMPLETE_KEY,
       authApiURL: `${process.env.VUE_APP_AUTH_API_URL || ''}${process.env.VUE_APP_AUTH_API_VERSION || ''}`,
       authWebURL: process.env.VUE_APP_AUTH_WEB_URL || '',
-      registryHomeURL: process.env.VUE_APP_REGISTRY_HOME_URL || '',
       kcURL: process.env.VUE_APP_KEYCLOAK_AUTH_URL || '',
       kcRealm: process.env.VUE_APP_KEYCLOAK_REALM || '',
-      kcClient: process.env.VUE_APP_KEYCLOAK_CLIENTID || ''
+      kcClient: process.env.VUE_APP_KEYCLOAK_CLIENTID || '',
+      legalApiURL: `${process.env.VUE_APP_LEGAL_API_URL || ''}${process.env.VUE_APP_LEGAL_API_VERSION_2 || ''}`,
+      registryHomeURL: process.env.VUE_APP_REGISTRY_HOME_URL || ''
     }
   },
   vite: {

@@ -2,6 +2,7 @@ describe('forms -> preferred name -> validate that the preferred name component 
   beforeEach(() => {
     // navigate to index page and check footer and header exist
     cy.visit('/examples/form')
+    cy.wait(1000)
   })
 
   it('test the validation rule for the maximum name length', () => {

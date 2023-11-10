@@ -15,6 +15,14 @@
 <script setup lang="ts">
 import { useIndividualPerson } from '~/store/individual-person'
 
+onBeforeMount(async () => {
+  // FUTURE: put in a loading page or something while this happens in case network is slow
+  await useBcrosBusiness().loadBusiness(route.params.identifier as string)
+})
+
+const route = useRoute()
+console.info(route.params.identifier) // Temporary to show how to use identifier. Rmv once this is used elsewhere.
+
 const individualPersonStore = useIndividualPerson()
 
 const individuals = computed(() => individualPersonStore.getIndividualPersons)

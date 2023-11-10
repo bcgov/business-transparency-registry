@@ -2,6 +2,7 @@ describe('forms -> address -> validate that address component work inside exmamp
   beforeEach(() => {
     // navigate to index page and check footer and header exist
     cy.visit('/examples/form')
+    cy.wait(1000)
   })
 
   it('displays address component', () => {

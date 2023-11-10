@@ -1,18 +1,15 @@
 import { describe, it, expect } from 'vitest'
 import { VueWrapper, flushPromises } from '@vue/test-utils'
-import { createI18n } from 'vue-i18n'
 import { mountSuspended } from 'vitest-environment-nuxt/utils'
+import { mockedI18n } from '../../../../btr-common-components/tests/unit/utils/mockedi18n'
 
 import { IndividualPersonAddNew, BcrosInputsDateSelect, BcrosInputsAddress } from '#components'
 
-const i18n = createI18n({
-  // vue-i18n options here ...
-})
 describe('AddIndividualPerson tests', () => {
   let wrapper: VueWrapper<any>
 
   beforeEach(async () => {
-    wrapper = await mountSuspended(IndividualPersonAddNew, { global: { plugins: [i18n] } })
+    wrapper = await mountSuspended(IndividualPersonAddNew, { global: { plugins: [mockedI18n] } })
   })
   afterEach(() => {
     wrapper.unmount()

@@ -36,6 +36,13 @@ export default defineNuxtConfig({
   pinia: {
     /* pinia module options */
   },
+  runtimeConfig: {
+    public: {
+      // Keys within public, will be also exposed to the client-side
+      registryDashboardURL: process.env.VUE_APP_REGISTRY_URL || '',
+      businessWebURL: process.env.VUE_APP_DASHBOARD_URL || ''
+    }
+  },
   vite: {
     css: {
       preprocessorOptions: {

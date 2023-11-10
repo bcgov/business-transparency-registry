@@ -2,6 +2,7 @@ describe('forms -> email -> validate that email component work inside example fo
   beforeEach(() => {
     // navigate to index page and check footer and header exist
     cy.visit('/examples/form')
+    cy.wait(2000)
   })
 
   it('verify email field validation rules', () => {

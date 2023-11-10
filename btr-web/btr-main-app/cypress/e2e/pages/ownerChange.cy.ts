@@ -1,8 +1,12 @@
-describe('pages -> Add individual', () => {
+describe('pages -> Beneficial Owner Change', () => {
   beforeEach(() => {
     cy.visit('/')
   })
 
+  it('redirected to owner change page', () => {
+    // NOTE: this will change when we design a landing page. Once that happens change the cy.visit('/') ^
+    cy.url().should('include', '/BC0871427/beneficial-owner-change')
+  })
   it('verify all parts visible when manual entry clicked', () => {
     cy.contains('Add transparency register information manually')
 

@@ -4,24 +4,32 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
-dependencies:
-  '@vuepic/vue-datepicker':
-    specifier: ^7.1.0
-    version: 7.1.0(vue@3.3.4)
-  keycloak-js:
-    specifier: ^22.0.5
-    version: 22.0.5
+importers:
 
-devDependencies:
-  '@nuxtjs/i18n':
-    specifier: ^8.0.0-rc.5
-    version: 8.0.0-rc.5(vue-router@4.2.5)(vue@3.3.4)
-  '@vitest/coverage-v8':
-    specifier: ^0.34.6
-    version: 0.34.6(vitest@0.33.0)
-  vitest-environment-nuxt:
-    specifier: 0.11.0
-    version: 0.11.0(vitest@0.33.0)(vue-router@4.2.5)(vue@3.3.4)
+  .:
+    dependencies:
+      '@vuepic/vue-datepicker':
+        specifier: ^7.1.0
+        version: 7.1.0(vue@3.3.4)
+      keycloak-js:
+        specifier: ^22.0.5
+        version: 22.0.5
+    devDependencies:
+      '@nuxtjs/i18n':
+        specifier: ^8.0.0-rc.5
+        version: 8.0.0-rc.5(vue-router@4.2.5)(vue@3.3.4)
+      '@vitest/coverage-v8':
+        specifier: ^0.34.6
+        version: 0.34.6(vitest@0.33.0)
+      vitest-environment-nuxt:
+        specifier: 0.11.0
+        version: 0.11.0(vitest@0.33.0)(vue-router@4.2.5)(vue@3.3.4)
+
+  ..: {}
+
+  ../btr-layouts: {}
+
+  ../btr-main-app: {}
 
 packages:
 
