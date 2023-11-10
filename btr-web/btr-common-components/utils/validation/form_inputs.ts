@@ -89,12 +89,18 @@ export const validateTaxNumber = (taxNumber: string): boolean => {
   }
 
   let checkSum = 0
+
   for (let i = 0; i < 9; i++) {
     const digit = parseInt(digits[i])
     if (i % 2 === 0) {
       checkSum += digit
     } else {
-      checkSum += digit * 2
+      const product = digit * 2
+      if (product < 10) {
+        checkSum += product
+      } else {
+        checkSum += product - 9
+      }
     }
   }
 

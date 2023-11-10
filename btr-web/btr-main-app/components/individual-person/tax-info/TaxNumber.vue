@@ -1,17 +1,17 @@
 <template>
   <div class="flex flex-col py-5">
-    <div class="flex items-center mb-2 py-1">
+    <div class="flex mb-2 py-1">
       <URadio
         id="taxNumberRadioButton"
         v-model="selectedButton"
         :value="HAS_TAX_NUMBER"
+        class="mt-2"
         @change="handleRadioButtonChange(HAS_TAX_NUMBER)"
       />
       <UFormGroup :name="name" class="ml-5">
         <UInput
           v-model="taxNumber"
           type="text"
-          :disabled="selectedButton !== HAS_TAX_NUMBER"
           variant="bcGov"
           :placeholder="$t('placeholders.taxNumber')"
           class="w-80"
@@ -57,25 +57,22 @@ const selectedButton = ref('')
 // The tax number input value
 const taxNumber = ref('')
 
-// Watch the selected radio button value to update the taxNumber value and emit the parent's `v-model`.
-watch(() => selectedButton.value, (button) => {
-  if (button === NO_TAX_NUMBER) {
-    emit('update:modelValue', { hasTaxNumber: false, taxNumber: undefined })
-    taxNumber.value = ''
-  } else {
-    emit('update:modelValue', { hasTaxNumber: true, taxNumber: taxNumber.value })
-  }
-})
-
-// Watch the taxNumber value to update the parent's `v-model` only if the selected radio button is 'CRA Tax Number'.
-watch(() => taxNumber.value, (newTaxNumber) => {
-  if (selectedButton.value === HAS_TAX_NUMBER) {
+watch(taxNumber, (newTaxNumber) => {
+  // when the user starts typing, the radio HAS_TAX_NUMBER button should be selected
+  if (newTaxNumber !== '') {
+    selectedButton.value = HAS_TAX_NUMBER
     emit('update:modelValue', { hasTaxNumber: true, taxNumber: newTaxNumber })
   }
 })
 
 const handleRadioButtonChange = (value) => {
   selectedButton.value = value
+  if (value === NO_TAX_NUMBER) {
+    taxNumber.value = ''
+    emit('update:modelValue', { hasTaxNumber: false, taxNumber: undefined })
+  } else if (value === HAS_TAX_NUMBER) {
+    emit('update:modelValue', { hasTaxNumber: true, taxNumber: taxNumber.value })
+  }
 }
 
 const formatInput = () => {
