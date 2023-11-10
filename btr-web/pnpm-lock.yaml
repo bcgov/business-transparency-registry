@@ -11,9 +11,6 @@ dependencies:
   http-status-codes:
     specifier: ^2.3.0
     version: 2.3.0
-  nuxt-storage:
-    specifier: ^1.2.2
-    version: 1.2.2
   zod:
     specifier: ^3.22.4
     version: 3.22.4
@@ -7937,10 +7934,6 @@ packages:
     optionalDependencies:
       fsevents: 2.3.3
     dev: true
-
-  /nuxt-storage@1.2.2:
-    resolution: {integrity: sha512-quJbZ87NO7QRCSp7YZolot6VwktciSLuTS/sRl8NPz5rAWA84U5Py0y9FmAsbKTiaqJtFcCKSaJGzky948jA3w==}
-    dev: false
 
   /nuxt-vitest@0.11.0(@testing-library/vue@7.0.0)(@vitejs/plugin-vue-jsx@3.0.2)(@vitejs/plugin-vue@4.4.0)(happy-dom@12.1.2)(jsdom@22.1.0)(vite@4.4.11)(vitest@0.33.0)(vue-router@4.2.5)(vue@3.3.4):
     resolution: {integrity: sha512-3gXY/c6bfIQnrwUp1tVLdc5jNEk9m2czmebCSWn9fmMz7wVO3BX1k1qJaWvwU0Q4q7WEzHNn6toUXwI8BuhV1Q==}

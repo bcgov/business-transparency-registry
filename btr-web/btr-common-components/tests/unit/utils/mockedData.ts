@@ -37,3 +37,27 @@ export const testUserSettings = [
     type: UserSettingsTypeE.CREATE_ACCOUNT
   }
 ]
+
+export const testBusinessBEN: BusinessI = {
+  business: {
+    adminFreeze: false,
+    goodStanding: true,
+    identifier: 'BC0871427',
+    legalName: '0871427 B.C. LTD.',
+    legalType: BusinessTypeE.BEN,
+    state: BusinessStateE.ACTIVE
+  }
+}
+
+export const testBusinessSP: BusinessI = {
+  business: {
+    adminFreeze: false,
+    alternateNames: [
+      { operatingName: 'Test Proprietorship' }
+    ],
+    identifier: 'FM1234567',
+    legalName: 'Legal Name of Owner',
+    legalType: BusinessTypeE.SP,
+    state: BusinessStateE.ACTIVE
+  }
+}

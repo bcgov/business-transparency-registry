@@ -36,7 +36,6 @@
   },
   "dependencies": {
     "@vuepic/vue-datepicker": "^7.1.0",
-    "keycloak-js": "^22.0.5",
-    "nuxt-storage": "^1.2.2"
+    "keycloak-js": "^22.0.5"
   }
 }

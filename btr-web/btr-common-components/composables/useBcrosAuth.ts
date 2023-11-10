@@ -1,5 +1,4 @@
 import { KeycloakConfig } from 'keycloak-js'
-import { getData } from 'nuxt-storage/session-storage'
 
 /** Manages auth flows */
 export const useBcrosAuth = () => {
@@ -37,13 +36,10 @@ export const useBcrosAuth = () => {
   async function setupAuth (kcConfig: KeycloakConfig) {
     if (!keycloak.kc.authenticated) {
       console.info('Initializing auth setup...')
-      const token = getData(SessionStorageKeyE.KEYCLOAK_TOKEN) || undefined
-      const refreshToken = getData(SessionStorageKeyE.KEYCLOAK_TOKEN_REFRESH) || undefined
-      const idToken = getData(SessionStorageKeyE.KEYCLOAK_TOKEN_ID) || undefined
       // initialize keycloak with user token
       console.info('Initializing Keycloak...')
       try {
-        await keycloak.initKeyCloak(kcConfig, token, refreshToken, idToken)
+        await keycloak.initKeyCloak(kcConfig)
         if (keycloak.kc.authenticated) {
           // successfully initialized so setup other pieces
           keycloak.syncSessionStorage()
