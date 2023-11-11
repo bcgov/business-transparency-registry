@@ -48,11 +48,11 @@
       "fullName": {
         "empty": "The legal name should contain at least one character",
         "maxLengthExceeded": "The legal name must not exceed 150 characters",
-        "specialCharacter": "The legal name should not contain special character"
+        "specialCharacter": "The legal name should not contain special characters"
       },
       "preferredName": {
         "maxLengthExceeded": "The preferred name must not exceed 150 characters",
-        "specialCharacter": "The preferred name should not contain special character"
+        "specialCharacter": "The preferred name should not contain special characters"
       }
     }
   },

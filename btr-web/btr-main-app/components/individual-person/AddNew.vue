@@ -42,6 +42,7 @@
         />
       </div>
     </UForm>
+
     <div class="text-blue-700 py-5 align-middle">
       <a
         id="add-person-manually-toggle"
@@ -127,12 +128,44 @@
           v-model:citizenships="citizenships"
         />
       </div>
+      <UForm
+        :schema="schema"
+        :state="state"
+      >
+        <div>
+          <p class="font-bold py-5">
+            {{ $t('labels.taxNumber') }}
+          </p>
+          <p class="text-justify">
+            {{ $t('texts.taxNumber') }}
+          </p>
+          <IndividualPersonTaxInfoTaxNumber
+            id="addNewPersonTaxNumber"
+            v-model="taxInfoModel"
+            name="taxNumber"
+            data-cy="testTaxNumber"
+          />
+        </div>
+      </UForm>
+      <div>
+        <p class="font-bold py-5">
+          {{ $t('labels.taxResidency') }}
+        </p>
+        <p class="text-justify">
+          {{ $t('texts.taxResidency') }}
+        </p>
+        <IndividualPersonTaxInfoTaxResidency
+          id="addNewPersonTaxResidency"
+          v-model="isTaxResident"
+          data-cy="testTaxResidency"
+        />
+      </div>
     </template>
   </div>
 </template>
 
 <script setup lang="ts">
-import { Ref, ref } from 'vue'
+import { Ref, ref, computed } from 'vue'
 import { z } from 'zod'
 
 const showAddInfoManually = ref(false)
@@ -182,14 +215,41 @@ const schema = z.object({
   email: z.string()
     .min(1, t('errors.validation.email.empty'))
     .max(254, 'errors.validation.email.maxLengthExceeded')
-    .refine(validateEmailRfc6532Regex, t('errors.validation.email.invalid'))
+    .refine(validateEmailRfc6532Regex, t('errors.validation.email.invalid')),
+  hasTaxNumber: z.boolean(),
+  taxNumber: z.union([
+    z.undefined(),
+    z.string()
+      .refine(checkSpecialCharacters, t('errors.validation.taxNumber.specialCharacter'))
+      .refine(checkTaxNumberLength, t('errors.validation.taxNumber.invalidLength'))
+      .refine(validateTaxNumber, t('errors.validation.taxNumber.invalidNumber'))
+  ])
 })
 
 const state = reactive({
   email: undefined,
   fullName: undefined,
-  preferredName: undefined
+  preferredName1: undefined,
+  hasTaxNumber: undefined,
+  taxNumber: undefined
 })
+
+// tax number input
+const taxInfoModel = computed({
+  get () {
+    return {
+      hasTaxNumber: state.hasTaxNumber,
+      taxNumber: state.taxNumber
+    }
+  },
+  set (value) {
+    state.hasTaxNumber = value.hasTaxNumber
+    state.taxNumber = value.taxNumber
+  }
+})
+
+// tax residency
+const isTaxResident: Ref<string | undefined> = ref(undefined)
 </script>
 
 <style scoped></style>

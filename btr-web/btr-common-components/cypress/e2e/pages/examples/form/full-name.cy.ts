@@ -1,5 +1,12 @@
 describe('forms -> preferred name -> validate that the preferred name component work inside example form', () => {
+  let en: any
+
   beforeEach(() => {
+    // load the English version of the language file
+    cy.readFile('lang/en.json').then((json) => {
+      en = json
+    })
+
     // navigate to index page and check footer and header exist
     cy.visit('/examples/form')
     cy.wait(1000)
@@ -7,7 +14,7 @@ describe('forms -> preferred name -> validate that the preferred name component 
 
   it('test the validation rule for the maximum name length', () => {
     cy.on('uncaught:exception', (err) => {
-      expect(err.message).to.include('The legal name must not exceed 150 characters')
+      expect(err.message).to.include(en.errors.validation.fullName.maxLengthExceeded)
       return false
     })
 
@@ -15,29 +22,29 @@ describe('forms -> preferred name -> validate that the preferred name component 
     const validLongName = '  ' + 'a'.repeat(150) + '  '
 
     cy.get('#testFullName').type(invalidLongName).blur()
-    cy.contains('The legal name must not exceed 150 characters').should('exist')
+    cy.contains(en.errors.validation.fullName.maxLengthExceeded).should('exist')
 
     cy.get('#testFullName').clear().type(validLongName).blur()
-    cy.contains('The legal name must not exceed 150 characters').should('not.exist')
+    cy.contains(en.errors.validation.fullName.maxLengthExceeded).should('not.exist')
   })
 
   it('test the validation rule for the minimum name length', () => {
     cy.on('uncaught:exception', (err) => {
-      expect(err.message).to.include('The legal name should contain at least one character')
+      expect(err.message).to.include(en.errors.validation.fullName.empty)
       return false
     })
 
     const singleCharacter = 'a'
     cy.get('#testFullName').type(singleCharacter).blur()
-    cy.contains('The legal name should contain at least one character').should('not.exist')
+    cy.contains(en.errors.validation.fullName.empty).should('not.exist')
 
     cy.get('#testFullName').clear().blur()
-    cy.contains('The legal name should contain at least one character').should('exist')
+    cy.contains(en.errors.validation.fullName.empty).should('exist')
   })
 
   it('test the validation rule for special character', () => {
     cy.on('uncaught:exception', (err) => {
-      expect(err.message).to.include('The legal name should not contain special character')
+      expect(err.message).to.include(en.errors.validation.fullName.specialCharacter)
       return false
     })
 
@@ -45,14 +52,14 @@ describe('forms -> preferred name -> validate that the preferred name component 
     const validName = 'first last'
 
     cy.get('#testFullName').type(invalidName).blur()
-    cy.contains('The legal name should not contain special character').should('exist')
+    cy.contains(en.errors.validation.fullName.specialCharacter).should('exist')
 
     cy.get('#testFullName').clear().type(validName).blur()
-    cy.contains('The legal name should not contain special character').should('not.exist')
+    cy.contains(en.errors.validation.fullName.specialCharacter).should('not.exist')
   })
 
   it('the full name field should accept UTF-8 characters', () => {
-    cy.contains('Full Legal Name:')
+    cy.contains(en.labels.fullName)
     const email = 'abc@email.com'
     cy.get('#testEmail').type(email)
 
