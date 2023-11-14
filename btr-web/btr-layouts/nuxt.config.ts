@@ -41,14 +41,5 @@ export default defineNuxtConfig({
       // Keys within public, will be also exposed to the client-side
       version: process.env.npm_package_version || ''
     }
-  },
-  vite: {
-    css: {
-      preprocessorOptions: {
-        scss: {
-          additionalData: '@use "../btr-common-components/assets/styles/theme.scss" as *;'
-        }
-      }
-    }
   }
 })
