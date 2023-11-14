@@ -50,11 +50,12 @@ export default defineNuxtConfig({
       registryHomeURL: process.env.VUE_APP_REGISTRY_HOME_URL || ''
     }
   },
+  css: ['~/../assets/scss/global.scss'],
   vite: {
     css: {
       preprocessorOptions: {
         scss: {
-          additionalData: '@use "~/assets/styles/theme.scss" as *;'
+          additionalData: '@use "../assets/styles/theme.scss" as *;'
         }
       }
     }

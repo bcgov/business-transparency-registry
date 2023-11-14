@@ -4,32 +4,24 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
-importers:
+dependencies:
+  nuxt:
+    specifier: ^3.7.4
+    version: 3.7.4
+  pinia:
+    specifier: ^2.1.7
+    version: 2.1.7(vue@3.3.4)
 
-  .:
-    dependencies:
-      nuxt:
-        specifier: ^3.7.4
-        version: 3.7.4
-      pinia:
-        specifier: ^2.1.7
-        version: 2.1.7(vue@3.3.4)
-    devDependencies:
-      '@nuxtjs/i18n':
-        specifier: ^8.0.0-rc.5
-        version: 8.0.0-rc.5(vue-router@4.2.5)(vue@3.3.4)
-      '@vitest/coverage-v8':
-        specifier: ^0.34.6
-        version: 0.34.6(vitest@0.33.0)
-      vitest-environment-nuxt:
-        specifier: 0.11.0
-        version: 0.11.0(vitest@0.33.0)(vue-router@4.2.5)(vue@3.3.4)
-
-  ..: {}
-
-  ../btr-common-components: {}
-
-  ../btr-layouts: {}
+devDependencies:
+  '@nuxtjs/i18n':
+    specifier: ^8.0.0-rc.5
+    version: 8.0.0-rc.5(vue-router@4.2.5)(vue@3.3.4)
+  '@vitest/coverage-v8':
+    specifier: ^0.34.6
+    version: 0.34.6(vitest@0.33.0)
+  vitest-environment-nuxt:
+    specifier: 0.11.0
+    version: 0.11.0(vitest@0.33.0)(vue-router@4.2.5)(vue@3.3.4)
 
 packages:
 

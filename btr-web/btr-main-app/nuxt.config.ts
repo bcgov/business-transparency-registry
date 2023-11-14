@@ -42,14 +42,5 @@ export default defineNuxtConfig({
       registryDashboardURL: process.env.VUE_APP_REGISTRY_URL || '',
       businessWebURL: process.env.VUE_APP_DASHBOARD_URL || ''
     }
-  },
-  vite: {
-    css: {
-      preprocessorOptions: {
-        scss: {
-          additionalData: '@use "../btr-common-components/assets/styles/theme.scss" as *;'
-        }
-      }
-    }
   }
 })
