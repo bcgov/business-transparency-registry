@@ -6,7 +6,7 @@ describe('forms -> email -> validate that email component work inside example fo
   })
 
   it('verify email field validation rules', () => {
-    cy.contains('Email address:')
+    cy.contains('Email Address')
 
     // invalid email
     cy.get('#testEmail').type('hrvoje..fekete@gmail.com').blur()

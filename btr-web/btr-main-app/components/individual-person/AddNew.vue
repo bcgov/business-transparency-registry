@@ -126,6 +126,7 @@
           id="countriesOfCitizenship"
           v-model:canadianCitizenship="citizenshipOrPermanentResidency"
           v-model:citizenships="citizenships"
+          data-cy="countryOfCitizenshipRadioGroup"
         />
       </div>
       <UForm

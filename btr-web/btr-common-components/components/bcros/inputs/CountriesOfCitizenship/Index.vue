@@ -1,27 +1,25 @@
 <template>
-  <URadioGroup
-    id="countryOfCitizenship"
-    v-model="citizenshipType"
-    :options="options"
-    as="template"
-    data-cy="countryOfCitizenshipRadioGroup"
-  >
-    <template #label="{ option }">
-      <div v-if="option.value === VALUE_OTHER" class="w-full h-14">
-        {{ option.label }}
-        <br>
-        <label>{{ $t('labels.countryOfCitizenship.selectAll') }}</label>
-        <br>
-        <BcrosInputsCountriesOfCitizenshipDropdown
-          v-model="citizenshipsInternal"
-          :disabled="citizenshipType !== VALUE_OTHER"
-        />
-      </div>
-      <div v-else class="w-full h-14">
-        {{ option.label }}
-      </div>
-    </template>
-  </URadioGroup>
+  <div class="flex flex-col py-5">
+    <div v-for="option in options" :key="option.value" class="flex items-center">
+      <URadio
+        :id="`radio-${option.value}`"
+        v-model="citizenshipType"
+        :value="option.value"
+      />
+      <label :for="`radio-${option.value}`">
+        <div class="text-base text-black">
+          {{ option.label }}
+        </div>
+      </label>
+    </div>
+    <div class="ml-5 mt-2 w-full">
+      {{ $t('labels.countryOfCitizenship.selectAll') }}
+      <BcrosInputsCountriesOfCitizenshipDropdown
+        v-model="citizenshipsInternal"
+        :disabled="citizenshipType !== VALUE_OTHER"
+      />
+    </div>
+  </div>
 </template>
 
 <script setup lang="ts">
