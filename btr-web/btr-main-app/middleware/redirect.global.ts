@@ -1,6 +1,6 @@
 export default defineNuxtRouteMiddleware((to) => {
   // temporary until there is a landing page
-  if (to.name !== RouteNameE.BEN_OWNR_CHNG) {
+  if (![RouteNameE.BEN_OWNR_CHNG, RouteNameE.MY_REG_DETAILS].includes(to.name as RouteNameE)) {
     return navigateTo(
       {
         name: RouteNameE.BEN_OWNR_CHNG,

@@ -39,7 +39,9 @@ describe('Business Store Tests', () => {
     const businessDetails = await business.getBusinessDetails(testBusinessBEN.business.identifier, { slim: true })
     expect(axiosRequestMocks.get).toHaveBeenCalledOnce()
     expect(axiosRequestMocks.get).toHaveBeenCalledWith(
-      `/businesses/${testBusinessBEN.business.identifier}`, { params: { slim: true } })
+      `https://legal-api-dev.apps.silver.devops.gov.bc.ca/api/v2/businesses/${testBusinessBEN.business.identifier}`,
+      { params: { slim: true } }
+    )
     expect(axiosRequestMocks.get).toHaveReturnedWith({ data: testBusinessBEN })
     expect(businessDetails).toBeDefined()
     if (businessDetails) {

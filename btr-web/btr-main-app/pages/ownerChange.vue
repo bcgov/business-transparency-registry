@@ -1,5 +1,5 @@
 <template>
-  <div class="my-[60px]">
+  <div>
     <div class="p-10 bg-white rounded flex">
       <div class="p-5 flex-none w-1/5 col-auto">
         <span class="font-bold">Add an individual person</span>

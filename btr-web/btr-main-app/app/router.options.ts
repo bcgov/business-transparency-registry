@@ -1,6 +1,6 @@
 import type { RouterConfig } from '@nuxt/schema'
 import { RouteNameE } from '../enums/route-name-e'
-import { getBusinessDashboardCrumb, getBusinessNameCrumb } from '~/utils/breadcrumbs'
+import { getBusinessDashboardCrumb, getBusinessNameCrumb, getMyRegDetailsCrumb } from '~/utils/breadcrumbs'
 
 export default <RouterConfig> {
   // https://router.vuejs.org/api/interfaces/routeroptions.html#routes
@@ -17,8 +17,17 @@ export default <RouterConfig> {
           getBusinessNameCrumb,
           getBeneficialOwnerChangeCrumb
         ],
-        preloadBusinessInfo: true,
         title: 'Beneficial Owner Change'
+      }
+    },
+    {
+      name: RouteNameE.MY_REG_DETAILS,
+      path: '/my-registries-details',
+      component: () => import('~/pages/myRegistriesDetails.vue').then(r => r.default || r),
+      meta: {
+        breadcrumbs: [getMyRegDetailsCrumb],
+        layout: 'person',
+        title: 'My BC Registries Details'
       }
     }
   ]

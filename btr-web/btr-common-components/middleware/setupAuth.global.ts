@@ -6,4 +6,7 @@ export default defineNuxtRouteMiddleware(async (to) => {
     const { kcURL, kcRealm, kcClient } = useRuntimeConfig().public
     await useBcrosAuth().setupAuth({ url: kcURL, realm: kcRealm, clientId: kcClient })
   }
+  // remove hash args in url added by keycloak
+  to.hash = ''
+  to.fullPath = to.fullPath.split('#')[0]
 })

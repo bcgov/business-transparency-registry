@@ -1,7 +1,7 @@
-describe('Layout -> Breadcrumb', () => {
+describe('Layout (default) -> Breadcrumb', () => {
   const identifier = 'BC0871427'
 
-  it('shows expected header information for owner change page (NO business mock)', () => {
+  it('shows expected breadcrumb information for owner change page (NO business mock)', () => {
     cy.visit('/')
     cy.get('#bcros-breadcrumb')
     // shows the expected breadcrumbs for owner change
@@ -13,7 +13,7 @@ describe('Layout -> Breadcrumb', () => {
     cy.get('[data-cy="crumb-link"]').eq(3).contains('Beneficial Owner Change')
   })
 
-  it('shows expected header information for owner change page (business mock)', () => {
+  it('shows expected breadcrumb information for owner change page (business mock)', () => {
     // setup intercept
     cy.intercept(
       'GET',
@@ -25,5 +25,15 @@ describe('Layout -> Breadcrumb', () => {
     cy.get('[data-cy="crumb-link"]').should('have.length', 4)
     // breadcrumb should now reflect the business name from the mock response
     cy.get('[data-cy="crumb-link"]').eq(2).contains('0871427 B.C. LTD.')
+  })
+})
+
+describe('Layout (person) -> Breadcrumb', () => {
+  it('shows expected breadcrumb information for profile page', () => {
+    cy.visit('/my-registries-details')
+    cy.get('#bcros-breadcrumb')
+    // shows the expected breadcrumbs for owner change
+    cy.get('[data-cy="crumb-link"]').should('have.length', 1)
+    cy.get('[data-cy="crumb-link"]').eq(0).contains('My BC Registries Details')
   })
 })

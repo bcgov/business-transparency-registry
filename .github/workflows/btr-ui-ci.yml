@@ -79,6 +79,10 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
+      - name: Set basic env
+        run: |
+          cp .env.example .env
+
       - name: Run unit tests
         run: pnpm test:cov
 
