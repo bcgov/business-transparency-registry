@@ -8,6 +8,7 @@
   "scripts": {
     "preinstall": "npx only-allow pnpm",
     "build": "nuxt build",
+    "build:local": "nuxt build",
     "dev": "nuxt dev",
     "cypress:open": "cypress open",
     "generate": "nuxt generate",
