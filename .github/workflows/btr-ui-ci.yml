@@ -130,7 +130,7 @@ jobs:
         uses: cypress-io/github-action@v6
         with:
           working-directory: btr-web/${{ matrix.project }}
-          build: pnpm run build
+          build: pnpm run build:local
           start: pnpm start
   
   build-check:
