@@ -81,7 +81,8 @@ export const useBcrosKeycloak = defineStore('bcros/keycloak', () => {
       token: token || undefined,
       refreshToken: refreshToken || undefined,
       idToken: idToken || undefined,
-      pkceMethod: 'S256'
+      pkceMethod: 'S256',
+      responseMode: 'query'
     }
     return await kc.value.init(kcOptions)
   }
