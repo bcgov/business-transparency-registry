@@ -8,7 +8,7 @@ describe('pages -> My Registries Details', () => {
     cy.get('[data-cy=myRegDetailsHeaderSub]')
       .should('contain', 'Your BC Registries Details are shared with businesses that list you as a beneficial owner.')
     cy.get('[data-cy=myRegDetailsSectionHeader]').should('contain', 'Your Details')
-    cy.get('[data-cy=myRegDetailsTable]')
+    cy.get('[data-cy=myRegDetailsTable]').should('exist')
   })
 
   it('shows expected profile values in the information table', () => {

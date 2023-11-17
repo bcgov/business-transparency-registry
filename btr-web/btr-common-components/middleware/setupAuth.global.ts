@@ -8,5 +8,6 @@ export default defineNuxtRouteMiddleware(async (to) => {
   }
   // remove hash args in url added by keycloak
   to.hash = ''
-  to.fullPath = to.fullPath.split('#')[0]
+  to.fullPath = to.fullPath.split('#state')[0]
+  to.fullPath = to.fullPath.split('#error=login_required')[0]
 })

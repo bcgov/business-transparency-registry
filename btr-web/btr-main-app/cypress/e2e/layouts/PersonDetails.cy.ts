@@ -6,6 +6,6 @@ describe('Layout -> Person Details', () => {
 
   it('shows header in person layout', () => {
     cy.visit('/my-registries-details')
-    cy.get('#bcros-person-details')
+    cy.get('#bcros-person-details').should('exist')
   })
 })
