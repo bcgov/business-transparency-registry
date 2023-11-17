@@ -47,7 +47,7 @@
 const { t } = useI18n()
 
 const items: InfoTableItemI = [
-  { label: t('labels.fullNameClean'), info: 'Wallaby Wobbles' },
+  { label: t('labels.fullName'), info: 'Wallaby Wobbles' },
   { label: t('labels.birthdate'), info: 'September 25, 1993' },
   {
     label: t('labels.addressResidential'),
@@ -60,7 +60,7 @@ const items: InfoTableItemI = [
     },
     slot: 'address'
   },
-  { label: t('labels.emailAddressClean'), info: '1@1.com' },
+  { label: t('labels.emailAddress'), info: '1@1.com' },
   { label: t('labels.taxNumber'), subLabel: t('labels.socialInsuranceNumber'), info: '123 456 789' },
   { label: t('labels.citizenshipPR'), subLabel: t('labels.citizenship'), info: 'Canada', slot: 'citizenship' },
   { label: t('labels.taxResidency'), info: 'Canada' },
