@@ -14,7 +14,7 @@ export default defineAppConfig({
     select: {
       rounded: 'rounded-none',
       variant: {
-        bcGov: 'bg-gray-100 border-b-2 h-12 focus:ring-0'
+        bcGov: 'bg-gray-100 h-12 border-b-2 border-b-gray-500 focus:ring-0'
       }
     },
     selectMenu: {

@@ -79,12 +79,14 @@ export const checkTaxNumberLength = (taxNumber: string): boolean => {
  * @param {string} taxNumber - string representation of the tax number input
  */
 export const validateTaxNumber = (taxNumber: string): boolean => {
-  // TODO: To confirm the validation algorithms for SIN, ITN, and TTN
   // SIN Validation rule used: https://en.wikipedia.org/wiki/Social_insurance_number
 
   const digits = taxNumber.replace(/\s+/g, '')
 
-  if (digits.length !== 9) {
+  // Case 1: the input is not 9 digits
+  // Case 2: the input is '000000000', which is invalid even if it can pass the checksum test
+  // Case 3: currently no tax number starts with 8
+  if (digits.length !== 9 || digits === '000000000' || digits[0] === '8') {
     return false
   }
 

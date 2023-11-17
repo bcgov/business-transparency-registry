@@ -1,13 +1,13 @@
 <template>
   <Popover v-slot="{ close }" class="bcros-date-select flex relative">
-    <PopoverButton class="bcros-date-select__btn bg-gray-100 border-b-2 grow pb-1 pt-2 cursor-text">
+    <PopoverButton class="bcros-date-select__btn bg-gray-100 grow cursor-text">
       <UInput
         :model-value="selectedDateDisplay"
         icon="i-mdi-calendar"
         :placeholder="$t('placeholders.dateSelect')"
         trailing
         type="text"
-        variant="none"
+        variant="bcGov"
       />
     </PopoverButton>
     <transition

@@ -1,18 +1,18 @@
 <template>
-  <div class="flex flex-col py-5">
-    <div v-for="option in options" :key="option.value" class="flex items-center">
+  <div class="flex flex-col py-5" data-cy="countryOfCitizenshipRadioGroup">
+    <div v-for="option in options" :key="option.value" class="flex items-center mb-2 py-1">
       <URadio
         :id="`radio-${option.value}`"
         v-model="citizenshipType"
         :value="option.value"
       />
-      <label :for="`radio-${option.value}`">
+      <label :for="`radio-${option.value}`" class="ml-5">
         <div class="text-base text-black">
           {{ option.label }}
         </div>
       </label>
     </div>
-    <div class="ml-5 mt-2 w-full">
+    <div class="ml-9">
       {{ $t('labels.countryOfCitizenship.selectAll') }}
       <BcrosInputsCountriesOfCitizenshipDropdown
         v-model="citizenshipsInternal"
