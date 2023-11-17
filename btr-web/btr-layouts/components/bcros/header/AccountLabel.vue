@@ -5,10 +5,10 @@
     </p>
   </div>
   <div class="ml-3 text-left">
-    <p data-cy="al-username">
+    <p :class="accountName ? '' : 'mt-[6px]'" data-cy="al-username">
       {{ username }}
     </p>
-    <p class="text-xs opacity-75" data-cy="al-account-name">
+    <p v-if="accountName" class="text-xs opacity-75" data-cy="al-account-name">
       {{ accountName }}
     </p>
   </div>

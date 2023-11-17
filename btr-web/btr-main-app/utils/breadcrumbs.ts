@@ -28,3 +28,8 @@ export function getBusinessNameCrumb (): BreadcrumbI {
     href: `${useRuntimeConfig().public.businessWebURL}${route?.params?.identifier || ''}`
   }
 }
+
+export function getMyRegDetailsCrumb (): BreadcrumbI {
+  const { t } = useI18n()
+  return { text: t('breadcrumbs.myRegDetails') }
+}

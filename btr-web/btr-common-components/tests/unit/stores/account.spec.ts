@@ -50,7 +50,8 @@ describe('Account Store Tests', () => {
     expect(axiosRequestMocks.get).not.toHaveBeenCalled()
     await account.setUserName()
     expect(axiosRequestMocks.get).toHaveBeenCalledOnce()
-    expect(axiosRequestMocks.get).toHaveBeenCalledWith('/users/@me')
+    expect(axiosRequestMocks.get).toHaveBeenCalledWith(
+      'https://auth-api-dev.apps.silver.devops.gov.bc.ca/api/v1/users/@me')
     expect(axiosRequestMocks.get).toHaveReturnedWith({ data: testProfile })
   })
 
@@ -59,7 +60,8 @@ describe('Account Store Tests', () => {
     expect(sessionStorage.getItem(SessionStorageKeyE.CURRENT_ACCOUNT)).toBeNull()
     await account.setAccountInfo()
     expect(axiosRequestMocks.get).toHaveBeenCalledOnce()
-    expect(axiosRequestMocks.get).toHaveBeenCalledWith(`/users/${account.user.keycloakGuid}/settings`)
+    expect(axiosRequestMocks.get).toHaveBeenCalledWith(
+      `https://auth-api-dev.apps.silver.devops.gov.bc.ca/api/v1/users/${account.user.keycloakGuid}/settings`)
     expect(account.currentAccount).toEqual(testUserSettings[0])
     expect(sessionStorage.getItem(SessionStorageKeyE.CURRENT_ACCOUNT)).toBe(JSON.stringify(testUserSettings[0]))
     // test setting the current account to the 2nd value

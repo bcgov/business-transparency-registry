@@ -1,15 +1,22 @@
 {
   "breadcrumbs": {
-    "registryDashboard": "BC Registries Dashboard",
     "beneficialOwnerChange": "Beneficial Owner Change",
-    "businessDashboard": "My Business Registry"
+    "businessDashboard": "My Business Registry",
+    "myRegDetails": "My BC Registries Details",
+    "registryDashboard": "BC Registries Dashboard"
   },
   "labels": {
     "birthdate": "Birthdate",
+    "competency": "Competency",
+    "citizenship": "Citizenship",
+    "citizenshipPR": "Citizenship/Permanent Residency",
     "emailAddress": "Email address: ",
+    "emailAddressClean": "Email address",
     "fullName": "Full Legal Name: ",
+    "fullNameClean": "Full Legal Name",
     "preferredName": "Preferred Name: ",
     "address": "Address: ",
+    "addressResidential": "Residential Address",
     "state": "State",
     "country": "Country",
     "line1": "Address Line 1",
@@ -33,7 +40,9 @@
       "bcsc": "BC Services Card",
       "bceid": "BCeID",
       "idir": "IDIR"
-    }
+    },
+    "socialInsuranceNumber": "Social Insurance Number (SIN)",
+    "taxNumber": "Tax Number"
   },
   "placeholders": {
     "dateSelect": "Select Date"

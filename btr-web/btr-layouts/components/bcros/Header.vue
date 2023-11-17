@@ -27,13 +27,16 @@
           <div v-if="authenticated" class="flex flex-wrap self-center text-sm">
             <BcrosHeaderMenu data-cy="logged-in-menu" :menu-lists="loggedInMenuOptions">
               <template #menu-button-text>
-                <BcrosHeaderAccountLabel :account-name="currentAccountName" :username="userFullName" />
+                <BcrosHeaderAccountLabel
+                  :account-name="!personMode ? currentAccountName : ''"
+                  :username="userFullName"
+                />
               </template>
               <template #menu-list-header-0>
                 <div class="flex px-4 mb-3">
                   <BcrosHeaderAccountLabel
                     :avatar-classes="'text-white'"
-                    :account-name="currentAccountName"
+                    :account-name="!personMode ? currentAccountName : ''"
                     :username="userFullName"
                   />
                 </div>
@@ -62,6 +65,8 @@
 
 <script setup lang="ts">
 import { storeToRefs } from 'pinia'
+
+const props = defineProps<{ personMode?: boolean }>()
 
 const config = useRuntimeConfig()
 const { t } = useI18n()
@@ -175,14 +180,16 @@ const loggedInMenuOptions: Ref<HeaderMenuItemI[]> = ref([])
 
 function updateLoggedInMenuOptions () {
   const options: HeaderMenuItemI[] = [{ items: basicAccountOptions.value }]
-  if (accountSettingsOptions.value.length > 0) {
-    options.push({ header: t('header.menus.headers.accountSettings'), items: accountSettingsOptions.value })
-  }
-  if (switchAccountOptions.value.length > 1) {
-    options.push({ header: t('header.menus.headers.switchAccount'), items: switchAccountOptions.value })
-  }
-  if (createOptions.value.length > 0) {
-    options.push({ items: createOptions.value })
+  if (!props.personMode) {
+    if (accountSettingsOptions.value.length > 0) {
+      options.push({ header: t('header.menus.headers.accountSettings'), items: accountSettingsOptions.value })
+    }
+    if (switchAccountOptions.value.length > 1) {
+      options.push({ header: t('header.menus.headers.switchAccount'), items: switchAccountOptions.value })
+    }
+    if (createOptions.value.length > 0) {
+      options.push({ items: createOptions.value })
+    }
   }
   loggedInMenuOptions.value = options
 }

@@ -79,6 +79,10 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
+      - name: Set basic env
+        run: |
+          cp .env.example .env
+
       - name: Run unit tests
         run: pnpm test:cov
 
@@ -126,7 +130,7 @@ jobs:
         uses: cypress-io/github-action@v6
         with:
           working-directory: btr-web/${{ matrix.project }}
-          build: pnpm run build
+          build: pnpm run build:local
           start: pnpm start
   
   build-check:
