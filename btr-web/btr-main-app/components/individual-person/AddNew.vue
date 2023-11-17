@@ -1,5 +1,5 @@
 <template>
-  <div data-test="addIndividualPerson" class="flex-col w-full text-gray-900">
+  <div data-test="addIndividualPerson" class="flex-col w-full">
     <div>
       <!-- todo: move this to lang file -->
       <p class="text-justify">
