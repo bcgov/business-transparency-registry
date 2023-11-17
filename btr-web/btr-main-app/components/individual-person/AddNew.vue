@@ -86,7 +86,7 @@
           class="w-1/5"
         >
           <template #trailing>
-            <span class="text-gray-500 dark:text-gray-400 text-xs">%</span>
+            <span class="text-gray-500 text-xs">%</span>
           </template>
         </UInput>
         <UInput
@@ -97,7 +97,7 @@
           class="w-1/5 mt-5"
         >
           <template #trailing>
-            <span class="text-gray-500 dark:text-gray-400 text-xs">%</span>
+            <span class="text-gray-500 text-xs">%</span>
           </template>
         </UInput>
       </div>
