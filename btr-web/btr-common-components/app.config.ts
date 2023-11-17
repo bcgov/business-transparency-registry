@@ -3,7 +3,7 @@ export default defineAppConfig({
     primary: 'bcGovBlue',
     gray: 'bcGovGray',
     formGroup: {
-      label: { base: 'block text-base font-bold py-3 text-black-700' }
+      label: { base: 'block text-base font-bold py-3 text-gray-900' }
     },
     input: {
       rounded: 'rounded-none',
@@ -30,6 +30,11 @@ export default defineAppConfig({
       rounded: 'rounded-none',
       variant: {
         bcGov: 'bg-gray-100 border-b-2 h-20 focus:ring-0 text-gray-900'
+      }
+    },
+    table: {
+      th: {
+        color: 'text-gray-900'
       }
     }
   }
