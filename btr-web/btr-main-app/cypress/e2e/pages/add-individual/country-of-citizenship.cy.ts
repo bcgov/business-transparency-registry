@@ -14,7 +14,7 @@ describe('pages -> Add individual', () => {
     const dropDwnButton = cy.get('[data-cy="countryOfCitizenshipDropdownButton"]').should('be.disabled')
 
     // select "other" value radio button
-    radioGroup.children().find('[type="radio"]').check('other')
+    radioGroup.get('[type="radio"][value="other"]').check().should('be.checked')
 
     // check button is not disabled anymore
     dropDwnButton.should('not.be.disabled')
@@ -65,5 +65,12 @@ describe('pages -> Add individual', () => {
     // make sure two chips are displayed
     cy.get('[data-cy="countryOfCitizenshipDropdownChip"]').should('have.length', 2)
     cy.get('[data-cy="countryOfCitizenshipDropdownChip"]').last().should('have.text', 'Croatia')
+
+    // select "citizen" value radio button
+    radioGroup.get('[type="radio"][value="citizen"]').check().should('be.checked')
+
+    // when "citizen" is selected, the dropdown list should be disabled and all selections should be cleared
+    cy.get('[data-cy="countryOfCitizenshipDropdownChip"]').should('have.length', 0)
+    cy.get('[data-cy="countryOfCitizenshipDropdownButton"]').should('be.disabled')
   })
 })

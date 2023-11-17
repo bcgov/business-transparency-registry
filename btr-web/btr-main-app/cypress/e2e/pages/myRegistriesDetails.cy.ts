@@ -19,7 +19,7 @@ describe('pages -> My Registries Details', () => {
       { label: 'Full Legal Name', value: 'Wallaby Wobbles' },
       { label: 'Birthdate', value: 'September 25, 1993' },
       { label: 'Residential Address', value: '123 Fake StVictoria BC V2L 3T6Canada' },
-      { label: 'Email address', value: '1@1.com' },
+      { label: 'Email Address', value: '1@1.com' },
       {
         label: 'Canada Revenue Agency (CRA) Tax Number',
         subLabel: 'Social Insurance Number (SIN)',

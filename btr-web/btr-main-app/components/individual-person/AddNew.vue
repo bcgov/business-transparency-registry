@@ -42,7 +42,6 @@
         />
       </div>
     </UForm>
-
     <div class="text-blue-700 py-5 align-middle">
       <a
         id="add-person-manually-toggle"
@@ -70,7 +69,7 @@
         </p>
       </div>
       <div class="flex-col py-5">
-        <p class="font-bold py-5">
+        <p class="font-bold py-3">
           Control of Shares and Votes
         </p>
         <p class="text-justify">
@@ -83,43 +82,43 @@
           v-model="percentOfShares"
           placeholder="Percent of Shares"
           type="text"
-          variant="none"
-          class="w-1/5 bg-gray-100 border-b-2 my-5 p-2"
+          variant="bcGov"
+          class="w-1/5"
         >
           <template #trailing>
-            <span class="text-gray-500 dark:text-gray-400 text-xs">%</span>
+            <span class="text-gray-500 text-xs">%</span>
           </template>
         </UInput>
         <UInput
           v-model="percentOfVotes"
           placeholder="Percent of Votes"
           type="text"
-          variant="none"
-          class="w-1/5 bg-gray-100 border-b-2 my-5 p-2"
+          variant="bcGov"
+          class="w-1/5 mt-5"
         >
           <template #trailing>
-            <span class="text-gray-500 dark:text-gray-400 text-xs">%</span>
+            <span class="text-gray-500 text-xs">%</span>
           </template>
         </UInput>
       </div>
-      <div>
-        <p class="font-bold mt-5">
+      <div class="flex-col py-5">
+        <p class="font-bold py-3">
           {{ $t('labels.birthdate') }}
         </p>
-        <BcrosInputsDateSelect class="mt-5" :max-date="maxDate" @selection="birthdate = $event" />
+        <BcrosInputsDateSelect class="mt-3" :max-date="maxDate" @selection="birthdate = $event" />
       </div>
-      <div class="my-10">
+      <div class="flex-col py-5">
         <BcrosInputsAddress
           id="addNewPersonLastKnownAddress"
           v-model="lastKnownAddress"
           :label="$t('labels.lastKnownAddress')"
         />
       </div>
-      <div class="my-10">
-        <p class="font-bold my-2">
+      <div class="flex-col py-5">
+        <p class="font-bold py-3">
           {{ $t('labels.citizenshipPermanentResidency') }}
         </p>
-        <p class="mb-5">
+        <p class="text-justify">
           {{ $t('texts.citizenshipPermanentResidency') }}
         </p>
         <BcrosInputsCountriesOfCitizenship
@@ -133,7 +132,7 @@
         :state="state"
       >
         <div>
-          <p class="font-bold py-5">
+          <p class="font-bold py-3">
             {{ $t('labels.taxNumber') }}
           </p>
           <p class="text-justify">
@@ -148,7 +147,7 @@
         </div>
       </UForm>
       <div>
-        <p class="font-bold py-5">
+        <p class="font-bold py-3">
           {{ $t('labels.taxResidency') }}
         </p>
         <p class="text-justify">

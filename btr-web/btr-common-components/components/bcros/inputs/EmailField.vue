@@ -6,6 +6,7 @@
       v-bind="$attrs"
       :value="modelValue"
       variant="bcGov"
+      :placeholder="label"
       @input="$emit('update:modelValue', $event.target.value)"
     />
   </UFormGroup>
