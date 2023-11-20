@@ -1,10 +1,6 @@
 import Axios from 'axios'
 import { StatusCodes } from 'http-status-codes'
 import { defineStore } from 'pinia'
-import { BusinessI } from '~/interfaces/business-i'
-import { ErrorCategoryE } from '~/enums/error-category-e'
-import { ErrorI } from '~/interfaces/error-i'
-import { addAxiosInterceptors } from '~/utils/axios'
 
 /** Manages bcros business data */
 export const useBcrosBusiness = defineStore('bcros/business', () => {
@@ -16,11 +12,13 @@ export const useBcrosBusiness = defineStore('bcros/business', () => {
     }
     return currentBusiness.value.legalName
   })
+  const currentBusinessContact = ref({} as ContactBusinessI)
   // errors
   const errors: Ref<ErrorI[]> = ref([])
   // api request variables
   const axios = addAxiosInterceptors(Axios.create())
   const apiURL = useRuntimeConfig().public.legalApiURL
+  const authApiURL = useRuntimeConfig().public.authApiURL
 
   /** Return the business details for the given identifier */
   async function getBusinessDetails (identifier: string, params?: object) {
@@ -40,11 +38,41 @@ export const useBcrosBusiness = defineStore('bcros/business', () => {
       })
   }
 
+  /** Return the business contacts for the given identifier */
+  async function getBusinessContact (identifier: string, params?: object) {
+    // NOTE: this data will be moved to the legal-api eventually
+    return await axios.get<ContactResponseI>(`${authApiURL}/entities/${identifier}`, { params })
+      .then((response) => {
+        const data = response?.data
+        if (!data || !data.contacts) { throw new Error(`Invalid AUTH API response ${data}`) }
+        if (data.contacts.length === 0) { return {} as ContactBusinessI }
+
+        return {
+          businessIdentifier: data.businessIdentifier,
+          ...data.contacts[0]
+        }
+      })
+      .catch((error) => {
+        console.warn('Error fetching business contacts for', identifier)
+        errors.value.push({
+          statusCode: error?.response?.status || StatusCodes.INTERNAL_SERVER_ERROR,
+          message: error?.response?.data?.message,
+          category: ErrorCategoryE.ENTITY_BASIC
+        })
+      })
+  }
+
   async function loadBusiness (identifier: string, force = false) {
-    const businessCached = currentBusiness && identifier === currentBusinessIdentifier.value
+    const businessCached = currentBusiness.value && identifier === currentBusinessIdentifier.value
     if (!businessCached || force) {
-      const businessDetails = await getBusinessDetails(identifier, { slim: true }) || {} as BusinessI
-      currentBusiness.value = businessDetails
+      currentBusiness.value = await getBusinessDetails(identifier, { slim: true }) || {} as BusinessI
+    }
+  }
+
+  async function loadBusinessContact (identifier: string, force = false) {
+    const contactCached = currentBusinessContact.value && identifier === currentBusinessContact.value.businessIdentifier
+    if (!contactCached || force) {
+      currentBusinessContact.value = await getBusinessContact(identifier) || {} as ContactBusinessI
     }
   }
 
@@ -52,7 +80,10 @@ export const useBcrosBusiness = defineStore('bcros/business', () => {
     currentBusiness,
     currentBusinessIdentifier,
     currentBusinessName,
+    currentBusinessContact,
+    getBusinessContact,
     getBusinessDetails,
-    loadBusiness
+    loadBusiness,
+    loadBusinessContact
   }
 })

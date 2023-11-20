@@ -9,4 +9,5 @@ export interface BusinessI {
   legalName: string
   legalType: BusinessTypeE
   state: BusinessStateE
+  taxId?: string
 }

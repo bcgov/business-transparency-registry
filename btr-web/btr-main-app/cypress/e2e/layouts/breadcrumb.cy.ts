@@ -1,6 +1,6 @@
-describe('Layout (default) -> Breadcrumb', () => {
-  const identifier = 'BC0871427'
+import business from '../../fixtures/business.json'
 
+describe('Layout (business) -> Breadcrumb', () => {
   it('shows expected breadcrumb information for owner change page (NO business mock)', () => {
     cy.visit('/')
     cy.get('#bcros-breadcrumb').should('exist')
@@ -9,7 +9,7 @@ describe('Layout (default) -> Breadcrumb', () => {
     cy.get('[data-cy="crumb-link"]').eq(0).should('contain.text', 'BC Registries Dashboard')
     cy.get('[data-cy="crumb-link"]').eq(1).should('contain.text', 'My Business Registry')
     // this will fail to get the name because unauthorized and trying to access dev so should default to identifier
-    cy.get('[data-cy="crumb-link"]').eq(2).should('contain.text', identifier)
+    cy.get('[data-cy="crumb-link"]').eq(2).should('contain.text', business.identifier)
     cy.get('[data-cy="crumb-link"]').eq(3).should('contain.text', 'Beneficial Owner Change')
   })
 
@@ -17,14 +17,14 @@ describe('Layout (default) -> Breadcrumb', () => {
     // setup intercept
     cy.intercept(
       'GET',
-      `https://legal-api-dev.apps.silver.devops.gov.bc.ca/api/v2/businesses/${identifier}?slim=true`,
-      { fixture: 'business.json' })
+      `https://legal-api-dev.apps.silver.devops.gov.bc.ca/api/v2/businesses/${business.identifier}?slim=true`,
+      { business })
     // execute test
     cy.visit('/')
     // sanity check (previous test already confirmed)
     cy.get('[data-cy="crumb-link"]').should('have.length', 4)
     // breadcrumb should now reflect the business name from the mock response
-    cy.get('[data-cy="crumb-link"]').eq(2).should('contain.text', '0871427 B.C. LTD.')
+    cy.get('[data-cy="crumb-link"]').eq(2).should('contain.text', business.legalName)
   })
 })
 

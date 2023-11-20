@@ -1,5 +1,5 @@
 describe('Layout -> Footer', () => {
-  it('shows the footer in default layout', () => {
+  it('shows the footer in business layout', () => {
     cy.visit('/')
     cy.get('#bcros-main-footer').should('exist')
   })

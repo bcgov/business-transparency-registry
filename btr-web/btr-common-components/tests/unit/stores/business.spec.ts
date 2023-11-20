@@ -1,13 +1,18 @@
 import { describe, expect, it, vi } from 'vitest'
 import { setActivePinia, createPinia, storeToRefs } from 'pinia'
 import { axiosRequestMocks, axiosDefaultMock } from '../utils/mockedAxios'
-import { testBusinessBEN, testBusinessSP } from '../utils/mockedData'
+import { testBusinessBEN, testBusinessSP, testBusinessContact } from '../utils/mockedData'
 import { useBcrosBusiness } from '@/stores/business'
 
 describe('Business Store Tests', () => {
   setActivePinia(createPinia())
   const business = useBcrosBusiness()
-  const { currentBusiness, currentBusinessIdentifier, currentBusinessName } = storeToRefs(business)
+  const {
+    currentBusiness,
+    currentBusinessIdentifier,
+    currentBusinessName,
+    currentBusinessContact
+  } = storeToRefs(business)
   // axios mocks
   vi.mock('axios', () => { return { default: { ...axiosDefaultMock } } })
 
@@ -78,5 +83,26 @@ describe('Business Store Tests', () => {
     expect(axiosRequestMocks.get).not.toHaveBeenCalled()
     await business.loadBusiness(testBusinessBEN.business.identifier, true)
     expect(axiosRequestMocks.get).toHaveBeenCalledOnce()
+  })
+
+  it('loads corresponding contact data into the store with expected caching rules', async () => {
+    const expectedContact: ContactBusinessI = {
+      businessIdentifier: testBusinessContact.businessIdentifier,
+      ...testBusinessContact.contacts[0]
+    }
+    expect(axiosRequestMocks.get).not.toHaveBeenCalled()
+    await business.loadBusinessContact(testBusinessContact.businessIdentifier)
+    // should call the mock once and set the data
+    expect(axiosRequestMocks.get).toHaveBeenCalledOnce()
+    expect(currentBusinessContact.value).toEqual(expectedContact)
+    // calling again with the same identifier should not trigger the mocked call since it is already loaded
+    await business.loadBusinessContact(testBusinessContact.businessIdentifier)
+    expect(axiosRequestMocks.get).toHaveBeenCalledTimes(1)
+    // calling again with force should trigger the mocked call again
+    await business.loadBusinessContact(testBusinessContact.businessIdentifier, true)
+    expect(axiosRequestMocks.get).toHaveBeenCalledTimes(2)
+    // calling with a different identifier should trigger the mocked call
+    await business.loadBusinessContact(testBusinessContact.businessIdentifier + '1')
+    expect(axiosRequestMocks.get).toHaveBeenCalledTimes(3)
   })
 })

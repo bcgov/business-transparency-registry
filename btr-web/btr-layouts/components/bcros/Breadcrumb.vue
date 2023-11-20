@@ -4,6 +4,7 @@
       <UButton
         class="mr-3 mt-[1px] px-1 h-[28px] w-[28px] rounded-full"
         color="white"
+        :disabled="breadcrumbs.length < 2"
         icon="i-mdi-arrow-left"
         data-cy="crumb-back"
         @click="back()"

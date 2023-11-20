@@ -33,7 +33,7 @@ export const useBcrosAuth = () => {
   }
 
   /** Setup keycloak / user auth pieces */
-  async function setupAuth (kcConfig: KeycloakConfig) {
+  async function setupAuth (kcConfig: KeycloakConfig, currentAccountId?: string) {
     if (!keycloak.kc.authenticated) {
       console.info('Initializing auth setup...')
       // initialize keycloak with user token
@@ -49,7 +49,7 @@ export const useBcrosAuth = () => {
           await account.setUserName()
           // set account info
           console.info('Setting user account information...')
-          await account.setAccountInfo()
+          await account.setAccountInfo(currentAccountId)
           // check account status
           console.info('Checking account status...')
           // verify account status

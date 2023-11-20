@@ -17,6 +17,7 @@ export default <RouterConfig> {
           getBusinessNameCrumb,
           getBeneficialOwnerChangeCrumb
         ],
+        layout: 'business',
         title: 'Beneficial Owner Change'
       }
     },
