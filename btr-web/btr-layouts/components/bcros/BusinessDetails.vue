@@ -27,7 +27,7 @@
 import { storeToRefs } from 'pinia'
 
 const route = useRoute()
-const t = useI18n()
+const { t } = useI18n()
 const business = useBcrosBusiness()
 const { currentBusiness, currentBusinessContact, currentBusinessName } = storeToRefs(business)
 
