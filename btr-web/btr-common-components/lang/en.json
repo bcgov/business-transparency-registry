@@ -5,6 +5,18 @@
     "myRegDetails": "My BC Registries Details",
     "registryDashboard": "BC Registries Dashboard"
   },
+  "business": {
+    "legalTypes": {
+      "BEN": "BC Benefit Company",
+      "BC": "BC Company",
+      "CP": "BC Cooperative Association",
+      "SP": "Sole Proprietorship",
+      "GP": "BC General Partnership",
+      "undefined": "N/A"
+    },
+    "incorporationNum": "Incorporation Number",
+    "registrationNum": "Registration Number"
+  },
   "labels": {
     "birthdate": "Birthdate",
     "competency": "Competency",

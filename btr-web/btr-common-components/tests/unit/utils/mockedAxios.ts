@@ -1,5 +1,5 @@
 import { vi } from 'vitest'
-import { testProfile, testUserSettings, testBusinessBEN, testBusinessSP } from './mockedData'
+import { testProfile, testUserSettings, testBusinessBEN, testBusinessSP, testBusinessContact } from './mockedData'
 
 export const axiosRequestMocks = vi.hoisted(() => ({
   get: vi.fn().mockImplementation((url: string, config?: any) => {
@@ -14,6 +14,8 @@ export const axiosRequestMocks = vi.hoisted(() => ({
       return new Promise(resolve => resolve({ data: { ...testBusinessBEN } }))
     } else if (url.includes(`/businesses/${testBusinessSP.business.identifier}`)) {
       return new Promise(resolve => resolve({ data: { ...testBusinessSP } }))
+    } else if (url.includes('/entities/')) {
+      return new Promise(resolve => resolve({ data: { ...testBusinessContact } }))
     }
   })
 }))

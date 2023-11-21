@@ -89,12 +89,9 @@ export const useBcrosAccount = defineStore('bcros/account', () => {
   }
 
   /** Set the user account list and current account */
-  async function setAccountInfo () {
-    const route = useRoute()
-    // try id from url param
-    let currentAccountId = route.params?.accountid as string
+  async function setAccountInfo (currentAccountId?: string) {
     if (!currentAccountId) {
-      // get id from existing session storage
+      // try getting id from existing session storage
       currentAccountId = JSON.parse(sessionStorage.getItem(SessionStorageKeyE.CURRENT_ACCOUNT) || '{}').id
     }
     if (user.value?.keycloakGuid) {

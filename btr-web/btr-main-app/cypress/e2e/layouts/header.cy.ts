@@ -1,5 +1,5 @@
 describe('Layout -> Header', () => {
-  it('shows header in default layout', () => {
+  it('shows header in business layout', () => {
     cy.visit('/')
     cy.get('#bcros-main-header').should('exist')
   })
