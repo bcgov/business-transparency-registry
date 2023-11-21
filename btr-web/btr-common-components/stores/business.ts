@@ -41,7 +41,7 @@ export const useBcrosBusiness = defineStore('bcros/business', () => {
   /** Return the business contacts for the given identifier */
   async function getBusinessContact (identifier: string, params?: object) {
     // NOTE: this data will be moved to the legal-api eventually
-    return await axios.get<ContactResponseI>(`${authApiURL}/entities/${identifier}`, { params })
+    return await axios.get<ContactsBusinessResponseI>(`${authApiURL}/entities/${identifier}`, { params })
       .then((response) => {
         const data = response?.data
         if (!data || !data.contacts) { throw new Error(`Invalid AUTH API response ${data}`) }

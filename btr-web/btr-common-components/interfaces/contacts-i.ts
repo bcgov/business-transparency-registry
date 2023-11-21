@@ -4,7 +4,7 @@ export interface ContactI {
   phoneExtension: string
 }
 
-export interface ContactResponseI {
+export interface ContactsBusinessResponseI {
   businessIdentifier: string
   contacts: ContactI[]
 }
