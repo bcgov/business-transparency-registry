@@ -30,7 +30,7 @@
             <p v-if="row.info.line2">
               {{ row.info.line2 }}
             </p>
-            <p>{{ row.info.city }} {{ row.info.region }} {{ row.info.postalCode }}</p>
+            <p>{{ row.info.city }} {{ row.info.region }}&nbsp;&nbsp;{{ row.info.postalCode }}</p>
             <p>{{ row.info.country.name }}</p>
           </template>
           <template #info-competency>
