@@ -18,6 +18,12 @@
     "registrationNum": "Registration Number"
   },
   "labels": {
+    "buttons": {
+      "cancel": "Cancel",
+      "reviewConfirm": "Review and Confirm",
+      "save": "Save",
+      "saveResume": "Save and Resume"
+    },
     "birthdate": "Birthdate",
     "competency": "Competency",
     "citizenship": "Citizenship",

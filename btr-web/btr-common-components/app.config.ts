@@ -2,6 +2,11 @@ export default defineAppConfig({
   ui: {
     primary: 'bcGovBlue',
     gray: 'bcGovGray',
+    button: {
+      variant: {
+        solid: 'hover:bg-opacity-[.92] hover:bg-{color}-500'
+      }
+    },
     formGroup: {
       label: { base: 'block text-base font-bold py-3 text-gray-900' }
     },

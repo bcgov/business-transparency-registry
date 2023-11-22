@@ -51,7 +51,7 @@ function loadComponentData (identifier: string) {
 }
 // watcher required because layouts start rendering before the route is initialized
 watch(() => route.params.identifier as string, loadComponentData)
-onMounted(() => {
+onBeforeMount(() => {
   // onMounted required for refresh case (route will be set already so ^ watcher will not fire)
   if (route.params.identifier) {
     loadComponentData(route.params.identifier as string)
