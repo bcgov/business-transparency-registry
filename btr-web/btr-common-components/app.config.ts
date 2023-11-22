@@ -36,6 +36,14 @@ export default defineAppConfig({
       th: {
         color: 'text-gray-900'
       }
+    },
+    radio: {
+      border: 'border-gray-500',
+    },
+    checkbox: {
+      wrapper: 'flex items-center',
+      border: 'border-gray-500',
+      label: 'text-base ml-2',
     }
   }
 })

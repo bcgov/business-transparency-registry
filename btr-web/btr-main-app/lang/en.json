@@ -1,6 +1,11 @@
 {
   "labels": {
+    "beneficialOwnershipAssessment": "Beneficial Ownership Assessment",
+    "control": "Control of Shares and Votes",
     "lastKnownAddress": "Last Known Address",
+    "registeredOwner": "Registered owner",
+    "beneficialOwner": "Beneficial owner (e.g., through a trust)",
+    "indirectControl": "Indirect control (e.g., through another business)",
     "citizenshipPermanentResidency": "Citizenship / Permanent Residency",
     "taxNumber": "Canada Revenue Agency (CRA) Tax Number",
     "noTaxNumberLabel": "This person does not have a CRA Tax Number",
@@ -9,6 +14,11 @@
     "notTaxResident": "Not a Canada tax resident"
   },
   "texts": {
+    "addIndividualPerson":  "To add a person to the transparency register of this business, enter their name and email address. A request will be sent to the person at their email address and they will have the ability to accept or decline the addition of their information to the transparency register of the business. If they accept, their information will automatically be added to the transparency register. If you don’t want to send an invitation, you can add the person’s transparency information manually.",
+    "beneficialOwnershipAssessmentText1": "Beneficial Ownership is determined by the control of of shares and/or votes at general meetings, and control of the right to elect, appoint, or remove directors of the business.",
+    "beneficialOwnershipAssessmentText2": "Complete following assessment to determine this person’s beneficial ownership status.",
+    "controlPercentage": "Enter the percentage of shares issued for the business and/or shares entitled to votes at general meetings this individual owns or ultimately controls (or can exercise ultimate effective control over).",
+    "typeOfControl": "If this person controls shares or shares entitled to votes, indicate the type(s) of control of the shares and/or votes this person has:",
     "citizenshipPermanentResidency": "Indicate if this person is a citizen or permanent resident of Canada, or list all of the non-Canadian citizenship(s) of this person. If this person is a Citizen or Permanent resident of Canada, listing of multiple citizenships is not required.",
     "isCompetent": "I am able to manage my own financial affairs.",
     "myRegDetails": "Your BC Registries Details are shared with businesses that list you as a beneficial owner.",
@@ -20,6 +30,10 @@
   },
   "errors": {
     "validation": {
+      "controlPercentage": {
+        "empty": "Please enter a percentage of shares and/or votes",
+        "invalidPercentage": "Enter a number between 1 and 100"
+      },
       "taxNumber": {
         "specialCharacter": "The CRA tax number should not contain special characters",
         "invalidLength": "The CRA tax number should be 9 digits long",

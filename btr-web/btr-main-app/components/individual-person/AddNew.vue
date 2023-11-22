@@ -1,14 +1,8 @@
 <template>
   <div data-test="addIndividualPerson" class="flex-col w-full">
     <div>
-      <!-- todo: move this to lang file -->
       <p class="text-justify">
-        To add a person to the transparency register of this business,
-        enter their name and email address. A request will be sent to the person at
-        their email address and they will have the ability to accept or decline the addition
-        of their information to the transparency register of the business.
-        If they accept, their information will automatically be added to the transparency register.
-        If you don’t want to send an invitation, you can add the person’s transparency information manually.
+        {{ $t('texts.addIndividualPerson') }}
       </p>
     </div>
     <UForm
@@ -57,50 +51,58 @@
     <template v-if="showAddInfoManually">
       <div class="flex-col py-5">
         <p class="font-bold py-3">
-          <!-- todo: move this to lang file -->
-          Beneficial Ownership Assessment
+          {{ $t('labels.beneficialOwnershipAssessment') }}
         </p>
         <p class="text-justify">
-          <!-- todo: move this to lang file -->
-          Beneficial Ownership is determined by the control of of shares and/or votes at general meetings,
-          and control of the right to elect, appoint, or remove directors of the business.
+          {{ $t('texts.beneficialOwnershipAssessmentText1') }}
+        </p>
+        <br>
+        <p class="text-justify">
+          {{ $t('texts.beneficialOwnershipAssessmentText2') }}
+        </p>
+      </div>
+      <UForm
+      :schema="schema"
+      :state="state"
+      >
+        <div class="flex-col py-5">
+          <p class="font-bold py-3">
+            {{ $t('labels.control') }}
+          </p>
+          <p class="text-justify">
+            {{ $t('texts.controlPercentage') }}
+          </p>
+          <IndividualPersonControlPercentage
+            id="percentageOfShares"
+            v-model="state.percentOfShares"
+            name="percentOfShares"
+            placeholder="Percent of Shares"
+            data-cy="testPercentOfShares"
+          />
+          <IndividualPersonControlPercentage
+            id="percentageOfVotes"
+            v-model="state.percentOfVotes"
+            name="percentOfVotes"
+            placeholder="Percent of Votes"
+            data-cy="testPercentOfVotes"
+          />
+        </div>
+      </UForm>
 
-          Complete following assessment to determine this person’s beneficial ownership status.
-        </p>
-      </div>
-      <div class="flex-col py-5">
-        <p class="font-bold py-3">
-          Control of Shares and Votes
-        </p>
+      <div>
         <p class="text-justify">
-          Enter the percentage of shares and/or shares entitled to votes at general meetings
-          this person owns or ultimately controls (or can exercise ultimate effective control over).
+          {{ $t('texts.typeOfControl') }}
         </p>
+        <IndividualPersonControlTypeOfControl
+          id="qqq"
+          v-model="typeOfControl"
+          name="typeOfControl"
+          data-cy="testTypeOfControl"
+        />
       </div>
-      <div class="flex-col py-5">
-        <UInput
-          v-model="percentOfShares"
-          placeholder="Percent of Shares"
-          type="text"
-          variant="bcGov"
-          class="w-1/5"
-        >
-          <template #trailing>
-            <span class="text-gray-500 text-xs">%</span>
-          </template>
-        </UInput>
-        <UInput
-          v-model="percentOfVotes"
-          placeholder="Percent of Votes"
-          type="text"
-          variant="bcGov"
-          class="w-1/5 mt-5"
-        >
-          <template #trailing>
-            <span class="text-gray-500 text-xs">%</span>
-          </template>
-        </UInput>
-      </div>
+      <h1>{{ typeOfControl }} </h1>
+
+
       <div class="flex-col py-5">
         <p class="font-bold py-3">
           {{ $t('labels.birthdate') }}
@@ -174,8 +176,6 @@ const showAddInfoManuallyText = computed(() => {
   }
   return 'Add transparency register information manually'
 })
-const percentOfShares: Ref<number | undefined> = ref(undefined)
-const percentOfVotes: Ref<number | undefined> = ref(undefined)
 
 // birthdate
 const maxDate = new Date()
@@ -199,6 +199,15 @@ const minNameLength = 1
 const maxNameLength = 150
 
 const { t } = useI18n()
+
+const validateNumberInput = (value: string) => {
+  if (value === '') {
+    return true
+  }
+  const regex = /^[0-9]*$/
+  return regex.test(value) && parseInt(value) >= 1 && parseInt(value) <= 100
+} 
+
 const schema = z.object({
   fullName: z.preprocess(normalizeName,
     z.string()
@@ -222,7 +231,9 @@ const schema = z.object({
       .refine(checkSpecialCharacters, t('errors.validation.taxNumber.specialCharacter'))
       .refine(checkTaxNumberLength, t('errors.validation.taxNumber.invalidLength'))
       .refine(validateTaxNumber, t('errors.validation.taxNumber.invalidNumber'))
-  ])
+  ]),
+  percentOfShares: z.string().refine(validateNumberInput, t('errors.validation.controlPercentage.invalidPercentage')),
+  percentOfVotes: z.string().refine(validateNumberInput, t('errors.validation.controlPercentage.invalidPercentage')),
 })
 
 const state = reactive({
@@ -230,7 +241,15 @@ const state = reactive({
   fullName: undefined,
   preferredName1: undefined,
   hasTaxNumber: undefined,
-  taxNumber: undefined
+  taxNumber: undefined,
+  percentOfShares: "",
+  percentOfVotes: "",
+})
+
+const typeOfControl: Ref<ControlTypeI> = ref({
+  registeredOwner: false,
+  beneficialOwner: false,
+  indirectControl: false,
 })
 
 // tax number input
