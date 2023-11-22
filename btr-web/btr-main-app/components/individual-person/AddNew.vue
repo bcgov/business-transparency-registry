@@ -62,15 +62,15 @@
         </p>
       </div>
       <UForm
-      :schema="schema"
-      :state="state"
+        :schema="schema"
+        :state="state"
       >
         <div class="flex-col py-5">
           <p class="font-bold py-3">
-            {{ $t('labels.control') }}
+            {{ $t('labels.sharesAndVotes') }}
           </p>
           <p class="text-justify">
-            {{ $t('texts.controlPercentage') }}
+            {{ $t('texts.sharesAndVotes.controlPercentage') }}
           </p>
           <IndividualPersonControlPercentage
             id="percentageOfShares"
@@ -88,21 +88,29 @@
           />
         </div>
       </UForm>
-
+      <p class="text-justify pb-5">
+        <span class="font-bold">{{ $t('texts.note') }}</span>
+        {{ $t('texts.sharesAndVotes.note1') }}
+      </p>
       <div>
         <p class="text-justify">
-          {{ $t('texts.typeOfControl') }}
+          {{ $t('texts.sharesAndVotes.typeOfControl') }}
         </p>
         <IndividualPersonControlTypeOfControl
-          id="qqq"
+          id="typeOfControl"
           v-model="typeOfControl"
           name="typeOfControl"
           data-cy="testTypeOfControl"
         />
+        <p class="text-justify pb-5">
+          <span class="font-bold">{{ $t('texts.note') }}</span>
+          {{ $t('texts.sharesAndVotes.note2') }}
+        </p>
+        <p class="text-justify pb-5">
+          <span class="font-bold">{{ $t('texts.note') }}</span>
+          {{ $t('texts.sharesAndVotes.note3') }}
+        </p>
       </div>
-      <h1>{{ typeOfControl }} </h1>
-
-
       <div class="flex-col py-5">
         <p class="font-bold py-3">
           {{ $t('labels.birthdate') }}
@@ -180,6 +188,8 @@ const showAddInfoManuallyText = computed(() => {
 // birthdate
 const maxDate = new Date()
 const birthdate: Ref<Date | null> = ref(null)
+
+// last known address
 const lastKnownAddress: Ref<BtrAddressI> = ref({
   city: '',
   country: { name: '', alpha_2: '' },
@@ -199,14 +209,6 @@ const minNameLength = 1
 const maxNameLength = 150
 
 const { t } = useI18n()
-
-const validateNumberInput = (value: string) => {
-  if (value === '') {
-    return true
-  }
-  const regex = /^[0-9]*$/
-  return regex.test(value) && parseInt(value) >= 1 && parseInt(value) <= 100
-} 
 
 const schema = z.object({
   fullName: z.preprocess(normalizeName,
@@ -232,8 +234,8 @@ const schema = z.object({
       .refine(checkTaxNumberLength, t('errors.validation.taxNumber.invalidLength'))
       .refine(validateTaxNumber, t('errors.validation.taxNumber.invalidNumber'))
   ]),
-  percentOfShares: z.string().refine(validateNumberInput, t('errors.validation.controlPercentage.invalidPercentage')),
-  percentOfVotes: z.string().refine(validateNumberInput, t('errors.validation.controlPercentage.invalidPercentage')),
+  percentOfShares: z.string().refine(validatePercentage, t('errors.validation.controlPercentage.invalidPercentage')),
+  percentOfVotes: z.string().refine(validatePercentage, t('errors.validation.controlPercentage.invalidPercentage'))
 })
 
 const state = reactive({
@@ -242,14 +244,15 @@ const state = reactive({
   preferredName1: undefined,
   hasTaxNumber: undefined,
   taxNumber: undefined,
-  percentOfShares: "",
-  percentOfVotes: "",
+  percentOfShares: '',
+  percentOfVotes: ''
 })
 
+// type of control
 const typeOfControl: Ref<ControlTypeI> = ref({
   registeredOwner: false,
   beneficialOwner: false,
-  indirectControl: false,
+  indirectControl: false
 })
 
 // tax number input

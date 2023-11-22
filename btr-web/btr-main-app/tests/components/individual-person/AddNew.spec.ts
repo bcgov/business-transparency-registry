@@ -4,8 +4,8 @@ import { mountSuspended } from 'vitest-environment-nuxt/utils'
 import { mockedI18n } from '../../../../btr-common-components/tests/unit/utils/mockedi18n'
 
 import {
-  IndividualPersonAddNew, BcrosInputsDateSelect, BcrosInputsAddress,
-  IndividualPersonTaxInfoTaxNumber, IndividualPersonTaxInfoTaxResidency
+  IndividualPersonAddNew, BcrosInputsDateSelect, BcrosInputsAddress, IndividualPersonTaxInfoTaxNumber,
+  IndividualPersonTaxInfoTaxResidency, IndividualPersonControlPercentage, IndividualPersonControlTypeOfControl
 } from '#components'
 
 describe('AddIndividualPerson tests', () => {
@@ -51,6 +51,13 @@ describe('AddIndividualPerson tests', () => {
     expect(wrapper.find('[data-cy="address-region-input"]').exists()).toBe(true)
     expect(wrapper.find('[data-cy="address-postal-code"]').exists()).toBe(true)
     expect(wrapper.find('[data-cy="address-location-description"]').exists()).toBe(true)
+  })
+
+  it('renders the control of shares and votes', async () => {
+    await wrapper.find('#add-person-manually-toggle').trigger('click')
+    await flushPromises()
+    expect(wrapper.findComponent(IndividualPersonControlPercentage).exists()).toBe(true)
+    expect(wrapper.findComponent(IndividualPersonControlTypeOfControl).exists()).toBe(true)
   })
 
   it('renders the tax number component', async () => {

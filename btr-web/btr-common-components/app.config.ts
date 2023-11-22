@@ -38,12 +38,12 @@ export default defineAppConfig({
       }
     },
     radio: {
-      border: 'border-gray-500',
+      border: 'border-gray-500'
     },
     checkbox: {
       wrapper: 'flex items-center',
       border: 'border-gray-500',
-      label: 'text-base ml-2',
+      label: 'text-base text-gray-900 ml-2'
     }
   }
 })
