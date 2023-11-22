@@ -36,8 +36,11 @@
 </template>
 
 <script setup lang="ts">
-defineProps<{
-  leftButtons?: ButtonControlI[],
-  rightButtons?: ButtonControlI[]
+const props = defineProps<{
+  leftButtonConstructors?:(() => ButtonControlI)[],
+  rightButtonConstructors?:(() => ButtonControlI)[]
 }>()
+
+const leftButtons = computed(() => props.leftButtonConstructors?.map(getBtn => getBtn()) || [])
+const rightButtons = computed(() => props.rightButtonConstructors?.map(getBtn => getBtn()) || [])
 </script>

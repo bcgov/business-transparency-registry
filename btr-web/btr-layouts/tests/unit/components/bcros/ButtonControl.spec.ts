@@ -25,7 +25,14 @@ describe('Button Control tests', () => {
   ]
 
   beforeEach(() => {
-    wrapper = mount(BcrosButtonControl, { props: { leftButtons, rightButtons } })
+    wrapper = mount(
+      BcrosButtonControl,
+      {
+        props: {
+          leftButtonConstructors: leftButtons.map(btn => () => btn),
+          rightButtonConstructors: rightButtons.map(btn => () => btn)
+        }
+      })
   })
   afterEach(() => {
     wrapper.unmount()

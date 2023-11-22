@@ -18,15 +18,8 @@ export default <RouterConfig> {
           getBeneficialOwnerChangeCrumb
         ],
         buttonControl: {
-          // FUTURE: pass action functions from SI store
-          leftButtons: [
-            { action: () => {}, label: 'Cancel', variant: 'outline' },
-            { action: () => {}, label: 'Save and Resume Later', variant: 'outline' },
-            { action: () => {}, label: 'Save', variant: 'outline' }
-          ],
-          rightButtons: [
-            { action: () => {}, icon: 'i-mdi-chevron-right', label: 'Review and Confirm', trailing: true }
-          ]
+          leftButtons: [getSIChangeCancel, getSIChangeSaveExit, getSIChangeSave],
+          rightButtons: [getSIChangeConfirm]
         },
         layout: 'business',
         title: 'Beneficial Owner Change'
