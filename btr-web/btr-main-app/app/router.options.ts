@@ -17,6 +17,10 @@ export default <RouterConfig> {
           getBusinessNameCrumb,
           getBeneficialOwnerChangeCrumb
         ],
+        buttonControl: {
+          leftButtons: [getSIChangeCancel, getSIChangeSaveExit, getSIChangeSave],
+          rightButtons: [getSIChangeConfirm]
+        },
         layout: 'business',
         title: 'Beneficial Owner Change'
       }
