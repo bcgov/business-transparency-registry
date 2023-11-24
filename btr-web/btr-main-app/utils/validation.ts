@@ -23,5 +23,5 @@ export function validatePercentageFormat (value: string): boolean {
  * @param value the input string
  */
 export function validatePercentageValue (value: string): boolean {
-  return parseInt(value) <= 100
+  return value === '' || parseInt(value) <= 100
 }
