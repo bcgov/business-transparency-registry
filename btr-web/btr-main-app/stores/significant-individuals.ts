@@ -3,7 +3,6 @@ import { SignificantIndividualI } from '../interfaces/significant-individual-i'
 
 /** Manages Significant */
 export const useSignificantIndividuals = defineStore('significantIndividuals', () => {
-  const currentIdentifier = ref('')
   const currentSIFiling: Ref<SignificantIndividualFilingI> = ref({}) // current significant individual change filing
   const currentSavedSIs: Ref<SignificantIndividualI[]> = ref([]) // saved SIs from api for this business
 
@@ -13,9 +12,10 @@ export const useSignificantIndividuals = defineStore('significantIndividuals', (
   }
 
   /** Initialize a new significant individual filing */
-  function filingInit () {
+  async function filingInit (businessIdentifier: string) {
+    await loadSavedSIs(businessIdentifier)
     currentSIFiling.value = {
-      businessIdentifier: currentIdentifier.value,
+      businessIdentifier,
       significantIndividuals: currentSavedSIs.value,
       effectiveDate: null
     }
@@ -42,9 +42,7 @@ export const useSignificantIndividuals = defineStore('significantIndividuals', (
 
   /** Load the significant individuals for the business into the store */
   async function loadSavedSIs (businessIdentifier: string, force = false) {
-    const cached = businessIdentifier === currentIdentifier.value && currentSavedSIs.value
-    if (!cached || force) {
-      currentIdentifier.value = businessIdentifier
+    if (!currentSavedSIs.value || force) {
       currentSavedSIs.value = await getSIs(businessIdentifier) || []
     }
   }

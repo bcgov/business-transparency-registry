@@ -22,8 +22,7 @@ onBeforeMount(async () => {
   const identifier = useRoute().params.identifier as string
   // FUTURE: put in a loading page or something while this happens in case network is slow
   await useBcrosBusiness().loadBusiness(identifier)
-  await significantIndividuals.loadSavedSIs(identifier)
-  significantIndividuals.filingInit()
+  await significantIndividuals.filingInit(identifier)
 })
 
 </script>
