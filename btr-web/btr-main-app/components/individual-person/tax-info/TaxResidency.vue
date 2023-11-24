@@ -17,6 +17,7 @@ import { ref, watch, defineProps, defineEmits } from 'vue'
 
 const props = defineProps({
   id: { type: String, required: true },
+  label: { type: [String], default: '' },
   modelValue: { type: String, default: '' }
 })
 

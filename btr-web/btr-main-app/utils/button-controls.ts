@@ -1,3 +1,5 @@
+import { reviewConfirm } from './button-actions'
+
 // FUTURE: pass action functions from SI store
 export function getSIChangeCancel (): ButtonControlI {
   return {
@@ -9,7 +11,7 @@ export function getSIChangeCancel (): ButtonControlI {
 
 export function getSIChangeConfirm (): ButtonControlI {
   return {
-    action: () => {},
+    action: reviewConfirm,
     icon: 'i-mdi-chevron-right',
     label: useI18n().t('labels.buttons.reviewConfirm'),
     trailing: true

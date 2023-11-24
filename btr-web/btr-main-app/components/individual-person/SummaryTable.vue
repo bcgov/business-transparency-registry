@@ -1,6 +1,10 @@
 <template>
   <div data-cy="individualsSummaryTable" class="bg-white rounded-[5px] px-10 py-5">
-    <UTable :rows="individuals" :columns="headers" class="bg-white min-w-[30%]">
+    <UTable
+      :columns="headers"
+      :rows="individuals"
+      :empty-state="{ icon: '', label: 'No significant individuals added yet' }"
+    >
       <template #fullName-data="{ row }">
         <span class="font-bold text-gray-900">
           <UIcon name="i-mdi-user" />
@@ -35,7 +39,8 @@
 </template>
 
 <script setup lang="ts">
-import { IndividualPersonInterface } from '~/models/persons'
+// FUTURE: update this table to follow SignificantIndividualI structure (Part of ticket: #18664)
+defineProps<{ individuals: SignificantIndividualI[] }>()
 
 const headers = [
   { key: 'fullName', label: 'Name' },
@@ -45,13 +50,6 @@ const headers = [
   { key: 'controlsText', label: 'Controls' },
   { key: 'actions' }
 ]
-
-defineProps({
-  individuals: {
-    type: Array<IndividualPersonInterface>,
-    required: true
-  }
-})
 </script>
 
 <style scoped>
