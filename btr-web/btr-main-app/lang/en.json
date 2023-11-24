@@ -11,7 +11,8 @@
     "noTaxNumberLabel": "This person does not have a CRA Tax Number",
     "taxResidency": "Tax Residency",
     "isTaxResident": "Canada tax resident",
-    "notTaxResident": "Not a Canada tax resident"
+    "notTaxResident": "Not a Canada tax resident",
+    "controlOfDirectors": "Control of Majority of Directors"
   },
   "texts": {
     "note": "Note: ",
@@ -24,6 +25,22 @@
       "typeOfControl": "If this person controls shares or shares entitled to votes, indicate the type(s) of control of the shares and/or votes this person has:",
       "note2": "If shares in this business are held in trust, you must list the Trustees as the Registered owner, and you must also list the beneficiaries of the trust as the Beneficial owners of the shares.",
       "note3": "Beneficiaries do not have to be listed in the transparency register if their beneficial interest is conditional on the death of another individual."
+    },
+    "controlOfDirectors": {
+      "text": {
+        "part1": "If this individual has control of the right to ",
+        "part2": "elect, appoint, or remove a majority of the company's directors, ",
+        "part3": "indicate the type(s) of control of the right this individual has:"
+      },
+      "directControl": "Direct control",
+      "indirectControl": "Indirect control (through another business)",
+      "significantInfluence": "Significant influence control",
+      "noControl": {
+        "text": "This individual has control of the majority of directors through rights and/or exercised in concert with",
+        "tooltip": "other individuals",
+        "tooltipContent": "Other individuals includes groups of individuals acting in concert, spouses, and relatives who live in the same home."
+      },
+      "note": "All individuals with joint control of the majority of directors must be listed as significant individuals."
     },
     "citizenshipPermanentResidency": "Indicate if this person is a citizen or permanent resident of Canada, or list all of the non-Canadian citizenship(s) of this person. If this person is a Citizen or Permanent resident of Canada, listing of multiple citizenships is not required.",
     "isCompetent": "I am able to manage my own financial affairs.",

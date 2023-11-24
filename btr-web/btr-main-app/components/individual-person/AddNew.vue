@@ -113,6 +113,27 @@
       </div>
       <div class="flex-col py-5">
         <p class="font-bold py-3">
+          {{ $t('labels.controlOfDirectors') }}
+        </p>
+        <p class="text-justify">
+          {{ $t('texts.controlOfDirectors.text.part1') }}
+          <span class="font-bold">{{ $t('texts.controlOfDirectors.text.part2') }}</span>
+          {{ $t('texts.controlOfDirectors.text.part3') }}
+        </p>
+        <IndividualPersonControlOfDirectors
+          id="controlOfDirectors"
+          v-model="controlOfDirectors"
+          name="controlOfDirectors"
+          data-cy="testControlOfDirectors"
+        />
+        <p> {{ controlOfDirectors }} </p>
+        <p class="text-justify">
+          <span class="font-bold">{{ $t('texts.note') }}</span>
+          {{ $t('texts.controlOfDirectors.note') }}
+        </p>
+      </div>
+      <div class="flex-col py-5">
+        <p class="font-bold py-3">
           {{ $t('labels.birthdate') }}
         </p>
         <BcrosInputsDateSelect class="mt-3" :max-date="maxDate" @selection="birthdate = $event" />
@@ -259,6 +280,14 @@ const typeOfControl: Ref<ControlTypeI> = ref({
   registeredOwner: false,
   beneficialOwner: false,
   indirectControl: false
+})
+
+// control of directors
+const controlOfDirectors: Ref<ControlOfDirectorsI> = ref({
+  directControl: false,
+  indirectControl: false,
+  significantInfluence: false,
+  noControl: true
 })
 
 // tax number input

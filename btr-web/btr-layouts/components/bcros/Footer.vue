@@ -17,7 +17,15 @@
           </li>
         </ul>
         <div class="flex flex-auto justify-end">
-          <UTooltip id="footer-tooltip" class="mt-1" :text="`BTR UI v${appVersion}`">
+          <UTooltip
+            id="footer-tooltip"
+            class="mt-1"
+            :text="`BTR UI v${appVersion}`"
+            :popper="{
+              placement: 'left',
+              arrow: true
+            }"
+          >
             <div class="icon-container" role="img" tabindex="0">
               <UIcon class="text-2xl text-white" name="i-mdi-information-outline" />
             </div>
