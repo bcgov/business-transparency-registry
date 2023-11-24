@@ -234,8 +234,14 @@ const schema = z.object({
       .refine(checkTaxNumberLength, t('errors.validation.taxNumber.invalidLength'))
       .refine(validateTaxNumber, t('errors.validation.taxNumber.invalidNumber'))
   ]),
-  percentOfShares: z.string().refine(validatePercentage, t('errors.validation.controlPercentage.invalidPercentage')),
-  percentOfVotes: z.string().refine(validatePercentage, t('errors.validation.controlPercentage.invalidPercentage'))
+  percentOfShares: z.string()
+    .refine(validatePercentageWholeNumber, t('errors.validation.controlPercentage.specialCharacter'))
+    .refine(validatePercentageFormat, t('errors.validation.controlPercentage.invalidFormat'))
+    .refine(validatePercentageValue, t('errors.validation.controlPercentage.maxValueReached')),
+  percentOfVotes: z.string()
+    .refine(validatePercentageWholeNumber, t('errors.validation.controlPercentage.specialCharacter'))
+    .refine(validatePercentageFormat, t('errors.validation.controlPercentage.invalidFormat'))
+    .refine(validatePercentageValue, t('errors.validation.controlPercentage.maxValueReached'))
 })
 
 const state = reactive({

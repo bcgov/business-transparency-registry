@@ -1,12 +1,27 @@
 /**
- * Check if the input value is a valid percentage number from "1" to "100"
+ * Check if the input value is a whole number with no non-digit characters
  * Empty string is considered valid
  * @param value the input string
  */
-export function validatePercentage (value: string): boolean {
-  if (value === '') {
-    return true
-  }
+export function validatePercentageWholeNumber (value: string): boolean {
   const regex = /^[0-9]*$/
-  return regex.test(value) && parseInt(value) >= 1 && parseInt(value) <= 100
+  return value === '' || regex.test(value)
+}
+
+/**
+ * Check if the input value is in a valid format with no leading zeros
+ * Empty string is considered valid
+ * @param value the input string
+ */
+export function validatePercentageFormat (value: string): boolean {
+  const regex = /^[1-9][0-9]*$/
+  return value === '' || regex.test(value)
+}
+
+/**
+ * Check if the input value is a valid percentage number from "1" to "100"
+ * @param value the input string
+ */
+export function validatePercentageValue (value: string): boolean {
+  return parseInt(value) <= 100
 }

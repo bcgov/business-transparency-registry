@@ -38,7 +38,9 @@
     "validation": {
       "controlPercentage": {
         "empty": "Please enter a percentage of shares and/or votes",
-        "invalidPercentage": "Enter a number between 1 and 100"
+        "specialCharacter": "Numbers only",
+        "maxValueReached": "Must be between 1 and 100",
+        "invalidFormat": "Enter a number between 1 and 100"
       },
       "taxNumber": {
         "specialCharacter": "The CRA tax number should not contain special characters",
