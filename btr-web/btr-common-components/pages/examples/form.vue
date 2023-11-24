@@ -71,6 +71,21 @@
       <UButton id="exampleSubmitButton" type="submit" data-cy="submit-button">
         Submit
       </UButton>
+      <BcrosAlertsMessage flavour="alert">
+        Hi
+      </BcrosAlertsMessage>
+      <BcrosAlertsMessage flavour="warning">
+        Hi
+      </BcrosAlertsMessage>
+      <BcrosAlertsMessage flavour="success">
+        Hi
+      </BcrosAlertsMessage>
+      <BcrosAlertsMessage flavour="info">
+        Hi
+      </BcrosAlertsMessage>
+      <BcrosAlertsMessage flavour="message">
+        Hi
+      </BcrosAlertsMessage>
     </UForm>
   </div>
 </template>
