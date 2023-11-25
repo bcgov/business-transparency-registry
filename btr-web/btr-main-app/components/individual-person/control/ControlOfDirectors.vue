@@ -21,6 +21,7 @@
             placement: 'top',
             arrow: true
           }"
+          data-cy="testControlOfDirectorsTooltip"
         >
           <template #text>
             <span class="whitespace-normal place-content: center">
