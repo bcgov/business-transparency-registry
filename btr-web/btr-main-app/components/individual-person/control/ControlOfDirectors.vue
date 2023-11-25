@@ -23,7 +23,7 @@
           }"
         >
           <template #text>
-            <span class="whitespace-normal">
+            <span class="whitespace-normal place-content: center">
               {{ $t('texts.controlOfDirectors.noControl.tooltipContent') }}
             </span>
           </template>

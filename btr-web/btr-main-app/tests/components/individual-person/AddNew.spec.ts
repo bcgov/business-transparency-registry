@@ -5,7 +5,7 @@ import { mockedI18n } from '../../../../btr-common-components/tests/unit/utils/m
 
 import {
   IndividualPersonAddNew, BcrosInputsDateSelect, BcrosInputsAddress, IndividualPersonTaxInfoTaxNumber,
-  IndividualPersonTaxInfoTaxResidency, IndividualPersonControlPercentage, IndividualPersonControlTypeOfControl
+  IndividualPersonTaxInfoTaxResidency, IndividualPersonControlPercentage, IndividualPersonControlTypeOfControl, IndividualPersonControlOfDirectors
 } from '#components'
 
 describe('AddIndividualPerson tests', () => {
@@ -58,6 +58,12 @@ describe('AddIndividualPerson tests', () => {
     await flushPromises()
     expect(wrapper.findComponent(IndividualPersonControlPercentage).exists()).toBe(true)
     expect(wrapper.findComponent(IndividualPersonControlTypeOfControl).exists()).toBe(true)
+  })
+
+  it('renders the control of majority of directors', async () => {
+    await wrapper.find('#add-person-manually-toggle').trigger('click')
+    await flushPromises()
+    expect(wrapper.findComponent(IndividualPersonControlOfDirectors).exists()).toBe(true)
   })
 
   it('renders the tax number component', async () => {

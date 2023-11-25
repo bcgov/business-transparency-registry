@@ -51,31 +51,15 @@ export default defineAppConfig({
       label: 'text-base text-gray-900 ml-2'
     },
     tooltip: {
-      wrapper: "relative inline-flex",
-      container: "z-20 group",
-      width: "max-w-xs",
-      background: "bg-gray-700",
-      color: "text-white",
-      shadow: "shadow",
-      rounded: "rounded",
-      ring: "ring-1 ring-gray-700",
-      base: "[@media(pointer:coarse)]:hidden h-24 px-2 py-1 text-base",
-      shortcuts: "hidden md:inline-flex flex-shrink-0 gap-0.5",
-      transition: {
-        enterActiveClass: "transition ease-out duration-200",
-        enterFromClass: "opacity-0 translate-y-1",
-        enterToClass: "opacity-100 translate-y-0",
-        leaveActiveClass: "transition ease-in duration-150",
-        leaveFromClass: "opacity-100 translate-y-0",
-        leaveToClass: "opacity-0 translate-y-1"
-      },
+      background: 'bg-gray-700',
+      color: 'text-white',
+      ring: 'ring-1 ring-gray-700',
+      rounded: 'rounded-none',
+      base: 'h-auto text-base p-3',
       arrow: {
-        base: "before:w-3 before:h-3",
-        ring: "before:ring-1 before:ring-gray-700",
-        rounded: "before:rounded-sm",
-        background: "before:bg-gray-700",
-        shadow: "before:shadow",
-        placement: "group-data-[popper-placement*=\"right\"]:-left-1 group-data-[popper-placement*=\"left\"]:-right-1 group-data-[popper-placement*=\"top\"]:-bottom-1 group-data-[popper-placement*=\"bottom\"]:-top-1"
+        base: 'before:w-3 before:h-3',
+        ring: 'before:ring-1 before:ring-gray-700',
+        background: 'before:bg-gray-700'
       }
     }
   }
