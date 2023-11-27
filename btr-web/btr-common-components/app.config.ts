@@ -49,6 +49,18 @@ export default defineAppConfig({
       wrapper: 'flex items-center',
       border: 'border-gray-500',
       label: 'text-base text-gray-900 ml-2'
+    },
+    tooltip: {
+      background: 'bg-gray-700',
+      color: 'text-white',
+      ring: 'ring-1 ring-gray-700',
+      rounded: 'rounded-none',
+      base: 'h-auto text-base p-3',
+      arrow: {
+        base: 'before:w-3 before:h-3',
+        ring: 'before:ring-1 before:ring-gray-700',
+        background: 'before:bg-gray-700'
+      }
     }
   }
 })

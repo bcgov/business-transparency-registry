@@ -113,6 +113,26 @@
       </div>
       <div class="flex-col py-5">
         <p class="font-bold py-3">
+          {{ $t('labels.controlOfDirectors') }}
+        </p>
+        <p class="text-justify">
+          {{ $t('texts.controlOfDirectors.text.part1') }}
+          <span class="font-bold">{{ $t('texts.controlOfDirectors.text.part2') }}</span>
+          {{ $t('texts.controlOfDirectors.text.part3') }}
+        </p>
+        <IndividualPersonControlOfDirectors
+          id="controlOfDirectors"
+          v-model="controlOfDirectors"
+          name="controlOfDirectors"
+          data-cy="testControlOfDirectors"
+        />
+        <p class="text-justify">
+          <span class="font-bold">{{ $t('texts.note') }}</span>
+          {{ $t('texts.controlOfDirectors.note') }}
+        </p>
+      </div>
+      <div class="flex-col py-5">
+        <p class="font-bold py-3">
           {{ $t('labels.birthdate') }}
         </p>
         <BcrosInputsDateSelect class="mt-3" :max-date="maxDate" @selection="birthdate = $event" />
@@ -234,8 +254,14 @@ const schema = z.object({
       .refine(checkTaxNumberLength, t('errors.validation.taxNumber.invalidLength'))
       .refine(validateTaxNumber, t('errors.validation.taxNumber.invalidNumber'))
   ]),
-  percentOfShares: z.string().refine(validatePercentage, t('errors.validation.controlPercentage.invalidPercentage')),
-  percentOfVotes: z.string().refine(validatePercentage, t('errors.validation.controlPercentage.invalidPercentage'))
+  percentOfShares: z.string()
+    .refine(validatePercentageWholeNumber, t('errors.validation.controlPercentage.specialCharacter'))
+    .refine(validatePercentageFormat, t('errors.validation.controlPercentage.invalidFormat'))
+    .refine(validatePercentageValue, t('errors.validation.controlPercentage.maxValueReached')),
+  percentOfVotes: z.string()
+    .refine(validatePercentageWholeNumber, t('errors.validation.controlPercentage.specialCharacter'))
+    .refine(validatePercentageFormat, t('errors.validation.controlPercentage.invalidFormat'))
+    .refine(validatePercentageValue, t('errors.validation.controlPercentage.maxValueReached'))
 })
 
 const state = reactive({
@@ -253,6 +279,14 @@ const typeOfControl: Ref<ControlTypeI> = ref({
   registeredOwner: false,
   beneficialOwner: false,
   indirectControl: false
+})
+
+// control of directors
+const controlOfDirectors: Ref<ControlOfDirectorsI> = ref({
+  directControl: false,
+  indirectControl: false,
+  significantInfluence: false,
+  noControl: false
 })
 
 // tax number input
