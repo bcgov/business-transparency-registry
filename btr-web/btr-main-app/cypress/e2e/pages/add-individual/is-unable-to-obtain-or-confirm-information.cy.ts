@@ -22,7 +22,7 @@ describe('pages -> Add individual', () => {
     cy.get('[data-cy="isUnableToObtainOrConfirmInformationTextArea"]')
 
     // write in text area and switch it
-    cy.get('[data-cy="isUnableToObtainOrConfirmInformationTextArea"]').type('test').blur()
+    cy.get('[data-cy="isUnableToObtainOrConfirmInformationTextArea"] >> textarea').type('test').blur()
 
     // make sure checkbox got checked
     cy.get('[data-cy="isUnableToObtainOrConfirmInformationCheckbox"]').should('be.checked')

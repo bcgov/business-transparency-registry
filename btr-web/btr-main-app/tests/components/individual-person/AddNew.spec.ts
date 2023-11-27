@@ -24,7 +24,7 @@ describe('AddIndividualPerson tests', () => {
     expect(wrapper.find('[data-test="addIndividualPerson"]').exists()).toBe(true)
     // FUTURE: add in other pieces
     // add manually should be false
-    expect(wrapper.find('#add-person-manually-toggle').text()).toBe('Add transparency register information manually')
+    expect(wrapper.find('#add-person-manually-toggle').text()).toBe('buttons.addIndividualPerson.add')
     // birthdate should be hidden
     expect(wrapper.findComponent(BcrosInputsDateSelect).exists()).toBe(false)
   })
