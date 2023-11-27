@@ -7,11 +7,16 @@
   >
     <div class="py-3 px-0">
       <slot name="icon">
-        <UIcon :class="flavourIconClass" v-if="flavourIcon" class="mt-[2px] text-2xl float-right" :name="flavourIcon" />
+        <UIcon
+          v-if="flavourIcon"
+          :class="flavourIconClass"
+          class="mt-[2px] text-2xl float-right"
+          :name="flavourIcon"
+        />
       </slot>
     </div>
     <div class="p-2 col-span-11">
-      <slot name="default"></slot>
+      <slot name="default" />
     </div>
   </div>
 </template>
