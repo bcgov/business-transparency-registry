@@ -5,7 +5,8 @@ import { mockedI18n } from '../../../../btr-common-components/tests/unit/utils/m
 
 import {
   IndividualPersonAddNew, BcrosInputsDateSelect, BcrosInputsAddress, IndividualPersonTaxInfoTaxNumber,
-  IndividualPersonTaxInfoTaxResidency, IndividualPersonControlPercentage, IndividualPersonControlTypeOfControl, IndividualPersonControlOfDirectors
+  IndividualPersonTaxInfoTaxResidency, IndividualPersonControlPercentage,
+  IndividualPersonControlTypeOfControl, IndividualPersonControlOfDirectors
 } from '#components'
 
 describe('AddIndividualPerson tests', () => {

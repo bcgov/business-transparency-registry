@@ -1,18 +1,17 @@
 <template>
   <UFormGroup :name="name" class="flex-col py-5">
-    <UInput
-      :id="id"
-      type="text"
-      v-bind="$attrs"
-      :value="modelValue"
-      variant="bcGov"
-      :placeholder="placeholder"
-      class="w-1/5"
-    >
-      <template #trailing>
-        <span class="text-gray-500 text-xs">%</span>
-      </template>
-    </UInput>
+    <div class="flex items-center">
+      <UInput
+        :id="id"
+        type="text"
+        v-bind="$attrs"
+        :value="modelValue"
+        variant="bcGov"
+        :placeholder="placeholder"
+        class="w-1/5"
+      />
+      <span class="ml-2 text-gray-500">%</span>
+    </div>
   </UFormGroup>
 </template>
 
