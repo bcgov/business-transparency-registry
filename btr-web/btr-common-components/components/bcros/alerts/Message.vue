@@ -1,5 +1,10 @@
 <template>
-  <div class="grid grid-cols-12 gap-1 p-3 m-3" :class="flavourContainerClass" :role="flavour">
+  <div
+    class="grid grid-cols-12 gap-1 p-3 m-3"
+    :class="flavourContainerClass"
+    :role="flavour"
+    :data-cy="'alertsMessage:' + flavour"
+  >
     <div class="py-3 px-0">
       <slot name="icon">
         <UIcon :class="flavourIconClass" v-if="flavourIcon" class="mt-[2px] text-2xl float-right" :name="flavourIcon" />
