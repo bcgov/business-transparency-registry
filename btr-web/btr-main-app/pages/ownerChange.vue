@@ -8,24 +8,22 @@
         <IndividualPersonAddNew />
       </div>
     </div>
-    <IndividualPersonSummaryTable class="mt-5" :individuals="individuals" />
+    <IndividualPersonSummaryTable class="mt-5" :individuals="currentSIFiling.significantIndividuals || []" />
   </div>
 </template>
 
 <script setup lang="ts">
-import { useIndividualPerson } from '~/store/individual-person'
+import { storeToRefs } from 'pinia'
+
+const significantIndividuals = useSignificantIndividuals()
+const { currentSIFiling } = storeToRefs(significantIndividuals)
 
 onBeforeMount(async () => {
+  const identifier = useRoute().params.identifier as string
   // FUTURE: put in a loading page or something while this happens in case network is slow
-  await useBcrosBusiness().loadBusiness(route.params.identifier as string)
+  await useBcrosBusiness().loadBusiness(identifier)
+  await significantIndividuals.filingInit(identifier)
 })
-
-const route = useRoute()
-console.info(route.params.identifier) // Temporary to show how to use identifier. Rmv once this is used elsewhere.
-
-const individualPersonStore = useIndividualPerson()
-
-const individuals = computed(() => individualPersonStore.getIndividualPersons)
 
 </script>
 

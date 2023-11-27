@@ -1,18 +1,18 @@
 <template>
-  <div data-test="addIndividualPerson" class="flex-col w-full">
+  <div v-if="significantIndividual" data-test="addIndividualPerson" class="flex-col w-full">
     <div>
       <p class="text-justify">
         {{ $t('texts.addIndividualPerson') }}
       </p>
     </div>
     <UForm
-      :schema="schema"
-      :state="state"
+      :schema="profileSchema"
+      :state="significantIndividual.profile"
     >
       <div class="flex-col py-5">
         <BcrosInputsNameField
           id="individual-person-full-name"
-          v-model="state.fullName"
+          v-model="significantIndividual.profile.fullName"
           name="fullName"
           :label="$t('labels.fullName')"
           data-cy="testFullName"
@@ -21,7 +21,7 @@
       <div class="flex-col py-5">
         <BcrosInputsNameField
           id="individual-person-preferred-name"
-          v-model="state.preferredName"
+          v-model="significantIndividual.profile.preferredName"
           name="preferredName"
           :label="$t('labels.preferredName')"
           data-cy="testPreferredName"
@@ -30,7 +30,7 @@
       <div class="flex-col py-5">
         <BcrosInputsEmailField
           id="individual-person-email"
-          v-model="state.email"
+          v-model="significantIndividual.profile.email"
           :label="$t('labels.emailAddress')"
           data-cy="testEmail"
         />
@@ -62,8 +62,8 @@
         </p>
       </div>
       <UForm
-        :schema="schema"
-        :state="state"
+        :schema="ownershipSchema"
+        :state="significantIndividual"
       >
         <div class="flex-col py-5">
           <p class="font-bold py-3">
@@ -74,14 +74,14 @@
           </p>
           <IndividualPersonControlPercentage
             id="percentageOfShares"
-            v-model="state.percentOfShares"
+            v-model="significantIndividual.percentOfShares"
             name="percentOfShares"
             placeholder="Percent of Shares"
             data-cy="testPercentOfShares"
           />
           <IndividualPersonControlPercentage
             id="percentageOfVotes"
-            v-model="state.percentOfVotes"
+            v-model="significantIndividual.percentOfVotes"
             name="percentOfVotes"
             placeholder="Percent of Votes"
             data-cy="testPercentOfVotes"
@@ -98,7 +98,7 @@
         </p>
         <IndividualPersonControlTypeOfControl
           id="typeOfControl"
-          v-model="typeOfControl"
+          v-model="significantIndividual.controlType.sharesVotes"
           name="typeOfControl"
           data-cy="testTypeOfControl"
         />
@@ -122,7 +122,7 @@
         </p>
         <IndividualPersonControlOfDirectors
           id="controlOfDirectors"
-          v-model="controlOfDirectors"
+          v-model="significantIndividual.controlType.directors"
           name="controlOfDirectors"
           data-cy="testControlOfDirectors"
         />
@@ -135,12 +135,16 @@
         <p class="font-bold py-3">
           {{ $t('labels.birthdate') }}
         </p>
-        <BcrosInputsDateSelect class="mt-3" :max-date="maxDate" @selection="birthdate = $event" />
+        <BcrosInputsDateSelect
+          class="mt-3"
+          :max-date="new Date()"
+          @selection="significantIndividual.profile.birthDate = $event"
+        />
       </div>
       <div class="flex-col py-5">
         <BcrosInputsAddress
           id="addNewPersonLastKnownAddress"
-          v-model="lastKnownAddress"
+          v-model="significantIndividual.profile.address"
           :label="$t('labels.lastKnownAddress')"
         />
       </div>
@@ -153,13 +157,13 @@
         </p>
         <BcrosInputsCountriesOfCitizenship
           id="countriesOfCitizenship"
-          v-model:canadianCitizenship="citizenshipOrPermanentResidency"
-          v-model:citizenships="citizenships"
+          v-model:canadianCitizenship="significantIndividual.profile.citizenshipCA"
+          v-model:citizenships="significantIndividual.profile.citizenshipsExCA"
         />
       </div>
       <UForm
-        :schema="schema"
-        :state="state"
+        :schema="profileSchema"
+        :state="significantIndividual.profile"
       >
         <div>
           <p class="font-bold py-3">
@@ -185,17 +189,81 @@
         </p>
         <IndividualPersonTaxInfoTaxResidency
           id="addNewPersonTaxResidency"
-          v-model="isTaxResident"
+          v-model="significantIndividual.profile.isTaxResident"
           data-cy="testTaxResidency"
         />
       </div>
     </template>
+    <!-- temporary button section -->
+    <div class="grid mt-10 w-full">
+      <UButton
+        class="justify-self-end px-10 py-4"
+        label="Done"
+        color="primary"
+        valriant="solid"
+        @click="addSignificantIndividual()"
+      />
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { Ref, ref, computed } from 'vue'
 import { z } from 'zod'
+
+const props = defineProps<{ setSignificantIndividual?: SignificantIndividualI }>()
+const defaultSI = {
+  profile: {
+    fullName: '',
+    preferredName: '',
+    address: {
+      city: '',
+      country: { name: '', alpha_2: '' },
+      line1: '',
+      postalCode: '',
+      region: '',
+      line2: '',
+      locationDescription: ''
+    },
+    competency: {
+      decisionMaking: false,
+      financialAffairs: false
+    },
+    birthDate: null,
+    citizenshipCA: '',
+    citizenshipsExCA: [],
+    email: '',
+    isTaxResident: undefined,
+    hasTaxNumber: undefined,
+    taxNumber: undefined
+  },
+  controlType: {
+    sharesVotes: {
+      registeredOwner: false,
+      beneficialOwner: false,
+      indirectControl: false
+    },
+    directors: {
+      directControl: false,
+      indirectControl: false,
+      significantInfluence: false,
+      noControl: false
+    },
+    other: ''
+  },
+  missingInfoReason: undefined,
+  percentOfShares: '',
+  percentOfVotes: '',
+  action: 'added'
+}
+// NOTE: not setting this as modelValue because it is a nested object so mutating it gets complicated
+const significantIndividual: Ref<SignificantIndividualI> = ref(props.setSignificantIndividual || defaultSI)
+
+function addSignificantIndividual () {
+  // FUTURE: validate form / scroll to 1st error
+  // add to filing
+  useSignificantIndividuals().filingAddSI(significantIndividual.value) // if prop: significantIndividuals.filingAddSI(significantIndividual)
+  // FUTURE: collapse 'add new'
+}
 
 const showAddInfoManually = ref(false)
 const showAddInfoManuallyText = computed(() => {
@@ -205,106 +273,32 @@ const showAddInfoManuallyText = computed(() => {
   return 'Add transparency register information manually'
 })
 
-// birthdate
-const maxDate = new Date()
-const birthdate: Ref<Date | null> = ref(null)
-
-// last known address
-const lastKnownAddress: Ref<BtrAddressI> = ref({
-  city: '',
-  country: { name: '', alpha_2: '' },
-  line1: '',
-  postalCode: '',
-  region: '',
-  line2: '',
-  locationDescription: ''
-})
-
-// citizenships or permanent residency
-const citizenshipOrPermanentResidency = ref('')
-const citizenships = ref([])
-
-// full name
-const minNameLength = 1
-const maxNameLength = 150
-
-const { t } = useI18n()
-
-const schema = z.object({
-  fullName: z.preprocess(normalizeName,
-    z.string()
-      .min(minNameLength, t('errors.validation.fullName.empty'))
-      .max(maxNameLength, t('errors.validation.fullName.maxLengthExceeded'))
-      .refine(validateNameCharacters, t('errors.validation.fullName.specialCharacter'))
-  ),
-  preferredName: z.preprocess(normalizeName,
-    z.string()
-      .max(maxNameLength, t('errors.validation.preferredName.maxLengthExceeded'))
-      .refine(validatePreferredName, t('errors.validation.preferredName.specialCharacter'))
-  ),
-  email: z.string()
-    .min(1, t('errors.validation.email.empty'))
-    .max(254, 'errors.validation.email.maxLengthExceeded')
-    .refine(validateEmailRfc6532Regex, t('errors.validation.email.invalid')),
+const profileSchema = z.object({
+  fullName: getFullNameValidator(),
+  preferredName: getPreferredNameValidator(),
+  email: getEmailValidator(),
   hasTaxNumber: z.boolean(),
-  taxNumber: z.union([
-    z.undefined(),
-    z.string()
-      .refine(checkSpecialCharacters, t('errors.validation.taxNumber.specialCharacter'))
-      .refine(checkTaxNumberLength, t('errors.validation.taxNumber.invalidLength'))
-      .refine(validateTaxNumber, t('errors.validation.taxNumber.invalidNumber'))
-  ]),
-  percentOfShares: z.string()
-    .refine(validatePercentageWholeNumber, t('errors.validation.controlPercentage.specialCharacter'))
-    .refine(validatePercentageFormat, t('errors.validation.controlPercentage.invalidFormat'))
-    .refine(validatePercentageValue, t('errors.validation.controlPercentage.maxValueReached')),
-  percentOfVotes: z.string()
-    .refine(validatePercentageWholeNumber, t('errors.validation.controlPercentage.specialCharacter'))
-    .refine(validatePercentageFormat, t('errors.validation.controlPercentage.invalidFormat'))
-    .refine(validatePercentageValue, t('errors.validation.controlPercentage.maxValueReached'))
+  taxNumber: getTaxNumberValidator()
 })
 
-const state = reactive({
-  email: undefined,
-  fullName: undefined,
-  preferredName1: undefined,
-  hasTaxNumber: undefined,
-  taxNumber: undefined,
-  percentOfShares: '',
-  percentOfVotes: ''
-})
-
-// type of control
-const typeOfControl: Ref<ControlTypeI> = ref({
-  registeredOwner: false,
-  beneficialOwner: false,
-  indirectControl: false
-})
-
-// control of directors
-const controlOfDirectors: Ref<ControlOfDirectorsI> = ref({
-  directControl: false,
-  indirectControl: false,
-  significantInfluence: false,
-  noControl: false
+const ownershipSchema = z.object({
+  percentOfShares: getPercentageValidator(),
+  percentOfVotes: getPercentageValidator()
 })
 
 // tax number input
 const taxInfoModel = computed({
   get () {
     return {
-      hasTaxNumber: state.hasTaxNumber,
-      taxNumber: state.taxNumber
+      hasTaxNumber: significantIndividual.value.profile.hasTaxNumber,
+      taxNumber: significantIndividual.value.profile.taxNumber
     }
   },
   set (value) {
-    state.hasTaxNumber = value.hasTaxNumber
-    state.taxNumber = value.taxNumber
+    significantIndividual.value.profile.hasTaxNumber = value.hasTaxNumber
+    significantIndividual.value.profile.taxNumber = value.taxNumber
   }
 })
-
-// tax residency
-const isTaxResident: Ref<string | undefined> = ref(undefined)
 </script>
 
 <style scoped></style>

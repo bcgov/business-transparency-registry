@@ -26,6 +26,24 @@ export default <RouterConfig> {
       }
     },
     {
+      name: RouteNameE.REVIEW_CONFIRM,
+      path: '/:identifier/beneficial-owner-change/review-confirm',
+      component: () => import('~/pages/reviewConfirm.vue').then(r => r.default || r),
+      meta: {
+        breadcrumbs: [
+          getBcrosHomeDashboardCrumb,
+          getBusinessDashboardCrumb,
+          getBusinessNameCrumb,
+          getBeneficialOwnerChangeCrumb
+        ],
+        buttonControl: { // FUTURE: add buttons
+          leftButtons: [],
+          rightButtons: []
+        },
+        layout: 'business'
+      }
+    },
+    {
       name: RouteNameE.MY_REG_DETAILS,
       path: '/my-registries-details',
       component: () => import('~/pages/myRegistriesDetails.vue').then(r => r.default || r),
