@@ -205,16 +205,20 @@
           variant="bcGov"
           data-cy="isUnableToObtainOrConfirmInformationCheckbox"
         />
+        <!-- todo: check with scott if he wants this disabled when stuff in text
+        :disabled="!!(isUnableToObtainOrConfirmInformationDetails.trim())"-->
         <p class="py-3">
           {{ $t('labels.unableToObtainOrConfirmInformation.description') }}
         </p>
-        <UTextarea
+        <BcrosInputsTextArea
           v-model="isUnableToObtainOrConfirmInformationDetails"
           :placeholder="$t('labels.unableToObtainOrConfirmInformation.textAreaPlaceholder')"
           class="py-2 w-full"
           variant="bcGov"
+          resize
+          :max-char="4000"
           data-cy="isUnableToObtainOrConfirmInformationTextArea"
-          @change="isUnableToObtainOrConfirmInformationDetailsChange"
+          @keydown="isUnableToObtainOrConfirmInformationDetailsChange"
         />
         <BcrosAlertsMessage v-if="isUnableToObtainOrConfirmInformation" :flavour="AlertsFlavourE.ALERT">
           <p class="py-2">
