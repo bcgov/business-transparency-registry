@@ -1,6 +1,6 @@
 export interface ControlOfDirectorsI {
     directControl: boolean
     indirectControl: boolean
-    significantInfluenceControl: boolean
+    significantInfluence: boolean
     noControl: boolean
 }

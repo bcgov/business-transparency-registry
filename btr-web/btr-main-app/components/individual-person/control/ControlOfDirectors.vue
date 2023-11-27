@@ -45,7 +45,7 @@ const prop = defineProps({
       directControl: false,
       indirectControl: false,
       significantInfluence: false,
-      noControl: true
+      noControl: false
     })
   }
 })
