@@ -2,12 +2,14 @@
   <UFormGroup :label="label" name="taxResidency" class="flex flex-col py-5">
     <div v-for="(option, index) in options" :key="index" class="flex items-center mb-2 py-1">
       <URadio
-        :id="`${id}-${option.value}`"
+        :id="`radio-${option.value}`"
         v-model="selectedValue"
         name="taxResidency"
         :value="option.value"
       />
-      <label class="ml-5"> {{ option.label }} </label>
+      <label :for="`radio-${option.value}`" class="ml-5">
+        {{ option.label }}
+      </label>
     </div>
   </UFormGroup>
 </template>

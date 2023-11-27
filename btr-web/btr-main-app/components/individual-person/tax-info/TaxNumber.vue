@@ -27,7 +27,9 @@
         :value="NO_TAX_NUMBER"
         @change="handleRadioButtonChange(NO_TAX_NUMBER)"
       />
-      <label class="ml-5"> {{ $t('labels.noTaxNumberLabel') }} </label>
+      <label for="noTaxNumberRadioButton" class="ml-5">
+        {{ $t('labels.noTaxNumberLabel') }}
+      </label>
     </div>
   </div>
 </template>
