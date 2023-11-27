@@ -78,4 +78,12 @@ describe('AddIndividualPerson tests', () => {
     await flushPromises()
     expect(wrapper.findComponent(IndividualPersonTaxInfoTaxResidency).exists()).toBe(true)
   })
+
+  it('renders the isUnableToObtainOrConfirmInformation section and all details', async () => {
+    await wrapper.find('#add-person-manually-toggle').trigger('click')
+    await flushPromises()
+
+    // find section div
+    expect(wrapper.find('[data-cy="isUnableToObtainOrConfirmInformation"]').exists()).toBe(true)
+  })
 })
