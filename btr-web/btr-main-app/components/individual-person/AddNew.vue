@@ -286,7 +286,7 @@ const controlOfDirectors: Ref<ControlOfDirectorsI> = ref({
   directControl: false,
   indirectControl: false,
   significantInfluence: false,
-  noControl: true
+  noControl: false
 })
 
 // tax number input
