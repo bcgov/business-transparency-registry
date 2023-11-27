@@ -1,6 +1,6 @@
 <template>
   <div
-    class="grid grid-cols-12 gap-1 p-3 m-3"
+    class="grid grid-cols-12 gap-1 p-4"
     :class="flavourContainerClass"
     :role="flavour"
     :data-cy="'alertsMessage:' + flavour"
