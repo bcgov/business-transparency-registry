@@ -7,7 +7,7 @@ export interface SignificantIndividualI {
       beneficialOwner: boolean,
       indirectControl: boolean
     }
-    directors: string[] // FUTURE: enum or object; (types of control over directors)
+    directors: ControlOfDirectorsI
     other: string // other ways this person has SI control
   }
   missingInfoReason: string

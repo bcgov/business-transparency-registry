@@ -122,7 +122,7 @@
         </p>
         <IndividualPersonControlOfDirectors
           id="controlOfDirectors"
-          v-model="controlOfDirectors"
+          v-model="significantIndividual.controlType.directors"
           name="controlOfDirectors"
           data-cy="testControlOfDirectors"
         />
@@ -242,7 +242,12 @@ const defaultSI = {
       beneficialOwner: false,
       indirectControl: false
     },
-    directors: [],
+    directors: {
+      directControl: false,
+      indirectControl: false,
+      significantInfluenceControl: false,
+      noControl: false
+    },
     other: ''
   },
   missingInfoReason: undefined,
@@ -279,14 +284,6 @@ const profileSchema = z.object({
 const ownershipSchema = z.object({
   percentOfShares: getPercentageValidator(),
   percentOfVotes: getPercentageValidator()
-})
-
-// control of directors
-const controlOfDirectors: Ref<ControlOfDirectorsI> = ref({
-  directControl: false,
-  indirectControl: false,
-  significantInfluence: false,
-  noControl: false
 })
 
 // tax number input
