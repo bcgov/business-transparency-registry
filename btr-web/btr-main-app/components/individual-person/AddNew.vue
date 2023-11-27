@@ -245,7 +245,7 @@ const defaultSI = {
     directors: {
       directControl: false,
       indirectControl: false,
-      significantInfluenceControl: false,
+      significantInfluence: false,
       noControl: false
     },
     other: ''
