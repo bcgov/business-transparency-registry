@@ -129,7 +129,6 @@
         <p> {{ controlOfDirectors }} </p>
         <p class="text-justify">
           <span class="font-bold">{{ $t('texts.note') }}</span>
-          {{ $t('texts.controlOfDirectors.note') }}
         </p>
       </div>
       <div class="flex-col py-5">
