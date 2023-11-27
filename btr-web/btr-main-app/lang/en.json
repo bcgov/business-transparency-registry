@@ -12,7 +12,7 @@
     "taxResidency": "Tax Residency",
     "isTaxResident": "Canada tax resident",
     "notTaxResident": "Not a Canada tax resident",
-    "controlOfDirectors": "Control of Majority of Directors"
+    "controlOfDirectors": "Control of Majority of Directors",
     "unableToObtainOrConfirmInformation": {
       "title": "Unable to Obtain or Confirm Information",
       "checkboxText": "It is not possible to obtain or confirm some information about this individual",
@@ -23,6 +23,12 @@
         "sentence1": "You MUST complete all required information about this individual that you can obtain and confirm.",
         "sentence2": "Indicating that it is not possible to obtain or confirm information about an individual constitutes a statement in respect of a material fact."
       }
+    }
+  },
+  "buttons": {
+    "addIndividualPerson": {
+      "add": "Add transparency register information manually",
+      "cancel": "Cancel transparent register information"
     }
   },
   "texts": {

@@ -193,43 +193,7 @@
           data-cy="testTaxResidency"
         />
       </div>
-      <div data-cy="isUnableToObtainOrConfirmInformation">
-        <p class="font-bold py-3">
-          {{ $t('labels.unableToObtainOrConfirmInformation.title') }}
-        </p>
-        <UCheckbox
-          v-model="isUnableToObtainOrConfirmInformation"
-          name="isUnableToObtainOrConfirmInformation"
-          :label="$t('labels.unableToObtainOrConfirmInformation.checkboxText')"
-          class="py-2 w-full"
-          variant="bcGov"
-          data-cy="isUnableToObtainOrConfirmInformationCheckbox"
-        />
-        <!-- todo: check with scott if he wants this disabled when stuff in text
-        :disabled="!!(isUnableToObtainOrConfirmInformationDetails.trim())"-->
-        <p class="py-3">
-          {{ $t('labels.unableToObtainOrConfirmInformation.description') }}
-        </p>
-        <BcrosInputsTextArea
-          v-model="isUnableToObtainOrConfirmInformationDetails"
-          :placeholder="$t('labels.unableToObtainOrConfirmInformation.textAreaPlaceholder')"
-          class="py-2 w-full"
-          variant="bcGov"
-          resize
-          :max-char="4000"
-          data-cy="isUnableToObtainOrConfirmInformationTextArea"
-          @keydown="isUnableToObtainOrConfirmInformationDetailsChange"
-        />
-        <BcrosAlertsMessage v-if="isUnableToObtainOrConfirmInformation" :flavour="AlertsFlavourE.ALERT">
-          <p class="py-2">
-            <strong>{{ $t('labels.unableToObtainOrConfirmInformation.alert.important') }}</strong>
-            {{ $t('labels.unableToObtainOrConfirmInformation.alert.sentence1') }}
-          </p>
-          <p class="py-2">
-            {{ $t('labels.unableToObtainOrConfirmInformation.alert.sentence2') }}
-          </p>
-        </BcrosAlertsMessage>
-      </div>
+      <IndividualPersonControlUnableToObtainOrConfirmInformation v-model="significantIndividual.missingInfoReason" />
     </template>
     <!-- temporary button section -->
     <div class="grid mt-10 w-full">
@@ -247,6 +211,7 @@
 <script setup lang="ts">
 import { z } from 'zod'
 
+const { t } = useI18n()
 const props = defineProps<{ setSignificantIndividual?: SignificantIndividualI }>()
 const defaultSI = {
   profile: {
@@ -305,9 +270,9 @@ function addSignificantIndividual () {
 const showAddInfoManually = ref(false)
 const showAddInfoManuallyText = computed(() => {
   if (showAddInfoManually.value) {
-    return 'Cancel transparent register information'
+    return t('buttons.addIndividualPerson.cancel')
   }
-  return 'Add transparency register information manually'
+  return t('buttons.addIndividualPerson.add')
 })
 
 const profileSchema = z.object({
@@ -336,17 +301,6 @@ const taxInfoModel = computed({
     significantIndividual.value.profile.taxNumber = value.taxNumber
   }
 })
-
-// tax residency
-const isTaxResident: Ref<string | undefined> = ref(undefined)
-
-const isUnableToObtainOrConfirmInformation = ref(false)
-const isUnableToObtainOrConfirmInformationDetails = ref('')
-const isUnableToObtainOrConfirmInformationDetailsChange = () => {
-  if (isUnableToObtainOrConfirmInformationDetails.value) {
-    isUnableToObtainOrConfirmInformation.value = true
-  }
-}
 </script>
 
 <style scoped></style>
