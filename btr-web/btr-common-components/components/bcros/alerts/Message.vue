@@ -1,11 +1,11 @@
 <template>
-  <div class="grid grid-cols-12 gap-2 p-3 m-3" :class="flavourContainerClass" :role="flavour">
-    <div class="p-2">
+  <div class="grid grid-cols-12 gap-1 p-3 m-3" :class="flavourContainerClass" :role="flavour">
+    <div class="py-3 px-0">
       <slot name="icon">
-        <UIcon :class="flavourIconClass" v-if="flavourIcon" class="mt-[2px] text-2xl" :name="flavourIcon" />
+        <UIcon :class="flavourIconClass" v-if="flavourIcon" class="mt-[2px] text-2xl float-right" :name="flavourIcon" />
       </slot>
     </div>
-    <div class="p-2">
+    <div class="p-2 col-span-11">
       <slot name="default"></slot>
     </div>
   </div>
@@ -26,20 +26,20 @@ const flavourIconClass = ref('')
 switch (props.flavour) {
   case AlertsFlavourE.ALERT:
     flavourIcon.value = 'i-mdi-alert'
-    flavourIconClass.value = 'bcGovRed-500 '
-    flavourContainerClass.value = 'border-2 border-bcGovRed-500 bg-bcGovRed-200'
+    flavourIconClass.value = 'text-bcGovRed-500'
+    flavourContainerClass.value = 'border-2 border-bcGovRed-500 bg-bcGovRed-100'
     break
   case AlertsFlavourE.SUCCESS:
     flavourIcon.value = 'i-mdi-success-circle'
-    flavourContainerClass.value = 'border-2 border-bcGovGreen-500 bg-bcGovGreen-200'
+    flavourContainerClass.value = 'border-2 border-bcGovGreen-500 bg-bcGovGreen-100'
     break
   case AlertsFlavourE.WARNING:
     flavourIcon.value = 'i-mdi-warning-circle'
-    flavourContainerClass.value = 'border-2 border-bcGovOrange-500 bg-bcGovOrange-200'
+    flavourContainerClass.value = 'border-2 border-bcGovOrange-500 bg-bcGovOrange-100'
     break
   case AlertsFlavourE.INFO:
     flavourIcon.value = 'i-mdi-warning-circle'
-    flavourContainerClass.value = 'border-2 border-solid border-bcGovBlue-500 bg-bcGovBlue-200'
+    flavourContainerClass.value = 'border-2 border-solid border-bcGovBlue-500 bg-bcGovBlue-100'
     break
   case AlertsFlavourE.MESSAGE:
     flavourIcon.value = null

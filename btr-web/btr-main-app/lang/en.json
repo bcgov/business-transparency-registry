@@ -13,10 +13,21 @@
     "isTaxResident": "Canada tax resident",
     "notTaxResident": "Not a Canada tax resident",
     "controlOfDirectors": "Control of Majority of Directors"
+    "unableToObtainOrConfirmInformation": {
+      "title": "Unable to Obtain or Confirm Information",
+      "checkboxText": "It is not possible to obtain or confirm some information about this individual",
+      "description": "Enter the steps and efforts taken to obtain or confirm the required information about this individual.",
+      "textAreaPlaceholder": "Steps and efforts taken to obtain or confirm required information",
+      "alert": {
+        "important": "Important:",
+        "sentence1": "You MUST complete all required information about this individual that you can obtain and confirm.",
+        "sentence2": "Indicating that it is not possible to obtain or confirm information about an individual constitutes a statement in respect of a material fact."
+      }
+    }
   },
   "texts": {
     "note": "Note: ",
-    "addIndividualPerson":  "To add a person to the transparency register of this business, enter their name and email address. A request will be sent to the person at their email address and they will have the ability to accept or decline the addition of their information to the transparency register of the business. If they accept, their information will automatically be added to the transparency register. If you don’t want to send an invitation, you can add the person’s transparency information manually.",
+    "addIndividualPerson": "To add a person to the transparency register of this business, enter their name and email address. A request will be sent to the person at their email address and they will have the ability to accept or decline the addition of their information to the transparency register of the business. If they accept, their information will automatically be added to the transparency register. If you don’t want to send an invitation, you can add the person’s transparency information manually.",
     "beneficialOwnershipAssessmentText1": "Beneficial Ownership is determined by the control of of shares and/or votes at general meetings, and control of the right to elect, appoint, or remove directors of the business.",
     "beneficialOwnershipAssessmentText2": "Complete following assessment to determine this person’s beneficial ownership status.",
     "sharesAndVotes": {

@@ -193,6 +193,39 @@
           data-cy="testTaxResidency"
         />
       </div>
+      <div>
+        <p class="font-bold py-3">
+          {{ $t('labels.unableToObtainOrConfirmInformation.title') }}
+        </p>
+        <UCheckbox
+          v-model="isUnableToObtainOrConfirmInformation"
+          name="isUnableToObtainOrConfirmInformation"
+          :label="$t('labels.unableToObtainOrConfirmInformation.checkboxText')"
+          class="py-2 w-full"
+          variant="bcGov"
+          data-cy="isUnableToObtainOrConfirmInformationCheckbox"
+        />
+        <p class="py-3">
+          {{ $t('labels.unableToObtainOrConfirmInformation.description') }}
+        </p>
+        <UTextarea
+          v-model="isUnableToObtainOrConfirmInformationDetails"
+          :placeholder="$t('labels.unableToObtainOrConfirmInformation.textAreaPlaceholder')"
+          class="py-2 w-full"
+          variant="bcGov"
+          data-cy="isUnableToObtainOrConfirmInformationTextArea"
+          @change="isUnableToObtainOrConfirmInformationDetailsChange"
+        />
+        <BcrosAlertsMessage v-if="isUnableToObtainOrConfirmInformation" :flavour="AlertsFlavourE.ALERT">
+          <p class="py-2">
+            <strong>{{ $t('labels.unableToObtainOrConfirmInformation.alert.important') }}</strong>
+            {{ $t('labels.unableToObtainOrConfirmInformation.alert.sentence1') }}
+          </p>
+          <p class="py-2">
+            {{ $t('labels.unableToObtainOrConfirmInformation.alert.sentence2') }}
+          </p>
+        </BcrosAlertsMessage>
+      </div>
     </template>
     <!-- temporary button section -->
     <div class="grid mt-10 w-full">
@@ -299,6 +332,17 @@ const taxInfoModel = computed({
     significantIndividual.value.profile.taxNumber = value.taxNumber
   }
 })
+
+// tax residency
+const isTaxResident: Ref<string | undefined> = ref(undefined)
+
+const isUnableToObtainOrConfirmInformation = ref(false)
+const isUnableToObtainOrConfirmInformationDetails = ref('')
+const isUnableToObtainOrConfirmInformationDetailsChange = () => {
+  if (isUnableToObtainOrConfirmInformationDetails.value) {
+    isUnableToObtainOrConfirmInformation.value = true
+  }
+}
 </script>
 
 <style scoped></style>
