@@ -24,7 +24,7 @@ describe('AddIndividualPerson tests', () => {
     expect(wrapper.find('[data-test="addIndividualPerson"]').exists()).toBe(true)
     // FUTURE: add in other pieces
     // add manually should be false
-    expect(wrapper.find('#add-person-manually-toggle').text()).toBe('Add transparency register information manually')
+    expect(wrapper.find('#add-person-manually-toggle').text()).toBe('buttons.addIndividualPerson.add')
     // birthdate should be hidden
     expect(wrapper.findComponent(BcrosInputsDateSelect).exists()).toBe(false)
   })
@@ -77,5 +77,13 @@ describe('AddIndividualPerson tests', () => {
     await wrapper.find('#add-person-manually-toggle').trigger('click')
     await flushPromises()
     expect(wrapper.findComponent(IndividualPersonTaxInfoTaxResidency).exists()).toBe(true)
+  })
+
+  it('renders the isUnableToObtainOrConfirmInformation section and all details', async () => {
+    await wrapper.find('#add-person-manually-toggle').trigger('click')
+    await flushPromises()
+
+    // find section div
+    expect(wrapper.find('[data-cy="isUnableToObtainOrConfirmInformation"]').exists()).toBe(true)
   })
 })

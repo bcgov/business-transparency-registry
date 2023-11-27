@@ -83,7 +83,7 @@
                 :class="{ 'bg-gray-100': active }"
                 data-cy="countryOfCitizenshipDropdownOption"
               >
-                <span v-if="isInSelected(country)" class="float-right text-outcomes-approved">
+                <span v-if="isInSelected(country)" class="float-right text-outcomes-success">
                   <UIcon name="i-mdi-check" />
                   {{ $t('labels.countryOfCitizenship.selected') }}
                 </span>

@@ -193,6 +193,7 @@
           data-cy="testTaxResidency"
         />
       </div>
+      <IndividualPersonControlUnableToObtainOrConfirmInformation v-model="significantIndividual.missingInfoReason" />
     </template>
     <!-- temporary button section -->
     <div class="grid mt-10 w-full">
@@ -210,6 +211,7 @@
 <script setup lang="ts">
 import { z } from 'zod'
 
+const { t } = useI18n()
 const props = defineProps<{ setSignificantIndividual?: SignificantIndividualI }>()
 const defaultSI = {
   profile: {
@@ -268,9 +270,9 @@ function addSignificantIndividual () {
 const showAddInfoManually = ref(false)
 const showAddInfoManuallyText = computed(() => {
   if (showAddInfoManually.value) {
-    return 'Cancel transparent register information'
+    return t('buttons.addIndividualPerson.cancel')
   }
-  return 'Add transparency register information manually'
+  return t('buttons.addIndividualPerson.add')
 })
 
 const profileSchema = z.object({

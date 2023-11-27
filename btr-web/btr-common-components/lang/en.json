@@ -18,6 +18,7 @@
     "registrationNum": "Registration Number"
   },
   "labels": {
+    "characters": "characters",
     "buttons": {
       "cancel": "Cancel",
       "reviewConfirm": "Review and Confirm",
