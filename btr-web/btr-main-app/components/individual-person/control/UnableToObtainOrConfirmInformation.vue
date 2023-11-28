@@ -24,6 +24,7 @@
       :max-char="4000"
       data-cy="isUnableToObtainOrConfirmInformationTextArea"
       @keydown="isUnableToObtainOrConfirmInformationDetailsKeyDown"
+      @change="emit('update:modelValue', isUnableToObtainOrConfirmInformationDetails || undefined)"
     />
     <BcrosAlertsMessage v-if="isUnableToObtainOrConfirmInformation" :flavour="AlertsFlavourE.ALERT">
       <p class="py-2">
@@ -38,7 +39,7 @@
 </template>
 
 <script setup lang="ts">
-const emit = defineEmits<{(e: 'update:modelValue', value: string | undefined): void }>()
+const emit = defineEmits<{ (e: 'update:modelValue', value: string | undefined): void }>()
 defineProps({
   modelValue: { type: String, default: undefined }
 })
@@ -52,9 +53,6 @@ const isUnableToObtainOrConfirmInformationCheckboxChange = () => {
   }
 }
 const isUnableToObtainOrConfirmInformationDetailsKeyDown = () => {
-  if (isUnableToObtainOrConfirmInformationDetails.value) {
-    isUnableToObtainOrConfirmInformation.value = true
-  }
-  emit('update:modelValue', isUnableToObtainOrConfirmInformationDetails.value || undefined)
+  isUnableToObtainOrConfirmInformation.value = true
 }
 </script>
