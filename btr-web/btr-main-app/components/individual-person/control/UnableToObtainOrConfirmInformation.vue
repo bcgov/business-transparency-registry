@@ -39,7 +39,7 @@
 </template>
 
 <script setup lang="ts">
-const emit = defineEmits<{(e: 'update:modelValue', value: string | undefined): void }>()
+const emit = defineEmits<{ (e: 'update:modelValue', value: string | undefined): void }>()
 defineProps({
   modelValue: { type: String, default: undefined }
 })
