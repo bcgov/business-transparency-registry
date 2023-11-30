@@ -65,7 +65,7 @@
         :schema="ownershipSchema"
         :state="significantIndividual"
       >
-        <div class="flex-col py-5">
+        <div class="flex-col pt-5">
           <p class="font-bold py-3">
             {{ $t('labels.sharesAndVotes') }}
           </p>
@@ -88,29 +88,18 @@
           />
         </div>
       </UForm>
-      <p class="text-justify pb-5">
-        <span class="font-bold">{{ $t('texts.note') }}</span>
-        {{ $t('texts.sharesAndVotes.note1') }}
-      </p>
-      <div>
-        <p class="text-justify">
-          {{ $t('texts.sharesAndVotes.typeOfControl') }}
-        </p>
+
+      <div class="flex-col py-5">
         <IndividualPersonControlTypeOfControl
           id="typeOfControl"
           v-model="significantIndividual.controlType.sharesVotes"
           name="typeOfControl"
           data-cy="testTypeOfControl"
         />
-        <p class="text-justify pb-5">
-          <span class="font-bold">{{ $t('texts.note') }}</span>
-          {{ $t('texts.sharesAndVotes.note2') }}
-        </p>
-        <p class="text-justify pb-5">
-          <span class="font-bold">{{ $t('texts.note') }}</span>
-          {{ $t('texts.sharesAndVotes.note3') }}
-        </p>
+
+        {{  significantIndividual.controlType.sharesVotes }}
       </div>
+
       <div class="flex-col py-5">
         <p class="font-bold py-3">
           {{ $t('labels.controlOfDirectors') }}
@@ -130,6 +119,9 @@
           <span class="font-bold">{{ $t('texts.note') }}</span>
           {{ $t('texts.controlOfDirectors.note') }}
         </p>
+
+        {{  significantIndividual.controlType.directors }}
+
       </div>
       <div class="flex-col py-5">
         <p class="font-bold py-3">
@@ -249,7 +241,7 @@ const defaultSI = {
       directControl: false,
       indirectControl: false,
       significantInfluence: false,
-      noControl: false
+      inConcertControl: false
     },
     other: ''
   },

@@ -12,9 +12,6 @@
     "sharesAndVotes": "Control of Shares and Votes",
     "significanceDates": "Significance Dates",
     "lastKnownAddress": "Last Known Address",
-    "registeredOwner": "Registered owner",
-    "beneficialOwner": "Beneficial owner (e.g., through a trust)",
-    "indirectControl": "Indirect control (e.g., through another business)",
     "citizenshipPermanentResidency": "Citizenship / Permanent Residency",
     "taxNumber": "Canada Revenue Agency (CRA) Tax Number",
     "noTaxNumberLabel": "This person does not have a CRA Tax Number",
@@ -49,8 +46,17 @@
     "dateRange": "{start} to {end}",
     "sharesAndVotes": {
       "controlPercentage": "Enter the percentage of shares issued for the business and/or shares entitled to votes at general meetings this individual owns or ultimately controls (or can exercise ultimate effective control over).",
+      "inConcertControl": {
+        "part1": "All individual has shares or votes exercised in concert with ",
+        "tooltip": "other individuals",
+        "tooltipContent": "Other individuals includes groups of individuals acting in concert, spouses, and relatives who live in the same home.",
+        "part2": " and the total combined shares or votes of the group equals 25% or more"
+      },
       "note1": "All individuals with joint control of 25% or more of the issued shares must be listed as significant individuals.",
       "typeOfControl": "If this person controls shares or shares entitled to votes, indicate the type(s) of control of the shares and/or votes this person has:",
+      "registeredOwner": "Registered owner",
+      "beneficialOwner": "Beneficial owner (e.g., through a trust)",
+      "indirectControl": "Indirect control (e.g., through another business)",
       "note2": "If shares in this business are held in trust, you must list the Trustees as the Registered owner, and you must also list the beneficiaries of the trust as the Beneficial owners of the shares.",
       "note3": "Beneficiaries do not have to be listed in the transparency register if their beneficial interest is conditional on the death of another individual.",
       "summary": {
@@ -63,6 +69,7 @@
         "registeredindirect": "Registered owner and Indirect control of {sharePercent}% of shares, {votePercent}% of votes",
         "inConcert": "25% or more of shares or votes exercised in concert"
       }
+      
     },
     "controlOfDirectors": {
       "text": {
@@ -73,7 +80,7 @@
       "directControl": "Direct control",
       "indirectControl": "Indirect control (through another business)",
       "significantInfluence": "Significant influence control",
-      "noControl": {
+      "inConcertControl": {
         "text": "This individual has control of the majority of directors through rights and/or exercised in concert with",
         "tooltip": "other individuals",
         "tooltipContent": "Other individuals includes groups of individuals acting in concert, spouses, and relatives who live in the same home."
