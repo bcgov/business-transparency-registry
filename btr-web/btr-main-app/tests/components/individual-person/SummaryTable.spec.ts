@@ -81,7 +81,7 @@ describe('AddIndividualPersonSummaryTable tests', () => {
     si.controlType.directors.directControl = false
     si.controlType.directors.indirectControl = false
     si.controlType.directors.significantInfluence = false
-    si.controlType.directors.noControl = false
+    si.controlType.directors.inConcertControl = false
     si.controlType.other = ''
     await wrapper.setProps({ individuals: [si] })
     let controls = wrapper.find('[data-cy=summary-table-controls]')
@@ -99,7 +99,7 @@ describe('AddIndividualPersonSummaryTable tests', () => {
     si.controlType.directors.directControl = true
     si.controlType.directors.indirectControl = true
     si.controlType.directors.significantInfluence = true
-    si.controlType.directors.noControl = true
+    si.controlType.directors.inConcertControl = true
     si.controlType.other = ''
     await wrapper.setProps({ individuals: [si] })
     controls = wrapper.find('[data-cy=summary-table-controls]')
@@ -117,7 +117,7 @@ describe('AddIndividualPersonSummaryTable tests', () => {
     si.controlType.directors.directControl = false
     si.controlType.directors.indirectControl = false
     si.controlType.directors.significantInfluence = false
-    si.controlType.directors.noControl = false
+    si.controlType.directors.inConcertControl = false
     si.controlType.other = 'My lawyer said so'
     await wrapper.setProps({ individuals: [si] })
     controls = wrapper.find('[data-cy=summary-table-controls]')
@@ -133,7 +133,7 @@ describe('AddIndividualPersonSummaryTable tests', () => {
     si.controlType.directors.directControl = true
     si.controlType.directors.indirectControl = true
     si.controlType.directors.significantInfluence = false
-    si.controlType.directors.noControl = false
+    si.controlType.directors.inConcertControl = false
     si.controlType.other = 'My lawyer said so'
     await wrapper.setProps({ individuals: [si] })
     controls = wrapper.find('[data-cy=summary-table-controls]')

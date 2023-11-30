@@ -34,7 +34,7 @@ export const testSI: SignificantIndividualI = {
       directControl: true,
       indirectControl: true,
       significantInfluence: false,
-      noControl: false
+      inConcertControl: false
     },
     other: ''
   },
