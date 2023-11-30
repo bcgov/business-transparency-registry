@@ -22,7 +22,7 @@
           <span>{{ displayDate(row.profile.birthDate) }}</span><br>
           <span v-if="row.profile.taxNumber">{{ row.profile.taxNumber }}<br></span>
           <label>{{ $t('labels.citizenships') }}:</label><br>
-          <span v-if="row.profile.citizenshipCA !== 'other'">Canada<br></span>
+          <span v-if="row.profile.citizenshipCA !== 'other'">{{ $t('countries.ca') }}<br></span>
           <span v-for="country in row.profile.citizenshipsExCA" :key="country.name">
             {{ country.name }}<br>
           </span>
@@ -88,16 +88,16 @@ function getTaxResidentText (isTaxResident: boolean) {
   return t('texts.isNotTaxResident')
 }
 
-function getControlTextField (items: { value: boolean, label: string }[]) {
-  const activeLabels = items.filter(item => item.value).map(item => item.label)
+function getControlTextField (items: { value: boolean, field: string }[]) {
+  const activeLabels = items.filter(item => item.value).map(item => item.field)
   return activeLabels.join('') || ''
 }
 
 function getSharesControlText (significantIndividual: SignificantIndividualI) {
   const field = getControlTextField([
-    { value: significantIndividual.controlType.sharesVotes.registeredOwner, label: 'registered' },
-    { value: significantIndividual.controlType.sharesVotes.beneficialOwner, label: 'beneficial' },
-    { value: significantIndividual.controlType.sharesVotes.indirectControl, label: 'indirect' }
+    { value: significantIndividual.controlType.sharesVotes.registeredOwner, field: 'registered' },
+    { value: significantIndividual.controlType.sharesVotes.beneficialOwner, field: 'beneficial' },
+    { value: significantIndividual.controlType.sharesVotes.indirectControl, field: 'indirect' }
   ])
   if (field) {
     return t(
@@ -112,9 +112,9 @@ function getSharesControlText (significantIndividual: SignificantIndividualI) {
 
 function getDirectorsControlText (directorsConstrol: ControlOfDirectorsI) {
   const field = getControlTextField([
-    { value: directorsConstrol.directControl, label: 'direct' },
-    { value: directorsConstrol.indirectControl, label: 'indirect' },
-    { value: directorsConstrol.significantInfluence, label: 'significantinfluence' }
+    { value: directorsConstrol.directControl, field: 'direct' },
+    { value: directorsConstrol.indirectControl, field: 'indirect' },
+    { value: directorsConstrol.significantInfluence, field: 'significantinfluence' }
   ])
   if (field) {
     return t(`texts.controlOfDirectors.summary.${field}`)

@@ -243,7 +243,7 @@ const defaultSI = {
       registeredOwner: false,
       beneficialOwner: false,
       indirectControl: false,
-      inConcertControl: true
+      inConcertControl: false
     },
     directors: {
       directControl: false,

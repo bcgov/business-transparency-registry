@@ -17,6 +17,9 @@
     "incorporationNum": "Incorporation Number",
     "registrationNum": "Registration Number"
   },
+  "countries": {
+    "ca": "Canada"
+  },
   "labels": {
     "characters": "characters",
     "buttons": {
