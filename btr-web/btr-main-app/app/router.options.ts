@@ -40,7 +40,7 @@ export default <RouterConfig> {
           leftButtons: [],
           rightButtons: []
         },
-        layout: 'business'
+        layout: 'filing'
       }
     },
     {

@@ -20,6 +20,13 @@
   "countries": {
     "ca": "Canada"
   },
+  "widgets": {
+    "feeSummary": {
+      "title": "Fee summary",
+      "total": "Total fees",
+      "noFee": "No Fee"
+    }
+  },
   "labels": {
     "characters": "characters",
     "buttons": {
