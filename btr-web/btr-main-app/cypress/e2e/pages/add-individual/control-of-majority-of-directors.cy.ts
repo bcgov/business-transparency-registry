@@ -18,7 +18,7 @@ describe('pages -> Add individual', () => {
     checkboxes.get('[name="directControl"]').check().should('be.checked')
     checkboxes.get('[name="indirectControl"]').check().should('be.checked')
     checkboxes.get('[name="significantInfluence"]').check().should('be.checked')
-    checkboxes.get('[name="noControl"]').check().should('be.checked')
+    checkboxes.get('[name="inConcertControl"]').check().should('be.checked')
   })
 
   it('test the tooltip', () => {
@@ -27,6 +27,6 @@ describe('pages -> Add individual', () => {
     const checkboxes = cy.get('[data-cy="testControlOfDirectors"]').should('exist')
 
     checkboxes.get('[data-cy="testControlOfDirectorsTooltip"]').trigger('mouseover')
-    cy.contains(en.texts.controlOfDirectors.noControl.tooltipContent).should('exist')
+    cy.contains(en.texts.sharesAndVotes.inConcertControl.tooltipContent).should('exist')
   })
 })

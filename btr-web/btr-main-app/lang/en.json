@@ -47,7 +47,7 @@
     "sharesAndVotes": {
       "controlPercentage": "Enter the percentage of shares issued for the business and/or shares entitled to votes at general meetings this individual owns or ultimately controls (or can exercise ultimate effective control over).",
       "inConcertControl": {
-        "part1": "All individual has shares or votes exercised in concert with ",
+        "part1": "This individual has shares or votes exercised in concert with ",
         "tooltip": "other individuals",
         "tooltipContent": "Other individuals includes groups of individuals acting in concert, spouses, and relatives who live in the same home.",
         "part2": " and the total combined shares or votes of the group equals 25% or more"
@@ -69,7 +69,6 @@
         "registeredindirect": "Registered owner and Indirect control of {sharePercent}% of shares, {votePercent}% of votes",
         "inConcert": "25% or more of shares or votes exercised in concert"
       }
-      
     },
     "controlOfDirectors": {
       "text": {

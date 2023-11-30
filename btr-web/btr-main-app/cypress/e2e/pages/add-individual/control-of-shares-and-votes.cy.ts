@@ -15,9 +15,17 @@ describe('pages -> Add individual', () => {
 
     const checkboxes = cy.get('[data-cy="testTypeOfControl"]').should('exist')
 
+    checkboxes.get('[name="inConcertControl"]').check().should('be.checked')
     checkboxes.get('[name="registeredOwner"]').check().should('be.checked')
     checkboxes.get('[name="beneficialOwner"]').check().should('be.checked')
     checkboxes.get('[name="indirectControl"]').check().should('be.checked')
+  })
+
+  it('test the tooltip for in-concert control', () => {
+    cy.get('[data-cy="showAddIndividualPersonManually"]').trigger('click')
+
+    cy.get('[data-cy="testInConcertControlTooltip"]').trigger('mouseover')
+    cy.contains(en.texts.controlOfDirectors.inConcertControl.tooltipContent).should('exist')
   })
 
   it('test the error message for special characters', () => {

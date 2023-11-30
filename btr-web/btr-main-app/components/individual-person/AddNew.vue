@@ -88,7 +88,6 @@
           />
         </div>
       </UForm>
-
       <div class="flex-col py-5">
         <IndividualPersonControlTypeOfControl
           id="typeOfControl"
@@ -96,10 +95,7 @@
           name="typeOfControl"
           data-cy="testTypeOfControl"
         />
-
-        {{  significantIndividual.controlType.sharesVotes }}
       </div>
-
       <div class="flex-col py-5">
         <p class="font-bold py-3">
           {{ $t('labels.controlOfDirectors') }}
@@ -119,9 +115,6 @@
           <span class="font-bold">{{ $t('texts.note') }}</span>
           {{ $t('texts.controlOfDirectors.note') }}
         </p>
-
-        {{  significantIndividual.controlType.directors }}
-
       </div>
       <div class="flex-col py-5">
         <p class="font-bold py-3">
