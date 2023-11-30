@@ -1,6 +1,6 @@
 import { expect, describe, it } from 'vitest'
 import { VueWrapper, flushPromises, mount } from '@vue/test-utils'
-import { mockedI18n } from '../../../../btr-common-components/tests/unit/utils/mockedi18n'
+import { mockedI18n } from '../../utils/mockedi18n'
 import { testSI } from '../../utils/mockedData'
 import { IndividualPersonSummaryTable } from '#components'
 

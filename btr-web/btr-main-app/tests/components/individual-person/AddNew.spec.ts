@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest'
 import { VueWrapper, flushPromises } from '@vue/test-utils'
 import { mountSuspended } from 'vitest-environment-nuxt/utils'
-import { mockedI18n } from '../../../../btr-common-components/tests/unit/utils/mockedi18n'
+import { mockedI18n } from '../../utils/mockedi18n'
 
 import {
   IndividualPersonAddNew, BcrosInputsDateSelect, BcrosInputsAddress, IndividualPersonTaxInfoTaxNumber,
@@ -24,7 +24,7 @@ describe('AddIndividualPerson tests', () => {
     expect(wrapper.find('[data-test="addIndividualPerson"]').exists()).toBe(true)
     // FUTURE: add in other pieces
     // add manually should be false
-    expect(wrapper.find('#add-person-manually-toggle').text()).toBe('buttons.addIndividualPerson.add')
+    expect(wrapper.find('#add-person-manually-toggle').text()).toBe('Add transparency register information manually')
     // birthdate should be hidden
     expect(wrapper.findComponent(BcrosInputsDateSelect).exists()).toBe(false)
   })

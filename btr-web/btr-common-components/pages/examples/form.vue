@@ -41,7 +41,7 @@
       <BcrosInputsAddress
         id="testDateAddress"
         v-model="addr"
-        :label="$t('labels.address')"
+        :label="$t('labels.address') + ':'"
         data-cy="testDateAddress"
       />
       <br>

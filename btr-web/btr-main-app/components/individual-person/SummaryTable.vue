@@ -3,7 +3,7 @@
     <UTable
       :columns="headers"
       :rows="individuals"
-      :empty-state="{ icon: '', label: 'No significant individuals added yet' }"
+      :empty-state="{ icon: '', label: $t('texts.tables.emptyTexts.individualsSummaryTable') }"
     >
       <template #name-data="{ row }">
         <div data-cy="summary-table-name">
@@ -21,7 +21,7 @@
         <div data-cy="summary-table-details">
           <span>{{ displayDate(row.profile.birthDate) }}</span><br>
           <span v-if="row.profile.taxNumber">{{ row.profile.taxNumber }}<br></span>
-          <label>Citizenship(s):</label><br>
+          <label>{{ $t('labels.citizenships') }}:</label><br>
           <span v-if="row.profile.citizenshipCA !== 'other'">Canada<br></span>
           <span v-for="country in row.profile.citizenshipsExCA" :key="country.name">
             {{ country.name }}<br>
@@ -32,8 +32,8 @@
 
       <template #significanceDates-data="{ row }">
         <div data-cy="summary-table-dates">
-          {{ displayDate(row.startDate) || 'Unknown' }} to<br>
-          {{ row.endDate || 'Current' }}
+          {{ $t('texts.dateRange', { start: displayDate(row.startDate) || $t('labels.unknown'),
+                                     end: displayDate(row.endDate) || $t('labels.current') }) }}
         </div>
       </template>
 
@@ -41,25 +41,25 @@
         <div data-cy="summary-table-controls">
           <div v-if="Object.values(row.controlType.sharesVotes).includes(true)">
             <h4 class="font-bold italic">
-              Shares
+              {{ $t('labels.shares') }}
             </h4>
             <p>{{ getSharesControlText(row) }}</p>
             <p v-if="row.controlType.sharesVotes.inConcertControl">
-              25% or more of shares or votes exercised in concert
+              {{ $t('texts.sharesAndVotes.summary.inConcert') }}
             </p>
           </div>
           <div v-if="Object.values(row.controlType.directors).includes(true)" class="mt-3">
             <h4 class="font-bold italic">
-              Directors
+              {{ $t('labels.directors') }}
             </h4>
             <p>{{ getDirectorsControlText(row.controlType.directors) }}</p>
             <p v-if="row.controlType.directors.noControl">
-              Control of directors exercised in concert
+              {{ $t('texts.controlOfDirectors.summary.inConcert') }}
             </p>
           </div>
           <div v-if="row.controlType.other" class="mt-3">
             <h4 class="font-bold italic">
-              Other
+              {{ $t('labels.other') }}
             </h4>
             <p>{{ row.controlType.other }}</p>
           </div>
@@ -72,59 +72,54 @@
 <script setup lang="ts">
 defineProps<{ individuals: SignificantIndividualI[] }>()
 
+const { t } = useI18n()
 const headers = [
-  { key: 'name', label: 'Name' },
-  { key: 'address', label: 'Address' },
-  { key: 'details', label: 'Details' },
-  { key: 'significanceDates', label: 'Significance Dates' },
-  { key: 'controls', label: 'Controls' }
+  { key: 'name', label: t('labels.name') },
+  { key: 'address', label: t('labels.address') },
+  { key: 'details', label: t('labels.details') },
+  { key: 'significanceDates', label: t('labels.significanceDates') },
+  { key: 'controls', label: t('labels.controls') }
 ]
 
 function getTaxResidentText (isTaxResident: boolean) {
   if (isTaxResident) {
-    return 'Tax Resident of Canada'
+    return t('texts.isTaxResident')
   }
-  return 'Not a Tax Resident of Canada'
+  return t('texts.isNotTaxResident')
 }
 
-function getControlText (items: { value: boolean, label: string }[]) {
-  let text = ''
+function getControlTextField (items: { value: boolean, label: string }[]) {
   const activeLabels = items.filter(item => item.value).map(item => item.label)
-  if (activeLabels.length === 1) {
-    text = activeLabels[1]
-  } else if (activeLabels.length === 2) {
-    // 'this and that'
-    text = activeLabels.join(' and ')
-  } else {
-    // 'this, this, ..., and that'
-    activeLabels[activeLabels.length - 1] = `and ${activeLabels[activeLabels.length - 1]}`
-    text = activeLabels.join(', ')
-  }
-  return text
+  return activeLabels.join('') || ''
 }
 
 function getSharesControlText (significantIndividual: SignificantIndividualI) {
-  let text = getControlText([
-    { value: significantIndividual.controlType.sharesVotes.registeredOwner, label: 'Registered owner' },
-    { value: significantIndividual.controlType.sharesVotes.beneficialOwner, label: 'Beneficial owner' },
-    { value: significantIndividual.controlType.sharesVotes.indirectControl, label: 'Indirect control' }
+  const field = getControlTextField([
+    { value: significantIndividual.controlType.sharesVotes.registeredOwner, label: 'registered' },
+    { value: significantIndividual.controlType.sharesVotes.beneficialOwner, label: 'beneficial' },
+    { value: significantIndividual.controlType.sharesVotes.indirectControl, label: 'indirect' }
   ])
-  if (text) {
-    text += ` of ${significantIndividual.percentOfShares}% of shares, ${significantIndividual.percentOfVotes}% of votes`
+  if (field) {
+    return t(
+      `texts.sharesAndVotes.summary.${field}`,
+      {
+        sharePercent: significantIndividual.percentOfShares || '0',
+        votePercent: significantIndividual.percentOfVotes || '0'
+      })
   }
-  return text
+  return ''
 }
 
 function getDirectorsControlText (directorsConstrol: ControlOfDirectorsI) {
-  let text = getControlText([
-    { value: directorsConstrol.directControl, label: 'Direct control' },
-    { value: directorsConstrol.indirectControl, label: 'Indirect control' },
-    { value: directorsConstrol.significantInfluence, label: 'Significant influence control' }
+  const field = getControlTextField([
+    { value: directorsConstrol.directControl, label: 'direct' },
+    { value: directorsConstrol.indirectControl, label: 'indirect' },
+    { value: directorsConstrol.significantInfluence, label: 'significantinfluence' }
   ])
-  if (text) {
-    text += ' of the majority of directors'
+  if (field) {
+    return t(`texts.controlOfDirectors.summary.${field}`)
   }
-  return text
+  return ''
 }
 </script>
 
