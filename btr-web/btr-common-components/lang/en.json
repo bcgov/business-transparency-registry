@@ -17,6 +17,9 @@
     "incorporationNum": "Incorporation Number",
     "registrationNum": "Registration Number"
   },
+  "countries": {
+    "ca": "Canada"
+  },
   "labels": {
     "characters": "characters",
     "buttons": {
@@ -32,7 +35,7 @@
     "emailAddress": "Email Address",
     "fullName": "Full Legal Name",
     "preferredName": "Preferred Name",
-    "address": "Address: ",
+    "address": "Address",
     "addressResidential": "Residential Address",
     "state": "State",
     "country": "Country",

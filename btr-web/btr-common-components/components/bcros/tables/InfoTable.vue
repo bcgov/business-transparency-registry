@@ -3,8 +3,7 @@
     :ui="{
       base: 'min-w-[0px]',
       divide: 'divide-none',
-      tbody: 'divide-none',
-      td: { base: 'align-text-top', color: 'text-gray-700' }
+      tbody: 'divide-none'
     }"
     :rows="items"
     :columns="headers"

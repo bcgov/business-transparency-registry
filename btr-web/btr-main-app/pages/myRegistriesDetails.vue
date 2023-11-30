@@ -25,13 +25,7 @@
             </p>
           </template>
           <template #info-address="{ row }">
-            <!-- FUTURE: common address display component -->
-            <p>{{ row.info.line1 }}</p>
-            <p v-if="row.info.line2">
-              {{ row.info.line2 }}
-            </p>
-            <p>{{ row.info.city }} {{ row.info.region }}&nbsp;&nbsp;{{ row.info.postalCode }}</p>
-            <p>{{ row.info.country.name }}</p>
+            <BcrosInputsAddressDisplay :model-value="row.info" />
           </template>
           <template #info-competency>
             <!-- FUTURE: add in not competent version -->

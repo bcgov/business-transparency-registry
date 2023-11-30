@@ -3,53 +3,124 @@
     <UTable
       :columns="headers"
       :rows="individuals"
-      :empty-state="{ icon: '', label: 'No significant individuals added yet' }"
+      :empty-state="{ icon: '', label: $t('texts.tables.emptyTexts.individualsSummaryTable') }"
     >
-      <template #fullName-data="{ row }">
-        <span class="font-bold text-gray-900">
-          <UIcon name="i-mdi-user" />
-          {{ row.fullName }}
-        </span>
-      </template>
-
-      <template #significanceDates-data="{ row }">
-        {{ row?.significanceDates[0] }} to
-        {{ !!row?.significanceDates?.[1] ? row.significanceDates[1] : 'Current' }}
-      </template>
-
-      <template #details-data="{ row }">
-        <div class="px-6 py-3 align-top min-w-[120px]">
-          {{ row.details?.dateOfBirth }}<br>
-          <span v-for="(residency, index) in row.details?.residency" :key="index">{{ residency }}<br></span>
-          <!-- todo: internationalize tax resident -->
-          <span v-if="row.details?.isTaxResident">Tax Resident</span>
+      <template #name-data="{ row }">
+        <div data-cy="summary-table-name">
+          <span class="font-bold">{{ row.profile.fullName.toUpperCase() }}</span><br>
+          <span v-if="row.profile.preferredName">{{ row.profile.preferredName }}<br></span>
+          <span>{{ row.profile.email }}</span>
         </div>
       </template>
 
-      <template #actions-data>
-        <ULink>
-          <span class="text-blue-700">
-            <UIcon name="i-mdi-edit" />
-            Change
+      <template #address-data="{ row }">
+        <BcrosInputsAddressDisplay :model-value="row.profile.address" data-cy="summary-table-address" />
+      </template>
+
+      <template #details-data="{ row }">
+        <div data-cy="summary-table-details">
+          <span>{{ displayDate(row.profile.birthDate) }}</span><br>
+          <span v-if="row.profile.taxNumber">{{ row.profile.taxNumber }}<br></span>
+          <label>{{ $t('labels.citizenships') }}:</label><br>
+          <span v-if="row.profile.citizenshipCA !== 'other'">{{ $t('countries.ca') }}<br></span>
+          <span v-for="country in row.profile.citizenshipsExCA" :key="country.name">
+            {{ country.name }}<br>
           </span>
-        </ULink>
+          <span>{{ getTaxResidentText(row.profile.isTaxResident) }}</span>
+        </div>
+      </template>
+
+      <template #significanceDates-data="{ row }">
+        <div data-cy="summary-table-dates">
+          {{ $t('texts.dateRange', { start: displayDate(row.startDate) || $t('labels.unknown'),
+                                     end: displayDate(row.endDate) || $t('labels.current') }) }}
+        </div>
+      </template>
+
+      <template #controls-data="{ row }">
+        <div data-cy="summary-table-controls">
+          <div v-if="Object.values(row.controlType.sharesVotes).includes(true)">
+            <h4 class="font-bold italic">
+              {{ $t('labels.shares') }}
+            </h4>
+            <p>{{ getSharesControlText(row) }}</p>
+            <p v-if="row.controlType.sharesVotes.inConcertControl">
+              {{ $t('texts.sharesAndVotes.summary.inConcert') }}
+            </p>
+          </div>
+          <div v-if="Object.values(row.controlType.directors).includes(true)" class="mt-3">
+            <h4 class="font-bold italic">
+              {{ $t('labels.directors') }}
+            </h4>
+            <p>{{ getDirectorsControlText(row.controlType.directors) }}</p>
+            <p v-if="row.controlType.directors.noControl">
+              {{ $t('texts.controlOfDirectors.summary.inConcert') }}
+            </p>
+          </div>
+          <div v-if="row.controlType.other" class="mt-3">
+            <h4 class="font-bold italic">
+              {{ $t('labels.other') }}
+            </h4>
+            <p>{{ row.controlType.other }}</p>
+          </div>
+        </div>
       </template>
     </UTable>
   </div>
 </template>
 
 <script setup lang="ts">
-// FUTURE: update this table to follow SignificantIndividualI structure (Part of ticket: #18664)
 defineProps<{ individuals: SignificantIndividualI[] }>()
 
+const { t } = useI18n()
 const headers = [
-  { key: 'fullName', label: 'Name' },
-  { key: 'address', label: 'Address' },
-  { key: 'details', label: 'Details' },
-  { key: 'significanceDates', label: 'Significance Dates' },
-  { key: 'controlsText', label: 'Controls' },
-  { key: 'actions' }
+  { key: 'name', label: t('labels.name') },
+  { key: 'address', label: t('labels.address') },
+  { key: 'details', label: t('labels.details') },
+  { key: 'significanceDates', label: t('labels.significanceDates') },
+  { key: 'controls', label: t('labels.controls') }
 ]
+
+function getTaxResidentText (isTaxResident: boolean) {
+  if (isTaxResident) {
+    return t('texts.isTaxResident')
+  }
+  return t('texts.isNotTaxResident')
+}
+
+function getControlTextField (items: { value: boolean, field: string }[]) {
+  const activeLabels = items.filter(item => item.value).map(item => item.field)
+  return activeLabels.join('') || ''
+}
+
+function getSharesControlText (significantIndividual: SignificantIndividualI) {
+  const field = getControlTextField([
+    { value: significantIndividual.controlType.sharesVotes.registeredOwner, field: 'registered' },
+    { value: significantIndividual.controlType.sharesVotes.beneficialOwner, field: 'beneficial' },
+    { value: significantIndividual.controlType.sharesVotes.indirectControl, field: 'indirect' }
+  ])
+  if (field) {
+    return t(
+      `texts.sharesAndVotes.summary.${field}`,
+      {
+        sharePercent: significantIndividual.percentOfShares || '0',
+        votePercent: significantIndividual.percentOfVotes || '0'
+      })
+  }
+  return ''
+}
+
+function getDirectorsControlText (directorsConstrol: ControlOfDirectorsI) {
+  const field = getControlTextField([
+    { value: directorsConstrol.directControl, field: 'direct' },
+    { value: directorsConstrol.indirectControl, field: 'indirect' },
+    { value: directorsConstrol.significantInfluence, field: 'significantinfluence' }
+  ])
+  if (field) {
+    return t(`texts.controlOfDirectors.summary.${field}`)
+  }
+  return ''
+}
 </script>
 
 <style scoped>

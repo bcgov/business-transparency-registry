@@ -1,7 +1,16 @@
 {
   "labels": {
     "beneficialOwnershipAssessment": "Beneficial Ownership Assessment",
+    "controls": "Controls",
+    "citizenships": "Citizenship(s)",
+    "current": "Current",
+    "details": "Details",
+    "directors": "Directors",
+    "name": "Name",
+    "other": "Other",
+    "shares": "Shares",
     "sharesAndVotes": "Control of Shares and Votes",
+    "significanceDates": "Significance Dates",
     "lastKnownAddress": "Last Known Address",
     "registeredOwner": "Registered owner",
     "beneficialOwner": "Beneficial owner (e.g., through a trust)",
@@ -23,7 +32,8 @@
         "sentence1": "You MUST complete all required information about this individual that you can obtain and confirm.",
         "sentence2": "Indicating that it is not possible to obtain or confirm information about an individual constitutes a statement in respect of a material fact."
       }
-    }
+    },
+    "unknown": "Unknown"
   },
   "buttons": {
     "addIndividualPerson": {
@@ -36,12 +46,23 @@
     "addIndividualPerson": "To add a person to the transparency register of this business, enter their name and email address. A request will be sent to the person at their email address and they will have the ability to accept or decline the addition of their information to the transparency register of the business. If they accept, their information will automatically be added to the transparency register. If you don’t want to send an invitation, you can add the person’s transparency information manually.",
     "beneficialOwnershipAssessmentText1": "Beneficial Ownership is determined by the control of of shares and/or votes at general meetings, and control of the right to elect, appoint, or remove directors of the business.",
     "beneficialOwnershipAssessmentText2": "Complete following assessment to determine this person’s beneficial ownership status.",
+    "dateRange": "{start} to {end}",
     "sharesAndVotes": {
       "controlPercentage": "Enter the percentage of shares issued for the business and/or shares entitled to votes at general meetings this individual owns or ultimately controls (or can exercise ultimate effective control over).",
       "note1": "All individuals with joint control of 25% or more of the issued shares must be listed as significant individuals.",
       "typeOfControl": "If this person controls shares or shares entitled to votes, indicate the type(s) of control of the shares and/or votes this person has:",
       "note2": "If shares in this business are held in trust, you must list the Trustees as the Registered owner, and you must also list the beneficiaries of the trust as the Beneficial owners of the shares.",
-      "note3": "Beneficiaries do not have to be listed in the transparency register if their beneficial interest is conditional on the death of another individual."
+      "note3": "Beneficiaries do not have to be listed in the transparency register if their beneficial interest is conditional on the death of another individual.",
+      "summary": {
+        "beneficial": "Beneficial owner of {sharePercent}% of shares, {votePercent}% of votes",
+        "beneficialindirect": "Beneficial owner and Indirect control of {sharePercent}% of shares, {votePercent}% of votes",
+        "indirect": "Indirect control of {sharePercent}% of shares, {votePercent}% of votes",
+        "registered": "Registered owner of {sharePercent}% of shares, {votePercent}% of votes",
+        "registeredbeneficial": "Registered owner and Beneficial owner of {sharePercent}% of shares, {votePercent}% of votes",
+        "registeredbeneficialindirect": "Registered owner, Beneficial owner, and Indirect control of {sharePercent}% of shares, {votePercent}% of votes",
+        "registeredindirect": "Registered owner and Indirect control of {sharePercent}% of shares, {votePercent}% of votes",
+        "inConcert": "25% or more of shares or votes exercised in concert"
+      }
     },
     "controlOfDirectors": {
       "text": {
@@ -57,11 +78,28 @@
         "tooltip": "other individuals",
         "tooltipContent": "Other individuals includes groups of individuals acting in concert, spouses, and relatives who live in the same home."
       },
-      "note": "All individuals with joint control of the majority of directors must be listed as significant individuals."
+      "note": "All individuals with joint control of the majority of directors must be listed as significant individuals.",
+      "summary": {
+        "direct": "Direct control of the majority of directors",
+        "directindirect": "Direct control and Indirect control of the majority of directors",
+        "directindirectsignificantinfluence": "Direct control, Indirect control, and Significant influence control of the majority of directors",
+        "directsignificantinfluence": "Direct control and Significant influence control of the majority of directors",
+        "indirect": "Indirect control of the majority of directors",
+        "indirectsignificantinfluence": "Indirect control and Significant influence control of the majority of directors",
+        "significantinfluence": "Significant influence control of the majority of directors",
+        "inConcert": "Control of directors exercised in concert"
+      }
     },
     "citizenshipPermanentResidency": "Indicate if this person is a citizen or permanent resident of Canada, or list all of the non-Canadian citizenship(s) of this person. If this person is a Citizen or Permanent resident of Canada, listing of multiple citizenships is not required.",
     "isCompetent": "I am able to manage my own financial affairs.",
+    "isTaxResident": "Tax Resident of Canada",
+    "isNotTaxResident": "Not a Tax Resident of Canada",
     "myRegDetails": "Your BC Registries Details are shared with businesses that list you as a beneficial owner.",
+    "tables": {
+      "emptyTexts": {
+        "individualsSummaryTable": "No significant individuals added yet"
+      }
+    },
     "taxNumber": "A 9-digit Social Insurance Number (SIN), an Individual Tax Number (ITN), or a Temporary Taxation Number (TTN) is required if this person has one.",
     "taxResidency": "Indicate if this person is a resident of Canada for Income Tax purposes."
   },

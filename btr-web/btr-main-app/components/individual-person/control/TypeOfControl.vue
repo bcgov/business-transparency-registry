@@ -15,7 +15,7 @@
 const prop = defineProps({
   id: { type: String, required: true },
   modelValue: {
-    type: Object as PropType<ControlTypeI>,
+    type: Object as PropType<ControlOfSharesI>,
     default: () => ({
       registeredOwner: false,
       beneficialOwner: false,
@@ -31,6 +31,6 @@ const types = [
   { value: 'indirectControl', label: t('labels.indirectControl') }
 ]
 
-const typeOfControl: Ref<ControlTypeI> = ref(prop.modelValue)
+const typeOfControl: Ref<ControlOfSharesI> = ref(prop.modelValue)
 
 </script>

@@ -26,5 +26,8 @@ describe('pages -> Beneficial Owner Change', () => {
       .and('contain', 'Details')
       .and('contain', 'Significance Dates')
       .and('contain', 'Controls')
+    // body should contain correct empty text
+    cy.get('[data-cy="individualsSummaryTable"]').get('td')
+      .should('contain.text', 'No significant individuals added yet')
   })
 })

@@ -1,6 +1,6 @@
 import { expect, describe, test } from 'vitest'
 import { VueWrapper, mount } from '@vue/test-utils'
-import { mockedI18n } from '../../../btr-common-components/tests/unit/utils/mockedi18n'
+import { mockedI18n } from '../utils/mockedi18n'
 import ownerChange from '~/pages/ownerChange.vue'
 
 describe('Tests for owner change page', () => {
