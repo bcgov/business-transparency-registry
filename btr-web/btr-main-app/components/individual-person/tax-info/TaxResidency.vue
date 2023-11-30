@@ -20,20 +20,20 @@ import { ref, watch, defineProps, defineEmits } from 'vue'
 const props = defineProps({
   id: { type: String, required: true },
   label: { type: [String], default: '' },
-  modelValue: { type: String, default: '' }
+  modelValue: { type: Boolean, default: undefined }
 })
 
-const emit = defineEmits<{(e: 'update:modelValue', value: string): void}>()
+const emit = defineEmits<{(e: 'update:modelValue', value: boolean): void}>()
 
 const selectedValue = ref(props.modelValue)
 
 const { t } = useI18n()
 const options = [
-  { value: 'true', label: t('labels.isTaxResident') },
-  { value: 'false', label: t('labels.notTaxResident') }
+  { value: true, label: t('labels.isTaxResident') },
+  { value: false, label: t('labels.notTaxResident') }
 ]
 
 watch(selectedValue, (newValue) => {
-  emit('update:modelValue', newValue)
+  emit('update:modelValue', newValue as boolean)
 })
 </script>

@@ -40,6 +40,10 @@ export default defineAppConfig({
     table: {
       th: {
         color: 'text-gray-900'
+      },
+      td: {
+        base: 'align-text-top whitespace-normal',
+        color: 'text-gray-700'
       }
     },
     radio: {

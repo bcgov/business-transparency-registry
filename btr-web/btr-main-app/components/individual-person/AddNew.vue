@@ -242,7 +242,8 @@ const defaultSI = {
     sharesVotes: {
       registeredOwner: false,
       beneficialOwner: false,
-      indirectControl: false
+      indirectControl: false,
+      inConcertControl: true
     },
     directors: {
       directControl: false,

@@ -27,9 +27,15 @@ export const testSI: SignificantIndividualI = {
     sharesVotes: {
       registeredOwner: true,
       beneficialOwner: false,
-      indirectControl: false
+      indirectControl: false,
+      inConcertControl: false
     },
-    directors: [],
+    directors: {
+      directControl: true,
+      indirectControl: true,
+      significantInfluence: false,
+      noControl: false
+    },
     other: ''
   },
   missingInfoReason: undefined,

@@ -2,11 +2,7 @@ import { ProfileI } from './profile-i'
 
 export interface SignificantIndividualI {
   controlType: {
-    sharesVotes: { // (types of control over votes/shares)
-      registeredOwner: boolean,
-      beneficialOwner: boolean,
-      indirectControl: boolean
-    }
+    sharesVotes: ControlOfSharesI
     directors: ControlOfDirectorsI
     other: string // other ways this person has SI control
   }
