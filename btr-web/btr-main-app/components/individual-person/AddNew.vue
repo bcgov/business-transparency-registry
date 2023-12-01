@@ -1,7 +1,7 @@
 <template>
   <div v-if="significantIndividual" data-test="addIndividualPerson" class="flex-col w-full">
     <div>
-      <p class="text-justify">
+      <p>
         {{ $t('texts.addIndividualPerson') }}
       </p>
     </div>
@@ -53,11 +53,11 @@
         <p class="font-bold py-3">
           {{ $t('labels.beneficialOwnershipAssessment') }}
         </p>
-        <p class="text-justify">
+        <p>
           {{ $t('texts.beneficialOwnershipAssessmentText1') }}
         </p>
         <br>
-        <p class="text-justify">
+        <p>
           {{ $t('texts.beneficialOwnershipAssessmentText2') }}
         </p>
       </div>
@@ -69,7 +69,7 @@
           <p class="font-bold py-3">
             {{ $t('labels.sharesAndVotes') }}
           </p>
-          <p class="text-justify">
+          <p>
             {{ $t('texts.sharesAndVotes.controlPercentage') }}
           </p>
           <IndividualPersonControlPercentage
@@ -100,7 +100,7 @@
         <p class="font-bold py-3">
           {{ $t('labels.controlOfDirectors') }}
         </p>
-        <p class="text-justify">
+        <p>
           {{ $t('texts.controlOfDirectors.text.part1') }}
           <span class="font-bold">{{ $t('texts.controlOfDirectors.text.part2') }}</span>
           {{ $t('texts.controlOfDirectors.text.part3') }}
@@ -111,7 +111,7 @@
           name="controlOfDirectors"
           data-cy="testControlOfDirectors"
         />
-        <p class="text-justify">
+        <p>
           <span class="font-bold">{{ $t('texts.note') }}</span>
           {{ $t('texts.controlOfDirectors.note') }}
         </p>
@@ -137,7 +137,7 @@
         <p class="font-bold py-3">
           {{ $t('labels.citizenshipPermanentResidency') }}
         </p>
-        <p class="text-justify">
+        <p>
           {{ $t('texts.citizenshipPermanentResidency') }}
         </p>
         <BcrosInputsCountriesOfCitizenship
@@ -154,7 +154,7 @@
           <p class="font-bold py-3">
             {{ $t('labels.taxNumber') }}
           </p>
-          <p class="text-justify">
+          <p>
             {{ $t('texts.taxNumber') }}
           </p>
           <IndividualPersonTaxInfoTaxNumber
@@ -169,7 +169,7 @@
         <p class="font-bold py-3">
           {{ $t('labels.taxResidency') }}
         </p>
-        <p class="text-justify">
+        <p>
           {{ $t('texts.taxResidency') }}
         </p>
         <IndividualPersonTaxInfoTaxResidency

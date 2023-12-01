@@ -25,11 +25,11 @@
         {{ $t('texts.sharesAndVotes.inConcertControl.part2') }}
       </template>
     </UCheckbox>
-    <p class="text-justify pb-5">
+    <p class="pb-5">
       <span class="font-bold">{{ $t('texts.note') }}</span>
       {{ $t('texts.sharesAndVotes.note1') }}
     </p>
-    <p class="text-justify">
+    <p>
       {{ $t('texts.sharesAndVotes.typeOfControl') }}
     </p>
     <div :id="id" class="flex flex-col py-5">
@@ -42,11 +42,11 @@
         />
       </div>
     </div>
-    <p class="text-justify pb-5">
+    <p class="pb-5">
       <span class="font-bold">{{ $t('texts.note') }}</span>
       {{ $t('texts.sharesAndVotes.note2') }}
     </p>
-    <p class="text-justify pb-5">
+    <p>
       <span class="font-bold">{{ $t('texts.note') }}</span>
       {{ $t('texts.sharesAndVotes.note3') }}
     </p>
