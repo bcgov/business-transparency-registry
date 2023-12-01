@@ -11,6 +11,7 @@ describe('pages -> Add individual', () => {
   })
 
   it('verify that the Type of Control checkboxes are working', () => {
+    cy.get('[data-cy=add-new-btn]').trigger('click')
     cy.get('[data-cy="showAddIndividualPersonManually"]').trigger('click')
 
     const checkboxes = cy.get('[data-cy="testTypeOfControl"]').should('exist')
@@ -34,6 +35,7 @@ describe('pages -> Add individual', () => {
       return false
     })
 
+    cy.get('[data-cy=add-new-btn]').trigger('click')
     cy.get('[data-cy="showAddIndividualPersonManually"]').trigger('click')
     cy.get('[name="percentOfShares"]').type('10ab').blur()
     cy.contains(en.errors.validation.controlPercentage.specialCharacter).should('exist')
@@ -56,6 +58,7 @@ describe('pages -> Add individual', () => {
       return false
     })
 
+    cy.get('[data-cy=add-new-btn]').trigger('click')
     cy.get('[data-cy="showAddIndividualPersonManually"]').trigger('click')
     cy.get('[name="percentOfShares"]').type('0').blur()
     cy.contains(en.errors.validation.controlPercentage.invalidFormat).should('exist')
@@ -78,6 +81,7 @@ describe('pages -> Add individual', () => {
       return false
     })
 
+    cy.get('[data-cy=add-new-btn]').trigger('click')
     cy.get('[data-cy="showAddIndividualPersonManually"]').trigger('click')
     cy.get('[name="percentOfShares"]').type('101').blur()
     cy.contains(en.errors.validation.controlPercentage.maxValueReached).should('exist')

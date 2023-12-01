@@ -8,6 +8,7 @@
         trailing
         type="text"
         variant="bcGov"
+        data-cy="date-select"
       />
     </PopoverButton>
     <transition

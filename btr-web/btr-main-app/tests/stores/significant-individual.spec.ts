@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { setActivePinia, createPinia, storeToRefs } from 'pinia'
+import { dateToString } from '../../../btr-common-components/utils/date'
 import { testSI } from '../utils/mockedData'
 import { useSignificantIndividuals } from '@/stores/significant-individuals'
 

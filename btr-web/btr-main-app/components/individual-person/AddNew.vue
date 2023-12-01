@@ -1,5 +1,5 @@
 <template>
-  <div v-if="significantIndividual" data-test="addIndividualPerson" class="flex-col w-full">
+  <div data-cy="addIndividualPerson">
     <div>
       <p>
         {{ $t('texts.addIndividualPerson') }}
@@ -123,7 +123,7 @@
         <BcrosInputsDateSelect
           class="mt-3"
           :max-date="new Date()"
-          @selection="significantIndividual.profile.birthDate = $event"
+          @selection="significantIndividual.profile.birthDate = dateToString($event, 'YYYY-MM-DD')"
         />
       </div>
       <div class="flex-col py-5">
@@ -180,15 +180,25 @@
       </div>
       <IndividualPersonControlUnableToObtainOrConfirmInformation v-model="significantIndividual.missingInfoReason" />
     </template>
-    <!-- temporary button section -->
     <div class="grid mt-10 w-full">
-      <UButton
-        class="justify-self-end px-10 py-4"
-        label="Done"
-        color="primary"
-        valriant="solid"
-        @click="addSignificantIndividual()"
-      />
+      <div class="justify-self-end flex">
+        <UButton
+          class="px-10 py-4"
+          :label="t('buttons.cancel')"
+          color="primary"
+          variant="outline"
+          data-cy="new-si-cancel-btn"
+          @click="$emit('cancel', true)"
+        />
+        <UButton
+          class="ml-5 px-10 py-4"
+          :label="t('buttons.done')"
+          color="primary"
+          valriant="solid"
+          data-cy="new-si-done-btn"
+          @click="addSignificantIndividual()"
+        />
+      </div>
     </div>
   </div>
 </template>
@@ -197,6 +207,7 @@
 import { z } from 'zod'
 
 const { t } = useI18n()
+const emits = defineEmits<{ add: [value: SignificantIndividualI], cancel: [value: any]}>()
 const props = defineProps<{ setSignificantIndividual?: SignificantIndividualI }>()
 const defaultSI = {
   profile: {
@@ -241,16 +252,16 @@ const defaultSI = {
   missingInfoReason: undefined,
   percentOfShares: '',
   percentOfVotes: '',
-  action: 'added'
+  startDate: useSignificantIndividuals().currentSIFiling?.effectiveDate || '',
+  action: FilingActionE.ADD
 }
 // NOTE: not setting this as modelValue because it is a nested object so mutating it gets complicated
 const significantIndividual: Ref<SignificantIndividualI> = ref(props.setSignificantIndividual || defaultSI)
 
 function addSignificantIndividual () {
   // FUTURE: validate form / scroll to 1st error
-  // add to filing
-  useSignificantIndividuals().filingAddSI(significantIndividual.value) // if prop: significantIndividuals.filingAddSI(significantIndividual)
-  // FUTURE: collapse 'add new'
+  // emit significantIndividual so it gets added to the filing
+  emits('add', significantIndividual.value)
 }
 
 const showAddInfoManually = ref(false)

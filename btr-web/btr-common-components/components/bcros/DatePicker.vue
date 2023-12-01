@@ -15,6 +15,7 @@
       :min-date="minDate || ''"
       :month-change-on-scroll="false"
       :week-start="0"
+      data-cy="date-picker"
     />
   </div>
 </template>

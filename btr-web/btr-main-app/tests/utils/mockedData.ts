@@ -15,7 +15,7 @@ export const testSI: SignificantIndividualI = {
       decisionMaking: true,
       financialAffairs: true
     },
-    birthDate: new Date(),
+    birthDate: '2000-03-19',
     citizenshipCA: 'citizen',
     citizenshipsExCA: [],
     email: '1@1.com',
@@ -41,5 +41,6 @@ export const testSI: SignificantIndividualI = {
   missingInfoReason: undefined,
   percentOfShares: '75',
   percentOfVotes: '25',
+  startDate: '',
   action: 'added'
 }

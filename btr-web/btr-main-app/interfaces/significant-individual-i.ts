@@ -1,4 +1,5 @@
 import { ProfileI } from './profile-i'
+import { FilingActionE } from '~/enums/filing-action-e'
 
 export interface SignificantIndividualI {
   controlType: {
@@ -10,7 +11,7 @@ export interface SignificantIndividualI {
   percentOfShares: string
   percentOfVotes: string
   profile: ProfileI
-  startDate: string
-  endDate?: string
-  action?: string // FUTURE: enum for removed/changed/added
+  startDate: string // YYYY-MM-DDT:HH:mm:ss+-HH:mm
+  endDate?: string // YYYY-MM-DDT:HH:mm:ss+-HH:mm
+  action?: FilingActionE // FUTURE: enum for removed/changed/added
 }
