@@ -9,12 +9,12 @@
       />
     </div>
     <UCheckbox
-      v-model="controlOfDirectors.noControl"
-      name="noControl"
+      v-model="controlOfDirectors.inConcertControl"
+      name="inConcertControl"
       class="py-2 mt-5"
     >
       <template #label>
-        {{ $t('texts.controlOfDirectors.noControl.text') }}
+        {{ $t('texts.controlOfDirectors.inConcertControl.text') }}
         <UTooltip
           class="underline underline-offset-4 decoration-dotted"
           :popper="{
@@ -25,10 +25,10 @@
         >
           <template #text>
             <span class="whitespace-normal place-content: center">
-              {{ $t('texts.controlOfDirectors.noControl.tooltipContent') }}
+              {{ $t('texts.controlOfDirectors.inConcertControl.tooltipContent') }}
             </span>
           </template>
-          {{ $t('texts.controlOfDirectors.noControl.tooltip') }}
+          {{ $t('texts.controlOfDirectors.inConcertControl.tooltip') }}
         </UTooltip>
       </template>
     </UCheckbox>
@@ -45,7 +45,7 @@ const prop = defineProps({
       directControl: false,
       indirectControl: false,
       significantInfluence: false,
-      noControl: false
+      inConcertControl: false
     })
   }
 })

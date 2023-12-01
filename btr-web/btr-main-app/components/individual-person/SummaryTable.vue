@@ -53,7 +53,7 @@
               {{ $t('labels.directors') }}
             </h4>
             <p>{{ getDirectorsControlText(row.controlType.directors) }}</p>
-            <p v-if="row.controlType.directors.noControl">
+            <p v-if="row.controlType.directors.inConcertControl">
               {{ $t('texts.controlOfDirectors.summary.inConcert') }}
             </p>
           </div>

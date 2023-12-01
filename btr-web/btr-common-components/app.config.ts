@@ -50,9 +50,10 @@ export default defineAppConfig({
       border: 'border-gray-500'
     },
     checkbox: {
-      wrapper: 'flex items-center',
+      wrapper: 'flex items-start',
+      base: 'mt-1 mr-2',
       border: 'border-gray-500',
-      label: 'text-base text-gray-900 ml-2'
+      label: 'text-base text-gray-900'
     },
     tooltip: {
       background: 'bg-gray-700',
