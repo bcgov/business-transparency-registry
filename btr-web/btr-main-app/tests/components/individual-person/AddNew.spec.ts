@@ -21,7 +21,7 @@ describe('AddIndividualPerson tests', () => {
 
   it('renders AddIndividualPerson', () => {
     // test everything renders
-    expect(wrapper.find('[data-test="addIndividualPerson"]').exists()).toBe(true)
+    expect(wrapper.find('[data-cy="addIndividualPerson"]').exists()).toBe(true)
     // FUTURE: add in other pieces
     // add manually should be false
     expect(wrapper.find('#add-person-manually-toggle').text()).toBe('Add transparency register information manually')
