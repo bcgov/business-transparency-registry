@@ -116,13 +116,14 @@
           {{ $t('texts.controlOfDirectors.note') }}
         </p>
       </div>
-      <IndividualPersonControlOtherReasons
-        id="otherReasons"
-        v-model="significantIndividual.controlType.other"
-        name="otherReasons"
-        data-cy="otherReasons"
-      />
-      {{ significantIndividual.controlType.other }}
+      <div class="flex-col py-5">
+        <IndividualPersonControlOtherReasons
+          id="otherReasons"
+          v-model="significantIndividual.controlType.other"
+          name="otherReasons"
+          data-cy="otherReasons"
+        />
+      </div>
       <div class="flex-col py-5">
         <p class="font-bold py-3">
           {{ $t('labels.birthdate') }}

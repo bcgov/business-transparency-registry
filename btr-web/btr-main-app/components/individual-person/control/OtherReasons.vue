@@ -13,6 +13,7 @@
       variant="bcGov"
       resize
       :max-char="1000"
+      data-cy="otherReasonsTextArea"
       @change="emit('update:modelValue', otherReasons || undefined)"
     />
   </div>

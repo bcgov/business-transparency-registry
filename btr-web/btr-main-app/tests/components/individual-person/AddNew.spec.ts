@@ -6,7 +6,7 @@ import { mockedI18n } from '../../utils/mockedi18n'
 import {
   IndividualPersonAddNew, BcrosInputsDateSelect, BcrosInputsAddress, IndividualPersonTaxInfoTaxNumber,
   IndividualPersonTaxInfoTaxResidency, IndividualPersonControlPercentage,
-  IndividualPersonControlTypeOfControl, IndividualPersonControlOfDirectors
+  IndividualPersonControlTypeOfControl, IndividualPersonControlOfDirectors, IndividualPersonControlOtherReasons
 } from '#components'
 
 describe('AddIndividualPerson tests', () => {
@@ -65,6 +65,12 @@ describe('AddIndividualPerson tests', () => {
     await wrapper.find('#add-person-manually-toggle').trigger('click')
     await flushPromises()
     expect(wrapper.findComponent(IndividualPersonControlOfDirectors).exists()).toBe(true)
+  })
+
+  it('renders the text area for Other Reasons for Individual Significance', async () => {
+    await wrapper.find('#add-person-manually-toggle').trigger('click')
+    await flushPromises()
+    expect(wrapper.findComponent(IndividualPersonControlOtherReasons).exists()).toBe(true)
   })
 
   it('renders the tax number component', async () => {
