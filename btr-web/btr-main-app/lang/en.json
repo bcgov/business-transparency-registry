@@ -101,8 +101,8 @@
       }
     },
     "otherReasons": {
-      "description": "Enter any other reason(s) this person is a beneficial owner.",
-      "textAreaPlaceholder": "Other beneficial ownership reasons"
+      "description": "Enter any other reason(s) this person is a significant individual.",
+      "textAreaPlaceholder": "Other reasons for individual significance"
     },
     "citizenshipPermanentResidency": "Indicate if this person is a citizen or permanent resident of Canada, or list all of the non-Canadian citizenship(s) of this person. If this person is a Citizen or Permanent resident of Canada, listing of multiple citizenships is not required.",
     "isCompetent": "I am able to manage my own financial affairs.",
