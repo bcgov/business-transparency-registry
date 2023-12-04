@@ -1,5 +1,5 @@
 <template>
-  <div class="w-[282px] bg-white p-0">
+  <div class="w-[282px] bg-white p-0" data-cy="pay-fees-widget">
     <BcrosCard>
       <template #header>
         <slot name="header">
@@ -41,7 +41,7 @@
               {{ $t('currency.cad') }}
             </span>
             <span
-              v-if="fees?.length>2"
+              v-if="fees?.length > 0"
               class="font-bold text-2xl float-right ml-2 overflow-hidden whitespace-nowrap"
             >
               ${{ total }}

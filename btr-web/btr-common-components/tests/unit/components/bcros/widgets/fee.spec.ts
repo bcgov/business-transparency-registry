@@ -3,18 +3,19 @@ import { it, expect } from 'vitest'
 import { mountSuspended } from 'vitest-environment-nuxt/utils'
 
 import { BcrosWidgetsFee } from '#components'
-import { FeesI } from '~/interfaces/fees-i'
+import { FeeInfoI } from '~/interfaces/fees-i'
 
 it('can mount fees component', async () => {
-  const fees: FeesI[] = [
+  const fees: FeeInfoI[] = [
     {
-      amount: 0, name: '0 Charge - no fee'
-    }, {
-      amount: 12, name: '$12 fee'
+      filingTypeCode: 'REGSIGIN',
+      total: 12
     },
     {
-      amount: 17.2, name: 'another fee'
-    }]
+      filingTypeCode: 'REGSIGIN1',
+      total: 17.2
+    }
+  ]
 
   const total = 0 + 12 + 17.2
 
