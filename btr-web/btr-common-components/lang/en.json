@@ -20,11 +20,21 @@
   "countries": {
     "ca": "Canada"
   },
+  "currency": {
+    "cad": "CAD",
+    "usd": "USD"
+  },
   "widgets": {
     "feeSummary": {
       "title": "Fee summary",
       "total": "Total fees",
-      "noFee": "No Fee"
+      "noFee": "No Fee",
+      "priorityFees": "Priority Fees",
+      "futureEffectiveFees": "Future Effective Fees",
+      "serviceFees": "Service Fees",
+      "itemLabels": {
+        "REGSIGIN": "Significant Individual Change"
+      }
     }
   },
   "labels": {

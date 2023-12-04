@@ -87,7 +87,6 @@
         Hi
       </BcrosAlertsMessage>
     </UForm>
-    <BcrosWidgetsFee :fees="fees" />
   </div>
 </template>
 
@@ -97,12 +96,6 @@ import { z } from 'zod'
 import type { FormSubmitEvent } from '@nuxt/ui/dist/runtime/types'
 import { BtrAddressI } from '~/interfaces/btr-address-i'
 import { validateEmailRfc5322Regex } from '~/utils/validation/form_inputs'
-import { FeesI } from '~/interfaces/fees-i'
-
-const fees: FeesI[] = [
-  { name: 'Significant Individual Change', amount: 13 },
-  { name: 'Service Charge', amount: 2.04 }
-]
 
 const minNameLength = 1
 const maxNameLength = 150

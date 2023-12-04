@@ -8,7 +8,20 @@
         <slot />
       </div>
       <div class="hidden bcroslg:block p-4">
-        <BcrosWidgetsFee :fees="fees" />
+        <BcrosWidgetsFee :fees="payFeesWidget.fees">
+          <template #emptyFees>
+            <div
+              class="bg-white p-3 border-gray-300 border-b-[1px] flex"
+            >
+              <span class="font-bold text-sm mr-auto">
+                {{ $t('widgets.feeSummary.itemLabels.REGSIGIN') }}
+              </span>
+              <span class="font-bold text-2xl float-right ml-2 overflow-hidden whitespace-nowrap">
+                -
+              </span>
+            </div>
+          </template>
+        </BcrosWidgetsFee>
       </div>
     </div>
     <BcrosFooter :app-version="version" />
@@ -16,12 +29,23 @@
 </template>
 
 <script setup lang="ts">
-import { FeesI } from '../../btr-common-components/interfaces/fees-i'
+import { usePayFeesWidget } from '../../btr-common-components/stores/pay-fees-widget'
+import { FilingDataI } from '../../btr-common-components/interfaces/filling-data-i'
 
-const fees: FeesI[] = [
-  { name: 'Significant Individual Change', amount: 0 },
-  { name: 'Service Charge', amount: 2.04 }
+const payFeesWidget = usePayFeesWidget()
+const filingData: FilingDataI[] = [
+  {
+    entityType: 'BTR',
+    filingTypeCode: 'REGSIGIN',
+    futureEffective: false,
+    priority: false,
+    waiveFees: false
+  }
 ]
+
+// todo: update getting folio number from store when there is this data available
+payFeesWidget.loadFeeTypesAndCharges('custom', filingData)
+
 const route = useRoute()
 const crumbConstructors = computed(() => (route?.meta?.breadcrumbs || []) as (() => BreadcrumbI)[])
 
