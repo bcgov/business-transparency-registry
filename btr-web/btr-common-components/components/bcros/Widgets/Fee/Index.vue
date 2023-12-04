@@ -9,10 +9,11 @@
         </slot>
       </template>
       <template #default>
-        <slot name="emptyFees" v-if="hasEmptyFees" />
+        <slot v-if="hasEmptyFees" name="emptyFees" />
         <slot name="default">
           <div
             v-for="fee in fees"
+            :key="fee.uiUuid"
             class="bg-white p-3 border-gray-300 border-b-[1px] flex"
           >
             <span class="font-bold text-sm mr-auto">
@@ -60,7 +61,7 @@
 import { PayFeesWidgetItemI } from '~/interfaces/fees-i'
 
 const props = defineProps({
-  fees: { type: Array<PayFeesWidgetItemI> }
+  fees: { type: Array<PayFeesWidgetItemI>, required: true }
 })
 
 const hasEmptyFees = computed(() => !props.fees?.length)

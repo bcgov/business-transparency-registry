@@ -5,20 +5,20 @@ export default <Partial<Config>>{
   theme: {
     extend: {
       height: {
-        'bcrosRow': '46px'
+        bcrosRow: '46px'
       },
       maxWidth: {
-        'bcrosmd': '1020px',
-        'bcroslg': '1360px'
+        bcrosmd: '1020px',
+        bcroslg: '1360px'
       },
       width: {
-        'bcrosmd': '1020px',
-        'bcroslg': '1360px'
+        bcrosmd: '1020px',
+        bcroslg: '1360px'
       },
       screens: {
         // => @media (min-width: 1020px) { ... }
-        'bcrosmd': '1020px',
-        'bcroslg': '1360px'
+        bcrosmd: '1020px',
+        bcroslg: '1360px'
       },
       colors: {
         bcGovColor: {

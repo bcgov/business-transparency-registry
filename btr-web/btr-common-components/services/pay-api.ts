@@ -10,17 +10,17 @@ const constructFeeInfoURL = (filingData: FilingDataI) => {
 const getPayFeesApiQueryParams = (filingData: FilingDataI): PayFeesApiQueryParamsI => {
   return {
     waiveFees: filingData.waiveFees || undefined,
-    futureEffective: filingData.futureEffective  || undefined,
+    futureEffective: filingData.futureEffective || undefined,
     priority: filingData.priority || undefined
   }
 }
 
 const getFeeInfoRefs = async (filingData: FilingDataI) => {
-  const url = constructFeeInfoURL(filingData);
+  const url = constructFeeInfoURL(filingData)
   const queryParams = getPayFeesApiQueryParams(filingData)
   const { data, error } = await useFetchBcros<FeeInfoI>(url, { query: queryParams })
 
-  return { data, error };
+  return { data, error }
 }
 
 const getFeeInfo = async (filingData: FilingDataI) => {

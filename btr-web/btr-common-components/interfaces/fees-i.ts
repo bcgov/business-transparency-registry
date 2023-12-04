@@ -16,5 +16,6 @@ export interface FeeInfoI {
 }
 
 export interface PayFeesWidgetItemI extends FeeInfoI {
+  uiUuid: string,
   quantity?: number
 }

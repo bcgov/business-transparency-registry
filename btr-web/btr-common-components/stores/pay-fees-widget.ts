@@ -1,5 +1,6 @@
-import { defineStore } from 'pinia';
-import { Ref } from '@vue/reactivity'
+import { defineStore } from 'pinia'
+import { v4 as UUIDv4 } from 'uuid'
+import { Ref } from 'vue'
 import { StatusCodes } from 'http-status-codes'
 
 import { FeeInfoI, PayFeesWidgetItemI } from '~/interfaces/fees-i'
@@ -22,7 +23,7 @@ export const usePayFeesWidget = defineStore('payFeeWidget', () => {
     )
 
     if (index === -1) {
-      fees.value.push({ ...newFee, quantity: 1 })
+      fees.value.push({ ...newFee, quantity: 1, uiUuid: UUIDv4() })
     }
   }
 
@@ -43,7 +44,9 @@ export const usePayFeesWidget = defineStore('payFeeWidget', () => {
   }
 
   const removeFee = (feeToRemove: FeeInfoI) => {
-    const index = fees.value.findIndex(fee => feeToRemove.filingType)
+    const index = fees.value.findIndex(fee =>
+      fee.filingType === feeToRemove.filingType && fee.filingTypeCode === feeToRemove.filingTypeCode
+    )
     if (index > -1) { // only splice array when item is found
       fees.value.splice(index, 1)
     }
@@ -65,12 +68,12 @@ export const usePayFeesWidget = defineStore('payFeeWidget', () => {
     folioNumber.value = newFolioNumber
 
     for (const filingDataItem of filingData) {
-      payApi.getFeeInfo(filingDataItem)
+      await payApi.getFeeInfo(filingDataItem)
         .then(({ data, error }) => {
           if (error) {
             console.error(error)
             const err = {
-              statusCode: error.statusCode || StatusCodes.INTERNAL_SERVER_ERROR,
+              statusCode: error.statusCode ?? StatusCodes.INTERNAL_SERVER_ERROR,
               message: error.message,
               category: ErrorCategoryE.FEE_INFO
             }

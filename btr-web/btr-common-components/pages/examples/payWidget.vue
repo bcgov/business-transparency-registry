@@ -1,18 +1,40 @@
 <script setup lang="ts">
 
-import { FeesI } from '~/interfaces/fees-i'
+import { PayFeesWidgetItemI } from '~/interfaces/fees-i'
 
-
-const fees: FeesI[] = [
-  { name: 'Significant Individual Change', amount: 13 },
-  { name: 'Service Charge', amount: 2.04 }
+const fees: PayFeesWidgetItemI[] = [
+  {
+    uiUuid: '111',
+    quantity: 1,
+    filingFees: 0,
+    filingType: 'Register Significant Individual',
+    filingTypeCode: 'REGSIGIN',
+    futureEffectiveFees: 0,
+    priorityFees: 0,
+    processingFees: 0,
+    serviceFees: 0,
+    tax: { gst: 0, pst: 0 },
+    total: 0
+  },
+  {
+    uiUuid: '123',
+    quantity: 2,
+    filingFees: 0,
+    filingType: 'Register Significant Individual2',
+    filingTypeCode: 'REGSIGIN2',
+    futureEffectiveFees: 0,
+    priorityFees: 0,
+    processingFees: 0,
+    serviceFees: 0,
+    tax: { gst: 0, pst: 0 },
+    total: 0
+  }
 ]
 
 </script>
 
 <template>
   <BcrosWidgetsFee :fees="fees" />
-  <hr>
 </template>
 
 <style scoped>
