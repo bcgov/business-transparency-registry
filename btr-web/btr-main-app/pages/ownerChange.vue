@@ -1,14 +1,35 @@
 <template>
   <div>
-    <div class="p-10 bg-white rounded flex">
-      <div class="p-5 flex-none w-1/5 col-auto">
-        <span class="font-bold">Add an individual person</span>
-      </div>
-      <div class="p-5 flex-none w-4/5">
-        <IndividualPersonAddNew />
+    <h1 class="font-bold text-3xl" data-cy="page-header">
+      {{ $t('pageHeadings.significantIndividualChange') }}
+    </h1>
+    <p class="mt-5" data-cy="page-info-text">
+      {{ $t('texts.significantIndividualChange') }}
+    </p>
+    <div class="mt-10 p-10 bg-white rounded flex" data-cy="effective-date-select">
+      <label class="text-lg w-[190px]">{{ $t('labels.significantIndividualChangeDate') }}</label>
+      <div class="ml-8 flex-auto">
+        <BcrosInputsDateSelect
+          :max-date="new Date()"
+          @selection="currentSIFiling.effectiveDate = dateToString($event)"
+        />
       </div>
     </div>
-    <IndividualPersonSummaryTable class="mt-5" :individuals="currentSIFiling.significantIndividuals || []" />
+    <UButton
+      v-if="!expandNewSI"
+      class="mt-10 px-4 py-3"
+      color="primary"
+      icon="i-mdi-account-plus"
+      :label="$t('labels.addIndividual')"
+      variant="outline"
+      data-cy="add-new-btn"
+      @click="expandNewSI = true"
+    />
+    <div v-else class="mt-10 p-10 bg-white rounded flex flex-row">
+      <label class="font-bold text-lg min-w-[190px]">{{ $t('labels.addIndividual') }}</label>
+      <IndividualPersonAddNew class="ml-8" @cancel="expandNewSI = false" @add="addNewSI($event)" />
+    </div>
+    <IndividualPersonSummaryTable class="mt-10" :individuals="currentSIFiling.significantIndividuals || []" />
   </div>
 </template>
 
@@ -17,6 +38,13 @@ import { storeToRefs } from 'pinia'
 
 const significantIndividuals = useSignificantIndividuals()
 const { currentSIFiling } = storeToRefs(significantIndividuals)
+
+const expandNewSI = ref(false)
+
+function addNewSI (si: SignificantIndividualI) {
+  significantIndividuals.filingAddSI(si)
+  expandNewSI.value = false
+}
 
 onBeforeMount(async () => {
   const identifier = useRoute().params.identifier as string

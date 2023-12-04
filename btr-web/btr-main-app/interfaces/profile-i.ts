@@ -4,7 +4,7 @@ export interface ProfileI {
     decisionMaking: boolean // no one else can influence decision making
     financialAffairs: boolean // is able to manage own financial affairs
   }
-  birthDate: Date
+  birthDate: string // YYYY-MM-DD
   citizenshipCA: string // FUTURE: enum
   citizenshipsExCA: BtrCountryI[]
   email: string

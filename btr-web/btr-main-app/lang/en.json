@@ -1,5 +1,6 @@
 {
   "labels": {
+    "addIndividual": "Add an Individual",
     "beneficialOwnershipAssessment": "Beneficial Ownership Assessment",
     "controls": "Controls",
     "citizenships": "Citizenship(s)",
@@ -11,6 +12,7 @@
     "shares": "Shares",
     "sharesAndVotes": "Control of Shares and Votes",
     "significanceDates": "Significance Dates",
+    "significantIndividualChangeDate": "Significant Individual Change Date",
     "lastKnownAddress": "Last Known Address",
     "citizenshipPermanentResidency": "Citizenship / Permanent Residency",
     "taxNumber": "Canada Revenue Agency (CRA) Tax Number",
@@ -36,7 +38,9 @@
     "addIndividualPerson": {
       "add": "Add transparency register information manually",
       "cancel": "Cancel transparent register information"
-    }
+    },
+    "cancel": "Cancel",
+    "done": "Done"
   },
   "texts": {
     "note": "Note: ",
@@ -101,6 +105,7 @@
     "isTaxResident": "Tax Resident of Canada",
     "isNotTaxResident": "Not a Tax Resident of Canada",
     "myRegDetails": "Your BC Registries Details are shared with businesses that list you as a beneficial owner.",
+    "significantIndividualChange": "Select the date of your significant individual changes. If you have significant individual changes that occurred on different dates, you will need to perform multiple Significant Individual Change filings — one for each unique date.",
     "tables": {
       "emptyTexts": {
         "individualsSummaryTable": "No significant individuals added yet"
@@ -128,7 +133,8 @@
     }
   },
   "pageHeadings": {
-    "myRegDetails": "My BC Registries Details"
+    "myRegDetails": "My BC Registries Details",
+    "significantIndividualChange": "Significant Individual Change"
   },
   "sectionHeadings": {
     "profileDetails": "Your Details"

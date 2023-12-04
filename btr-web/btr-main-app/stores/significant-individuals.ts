@@ -6,6 +6,15 @@ export const useSignificantIndividuals = defineStore('significantIndividuals', (
   const currentSIFiling: Ref<SignificantIndividualFilingI> = ref({}) // current significant individual change filing
   const currentSavedSIs: Ref<SignificantIndividualI[]> = ref([]) // saved SIs from api for this business
 
+  watch(() => currentSIFiling.value?.effectiveDate, (val) => {
+    // set the start date for all newly added SIs
+    for (const i in currentSIFiling.value?.significantIndividuals) {
+      if (currentSIFiling.value.significantIndividuals[i].action === FilingActionE.ADD) {
+        currentSIFiling.value.significantIndividuals[i].startDate = val
+      }
+    }
+  })
+
   /** Add currentSI to the currentSIFiling. */
   function filingAddSI (significantIndividual: SignificantIndividualI) {
     currentSIFiling.value.significantIndividuals.push(significantIndividual)

@@ -62,10 +62,7 @@ describe('AddIndividualPersonSummaryTable tests', () => {
   it('displays the Details column as expected', async () => {
     await wrapper.setProps({ individuals: [si] })
     const details = wrapper.find('[data-cy=summary-table-details]')
-    const year = si.profile.birthDate.getFullYear()
-    const month = si.profile.birthDate.getMonth() + 1
-    const day = si.profile.birthDate.getDate()
-    expect(details.text()).toContain(`${year}-${month}-${day}`)
+    expect(details.text()).toContain(si.profile.birthDate)
     expect(details.text()).toContain(si.profile.taxNumber)
     expect(details.text()).toContain('Citizenship(s):Canada')
     expect(details.text()).toContain('Tax Resident of Canada')

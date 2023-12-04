@@ -19,7 +19,7 @@
 
       <template #details-data="{ row }">
         <div data-cy="summary-table-details">
-          <span>{{ displayDate(row.profile.birthDate) }}</span><br>
+          <span>{{ row.profile.birthDate }}</span><br>
           <span v-if="row.profile.taxNumber">{{ row.profile.taxNumber }}<br></span>
           <label>{{ $t('labels.citizenships') }}:</label><br>
           <span v-if="row.profile.citizenshipCA !== 'other'">{{ $t('countries.ca') }}<br></span>
@@ -32,8 +32,9 @@
 
       <template #significanceDates-data="{ row }">
         <div data-cy="summary-table-dates">
-          {{ $t('texts.dateRange', { start: displayDate(row.startDate) || $t('labels.unknown'),
-                                     end: displayDate(row.endDate) || $t('labels.current') }) }}
+          {{ $t('texts.dateRange', {
+            start: row.startDate ? datetimeStringToDateString(row.startDate) : $t('labels.unknown'),
+            end: row.endDate ? datetimeStringToDateString(row.endDate) : $t('labels.current') }) }}
         </div>
       </template>
 
