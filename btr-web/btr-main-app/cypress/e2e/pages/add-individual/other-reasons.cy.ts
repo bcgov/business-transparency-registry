@@ -4,6 +4,8 @@ describe('pages -> Add individual', () => {
   })
 
   it('renders the OtherReason component', () => {
+    cy.get('[data-cy=add-new-btn]').trigger('click')
+
     cy.get('[data-cy="showAddIndividualPersonManually"]').trigger('click')
 
     cy.get('[data-cy="otherReasons"]')
