@@ -8,10 +8,11 @@
         <slot />
       </div>
       <div class="hidden bcroslg:block p-4">
-        <BcrosWidgetsFee :fees="payFeesWidget.fees">
+        <BcrosWidgetsFee :fees="payFeesWidget.fees" data-cy="pay-fees-widget">
           <template #emptyFees>
             <div
               class="bg-white p-3 border-gray-300 border-b-[1px] flex"
+              data-cy="pay-fees-widget-empty-fees"
             >
               <span class="font-bold text-sm mr-auto">
                 {{ $t('widgets.feeSummary.itemLabels.REGSIGIN') }}

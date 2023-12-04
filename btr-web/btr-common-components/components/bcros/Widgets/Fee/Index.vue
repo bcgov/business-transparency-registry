@@ -1,15 +1,18 @@
 <template>
-  <div class="w-[282px] bg-white p-0" data-cy="pay-fees-widget">
+  <div class="w-[282px] bg-white p-0">
     <BcrosCard>
       <template #header>
         <slot name="header">
-          <div class="bg-bcGovColor-header text-white h-bcrosRow font-bold p-3 rounded-t-md">
+          <div
+            class="bg-bcGovColor-header text-white h-bcrosRow font-bold p-3 rounded-t-md"
+            data-cy="pay-fees-widget-title"
+          >
             {{ $t('widgets.feeSummary.title') }}
           </div>
         </slot>
       </template>
       <template #default>
-        <slot v-if="hasEmptyFees" name="emptyFees" />
+        <slot v-if="hasEmptyFees" name="emptyFees" data-cy="pay-fees-widget-empty-fees" />
         <slot name="default">
           <div
             v-for="fee in fees"
@@ -30,7 +33,7 @@
       </template>
       <template #footer>
         <slot name="footer">
-          <div class="bg-white rounded-b-md shadow-md p-3 items-center flex">
+          <div class="bg-white rounded-b-md shadow-md p-3 items-center flex" data-cy="pay-fees-widget-total">
             <span class="font-bold text-sm mr-auto">
               {{ $t('widgets.feeSummary.total') }}
             </span>
@@ -40,7 +43,6 @@
             <span
               v-if="fees?.length>2"
               class="font-bold text-2xl float-right ml-2 overflow-hidden whitespace-nowrap"
-              data-cy="pay-fees-widget-total"
             >
               ${{ total }}
             </span>

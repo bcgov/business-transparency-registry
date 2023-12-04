@@ -24,14 +24,6 @@ export default defineNuxtConfig({
   imports: {
     dirs: ['enums', 'interfaces', 'stores']
   },
-  i18n: {
-    lazy: true,
-    defaultLocale: 'en',
-    langDir: './lang',
-    locales: [
-      { code: 'en', file: 'en.json' }
-    ]
-  },
   eslint: {
     /* module options */
     lintOnStart: false,
