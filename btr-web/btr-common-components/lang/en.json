@@ -33,6 +33,7 @@
       "futureEffectiveFees": "Future Effective Fees",
       "serviceFees": "Service Fees",
       "itemLabels": {
+        "TEST": "This is test entry",
         "REGSIGIN": "Significant Individual Change"
       }
     }

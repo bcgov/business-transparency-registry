@@ -26,7 +26,7 @@
               {{ `X${fee.quantity}` }}
             </span>
             <span class="font-bold text-sm float-right ml-2 overflow-hidden whitespace-nowrap">
-              {{ fee.total === 0 ? $t('widgets.feeSummary.noFee') : displayCanadianDollars(fee.total) }}
+              ${{ fee.total === 0 ? $t('widgets.feeSummary.noFee') : displayCanadianDollars(fee.total) }}
             </span>
           </div>
         </slot>
@@ -44,7 +44,7 @@
               v-if="fees?.length > 0"
               class="font-bold text-2xl float-right ml-2 overflow-hidden whitespace-nowrap"
             >
-              ${{ total }}
+              ${{ displayCanadianDollars(total) }}
             </span>
             <span
               v-else
@@ -69,7 +69,7 @@ const props = defineProps({
 const hasEmptyFees = computed(() => !props.fees?.length)
 
 const displayCanadianDollars = (amount: number) => {
-  return `$${(amount.toFixed(2))}`
+  return `${(amount.toFixed(2))}`
 }
 
 const total = computed(() => {
