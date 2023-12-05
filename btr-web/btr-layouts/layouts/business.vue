@@ -7,7 +7,7 @@
       <div class="max-w-bcrosmd p-4">
         <slot />
       </div>
-      <div class="hidden bcroslg:block p-4">
+      <div class="hidden bcroslg:block p-4 sticky top-0">
         <BcrosWidgetsFee :fees="payFeesWidget.fees" data-cy="pay-fees-widget">
           <template #emptyFees>
             <div
