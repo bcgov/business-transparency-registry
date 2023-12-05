@@ -8,7 +8,7 @@
     <UForm
       :schema="profileSchema"
       :state="significantIndividual.profile"
-      @change="addNewFee"
+      @change="addBtrPayFees"
     >
       <div class="flex-col py-5">
         <BcrosInputsNameField
@@ -215,7 +215,6 @@
 <script setup lang="ts">
 import { z } from 'zod'
 
-const payFeesWidget = usePayFeesWidget()
 const { t } = useI18n()
 const emits = defineEmits<{ add: [value: SignificantIndividualI], cancel: [value: any]}>()
 const props = defineProps<{ setSignificantIndividual?: SignificantIndividualI }>()
@@ -308,17 +307,4 @@ const taxInfoModel = computed({
     significantIndividual.value.profile.taxNumber = value.taxNumber
   }
 })
-
-const addNewFee = async () => {
-  const feeInfo = await payFeesWidget.getFeeInfo(
-    {
-      entityType: 'BTR',
-      filingTypeCode: 'REGSIGIN',
-      futureEffective: false,
-      priority: false,
-      waiveFees: false
-    }
-  )
-  payFeesWidget.addFee(feeInfo)
-}
 </script>

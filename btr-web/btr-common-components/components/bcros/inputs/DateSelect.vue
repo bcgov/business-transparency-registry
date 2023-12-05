@@ -33,7 +33,6 @@
 <script setup lang="ts">
 import { ComputedRef, Ref, computed, ref, watch } from 'vue'
 import { Popover, PopoverButton, PopoverPanel } from '@headlessui/vue'
-import moment from 'moment'
 
 defineProps<{ maxDate?: Date }>()
 
@@ -47,7 +46,7 @@ const updateDate = (val: Date | null) => {
 }
 
 const selectedDateDisplay: ComputedRef<string> = computed(
-  () => selectedDate.value ? moment(selectedDate.value).format('YYYY-MM-DD') : ''
+  () => selectedDate.value ? datetimeStringToDateString(selectedDate.value) : ''
 )
 
 </script>
