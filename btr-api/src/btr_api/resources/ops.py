@@ -31,28 +31,31 @@
 # CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
-from flask import Flask
+from http import HTTPStatus
 
-from .base import bp as base_endpoint
-from .ops import bp as ops_endpoint
-from .submission import bp as submission_endpoint
+from flask import Blueprint, current_app, jsonify, request
+from sqlalchemy import exc, text
+
+from btr_api.models import db
 
 
-def register_endpoints(app: Flask):
-    # Allow base route to match with, and without a trailing slash
-    app.url_map.strict_slashes = False
+bp = Blueprint("ops", __name__)
 
-    app.register_blueprint(
-        url_prefix="/",
-        blueprint=base_endpoint,
-    )
+@bp.route("/healthz", methods=("GET",))
+def healthy():
+    try:
+      db.session.execute(text('select 1'))
+    except exc.SQLAlchemyError as db_exception:
+        current_app.logger.error('DB connection pool unhealthy:' + repr(db_exception))
+        return {'message': 'api is down'}, HTTPStatus.INTERNAL_SERVER_ERROR
+    except Exception as default_exception:  # noqa: B902; log error
+        current_app.logger.error('DB connection failed:' + repr(default_exception))
+        return {'message': 'api is down'}, 500
 
-    app.register_blueprint(
-        url_prefix="/ops",
-        blueprint=ops_endpoint,
-    )
+    return {'message': 'api is healthy'}, HTTPStatus.OK
 
-    app.register_blueprint(
-        url_prefix="/plots",
-        blueprint=submission_endpoint,
-    )
+
+@bp.route("/readyz", methods=("GET",))
+def ready():
+    """Return a JSON object that identifies if the service is setup and ready to work."""
+    return {'message': 'api is ready'}, HTTPStatus.OK
