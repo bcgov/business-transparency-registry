@@ -33,8 +33,8 @@
       <template #significanceDates-data="{ row }">
         <div data-cy="summary-table-dates">
           {{ $t('texts.dateRange', {
-            start: row.startDate ? datetimeStringToDateString(row.startDate) : $t('labels.unknown'),
-            end: row.endDate ? datetimeStringToDateString(row.endDate) : $t('labels.current') }) }}
+            start: row.startDate ? row.startDate : $t('labels.unknown'),
+            end: row.endDate ? row.endDate : $t('labels.current') }) }}
         </div>
       </template>
 

@@ -17,7 +17,7 @@ export const useSignificantIndividuals = defineStore('significantIndividuals', (
 
   /** Add currentSI to the currentSIFiling. */
   function filingAddSI (significantIndividual: SignificantIndividualI) {
-    currentSIFiling.value.significantIndividuals.push(significantIndividual)
+    currentSIFiling.value.significantIndividuals.unshift(significantIndividual)
   }
 
   /** Initialize a new significant individual filing */

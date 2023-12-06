@@ -121,6 +121,10 @@
     "reviewConfirm": "Review the information in your registration. If you need to change anything, return to the previous step to make the necessary change."
   },
   "placeholders": {
+    "dateSelect": {
+      "birthdate": "Select Date",
+      "significantIndividualChange": "Significant Individual Change Date"
+    },
     "taxNumber": "CRA Tax Number (SIN, ITN, or TTN)"
   },
   "errors": {
