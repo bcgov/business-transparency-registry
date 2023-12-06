@@ -4,6 +4,22 @@ export default <Partial<Config>>{
   content: ['*.{html,ts,js,vue}'],
   theme: {
     extend: {
+      height: {
+        bcrosRow: '46px'
+      },
+      maxWidth: {
+        bcrosmd: '1020px',
+        bcroslg: '1360px'
+      },
+      width: {
+        bcrosmd: '1020px',
+        bcroslg: '1360px'
+      },
+      screens: {
+        // => @media (min-width: 1020px) { ... }
+        bcrosmd: '1020px',
+        bcroslg: '1360px'
+      },
       colors: {
         bcGovColor: {
           // these colors are as defined in styleguide:

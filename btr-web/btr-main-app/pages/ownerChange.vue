@@ -11,7 +11,7 @@
       <div class="ml-8 flex-auto">
         <BcrosInputsDateSelect
           :max-date="new Date()"
-          @selection="currentSIFiling.effectiveDate = dateToString($event)"
+          @selection="significantIndividualChangeDate($event)"
         />
       </div>
     </div>
@@ -41,6 +41,11 @@ const { currentSIFiling } = storeToRefs(significantIndividuals)
 
 const expandNewSI = ref(false)
 
+const significantIndividualChangeDate = (event) => {
+  currentSIFiling.value.effectiveDate = datetimeStringToDateString(event)
+  addBtrPayFees()
+}
+
 function addNewSI (si: SignificantIndividualI) {
   significantIndividuals.filingAddSI(si)
   expandNewSI.value = false
@@ -54,7 +59,3 @@ onBeforeMount(async () => {
 })
 
 </script>
-
-<style scoped>
-
-</style>

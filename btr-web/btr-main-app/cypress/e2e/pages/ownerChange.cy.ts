@@ -25,9 +25,14 @@ describe('pages -> Beneficial Owner Change', () => {
     cy.get('[data-cy=date-select]').trigger('click')
     cy.get('[data-cy=date-picker]').should('exist')
     cy.get('[data-cy=date-picker]').get('.bcros-date-picker__calendar__day').should('exist')
-    cy.get('[data-cy=date-picker]').get('.bcros-date-picker__calendar__day.dp__today').trigger('click')
-    const today = moment(new Date()).format('MM/D/YYYY')
-    cy.get('[data-cy=date-select]').should('have.value', today)
+    cy.get('[data-cy=date-picker]').get('.bcros-date-picker__calendar__day').eq(0).trigger('click')
+
+    const today = new Date()
+    const year = today.getFullYear()
+    const monty = today.getMonth()
+    const day = 1
+    const expectedDate = moment(new Date(year, monty, day)).format('YYYY-MM-DD')
+    cy.get('[data-cy=date-select]').should('have.value', expectedDate)
   })
 
   it('expands add individual component when add individual button is clicked', () => {

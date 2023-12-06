@@ -8,6 +8,7 @@
     <UForm
       :schema="profileSchema"
       :state="significantIndividual.profile"
+      @change="addBtrPayFees"
     >
       <div class="flex-col py-5">
         <BcrosInputsNameField
@@ -307,5 +308,3 @@ const taxInfoModel = computed({
   }
 })
 </script>
-
-<style scoped></style>

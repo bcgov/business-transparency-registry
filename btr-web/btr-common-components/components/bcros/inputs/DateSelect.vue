@@ -45,9 +45,8 @@ const updateDate = (val: Date | null) => {
   selectedDate.value = val
 }
 
-const selectedDateDisplay: ComputedRef<string> = computed(() => selectedDate.value?.toLocaleDateString() || '')
+const selectedDateDisplay: ComputedRef<string> = computed(
+  () => selectedDate.value ? datetimeStringToDateString(selectedDate.value) : ''
+)
 
 </script>
-
-<style lang="scss" scoped>
-</style>
