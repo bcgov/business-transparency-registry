@@ -1,0 +1,23 @@
+{
+  "fullName": "John Smith",
+  "preferredName": "John",
+  "email": "123@test.com",
+  "percentOfShares": "20",
+  "percentOfVotes": "10",
+  "address": {
+    "country": "Canada",
+    "streetAddress": "111 test street",
+    "city": "Vancouver",
+    "province": ["British Columbia", "BC"],
+    "postalCode": "V0E 1H5"
+  },
+  "taxNumber": "123456789",
+  "taxResidency": "true",
+  "summaryTable": {
+    "citizenship": "Citizenship(s):Canada",
+    "taxResidency": "Tax Resident of Canada",
+    "shareControl": "Registered owner of 20% of shares, 10% of votes",
+    "directorControl": "Direct control of the majority of directors"
+  }
+}
+  

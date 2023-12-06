@@ -10,7 +10,7 @@ describe('pages -> Add individual', () => {
     cy.visit('/')
   })
 
-  it('verify TaxResidency component is working', () => {
+  it('verify the control of director component is working', () => {
     cy.get('[data-cy=add-new-btn]').trigger('click')
     cy.get('[data-cy="showAddIndividualPersonManually"]').trigger('click')
 
