@@ -55,6 +55,8 @@
       </div>
     </div>
   </div>
+  <ReviewConfirmCertify :name="account.userFullName.value" :date="currentSIFiling.effectiveDate"/>
+  {{  currentSIFiling }}
 </template>
 
 <script setup lang="ts">
@@ -78,4 +80,5 @@ const schemaFolioNumber = z.object({
   ])
     .optional()
 })
+const account = storeToRefs(useBcrosAccount())
 </script>
