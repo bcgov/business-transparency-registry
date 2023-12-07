@@ -130,6 +130,7 @@
           {{ $t('labels.birthdate') }}
         </p>
         <BcrosInputsDateSelect
+          id="addNewPersonBirthdate"
           class="mt-3"
           :max-date="new Date()"
           @selection="significantIndividual.profile.birthDate = dateToString($event, 'YYYY-MM-DD')"
