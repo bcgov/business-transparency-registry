@@ -15,7 +15,7 @@ python-dotenv = "^1.0.0"
 flask-sqlalchemy = "^3.0.5"
 flask-migrate = "^4.0.4"
 psycopg2 = "^2.9.5"
-sql-versioning = { git = "https://github.com/bcgov/lear.git", subdirectory = "python/common/sql-versioning", branch = "main" }
+sql-versioning = { git = "https://github.com/bcgov/lear.git", subdirectory = "python/common/sql-versioning", branch = "feature-legal-name" }
 sentry-sdk = "^1.24.0"
 flask-babel = "^4.0.0"
 flask-jwt-oidc = "^0.3.0"
