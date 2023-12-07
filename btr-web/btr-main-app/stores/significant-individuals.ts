@@ -39,7 +39,8 @@ export const useSignificantIndividuals = defineStore('significantIndividuals', (
       businessIdentifier,
       significantIndividuals: currentSavedSIs.value,
       effectiveDate: null,
-      folioNumber: folioNum
+      folioNumber: folioNum,
+      certified: false
     }
   }
 

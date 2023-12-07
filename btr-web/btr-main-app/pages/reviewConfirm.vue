@@ -54,9 +54,13 @@
         </UForm>
       </div>
     </div>
+    <ReviewConfirmCertify
+      v-model="currentSIFiling.certified"
+      :name="account.userFullName.value"
+      :date="currentSIFiling.effectiveDate"
+      data-cy="certification-checkbox"
+    />
   </div>
-  <ReviewConfirmCertify :name="account.userFullName.value" :date="currentSIFiling.effectiveDate"/>
-  {{  currentSIFiling }}
 </template>
 
 <script setup lang="ts">
