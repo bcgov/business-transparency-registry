@@ -4,7 +4,7 @@
       <UInput
         :model-value="selectedDateDisplay"
         icon="i-mdi-calendar"
-        :placeholder="$t('placeholders.dateSelect')"
+        :placeholder="placeholder || ''"
         trailing
         type="text"
         variant="bcGov"
@@ -34,7 +34,7 @@
 import { ComputedRef, Ref, computed, ref, watch } from 'vue'
 import { Popover, PopoverButton, PopoverPanel } from '@headlessui/vue'
 
-defineProps<{ maxDate?: Date }>()
+defineProps<{ maxDate?: Date, placeholder?: string }>()
 
 const emit = defineEmits<{(e: 'selection', value: Date | null): void }>()
 

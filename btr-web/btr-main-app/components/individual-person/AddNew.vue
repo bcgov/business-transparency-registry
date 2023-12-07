@@ -133,6 +133,7 @@
           id="addNewPersonBirthdate"
           class="mt-3"
           :max-date="new Date()"
+          :placeholder="$t('placeholders.dateSelect.birthdate')"
           @selection="significantIndividual.profile.birthDate = dateToString($event, 'YYYY-MM-DD')"
         />
       </div>
@@ -218,7 +219,7 @@ import { z } from 'zod'
 
 const { t } = useI18n()
 const emits = defineEmits<{ add: [value: SignificantIndividualI], cancel: [value: any]}>()
-const props = defineProps<{ setSignificantIndividual?: SignificantIndividualI }>()
+const props = defineProps<{ setSignificantIndividual?: SignificantIndividualI, startDate?: string }>()
 const defaultSI = {
   profile: {
     fullName: '',
@@ -262,11 +263,15 @@ const defaultSI = {
   missingInfoReason: undefined,
   percentOfShares: '',
   percentOfVotes: '',
-  startDate: useSignificantIndividuals().currentSIFiling?.effectiveDate || '',
+  startDate: props.startDate || '',
   action: FilingActionE.ADD
 }
 // NOTE: not setting this as modelValue because it is a nested object so mutating it gets complicated
 const significantIndividual: Ref<SignificantIndividualI> = ref(props.setSignificantIndividual || defaultSI)
+
+watch(() => props.startDate, (val) => {
+  significantIndividual.value.startDate = val
+})
 
 function addSignificantIndividual () {
   // FUTURE: validate form / scroll to 1st error

@@ -30,5 +30,10 @@ describe('Business Store Tests', () => {
     significantIndividuals.filingAddSI(testSI)
     // FUTURE: call mocked and returning a list of existing SIs
     expect(currentSIFiling.value.significantIndividuals).toEqual([testSI])
+    // add another one and ensure it is first
+    const newTestSI = { ...testSI }
+    newTestSI.profile.fullName = 'Test Name 2'
+    significantIndividuals.filingAddSI(newTestSI)
+    expect(currentSIFiling.value.significantIndividuals).toEqual([newTestSI, testSI])
   })
 })

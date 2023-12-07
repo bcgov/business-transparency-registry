@@ -11,6 +11,7 @@
       <div class="ml-8 flex-auto">
         <BcrosInputsDateSelect
           :max-date="new Date()"
+          :placeholder="$t('placeholders.dateSelect.significantIndividualChange')"
           @selection="significantIndividualChangeDate($event)"
         />
       </div>
@@ -27,7 +28,12 @@
     />
     <div v-else class="mt-10 p-10 bg-white rounded flex flex-row">
       <label class="font-bold text-lg min-w-[190px]">{{ $t('labels.addIndividual') }}</label>
-      <IndividualPersonAddNew class="ml-8" @cancel="expandNewSI = false" @add="addNewSI($event)" />
+      <IndividualPersonAddNew
+        class="ml-8"
+        :start-date="currentSIFiling.effectiveDate"
+        @cancel="expandNewSI = false"
+        @add="addNewSI($event)"
+      />
     </div>
     <IndividualPersonSummaryTable class="mt-10" :individuals="currentSIFiling.significantIndividuals || []" />
   </div>
@@ -41,8 +47,8 @@ const { currentSIFiling } = storeToRefs(significantIndividuals)
 
 const expandNewSI = ref(false)
 
-const significantIndividualChangeDate = (event) => {
-  currentSIFiling.value.effectiveDate = datetimeStringToDateString(event)
+const significantIndividualChangeDate = (event: Date) => {
+  currentSIFiling.value.effectiveDate = dateToString(event, 'YYYY-MM-DD')
   addBtrPayFees()
 }
 
