@@ -72,12 +72,10 @@ describe('pages -> Review and Confirm', () => {
       // verify the url changes to /review-confirm
       cy.url().should('include', '/review-confirm')
 
-      // TO-DO: uncomment the following section when the bug in date picker is fixed
-
-      // // check the significant individual change date is correct
-      // const today = new Date()
-      // const expectedDate = today.toISOString().split('T')[0]
-      // cy.get('[data-cy=effective-date-select]').contains(expectedDate)
+      // check the significant individual change date is correct
+      const today = new Date()
+      const expectedDate = today.toISOString().split('T')[0]
+      cy.get('[data-cy=effective-date-select]').contains(expectedDate)
 
       // check if the summary table contain the correct data
       const summaryTable = cy.get('[data-cy="individualsSummaryTable"]')
@@ -93,8 +91,7 @@ describe('pages -> Review and Confirm', () => {
       summaryTable.get('[data-cy=summary-table-details]').contains(testData.summaryTable.citizenship)
       summaryTable.get('[data-cy=summary-table-details]').contains(testData.summaryTable.taxResidency)
 
-      // TO-DO: uncomment the following section when the bug in date picker is fixed
-      // summaryTable.get('[data-cy=summary-table-dates]').contains(expectedDate)
+      summaryTable.get('[data-cy=summary-table-dates]').contains(expectedDate)
 
       summaryTable.get('[data-cy=summary-table-controls]').contains(testData.summaryTable.shareControl)
       summaryTable.get('[data-cy=summary-table-controls]').contains(testData.summaryTable.directorControl)

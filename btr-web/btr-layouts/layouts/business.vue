@@ -3,12 +3,12 @@
     <BcrosHeader />
     <BcrosBreadcrumb v-if="crumbConstructors.length > 0" :crumb-constructors="crumbConstructors" />
     <BcrosBusinessDetails />
-    <div class="mx-auto p-4 w-full max-w-bcroslg flex justify-center items-start">
-      <div class="max-w-bcrosmd p-4">
+    <div class="mx-auto px-4 w-full max-w-bcroslg flex">
+      <div>
         <slot />
       </div>
-      <div class="hidden bcroslg:block p-4 sticky top-0">
-        <BcrosWidgetsFee :fees="payFeesWidget.fees" data-cy="pay-fees-widget">
+      <div class="flex-none ml-8 mt-10">
+        <BcrosWidgetsFee class="sticky top-10" :fees="payFeesWidget.fees" data-cy="pay-fees-widget">
           <template #emptyFees>
             <div
               class="bg-white p-3 border-gray-300 border-b-[1px] flex"
