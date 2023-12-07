@@ -1,3 +1,4 @@
+import { dateToString } from '../../../../btr-common-components/utils/date'
 import payFeesForBtrRegsigin from '../../fixtures/payFeeForBtrRegsigin.json'
 
 describe('pages -> Review and Confirm', () => {
@@ -74,7 +75,7 @@ describe('pages -> Review and Confirm', () => {
 
       // check the significant individual change date is correct
       const today = new Date()
-      const expectedDate = today.toISOString().split('T')[0]
+      const expectedDate = dateToString(today, 'YYYY-MM-DD')
       cy.get('[data-cy=effective-date-select]').contains(expectedDate)
 
       // check if the summary table contain the correct data

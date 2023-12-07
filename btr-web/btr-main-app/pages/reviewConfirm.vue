@@ -12,7 +12,7 @@
     <div class="mt-10 p-10 bg-white rounded flex" data-cy="effective-date-select">
       <label class="font-bold text-lg w-[200px]">{{ $t('labels.significantIndividualChangeDate') }}</label>
       <div class="ml-10 text-lg">
-        {{ datetimeStringToDateString (currentSIFiling.effectiveDate) }}
+        {{ currentSIFiling.effectiveDate }}
       </div>
     </div>
     <div class="bg-white rounded-[5px] mt-10">
