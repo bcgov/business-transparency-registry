@@ -58,7 +58,7 @@
       v-model="currentSIFiling.certified"
       :name="account.userFullName.value"
       :date="currentSIFiling.effectiveDate"
-      data-cy="certification-checkbox"
+      data-cy="certify-section"
     />
   </div>
 </template>

@@ -34,7 +34,8 @@
         "sentence2": "Indicating that it is not possible to obtain or confirm information about an individual constitutes a statement in respect of a material fact."
       }
     },
-    "unknown": "Unknown"
+    "unknown": "Unknown",
+    "certifySection": "2. Certify"
   },
   "buttons": {
     "addIndividualPerson": {
@@ -120,7 +121,14 @@
     },
     "taxNumber": "A 9-digit Social Insurance Number (SIN), an Individual Tax Number (ITN), or a Temporary Taxation Number (TTN) is required if this person has one.",
     "taxResidency": "Indicate if this person is a resident of Canada for Income Tax purposes.",
-    "reviewConfirm": "Review the information in your registration. If you need to change anything, return to the previous step to make the necessary change."
+    "reviewConfirm": "Review the information in your registration. If you need to change anything, return to the previous step to make the necessary change.",
+    "certify": {
+      "certification": "Certification",
+      "part1": "I, ",
+      "part2": ", certify that I have relevant knowledge of this BC Benefit Company and that I am authorized to make this filing.",
+      "date": "Date: ",
+      "note": "Note: It is an offence to make a false or misleading statement in respect of a material fact in a record submitted to the Corporate Registry for filing. See section 427 of the Business Corporations Act."
+    }
   },
   "placeholders": {
     "dateSelect": {

@@ -1,32 +1,39 @@
 <template>
-  <h2 class="font-bold text-lg mt-5" data-cy="review-confirm-section-heading">
-    2. Certify
-  </h2>
-  <div class="mt-5 p-10 bg-white rounded flex" data-cy="effective-date-select">
-    <label class="font-bold text-lg w-[200px]">Certification</label>
-    <div class="ml-10 text-lg">
-      <div>
-        <UCheckbox
-          v-model="certified"
-          name="certification"
-          variant="bcGov"
-          @change="$emit('update:modelValue', certified)"
-        >
-          <template #label>
-            <div class="text-sm">
-              <div>
-                I, <span class="font-bold"> {{ name.toUpperCase() }}</span>, certify that I have relevant knowledge of this BC Benefit Company and that I am authorized to make this filing.
-              </div><br>
-              <div>
-                Date: {{ date }}
-              </div><br>
-              <div>
-                Note:It is an offence to make a false or misleading statement in respect of a material fact in a record submitted to the Corporate Registry for filing.
-                See section 427 of the Business Corporations Act.
+  <div>
+    <h2 class="font-bold text-lg mt-5" data-cy="certify-section-label">
+      {{ $t('labels.certifySection') }}
+    </h2>
+    <div class="mt-5 p-10 bg-white rounded flex">
+      <label class="font-bold w-[200px]">{{ $t('texts.certify.certification') }}</label>
+      <div class="ml-20">
+        <div>
+          <UCheckbox
+            v-model="certified"
+            name="certification"
+            variant="bcGov"
+            data-cy="certify-section-checkbox"
+            @change="$emit('update:modelValue', certified)"
+          >
+            <template #label>
+              <div class="text-sm">
+                <div>
+                  {{ $t('texts.certify.part1') }}
+                  <span class="font-bold"> {{ name.toUpperCase() }}</span>
+                  {{ $t('texts.certify.part2') }}
+                </div>
+                <br>
+                <div>
+                  {{ $t('texts.certify.date') }}
+                  {{ date }}
+                </div>
+                <br>
+                <div>
+                  {{ $t('texts.certify.note') }}
+                </div>
               </div>
-            </div>
-          </template>
-        </UCheckbox>
+            </template>
+          </UCheckbox>
+        </div>
       </div>
     </div>
   </div>
