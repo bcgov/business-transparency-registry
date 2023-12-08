@@ -5,7 +5,7 @@ export interface ProfileI {
     financialAffairs: boolean // is able to manage own financial affairs
   }
   birthDate: string // YYYY-MM-DD
-  citizenshipCA: string // FUTURE: enum
+  citizenshipCA: CitizenshipTypeE
   citizenshipsExCA: BtrCountryI[]
   email: string
   hasTaxNumber: boolean

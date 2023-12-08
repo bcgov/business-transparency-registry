@@ -4,10 +4,12 @@ import payFeesForBtrRegsigin from '../../fixtures/payFeeForBtrRegsigin.json'
 describe('pages -> Review and Confirm', () => {
   beforeEach(() => {
     cy.visit('/')
+    cy.wait(1000)
   })
 
   it('verify pay fee widget is visible and base state is available', () => {
     cy.visit('/BC0871427/beneficial-owner-change/review-confirm')
+    cy.wait(1000)
     cy.viewport(2560, 1440)
     cy.intercept(
       'GET',

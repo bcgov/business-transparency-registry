@@ -2,7 +2,7 @@
   "labels": {
     "addIndividual": "Add an Individual",
     "beneficialOwnershipAssessment": "Beneficial Ownership Assessment",
-    "controls": "Controls",
+    "control": "Control",
     "citizenships": "Citizenship(s)",
     "current": "Current",
     "details": "Details",
@@ -49,6 +49,7 @@
     "beneficialOwnershipAssessmentText1": "Beneficial Ownership is determined by the control of of shares and/or votes at general meetings, and control of the right to elect, appoint, or remove directors of the business.",
     "beneficialOwnershipAssessmentText2": "Complete following assessment to determine this person’s beneficial ownership status.",
     "dateRange": "{start} to {end}",
+    "noCRATaxNumber": "No CRA Tax Number",
     "sharesAndVotes": {
       "controlPercentage": "Enter the percentage of shares issued for the business and/or shares entitled to votes at general meetings this individual owns or ultimately controls (or can exercise ultimate effective control over).",
       "inConcertControl": {

@@ -16,15 +16,13 @@
       {{ $t('labels.countryOfCitizenship.selectAll') }}
       <BcrosInputsCountriesOfCitizenshipDropdown
         v-model="citizenshipsInternal"
-        :disabled="citizenshipType !== VALUE_OTHER"
+        :disabled="citizenshipType !== CitizenshipTypeE.OTHER"
       />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-const VALUE_OTHER = 'other'
-
 const { t } = useI18n()
 const emit = defineEmits<{
   'update:citizenships': [value: Array<BtrCountryI>]
@@ -40,7 +38,7 @@ const citizenshipType = computed({
     return props.canadianCitizenship
   },
   set (value) {
-    if (value !== VALUE_OTHER) {
+    if (value !== CitizenshipTypeE.OTHER) {
       citizenshipsInternal.value = []
     }
     emit('update:canadianCitizenship', value)
@@ -57,13 +55,13 @@ const citizenshipsInternal = computed({
 })
 
 const options = [{
-  value: 'citizen',
+  value: CitizenshipTypeE.CITIZEN,
   label: t('labels.countryOfCitizenship.citizen')
 }, {
-  value: 'pr',
+  value: CitizenshipTypeE.PR,
   label: t('labels.countryOfCitizenship.pr')
 }, {
-  value: VALUE_OTHER,
+  value: CitizenshipTypeE.OTHER,
   label: t('labels.countryOfCitizenship.others')
 }]
 </script>
