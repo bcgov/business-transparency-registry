@@ -103,10 +103,4 @@ describe('pages -> Beneficial Owner Change', () => {
     cy.get('[data-cy="individualsSummaryTable"]').get('td')
       .should('contain.text', 'No significant individuals added yet')
   })
-
-  it('verify significantIndividualChangeFolioNumber is rendered as expected', () => {
-    cy.get('[data-cy=significantIndividualChangeFolioNumberLabel]').should('have.text', 'Folio or Reference Number')
-    cy.get('[data-cy=significantIndividualChangeFolioNumberTextArea]').type('123123')
-    cy.get('[data-cy=significantIndividualChangeFolioNumberTextArea]').should('have.value', '123123')
-  })
 })

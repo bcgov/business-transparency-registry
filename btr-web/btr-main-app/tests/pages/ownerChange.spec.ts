@@ -20,9 +20,4 @@ describe('Tests for owner change page', () => {
     expect(wrapper.find('[data-test="addIndividualPerson"]').exists()).toBe(false)
     expect(wrapper.find('THERE IS NO SUCH THING HERE').exists()).toBe(false)
   })
-
-  test('significantIndividualChangeFolioNumber is being displayed', () => {
-    expect(wrapper.find('[data-cy=significantIndividualChangeFolioNumberLabel]').exists()).toBe(true)
-    expect(wrapper.find('[data-cy=significantIndividualChangeFolioNumberTextArea]').exists()).toBe(true)
-  })
 })

@@ -12,7 +12,7 @@
     "shares": "Shares",
     "sharesAndVotes": "Control of Shares and Votes",
     "significanceDates": "Significance Dates",
-    "significantIndividuals": "Significant Individuals", 
+    "significantIndividuals": "Significant Individuals",
     "significantIndividualChangeDate": "Significant Individual Change Date",
     "lastKnownAddress": "Last Known Address",
     "citizenshipPermanentResidency": "Citizenship / Permanent Residency",
@@ -141,6 +141,10 @@
         "specialCharacter": "The CRA tax number should not contain special characters",
         "invalidLength": "The CRA tax number should be 9 digits long",
         "invalidNumber": "The CRA tax number is invalid"
+      },
+      "folioNumber": {
+        "maxLengthExceeded": "The Folio or Reference number should be up to 30 characters",
+        "specialCharacter": "The Folio or Reference number should contain only alpha numeric characters"
       }
     }
   },

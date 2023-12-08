@@ -18,4 +18,9 @@ describe('Tests for review and confirm page', () => {
     expect(wrapper.find('[data-cy="summary-table-header"]').exists()).toBe(true)
     expect(wrapper.find('[data-cy="individualsSummaryTable"]').exists()).toBe(true)
   })
+
+  test('significantIndividualChangeFolioNumber is being displayed', () => {
+    expect(wrapper.find('[data-cy=significantIndividualChangeFolioNumberLabel]').exists()).toBe(true)
+    expect(wrapper.find('[data-cy=significantIndividualChangeFolioNumberTextArea]').exists()).toBe(true)
+  })
 })
