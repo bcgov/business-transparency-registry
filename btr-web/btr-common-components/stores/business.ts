@@ -5,7 +5,7 @@ import { defineStore } from 'pinia'
 /** Manages bcros business data */
 export const useBcrosBusiness = defineStore('bcros/business', () => {
   const currentBusiness: Ref<BusinessI> = ref({} as BusinessI)
-  const currentFolioNumber: Ref<string> = ref("")
+  const currentFolioNumber: Ref<string> = ref('')
 
   const currentBusinessIdentifier = computed((): string => currentBusiness.value.identifier)
   const currentBusinessName = computed((): string => {
