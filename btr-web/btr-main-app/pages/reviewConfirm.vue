@@ -56,7 +56,7 @@
     </div>
     <ReviewConfirmCertify
       v-model="currentSIFiling.certified"
-      :name="account.userFullName.value"
+      :name="userFullName"
       :date="currentSIFiling.effectiveDate"
       data-cy="certify-section"
     />
@@ -84,5 +84,6 @@ const schemaFolioNumber = z.object({
   ])
     .optional()
 })
-const account = storeToRefs(useBcrosAccount())
+
+const { userFullName } = storeToRefs(useBcrosAccount())
 </script>

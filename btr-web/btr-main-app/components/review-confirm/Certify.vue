@@ -1,7 +1,7 @@
 <template>
   <div>
     <h2 class="font-bold text-lg mt-5" data-cy="certify-section-label">
-      {{ $t('labels.certifySection') }}
+      2. {{ $t('labels.certifySection') }}
     </h2>
     <div class="mt-5 p-10 bg-white rounded flex">
       <label class="font-bold w-[200px]">{{ $t('texts.certify.certification') }}</label>
@@ -17,9 +17,11 @@
             <template #label>
               <div class="text-sm">
                 <div>
-                  {{ $t('texts.certify.part1') }}
-                  <span class="font-bold"> {{ name.toUpperCase() }}</span>
-                  {{ $t('texts.certify.part2') }}
+                  <span>{{ $t('texts.certify.part1') }}</span>
+                  <span class="font-bold">
+                    {{ name.toUpperCase() }}
+                  </span>
+                  <span>{{ $t('texts.certify.part2') }}</span>
                 </div>
                 <br>
                 <div>
