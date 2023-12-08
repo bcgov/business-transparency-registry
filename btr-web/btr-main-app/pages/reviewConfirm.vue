@@ -46,7 +46,7 @@
               class="my-0"
               type="text"
               variant="bcGov"
-              :placeholder="$t('labels.folioNumber') + `(${$t('labels.optional')})`"
+              :placeholder="`${$t('labels.folioNumber')} (${$t('labels.optional')})`"
               data-cy="significantIndividualChangeFolioNumberTextArea"
               @change="addBtrPayFees"
             />
@@ -69,8 +69,13 @@ const { currentSIFiling } = storeToRefs(significantIndividuals)
 const maxFolioNumberLength = 30
 
 const schemaFolioNumber = z.object({
-  folioNumber: z.string()
-    .max(maxFolioNumberLength, t('errors.validation.folioNumber.maxLengthExceeded'))
-    .refine(validateFolioNumberCharacters, t('errors.validation.folioNumber.specialCharacter'))
+  folioNumber: z.union([
+    z.string()
+      .min(1)
+      .max(maxFolioNumberLength, t('errors.validation.folioNumber.maxLengthExceeded'))
+      .refine(validateFolioNumberCharacters, t('errors.validation.folioNumber.specialCharacter')),
+    z.string().length(0)
+  ])
+    .optional()
 })
 </script>
