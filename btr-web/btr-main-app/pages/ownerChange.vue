@@ -36,11 +36,12 @@
       />
     </div>
     <IndividualPersonSummaryTable class="mt-10" :individuals="currentSIFiling.significantIndividuals || []" />
-    <div class="mt-10 p-10 bg-white rounded flex align-middle" data-cy="effective-date-select">
+    <div class="mt-10 p-10 bg-white rounded flex align-middle">
       <div class="my-auto">
         <label
           for="significantIndividualChangeFolioNumber"
           class="text-lg max-w-[190px] w-[190px]"
+          data-cy="significantIndividualChangeFolioNumberLabel"
         >
           {{ $t('labels.folioNumber') }}
         </label>
@@ -55,6 +56,7 @@
             type="text"
             variant="bcGov"
             :placeholder="$t('labels.folioNumber') + `(${$t('labels.optional')})`"
+            data-cy="significantIndividualChangeFolioNumberTextArea"
             @change="addBtrPayFees"
           />
         </UFormGroup>
