@@ -46,8 +46,8 @@ describe('pages -> Beneficial Owner Change', () => {
     cy.get('[data-cy=addIndividualPerson]').should('not.contain.text', 'Beneficial Ownership Assessment')
     cy.get('[data-cy=new-si-cancel-btn]').should('have.text', 'Cancel')
     cy.get('[data-cy=new-si-done-btn]').should('have.text', 'Done')
-    // should hide add button while add individual is expanded
-    cy.get('[data-cy=add-new-btn]').should('not.exist')
+    // should disable add button while add individual is expanded
+    cy.get('[data-cy=add-new-btn]').should('have.attr', 'disabled')
   })
 
   it('expands all parts when manual entry clicked', () => {
@@ -70,24 +70,24 @@ describe('pages -> Beneficial Owner Change', () => {
   it('has expected cancel button functionality with add individual', () => {
     cy.get('[data-cy=add-new-btn]').trigger('click')
     cy.get('[data-cy=addIndividualPerson]').should('exist')
-    cy.get('[data-cy=add-new-btn]').should('not.exist')
+    cy.get('[data-cy=add-new-btn]').should('have.attr', 'disabled')
 
     cy.get('[data-cy=new-si-cancel-btn]').trigger('click')
     cy.get('[data-cy=addIndividualPerson]').should('not.exist')
-    cy.get('[data-cy=add-new-btn]').should('exist')
+    cy.get('[data-cy=add-new-btn]').should('not.have.attr', 'disabled')
   })
 
   it('has expected done button functionality with add individual', () => {
     cy.get('[data-cy=add-new-btn]').trigger('click')
     cy.get('[data-cy=addIndividualPerson]').should('exist')
-    cy.get('[data-cy=add-new-btn]').should('not.exist')
+    cy.get('[data-cy=add-new-btn]').should('have.attr', 'disabled')
 
     // FUTURE: fill out full form so it passes validation
     const testName = 'Mr Tester'
     cy.get('[data-cy=testFullName]').get('#individual-person-full-name').type(testName)
     cy.get('[data-cy=new-si-done-btn]').trigger('click')
     cy.get('[data-cy=addIndividualPerson]').should('not.exist')
-    cy.get('[data-cy=add-new-btn]').should('exist')
+    cy.get('[data-cy=add-new-btn]').should('not.have.attr', 'disabled')
     cy.get('[data-cy=individualsSummaryTable]').get('td').eq(0).should('have.text', testName.toUpperCase())
   })
 
@@ -98,7 +98,7 @@ describe('pages -> Beneficial Owner Change', () => {
       .and('contain', 'Address')
       .and('contain', 'Details')
       .and('contain', 'Significance Dates')
-      .and('contain', 'Controls')
+      .and('contain', 'Control')
     // body should contain correct empty text
     cy.get('[data-cy="individualsSummaryTable"]').get('td')
       .should('contain.text', 'No significant individuals added yet')

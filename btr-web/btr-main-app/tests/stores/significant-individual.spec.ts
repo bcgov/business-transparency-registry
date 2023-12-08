@@ -26,14 +26,19 @@ describe('Business Store Tests', () => {
 
   it('adds a new significant individual to the filing as expected', async () => {
     const identifier = 'BC1234567'
+    const startingSI = { ...testSI }
+    startingSI.profile.name = 'starting si name'
+    delete startingSI.action
+    // FUTURE: call mocked and returning a list of existing SIs
+    currentSavedSIs.value = [startingSI]
     await significantIndividuals.filingInit(identifier)
     significantIndividuals.filingAddSI(testSI)
-    // FUTURE: call mocked and returning a list of existing SIs
-    expect(currentSIFiling.value.significantIndividuals).toEqual([testSI])
-    // add another one and ensure it is first
+    // ensure it is ahead of the 'current' one
+    expect(currentSIFiling.value.significantIndividuals).toEqual([testSI, startingSI])
+    // add another one and ensure it is behind the 1st added one, but still ahead of the 'current' one
     const newTestSI = { ...testSI }
     newTestSI.profile.fullName = 'Test Name 2'
     significantIndividuals.filingAddSI(newTestSI)
-    expect(currentSIFiling.value.significantIndividuals).toEqual([newTestSI, testSI])
+    expect(currentSIFiling.value.significantIndividuals).toEqual([testSI, newTestSI, startingSI])
   })
 })

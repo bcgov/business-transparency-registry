@@ -17,7 +17,10 @@ export const useSignificantIndividuals = defineStore('significantIndividuals', (
 
   /** Add currentSI to the currentSIFiling. */
   function filingAddSI (significantIndividual: SignificantIndividualI) {
-    currentSIFiling.value.significantIndividuals.unshift(significantIndividual)
+    // put it at the end of the new individuals
+    const lastNewSIIndex = currentSIFiling.value.significantIndividuals
+      .findLastIndex(si => si.action === FilingActionE.ADD)
+    currentSIFiling.value.significantIndividuals.splice(lastNewSIIndex + 1, 0, significantIndividual)
   }
 
   /** Initialize a new significant individual filing */
@@ -51,7 +54,7 @@ export const useSignificantIndividuals = defineStore('significantIndividuals', (
 
   /** Load the significant individuals for the business into the store */
   async function loadSavedSIs (businessIdentifier: string, force = false) {
-    if (!currentSavedSIs.value || force) {
+    if (currentSavedSIs.value.length === 0 || force) {
       currentSavedSIs.value = await getSIs(businessIdentifier) || []
     }
   }

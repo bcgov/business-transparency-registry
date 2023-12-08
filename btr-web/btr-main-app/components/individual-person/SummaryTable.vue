@@ -21,11 +21,17 @@
         <div data-cy="summary-table-details">
           <span>{{ row.profile.birthDate }}</span><br>
           <span v-if="row.profile.taxNumber">{{ row.profile.taxNumber }}<br></span>
-          <label>{{ $t('labels.citizenships') }}:</label><br>
-          <span v-if="row.profile.citizenshipCA !== 'other'">{{ $t('countries.ca') }}<br></span>
-          <span v-for="country in row.profile.citizenshipsExCA" :key="country.name">
-            {{ country.name }}<br>
+          <span v-else>{{ $t('texts.noCRATaxNumber') }}<br></span>
+          <span v-if="row.profile.citizenshipCA === CitizenshipTypeE.PR">
+            {{ $t('labels.countryOfCitizenship.pr') }}<br>
           </span>
+          <div v-else>
+            <label>{{ $t('labels.citizenships') }}:</label><br>
+            <span v-if="row.profile.citizenshipCA === CitizenshipTypeE.CITIZEN">{{ $t('countries.ca') }}<br></span>
+            <span v-for="country in row.profile.citizenshipsExCA" :key="country.name">
+              {{ country.name }}<br>
+            </span>
+          </div>
           <span>{{ getTaxResidentText(row.profile.isTaxResident) }}</span>
         </div>
       </template>
@@ -38,7 +44,7 @@
         </div>
       </template>
 
-      <template #controls-data="{ row }">
+      <template #control-data="{ row }">
         <div data-cy="summary-table-controls">
           <div v-if="Object.values(row.controlType.sharesVotes).includes(true)">
             <h4 class="font-bold italic">
@@ -79,7 +85,7 @@ const headers = [
   { key: 'address', label: t('labels.address') },
   { key: 'details', label: t('labels.details') },
   { key: 'significanceDates', label: t('labels.significanceDates') },
-  { key: 'controls', label: t('labels.controls') }
+  { key: 'control', label: t('labels.control') }
 ]
 
 function getTaxResidentText (isTaxResident: boolean) {

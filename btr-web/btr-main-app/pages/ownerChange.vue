@@ -17,16 +17,16 @@
       </div>
     </div>
     <UButton
-      v-if="!expandNewSI"
       class="mt-10 px-4 py-3"
       color="primary"
+      :disabled="expandNewSI"
       icon="i-mdi-account-plus"
       :label="$t('labels.addIndividual')"
       variant="outline"
       data-cy="add-new-btn"
       @click="expandNewSI = true"
     />
-    <div v-else class="mt-10 p-10 bg-white rounded flex flex-row">
+    <div v-if="expandNewSI" class="mt-10 p-10 bg-white rounded flex flex-row">
       <label class="font-bold text-lg min-w-[190px]">{{ $t('labels.addIndividual') }}</label>
       <IndividualPersonAddNew
         class="ml-8"

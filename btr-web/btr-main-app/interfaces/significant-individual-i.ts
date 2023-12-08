@@ -13,5 +13,5 @@ export interface SignificantIndividualI {
   profile: ProfileI
   startDate: string // YYYY-MM-DDT:HH:mm:ss+-HH:mm
   endDate?: string // YYYY-MM-DDT:HH:mm:ss+-HH:mm
-  action?: FilingActionE // FUTURE: enum for removed/changed/added
+  action?: FilingActionE
 }
