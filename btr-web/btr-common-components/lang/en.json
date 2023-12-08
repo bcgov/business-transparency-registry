@@ -26,8 +26,8 @@
   },
   "widgets": {
     "feeSummary": {
-      "title": "Fee summary",
-      "total": "Total fees",
+      "title": "Fee Summary",
+      "total": "Total Fees",
       "noFee": "No Fee",
       "priorityFees": "Priority Fees",
       "futureEffectiveFees": "Future Effective Fees",
@@ -39,6 +39,7 @@
     }
   },
   "labels": {
+    "optional": "Optional",
     "characters": "characters",
     "buttons": {
       "cancel": "Cancel",

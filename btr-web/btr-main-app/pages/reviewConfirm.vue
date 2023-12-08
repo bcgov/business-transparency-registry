@@ -24,12 +24,58 @@
       </div>
       <IndividualPersonSummaryTable :individuals="currentSIFiling.significantIndividuals || []" />
     </div>
+    <div class="mt-10 p-10 bg-white rounded flex align-middle" data-cy="significantIndividualChangeFolioNumber">
+      <label
+        for="significantIndividualChangeFolioNumber"
+        class="text-lg w-[190px] font-bold"
+        data-cy="significantIndividualChangeFolioNumberLabel"
+      >
+        {{ $t('labels.folioNumber') }}
+      </label>
+      <div class="ml-8 flex-auto">
+        <UForm
+          :schema="schemaFolioNumber"
+          :state="currentSIFiling"
+        >
+          <UFormGroup label="" name="folioNumber">
+            <UInput
+              id="significantIndividualChangeFolioNumber"
+              v-bind="$attrs"
+              v-model="currentSIFiling.folioNumber"
+              name="significantIndividualChangeFolioNumber"
+              class="my-0"
+              type="text"
+              variant="bcGov"
+              :placeholder="`${$t('labels.folioNumber')} (${$t('labels.optional')})`"
+              data-cy="significantIndividualChangeFolioNumberTextArea"
+              @change="addBtrPayFees"
+            />
+          </UFormGroup>
+        </UForm>
+      </div>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { storeToRefs } from 'pinia'
+import { z } from 'zod'
+import { validateFolioNumberCharacters } from '../../btr-common-components/utils'
+
+const { t } = useI18n()
 
 const significantIndividuals = useSignificantIndividuals()
 const { currentSIFiling } = storeToRefs(significantIndividuals)
+const maxFolioNumberLength = 30
+
+const schemaFolioNumber = z.object({
+  folioNumber: z.union([
+    z.string()
+      .min(1)
+      .max(maxFolioNumberLength, t('errors.validation.folioNumber.maxLengthExceeded'))
+      .refine(validateFolioNumberCharacters, t('errors.validation.folioNumber.specialCharacter')),
+    z.string().length(0)
+  ])
+    .optional()
+})
 </script>

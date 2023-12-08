@@ -63,5 +63,4 @@ onBeforeMount(async () => {
   await useBcrosBusiness().loadBusiness(identifier)
   await significantIndividuals.filingInit(identifier)
 })
-
 </script>

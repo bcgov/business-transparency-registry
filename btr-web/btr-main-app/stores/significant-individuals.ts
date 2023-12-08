@@ -23,13 +23,23 @@ export const useSignificantIndividuals = defineStore('significantIndividuals', (
     currentSIFiling.value.significantIndividuals.splice(lastNewSIIndex + 1, 0, significantIndividual)
   }
 
+  const _getFolioNumber = (): string | null => {
+    const business = useBcrosBusiness()
+    if (business.currentFolioNumber) {
+      return business.currentFolioNumber
+    }
+    return null
+  }
+
   /** Initialize a new significant individual filing */
   async function filingInit (businessIdentifier: string) {
     await loadSavedSIs(businessIdentifier)
+    const folioNum = _getFolioNumber()
     currentSIFiling.value = {
       businessIdentifier,
       significantIndividuals: currentSavedSIs.value,
-      effectiveDate: null
+      effectiveDate: null,
+      folioNumber: folioNum
     }
   }
 

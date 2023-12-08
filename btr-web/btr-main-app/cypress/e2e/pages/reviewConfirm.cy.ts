@@ -25,6 +25,11 @@ describe('pages -> Review and Confirm', () => {
 
   it('integration test for adding an individual and reviewing the summary', () => {
     cy.fixture('individual').then((testData) => {
+      cy.intercept(
+        'GET',
+        'https://pay-api-dev.apps.silver.devops.gov.bc.ca/api/v1/fees/BTR/REGSIGIN',
+        { data: payFeesForBtrRegsigin })
+
       // select the date of today
       cy.get('[data-cy=date-select]').trigger('click')
       cy.get('[data-cy=date-picker]').get('.bcros-date-picker__calendar__day.dp__today').trigger('click')

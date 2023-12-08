@@ -1,6 +1,6 @@
 export {
   validateEmailRfc6532Regex, validateNameCharacters, validatePreferredName, normalizeName,
-  checkSpecialCharacters, checkTaxNumberLength, validateTaxNumber
+  checkSpecialCharacters, checkTaxNumberLength, validateTaxNumber, validateFolioNumberCharacters
 } from './validation/form_inputs'
 
 // canada post retrieve api
