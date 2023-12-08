@@ -22,6 +22,7 @@ describe('Tests for owner change page', () => {
   })
 
   test('significantIndividualChangeFolioNumber is being displayed', () => {
-    expect(wrapper.find('[data-cy=significantIndividualChangeFolioNumber]').exists()).toBe(true)
+    expect(wrapper.find('[data-cy=significantIndividualChangeFolioNumberLabel]').exists()).toBe(true)
+    expect(wrapper.find('[data-cy=significantIndividualChangeFolioNumberTextArea]').exists()).toBe(true)
   })
 })
