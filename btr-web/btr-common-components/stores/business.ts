@@ -5,6 +5,8 @@ import { defineStore } from 'pinia'
 /** Manages bcros business data */
 export const useBcrosBusiness = defineStore('bcros/business', () => {
   const currentBusiness: Ref<BusinessI> = ref({} as BusinessI)
+  const currentFolioNumber: Ref<string> = ref("")
+
   const currentBusinessIdentifier = computed((): string => currentBusiness.value.identifier)
   const currentBusinessName = computed((): string => {
     if (currentBusiness.value.alternateNames && currentBusiness.value.legalType === BusinessTypeE.SP) {
@@ -47,6 +49,10 @@ export const useBcrosBusiness = defineStore('bcros/business', () => {
         if (!data || !data.contacts) { throw new Error(`Invalid AUTH API response ${data}`) }
         if (data.contacts.length === 0) { return {} as ContactBusinessI }
 
+        if (data?.folioNumber) {
+          currentFolioNumber.value = data.folioNumber
+        }
+
         return {
           businessIdentifier: data.businessIdentifier,
           ...data.contacts[0]
@@ -81,6 +87,7 @@ export const useBcrosBusiness = defineStore('bcros/business', () => {
     currentBusinessIdentifier,
     currentBusinessName,
     currentBusinessContact,
+    currentFolioNumber,
     getBusinessContact,
     getBusinessDetails,
     loadBusiness,

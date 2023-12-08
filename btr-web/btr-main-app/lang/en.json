@@ -22,6 +22,7 @@
     "isTaxResident": "Canada tax resident",
     "notTaxResident": "Not a Canada tax resident",
     "controlOfDirectors": "Control of Majority of Directors",
+    "folioNumber": "Folio or Reference Number",
     "unableToObtainOrConfirmInformation": {
       "title": "Unable to Obtain or Confirm Information",
       "checkboxText": "It is not possible to obtain or confirm some information about this individual",

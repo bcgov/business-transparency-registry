@@ -36,6 +36,30 @@
       />
     </div>
     <IndividualPersonSummaryTable class="mt-10" :individuals="currentSIFiling.significantIndividuals || []" />
+    <div class="mt-10 p-10 bg-white rounded flex align-middle" data-cy="effective-date-select">
+      <div class="my-auto">
+        <label
+          for="significantIndividualChangeFolioNumber"
+          class="text-lg max-w-[190px] w-[190px]"
+        >
+          {{ $t('labels.folioNumber') }}
+        </label>
+      </div>
+      <div class="ml-8 flex-auto">
+        <UFormGroup label="">
+          <UInput
+            id="significantIndividualChangeFolioNumber"
+            v-bind="$attrs"
+            v-model="currentSIFiling.folioNumber"
+            name="significantIndividualChangeFolioNumber"
+            type="text"
+            variant="bcGov"
+            :placeholder="$t('labels.folioNumber') + `(${$t('labels.optional')})`"
+            @change="addBtrPayFees"
+          />
+        </UFormGroup>
+      </div>
+    </div>
   </div>
 </template>
 

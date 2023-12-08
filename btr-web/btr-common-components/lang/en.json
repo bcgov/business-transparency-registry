@@ -39,6 +39,7 @@
     }
   },
   "labels": {
+    "optional": "Optional",
     "characters": "characters",
     "buttons": {
       "cancel": "Cancel",
