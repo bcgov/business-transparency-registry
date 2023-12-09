@@ -8,6 +8,18 @@ export function getEmailValidator () {
     .refine(validateEmailRfc6532Regex, t('errors.validation.email.invalid'))
 }
 
+export function getFolioValidator () {
+  const { $i18n } = useNuxtApp()
+  const maxFolioNumberLength = 30
+  return z.union([
+    z.string()
+      .min(1)
+      .max(maxFolioNumberLength, $i18n.t('errors.validation.folioNumber.maxLengthExceeded'))
+      .refine(validateFolioNumberCharacters, $i18n.t('errors.validation.folioNumber.specialCharacter')),
+    z.string().length(0)
+  ]).optional()
+}
+
 export function getFullNameValidator () {
   const { t } = useI18n()
   return z.preprocess(normalizeName as (arg: unknown) => unknown, z.string()

@@ -103,6 +103,24 @@ describe('pages -> Review and Confirm', () => {
 
       summaryTable.get('[data-cy=summary-table-controls]').contains(testData.summaryTable.shareControl)
       summaryTable.get('[data-cy=summary-table-controls]').contains(testData.summaryTable.directorControl)
+
+      // can click 'back' to go back to non review page
+      cy.get('[data-cy=button-control-right-button]').eq(0).should('have.text', 'Back')
+      cy.get('[data-cy=button-control-right-button]').eq(0).click()
+      cy.url().should('not.include', '/beneficial-owner-change/review-confirm')
+      cy.url().should('include', '/beneficial-owner-change')
+
+      // go back to review and file now, FUTURE: check certify / folio
+      cy.get('[data-cy=button-control-right-button]').eq(0).should('have.text', 'Review and Confirm')
+      cy.get('[data-cy=button-control-right-button]').eq(0).click()
+      cy.url().should('include', '/beneficial-owner-change/review-confirm')
+      cy.get('[data-cy=button-control-right-button]').eq(1).should('have.text', 'File Now (no fee)')
+      // TODO: uncomment / add checking certify once that code is merged
+      // check loading state
+      // cy.get('[data-cy=button-control-right-button]').eq(1).should('have.attr', 'loading')
+      // check redirect to change
+      // cy.url().should('not.include', '/beneficial-owner-change/review-confirm')
+      // cy.url().should('include', '/beneficial-owner-change')
     })
   })
 

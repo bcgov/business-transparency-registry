@@ -10,6 +10,7 @@
       <label class="text-lg w-[190px]">{{ $t('labels.significantIndividualChangeDate') }}</label>
       <div class="ml-8 flex-auto">
         <BcrosInputsDateSelect
+          :initial-date="currentSIFiling.effectiveDate ? dateStringToDate(currentSIFiling.effectiveDate) : undefined"
           :max-date="new Date()"
           :placeholder="$t('placeholders.dateSelect.significantIndividualChange')"
           @selection="significantIndividualChangeDate($event)"
@@ -61,6 +62,9 @@ onBeforeMount(async () => {
   const identifier = useRoute().params.identifier as string
   // FUTURE: put in a loading page or something while this happens in case network is slow
   await useBcrosBusiness().loadBusiness(identifier)
-  await significantIndividuals.filingInit(identifier)
+  if (!currentSIFiling.value.businessIdentifier) {
+    await significantIndividuals.filingInit(identifier)
+  }
+  currentSIFiling.value.certified = false
 })
 </script>

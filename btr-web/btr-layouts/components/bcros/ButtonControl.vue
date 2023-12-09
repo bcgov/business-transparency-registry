@@ -20,14 +20,16 @@
           <UButton
             v-for="button, i in rightButtons"
             :key="'right-button-' + i"
-            class="px-4 py-3 font-bold"
+            class="px-4 py-3"
+            :class="button.class"
             :color="button.color || 'primary'"
             :icon="button.icon || ''"
             :label="button.label"
+            :loading="button.loading || false"
             :trailing="button.trailing || false"
             :variant="button.variant || 'solid'"
             data-cy="button-control-right-button"
-            @click="button.action()"
+            @click="handleAction(button)"
           />
         </div>
       </div>
@@ -43,4 +45,8 @@ const props = defineProps<{
 
 const leftButtons = computed(() => props.leftButtonConstructors?.map(getBtn => getBtn()) || [])
 const rightButtons = computed(() => props.rightButtonConstructors?.map(getBtn => getBtn()) || [])
+
+async function handleAction (button: ButtonControlI) {
+  await button.action()
+}
 </script>

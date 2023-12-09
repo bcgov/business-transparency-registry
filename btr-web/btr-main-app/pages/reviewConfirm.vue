@@ -65,23 +65,16 @@
 <script setup lang="ts">
 import { storeToRefs } from 'pinia'
 import { z } from 'zod'
-import { validateFolioNumberCharacters } from '../../btr-common-components/utils'
-
-const { t } = useI18n()
 
 const significantIndividuals = useSignificantIndividuals()
 const { currentSIFiling } = storeToRefs(significantIndividuals)
-const maxFolioNumberLength = 30
 
 const schemaFolioNumber = z.object({
-  folioNumber: z.union([
-    z.string()
-      .min(1)
-      .max(maxFolioNumberLength, t('errors.validation.folioNumber.maxLengthExceeded'))
-      .refine(validateFolioNumberCharacters, t('errors.validation.folioNumber.specialCharacter')),
-    z.string().length(0)
-  ])
-    .optional()
+  folioNumber: getFolioValidator()
+})
+
+onBeforeMount(() => {
+  currentSIFiling.value.certified = false
 })
 
 const { userFullName } = storeToRefs(useBcrosAccount())

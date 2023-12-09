@@ -36,9 +36,9 @@ export default <RouterConfig> {
           getBusinessNameCrumb,
           getBeneficialOwnerChangeCrumb
         ],
-        buttonControl: { // FUTURE: add buttons
-          leftButtons: [],
-          rightButtons: []
+        buttonControl: {
+          leftButtons: [getSIChangeCancel, getSIChangeSaveExit, getSIChangeSave],
+          rightButtons: [getSIChangeBack, getSIChangeSubmit]
         },
         layout: 'business'
       }
