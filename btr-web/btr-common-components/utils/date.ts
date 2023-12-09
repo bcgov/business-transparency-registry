@@ -1,7 +1,7 @@
 import moment from 'moment'
 
 /** Return the date string as a date
- *  -- expected dateString format: YYYY-MM-DD
+ * @param dateString expected dateString format: YYYY-MM-DD
 */
 export function dateStringToDate (dateString: string) {
   // convert to date
@@ -12,14 +12,15 @@ export function dateStringToDate (dateString: string) {
 }
 
 /** Return the date as a string in the desired format
- *  -- default return format: YYYY-MM-DDT:HH:mm:ss+-HH:mm
+ * @param date js Date
+ * @param format default: YYYY-MM-DDT:HH:mm:ss+-HH:mm
 */
 export function dateToString (date: Date, format?: string) {
   return (date) ? moment(date).local().format(format) : ''
 }
 
 /** Return the date string in date format from datetime string format
- *  -- expected datetimeString format: YYYY-MM-DDT:HH:mm:ss+-HH:mm
+ * @param datetimeString expected format: YYYY-MM-DDT:HH:mm:ss+-HH:mm
 */
 export function datetimeStringToDateString (datetimeString: string) {
   const date = new Date(datetimeString)

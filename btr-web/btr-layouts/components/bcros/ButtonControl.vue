@@ -29,7 +29,7 @@
             :trailing="button.trailing || false"
             :variant="button.variant || 'solid'"
             data-cy="button-control-right-button"
-            @click="handleAction(button)"
+            @click="button.action()"
           />
         </div>
       </div>
@@ -45,8 +45,4 @@ const props = defineProps<{
 
 const leftButtons = computed(() => props.leftButtonConstructors?.map(getBtn => getBtn()) || [])
 const rightButtons = computed(() => props.rightButtonConstructors?.map(getBtn => getBtn()) || [])
-
-async function handleAction (button: ButtonControlI) {
-  await button.action()
-}
 </script>
