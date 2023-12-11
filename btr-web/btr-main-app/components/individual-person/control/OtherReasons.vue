@@ -8,6 +8,7 @@
     </p>
     <BcrosInputsTextArea
       v-model="otherReasons"
+      style="min-height: 50px"
       :placeholder="$t('texts.otherReasons.textAreaPlaceholder')"
       class="py-2 w-full"
       variant="bcGov"
