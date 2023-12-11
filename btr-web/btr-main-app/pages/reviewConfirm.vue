@@ -24,36 +24,23 @@
       </div>
       <IndividualPersonSummaryTable :individuals="currentSIFiling.significantIndividuals || []" />
     </div>
-    <div class="mt-10 p-10 bg-white rounded flex align-middle" data-cy="significantIndividualChangeFolioNumber">
-      <label
-        for="significantIndividualChangeFolioNumber"
-        class="text-lg w-[190px] font-bold"
-        data-cy="significantIndividualChangeFolioNumberLabel"
-      >
-        {{ $t('labels.folioNumber') }}
-      </label>
-      <div class="ml-8 flex-auto">
-        <UForm
-          :schema="schemaFolioNumber"
-          :state="currentSIFiling"
-        >
-          <UFormGroup label="" name="folioNumber">
-            <UInput
-              id="significantIndividualChangeFolioNumber"
-              v-bind="$attrs"
-              v-model="currentSIFiling.folioNumber"
-              name="significantIndividualChangeFolioNumber"
-              class="my-0"
-              type="text"
-              variant="bcGov"
-              :placeholder="`${$t('labels.folioNumber')} (${$t('labels.optional')})`"
-              data-cy="significantIndividualChangeFolioNumberTextArea"
-              @change="addBtrPayFees"
-            />
-          </UFormGroup>
-        </UForm>
-      </div>
-    </div>
+
+    <h2 class="font-bold text-lg mt-16" data-cy="review-confirm-section-heading">
+      1. {{ $t('texts.folioNumber.reviewAndConfirm.title') }}
+    </h2>
+    <p class="mt-5 text-justify" data-cy="folioNumber-reviewAndConfirm-description-text">
+      {{ $t('texts.folioNumber.reviewAndConfirm.description') }}
+    </p>
+    <UForm
+      :schema="schemaFolioNumber"
+      :state="currentSIFiling"
+    >
+      <BtrFolioNumber
+        v-model="currentSIFiling.folioNumber"
+        :max-folio-number-length="maxFolioNumberLength"
+        @change="addBtrPayFees"
+      />
+    </UForm>
     <ReviewConfirmCertify
       v-model="currentSIFiling.certified"
       :name="userFullName"

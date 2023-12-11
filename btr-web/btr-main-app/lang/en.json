@@ -51,6 +51,12 @@
     "beneficialOwnershipAssessmentText1": "Beneficial Ownership is determined by the control of of shares and/or votes at general meetings, and control of the right to elect, appoint, or remove directors of the business.",
     "beneficialOwnershipAssessmentText2": "Complete following assessment to determine this person’s beneficial ownership status.",
     "dateRange": "{start} to {end}",
+    "folioNumber": {
+      "reviewAndConfirm": {
+        "title": "Folio or Reference Number for this Filling",
+        "description": "Enter the folio or reference number you want to use for this filing for your own tracking purposes. The Business Folio or Reference Number is displayed below (if available). Entering a different value below will not change the Business Folio or Reference Number. Only the number below will appear on the transaction report and receipt for this filling."
+      }
+    },
     "noCRATaxNumber": "No CRA Tax Number",
     "sharesAndVotes": {
       "controlPercentage": "Enter the percentage of shares issued for the business and/or shares entitled to votes at general meetings this individual owns or ultimately controls (or can exercise ultimate effective control over).",
