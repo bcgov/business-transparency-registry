@@ -21,8 +21,12 @@ export const usePayFeesWidget = defineStore('payFeeWidget', () => {
     const index = fees.value.findIndex(fee =>
       fee.filingType === newFee.filingType && fee.filingTypeCode === newFee.filingTypeCode
     )
-
     if (index === -1) {
+      if (!newFee || newFee.total == null || newFee.filingFees == null || newFee.filingTypeCode == null) {
+        // todo: should we push this as big error ?
+        console.error('Trying to add fee INVALID FEE; Fee is missing details. NewFee:', newFee)
+        return
+      }
       fees.value.push({ ...newFee, quantity: 1, uiUuid: UUIDv4() })
     }
   }
@@ -79,6 +83,7 @@ export const usePayFeesWidget = defineStore('payFeeWidget', () => {
             }
             errors.value.push(err)
           }
+
           if (data) {
             feeInfo.value.push([filingDataItem, data])
           }
