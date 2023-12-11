@@ -28,9 +28,6 @@ export async function siChangeSubmit () {
     folioNumber: getFolioValidator()
   })
   const isValid = filingSchema.safeParse(significantIndividuals.currentSIFiling)
-  console.log(significantIndividuals.currentSIFiling)
-  console.log(filingSchema)
-  console.log(isValid)
   if (!isValid.success) {
     significantIndividuals.showErrors = true
   } else {
