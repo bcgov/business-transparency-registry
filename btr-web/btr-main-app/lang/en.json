@@ -111,7 +111,7 @@
       }
     },
     "otherReasons": {
-      "description": "Enter any other reason(s) this person is a significant individual.",
+      "description": "Enter any other reason(s) this individual is a significant individual.",
       "textAreaPlaceholder": "Other reasons for individual significance"
     },
     "citizenshipPermanentResidency": "Indicate if this person is a citizen or permanent resident of Canada, or list all of the non-Canadian citizenship(s) of this person. If this person is a Citizen or Permanent resident of Canada, listing of multiple citizenships is not required.",
