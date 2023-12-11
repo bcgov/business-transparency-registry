@@ -14,9 +14,7 @@
             <div class="text-sm">
               <div>
                 <span>{{ $t('texts.certify.part1') }}</span>
-                <span class="font-bold">
-                    {{ name.toUpperCase() }}
-                  </span>
+                <span class="font-bold">{{ name.toUpperCase() }}</span>
                 <span>{{ $t('texts.certify.part2') }}</span>
               </div>
               <br>
@@ -37,7 +35,7 @@
 </template>
 
 <script setup lang="ts">
-defineEmits<{ (e: 'update:modelValue', value: boolean): void }>()
+defineEmits<(e: 'update:modelValue', value: boolean) => void>()
 defineProps({
   name: { type: String, required: true, default: 'name' },
   modelValue: { type: Boolean, required: true, default: false }

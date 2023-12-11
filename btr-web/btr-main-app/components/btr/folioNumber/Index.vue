@@ -12,14 +12,13 @@
         <UInput
           id="significantIndividualChangeFolioNumber"
           v-bind="$attrs"
-          v-model="props.modelValue"
+          v-model="folioNumber"
           name="significantIndividualChangeFolioNumber"
           class="my-0"
           type="text"
           variant="bcGov"
           :placeholder="`${$t('labels.folioNumber')} (${$t('labels.optional')})`"
           data-cy="significantIndividualChangeFolioNumberTextArea"
-          @input="$emit('update:modelValue', $event.target.value)"
         />
       </UFormGroup>
     </div>
@@ -27,11 +26,19 @@
 </template>
 
 <script setup lang="ts">
-defineEmits<{ 'update:modelValue': [value: string] }>()
+const emit = defineEmits<{ 'update:modelValue': [value: string] }>()
 
 const props = defineProps({
   maxFolioNumberLength: { type: Number, default: 30 },
   modelValue: { type: String, required: true }
 })
 
+const folioNumber = computed({
+  get () {
+    return props.modelValue
+  },
+  set (value) {
+    emit('update:modelValue', value)
+  }
+})
 </script>
