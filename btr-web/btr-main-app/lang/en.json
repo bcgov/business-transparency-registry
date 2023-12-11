@@ -53,8 +53,8 @@
     "dateRange": "{start} to {end}",
     "folioNumber": {
       "reviewAndConfirm": {
-        "title": "Folio or Reference Number for this Filling",
-        "description": "Enter the folio or reference number you want to use for this filing for your own tracking purposes. The Business Folio or Reference Number is displayed below (if available). Entering a different value below will not change the Business Folio or Reference Number. Only the number below will appear on the transaction report and receipt for this filling."
+        "title": "Folio or Reference Number for this Filing",
+        "description": "Enter the folio or reference number you want to use for this filing for your own tracking purposes. The Business Folio or Reference Number is displayed below (if available). Entering a different value below will not change the Business Folio or Reference Number. Only the number below will appear on the transaction report and receipt for this filing."
       }
     },
     "noCRATaxNumber": "No CRA Tax Number",
