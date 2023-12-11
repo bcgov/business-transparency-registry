@@ -5,6 +5,8 @@ import { SignificantIndividualI } from '../interfaces/significant-individual-i'
 export const useSignificantIndividuals = defineStore('significantIndividuals', () => {
   const currentSIFiling: Ref<SignificantIndividualFilingI> = ref({}) // current significant individual change filing
   const currentSavedSIs: Ref<SignificantIndividualI[]> = ref([]) // saved SIs from api for this business
+  const showErrors = ref(false) // show submit error validations
+  const submitting = ref(false)
 
   watch(() => currentSIFiling.value?.effectiveDate, (val) => {
     // set the start date for all newly added SIs
@@ -23,12 +25,12 @@ export const useSignificantIndividuals = defineStore('significantIndividuals', (
     currentSIFiling.value.significantIndividuals.splice(lastNewSIIndex + 1, 0, significantIndividual)
   }
 
-  const _getFolioNumber = (): string | null => {
+  const _getFolioNumber = (): string => {
     const business = useBcrosBusiness()
     if (business.currentFolioNumber) {
       return business.currentFolioNumber
     }
-    return null
+    return ''
   }
 
   /** Initialize a new significant individual filing */
@@ -39,8 +41,8 @@ export const useSignificantIndividuals = defineStore('significantIndividuals', (
       businessIdentifier,
       significantIndividuals: currentSavedSIs.value,
       effectiveDate: null,
-      folioNumber: folioNum,
-      certified: false
+      certified: false,
+      folioNumber: folioNum
     }
   }
 
@@ -53,7 +55,9 @@ export const useSignificantIndividuals = defineStore('significantIndividuals', (
   /** Submit the current significant individual filing */
   async function filingSubmit () {
     console.info('Submit', currentSIFiling.value)
-    await new Promise(resolve => setTimeout(resolve, 100))
+    submitting.value = true
+    await new Promise(resolve => setTimeout(resolve, 3000))
+    submitting.value = false
   }
 
   /** Get the current significant individuals for the business */
@@ -70,14 +74,24 @@ export const useSignificantIndividuals = defineStore('significantIndividuals', (
     }
   }
 
+  function reset () {
+    currentSIFiling.value = {}
+    currentSavedSIs.value = []
+    showErrors.value = false
+    submitting.value = false
+  }
+
   return {
     currentSIFiling,
     currentSavedSIs,
+    showErrors,
+    submitting,
     filingAddSI,
     filingInit,
     filingSave,
     filingSubmit,
     getSIs,
-    loadSavedSIs
+    loadSavedSIs,
+    reset
   }
 })

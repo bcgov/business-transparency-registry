@@ -42,7 +42,9 @@
     "optional": "Optional",
     "characters": "characters",
     "buttons": {
+      "back": "Back",
       "cancel": "Cancel",
+      "fileNowNoFee": "File Now (no fee)",
       "reviewConfirm": "Review and Confirm",
       "save": "Save",
       "saveExit": "Save and Resume Later"

@@ -20,10 +20,12 @@
           <UButton
             v-for="button, i in rightButtons"
             :key="'right-button-' + i"
-            class="px-4 py-3 font-bold"
+            class="px-4 py-3"
+            :class="button.class"
             :color="button.color || 'primary'"
             :icon="button.icon || ''"
             :label="button.label"
+            :loading="button.loading || false"
             :trailing="button.trailing || false"
             :variant="button.variant || 'solid'"
             data-cy="button-control-right-button"

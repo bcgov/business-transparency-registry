@@ -103,4 +103,10 @@ describe('pages -> Beneficial Owner Change', () => {
     cy.get('[data-cy="individualsSummaryTable"]').get('td')
       .should('contain.text', 'No significant individuals added yet')
   })
+
+  it('goes to review confirm page when review confirm is clicked', () => {
+    cy.get('[data-cy=button-control-right-button]').eq(0).should('have.text', 'Review and Confirm')
+    cy.get('[data-cy=button-control-right-button]').eq(0).click()
+    cy.url().should('include', '/review-confirm')
+  })
 })

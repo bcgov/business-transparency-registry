@@ -34,11 +34,11 @@
 import { ComputedRef, Ref, computed, ref, watch } from 'vue'
 import { Popover, PopoverButton, PopoverPanel } from '@headlessui/vue'
 
-defineProps<{ maxDate?: Date, placeholder?: string }>()
+const props = defineProps<{ initialDate?: Date, maxDate?: Date, placeholder?: string }>()
 
 const emit = defineEmits<{(e: 'selection', value: Date | null): void }>()
 
-const selectedDate: Ref<Date | null> = ref(null)
+const selectedDate: Ref<Date | null> = ref(props.initialDate || null)
 watch(() => selectedDate.value, val => emit('selection', val))
 
 const updateDate = (val: Date | null) => {
@@ -46,7 +46,7 @@ const updateDate = (val: Date | null) => {
 }
 
 const selectedDateDisplay: ComputedRef<string> = computed(
-  () => selectedDate.value ? datetimeStringToDateString(selectedDate.value) : ''
+  () => selectedDate.value ? dateToString(selectedDate.value, 'YYYY-MM-DD') : ''
 )
 
 </script>
