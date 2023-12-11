@@ -45,8 +45,12 @@
 defineEmits<{(e: 'update:modelValue', value: boolean): void }>()
 defineProps({
   name: { type: String, required: true, default: 'name' },
-  date: { type: String, required: true, default: 'date' },
   modelValue: { type: Boolean, required: true, default: false }
+})
+
+let date = ''
+onBeforeMount(() => {
+  date = dateToString(new Date(), 'YYYY-MM-DD')
 })
 
 const certified = ref(false)

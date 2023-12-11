@@ -57,7 +57,6 @@
     <ReviewConfirmCertify
       v-model="currentSIFiling.certified"
       :name="userFullName"
-      :date="currentSIFiling.effectiveDate"
       data-cy="certify-section"
     />
   </div>
