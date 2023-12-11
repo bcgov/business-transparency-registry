@@ -41,6 +41,9 @@
         @change="addBtrPayFees"
       />
     </UForm>
+    <h2 class="font-bold text-lg mt-16" data-cy="certify-section-label">
+      2. {{ $t('labels.certifySection') }}
+    </h2>
     <ReviewConfirmCertify
       v-model="currentSIFiling.certified"
       :name="userFullName"
