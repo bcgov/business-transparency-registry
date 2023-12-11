@@ -31,12 +31,12 @@ describe('pages -> Review and Confirm', () => {
         { data: payFeesForBtrRegsigin })
 
       // select the date of today
-      cy.get('[data-cy=date-select]').trigger('click')
-      cy.get('[data-cy=date-picker]').get('.bcros-date-picker__calendar__day.dp__today').trigger('click')
+      cy.get('[data-cy=date-select]').click()
+      cy.get('[data-cy=date-picker]').get('.bcros-date-picker__calendar__day.dp__today').click()
 
       // click 'Add an Individual' button and expand the form
-      cy.get('[data-cy=add-new-btn]').trigger('click')
-      cy.get('[data-cy=showAddIndividualPersonManually]').trigger('click')
+      cy.get('[data-cy=add-new-btn]').click()
+      cy.get('[data-cy=showAddIndividualPersonManually]').click()
 
       // fill out the form
       cy.get('#individual-person-full-name').type(testData.fullName)
@@ -115,12 +115,18 @@ describe('pages -> Review and Confirm', () => {
       cy.get('[data-cy=button-control-right-button]').eq(0).click()
       cy.url().should('include', '/beneficial-owner-change/review-confirm')
       cy.get('[data-cy=button-control-right-button]').eq(1).should('have.text', 'File Now (no fee)')
-      // TODO: uncomment / add checking certify once that code is merged
-      // check loading state
-      // cy.get('[data-cy=button-control-right-button]').eq(1).should('have.attr', 'loading')
+      // validate certify is not checked yet
+      cy.get('[data-cy="certify-section-checkbox"]').should('not.be.checked')
+      cy.get('[data-cy=button-control-right-button]').eq(1).click()
+      // Certify was not checked so nothing should happen
+      cy.url().should('include', '/beneficial-owner-change/review-confirm')
+      // Check certify and file
+      cy.get('[data-cy="certify-section-checkbox"]').click()
+      cy.get('[data-cy="certify-section-checkbox"]').should('be.checked')
+      cy.get('[data-cy=button-control-right-button]').eq(1).click()
       // check redirect to change
-      // cy.url().should('not.include', '/beneficial-owner-change/review-confirm')
-      // cy.url().should('include', '/beneficial-owner-change')
+      cy.url().should('not.include', '/beneficial-owner-change/review-confirm')
+      cy.url().should('include', '/beneficial-owner-change')
     })
   })
 

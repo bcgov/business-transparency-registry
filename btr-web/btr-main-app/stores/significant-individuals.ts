@@ -25,12 +25,12 @@ export const useSignificantIndividuals = defineStore('significantIndividuals', (
     currentSIFiling.value.significantIndividuals.splice(lastNewSIIndex + 1, 0, significantIndividual)
   }
 
-  const _getFolioNumber = (): string | null => {
+  const _getFolioNumber = (): string => {
     const business = useBcrosBusiness()
     if (business.currentFolioNumber) {
       return business.currentFolioNumber
     }
-    return null
+    return ''
   }
 
   /** Initialize a new significant individual filing */
