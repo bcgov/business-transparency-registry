@@ -17,6 +17,7 @@
     </p>
     <BcrosInputsTextArea
       v-model="isUnableToObtainOrConfirmInformationDetails"
+      style="min-height: 50px"
       :placeholder="$t('labels.unableToObtainOrConfirmInformation.textAreaPlaceholder')"
       class="py-2 w-full"
       variant="bcGov"

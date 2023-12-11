@@ -54,6 +54,11 @@
         </UForm>
       </div>
     </div>
+    <ReviewConfirmCertify
+      v-model="currentSIFiling.certified"
+      :name="userFullName"
+      data-cy="certify-section"
+    />
   </div>
 </template>
 
@@ -78,4 +83,6 @@ const schemaFolioNumber = z.object({
   ])
     .optional()
 })
+
+const { userFullName } = storeToRefs(useBcrosAccount())
 </script>

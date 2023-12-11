@@ -105,4 +105,12 @@ describe('pages -> Review and Confirm', () => {
       summaryTable.get('[data-cy=summary-table-controls]').contains(testData.summaryTable.directorControl)
     })
   })
+
+  it('verify the certify section is rendered and the checkbox is working', () => {
+    cy.visit('/BC0871427/beneficial-owner-change/review-confirm')
+    cy.get('[data-cy="certify-section"]').should('exist')
+    cy.get('[data-cy="certify-section-label"]').should('exist')
+    cy.get('[data-cy="certify-section-checkbox"]').should('exist')
+    cy.get('[data-cy="certify-section-checkbox"]').check().should('be.checked')
+  })
 })
