@@ -30,7 +30,7 @@ const emit = defineEmits<{ 'update:modelValue': [value: string] }>()
 
 const props = defineProps({
   maxFolioNumberLength: { type: Number, default: 30 },
-  modelValue: { type: String, required: true }
+  modelValue: { type: String, default: undefined }
 })
 
 const folioNumber = computed({

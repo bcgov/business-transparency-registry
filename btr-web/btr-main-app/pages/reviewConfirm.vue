@@ -59,6 +59,8 @@ import { z } from 'zod'
 const significantIndividuals = useSignificantIndividuals()
 const { currentSIFiling } = storeToRefs(significantIndividuals)
 
+const maxFolioNumberLength = 30
+
 const schemaFolioNumber = z.object({
   folioNumber: getFolioValidator()
 })
