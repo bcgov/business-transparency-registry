@@ -44,15 +44,19 @@ class SubmissionService(object):
         submission.payload = submission_dict
         submission.save()
 
-        if 'person' in submission_dict and submission_dict['person'].get('uuid'):
-            person_uuid = submission_dict['person'].get('uuid')
-            person = PersonModel.find_by_uuid(person_uuid)
-        else:
-            person = PersonService.save_person_from_submission(submission_dict=submission_dict)
+        for significant_individual in submission_dict['significantIndividuals']:
+            person = None
+            if significant_individual.get('profile').get('uuid'):
+                person = PersonModel.find_by_uuid(significant_individual['profile']['uuid'])
+            else:
+                person = PersonService.save_person_from_submission(submission_dict=submission_dict)
 
-        person_id = person.id if person else None
-        OwnershipDetailsService.save_ownership_details_from_submission(submission_dict=submission_dict,
-                                                                       submission_id=submission.id,
-                                                                       person_id=person_id)
+            person_id = person.id if person else None
+
+            OwnershipDetailsService.save_ownership_details_from_submission(
+                submission_dict=submission_dict,
+                submission_id=submission.id,
+                person_id=person_id
+            )
 
         return submission

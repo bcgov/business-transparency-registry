@@ -4,12 +4,13 @@ from http import HTTPStatus
 
 import pytest
 
-from btr_api.models import Submission
+from btr_api.models import Submission as SubmissionModel
 from btr_api.models import Person as PersonModel
-from btr_api.models import OwnershipDetails as OwnershipDetailsModel
 from btr_api.models import SubmissionType
+from btr_api.services.person import PersonService
+from btr_api.services.ownership_details import OwnershipDetailsService
 
-from tests.unit import nested_session
+from tests.unit import nested_session, TEST_SI_FILING
 
 
 @pytest.mark.parametrize(
@@ -44,48 +45,19 @@ def test_get_plots(client, session, test_name, submission_type, payload):
                 assert value in rv.text
 
 
-def test_post_plots(client, session):
-    json_data = {
-        "envelope": {"header": {"headerDetail": "metainfo"}, "body": [{"detail": "line1"}, {"detail": "line2"}]}
-    }
+def test_post_plots(client, mocker):
+    mock_submission_save = mocker.patch.object(SubmissionModel, 'save')
+    mock_find_by_uuid = mocker.patch.object(PersonModel, 'find_by_uuid')
+    mock_save_person = mocker.patch.object(PersonService, 'save_person_from_submission')
+    mock_save_ownership = mocker.patch.object(OwnershipDetailsService, 'save_ownership_details_from_submission')
 
-    rv = client.post("/plots", json=json_data)
-
+    rv = client.post("/plots", json=TEST_SI_FILING, content_type='application/json')
+    
     assert rv.status_code == HTTPStatus.CREATED
 
-    submission = Submission.find_by_id(rv.json.get("id"))
-    assert submission
-    assert submission.payload == json_data
+    mock_submission_save.assert_called_once()
+    mock_find_by_uuid.assert_called()
+    mock_save_person.assert_called()
+    mock_save_ownership.assert_called()
 
-
-def test_person_with_uuid(client, session):
-    uuid = "a37cf085-b8d2-4d41-862d-db674117aa86"
-    json_data = {
-        "person": {"uuid": uuid},
-        "ownership_details": {
-            "business_identifier": "BC123465667",
-            "control_type": "shares",
-            "control_percent": 27
-        }
-    }
-
-    with nested_session(session):
-        # Setup
-        person = PersonModel()
-        person.uuid = uuid
-        person.full_name = "test 123 123"
-        person.date_of_birth = "1989-01-01"
-        person.save()
-
-        # test
-        rv = client.post("/plots", json=json_data)
-
-        assert rv.status_code == HTTPStatus.CREATED
-
-        submission = Submission.find_by_id(rv.json.get("id"))
-        assert submission
-        assert submission.payload == json_data
-
-        ownership_details: OwnershipDetailsModel = OwnershipDetailsModel.find_by_submission_id(submission.id)
-        assert ownership_details
-        assert ownership_details.person_id == person.id
+    assert mock_save_ownership.call_count == len(TEST_SI_FILING['significantIndividuals'])

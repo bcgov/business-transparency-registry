@@ -66,7 +66,7 @@ def create_app(environment: Config = Production, **kwargs) -> Flask:
         )
 
     db.init_app(app)
-     # td is testData instance passed in to support testing
+    # td is testData instance passed in to support testing
     td = kwargs.get('ld_test_data', None)
     Flags().init_app(app, td)    # queue.init_app(app)
     babel.init_app(app)
