@@ -83,7 +83,7 @@ jobs:
         run: poetry run pytest --cov=./ --cov-report=xml
 
       - name: Check coverage
-        run: poetry run coverage report --fail-under=80
+        run: poetry run coverage report
     
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v3

@@ -1,5 +1,5 @@
-from sqlalchemy.dialects.postgresql import UUID
-from sqlalchemy import Column, String, DateTime, Boolean
+from sqlalchemy.dialects.postgresql import JSONB, UUID
+from sqlalchemy import Column, String, Boolean
 
 import uuid
 
@@ -15,15 +15,22 @@ class Person(db.Model, BtrModelBase):
     uuid = Column(UUID(as_uuid=True), default=uuid.uuid4)  # used as external reference
 
     full_name = Column(String(300), index=True, nullable=True)
+    preffered_name = Column(String(300), nullable=True)
     family_name = Column(String(100), nullable=True)
     given_name = Column(String(100), nullable=True)
     patronymic_name = Column(String(100), nullable=True)
 
-    date_of_birth = Column(DateTime(timezone=True))
+    birth_date = db.Column(db.Date(), nullable=True)
+    email = db.Column(db.String(150), nullable=True)
 
-    is_permanent_resident = Column(Boolean(), default=False)
-    is_canadian_citizen = Column(Boolean(), default=False)
-    is_canadian_tax_resident = Column(Boolean(), default=False)
+    citizenships_ex_ca = db.Column(JSONB, nullable=True)
+    is_permanent_resident = Column(Boolean(), default=True)
+    is_canadian_citizen = Column(Boolean(), default=True)
+    is_canadian_tax_resident = Column(Boolean(), default=True)
+    tax_number = db.Column(db.String(150), nullable=True)
+    competency = db.Column(JSONB, nullable=True)
+
+    address = db.Column(JSONB, nullable=True)
 
     @property
     def display_name(self):

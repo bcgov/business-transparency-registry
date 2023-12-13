@@ -1,5 +1,8 @@
-from sqlalchemy.dialects.postgresql import UUID
-from sqlalchemy import Column, String, Integer, Boolean
+from __future__ import annotations
+
+import uuid
+
+from sqlalchemy.dialects.postgresql import JSONB, UUID
 from sqlalchemy.orm import backref
 
 from .base import BtrModelBase
@@ -11,27 +14,41 @@ class OwnershipDetails(db.Model, BtrModelBase):
 
     __tablename__ = "ownership_details"
 
-    business_identifier = Column(String(300), index=True, nullable=False)
-    control_type = Column(String(50), nullable=False)
-    control_percent = Column(Integer(), nullable=False)
-    additional_text = Column(String(2000), nullable=True)
+    uuid = db.Column(UUID(as_uuid=True), default=uuid.uuid4)  # used as external reference
+
+    business_identifier = db.Column(db.String(300), index=True, nullable=False)
+    control_type = db.Column(JSONB, nullable=True)
+    percent_of_shares = db.Column(db.REAL(), nullable=True)
+    percent_of_votes = db.Column(db.REAL(), nullable=True)
+    missing_info_reason = db.Column(db.String(2000), nullable=True)
+    start_date = db.Column(db.Date(), nullable=False)
+    end_date = db.Column(db.Date(), nullable=True)
 
     # Relationships
     person_id = db.Column('person_id', db.Integer, db.ForeignKey('persons.id'))
     person = db.relationship('Person', backref=backref('person', uselist=False), foreign_keys=[person_id])
 
     submission_id = db.Column('submission_id', db.Integer, db.ForeignKey('submission.id'))
-    submission = db.relationship('Submission', backref=backref('submission', uselist=False), foreign_keys=[submission_id])
 
     @classmethod
-    def find_by_id(cls, search_id: int):
+    def find_by_id(cls, search_id: int) -> OwnershipDetails:
         """Return a OwnershipDetails if they exist, filtered by search_id."""
         return cls.query.filter_by(id=search_id).one_or_none()
+    
+    @classmethod
+    def find_by_uuid(cls, search_uuid: uuid) -> OwnershipDetails:
+        """Return a OwnershipDetails if they exist and match the provided search_uuid."""
+        return cls.query.filter_by(uuid=search_uuid).one_or_none()
 
     @classmethod
-    def find_by_submission_id(cls, search_id: int):
+    def find_by_submission_id(cls, search_id: int) -> OwnershipDetails:
         """Return a OwnershipDetails if they exist, filtered by submission_id."""
         return cls.query.filter_by(submission_id=search_id).one_or_none()
+
+    @classmethod
+    def find_current_for_business(cls, business_identifier: str) -> list[OwnershipDetails]:
+        """Return all the current ownership details for the business identifier."""
+        return cls.query.filter_by(business_identifier=business_identifier, end_date=None).all()
 
     def save(self):
         """Save and commit immediately."""

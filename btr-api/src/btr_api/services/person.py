@@ -32,8 +32,7 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 import json
-
-from sqlalchemy import DateTime
+from datetime import date
 
 from btr_api.models import Person as PersonModel
 
@@ -43,26 +42,59 @@ class PersonSerializer(object):
     def from_dict(json_dict: dict) -> PersonModel:
         """Create Person from json dict"""
         person = PersonModel()
-        person.full_name = json_dict.get('full_name')
-        person.family_name = json_dict.get('family_name')
-        person.given_name = json_dict.get('given_name')
-        person.patronymic_name = json_dict.get('patronymic_name')
+        person.full_name = json_dict.get('fullName')
+        person.preffered_name = json_dict.get('prefferedName')
+        person.family_name = json_dict.get('familyName')
+        person.given_name = json_dict.get('givenName')
+        person.patronymic_name = json_dict.get('patronymicName')
 
-        date_of_birth_str = json_dict.get('date_of_birth')
-        person.date_of_birth = date_of_birth_str if date_of_birth_str else None
+        if birth_date := json_dict.get('birthDate'):
+            person.birth_date = date.fromisoformat(birth_date)
 
-        person.is_permanent_resident = json_dict.get('is_permanent_resident', False)
-        person.is_canadian_citizen = json_dict.get('is_canadian_citizen', False)
-        person.is_canadian_tax_resident = json_dict.get('is_canadian_tax_resident', False)
+        person.email = json_dict.get('email')
+        person.address = json_dict.get('address')
+    
+        person.is_permanent_resident = json_dict.get('citizenshipCA') == 'pr'
+        person.is_canadian_citizen = json_dict.get('citizenshipCA') == 'citizen'
+        person.citizenships_ex_ca = json_dict.get('citizenshipExCA')
+
+        person.tax_number = json_dict.get('taxNumber')
+        person.is_canadian_tax_resident = json_dict.get('isTaxResident')
+        
+        person.competency = json_dict.get('competency')
 
         return person
+
+    @staticmethod
+    def to_dict(person: PersonModel) -> dict:
+        """Return the person class as a dict."""
+        # TODO: remove this once sqlalchemy dataclass/attrs/cattrs integration added
+        citizenship_ca = 'other'
+        if person.is_canadian_citizen:
+            citizenship_ca = 'citizen'
+        elif person.is_permanent_resident:
+            citizenship_ca = 'pr'
+
+        return {
+            'uuid': person.uuid,
+            'fullName': person.full_name,
+            'prefferedName': person.preffered_name,
+            'birthDate': person.birth_date,
+            'competency': person.competency,
+            'email': person.email,
+            'hasTaxNumber': person.tax_number is not None,
+            'taxNumber': person.tax_number,
+            'citizenshipCA': citizenship_ca,
+            'citizenshipsExCa': person.citizenships_ex_ca,
+            'isTaxResident': person.is_canadian_tax_resident,
+            'address': person.address
+        }
 
 
 class PersonService(object):
     @staticmethod
-    def save_person_from_submission(submission_dict: dict) -> PersonModel | None:
-        if 'person' in submission_dict:
-            person_dict = submission_dict['person']
+    def create_person_from_owner(owner_dict: dict) -> PersonModel | None:
+        if person_dict := owner_dict.get('profile'):
             person: PersonModel = PersonSerializer.from_dict(person_dict)
             return person
 

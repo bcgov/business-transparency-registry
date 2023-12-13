@@ -14,4 +14,5 @@ export interface SignificantIndividualI {
   startDate: string // YYYY-MM-DDT:HH:mm:ss+-HH:mm
   endDate?: string // YYYY-MM-DDT:HH:mm:ss+-HH:mm
   action?: FilingActionE
+  uuid?: string
 }

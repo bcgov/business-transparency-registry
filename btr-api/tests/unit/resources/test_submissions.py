@@ -25,7 +25,7 @@ def test_get_plots(client, session, test_name, submission_type, payload):
         # Setup
         id = ""
         if payload:
-            sub = Submission()
+            sub = SubmissionModel()
             sub.payload = payload
             sub.type = submission_type
             session.add(sub)
@@ -36,7 +36,6 @@ def test_get_plots(client, session, test_name, submission_type, payload):
         rv = client.get(f"/plots/{id}")
 
         # Confirm outcome
-        print(test_name)
         assert rv.status_code == HTTPStatus.OK
 
         if payload:
@@ -45,19 +44,26 @@ def test_get_plots(client, session, test_name, submission_type, payload):
                 assert value in rv.text
 
 
-def test_post_plots(client, mocker):
+def test_post_plots_db_mocked(client, mocker):
+    """Assure post submission works (db mocked)."""
     mock_submission_save = mocker.patch.object(SubmissionModel, 'save')
     mock_find_by_uuid = mocker.patch.object(PersonModel, 'find_by_uuid')
-    mock_save_person = mocker.patch.object(PersonService, 'save_person_from_submission')
-    mock_save_ownership = mocker.patch.object(OwnershipDetailsService, 'save_ownership_details_from_submission')
+    mock_create_person = mocker.patch.object(PersonService, 'create_person_from_owner')
+    mock_create_ownership = mocker.patch.object(OwnershipDetailsService, 'create_ownership_details_from_owner')
 
     rv = client.post("/plots", json=TEST_SI_FILING, content_type='application/json')
-    
     assert rv.status_code == HTTPStatus.CREATED
 
     mock_submission_save.assert_called_once()
-    mock_find_by_uuid.assert_called()
-    mock_save_person.assert_called()
-    mock_save_ownership.assert_called()
+    mock_find_by_uuid.assert_not_called()
+    mock_create_person.assert_called()
+    mock_create_ownership.assert_called()
 
-    assert mock_save_ownership.call_count == len(TEST_SI_FILING['significantIndividuals'])
+    assert mock_create_ownership.call_count == len(TEST_SI_FILING['significantIndividuals'])
+
+
+def test_post_plots(client, session):
+    """Assure post submission works."""
+    with nested_session(session):
+        rv = client.post("/plots", json=TEST_SI_FILING, content_type='application/json')
+        assert rv.status_code == HTTPStatus.CREATED

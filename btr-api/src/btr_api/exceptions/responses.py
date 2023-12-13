@@ -31,48 +31,29 @@
 # CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
+"""Exception responses."""
 from http import HTTPStatus
 
-from flask import Blueprint
-from flask import jsonify
-from flask import request
+from flask import jsonify, current_app
 
-from btr_api.exceptions import exception_response
-from btr_api.models import Submission
-from btr_api.services.submission import SubmissionService
+from .exceptions import BaseExceptionE
 
 
-bp = Blueprint("submission", __name__)
+def bad_request_response(message: str, errors: list[dict[str, str]] = None):
+    """Build generic bad request response."""
+    return jsonify({'message': message, 'details': errors or []}), HTTPStatus.BAD_REQUEST
 
 
-@bp.route("/", methods=("GET",))
-@bp.route("/<id>", methods=("GET",))
-def registers(id: int | None = None):
-    """Get the submissions, or sepcific submission by id."""
+def exception_response(exception: BaseExceptionE):
+    """Build exception error response."""
+    current_app.logger.error(repr(exception))
     try:
-        if id:
-            if submission := Submission.find_by_id(id):
-                return jsonify(type=submission.type, submission=submission.payload)
-            return {}, HTTPStatus.NOT_FOUND
-
-        submissions = Submission.get_filtered_submissions()
-
-        return jsonify(submissions)
-
-    except Exception as exception:  # noqa: B902
-        return exception_response(exception)
-
-
-@bp.route("/", methods=("POST",))
-def create_register():
-    try:
-        if json_input := request.get_json():
-            # normally do some validation here
-            submission = SubmissionService.create_submission(json_input)
-            submission.save()
-            return jsonify(id=submission.id), HTTPStatus.CREATED
-
-        return {}, HTTPStatus.BAD_REQUEST
-
-    except Exception as exception:  # noqa: B902
-        return exception_response(exception)
+        message = exception.message or 'Error processing request.'
+        detail = exception.error or repr(exception)
+        status_code = exception.status_code or HTTPStatus.INTERNAL_SERVER_ERROR
+    except Exception:  # noqa B902; Catch all scenario.
+        # uncaught exception
+        message = 'Error processing request.'
+        detail = repr(exception)
+        status_code = HTTPStatus.INTERNAL_SERVER_ERROR
+    return jsonify({'message': message, 'detail': detail}), status_code

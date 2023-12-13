@@ -35,44 +35,21 @@ from http import HTTPStatus
 
 from flask import Blueprint
 from flask import jsonify
-from flask import request
 
 from btr_api.exceptions import exception_response
-from btr_api.models import Submission
-from btr_api.services.submission import SubmissionService
+from btr_api.models import OwnershipDetails
+from btr_api.services.ownership_details import OwnershipDetailsSerializer
 
 
-bp = Blueprint("submission", __name__)
+bp = Blueprint("owners", __name__)
 
 
-@bp.route("/", methods=("GET",))
-@bp.route("/<id>", methods=("GET",))
-def registers(id: int | None = None):
-    """Get the submissions, or sepcific submission by id."""
+@bp.route("/<business_identifier>", methods=("GET",))
+def owners(business_identifier: int):
+    """Return the current owners for the business."""
     try:
-        if id:
-            if submission := Submission.find_by_id(id):
-                return jsonify(type=submission.type, submission=submission.payload)
-            return {}, HTTPStatus.NOT_FOUND
-
-        submissions = Submission.get_filtered_submissions()
-
-        return jsonify(submissions)
-
-    except Exception as exception:  # noqa: B902
-        return exception_response(exception)
-
-
-@bp.route("/", methods=("POST",))
-def create_register():
-    try:
-        if json_input := request.get_json():
-            # normally do some validation here
-            submission = SubmissionService.create_submission(json_input)
-            submission.save()
-            return jsonify(id=submission.id), HTTPStatus.CREATED
-
-        return {}, HTTPStatus.BAD_REQUEST
+      owners = OwnershipDetails.find_current_for_business(business_identifier)
+      return jsonify([OwnershipDetailsSerializer.to_dict(owner) for owner in owners]), HTTPStatus.OK
 
     except Exception as exception:  # noqa: B902
         return exception_response(exception)
