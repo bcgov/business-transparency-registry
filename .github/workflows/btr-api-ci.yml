@@ -80,7 +80,7 @@ jobs:
           poetry run flask db migrate
 
       - name: Run tests
-        run: poetry run pytest --cov=./ --cov-report=xml
+        run: poetry run pytest
 
       - name: Check coverage
         run: poetry run coverage report
