@@ -36,7 +36,7 @@ from __future__ import annotations
 
 from datetime import datetime
 
-from sqlalchemy import desc
+from sqlalchemy import desc, func
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import backref
 from sql_versioning import Versioned
@@ -61,7 +61,7 @@ class Submission(Versioned, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     type = db.Column(db.Enum(SubmissionType), default=SubmissionType.other)
     effective_date = db.Column(db.Date(), nullable=True)
-    submitted_datetime = db.Column("submitted_datetime", db.DateTime(timezone=True), default=datetime.now())
+    submitted_datetime = db.Column("submitted_datetime", db.DateTime(timezone=True), server_default=func.now())
     payload = db.Column("payload", JSONB)
 
     # Relationships
