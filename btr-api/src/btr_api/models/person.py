@@ -15,7 +15,7 @@ class Person(db.Model, BtrModelBase):
     uuid = Column(UUID(as_uuid=True), default=uuid.uuid4)  # used as external reference
 
     full_name = Column(String(300), index=True, nullable=True)
-    preffered_name = Column(String(300), nullable=True)
+    preferred_name = Column(String(300), nullable=True)
     family_name = Column(String(100), nullable=True)
     given_name = Column(String(100), nullable=True)
     patronymic_name = Column(String(100), nullable=True)

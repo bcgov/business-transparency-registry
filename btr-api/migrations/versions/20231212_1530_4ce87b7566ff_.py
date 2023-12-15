@@ -33,7 +33,7 @@ def upgrade():
         batch_op.drop_column('additional_text')
 
     with op.batch_alter_table('persons', schema=None) as batch_op:
-        batch_op.add_column(sa.Column('preffered_name', sa.String(length=300), nullable=True))
+        batch_op.add_column(sa.Column('preferred_name', sa.String(length=300), nullable=True))
         batch_op.add_column(sa.Column('birth_date', sa.Date(), nullable=True))
         batch_op.add_column(sa.Column('email', sa.String(length=150), nullable=True))
         batch_op.add_column(sa.Column('citizenships_ex_ca', postgresql.JSONB(astext_type=sa.Text()), nullable=True))
@@ -77,7 +77,7 @@ def downgrade():
         batch_op.drop_column('citizenships_ex_ca')
         batch_op.drop_column('email')
         batch_op.drop_column('birth_date')
-        batch_op.drop_column('preffered_name')
+        batch_op.drop_column('preferred_name')
 
     with op.batch_alter_table('ownership_details', schema=None) as batch_op:
         batch_op.add_column(sa.Column('additional_text', sa.VARCHAR(length=2000), autoincrement=False, nullable=True))

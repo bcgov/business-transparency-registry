@@ -43,7 +43,7 @@ class PersonSerializer(object):
         """Create Person from json dict"""
         person = PersonModel()
         person.full_name = json_dict.get('fullName')
-        person.preffered_name = json_dict.get('prefferedName')
+        person.preferred_name = json_dict.get('preferredName')
         person.family_name = json_dict.get('familyName')
         person.given_name = json_dict.get('givenName')
         person.patronymic_name = json_dict.get('patronymicName')
@@ -78,8 +78,8 @@ class PersonSerializer(object):
         return {
             'uuid': person.uuid,
             'fullName': person.full_name,
-            'prefferedName': person.preffered_name,
-            'birthDate': person.birth_date,
+            'preferredName': person.preferred_name,
+            'birthDate': person.birth_date.isoformat() if person.birth_date else None,
             'competency': person.competency,
             'email': person.email,
             'hasTaxNumber': person.tax_number is not None,
