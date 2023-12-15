@@ -80,10 +80,10 @@ jobs:
           poetry run flask db migrate
 
       - name: Run tests
-        run: poetry run pytest
+        run: poetry run pytest --cov=./src --cov-report=xml
 
       - name: Check coverage
-        run: poetry run coverage report
+        run: poetry run coverage report --fail-under=80
     
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v3
