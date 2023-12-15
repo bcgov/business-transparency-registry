@@ -72,12 +72,59 @@
           </div>
         </div>
       </template>
+      
+
+      <template #actions-data="{ row, index }">
+        <div>
+          <UButton 
+            label="Edit"
+            color="white"
+            @click="()=>{
+              currentEditIndex = index
+              filingEditSIOpen(index)
+            }"
+          />
+          <UPopover>
+            <UButton 
+              color="white" 
+              icon="i-heroicons-chevron-down-20-solid"
+            />
+            <template #panel>
+              <div class="p-4">
+                <UButton 
+                  label="Remove"
+                  color="white"
+                  @click="()=>{console.log('remove button clicked')}"
+                />
+              </div>
+            </template>
+          </UPopover>
+        </div>
+      </template>
+      
+      <template #editForm-data="{ row }">
+        <div v-if="currentEditIndex != -1" class="mt-10 bg-white rounded flex flex-row">
+          <label class="font-bold text-lg min-w-[190px]">Edit an Individual</label>
+          <IndividualPersonAddNew
+            :setSignificantIndividual="row"
+            @cancel="() => {
+              filingEditSIClose()
+            }"
+            @add="()=>{console.log('add button clicked')}"
+          />
+        </div>
+      </template>
     </UTable>
   </div>
 </template>
 
 <script setup lang="ts">
+const {filingEditSIOpen, filingEditSIClose} = useSignificantIndividuals()
+
 defineProps<{ individuals: SignificantIndividualI[] }>()
+//TO-DO: a model value so the parent component knows if the user is editing a SI. 
+
+const currentEditIndex = ref(-1)
 
 const { t } = useI18n()
 const headers = [
@@ -85,7 +132,9 @@ const headers = [
   { key: 'address', label: t('labels.address') },
   { key: 'details', label: t('labels.details') },
   { key: 'significanceDates', label: t('labels.significanceDates') },
-  { key: 'control', label: t('labels.control') }
+  { key: 'control', label: t('labels.control') },
+  { key: 'actions'},
+  { key: 'editForm'}
 ]
 
 function getTaxResidentText (isTaxResident: boolean) {
@@ -130,6 +179,30 @@ function getDirectorsControlText (directorsConstrol: ControlOfDirectorsI) {
 }
 </script>
 
-<style scoped>
+<style>
+/* Ensure the table row has a relative position to act as a container for absolute positioning */
+tr.editing {
+  background-color: lightblue;
+}
 
+/* Hide all <td> elements in a row with class 'editing' */
+tr.editing td {
+  display: none;
+}
+
+/* Absolute positioning for the last <td> */
+tr.editing td:last-child {
+  display: block;
+  position: relative;
+  width: 100%;
+}
+
+/* tr.removed {
+  display: none;
+} */
+
+/* Hide the last <td> element in rows without class 'editing' */
+tr:not(.editing) td:last-child {
+  display: none;
+}
 </style>

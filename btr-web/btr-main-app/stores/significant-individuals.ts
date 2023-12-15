@@ -7,6 +7,7 @@ export const useSignificantIndividuals = defineStore('significantIndividuals', (
   const currentSavedSIs: Ref<SignificantIndividualI[]> = ref([]) // saved SIs from api for this business
   const showErrors = ref(false) // show submit error validations
   const submitting = ref(false)
+  const editingIndex = ref(-1)
 
   watch(() => currentSIFiling.value?.effectiveDate, (val) => {
     // set the start date for all newly added SIs
@@ -23,6 +24,21 @@ export const useSignificantIndividuals = defineStore('significantIndividuals', (
     const lastNewSIIndex = currentSIFiling.value.significantIndividuals
       .findLastIndex(si => si.action === FilingActionE.ADD)
     currentSIFiling.value.significantIndividuals.splice(lastNewSIIndex + 1, 0, significantIndividual)
+  }
+  
+  function filingEditSIOpen(index: number) {
+    const significantIndividual = currentSIFiling.value.significantIndividuals[index]
+    editingIndex.value = index
+    let deepCopy = JSON.parse(JSON.stringify(significantIndividual))
+    deepCopy.class = 'editing'
+    deepCopy.action = FilingActionE.EDIT
+    currentSIFiling.value.significantIndividuals.splice(index + 1, 0, deepCopy)
+  }
+
+  function filingEditSIClose() {
+    console.log('currently editing' + editingIndex.value)
+    currentSIFiling.value.significantIndividuals.splice(editingIndex.value + 1, 1)
+    editingIndex.value = -1
   }
 
   const _getFolioNumber = (): string => {
@@ -87,6 +103,8 @@ export const useSignificantIndividuals = defineStore('significantIndividuals', (
     showErrors,
     submitting,
     filingAddSI,
+    filingEditSIOpen,
+    filingEditSIClose,
     filingInit,
     filingSave,
     filingSubmit,

@@ -1,7 +1,9 @@
 <template>
   <div data-cy="addIndividualPerson">
-    <div>
+    <div>{{ editing }} </div>
+    <div v-if="!editing">
       <p>
+        11111
         {{ $t('texts.addIndividualPerson') }}
       </p>
     </div>
@@ -264,10 +266,15 @@ const defaultSI = {
   percentOfShares: '',
   percentOfVotes: '',
   startDate: props.startDate || '',
-  action: FilingActionE.ADD
+  action: FilingActionE.ADD,
+  class: ''
 }
 // NOTE: not setting this as modelValue because it is a nested object so mutating it gets complicated
 const significantIndividual: Ref<SignificantIndividualI> = ref(props.setSignificantIndividual || defaultSI)
+
+const editing = computed(() => {
+  return significantIndividual.value.action === FilingActionE.EDIT
+})
 
 watch(() => props.startDate, (val) => {
   significantIndividual.value.startDate = val
