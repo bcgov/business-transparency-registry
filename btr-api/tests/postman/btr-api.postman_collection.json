@@ -213,7 +213,7 @@
 								},
 								{
 									"key": "Date",
-									"value": "Wed, 13 Dec 2023 21:40:11 GMT"
+									"value": "Fri, 15 Dec 2023 18:21:32 GMT"
 								},
 								{
 									"key": "Content-Type",
@@ -221,7 +221,7 @@
 								},
 								{
 									"key": "Content-Length",
-									"value": "907"
+									"value": "888"
 								},
 								{
 									"key": "Connection",
@@ -229,7 +229,7 @@
 								}
 							],
 							"cookie": [],
-							"body": "[\n    {\n        \"controlType\": {\n            \"directors\": {\n                \"directControl\": true,\n                \"inConcertControl\": true,\n                \"indirectControl\": true,\n                \"significantInfluence\": false\n            },\n            \"other\": \"\",\n            \"sharesVotes\": {\n                \"beneficialOwner\": false,\n                \"inConcertControl\": true,\n                \"indirectControl\": false,\n                \"registeredOwner\": true\n            }\n        },\n        \"endDate\": null,\n        \"missingInfoReason\": null,\n        \"percentOfShares\": 20,\n        \"percentOfVotes\": 10,\n        \"profile\": {\n            \"address\": {\n                \"city\": \"Vancouver\",\n                \"country\": {\n                    \"alpha_2\": \"CA\",\n                    \"name\": \"Canada\"\n                },\n                \"line1\": \"111 test street\",\n                \"line2\": null,\n                \"postalCode\": \"V0E 1H5\",\n                \"region\": \"BC\"\n            },\n            \"birthDate\": \"Sun, 19 Mar 2000 00:00:00 GMT\",\n            \"citizenshipCA\": \"citizen\",\n            \"citizenshipsExCa\": null,\n            \"competency\": {\n                \"decisionMaking\": true,\n                \"financialAffairs\": true\n            },\n            \"email\": \"123@test.com\",\n            \"fullName\": \"John Smith\",\n            \"hasTaxNumber\": true,\n            \"isTaxResident\": true,\n            \"preferredName\": null,\n            \"taxNumber\": \"000 000 000\",\n            \"uuid\": \"14d7608b-7d04-4a72-bca7-57cf713206f1\"\n        },\n        \"startDate\": \"2020-04-21\",\n        \"uuid\": \"4ea1e7f1-6333-498f-b4a5-217032342cf7\"\n    }\n]"
+							"body": "[\n    {\n        \"controlType\": {\n            \"directors\": {\n                \"directControl\": true,\n                \"inConcertControl\": true,\n                \"indirectControl\": true,\n                \"significantInfluence\": false\n            },\n            \"other\": \"\",\n            \"sharesVotes\": {\n                \"beneficialOwner\": false,\n                \"inConcertControl\": true,\n                \"indirectControl\": false,\n                \"registeredOwner\": true\n            }\n        },\n        \"endDate\": null,\n        \"missingInfoReason\": null,\n        \"percentOfShares\": 20,\n        \"percentOfVotes\": 10,\n        \"profile\": {\n            \"address\": {\n                \"city\": \"Vancouver\",\n                \"country\": {\n                    \"alpha_2\": \"CA\",\n                    \"name\": \"Canada\"\n                },\n                \"line1\": \"111 test street\",\n                \"line2\": null,\n                \"postalCode\": \"V0E 1H5\",\n                \"region\": \"BC\"\n            },\n            \"birthDate\": \"2000-03-19\",\n            \"citizenshipCA\": \"citizen\",\n            \"citizenshipsExCa\": null,\n            \"competency\": {\n                \"decisionMaking\": true,\n                \"financialAffairs\": true\n            },\n            \"email\": \"123@test.com\",\n            \"fullName\": \"John Smith\",\n            \"hasTaxNumber\": true,\n            \"isTaxResident\": true,\n            \"prefferedName\": null,\n            \"taxNumber\": \"000 000 000\",\n            \"uuid\": \"1ff28004-894e-43dc-af03-86aeb925d95e\"\n        },\n        \"startDate\": \"2020-04-21\",\n        \"uuid\": \"482564ad-311e-4b48-85d3-d1199d2dc6b1\"\n    }\n]"
 						}
 					]
 				}
