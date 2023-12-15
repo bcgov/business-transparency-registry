@@ -6,9 +6,9 @@ def nested_session(session):
     try:
         sess = session.begin_nested()
         yield sess
-        sess.rollback()
-    except:
-        pass
+    except Exception as error:
+        print(error)
+        raise error
     finally:
         pass
 
@@ -29,8 +29,8 @@ INDIVIDUAL_1 = {
         "other": ""
     },
     "missingInfoReason": "",
-    "percentOfShares": "25%",
-    "percentOfVotes": "30%",
+    "percentOfShares": "25",
+    "percentOfVotes": "30",
     "profile": {
         "address": {},
         "competency": {
@@ -47,8 +47,9 @@ INDIVIDUAL_1 = {
         "preferredName": "John",
         "taxNumber": "123456789"
     },
-    "startDate": "2023-01-01T00:00:00+00:00",
-    "endDate": "2024-01-01T00:00:00+00:00"
+    "startDate": "2023-01-01",
+    "endDate": "2024-01-01",
+    "action": "add"
 }
 
 INDIVIDUAL_2 = {
@@ -68,8 +69,8 @@ INDIVIDUAL_2 = {
         "other": ""
     },
     "missingInfoReason": "",
-    "percentOfShares": "12%",
-    "percentOfVotes": "11%",
+    "percentOfShares": "12",
+    "percentOfVotes": "11",
     "profile": {
         "address": {},
         "competency": {
@@ -84,10 +85,10 @@ INDIVIDUAL_2 = {
         "isTaxResident":True,
         "fullName": "Jane Doe",
         "preferredName": "",
-        "taxNumber": "123000111",
-        "uuid": "1112"
+        "taxNumber": "123000111"
     },
-    "startDate": "2023-01-01T00:00:00+00:00"
+    "startDate": "2023-01-01",
+    "action": "add"
 }
 
 INDIVIDUAL_3 = {
@@ -107,8 +108,8 @@ INDIVIDUAL_3 = {
         "other": "Other control details"
     },
     "missingInfoReason": "Not applicable",
-    "percentOfShares": "15%",
-    "percentOfVotes": "30%",
+    "percentOfShares": "15",
+    "percentOfVotes": "30",
     "profile": {
         "address": {},
         "competency": {
@@ -125,13 +126,14 @@ INDIVIDUAL_3 = {
         "preferredName": "testing",
         "taxNumber": "123456000"
     },
-    "startDate": "2023-01-01T00:00:00+00:00"
+    "startDate": "2023-01-01",
+    "action": "add"
 }
 
 TEST_SI_FILING = {
     "businessIdentifier": "BC0871427",
     "folioNumber": "12345",
-    "effectiveDate": "2023-12-11T10:00:00+00:00",
+    "effectiveDate": "2023-12-11",
     "significantIndividuals": [
         INDIVIDUAL_1,
         INDIVIDUAL_2,

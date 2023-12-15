@@ -36,7 +36,7 @@ from __future__ import annotations
 
 from datetime import datetime
 
-from sqlalchemy import desc
+from sqlalchemy import desc, func
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import backref
 from sql_versioning import Versioned
@@ -59,29 +59,20 @@ class Submission(Versioned, db.Model):
     __tablename__ = "submission"
 
     id = db.Column(db.Integer, primary_key=True)
-    type = db.Column("state", db.Enum(SubmissionType), default=SubmissionType.other)
-    submitted_date = db.Column("submitted_date", db.DateTime(timezone=True), default=datetime.now())
+    type = db.Column(db.Enum(SubmissionType), default=SubmissionType.other)
+    effective_date = db.Column(db.Date(), nullable=True)
+    submitted_datetime = db.Column("submitted_datetime", db.DateTime(timezone=True), server_default=func.now())
     payload = db.Column("payload", JSONB)
 
     # Relationships
+    owners = db.relationship('OwnershipDetails', lazy='dynamic')
+
     submitter_id = db.Column('submitter_id', db.Integer,
                              db.ForeignKey('users.id'))
 
     submitter = db.relationship('User',
                                 backref=backref('filing_submitter', uselist=False),
                                 foreign_keys=[submitter_id])
-
-    # @property
-    # def json(self):
-    #     """Return a json representation of this object."""
-    #     submission_dict = {
-    #          'id': self.id,
-    #          'type': self.type,
-    #          'submittedDate': self.submitted_date.isoformat(),
-    #          'payload': self.payload
-    #     }
-    #     if self.submitter_id:
-    #             submission_dict['submitter'] = self.submitter.username
 
 
     def save(self):
@@ -101,5 +92,5 @@ class Submission(Versioned, db.Model):
     @classmethod
     def get_filtered_submissions(cls):
         """Return the submissions."""
-        query = cls.query.order_by(desc(Submission.submitted_date))
+        query = cls.query.order_by(desc(Submission.submitted_datetime))
         return query.all()

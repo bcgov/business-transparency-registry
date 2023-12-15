@@ -115,6 +115,125 @@
 					"response": []
 				}
 			]
+		},
+		{
+			"name": "submission",
+			"item": [
+				{
+					"name": "BC0871427",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"businessIdentifier\": \"BC0871427\",\n    \"effectiveDate\": \"2020-10-03\",\n    \"significantIndividuals\": [\n        {\n            \"percentOfShares\": \"20\",\n            \"percentOfVotes\": \"10\",\n            \"controlType\": {\n                \"sharesVotes\": {\n                    \"registeredOwner\": true,\n                    \"beneficialOwner\": false,\n                    \"indirectControl\": false,\n                    \"inConcertControl\": true\n                },\n                \"directors\": {\n                    \"directControl\": true,\n                    \"indirectControl\": true,\n                    \"significantInfluence\": false,\n                    \"inConcertControl\": true\n                },\n                \"other\": \"\"\n            },\n            \"missingInfoReason\": null,\n            \"startDate\": \"2020-04-21\",\n            \"action\": \"add\",\n            \"profile\": {\n                \"fullName\": \"John Smith\",\n                \"preferredName\": \"John\",\n                \"email\": \"123@test.com\",\n                \"address\": {\n                    \"country\": { \"name\": \"Canada\", \"alpha_2\": \"CA\" },\n                    \"line1\": \"111 test street\",\n                    \"line2\": null,\n                    \"city\": \"Vancouver\",\n                    \"region\": \"BC\",\n                    \"postalCode\": \"V0E 1H5\"\n                },\n                \"competency\": {\n                    \"decisionMaking\": true,\n                    \"financialAffairs\": true\n                },\n                \"birthDate\": \"2000-03-19\",\n                \"citizenshipCA\": \"citizen\",\n                \"citizenshipsExCA\": [],\n                \"isTaxResident\": true,\n                \"hasTaxNumber\": true,\n                \"taxNumber\": \"000 000 000\"\n            }\n        }\n    ]\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{internal_url}}/plots",
+							"host": [
+								"{{internal_url}}"
+							],
+							"path": [
+								"plots"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "owners",
+			"item": [
+				{
+					"name": "BC0871427 current",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{internal_url}}/owners/BC0871427",
+							"host": [
+								"{{internal_url}}"
+							],
+							"path": [
+								"owners",
+								"BC0871427"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "BC0871427 current",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{internal_url}}/owners/BC0871427",
+									"host": [
+										"{{internal_url}}"
+									],
+									"path": [
+										"owners",
+										"BC0871427"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Server",
+									"value": "Werkzeug/3.0.1 Python/3.11.4"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 13 Dec 2023 21:40:11 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Length",
+									"value": "907"
+								},
+								{
+									"key": "Connection",
+									"value": "close"
+								}
+							],
+							"cookie": [],
+							"body": "[\n    {\n        \"controlType\": {\n            \"directors\": {\n                \"directControl\": true,\n                \"inConcertControl\": true,\n                \"indirectControl\": true,\n                \"significantInfluence\": false\n            },\n            \"other\": \"\",\n            \"sharesVotes\": {\n                \"beneficialOwner\": false,\n                \"inConcertControl\": true,\n                \"indirectControl\": false,\n                \"registeredOwner\": true\n            }\n        },\n        \"endDate\": null,\n        \"missingInfoReason\": null,\n        \"percentOfShares\": 20,\n        \"percentOfVotes\": 10,\n        \"profile\": {\n            \"address\": {\n                \"city\": \"Vancouver\",\n                \"country\": {\n                    \"alpha_2\": \"CA\",\n                    \"name\": \"Canada\"\n                },\n                \"line1\": \"111 test street\",\n                \"line2\": null,\n                \"postalCode\": \"V0E 1H5\",\n                \"region\": \"BC\"\n            },\n            \"birthDate\": \"Sun, 19 Mar 2000 00:00:00 GMT\",\n            \"citizenshipCA\": \"citizen\",\n            \"citizenshipsExCa\": null,\n            \"competency\": {\n                \"decisionMaking\": true,\n                \"financialAffairs\": true\n            },\n            \"email\": \"123@test.com\",\n            \"fullName\": \"John Smith\",\n            \"hasTaxNumber\": true,\n            \"isTaxResident\": true,\n            \"prefferedName\": null,\n            \"taxNumber\": \"000 000 000\",\n            \"uuid\": \"14d7608b-7d04-4a72-bca7-57cf713206f1\"\n        },\n        \"startDate\": \"2020-04-21\",\n        \"uuid\": \"4ea1e7f1-6333-498f-b4a5-217032342cf7\"\n    }\n]"
+						}
+					]
+				}
+			]
 		}
 	]
 }

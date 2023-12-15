@@ -165,7 +165,7 @@ def db(app):  # pylint: disable=redefined-outer-name, invalid-name
 
         yield _db
 
-        drop_test_db(database=app.config.get('DB_NAME'),
+        drop_test_db(database=app.config.get('DATABASE_TEST_NAME'),
                      database_uri=app.config.get('SQLALCHEMY_DATABASE_URI'))
 
 

@@ -31,48 +31,57 @@
 # CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
+"""Application Specific Exceptions, to manage api errors."""
+from dataclasses import dataclass
 from http import HTTPStatus
 
-from flask import Blueprint
-from flask import jsonify
-from flask import request
 
-from btr_api.exceptions import exception_response
-from btr_api.models import Submission
-from btr_api.services.submission import SubmissionService
+@dataclass
+class BaseExceptionE(Exception):
+    """Base exception class for custom exceptions."""
 
-
-bp = Blueprint("submission", __name__)
+    error: str
+    message: str = None
+    status_code: HTTPStatus = None
 
 
-@bp.route("/", methods=("GET",))
-@bp.route("/<id>", methods=("GET",))
-def registers(id: int | None = None):
-    """Get the submissions, or sepcific submission by id."""
-    try:
-        if id:
-            if submission := Submission.find_by_id(id):
-                return jsonify(type=submission.type, submission=submission.payload)
-            return {}, HTTPStatus.NOT_FOUND
+@dataclass
+class AuthorizationException(BaseExceptionE):
+    """Authorization exception."""
 
-        submissions = Submission.get_filtered_submissions()
-
-        return jsonify(submissions)
-
-    except Exception as exception:  # noqa: B902
-        return exception_response(exception)
+    def __post_init__(self):
+        """Return a valid AuthorizationException."""
+        self.error = f'{self.error}, {self.status_code}'
+        self.message = 'Unauthorized access.'
+        self.status_code = HTTPStatus.UNAUTHORIZED
 
 
-@bp.route("/", methods=("POST",))
-def create_register():
-    try:
-        if json_input := request.get_json():
-            # normally do some validation here
-            submission = SubmissionService.create_submission(json_input)
-            submission.save()
-            return jsonify(id=submission.id), HTTPStatus.CREATED
+@dataclass
+class BusinessException(BaseExceptionE):
+    """Business rules exception."""
 
-        return {}, HTTPStatus.BAD_REQUEST
+    def __post_init__(self):
+        """Return a valid BusinessException."""
+        if not self.message:
+            self.message = 'Business exception.'
 
-    except Exception as exception:  # noqa: B902
-        return exception_response(exception)
+
+@dataclass
+class DatabaseException(BaseExceptionE):
+    """Database insert/update exception."""
+
+    def __post_init__(self):
+        """Return a valid DatabaseException."""
+        self.message = 'Database error while processing request.'
+        self.status_code = HTTPStatus.INTERNAL_SERVER_ERROR
+
+
+@dataclass
+class ExternalServiceException(BaseExceptionE):
+    """3rd party service exception."""
+
+    def __post_init__(self):
+        """Return a valid ExternalServiceException."""
+        self.message = '3rd party service error while processing request.'
+        self.error = f'{self.error}, {self.status_code}'
+        self.status_code = HTTPStatus.SERVICE_UNAVAILABLE

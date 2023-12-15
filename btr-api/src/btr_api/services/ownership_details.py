@@ -31,37 +31,65 @@
 # CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
-from btr_api.models import OwnershipDetails as OwnershipDetailsModel
+import json
+from datetime import date, datetime
+
+from btr_api.exceptions import BusinessException
+from btr_api.models import OwnershipDetails as OwnershipDetailsModel, Person as PersonModel
+from btr_api.services.person import PersonSerializer
 
 
 class OwnershipDetailsSerializer(object):
     @staticmethod
-    def from_dict(json_dict: dict) -> OwnershipDetailsModel:
+    def from_dict(owner_dict: dict) -> OwnershipDetailsModel | None:
         """Create Person from json dict"""
-        ownership_details = OwnershipDetailsModel()
-        ownership_details.business_identifier = json_dict['business_identifier']
-        ownership_details.submission_id = json_dict['submission_id']
+        ownership_details = None
+        # TODO: add enum for action
+        if owner_dict.get('action') == 'remove':
+            if (uuid := owner_dict.get('uuid')) and (end_date := owner_dict.get('endDate')):
+                ownership_details = OwnershipDetailsModel.find_by_uuid(uuid)
+                ownership_details.end_date = date.fromisoformat(end_date)
+            else:
+                # TODO: handle this in initial filing validation
+                raise BusinessException('Error removing owner')
 
-        ownership_details.person_id = json_dict.get('person_id')
-        ownership_details.additional_text = json_dict.get('additional_text')
-        ownership_details.control_type = json_dict.get('control_type')
-        ownership_details.control_percent = json_dict.get('control_percent')
+        elif owner_dict.get('action') in ['add', 'edit']:
+            if uuid := owner_dict.get('uuid'):
+                ownership_details = OwnershipDetailsModel.find_by_uuid(uuid)
+            else:
+                ownership_details = OwnershipDetailsModel()
+
+            ownership_details.business_identifier = owner_dict['businessIdentifier']
+            ownership_details.control_type = owner_dict.get('controlType')
+            ownership_details.missing_info_reason = owner_dict.get('missingInfoReason')
+
+            ownership_details.percent_of_shares = owner_dict.get('percentOfShares')
+            ownership_details.percent_of_votes = owner_dict.get('percentOfVotes')
+
+            if start_date := owner_dict.get('startDate'):
+                ownership_details.start_date = date.fromisoformat(start_date)
 
         return ownership_details
+    
+    @staticmethod
+    def to_dict(ownership_details: OwnershipDetailsModel) -> dict:
+        """Return the ownership details class as a dict."""
+        # TODO: remove this once sqlalchemy dataclass/attrs/cattrs integration added
+        return {
+            'uuid': ownership_details.uuid,
+            'controlType': ownership_details.control_type,
+            'missingInfoReason': ownership_details.missing_info_reason,
+            'percentOfShares': ownership_details.percent_of_shares,
+            'percentOfVotes': ownership_details.percent_of_votes,
+            'profile': PersonSerializer.to_dict(ownership_details.person),
+            'startDate': ownership_details.start_date.isoformat() if ownership_details.start_date else None,
+            'endDate': ownership_details.end_date.isoformat() if ownership_details.end_date else None
+        }
 
 
 class OwnershipDetailsService(object):
     @staticmethod
-    def save_ownership_details_from_submission(submission_dict: dict,
-                                               submission_id: int,
-                                               person_id: int | None) -> OwnershipDetailsModel | None:
-        if 'ownership_details' in submission_dict:
-            ownership_dict = submission_dict['ownership_details']
-            ownership_dict['submission_id'] = submission_id
-            if ownership_dict.get('id') is None and person_id is not None:
-                ownership_dict['id'] = person_id
-            ownership_details = OwnershipDetailsSerializer.from_dict(ownership_dict)
-            ownership_details.save()
-            return ownership_details
-
-        return None
+    def create_ownership_details_from_owner(owner_dict: dict, person: PersonModel) -> OwnershipDetailsModel:
+        ownership_details = OwnershipDetailsSerializer.from_dict(owner_dict)
+        ownership_details.person = person
+        return ownership_details

@@ -33,7 +33,7 @@
 # POSSIBILITY OF SUCH DAMAGE.
 from http import HTTPStatus
 
-from flask import Blueprint, current_app, jsonify, request
+from flask import Blueprint, current_app
 from sqlalchemy import exc, text
 
 from btr_api.models import db
