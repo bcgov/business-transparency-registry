@@ -1,3 +1,4 @@
+import glob
 import json
 import os
 
@@ -6,6 +7,11 @@ from jsonschema import validate
 
 class SchemaService(object):
     loaded_schemas: dict = {}
+
+    @staticmethod
+    def scripts_directory():
+        script_path = os.path.dirname(os.path.abspath(__file__))
+        return os.path.join(script_path, '..', 'schemas')
 
     def validate(self, schema_name: str, object_data: dict) -> bool:
         if not schema_name:
@@ -21,8 +27,7 @@ class SchemaService(object):
     def load_schema(schema_name: str) -> dict | None:
         try:
             schema_file_name = f"{schema_name}.json"
-            script_path = os.path.dirname(os.path.abspath(__file__))
-            schema_file_path = os.path.join(script_path, '..', 'schemas', schema_file_name)
+            schema_file_path = os.path.join(SchemaService.scripts_directory(), schema_file_name)
             if not os.path.exists(schema_file_path):
                 raise ValueError(f'Schema file could not be found: {schema_file_name}')
             with open(schema_file_path, 'r', encoding='UTF-8') as schema_file:
@@ -43,3 +48,8 @@ class SchemaService(object):
             self.loaded_schemas[schema_name] = schema
 
         return self.loaded_schemas[schema_name]
+
+    @staticmethod
+    def list_all_schemas():
+        directory = SchemaService.scripts_directory()
+        return [os.path.splitext(os.path.basename(f))[0] for f in glob.glob(f"{directory}/*.json")]

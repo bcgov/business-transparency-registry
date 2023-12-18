@@ -39,6 +39,12 @@ from btr_api.services.schema import SchemaService
 bp = Blueprint("json-schemas", __name__)
 
 
+@bp.route("/", methods=("GET",))
+def list_all_schemas():
+    available_schemas = SchemaService.list_all_schemas()
+    return jsonify(available_schemas=available_schemas)
+
+
 @bp.route("/<schema_name>", methods=("GET",))
 def get_schema(schema_name: str):
     schema_service = SchemaService()
