@@ -1,4 +1,3 @@
-# Copyright © 2023 Province of British Columbia
 #
 # Licensed under the BSD 3 Clause License, (the "License");
 # you may not use this file except in compliance with the License.
@@ -31,40 +30,24 @@
 # CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
-from flask import Flask
+from flask import Blueprint
+from flask import jsonify
+from flask import request
 
-from .base import bp as base_endpoint
-from .ops import bp as ops_endpoint
-from .owners import bp as owners_endpoint
-from .submission import bp as submission_endpoint
-from .json_schema import bp as json_schema_endpoint
+from btr_api.services.schema import SchemaService
+
+bp = Blueprint("json-schemas", __name__)
 
 
-def register_endpoints(app: Flask):
-    # Allow base route to match with, and without a trailing slash
-    app.url_map.strict_slashes = False
+@bp.route("/<schema_name>", methods=("GET",))
+def get_schema(schema_name: str):
+    schema_service = SchemaService()
+    schema = schema_service.get_schema(schema_name)
 
-    app.register_blueprint(
-        url_prefix="/",
-        blueprint=base_endpoint,
-    )
+    if not schema:
+        return {
+            "message": "Schema not found",
+            "status_code": 404
+        }, 404
 
-    app.register_blueprint(
-        url_prefix="/ops",
-        blueprint=ops_endpoint,
-    )
-
-    app.register_blueprint(
-        url_prefix="/owners",
-        blueprint=owners_endpoint,
-    )
-
-    app.register_blueprint(
-        url_prefix="/plots",
-        blueprint=submission_endpoint,
-    )
-
-    app.register_blueprint(
-        url_prefix="/json-schemas",
-        blueprint=json_schema_endpoint,
-    )
+    return jsonify(schema=schema, schema_name=schema_name)

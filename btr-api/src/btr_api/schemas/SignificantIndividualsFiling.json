@@ -1,0 +1,176 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "definitions": {
+    "FilingActionE": {
+      "enum": ["add", "edit", "remove"],
+      "type": "string"
+    },
+    "ControlOfDirectorsI": {
+      "properties": {
+        "directControl": {
+          "type": "boolean"
+        },
+        "indirectControl": {
+          "type": "boolean"
+        },
+        "significantInfluence": {
+          "type": "boolean"
+        },
+        "inConcertControl": {
+          "type": "boolean"
+        }
+      },
+      "type": "object",
+      "required": ["directControl", "indirectControl", "significantInfluence", "inConcertControl"]
+    },
+    "ControlOfSharesI": {
+      "properties": {
+        "registeredOwner": {
+          "type": "boolean"
+        },
+        "beneficialOwner": {
+          "type": "boolean"
+        },
+        "indirectControl": {
+          "type": "boolean"
+        },
+        "inConcertControl": {
+          "type": "boolean"
+        }
+      },
+      "type": "object",
+      "required": ["registeredOwner", "beneficialOwner", "indirectControl", "inConcertControl"]
+    },
+    "CitizenshipTypeE": {
+      "enum": ["citizen", "permanentResident", "other"],
+      "type": "string"
+    },
+    "BtrCountryI": {
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "alpha_2": {
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": ["name", "alpha_2"]
+    },
+    "SignificantIndividualI": {
+      "properties": {
+        "controlType": {
+          "$ref": "#/definitions/ControlOfDirectorsI"
+        },
+        "missingInfoReason": {
+          "type": "string"
+        },
+        "percentOfShares": {
+          "type": "string"
+        },
+        "percentOfVotes": {
+          "type": "string"
+        },
+        "profile": {
+          "$ref": "#/definitions/ProfileI"
+        },
+        "startDate": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "endDate": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "action": {
+          "$ref": "#/definitions/FilingActionE"
+        }
+      },
+      "type": "object",
+      "required": ["controlType", "missingInfoReason", "percentOfShares", "percentOfVotes", "profile", "startDate", "endDate", "action"]
+    },
+    "SignificantIndividualFilingI": {
+      "properties": {
+        "businessIdentifier": {
+          "type": "string"
+        },
+        "folioNumber": {
+          "type": "string"
+        },
+        "effectiveDate": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "significantIndividuals": {
+          "items": {
+            "$ref": "#/definitions/SignificantIndividualI"
+          },
+          "type": "array"
+        },
+        "certified": {
+          "type": "boolean"
+        }
+      },
+      "type": "object",
+      "required": ["businessIdentifier", "folioNumber", "effectiveDate", "significantIndividuals", "certified"]
+    },
+    "ProfileI": {
+      "properties": {
+        "address": {
+          "$ref": "#/definitions/BtrAddressI"
+        },
+        "competency": {
+          "properties": {
+            "decisionMaking": {
+              "type": "boolean"
+            },
+            "financialAffairs": {
+              "type": "boolean"
+            }
+          },
+          "type": "object"
+        },
+        "birthDate": {
+          "type": "string",
+          "format": "date"
+        },
+        "citizenshipCA": {
+          "$ref": "#/definitions/CitizenshipTypeE"
+        },
+        "citizenshipsExCA": {
+          "items": {
+            "$ref": "#/definitions/BtrCountryI"
+          },
+          "type": "array"
+        },
+        "email": {
+          "type": "string"
+        },
+        "hasTaxNumber": {
+          "type": "boolean"
+        },
+        "isTaxResident": {
+          "type": "boolean"
+        },
+        "fullName": {
+          "type": "string"
+        },
+        "preferredName": {
+          "type": "string"
+        },
+        "taxNumber": {
+          "type": "string"
+        },
+        "uuid": {
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": ["address", "competency", "birthDate", "citizenshipCA", "citizenshipsExCA", "email", "hasTaxNumber", "isTaxResident", "fullName", "preferredName", "taxNumber", "uuid"]
+    },
+    "BtrAddressI": {
+      "type": "object"
+    }
+  },
+  "$ref": "#/definitions/SignificantIndividualFilingI"
+}
