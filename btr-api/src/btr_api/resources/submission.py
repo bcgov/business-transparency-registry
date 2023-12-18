@@ -39,6 +39,7 @@ from flask import request
 
 from btr_api.exceptions import exception_response
 from btr_api.models import Submission
+from btr_api.services.schema import SchemaService
 from btr_api.services.submission import SubmissionService
 
 
@@ -65,9 +66,19 @@ def registers(id: int | None = None):
 
 @bp.route("/", methods=("POST",))
 def create_register():
+    schema_name = "SignificantIndividualsFiling"
+    schema_service = SchemaService()
+    schema = schema_service.get_schema(schema_name)
+    if not schema:
+        return {}, HTTPStatus.INTERNAL_SERVER_ERROR
+
     try:
         if json_input := request.get_json():
             # normally do some validation here
+            [valid, errors] = schema_service.validate(schema_name, json_input)
+            if not valid:
+                return {"errors": errors}, HTTPStatus.BAD_REQUEST
+
             submission = SubmissionService.create_submission(json_input)
             submission.save()
             return jsonify(id=submission.id), HTTPStatus.CREATED

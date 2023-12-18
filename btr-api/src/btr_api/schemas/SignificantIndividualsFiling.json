@@ -87,7 +87,7 @@
         }
       },
       "type": "object",
-      "required": ["controlType", "missingInfoReason", "percentOfShares", "percentOfVotes", "profile", "startDate", "endDate", "action"]
+      "required": ["controlType", "percentOfShares", "percentOfVotes", "profile", "startDate", "action"]
     },
     "SignificantIndividualFilingI": {
       "properties": {
@@ -99,7 +99,7 @@
         },
         "effectiveDate": {
           "type": "string",
-          "format": "date-time"
+          "format": "date"
         },
         "significantIndividuals": {
           "items": {

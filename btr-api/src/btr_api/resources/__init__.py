@@ -60,7 +60,7 @@ def register_endpoints(app: Flask):
     )
 
     app.register_blueprint(
-        url_prefix="/plots",
+        url_prefix="/submission",
         blueprint=submission_endpoint,
     )
 

@@ -32,7 +32,6 @@
 # POSSIBILITY OF SUCH DAMAGE.
 from flask import Blueprint
 from flask import jsonify
-from flask import request
 
 from btr_api.services.schema import SchemaService
 
