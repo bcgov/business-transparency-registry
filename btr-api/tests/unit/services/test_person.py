@@ -2,17 +2,16 @@
 """
 import pytest
 
-from btr_api.models import Person
 from btr_api.services.person import PersonSerializer, PersonService
 
 from tests.unit import nested_session
 
 person_example = {
     'fullName': 'This is persons full name',
-    'familyName': None,
-    'givenName': None,
-    'patronymicName': None,
-    'birthDate': '1980-01-01'
+    'preferredName': 'Preferred Name',
+    'email': 'email@email.com',
+    'birthDate': '1980-01-01',
+    'taxNumber': '000 000 000'
 }
 
 owner_dict = {
@@ -26,7 +25,8 @@ owner_dict = {
         ("test ownership_details dic is converted to model", person_example),
     ],
 )
-def test_convert_dict_to_model(client, session, test_name, person_details_dict):
+def test_convert_dict_to_model(session, test_name, person_details_dict):
+    """Assure the from_dict serializer works as expected."""
     with nested_session(session):
         model = PersonSerializer.from_dict(person_details_dict)
 
@@ -42,13 +42,26 @@ def test_convert_dict_to_model(client, session, test_name, person_details_dict):
         assert model.created_at is not None
 
 
+@pytest.mark.parametrize("test_name, person_details_dict", [
+    ("basic", person_example),
+])
+def test_convert_model_to_dict(client, session, test_name, person_details_dict):
+    """Assure the to_dict serializer works as expected."""
+    with nested_session(session):
+        model = PersonSerializer.from_dict(person_details_dict)
+        model.save()
+        model_dict = PersonSerializer.to_dict(model)
+        for key in person_details_dict:
+            assert person_details_dict[key] == model_dict[key]
+
+
 @pytest.mark.parametrize(
     "test_name, submission_details_dict",
     [
         ("test ownership_details dic is converted to model", owner_dict),
     ],
 )
-def test_create_model_from_json(session, test_name, submission_details_dict):
+def test_create_model_from_owner(session, test_name, submission_details_dict):
     """Assure the create person method works as expected."""
     with nested_session(session):
         person = PersonService.create_person_from_owner(owner_dict)
