@@ -1,0 +1,78 @@
+{
+  "$id": "ControlOfDirectorsI.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "definitions": {
+    "Profile": {
+      "properties": {
+        "address": {
+          "$ref": "../address/BtrAddress.json#/definitions/BtrAddress"
+        },
+        "competency": {
+          "properties": {
+            "decisionMaking": {
+              "type": "boolean"
+            },
+            "financialAffairs": {
+              "type": "boolean"
+            }
+          },
+          "type": "object"
+        },
+        "birthDate": {
+          "type": "string",
+          "format": "date"
+        },
+        "citizenshipCA": {
+          "$ref": "CitizenshipType.json#/definitions/CitizenshipType"
+        },
+        "citizenshipsExCA": {
+          "items": {
+            "$ref": "../address/BtrCountry.json#/definitions/BtrCountry"
+          },
+          "type": "array"
+        },
+        "email": {
+          "type": "string",
+          "minLength": 3,
+          "maxLength": 250
+        },
+        "hasTaxNumber": {
+          "type": "boolean"
+        },
+        "isTaxResident": {
+          "type": "boolean"
+        },
+        "fullName": {
+          "type": "string",
+          "maxLength": 150
+        },
+        "preferredName": {
+          "type": "string",
+          "maxLength": 150
+        },
+        "taxNumber": {
+          "type": "string",
+          "maxLength": 11
+        },
+        "uuid": {
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": [
+        "address",
+        "competency",
+        "birthDate",
+        "citizenshipCA",
+        "citizenshipsExCA",
+        "email",
+        "hasTaxNumber",
+        "isTaxResident",
+        "fullName",
+        "preferredName",
+        "taxNumber",
+        "uuid"
+      ]
+    }
+  }
+}

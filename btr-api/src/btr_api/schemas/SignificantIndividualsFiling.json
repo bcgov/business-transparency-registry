@@ -1,7 +1,7 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "definitions": {
-    "FilingActionE": {
+    "FilingAction": {
       "enum": [
         "add",
         "edit",
@@ -9,7 +9,7 @@
       ],
       "type": "string"
     },
-    "ControlOfDirectorsI": {
+    "ControlOfDirectors": {
       "properties": {
         "directControl": {
           "type": "boolean"
@@ -55,33 +55,10 @@
         "inConcertControl"
       ]
     },
-    "CitizenshipTypeE": {
-      "enum": [
-        "citizen",
-        "permanentResident",
-        "other"
-      ],
-      "type": "string"
-    },
-    "BtrCountryI": {
-      "properties": {
-        "name": {
-          "type": "string"
-        },
-        "alpha_2": {
-          "type": "string"
-        }
-      },
-      "type": "object",
-      "required": [
-        "name",
-        "alpha_2"
-      ]
-    },
-    "SignificantIndividualI": {
+    "SignificantIndividual": {
       "properties": {
         "controlType": {
-          "$ref": "#/definitions/ControlOfDirectorsI"
+          "$ref": "#/definitions/ControlOfDirectors"
         },
         "missingInfoReason": {
           "type": "string"
@@ -95,7 +72,7 @@
           "maximum": 100
         },
         "profile": {
-          "$ref": "#/definitions/ProfileI"
+          "$ref": "./significant-individual/Profile.json#/definitions/Profile"
         },
         "startDate": {
           "type": "string",
@@ -106,7 +83,7 @@
           "format": "date-time"
         },
         "action": {
-          "$ref": "#/definitions/FilingActionE"
+          "$ref": "#/definitions/FilingAction"
         }
       },
       "type": "object",
@@ -119,7 +96,7 @@
         "action"
       ]
     },
-    "SignificantIndividualFilingI": {
+    "SignificantIndividualFiling": {
       "properties": {
         "businessIdentifier": {
           "type": "string"
@@ -133,7 +110,7 @@
         },
         "significantIndividuals": {
           "items": {
-            "$ref": "#/definitions/SignificantIndividualI"
+            "$ref": "#/definitions/SignificantIndividual"
           },
           "type": "array"
         },
@@ -149,134 +126,7 @@
         "significantIndividuals",
         "certified"
       ]
-    },
-    "ProfileI": {
-      "properties": {
-        "address": {
-          "$ref": "#/definitions/BtrAddressI"
-        },
-        "competency": {
-          "properties": {
-            "decisionMaking": {
-              "type": "boolean"
-            },
-            "financialAffairs": {
-              "type": "boolean"
-            }
-          },
-          "type": "object"
-        },
-        "birthDate": {
-          "type": "string",
-          "format": "date"
-        },
-        "citizenshipCA": {
-          "$ref": "#/definitions/CitizenshipTypeE"
-        },
-        "citizenshipsExCA": {
-          "items": {
-            "$ref": "#/definitions/BtrCountryI"
-          },
-          "type": "array"
-        },
-        "email": {
-          "type": "string",
-          "minLength": 3,
-          "maxLength": 250
-        },
-        "hasTaxNumber": {
-          "type": "boolean"
-        },
-        "isTaxResident": {
-          "type": "boolean"
-        },
-        "fullName": {
-          "type": "string",
-          "maxLength": 150
-        },
-        "preferredName": {
-          "type": "string",
-          "maxLength": 150
-        },
-        "taxNumber": {
-          "type": "string",
-          "maxLength": 11
-        },
-        "uuid": {
-          "type": "string"
-        }
-      },
-      "type": "object",
-      "required": [
-        "address",
-        "competency",
-        "birthDate",
-        "citizenshipCA",
-        "citizenshipsExCA",
-        "email",
-        "hasTaxNumber",
-        "isTaxResident",
-        "fullName",
-        "preferredName",
-        "taxNumber",
-        "uuid"
-      ]
-    },
-    "BtrAddressI": {
-      "type": "object",
-      "properties": {
-        "country": {
-          "$ref": "#/definitions/BtrCountryI"
-        },
-        "line1": {
-          "type": "string",
-          "minLength": 0,
-          "maxLength": 50
-        },
-        "line2": {
-          "type": "string",
-          "minLength": 0,
-          "maxLength": 50
-        },
-        "city": {
-          "type": "string",
-          "minLength": 1,
-          "maxLength": 40
-        },
-        "region": {
-          "type": "string"
-        },
-        "postalCode": {
-          "type": "string"
-        },
-        "locationDescription": {
-          "type": "string",
-          "maxLength": 400
-        }
-      },
-      "required": [
-        "country",
-        "line1",
-        "city",
-        "region",
-        "postalCode"
-      ]
-    },
-    "BtrCountrySubdivisionI": {
-      "type": "object",
-      "properties": {
-        "name": {
-          "type": "string"
-        },
-        "code": {
-          "type": "string"
-        }
-      },
-      "required": [
-        "name",
-        "code"
-      ]
     }
   },
-  "$ref": "#/definitions/SignificantIndividualFilingI"
+  "$ref": "#/definitions/SignificantIndividualFiling"
 }

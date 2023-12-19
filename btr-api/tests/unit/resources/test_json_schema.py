@@ -24,16 +24,3 @@ def test_list_all_schemas(client, session):
 def test_get_schema(client, session, test_name, schema_name, expected_status):
     rv = client.get(f'/json-schemas/{schema_name}')
     assert rv.status_code == expected_status
-
-
-@pytest.mark.parametrize(
-    "test_name, schema_name, expected_error",
-    [
-        ("Invalid date format", "SignificantIndividualsFiling", HTTPStatus.OK),
-        ("Missing required field", "NonExistingSchema", HTTPStatus.NOT_FOUND),
-        ("Value to long", "NonExistingSchema", HTTPStatus.NOT_FOUND),
-        ("Value to long", "NonExistingSchema", HTTPStatus.NOT_FOUND),
-    ],
-)
-def test_invalid_schemas(client, session, test_name, schema_name, expected_error):
-    pass

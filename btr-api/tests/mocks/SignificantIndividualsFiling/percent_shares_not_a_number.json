@@ -10,7 +10,7 @@
         "significantInfluence": false,
         "inConcertControl": true
       },
-      "percentOfShares": 100,
+      "percentOfShares": "100",
       "percentOfVotes": 85,
       "profile": {
         "address": {
