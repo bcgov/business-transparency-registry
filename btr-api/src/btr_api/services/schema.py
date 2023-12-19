@@ -2,6 +2,7 @@ import glob
 import json
 import os
 
+import jsonschema
 from jsonschema import Draft7Validator
 
 
@@ -23,7 +24,7 @@ class SchemaService(object):
             raise Exception('invalid schema name')
 
         schema = self.get_schema(schema_name=schema_name)
-        validator = Draft7Validator(schema)
+        validator = Draft7Validator(schema, format_checker=jsonschema.FormatChecker())
 
         if validator.is_valid(data):
             return True, []
