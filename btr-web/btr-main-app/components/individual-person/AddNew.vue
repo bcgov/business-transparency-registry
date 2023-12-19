@@ -1,9 +1,10 @@
 <template>
   <div data-cy="addIndividualPerson">
+    <h1>{{ significantIndividual }} </h1>
+    {{ setSignificantIndividual  }}
     <div>{{ editing }} </div>
     <div v-if="!editing">
       <p>
-        11111
         {{ $t('texts.addIndividualPerson') }}
       </p>
     </div>
@@ -220,7 +221,7 @@
 import { z } from 'zod'
 
 const { t } = useI18n()
-const emits = defineEmits<{ add: [value: SignificantIndividualI], cancel: [value: any]}>()
+const emits = defineEmits<{ add: [value: SignificantIndividualI], edit: [value: SignificantIndividualI], cancel: [value: any]}>()
 const props = defineProps<{ setSignificantIndividual?: SignificantIndividualI, startDate?: string }>()
 const defaultSI = {
   profile: {
@@ -271,9 +272,18 @@ const defaultSI = {
 }
 // NOTE: not setting this as modelValue because it is a nested object so mutating it gets complicated
 const significantIndividual: Ref<SignificantIndividualI> = ref(props.setSignificantIndividual || defaultSI)
+onMounted(() => {
+  if (props.setSignificantIndividual) {
+    significantIndividual.value = props.setSignificantIndividual
+    console.log('significantIndividual.value', significantIndividual.value)
+    console.log('props.setSignificantIndividual', props.setSignificantIndividual)
+  }
+})
 
-const editing = computed(() => {
-  return significantIndividual.value.action === FilingActionE.EDIT
+const editing = computed(() => significantIndividual.value.action === FilingActionE.EDIT)
+
+watch(() => props.setSignificantIndividual, (val) => {
+  console.log('Watch - -props.setSignificantIndividual', val)
 })
 
 watch(() => props.startDate, (val) => {
@@ -283,6 +293,10 @@ watch(() => props.startDate, (val) => {
 function addSignificantIndividual () {
   // FUTURE: validate form / scroll to 1st error
   // emit significantIndividual so it gets added to the filing
+  if (editing.value) {
+    emits('edit', significantIndividual.value)
+    return
+  }
   emits('add', significantIndividual.value)
 }
 

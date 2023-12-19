@@ -27,6 +27,7 @@ export const useSignificantIndividuals = defineStore('significantIndividuals', (
   }
   
   function filingEditSIOpen(index: number) {
+    console.log('Editing index:' + index)
     const significantIndividual = currentSIFiling.value.significantIndividuals[index]
     editingIndex.value = index
     let deepCopy = JSON.parse(JSON.stringify(significantIndividual))
@@ -35,8 +36,16 @@ export const useSignificantIndividuals = defineStore('significantIndividuals', (
     currentSIFiling.value.significantIndividuals.splice(index + 1, 0, deepCopy)
   }
 
-  function filingEditSIClose() {
-    console.log('currently editing' + editingIndex.value)
+  function filingEditSIDone(significantIndividual: SignificantIndividualI) {
+    console.log('Updating index:' + editingIndex.value)
+    significantIndividual.class = ''
+    significantIndividual.action = FilingActionE.ADD
+    currentSIFiling.value.significantIndividuals.splice(editingIndex.value, 2, significantIndividual)
+    editingIndex.value = -1
+  }
+
+  function filingEditSICancel() {
+    console.log('Canceling editing index:' + editingIndex.value)
     currentSIFiling.value.significantIndividuals.splice(editingIndex.value + 1, 1)
     editingIndex.value = -1
   }
@@ -104,7 +113,8 @@ export const useSignificantIndividuals = defineStore('significantIndividuals', (
     submitting,
     filingAddSI,
     filingEditSIOpen,
-    filingEditSIClose,
+    filingEditSIDone,
+    filingEditSICancel,
     filingInit,
     filingSave,
     filingSubmit,

@@ -1,5 +1,8 @@
 <template>
   <div data-cy="individualsSummaryTable" class="bg-white rounded-[5px] px-10 py-5">
+    <div v-for="i in individuals" :key="i.profile.fullName">
+      {{ i.profile.fullName }}
+    </div>
     <UTable
       :columns="headers"
       :rows="individuals"
@@ -73,14 +76,12 @@
         </div>
       </template>
       
-
       <template #actions-data="{ row, index }">
         <div>
           <UButton 
             label="Edit"
             color="white"
             @click="()=>{
-              currentEditIndex = index
               filingEditSIOpen(index)
             }"
           />
@@ -102,15 +103,16 @@
         </div>
       </template>
       
-      <template #editForm-data="{ row }">
-        <div v-if="currentEditIndex != -1" class="mt-10 bg-white rounded flex flex-row">
+      <template #editForm-data="{ row, index }">
+        {{ index }}
+        {{ row }}
+        <div class="mt-10 bg-white rounded flex flex-row">
           <label class="font-bold text-lg min-w-[190px]">Edit an Individual</label>
           <IndividualPersonAddNew
+            :id="index"
             :setSignificantIndividual="row"
-            @cancel="() => {
-              filingEditSIClose()
-            }"
-            @add="()=>{console.log('add button clicked')}"
+            @cancel="filingEditSICancel()"
+            @edit="filingEditSIDone($event)"
           />
         </div>
       </template>
@@ -119,12 +121,9 @@
 </template>
 
 <script setup lang="ts">
-const {filingEditSIOpen, filingEditSIClose} = useSignificantIndividuals()
+const {filingEditSIOpen, filingEditSIDone, filingEditSICancel} = useSignificantIndividuals()
 
-defineProps<{ individuals: SignificantIndividualI[] }>()
-//TO-DO: a model value so the parent component knows if the user is editing a SI. 
-
-const currentEditIndex = ref(-1)
+defineProps<{ individuals: SignificantIndividualI[] }>() 
 
 const { t } = useI18n()
 const headers = [
@@ -180,7 +179,6 @@ function getDirectorsControlText (directorsConstrol: ControlOfDirectorsI) {
 </script>
 
 <style>
-/* Ensure the table row has a relative position to act as a container for absolute positioning */
 tr.editing {
   background-color: lightblue;
 }
