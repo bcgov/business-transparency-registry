@@ -11,7 +11,7 @@ from btr_api.services.json_schema import SchemaService
         (
             "Invalid date format -- effectiveDate",
             "effective_date_invalid_format.json",
-            "'2022-01-01----' is not a 'date-time'"
+            "'2022-01-01----' is not a 'date'"
         ),
         (
             "Address Line 1 to long",
@@ -50,7 +50,7 @@ def test_invalid_significant_individuals_filing_schema(
         assert expected_error in [error["message"] for error in errors]
 
 
-def test_valid_significant_individuals_filing_schema(client, session):
+def test_valid_significant_individuals_filing_schema():
     current_dir = os.path.dirname(__file__)
 
     with open(
@@ -59,5 +59,6 @@ def test_valid_significant_individuals_filing_schema(client, session):
         data = json.load(file)
         ss = SchemaService()
         [valid, errors] = ss.validate(schema_name="significantIndividualsFiling", data=data)
+        print(errors)
         assert valid is True
         assert len(errors) == 0

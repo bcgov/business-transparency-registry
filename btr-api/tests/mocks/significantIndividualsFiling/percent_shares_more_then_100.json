@@ -1,7 +1,7 @@
 {
   "businessIdentifier": "12345",
   "folioNumber": "67890",
-  "effectiveDate": "2022-01-01T00:00:00Z",
+  "effectiveDate": "2022-01-01",
   "significantIndividuals": [
     {
       "controlType": {
@@ -48,8 +48,7 @@
         "taxNumber": "987654321",
         "uuid": "e2dd8f31-a097-4c8a-9f92-76e6f92f63f4"
       },
-      "startDate": "2022-01-01T00:00:00Z",
-      "action": "add"
+      "startDate": "2022-01-01"
     }
   ],
   "certified": true

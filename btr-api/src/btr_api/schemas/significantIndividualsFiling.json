@@ -91,11 +91,11 @@
         },
         "startDate": {
           "type": "string",
-          "format": "date-time"
+          "format": "date"
         },
         "endDate": {
           "type": "string",
-          "format": "date-time"
+          "format": "date"
         }
       },
       "type": "object",
@@ -104,8 +104,7 @@
         "percentOfShares",
         "percentOfVotes",
         "profile",
-        "startDate",
-        "action"
+        "startDate"
       ]
     },
     "significantIndividualFiling": {
@@ -118,7 +117,7 @@
         },
         "effectiveDate": {
           "type": "string",
-          "format": "date-time"
+          "format": "date"
         },
         "significantIndividuals": {
           "items": {

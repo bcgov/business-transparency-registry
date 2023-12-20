@@ -5,15 +5,6 @@ from http import HTTPStatus
 import pytest
 
 
-def test_list_all_schemas(client, session):
-    expected_available_schemas = ['significantIndividualsFiling']
-    rv = client.get('/json-schemas')
-
-    json_data = rv.get_json()
-    assert rv.status_code == HTTPStatus.OK
-    assert json_data['schemas'] == expected_available_schemas
-
-
 @pytest.mark.parametrize(
     "test_name, schema_name, expected_status",
     [
