@@ -22,6 +22,7 @@ flask-jwt-oidc = "^0.3.0"
 gunicorn = "^21.2.0"
 jsonschema = "^4.20.0"
 flask-cors = "^4.0.0"
+jsonschema = {extras = ["format"], version = "^4.20.0"}
 
 [tool.poetry.group.test.dependencies]
 freezegun = "^1.2.2"

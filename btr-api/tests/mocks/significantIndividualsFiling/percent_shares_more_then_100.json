@@ -1,7 +1,7 @@
 {
   "businessIdentifier": "12345",
   "folioNumber": "67890",
-  "effectiveDate": "2022-01-01",
+  "effectiveDate": "2022-01-01T00:00:00Z",
   "significantIndividuals": [
     {
       "controlType": {
@@ -10,7 +10,7 @@
         "significantInfluence": false,
         "inConcertControl": true
       },
-      "percentOfShares": 100,
+      "percentOfShares": 101,
       "percentOfVotes": 85,
       "profile": {
         "address": {
@@ -19,7 +19,7 @@
             "name": "United States",
             "numericCode": "840"
           },
-          "line1": "123 Main St 123 Main St123 Main St123 Main St123 Main St123 Main St123 Main St123 Main St123 Main St123 Main St123 Main St123 Main St123 Main St123 Main St123 Main St123 Main St",
+          "line1": "123 Main St",
           "city": "Los Angeles",
           "region": "CA",
           "postalCode": "90001"

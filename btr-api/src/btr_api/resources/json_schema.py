@@ -30,24 +30,22 @@
 # CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
-from flask import Blueprint
+from flask import Blueprint, current_app
 from flask import jsonify
 
-from btr_api.services.schema import SchemaService
+from btr_api.services.json_schema import SchemaService
 
 bp = Blueprint("json-schemas", __name__)
-
-
-@bp.route("/", methods=("GET",))
-def list_all_schemas():
-    available_schemas = SchemaService.list_all_schemas()
-    return jsonify(available_schemas=available_schemas)
 
 
 @bp.route("/<schema_name>", methods=("GET",))
 def get_schema(schema_name: str):
     schema_service = SchemaService()
-    schema = schema_service.get_schema(schema_name)
+    schema = None
+    try:
+        schema = schema_service.get_schema(schema_name)
+    except Exception as e:
+        current_app.logger.warning(e)
 
     if not schema:
         return {

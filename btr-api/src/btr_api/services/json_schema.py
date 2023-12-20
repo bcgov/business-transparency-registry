@@ -2,8 +2,10 @@ import glob
 import json
 import os
 
-import jsonschema
-from jsonschema import Draft7Validator
+from jsonschema import (
+    Draft7Validator,
+    FormatChecker,
+)
 
 
 class SchemaService(object):
@@ -14,17 +16,12 @@ class SchemaService(object):
         script_path = os.path.dirname(os.path.abspath(__file__))
         return os.path.join(script_path, '..', 'schemas')
 
-    @staticmethod
-    def list_all_schemas():
-        directory = SchemaService.scripts_directory()
-        return [os.path.splitext(os.path.basename(f))[0] for f in glob.glob(f"{directory}/*.json")]
-
     def validate(self, schema_name: str, data: dict) -> [bool, []]:
         if not schema_name:
             raise Exception('invalid schema name')
 
         schema = self.get_schema(schema_name=schema_name)
-        validator = Draft7Validator(schema, format_checker=jsonschema.FormatChecker())
+        validator = Draft7Validator(schema, format_checker=FormatChecker())
 
         if validator.is_valid(data):
             return True, []

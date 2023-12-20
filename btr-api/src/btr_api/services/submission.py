@@ -31,7 +31,7 @@
 # CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
-from datetime import date
+from datetime import datetime
 
 from btr_api.models import Person as PersonModel, Submission as SubmissionModel
 from btr_api.services.ownership_details import OwnershipDetailsService
@@ -43,7 +43,7 @@ class SubmissionService(object):
     @staticmethod
     def create_submission(submission_dict: dict) -> SubmissionModel:
         submission = SubmissionModel()
-        submission.effective_date = date.fromisoformat(submission_dict['effectiveDate'])
+        submission.effective_date = datetime.fromisoformat(submission_dict['effectiveDate'])
         submission.payload = submission_dict
 
         for significant_individual in submission_dict['significantIndividuals']:
@@ -56,5 +56,5 @@ class SubmissionService(object):
             owner = OwnershipDetailsService.create_ownership_details_from_owner(owner_dict=significant_individual,
                                                                                 person=person)
             submission.owners.append(owner)
-            
+
         return submission

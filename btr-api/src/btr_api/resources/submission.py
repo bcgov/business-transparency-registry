@@ -39,7 +39,7 @@ from flask import request
 
 from btr_api.exceptions import exception_response
 from btr_api.models import Submission
-from btr_api.services.schema import SchemaService
+from btr_api.services.json_schema import SchemaService
 from btr_api.services.submission import SubmissionService
 
 

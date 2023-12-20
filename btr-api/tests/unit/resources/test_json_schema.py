@@ -6,7 +6,7 @@ import pytest
 
 
 def test_list_all_schemas(client, session):
-    expected_available_schemas = ['SignificantIndividualsFiling']
+    expected_available_schemas = ['significantIndividualsFiling']
     rv = client.get('/json-schemas')
 
     json_data = rv.get_json()
@@ -17,8 +17,8 @@ def test_list_all_schemas(client, session):
 @pytest.mark.parametrize(
     "test_name, schema_name, expected_status",
     [
-        ("Existing schema", "SignificantIndividualsFiling", HTTPStatus.OK),
-        ("Non existing schema", "NonExistingSchema", HTTPStatus.NOT_FOUND)
+        ("Existing schema", "significantIndividualsFiling", HTTPStatus.OK),
+        ("Non existing schema", "nonExistingSchema", HTTPStatus.NOT_FOUND)
     ],
 )
 def test_get_schema(client, session, test_name, schema_name, expected_status):
