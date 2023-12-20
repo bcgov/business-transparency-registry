@@ -2,6 +2,7 @@ export default defineAppConfig({
   ui: {
     primary: 'bcGovBlue',
     gray: 'bcGovGray',
+    red: 'bcGovRed',
     button: {
       variant: {
         solid: 'hover:bg-opacity-[.92] hover:bg-{color}-500'
@@ -11,30 +12,46 @@ export default defineAppConfig({
       label: { base: 'block text-base font-bold py-3 text-gray-900' }
     },
     input: {
-      rounded: 'rounded-none',
+      base: 'bg-gray-100 hover:bg-gray-200 h-[56px] border-b-2 focus:ring-0',
+      rounded: 'rounded-none rounded-t-md',
       variant: {
-        bcGov: 'bg-gray-100 h-12 border-b-2 focus:ring-0'
+        bcGov: 'focus:border-primary-500 placeholder-gray-600 focus:placeholder-primary-500',
+        error: 'border-red-500 focus:border-red-500 placeholder-red-500 focus:placeholder-red-500',
+        primary: 'border-primary-500 placeholder-primary-500'
       }
     },
     select: {
-      rounded: 'rounded-none',
+      base: 'bg-gray-100 hover:bg-gray-200 h-[56px] border-b-2 focus:ring-0',
+      rounded: 'rounded-none rounded-t-md',
       variant: {
-        bcGov: 'bg-gray-100 h-12 border-b-2 border-b-gray-500 focus:ring-0'
+        bcGov: 'border-gray-500',
+        error: 'border-red-500'
+      },
+      icon: {
+        base: 'text-gray-600'
       }
     },
     selectMenu: {
       rounded: 'rounded-none',
+      placeholder: 'text-gray-600',
       option: {
-        rounded: 'rounded-none text-gray-900'
-      },
-      variant: {
-        bcGov: 'bg-gray-100 border-b-2 focus:ring-0 text-gray-900'
+        rounded: 'rounded-none',
+        active: 'text-primary-500',
+        selected: 'text-primary-500 bg-gray-100',
+        icon: {
+          active: 'text-primary-500'
+        },
+        selectedIcon: {
+          base: 'text-primary-500'
+        }
       }
     },
     textarea: {
-      rounded: 'rounded-none',
+      base: 'bg-gray-100 hover:bg-gray-200 border-b-2 h-20 focus:ring-0 text-gray-900',
+      rounded: 'rounded-none rounded-t-md',
       variant: {
-        bcGov: 'bg-gray-100 border-b-2 h-20 focus:ring-0 text-gray-900'
+        bcGov: 'focus:border-primary-500 placeholder-gray-600 focus:placeholder-primary-500',
+        error: 'border-red-500 focus:border-red-500 placeholder-red-500 focus:placeholder-red-500'
       }
     },
     table: {

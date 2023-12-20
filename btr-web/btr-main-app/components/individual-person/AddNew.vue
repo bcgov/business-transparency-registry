@@ -6,6 +6,7 @@
       </p>
     </div>
     <UForm
+      ref="profileFormBase"
       :schema="profileSchema"
       :state="significantIndividual.profile"
       @change="addBtrPayFees"
@@ -16,6 +17,7 @@
           v-model="significantIndividual.profile.fullName"
           name="fullName"
           :label="$t('labels.fullName')"
+          :variant="fullNameInvalid ? 'error' : 'bcGov'"
           data-cy="testFullName"
         />
       </div>
@@ -25,6 +27,7 @@
           v-model="significantIndividual.profile.preferredName"
           name="preferredName"
           :label="$t('labels.preferredName')"
+          :variant="preferredNameInvalid ? 'error' : 'bcGov'"
           data-cy="testPreferredName"
         />
       </div>
@@ -33,6 +36,7 @@
           id="individual-person-email"
           v-model="significantIndividual.profile.email"
           :label="$t('labels.emailAddress')"
+          :variant="emailInvalid ? 'error' : 'bcGov'"
           data-cy="testEmail"
         />
       </div>
@@ -63,6 +67,7 @@
         </p>
       </div>
       <UForm
+        ref="ownerFormBase"
         :schema="ownershipSchema"
         :state="significantIndividual"
       >
@@ -78,6 +83,7 @@
             v-model="significantIndividual.percentOfShares"
             name="percentOfShares"
             placeholder="Percent of Shares"
+            :variant="percentOfSharesInvalid ? 'error' : 'bcGov'"
             data-cy="testPercentOfShares"
           />
           <IndividualPersonControlPercentage
@@ -85,6 +91,7 @@
             v-model="significantIndividual.percentOfVotes"
             name="percentOfVotes"
             placeholder="Percent of Votes"
+            :variant="percentOfVotesInvalid ? 'error' : 'bcGov'"
             data-cy="testPercentOfVotes"
           />
         </div>
@@ -158,6 +165,7 @@
         />
       </div>
       <UForm
+        ref="profileFormExtended"
         :schema="profileSchema"
         :state="significantIndividual.profile"
       >
@@ -172,6 +180,7 @@
             id="addNewPersonTaxNumber"
             v-model="taxInfoModel"
             name="taxNumber"
+            :variant="taxNumebrInvalid ? 'error' : 'bcGov'"
             data-cy="testTaxNumber"
           />
         </div>
@@ -220,52 +229,7 @@ import { z } from 'zod'
 const { t } = useI18n()
 const emits = defineEmits<{ add: [value: SignificantIndividualI], cancel: [value: any]}>()
 const props = defineProps<{ setSignificantIndividual?: SignificantIndividualI, startDate?: string }>()
-const defaultSI = {
-  profile: {
-    fullName: '',
-    preferredName: '',
-    address: {
-      city: '',
-      country: { name: '', alpha_2: '' },
-      line1: '',
-      postalCode: '',
-      region: '',
-      line2: '',
-      locationDescription: ''
-    },
-    competency: {
-      decisionMaking: false,
-      financialAffairs: false
-    },
-    birthDate: null,
-    citizenshipCA: '',
-    citizenshipsExCA: [],
-    email: '',
-    isTaxResident: undefined,
-    hasTaxNumber: undefined,
-    taxNumber: undefined
-  },
-  controlType: {
-    sharesVotes: {
-      registeredOwner: false,
-      beneficialOwner: false,
-      indirectControl: false,
-      inConcertControl: false
-    },
-    directors: {
-      directControl: false,
-      indirectControl: false,
-      significantInfluence: false,
-      inConcertControl: false
-    },
-    other: ''
-  },
-  missingInfoReason: undefined,
-  percentOfShares: '',
-  percentOfVotes: '',
-  startDate: props.startDate || '',
-  action: FilingActionE.ADD
-}
+const defaultSI = getNewDefaultSI(props.startDate || '')
 // NOTE: not setting this as modelValue because it is a nested object so mutating it gets complicated
 const significantIndividual: Ref<SignificantIndividualI> = ref(props.setSignificantIndividual || defaultSI)
 
@@ -285,6 +249,31 @@ const showAddInfoManuallyText = computed(() => {
     return t('buttons.addIndividualPerson.cancel')
   }
   return t('buttons.addIndividualPerson.add')
+})
+
+const profileFormBase = ref()
+const profileFormExtended = ref()
+const ownerFormBase = ref()
+
+const fullNameInvalid = ref(false)
+const preferredNameInvalid = ref(false)
+const emailInvalid = ref(false)
+const taxNumebrInvalid = ref(false)
+
+const percentOfSharesInvalid = ref(false)
+const percentOfVotesInvalid = ref(false)
+
+watch(() => profileFormBase.value?.errors, (val: { path: string }[]) => {
+  fullNameInvalid.value = val.filter(val => val.path === 'fullName').length > 0
+  preferredNameInvalid.value = val.filter(val => val.path === 'preferredName').length > 0
+  emailInvalid.value = val.filter(val => val.path === 'email').length > 0
+})
+watch(() => profileFormExtended.value?.errors, (val: { path: string }[]) => {
+  taxNumebrInvalid.value = val.filter(val => val.path === 'taxNumber').length > 0
+})
+watch(() => ownerFormBase.value?.errors, (val: { path: string }[]) => {
+  percentOfSharesInvalid.value = val.filter(val => val.path === 'percentOfShares').length > 0
+  percentOfVotesInvalid.value = val.filter(val => val.path === 'percentOfVotes').length > 0
 })
 
 const profileSchema = z.object({

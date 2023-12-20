@@ -5,7 +5,7 @@
       type="text"
       v-bind="$attrs"
       :value="modelValue"
-      variant="bcGov"
+      :variant="variant"
       :placeholder="label"
       @input="$emit('update:modelValue', $event.target.value)"
     />
@@ -18,6 +18,7 @@ defineEmits<{(e: 'update:modelValue', value: string): void}>()
 defineProps({
   label: { type: [String], default: '' },
   id: { type: String, required: true },
-  modelValue: { type: String, default: '' }
+  modelValue: { type: String, default: '' },
+  variant: { type: String, default: 'bcGov' }
 })
 </script>
