@@ -1,9 +1,9 @@
 import { defineStore } from 'pinia'
-import { SignificantIndividualI } from '../interfaces/significant-individual-i'
-import fileSIApi from '@/services/file-significant-individual'
 import { StatusCodes } from 'http-status-codes'
 import { Ref } from 'vue'
+import { SignificantIndividualI } from '../interfaces/significant-individual-i'
 import { ErrorI } from '../../btr-common-components/interfaces/error-i'
+import fileSIApi from '@/services/file-significant-individual'
 
 /** Manages Significant */
 export const useSignificantIndividuals = defineStore('significantIndividuals', () => {
@@ -77,7 +77,7 @@ export const useSignificantIndividuals = defineStore('significantIndividuals', (
   /** Get the current significant individuals for the business */
   async function getSIs (businessIdentifier: string) {
     console.info('getSIs', businessIdentifier)
-    const {data, error } = await fileSIApi.getCurrentOwners(businessIdentifier)
+    const { data, error } = await fileSIApi.getCurrentOwners(businessIdentifier)
     if (error) {
       console.error(error)
       const err = {

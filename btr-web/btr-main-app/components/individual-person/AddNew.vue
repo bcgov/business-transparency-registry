@@ -79,18 +79,18 @@
             {{ $t('texts.sharesAndVotes.controlPercentage') }}
           </p>
           <IndividualPersonControlPercentage
-            type="number"
             id="percentageOfShares"
             v-model="significantIndividual.percentOfShares"
+            type="number"
             name="percentOfShares"
             placeholder="Percent of Shares"
             :variant="percentOfSharesInvalid ? 'error' : 'bcGov'"
             data-cy="testPercentOfShares"
           />
           <IndividualPersonControlPercentage
-            type="number"
             id="percentageOfVotes"
             v-model="significantIndividual.percentOfVotes"
+            type="number"
             name="percentOfVotes"
             placeholder="Percent of Votes"
             :variant="percentOfVotesInvalid ? 'error' : 'bcGov'"
