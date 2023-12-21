@@ -10,13 +10,6 @@ export default defineNuxtConfig({
     includeWorkspace: true
   },
   devtools: { enabled: true },
-  modules: [
-    '@nuxt/ui',
-    '@nuxtjs/eslint-module',
-    '@nuxtjs/i18n',
-    '@pinia/nuxt',
-    'nuxt-vitest'
-  ],
   i18n: {
     lazy: true,
     defaultLocale: 'en',

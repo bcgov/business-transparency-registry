@@ -5,7 +5,7 @@
       type="text"
       v-bind="$attrs"
       :value="modelValue"
-      variant="bcGov"
+      :variant="variant"
       :placeholder="label"
       @input="$emit('update:modelValue', $event.target.value)"
       @blur="normalizeInput"
@@ -19,10 +19,11 @@ import { normalizeName } from '~/utils/validation/form_inputs'
 const emit = defineEmits<{(e: 'update:modelValue', value: string): void}>()
 
 const props = defineProps({
-  label: { type: [String], default: '' },
+  label: { type: String, default: '' },
   id: { type: String, required: true },
   name: { type: String, default: 'name' },
-  modelValue: { type: String, default: '' }
+  modelValue: { type: String, default: '' },
+  variant: { type: String, default: 'bcGov' }
 })
 
 const normalizeInput = () => {

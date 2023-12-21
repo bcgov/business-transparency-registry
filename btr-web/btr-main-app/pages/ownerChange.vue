@@ -6,13 +6,20 @@
     <p class="mt-5" data-cy="page-info-text">
       {{ $t('texts.significantIndividualChange') }}
     </p>
-    <div class="mt-10 p-10 bg-white rounded flex" data-cy="effective-date-select">
-      <label class="text-lg w-[190px]">{{ $t('labels.significantIndividualChangeDate') }}</label>
+    <div
+      class="mt-10 p-10 bg-white rounded flex"
+      :class="showSignificantDateError ? 'border-l-[3px] border-bcGovRed-500' : ''"
+      data-cy="effective-date-select"
+    >
+      <label class="text-lg w-[190px]" :class="showSignificantDateError ? 'text-bcGovRed-500' : ''">
+        {{ $t('labels.significantIndividualChangeDate') }}
+      </label>
       <div class="ml-8 flex-auto">
         <BcrosInputsDateSelect
           :initial-date="currentSIFiling.effectiveDate ? dateStringToDate(currentSIFiling.effectiveDate) : undefined"
           :max-date="new Date()"
           :placeholder="$t('placeholders.dateSelect.significantIndividualChange')"
+          :variant="showSignificantDateError ? 'error' : 'bcGov'"
           @selection="significantIndividualChangeDate($event)"
         />
       </div>
@@ -27,8 +34,14 @@
       data-cy="add-new-btn"
       @click="expandNewSI = true"
     />
-    <div v-if="expandNewSI" class="mt-10 p-10 bg-white rounded flex flex-row">
-      <label class="font-bold text-lg min-w-[190px]">{{ $t('labels.addIndividual') }}</label>
+    <div
+      v-if="expandNewSI"
+      class="mt-10 p-10 bg-white rounded flex flex-row"
+      :class="showAddIndividualError ? 'border-l-[3px] border-bcGovRed-500' : ''"
+    >
+      <label class="font-bold text-lg min-w-[190px]" :class="showAddIndividualError ? 'text-bcGovRed-500' : ''">
+        {{ $t('labels.addIndividual') }}
+      </label>
       <IndividualPersonAddNew
         class="ml-8"
         :start-date="currentSIFiling.effectiveDate"
@@ -47,6 +60,10 @@ const significantIndividuals = useSignificantIndividuals()
 const { currentSIFiling } = storeToRefs(significantIndividuals)
 
 const expandNewSI = ref(false)
+
+// FUTURE: these will be triggered/replaced for something else in 18883
+const showSignificantDateError = ref(false)
+const showAddIndividualError = ref(false)
 
 const significantIndividualChangeDate = (event: Date) => {
   currentSIFiling.value.effectiveDate = dateToString(event, 'YYYY-MM-DD')

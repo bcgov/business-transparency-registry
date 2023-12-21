@@ -8,18 +8,22 @@
             'cursor-default',
             'overflow-hidden',
             'bg-gray-100',
+            'hover:bg-gray-200',
             'text-left',
             'border-b-2',
-            'border-gray-500',
+            errorVersion ? 'border-red-500' : 'border-gray-500',
             'focus:outline-none',
             'sm:text-sm',
-            'h-[46px]'
+            'h-[56px]',
+            'rounded-t-md'
           ]"
         >
           <ComboboxInput
             :placeholder="$t('labels.line1')"
-            class="w-full border-none p-3 text-sm leading-5 bg-gray-100 text-gray-900 focus:outline-none"
+            class="bg-transparent pl-2 w-full h-full focus:outline-none"
+            :class="errorVersion ? 'placeholder-red-500' : 'placeholder-gray-600'"
             @keyup="doTheSearch($event.target.value)"
+            @blur="$emit('blur', $event)"
           />
         </div>
         <ComboboxOptions
@@ -47,8 +51,8 @@
             <li
               class="cursor-default select-none py-2 pl-10 pr-4"
               :class="{
-                'bg-teal-600 text-white': active,
-                'text-gray-900': !active,
+                'bg-gray-200 text-primary-500': active,
+                'text-gray-700': !active,
               }"
               @click="selectFromDropdown(address, $event)"
             >
@@ -77,12 +81,14 @@ const runtimeConfig = useRuntimeConfig()
 const emit = defineEmits<{
   addrAutoCompleted: [value: BtrAddressI]
   'update:modelValue': [value: string]
+  blur: [value: FocusEvent]
 }>()
 const props = defineProps({
   countryIso3166Alpha2: { type: String, required: false, default: 'CA' },
   maxSuggestions: { type: Number, required: false, default: 7 },
   langCode: { type: String, required: false, default: 'ENG' },
-  modelValue: { type: String, required: true }
+  modelValue: { type: String, required: true },
+  errorVersion: { type: Boolean, default: false }
 })
 
 const canadaPostApiKey = runtimeConfig.public.addressCompleteKey
@@ -94,7 +100,7 @@ const selectFromDropdown = async (address: CanadaPostApiFindResponseItemI, event
     event.stopPropagation()
     event.preventDefault()
 
-    suggestedAddresses.value = await findAddress(line1, address.Id, props, canadaPostApiKey)
+    suggestedAddresses.value = await findAddress(line1.value, address.Id, props, canadaPostApiKey)
   } else {
     const address1 = await getExactAddress(address.Id)
     line1.value = address1.Line1
@@ -115,7 +121,7 @@ const convertToBtrAddress = (addr: CanadaPostRetrieveItemI): BtrAddressI => {
   }
 }
 
-const doTheSearch = async (searchTerm) => {
+const doTheSearch = async (searchTerm: string) => {
   // todo: add debounce
   line1.value = searchTerm
   suggestedAddresses.value = await findAddress(searchTerm, '', props, canadaPostApiKey)

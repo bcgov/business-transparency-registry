@@ -12,7 +12,7 @@
         <UInput
           v-model="taxNumber"
           type="text"
-          variant="bcGov"
+          :variant="variant"
           :placeholder="$t('placeholders.taxNumber')"
           class="w-80"
           @blur="formatInput"
@@ -47,7 +47,8 @@ defineProps({
       hasTaxNumber: undefined,
       taxNumber: undefined
     })
-  }
+  },
+  variant: { type: String, default: 'bcGov' }
 })
 
 const emit = defineEmits<{

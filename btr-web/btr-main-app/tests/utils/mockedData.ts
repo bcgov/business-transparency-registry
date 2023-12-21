@@ -1,3 +1,5 @@
+import { FilingActionE } from '~/enums/filing-action-e'
+
 export const testSI: SignificantIndividualI = {
   profile: {
     fullName: 'Test Name',
@@ -38,9 +40,9 @@ export const testSI: SignificantIndividualI = {
     },
     other: ''
   },
-  missingInfoReason: undefined,
+  missingInfoReason: '',
   percentOfShares: '75',
   percentOfVotes: '25',
   startDate: '',
-  action: 'added'
+  action: FilingActionE.ADD
 }

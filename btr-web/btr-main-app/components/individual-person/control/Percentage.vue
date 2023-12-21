@@ -6,20 +6,23 @@
         type="text"
         v-bind="$attrs"
         :value="modelValue"
-        variant="bcGov"
+        :variant="variant"
         :placeholder="placeholder"
-        class="w-1/5"
+        class="min-w-[140px] w-1/5"
       />
-      <span class="ml-2 text-gray-500">%</span>
+      <span class="ml-2" :class="percentColour">%</span>
     </div>
   </UFormGroup>
 </template>
 
 <script setup lang="ts">
-defineProps({
+const props = defineProps({
   id: { type: String, required: true },
   name: { type: String, default: 'name' },
   placeholder: { type: String, default: '' },
-  modelValue: { type: String, default: '' }
+  modelValue: { type: String, default: '' },
+  variant: { type: String, default: 'bcGov' }
 })
+
+const percentColour = computed(() => props.variant === 'error' ? 'text-red-500' : 'text-gray-500')
 </script>

@@ -21,7 +21,7 @@ export const useSignificantIndividuals = defineStore('significantIndividuals', (
   function filingAddSI (significantIndividual: SignificantIndividualI) {
     // put it at the end of the new individuals
     const lastNewSIIndex = currentSIFiling.value.significantIndividuals
-      .findLastIndex(si => si.action === FilingActionE.ADD)
+      .findLastIndex((si: SignificantIndividualI) => si.action === FilingActionE.ADD)
     currentSIFiling.value.significantIndividuals.splice(lastNewSIIndex + 1, 0, significantIndividual)
   }
 
