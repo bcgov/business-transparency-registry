@@ -93,7 +93,7 @@ describe('pages -> Beneficial Owner Change', () => {
 
   it('verify summary table is rendered as expected', () => {
     const summaryTableHeaders = cy.get('[data-cy="individualsSummaryTable"]').get('th')
-    summaryTableHeaders.children()
+    summaryTableHeaders
       .should('contain', 'Name')
       .and('contain', 'Address')
       .and('contain', 'Details')
