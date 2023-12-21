@@ -78,7 +78,7 @@ export const useSignificantIndividuals = defineStore('significantIndividuals', (
   async function getSIs (businessIdentifier: string) {
     console.info('getSIs', businessIdentifier)
     const {data, error } = await fileSIApi.getCurrentOwners(businessIdentifier)
-    if (error.value) {
+    if (error) {
       console.error(error)
       const err = {
         statusCode: error.statusCode ?? StatusCodes.INTERNAL_SERVER_ERROR,

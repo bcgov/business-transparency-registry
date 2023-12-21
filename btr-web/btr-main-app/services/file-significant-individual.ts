@@ -17,14 +17,14 @@ const submitSignificantIndividualFiling = async (sif: SignificantIndividualFilin
       headers: { 'Content-Type': 'application/json' }
     })
 
-  return { data, error }
+  return { data: data.value, error: error.value }
 }
 
 const getCurrentOwners = async (businessIdentifier: string) => {
   const url = `${constructBtrApiURL()}/owners/${businessIdentifier}`
   const { data, error } =
           await useFetchBcros<SignificantIndividualI[]>(url)
-  return { data, error }
+  return { data: data.value, error: error.value }
 }
 
 export default {
