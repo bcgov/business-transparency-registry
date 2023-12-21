@@ -426,6 +426,20 @@ Jinja2 = ">=3.1"
 pytz = ">=2022.7"
 
 [[package]]
+name = "flask-cors"
+version = "4.0.0"
+description = "A Flask extension adding a decorator for CORS support"
+optional = false
+python-versions = "*"
+files = [
+    {file = "Flask-Cors-4.0.0.tar.gz", hash = "sha256:f268522fcb2f73e2ecdde1ef45e2fd5c71cc48fe03cffb4b441c6d1b40684eb0"},
+    {file = "Flask_Cors-4.0.0-py2.py3-none-any.whl", hash = "sha256:bc3492bfd6368d27cfe79c7821df5a8a319e1a6d5eab277a3794be19bdc51783"},
+]
+
+[package.dependencies]
+Flask = ">=0.9"
+
+[[package]]
 name = "flask-jwt-oidc"
 version = "0.3.0"
 description = "Flask_JWT_OIDC"
@@ -1337,8 +1351,8 @@ develop = false
 [package.source]
 type = "git"
 url = "https://github.com/bcgov/lear.git"
-reference = "main"
-resolved_reference = "59a0c2a88cccf5b201b917dd88ad14316d3aebd2"
+reference = "feature-legal-name"
+resolved_reference = "08687e0a1a31ba8f7ac6d0859d7c541d9df3bb43"
 subdirectory = "python/common/sql-versioning"
 
 [[package]]
@@ -1506,4 +1520,4 @@ watchdog = ["watchdog (>=2.3)"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "edde485103e0ffab7b851751ad92fdcfb8a014055e652f95ba8fe5a83b75c077"
+content-hash = "bbd2ad48363629d9f7292783c03c69b3ba76826cef6658fda012582642d2e103"

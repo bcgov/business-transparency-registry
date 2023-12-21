@@ -8,8 +8,8 @@ export interface SignificantIndividualI {
     other: string // other ways this person has SI control
   }
   missingInfoReason: string
-  percentOfShares: string
-  percentOfVotes: string
+  percentOfShares: number
+  percentOfVotes: number
   profile: ProfileI
   startDate: string // YYYY-MM-DDT:HH:mm:ss+-HH:mm
   endDate?: string // YYYY-MM-DDT:HH:mm:ss+-HH:mm
