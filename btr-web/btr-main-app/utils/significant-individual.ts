@@ -1,7 +1,7 @@
 /** Get a new significant individual with all default fields
  * @param startDate expected iso date string (YYYY-MM-DD)
 */
-export function getNewDefaultSI (startDate: string) {
+export function getEmptySI (startDate: string) {
   return {
     profile: {
       fullName: '',

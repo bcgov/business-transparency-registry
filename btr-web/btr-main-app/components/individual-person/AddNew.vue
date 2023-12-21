@@ -229,7 +229,7 @@ import { z } from 'zod'
 const { t } = useI18n()
 const emits = defineEmits<{ add: [value: SignificantIndividualI], cancel: [value: any]}>()
 const props = defineProps<{ setSignificantIndividual?: SignificantIndividualI, startDate?: string }>()
-const defaultSI = getNewDefaultSI(props.startDate || '')
+const defaultSI = getEmptySI(props.startDate || '')
 // NOTE: not setting this as modelValue because it is a nested object so mutating it gets complicated
 const significantIndividual: Ref<SignificantIndividualI> = ref(props.setSignificantIndividual || defaultSI)
 
