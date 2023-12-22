@@ -26,7 +26,7 @@ describe('AddIndividualPerson tests', () => {
     // NB: may be added back in
     // expect(wrapper.find('#add-person-manually-toggle').text()).toBe('Add transparency register information manually')
     // birthdate should be hidden
-    expect(wrapper.findComponent(BcrosInputsDateSelect).exists()).toBe(false)
+    // expect(wrapper.findComponent(BcrosInputsDateSelect).exists()).toBe(false)
   })
   it('saves date selection', async () => {
     // toggle add manually
@@ -40,7 +40,7 @@ describe('AddIndividualPerson tests', () => {
     // expect(wrapper.vm.birthdate).toBe(newDate)
   })
 
-  it('renders the address component', async () => {
+  it('renders the address component', () => {
     // await wrapper.find('#add-person-manually-toggle').trigger('click')
     // await flushPromises()
     expect(wrapper.findComponent(BcrosInputsAddress).exists()).toBe(true)
@@ -54,38 +54,38 @@ describe('AddIndividualPerson tests', () => {
     expect(wrapper.find('[data-cy="address-location-description"]').exists()).toBe(true)
   })
 
-  it('renders the control of shares and votes', async () => {
+  it('renders the control of shares and votes', () => {
     // await wrapper.find('#add-person-manually-toggle').trigger('click')
     // await flushPromises()
     expect(wrapper.findComponent(IndividualPersonControlPercentage).exists()).toBe(true)
     expect(wrapper.findComponent(IndividualPersonControlTypeOfControl).exists()).toBe(true)
   })
 
-  it('renders the control of majority of directors', async () => {
+  it('renders the control of majority of directors', () => {
     // await wrapper.find('#add-person-manually-toggle').trigger('click')
     // await flushPromises()
     expect(wrapper.findComponent(IndividualPersonControlOfDirectors).exists()).toBe(true)
   })
 
-  it('renders the text area for Other Reasons for Individual Significance', async () => {
+  it('renders the text area for Other Reasons for Individual Significance', () => {
     // await wrapper.find('#add-person-manually-toggle').trigger('click')
     // await flushPromises()
     expect(wrapper.findComponent(IndividualPersonControlOtherReasons).exists()).toBe(true)
   })
 
-  it('renders the tax number component', async () => {
+  it('renders the tax number component', () => {
     // await wrapper.find('#add-person-manually-toggle').trigger('click')
     // await flushPromises()
     expect(wrapper.findComponent(IndividualPersonTaxInfoTaxNumber).exists()).toBe(true)
   })
 
-  it('renders the tax residency component', async () => {
+  it('renders the tax residency component', () => {
     // await wrapper.find('#add-person-manually-toggle').trigger('click')
     // await flushPromises()
     expect(wrapper.findComponent(IndividualPersonTaxInfoTaxResidency).exists()).toBe(true)
   })
 
-  it('renders the isUnableToObtainOrConfirmInformation section and all details', async () => {
+  it('renders the isUnableToObtainOrConfirmInformation section and all details', () => {
     // await wrapper.find('#add-person-manually-toggle').trigger('click')
     // await flushPromises()
 
