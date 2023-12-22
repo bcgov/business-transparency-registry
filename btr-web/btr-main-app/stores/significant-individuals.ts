@@ -7,7 +7,9 @@ import fileSIApi from '@/services/file-significant-individual'
 
 /** Manages Significant */
 export const useSignificantIndividuals = defineStore('significantIndividuals', () => {
-  const currentSIFiling: Ref<SignificantIndividualFilingI> = ref({}) // current significant individual change filing
+  const currentSIFiling: Ref<SignificantIndividualFilingI> = ref({
+    significantIndividuals: []
+  }) // current significant individual change filing
   const currentSavedSIs: Ref<SignificantIndividualI[]> = ref([]) // saved SIs from api for this business
   const showErrors = ref(false) // show submit error validations
   const submitting = ref(false)

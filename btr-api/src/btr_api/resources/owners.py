@@ -44,7 +44,7 @@ from btr_api.services.ownership_details import OwnershipDetailsSerializer
 bp = Blueprint("owners", __name__)
 
 
-@bp.route("/<business_identifier>", methods=("GET",))
+@bp.route("/<business_identifier>", methods=("GET", "OPTIONS",))
 def owners(business_identifier: int):
     """Return the current owners for the business."""
     try:

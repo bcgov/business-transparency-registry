@@ -32,7 +32,8 @@ describe('pages -> Review and Confirm', () => {
 
       // select the date of today
       cy.get('[data-cy=date-select]').click()
-      cy.get('[data-cy=date-picker]').get('.bcros-date-picker__calendar__day.dp__today').click()
+      cy.wait(250)
+      cy.get('.bcros-date-picker__calendar__day.dp__today').parent().click()
 
       // click 'Add an Individual' button and expand the form
       cy.get('[data-cy=add-new-btn]').click()

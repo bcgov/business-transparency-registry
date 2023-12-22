@@ -81,7 +81,6 @@
           <IndividualPersonControlPercentage
             id="percentageOfShares"
             v-model="significantIndividual.percentOfShares"
-            type="number"
             name="percentOfShares"
             placeholder="Percent of Shares"
             :variant="percentOfSharesInvalid ? 'error' : 'bcGov'"
@@ -90,7 +89,6 @@
           <IndividualPersonControlPercentage
             id="percentageOfVotes"
             v-model="significantIndividual.percentOfVotes"
-            type="number"
             name="percentOfVotes"
             placeholder="Percent of Votes"
             :variant="percentOfVotesInvalid ? 'error' : 'bcGov'"
