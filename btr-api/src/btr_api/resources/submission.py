@@ -66,7 +66,7 @@ def registers(id: int | None = None):
 
 @bp.route("/", methods=("POST",))
 def create_register():
-    schema_name = "SignificantIndividualsFiling"
+    schema_name = "significantIndividualsFiling"
     schema_service = SchemaService()
     schema = schema_service.get_schema(schema_name)
     if not schema:
