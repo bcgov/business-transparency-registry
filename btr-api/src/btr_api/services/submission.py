@@ -56,5 +56,5 @@ class SubmissionService(object):
             owner = OwnershipDetailsService.create_ownership_details_from_owner(owner_dict=significant_individual,
                                                                                 person=person)
             submission.owners.append(owner)
-            
+
         return submission

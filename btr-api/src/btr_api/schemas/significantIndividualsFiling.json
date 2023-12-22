@@ -1,0 +1,276 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "definitions": {
+    "controlOfDirectors": {
+      "properties": {
+        "directControl": {
+          "type": "boolean"
+        },
+        "indirectControl": {
+          "type": "boolean"
+        },
+        "significantInfluence": {
+          "type": "boolean"
+        },
+        "inConcertControl": {
+          "type": "boolean"
+        }
+      },
+      "type": "object",
+      "required": [
+        "directControl",
+        "indirectControl",
+        "significantInfluence",
+        "inConcertControl"
+      ]
+    },
+    "controlOfShares": {
+      "properties": {
+        "registeredOwner": {
+          "type": "boolean"
+        },
+        "beneficialOwner": {
+          "type": "boolean"
+        },
+        "indirectControl": {
+          "type": "boolean"
+        },
+        "inConcertControl": {
+          "type": "boolean"
+        }
+      },
+      "type": "object",
+      "required": [
+        "registeredOwner",
+        "beneficialOwner",
+        "indirectControl",
+        "inConcertControl"
+      ]
+    },
+    "citizenshipType": {
+      "enum": [
+        "citizen",
+        "permanentResident",
+        "other"
+      ],
+      "type": "string"
+    },
+    "btrCountry": {
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "alpha_2": {
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": [
+        "name",
+        "alpha_2"
+      ]
+    },
+    "significantIndividual": {
+      "properties": {
+        "controlType": {
+          "type": "object",
+          "properties": {
+            "directors": {
+              "$ref": "#/definitions/controlOfDirectors"
+            },
+            "sharesVotes": {
+              "$ref": "#/definitions/controlOfShares"
+            }
+          }
+        },
+        "missingInfoReason": {
+          "type": "string"
+        },
+        "percentOfShares": {
+          "type": "number",
+          "maximum": 100
+        },
+        "percentOfVotes": {
+          "type": "number",
+          "maximum": 100
+        },
+        "profile": {
+          "$ref": "#/definitions/profile"
+        },
+        "startDate": {
+          "type": "string",
+          "format": "date"
+        },
+        "endDate": {
+          "type": "string",
+          "format": "date"
+        }
+      },
+      "type": "object",
+      "required": [
+        "controlType",
+        "percentOfShares",
+        "percentOfVotes",
+        "profile",
+        "startDate"
+      ]
+    },
+    "significantIndividualFiling": {
+      "properties": {
+        "businessIdentifier": {
+          "type": "string"
+        },
+        "folioNumber": {
+          "type": "string"
+        },
+        "effectiveDate": {
+          "type": "string",
+          "format": "date"
+        },
+        "significantIndividuals": {
+          "items": {
+            "$ref": "#/definitions/significantIndividual"
+          },
+          "type": "array"
+        },
+        "certified": {
+          "type": "boolean"
+        }
+      },
+      "type": "object",
+      "required": [
+        "businessIdentifier",
+        "folioNumber",
+        "effectiveDate",
+        "significantIndividuals",
+        "certified"
+      ]
+    },
+    "profile": {
+      "properties": {
+        "address": {
+          "$ref": "#/definitions/btrAddress"
+        },
+        "competency": {
+          "properties": {
+            "decisionMaking": {
+              "type": "boolean"
+            },
+            "financialAffairs": {
+              "type": "boolean"
+            }
+          },
+          "type": "object"
+        },
+        "birthDate": {
+          "type": "string",
+          "format": "date"
+        },
+        "citizenshipCA": {
+          "$ref": "#/definitions/citizenshipType"
+        },
+        "citizenshipsExCA": {
+          "items": {
+            "$ref": "#/definitions/btrCountry"
+          },
+          "type": "array"
+        },
+        "email": {
+          "type": "string",
+          "minLength": 3,
+          "maxLength": 250
+        },
+        "hasTaxNumber": {
+          "type": "boolean"
+        },
+        "isTaxResident": {
+          "type": "boolean"
+        },
+        "fullName": {
+          "type": "string",
+          "maxLength": 150
+        },
+        "preferredName": {
+          "type": "string",
+          "maxLength": 150
+        },
+        "taxNumber": {
+          "type": "string",
+          "maxLength": 11
+        },
+        "uuid": {
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": [
+        "address",
+        "competency",
+        "birthDate",
+        "citizenshipCA",
+        "citizenshipsExCA",
+        "email",
+        "hasTaxNumber",
+        "isTaxResident",
+        "fullName",
+        "preferredName"
+      ]
+    },
+    "btrAddress": {
+      "type": "object",
+      "properties": {
+        "country": {
+          "$ref": "#/definitions/btrCountry"
+        },
+        "line1": {
+          "type": "string",
+          "minLength": 0,
+          "maxLength": 50
+        },
+        "line2": {
+          "type": "string",
+          "minLength": 0,
+          "maxLength": 50
+        },
+        "city": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 40
+        },
+        "region": {
+          "type": "string"
+        },
+        "postalCode": {
+          "type": "string"
+        },
+        "locationDescription": {
+          "type": "string",
+          "maxLength": 400
+        }
+      },
+      "required": [
+        "country",
+        "line1",
+        "city",
+        "region",
+        "postalCode"
+      ]
+    },
+    "btrCountrySubdivision": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "code": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "name",
+        "code"
+      ]
+    }
+  },
+  "$ref": "#/definitions/significantIndividualFiling"
+}
