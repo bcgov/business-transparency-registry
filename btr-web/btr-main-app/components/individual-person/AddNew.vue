@@ -12,7 +12,7 @@
       :state="significantIndividual.profile"
       @change="addBtrPayFees"
     >
-      <div class="flex-col py-5">
+      <div class="flex-col">
         <BcrosInputsNameField
           id="individual-person-full-name"
           v-model="significantIndividual.profile.fullName"
@@ -22,7 +22,7 @@
           data-cy="testFullName"
         />
       </div>
-      <div class="flex-col py-5">
+      <div class="flex-col mt-10">
         <BcrosInputsNameField
           id="individual-person-preferred-name"
           v-model="significantIndividual.profile.preferredName"
@@ -32,7 +32,7 @@
           data-cy="testPreferredName"
         />
       </div>
-      <div class="flex-col py-5">
+      <div class="flex-col mt-10">
         <BcrosInputsEmailField
           id="individual-person-email"
           v-model="significantIndividual.profile.email"
@@ -56,7 +56,7 @@
     </div> -->
     <!-- NB: we may be adding the toggle back in later -->
     <template v-if="showAddInfoManually">
-      <div class="flex-col py-5">
+      <div class="flex-col mt-5 py-5">
         <p class="font-bold py-3">
           {{ $t('labels.beneficialOwnershipAssessment') }}
         </p>
