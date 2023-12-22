@@ -5,7 +5,7 @@ describe('pages -> Add individual', () => {
 
   it('renders the isUnableToObtainOrConfirmInformation section and all basic boxes show on trigger', () => {
     cy.get('[data-cy=add-new-btn]').trigger('click')
-    cy.get('[data-cy="showAddIndividualPersonManually"]').trigger('click')
+    // cy.get('[data-cy="showAddIndividualPersonManually"]').trigger('click')
 
     // find section div
     cy.get('[data-cy="isUnableToObtainOrConfirmInformation"]')

@@ -37,7 +37,7 @@ describe('pages -> Review and Confirm', () => {
 
       // click 'Add an Individual' button and expand the form
       cy.get('[data-cy=add-new-btn]').click()
-      cy.get('[data-cy=showAddIndividualPersonManually]').click()
+      // cy.get('[data-cy=showAddIndividualPersonManually]').click()
 
       // fill out the form
       cy.get('#individual-person-full-name').type(testData.fullName)

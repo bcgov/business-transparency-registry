@@ -1,10 +1,11 @@
 <template>
   <div data-cy="addIndividualPerson">
-    <div>
+    <!-- NB: we may be adding this back in later -->
+    <!-- <div>
       <p>
         {{ $t('texts.addIndividualPerson') }}
       </p>
-    </div>
+    </div> -->
     <UForm
       ref="profileFormBase"
       :schema="profileSchema"
@@ -41,7 +42,7 @@
         />
       </div>
     </UForm>
-    <div class="text-blue-700 py-5 align-middle">
+    <!-- <div class="text-blue-700 py-5 align-middle">
       <a
         id="add-person-manually-toggle"
         href=""
@@ -52,7 +53,8 @@
         <UIcon v-if="showAddInfoManually" name="i-mdi-close" />
         {{ showAddInfoManuallyText }}
       </a>
-    </div>
+    </div> -->
+    <!-- NB: we may be adding the toggle back in later -->
     <template v-if="showAddInfoManually">
       <div class="flex-col py-5">
         <p class="font-bold py-3">
@@ -243,13 +245,14 @@ function addSignificantIndividual () {
   emits('add', significantIndividual.value)
 }
 
-const showAddInfoManually = ref(false)
-const showAddInfoManuallyText = computed(() => {
-  if (showAddInfoManually.value) {
-    return t('buttons.addIndividualPerson.cancel')
-  }
-  return t('buttons.addIndividualPerson.add')
-})
+// NB: we may be adding the toggle functionality back in later
+const showAddInfoManually = ref(true)
+// const showAddInfoManuallyText = computed(() => {
+//   if (showAddInfoManually.value) {
+//     return t('buttons.addIndividualPerson.cancel')
+//   }
+//   return t('buttons.addIndividualPerson.add')
+// })
 
 const profileFormBase = ref()
 const profileFormExtended = ref()

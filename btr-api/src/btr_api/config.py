@@ -68,6 +68,8 @@ class Config:
         SQLALCHEMY_DATABASE_URI = f"postgresql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
 
     GCP_AUTH_KEY = os.getenv("GCP_AUTH_KEY", None)
+    
+    LD_SDK_KEY = os.getenv("LD_SDK_KEY", None)
 
 
 class Production(Config):

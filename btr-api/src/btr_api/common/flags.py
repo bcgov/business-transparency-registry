@@ -38,7 +38,7 @@ from contextlib import suppress
 from typing import Union
 
 import ldclient
-from ldclient import LDClient, Config
+from ldclient import Config, Context, LDClient
 from ldclient.integrations.test_data import TestData
 from flask import current_app
 from flask import has_app_context
@@ -108,50 +108,44 @@ class Flags():
             return None
 
     @staticmethod
-    def get_anonymous_user():
-        """Return an anonymous key."""
-        return {
-            'key': 'anonymous'
-        }
-
-    @staticmethod
-    def flag_user(user: btr_api.models.User,
-                  account_id: int = None):
+    def get_flag_context(user: btr_api.models.User, account_id: int = None) -> Context:
         """Convert User into a Flag user dict."""
-        if not isinstance(user, btr_api.models.User):
-            return None
-
-        _user = {
-            'key': user.sub,
-            'firstName': user.firstname,
-            'lastName': user.lastname,
-            'email': user.email,
-            'custom': {
-                'loginSource': user.login_source,
-            }
-        }
-
-        return _user
+        if isinstance(user, btr_api.models.User):
+            userCtx = Context(
+                kind='user',
+                key=user.sub,
+                attributes={
+                    'firstName': user.firstname,
+                    'lastName': user.lastname,
+                    'email': user.email,
+                    'loginSource': user.login_source
+                })
+        return Context(
+            kind='multi',
+            key='',
+            allow_empty_key=True,
+            multi_contexts=[
+                userCtx or Context(kind='user', key='anonymous'),
+                Context(kind='org', key=str(account_id) if account_id else 'anonymous'),
+            ]
+        )
 
     @staticmethod
-    def value(flag: str, user=None):
+    def value(flag: str, user=None, account_id=None):
         """Retrieve the value  of the (flag, user) tuple."""
         client = Flags.get_client()
 
-        if user:
-            flag_user = user
-        else:
-            flag_user = Flags.get_anonymous_user()
+        flag_context = Flags.get_flag_context(user, account_id)
 
         try:
-            return client.variation(flag, flag_user, None)
+            return client.variation(flag, flag_context, None)
         except Exception as err:  # noqa: B902
             current_app.logger.error('Unable to read flags: %s' % repr(err), exc_info=True)
             return None
 
     @staticmethod
-    def detail(flag: str, user=None) -> Union[bool, int, str]:  # pylint: disable=E1136
+    def detail(flag: str, context: Context = None) -> Union[bool, int, str]:  # pylint: disable=E1136
         """Return the full flag and meta info."""
         client = current_app.extensions[Flags.COMPONENT_NAME]
-        link = client.variation_detail(flag, user, False)
+        link = client.variation_detail(flag, context, False)
         return link
