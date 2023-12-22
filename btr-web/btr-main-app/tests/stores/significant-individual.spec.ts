@@ -1,7 +1,8 @@
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import { setActivePinia, createPinia, storeToRefs } from 'pinia'
 import { testSI } from '../utils/mockedData'
 import { useSignificantIndividuals } from '@/stores/significant-individuals'
+import fileSIApi from '@/services/file-significant-individual'
 
 describe('Business Store Tests', () => {
   setActivePinia(createPinia())
@@ -16,12 +17,16 @@ describe('Business Store Tests', () => {
   })
 
   it('initializes a new significant individuals filing as expected', async () => {
+    fileSIApi.getCurrentOwners = vi.fn(() => {
+      return { data: [testSI], errors: [] }
+    })
+
     const identifier = 'BC1234567'
     await significantIndividuals.filingInit(identifier)
     expect(currentSIFiling.value.businessIdentifier).toBe(identifier)
     expect(currentSIFiling.value.effectiveDate).toBe(null)
     // FUTURE: call mocked and returning a list of existing SIs
-    expect(currentSIFiling.value.significantIndividuals).toEqual([])
+    expect(currentSIFiling.value.significantIndividuals).toEqual([testSI])
   })
 
   it('adds a new significant individual to the filing as expected', async () => {

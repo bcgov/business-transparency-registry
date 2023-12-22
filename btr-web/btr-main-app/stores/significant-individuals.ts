@@ -1,12 +1,19 @@
 import { defineStore } from 'pinia'
+import { StatusCodes } from 'http-status-codes'
+import { Ref } from 'vue'
 import { SignificantIndividualI } from '../interfaces/significant-individual-i'
+import { ErrorI } from '../../btr-common-components/interfaces/error-i'
+import fileSIApi from '@/services/file-significant-individual'
 
 /** Manages Significant */
 export const useSignificantIndividuals = defineStore('significantIndividuals', () => {
-  const currentSIFiling: Ref<SignificantIndividualFilingI> = ref({}) // current significant individual change filing
+  const currentSIFiling: Ref<SignificantIndividualFilingI> = ref({
+    significantIndividuals: []
+  }) // current significant individual change filing
   const currentSavedSIs: Ref<SignificantIndividualI[]> = ref([]) // saved SIs from api for this business
   const showErrors = ref(false) // show submit error validations
   const submitting = ref(false)
+  const errors: Ref<ErrorI[]> = ref([])
 
   watch(() => currentSIFiling.value?.effectiveDate, (val) => {
     // set the start date for all newly added SIs
@@ -56,15 +63,34 @@ export const useSignificantIndividuals = defineStore('significantIndividuals', (
   async function filingSubmit () {
     console.info('Submit', currentSIFiling.value)
     submitting.value = true
-    await new Promise(resolve => setTimeout(resolve, 3000))
+    const { error } = await fileSIApi.submitSignificantIndividualFiling(currentSIFiling.value)
+    if (error) {
+      console.error(error)
+      const err = {
+        statusCode: error.statusCode ?? StatusCodes.INTERNAL_SERVER_ERROR,
+        message: error.message,
+        category: ErrorCategoryE.SIGNIFICANT_INDIVIDUAL
+      }
+      errors.value.push(err)
+    }
     submitting.value = false
   }
 
   /** Get the current significant individuals for the business */
   async function getSIs (businessIdentifier: string) {
     console.info('getSIs', businessIdentifier)
-    await new Promise(resolve => setTimeout(resolve, 100))
-    return [] as SignificantIndividualI[]
+    const { data, error } = await fileSIApi.getCurrentOwners(businessIdentifier)
+    if (error) {
+      console.error(error)
+      const err = {
+        statusCode: error.statusCode ?? StatusCodes.INTERNAL_SERVER_ERROR,
+        message: error.message,
+        category: ErrorCategoryE.SIGNIFICANT_INDIVIDUAL
+      }
+      errors.value.push(err)
+      return null
+    }
+    return data
   }
 
   /** Load the significant individuals for the business into the store */

@@ -53,7 +53,7 @@ class OwnershipDetailsSerializer(object):
                 # TODO: handle this in initial filing validation
                 raise BusinessException('Error removing owner')
 
-        elif owner_dict.get('action') in ['add', 'edit']:
+        elif owner_dict.get('action') in ['add', 'edit'] or owner_dict.get('uuid'):
             if uuid := owner_dict.get('uuid'):
                 ownership_details = OwnershipDetailsModel.find_by_uuid(uuid)
             else:
@@ -70,7 +70,7 @@ class OwnershipDetailsSerializer(object):
                 ownership_details.start_date = date.fromisoformat(start_date)
 
         return ownership_details
-    
+
     @staticmethod
     def to_dict(ownership_details: OwnershipDetailsModel) -> dict:
         """Return the ownership details class as a dict."""
