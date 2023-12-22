@@ -9,6 +9,8 @@ export default defineNuxtRouteMiddleware(async (to) => {
       to.params.currentAccountId as string || to.query.currentAccountId as string
     )
   }
+  // initialize ldarkly
+  useBcrosLaunchdarkly().init()
   // remove query params in url added by keycloak
   if (to.query) {
     const params = new URLSearchParams(to.fullPath.split('?')[1])

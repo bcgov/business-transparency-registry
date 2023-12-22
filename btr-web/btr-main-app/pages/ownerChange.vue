@@ -36,10 +36,10 @@
     />
     <div
       v-if="expandNewSI"
-      class="mt-10 p-10 bg-white rounded flex flex-row"
+      class="mt-10 p-10 pt-8 bg-white rounded flex flex-row"
       :class="showAddIndividualError ? 'border-l-[3px] border-bcGovRed-500' : ''"
     >
-      <label class="font-bold text-lg min-w-[190px]" :class="showAddIndividualError ? 'text-bcGovRed-500' : ''">
+      <label class="font-bold text-lg min-w-[190px] mt-2" :class="showAddIndividualError ? 'text-bcGovRed-500' : ''">
         {{ $t('labels.addIndividual') }}
       </label>
       <IndividualPersonAddNew

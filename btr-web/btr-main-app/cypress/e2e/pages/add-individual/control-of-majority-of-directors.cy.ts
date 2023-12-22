@@ -12,7 +12,7 @@ describe('pages -> Add individual', () => {
 
   it('verify the control of director component is working', () => {
     cy.get('[data-cy=add-new-btn]').trigger('click')
-    cy.get('[data-cy="showAddIndividualPersonManually"]').trigger('click')
+    // cy.get('[data-cy="showAddIndividualPersonManually"]').trigger('click')
 
     const checkboxes = cy.get('[data-cy="testControlOfDirectors"]').should('exist')
 
@@ -24,7 +24,7 @@ describe('pages -> Add individual', () => {
 
   it('test the tooltip', () => {
     cy.get('[data-cy=add-new-btn]').trigger('click')
-    cy.get('[data-cy="showAddIndividualPersonManually"]').trigger('click')
+    // cy.get('[data-cy="showAddIndividualPersonManually"]').trigger('click')
 
     const checkboxes = cy.get('[data-cy="testControlOfDirectors"]').should('exist')
 

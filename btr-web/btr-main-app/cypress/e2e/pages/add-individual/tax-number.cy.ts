@@ -12,7 +12,7 @@ describe('pages -> Add individual', () => {
 
   it('verify Tax Number component is working', () => {
     cy.get('[data-cy=add-new-btn]').trigger('click')
-    cy.get('[data-cy="showAddIndividualPersonManually"]').trigger('click')
+    // cy.get('[data-cy="showAddIndividualPersonManually"]').trigger('click')
 
     const radioGroup = cy.get('[data-cy="testTaxNumber"]').should('exist')
 
@@ -26,7 +26,7 @@ describe('pages -> Add individual', () => {
     })
 
     cy.get('[data-cy=add-new-btn]').trigger('click')
-    cy.get('[data-cy="showAddIndividualPersonManually"]').trigger('click')
+    // cy.get('[data-cy="showAddIndividualPersonManually"]').trigger('click')
     cy.get('[name="taxNumber"]').type('00').blur()
     cy.contains(en.errors.validation.taxNumber.invalidLength).should('exist')
     cy.get('[type="radio"][value="hasTaxNumber"]').should('be.checked')
@@ -39,7 +39,7 @@ describe('pages -> Add individual', () => {
     })
 
     cy.get('[data-cy=add-new-btn]').trigger('click')
-    cy.get('[data-cy="showAddIndividualPersonManually"]').trigger('click')
+    // cy.get('[data-cy="showAddIndividualPersonManually"]').trigger('click')
     cy.get('[name="taxNumber"]').type('a').blur()
     cy.contains(en.errors.validation.taxNumber.specialCharacter).should('exist')
     cy.get('[type="radio"][value="hasTaxNumber"]').should('be.checked')
@@ -52,7 +52,7 @@ describe('pages -> Add individual', () => {
     })
 
     cy.get('[data-cy=add-new-btn]').trigger('click')
-    cy.get('[data-cy="showAddIndividualPersonManually"]').trigger('click')
+    // cy.get('[data-cy="showAddIndividualPersonManually"]').trigger('click')
     cy.get('[name="taxNumber"]').type('111222333').blur()
     cy.contains(en.errors.validation.taxNumber.invalidNumber).should('exist')
     cy.get('[type="radio"][value="hasTaxNumber"]').should('be.checked')

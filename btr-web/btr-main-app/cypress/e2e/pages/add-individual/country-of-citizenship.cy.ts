@@ -5,7 +5,7 @@ describe('pages -> Add individual', () => {
 
   it('verify CountriesOfCitizenship component is working', () => {
     cy.get('[data-cy=add-new-btn]').trigger('click')
-    cy.get('[data-cy="showAddIndividualPersonManually"]').trigger('click')
+    // cy.get('[data-cy="showAddIndividualPersonManually"]').trigger('click')
 
     const radioGroup = cy.get('[data-cy="countryOfCitizenshipRadioGroup"]').should('exist')
 

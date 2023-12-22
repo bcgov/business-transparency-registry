@@ -1,17 +1,18 @@
 <template>
   <div data-cy="addIndividualPerson">
-    <div>
+    <!-- NB: we may be adding this back in later -->
+    <!-- <div>
       <p>
         {{ $t('texts.addIndividualPerson') }}
       </p>
-    </div>
+    </div> -->
     <UForm
       ref="profileFormBase"
       :schema="profileSchema"
       :state="significantIndividual.profile"
       @change="addBtrPayFees"
     >
-      <div class="flex-col py-5">
+      <div class="flex-col">
         <BcrosInputsNameField
           id="individual-person-full-name"
           v-model="significantIndividual.profile.fullName"
@@ -21,7 +22,7 @@
           data-cy="testFullName"
         />
       </div>
-      <div class="flex-col py-5">
+      <div class="flex-col mt-10">
         <BcrosInputsNameField
           id="individual-person-preferred-name"
           v-model="significantIndividual.profile.preferredName"
@@ -31,7 +32,7 @@
           data-cy="testPreferredName"
         />
       </div>
-      <div class="flex-col py-5">
+      <div class="flex-col mt-10">
         <BcrosInputsEmailField
           id="individual-person-email"
           v-model="significantIndividual.profile.email"
@@ -41,7 +42,7 @@
         />
       </div>
     </UForm>
-    <div class="text-blue-700 py-5 align-middle">
+    <!-- <div class="text-blue-700 py-5 align-middle">
       <a
         id="add-person-manually-toggle"
         href=""
@@ -52,9 +53,10 @@
         <UIcon v-if="showAddInfoManually" name="i-mdi-close" />
         {{ showAddInfoManuallyText }}
       </a>
-    </div>
+    </div> -->
+    <!-- NB: we may be adding the toggle back in later -->
     <template v-if="showAddInfoManually">
-      <div class="flex-col py-5">
+      <div class="flex-col mt-5 py-5">
         <p class="font-bold py-3">
           {{ $t('labels.beneficialOwnershipAssessment') }}
         </p>
@@ -243,13 +245,14 @@ function addSignificantIndividual () {
   emits('add', significantIndividual.value)
 }
 
-const showAddInfoManually = ref(false)
-const showAddInfoManuallyText = computed(() => {
-  if (showAddInfoManually.value) {
-    return t('buttons.addIndividualPerson.cancel')
-  }
-  return t('buttons.addIndividualPerson.add')
-})
+// NB: we may be adding the toggle functionality back in later
+const showAddInfoManually = ref(true)
+// const showAddInfoManuallyText = computed(() => {
+//   if (showAddInfoManually.value) {
+//     return t('buttons.addIndividualPerson.cancel')
+//   }
+//   return t('buttons.addIndividualPerson.add')
+// })
 
 const profileFormBase = ref()
 const profileFormExtended = ref()

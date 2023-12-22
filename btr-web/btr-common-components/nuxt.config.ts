@@ -46,6 +46,7 @@ export default defineNuxtConfig({
       kcURL: process.env.VUE_APP_KEYCLOAK_AUTH_URL || '',
       kcRealm: process.env.VUE_APP_KEYCLOAK_REALM || '',
       kcClient: process.env.VUE_APP_KEYCLOAK_CLIENTID || '',
+      ldClientId: process.env.VUE_APP_LD_CLIENT_ID || '',
       legalApiURL: `${process.env.VUE_APP_LEGAL_API_URL || ''}${process.env.VUE_APP_LEGAL_API_VERSION_2 || ''}`,
       payApiURL: `${process.env.VUE_APP_PAY_API_URL || ''}${process.env.VUE_APP_PAY_API_VERSION || ''}`,
       btrApiURL: `${process.env.VUE_APP_BTR_API_URL || ''}${process.env.VUE_APP_BTR_API_VERSION || ''}`,

@@ -41,9 +41,9 @@ describe('pages -> Beneficial Owner Change', () => {
     cy.get('[data-cy=testFullName]').should('exist')
     cy.get('[data-cy=testPreferredName]').should('exist')
     cy.get('[data-cy=testEmail]').should('exist')
-    cy.get('[data-cy=showAddIndividualPersonManually]')
-      .should('have.text', ' Add transparency register information manually')
-    cy.get('[data-cy=addIndividualPerson]').should('not.contain.text', 'Beneficial Ownership Assessment')
+    // cy.get('[data-cy=showAddIndividualPersonManually]')
+    //   .should('have.text', ' Add transparency register information manually')
+    cy.get('[data-cy=addIndividualPerson]').should('contain.text', 'Beneficial Ownership Assessment')
     cy.get('[data-cy=new-si-cancel-btn]').should('have.text', 'Cancel')
     cy.get('[data-cy=new-si-done-btn]').should('have.text', 'Done')
     // should disable add button while add individual is expanded
@@ -53,9 +53,9 @@ describe('pages -> Beneficial Owner Change', () => {
   it('expands all parts when manual entry clicked', () => {
     cy.get('[data-cy=add-new-btn]').trigger('click')
 
-    cy.get('[data-cy=showAddIndividualPersonManually]').trigger('click')
-    cy.get('[data-cy=showAddIndividualPersonManually]')
-      .should('have.text', ' Cancel transparent register information')
+    // cy.get('[data-cy=showAddIndividualPersonManually]').trigger('click')
+    // cy.get('[data-cy=showAddIndividualPersonManually]')
+    //   .should('have.text', ' Cancel transparent register information')
 
     cy.get('[data-cy=addIndividualPerson]').should('contain.text', 'Beneficial Ownership Assessment')
     cy.get('[data-cy=addIndividualPerson]').should('contain.text', 'Control of Shares and Votes')
