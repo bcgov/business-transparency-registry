@@ -33,13 +33,12 @@
 # POSSIBILITY OF SUCH DAMAGE.
 from http import HTTPStatus
 
-from flask import Blueprint, current_app
+from flask import Blueprint
 from flask import jsonify
 from flask import request
 
-from btr_api.common.flags import Flags
 from btr_api.exceptions import exception_response
-from btr_api.models import Submission, User
+from btr_api.models import Submission
 from btr_api.services.submission import SubmissionService
 
 
