@@ -22,7 +22,10 @@
           {{ $t('labels.significantIndividuals') }}
         </h3>
       </div>
-      <IndividualPersonSummaryTable :individuals="currentSIFiling.significantIndividuals || []" />
+      <IndividualPersonSummaryTable
+        :individuals="currentSIFiling.significantIndividuals || []"
+        :edit="false"
+      />
     </div>
 
     <h2 class="font-bold text-lg mt-16" data-cy="review-confirm-section-heading">

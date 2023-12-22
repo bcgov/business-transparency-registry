@@ -49,7 +49,11 @@
         @add="addNewSI($event)"
       />
     </div>
-    <IndividualPersonSummaryTable class="mt-10" :individuals="currentSIFiling.significantIndividuals || []" />
+    <IndividualPersonSummaryTable
+      class="mt-10"
+      :individuals="currentSIFiling.significantIndividuals || []"
+      :edit="true"
+    />
   </div>
 </template>
 
