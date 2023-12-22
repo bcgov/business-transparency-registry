@@ -73,7 +73,15 @@
     "significantIndividual": {
       "properties": {
         "controlType": {
-          "$ref": "#/definitions/controlOfDirectors"
+          "type": "object",
+          "properties": {
+            "directors": {
+              "$ref": "#/definitions/controlOfDirectors"
+            },
+            "sharesVotes": {
+              "$ref": "#/definitions/controlOfShares"
+            }
+          }
         },
         "missingInfoReason": {
           "type": "string"
@@ -205,9 +213,7 @@
         "hasTaxNumber",
         "isTaxResident",
         "fullName",
-        "preferredName",
-        "taxNumber",
-        "uuid"
+        "preferredName"
       ]
     },
     "btrAddress": {

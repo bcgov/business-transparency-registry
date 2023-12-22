@@ -1,5 +1,5 @@
-
 from contextlib import contextmanager
+
 
 @contextmanager
 def nested_session(session):
@@ -11,6 +11,20 @@ def nested_session(session):
         raise error
     finally:
         pass
+
+
+ADDRESS = {
+    "city": "London",
+    "country": {
+        "alpha_2": "CA",
+        "name": "Canada"
+    },
+    "line1": "Gf-661 Hamilton Rd",
+    "postalCode": "N5Z 1T2",
+    "region": "ON",
+    "line2": "",
+    "locationDescription": ""
+}
 
 INDIVIDUAL_1 = {
     "controlType": {
@@ -29,16 +43,16 @@ INDIVIDUAL_1 = {
         "other": ""
     },
     "missingInfoReason": "",
-    "percentOfShares": "25",
-    "percentOfVotes": "30",
+    "percentOfShares": 25,
+    "percentOfVotes": 30,
     "profile": {
-        "address": {},
+        "address": ADDRESS,
         "competency": {
             "decisionMaking": True,
             "financialAffairs": False
         },
         "birthDate": "1980-03-01",
-        "citizenshipCA": "Canada",
+        "citizenshipCA": "citizen",
         "citizenshipsExCA": [],
         "email": "example1@email.com",
         "hasTaxNumber": True,
@@ -69,20 +83,20 @@ INDIVIDUAL_2 = {
         "other": ""
     },
     "missingInfoReason": "",
-    "percentOfShares": "12",
-    "percentOfVotes": "11",
+    "percentOfShares": 12,
+    "percentOfVotes": 11,
     "profile": {
-        "address": {},
+        "address": ADDRESS,
         "competency": {
             "decisionMaking": True,
             "financialAffairs": False
         },
         "birthDate": "1980-01-01",
-        "citizenshipCA": "Canada",
+        "citizenshipCA": "citizen",
         "citizenshipsExCA": [],
         "email": "example2@email.com",
         "hasTaxNumber": True,
-        "isTaxResident":True,
+        "isTaxResident": True,
         "fullName": "Jane Doe",
         "preferredName": "",
         "taxNumber": "123000111"
@@ -100,24 +114,24 @@ INDIVIDUAL_3 = {
             "inConcertControl": False
         },
         "directors": {
-        "directControl": True,
-        "indirectControl": False,
-        "significantInfluence": True,
-        "inConcertControl": True
+            "directControl": True,
+            "indirectControl": False,
+            "significantInfluence": True,
+            "inConcertControl": True
         },
         "other": "Other control details"
     },
     "missingInfoReason": "Not applicable",
-    "percentOfShares": "15",
-    "percentOfVotes": "30",
+    "percentOfShares": 15,
+    "percentOfVotes": 30,
     "profile": {
-        "address": {},
+        "address": ADDRESS,
         "competency": {
             "decisionMaking": True,
             "financialAffairs": False
         },
         "birthDate": "1990-01-01",
-        "citizenshipCA": "Canada",
+        "citizenshipCA": "citizen",
         "citizenshipsExCA": [],
         "email": "example3@email.com",
         "hasTaxNumber": True,
