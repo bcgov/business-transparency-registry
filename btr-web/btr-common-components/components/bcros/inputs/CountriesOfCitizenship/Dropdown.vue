@@ -11,19 +11,27 @@
         'overflow-hidden',
         'bg-gray-100',
         'text-left',
-        'border-b-2',
-        'border-gray-500',
+        'border-b-[1px]',
         'focus:outline-none',
         'sm:text-sm',
-        'h-[46px]']"
+        'h-[56px]',
+        'rounded-t-md',
+        disabled ? 'border-gray-500' : 'border-gray-700 hover:bg-gray-200']"
       :disabled="disabled"
     >
       <ComboboxButton
-        class="w-full h-11 text-left p-3"
-        :class="{ 'text-gray-300': disabled }"
+        class="w-full h-full px-[10px] text-left"
         data-cy="countryOfCitizenshipDropdownButton"
       >
-        <span v-if="nonCaCitizenships.length === 0" class="w-full text-gray-400 text-thin">
+        <span
+          v-if="nonCaCitizenships.length === 0"
+          class="w-full"
+          :class="{
+            'text-primary-500': open,
+            'text-gray-700': !open && !disabled,
+            'text-gray-500': disabled
+          }"
+        >
           {{ $t('labels.countryOfCitizenship.placeholder') }}
         </span>
         <span v-else class="align-middle">
@@ -49,7 +57,9 @@
               'sm:text-sm',
               'p-3',
               'bg-gray-100',
-              'border-b-1'
+              'border-b-2',
+              'border-primary-500',
+              'placeholder-primary-500'
             ]"
             data-cy="countryOfCitizenshipDropdownFilter"
             @change="filterCountries($event.target.value)"
