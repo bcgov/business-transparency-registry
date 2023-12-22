@@ -67,8 +67,6 @@ def registers(id: int | None = None):
 @bp.route("/", methods=("POST",))
 def create_register():
     try:
-        user = User.find_by_sub('e9e349c8-2ed6-4817-853a-85cdc616e649')
-        Flags.value('test', user, 3113)
         if json_input := request.get_json():
             # normally do some validation here
             submission = SubmissionService.create_submission(json_input)
