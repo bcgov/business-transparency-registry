@@ -27,7 +27,7 @@
     <UButton
       class="mt-10 px-4 py-3"
       color="primary"
-      :disabled="expandNewSI"
+      :disabled="isEditing || expandNewSI"
       icon="i-mdi-account-plus"
       :label="$t('labels.addIndividual')"
       variant="outline"
@@ -53,6 +53,8 @@
       class="mt-10"
       :individuals="currentSIFiling.significantIndividuals || []"
       :edit="true"
+      :isEditing="isEditing"
+      @toggle-editing-mode="toggleEditingMode"
     />
   </div>
 </template>
@@ -64,6 +66,12 @@ const significantIndividuals = useSignificantIndividuals()
 const { currentSIFiling } = storeToRefs(significantIndividuals)
 
 const expandNewSI = ref(false)
+
+const isEditing = ref(false)
+
+const toggleEditingMode = () => {
+  isEditing.value = !isEditing.value
+}
 
 // FUTURE: these will be triggered/replaced for something else in 18883
 const showSignificantDateError = ref(false)

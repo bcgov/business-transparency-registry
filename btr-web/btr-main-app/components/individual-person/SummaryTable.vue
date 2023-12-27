@@ -2,11 +2,11 @@
   <BcrosTablesTable
     data-cy="individualsSummaryTable"
     :headers="headers"
-    :items="individualsToDisplay"
+    :items="individuals"
     :empty-state="$t('texts.tables.emptyTexts.individualsSummaryTable')"
   >
-    <template #table-row="{ item }">
-      <tr>
+    <template #table-row="{ item, index }">
+      <tr v-if="item.action != FilingActionE.REMOVE">
         <td data-cy="summary-table-name">
           <span class="font-bold">{{ item.profile.fullName.toUpperCase() }}</span><br>
           <span v-if="item.profile.preferredName">{{ item.profile.preferredName }}<br></span>
@@ -65,14 +65,53 @@
           </div>
         </td>
         <template v-if="edit">
-          <!-- Edit Button -->
+          <div>
+            <UButton
+              :label="t('buttons.edit')"
+              color="white"
+              :disabled="isEditing"
+              @click="openEditingMode(index)"
+            />
+            <UPopover>
+              <UButton
+                color="white"
+                icon="i-heroicons-chevron-down-20-solid"
+                :disabled="isEditing"
+              />
+              <template #panel>
+                <div class="p-4">
+                  <UButton
+                    :label="t('buttons.remove')"
+                    color="white"
+                    @click="removeSignificantIndividual(index)"
+                  />
+                </div>
+              </template>
+            </UPopover>
+          </div>
         </template>
+      </tr>
+      <tr v-if="isEditing && editingIndex === index">
+        <td colspan="100%">
+          <div class="mt-10 w-full bg-white rounded flex flex-row">
+            <label class="font-bold text-lg min-w-[190px]">Edit an Individual</label>
+            <IndividualPersonAddNew
+              :index="index"
+              :setSignificantIndividual="copyIndividualToEdit()"
+              class="w-full"
+              @cancel="closeEditingMode"
+              @update="updateSignificantIndividual($event.index, $event.updatedSI)"
+              @remove="removeSignificantIndividual(index)"
+            />
+          </div>
+        </td>
       </tr>
     </template>
   </BcrosTablesTable>
 </template>
 
 <script setup lang="ts">
+const emit = defineEmits(['toggle-editing-mode'])
 const props = defineProps({
   individuals: {
     type: Array as PropType<SignificantIndividualI[]>,
@@ -81,19 +120,19 @@ const props = defineProps({
   edit: {
     type: Boolean,
     default: false
+  },
+  isEditing: {
+    type: Boolean,
+    default: false
   }
 })
+
+const editingIndex = ref(-1)
 
 const { t } = useI18n()
 const headers = [
   t('labels.name'), t('labels.address'), t('labels.details'), t('labels.significanceDates'), t('labels.control')
 ]
-
-// individuals that are marked as removed will not be displayed
-const individualsToDisplay = computed(() => {
-  return props.individuals.filter(
-    individual => individual.action !== FilingActionE.REMOVE)
-})
 
 function getTaxResidentText (isTaxResident: boolean) {
   if (isTaxResident) {
@@ -134,6 +173,34 @@ function getDirectorsControlText (directorsConstrol: ControlOfDirectorsI) {
     return t(`texts.controlOfDirectors.summary.${field}`)
   }
   return ''
+}
+
+function openEditingMode (index: number) {
+  editingIndex.value = index
+  emit('toggle-editing-mode')
+}
+
+function closeEditingMode () {
+  editingIndex.value = -1
+  if (props.isEditing) {
+    emit('toggle-editing-mode')
+  }
+}
+
+function copyIndividualToEdit () {
+  const individualToEdit = JSON.parse(JSON.stringify(props.individuals[editingIndex.value]))
+  individualToEdit.action = FilingActionE.EDIT
+  return individualToEdit
+}
+
+function removeSignificantIndividual (index: number) {
+  useSignificantIndividuals().filingRemoveSI(index)
+  closeEditingMode()
+}
+
+function updateSignificantIndividual (index: number, updatedSI: SignificantIndividualI) {
+  useSignificantIndividuals().filingUpdateSI(index, updatedSI)
+  closeEditingMode()
 }
 </script>
 

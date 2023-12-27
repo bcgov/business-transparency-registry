@@ -43,7 +43,9 @@
       "cancel": "Cancel transparent register information"
     },
     "cancel": "Cancel",
-    "done": "Done"
+    "done": "Done",
+    "remove": "Remove",
+    "edit": "Edit"
   },
   "texts": {
     "note": "Note: ",

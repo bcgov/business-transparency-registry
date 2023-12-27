@@ -40,6 +40,16 @@ export const useSignificantIndividuals = defineStore('significantIndividuals', (
     return ''
   }
 
+  /** Update the significant individual at the given index */
+  function filingUpdateSI (index: number, significantIndividual: SignificantIndividualI) {
+    currentSIFiling.value.significantIndividuals.splice(index, 1, significantIndividual)
+  }
+
+  /** Mark the significant individual at the given index as removed so it will not be displayed in the table */
+  function filingRemoveSI (index: number) {
+    currentSIFiling.value[index].action = FilingActionE.REMOVE
+  }
+
   /** Initialize a new significant individual filing */
   async function filingInit (businessIdentifier: string) {
     await loadSavedSIs(businessIdentifier)
@@ -113,6 +123,8 @@ export const useSignificantIndividuals = defineStore('significantIndividuals', (
     showErrors,
     submitting,
     filingAddSI,
+    filingUpdateSI,
+    filingRemoveSI,
     filingInit,
     filingSave,
     filingSubmit,
