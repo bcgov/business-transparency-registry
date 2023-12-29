@@ -1,4 +1,6 @@
 <template>
+  {{ modelValue }}
+  {{ modelValue === undefined }}
   <div data-cy="isUnableToObtainOrConfirmInformation">
     <p class="font-bold py-3">
       {{ $t('labels.unableToObtainOrConfirmInformation.title') }}
@@ -41,12 +43,12 @@
 
 <script setup lang="ts">
 const emit = defineEmits<{(e: 'update:modelValue', value: string | undefined): void }>()
-defineProps({
+const props = defineProps({
   modelValue: { type: String, default: undefined }
 })
 
-const isUnableToObtainOrConfirmInformation = ref(false)
-const isUnableToObtainOrConfirmInformationDetails = ref('')
+const isUnableToObtainOrConfirmInformation = ref(props.modelValue !== undefined && props.modelValue !== '')
+const isUnableToObtainOrConfirmInformationDetails = ref(props.modelValue || '')
 
 const isUnableToObtainOrConfirmInformationCheckboxChange = () => {
   if (!isUnableToObtainOrConfirmInformation.value) {

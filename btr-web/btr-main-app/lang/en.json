@@ -1,6 +1,7 @@
 {
   "labels": {
     "addIndividual": "Add an Individual",
+    "editIndividual": "Edit an Individual",
     "beneficialOwnershipAssessment": "Beneficial Ownership Assessment",
     "control": "Control",
     "citizenships": "Citizenship(s)",

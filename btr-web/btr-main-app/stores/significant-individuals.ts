@@ -42,12 +42,13 @@ export const useSignificantIndividuals = defineStore('significantIndividuals', (
 
   /** Update the significant individual at the given index */
   function filingUpdateSI (index: number, significantIndividual: SignificantIndividualI) {
+    significantIndividual.action = FilingActionE.ADD
     currentSIFiling.value.significantIndividuals.splice(index, 1, significantIndividual)
   }
 
   /** Mark the significant individual at the given index as removed so it will not be displayed in the table */
   function filingRemoveSI (index: number) {
-    currentSIFiling.value[index].action = FilingActionE.REMOVE
+    currentSIFiling.value.significantIndividuals[index].action = FilingActionE.REMOVE
   }
 
   /** Initialize a new significant individual filing */

@@ -6,7 +6,7 @@
     :empty-state="$t('texts.tables.emptyTexts.individualsSummaryTable')"
   >
     <template #table-row="{ item, index }">
-      <tr v-if="item.action != FilingActionE.REMOVE">
+      <tr v-if="item.action != FilingActionE.REMOVE && editingIndex != index">
         <td data-cy="summary-table-name">
           <span class="font-bold">{{ item.profile.fullName.toUpperCase() }}</span><br>
           <span v-if="item.profile.preferredName">{{ item.profile.preferredName }}<br></span>
@@ -65,40 +65,74 @@
           </div>
         </td>
         <template v-if="edit">
-          <div>
-            <UButton
-              :label="t('buttons.edit')"
-              color="white"
-              :disabled="isEditing"
-              @click="openEditingMode(index)"
-            />
-            <UPopover>
+          <td data-cy="summary-table-edit-button">
+            <div class="flex flex-nowrap justify-end">
               <UButton
-                color="white"
-                icon="i-heroicons-chevron-down-20-solid"
+                :ui="{
+                  rounded: 'rounded-none',
+                  variant: {
+                    editRow: 'text-primary border-0 border-r-2 border-gray'
+                  },
+                  padding: {
+                    default: 'py-0'
+                  }
+                }"
+                icon="i-mdi-pencil"
+                :label="t('buttons.edit')"
+                variant="editRow"
                 :disabled="isEditing"
+                @click="openEditingMode(index)"
               />
-              <template #panel>
-                <div class="p-4">
-                  <UButton
-                    :label="t('buttons.remove')"
-                    color="white"
-                    @click="removeSignificantIndividual(index)"
-                  />
-                </div>
-              </template>
-            </UPopover>
-          </div>
+              <UPopover>
+                <UButton
+                  :ui="{
+                    rounded: 'rounded-none',
+                    variant: {
+                      editRow2: 'text-primary border-0'
+                    },
+                    padding: {
+                      default: 'py-0'
+                    }
+                  }"
+                  icon="i-mdi-menu-down"
+                  variant="editRow2"
+                  :disabled="isEditing"
+                />
+                <template #panel>
+                  <div class="mx-2 my-2">
+                    <UButton
+                      :ui="{
+                        rounded: 'rounded-none',
+                        variant: {
+                          editRow2: 'text-primary border-0'
+                        },
+                        padding: {
+                          default: 'py-0'
+                        }
+                      }"
+                      icon="i-mdi-delete"
+                      :label="t('buttons.remove')"
+                      color="primary"
+                      variant="editRow2"
+                      @click="removeSignificantIndividual(index)"
+                    />
+                  </div>
+                </template>
+              </UPopover>
+            </div>
+          </td>
         </template>
       </tr>
       <tr v-if="isEditing && editingIndex === index">
-        <td colspan="100%">
-          <div class="mt-10 w-full bg-white rounded flex flex-row">
-            <label class="font-bold text-lg min-w-[190px]">Edit an Individual</label>
+        <td data-cy="summary-table-edit-form" colspan="100%">
+          <div class="bg-white rounded flex flex-row">
+            <label class="font-bold text-lg min-w-[190px] mt-2">
+              {{ $t('labels.editIndividual') }}
+            </label>
             <IndividualPersonAddNew
               :index="index"
-              :setSignificantIndividual="copyIndividualToEdit()"
-              class="w-full"
+              :set-significant-individual="copyIndividualToEdit()"
+              class="ml-8"
               @cancel="closeEditingMode"
               @update="updateSignificantIndividual($event.index, $event.updatedSI)"
               @remove="removeSignificantIndividual(index)"

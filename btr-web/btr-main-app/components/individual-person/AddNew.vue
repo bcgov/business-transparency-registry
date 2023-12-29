@@ -142,7 +142,7 @@
           id="addNewPersonBirthdate"
           class="mt-3"
           :max-date="new Date()"
-          :placeholder="$t('placeholders.dateSelect.birthdate')"
+          :placeholder="significantIndividual.profile.birthDate || $t('placeholders.dateSelect.birthdate')"
           @selection="significantIndividual.profile.birthDate = dateToString($event, 'YYYY-MM-DD')"
         />
       </div>
@@ -203,31 +203,34 @@
       <IndividualPersonControlUnableToObtainOrConfirmInformation v-model="significantIndividual.missingInfoReason" />
     </template>
     <div class="grid mt-10 w-full">
-      <div class="justify-self-end flex">
+      <div :class="isEditing ? 'flex justify-between' : 'flex justify-end'">
         <UButton
+          v-if="isEditing"
           class="px-10 py-4"
           :label="t('buttons.remove')"
-          color="primary"
+          color="red"
           variant="outline"
           data-cy="new-si-cancel-btn"
           @click="$emit('remove', true)"
         />
-        <UButton
-          class="px-10 py-4"
-          :label="t('buttons.cancel')"
-          color="primary"
-          variant="outline"
-          data-cy="new-si-cancel-btn"
-          @click="$emit('cancel', true)"
-        />
-        <UButton
-          class="ml-5 px-10 py-4"
-          :label="t('buttons.done')"
-          color="primary"
-          valriant="solid"
-          data-cy="new-si-done-btn"
-          @click="handleDoneButtonClick()"
-        />
+        <div class="flex">
+          <UButton
+            class="px-10 py-4"
+            :label="t('buttons.cancel')"
+            color="primary"
+            variant="outline"
+            data-cy="new-si-cancel-btn"
+            @click="$emit('cancel', true)"
+          />
+          <UButton
+            class="ml-5 px-10 py-4"
+            :label="t('buttons.done')"
+            color="primary"
+            variant="solid"
+            data-cy="new-si-done-btn"
+            @click="handleDoneButtonClick()"
+          />
+        </div>
       </div>
     </div>
   </div>

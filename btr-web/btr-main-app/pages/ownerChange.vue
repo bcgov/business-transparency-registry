@@ -53,7 +53,7 @@
       class="mt-10"
       :individuals="currentSIFiling.significantIndividuals || []"
       :edit="true"
-      :isEditing="isEditing"
+      :is-editing="isEditing"
       @toggle-editing-mode="toggleEditingMode"
     />
   </div>
