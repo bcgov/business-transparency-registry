@@ -70,50 +70,29 @@
               <UButton
                 :ui="{
                   rounded: 'rounded-none',
-                  variant: {
-                    editRow: 'text-primary border-0 border-r-2 border-gray'
-                  },
-                  padding: {
-                    default: 'py-0'
-                  }
+                  padding: { default: 'py-0' }
                 }"
                 icon="i-mdi-pencil"
                 :label="t('buttons.edit')"
-                variant="editRow"
+                variant="editButton"
                 :disabled="isEditing"
                 @click="openEditingMode(index)"
               />
               <UPopover>
                 <UButton
-                  :ui="{
-                    rounded: 'rounded-none',
-                    variant: {
-                      editRow2: 'text-primary border-0'
-                    },
-                    padding: {
-                      default: 'py-0'
-                    }
-                  }"
+                  :ui="{ padding: { default: 'py-0' } }"
                   icon="i-mdi-menu-down"
-                  variant="editRow2"
+                  variant="removeButton"
                   :disabled="isEditing"
                 />
                 <template #panel>
                   <div class="mx-2 my-2">
                     <UButton
-                      :ui="{
-                        rounded: 'rounded-none',
-                        variant: {
-                          editRow2: 'text-primary border-0'
-                        },
-                        padding: {
-                          default: 'py-0'
-                        }
-                      }"
+                      :ui="{ padding: { default: 'py-0' } }"
                       icon="i-mdi-delete"
                       :label="t('buttons.remove')"
                       color="primary"
-                      variant="editRow2"
+                      variant="removeButton"
                       @click="removeSignificantIndividual(index)"
                     />
                   </div>

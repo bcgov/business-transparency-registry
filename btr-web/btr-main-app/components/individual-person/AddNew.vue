@@ -206,7 +206,7 @@
       <div :class="isEditing ? 'flex justify-between' : 'flex justify-end'">
         <UButton
           v-if="isEditing"
-          class="px-10 py-4"
+          class="px-10 py-4 mr-5"
           :label="t('buttons.remove')"
           color="red"
           variant="outline"

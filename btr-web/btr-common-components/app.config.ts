@@ -5,7 +5,9 @@ export default defineAppConfig({
     red: 'bcGovRed',
     button: {
       variant: {
-        solid: 'hover:bg-opacity-[.92] hover:bg-{color}-500'
+        solid: 'hover:bg-opacity-[.92] hover:bg-{color}-500',
+        editButton: 'text-primary border-0 border-r-2 border-gray',
+        removeButton: 'text-primary border-0'
       }
     },
     formGroup: {
