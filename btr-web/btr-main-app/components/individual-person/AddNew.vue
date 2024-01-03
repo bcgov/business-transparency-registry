@@ -210,7 +210,7 @@
           :label="t('buttons.remove')"
           color="red"
           variant="outline"
-          data-cy="new-si-cancel-btn"
+          data-cy="edit-si-remove-btn"
           @click="$emit('remove', true)"
         />
         <div class="flex">

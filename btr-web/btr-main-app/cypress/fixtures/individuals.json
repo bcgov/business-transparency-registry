@@ -1,0 +1,46 @@
+{
+  "profile1": {
+    "fullName": "John Smith",
+    "preferredName": "John",
+    "email": "123@test.com",
+    "percentOfShares": "20",
+    "percentOfVotes": "10",
+    "address": {
+      "country": "Canada",
+      "streetAddress": "111 test street",
+      "city": "Vancouver",
+      "province": ["British Columbia", "BC"],
+      "postalCode": "V0E 1H5"
+    },
+    "taxNumber": "107 676 942",
+    "taxResidency": "true",
+    "summaryTable": {
+      "citizenship": "Citizenship(s):Canada",
+      "taxResidency": "Tax Resident of Canada",
+      "shareControl": "Registered owner of 20% of shares, 10% of votes",
+      "directorControl": "Direct control of the majority of directors"
+    }
+  },
+  "profile2": {
+    "fullName": "John Doe",
+    "preferredName": "John",
+    "email": "test@testemail.com",
+    "percentOfShares": "30",
+    "percentOfVotes": "10",
+    "address": {
+      "country": "Canada",
+      "streetAddress": "111 test street",
+      "city": "Vancouver",
+      "province": ["British Columbia", "BC"],
+      "postalCode": "V0E 1H5"
+    },
+    "taxNumber": "301 166 476",
+    "taxResidency": "true",
+    "summaryTable": {
+      "citizenship": "Citizenship(s):Canada",
+      "taxResidency": "Tax Resident of Canada",
+      "shareControl": "Registered owner of 30% of shares, 10% of votes",
+      "directorControl": "Direct control of the majority of directors"
+    }
+  }
+}

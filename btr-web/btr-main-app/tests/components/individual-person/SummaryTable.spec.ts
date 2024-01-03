@@ -35,7 +35,7 @@ describe('AddIndividualPersonSummaryTable tests', () => {
     expect(wrapper.find('[data-cy=summary-table-details]').exists()).toBe(false)
     expect(wrapper.find('[data-cy=summary-table-dates]').exists()).toBe(false)
     expect(wrapper.find('[data-cy=summary-table-controls]').exists()).toBe(false)
-    expect(wrapper.find('[data-cy=summary-table-edit-button]').exists()).toBe(false)
+    expect(wrapper.find('[data-cy=summary-table-buttons]').exists()).toBe(false)
   })
   it('updates SummaryTable with data dynamically', async () => {
     await wrapper.setProps({ individuals: [si] })
@@ -45,7 +45,7 @@ describe('AddIndividualPersonSummaryTable tests', () => {
     expect(wrapper.find('[data-cy=summary-table-details]').exists()).toBe(true)
     expect(wrapper.find('[data-cy=summary-table-dates]').exists()).toBe(true)
     expect(wrapper.find('[data-cy=summary-table-controls]').exists()).toBe(true)
-    expect(wrapper.find('[data-cy=summary-table-edit-button]').exists()).toBe(true)
+    expect(wrapper.find('[data-cy=summary-table-buttons]').exists()).toBe(true)
   })
   it('displays the Name column as expected', async () => {
     si.profile.fullName = 'full name'

@@ -24,7 +24,7 @@ describe('pages -> Review and Confirm', () => {
   })
 
   it('integration test for adding an individual and reviewing the summary', () => {
-    cy.fixture('individual').then((testData) => {
+    cy.fixture('individuals').then((testData) => {
       cy.intercept(
         'GET',
         'https://pay-api-dev.apps.silver.devops.gov.bc.ca/api/v1/fees/BTR/REGSIGIN',
@@ -40,13 +40,13 @@ describe('pages -> Review and Confirm', () => {
       // cy.get('[data-cy=showAddIndividualPersonManually]').click()
 
       // fill out the form
-      cy.get('#individual-person-full-name').type(testData.fullName)
-      cy.get('#individual-person-preferred-name').type(testData.preferredName)
-      cy.get('#individual-person-email').type(testData.email)
+      cy.get('#individual-person-full-name').type(testData.profile1.fullName)
+      cy.get('#individual-person-preferred-name').type(testData.profile1.preferredName)
+      cy.get('#individual-person-email').type(testData.profile1.email)
 
       // enter shares percent
-      cy.get('[name="percentOfShares"]').type(testData.percentOfShares)
-      cy.get('[name="percentOfVotes"]').type(testData.percentOfVotes)
+      cy.get('[name="percentOfShares"]').type(testData.profile1.percentOfShares)
+      cy.get('[name="percentOfVotes"]').type(testData.profile1.percentOfVotes)
 
       // select the control type (registred owner + direct control)
       cy.get('[data-cy="testTypeOfControl"]').get('[name="registeredOwner"]').check()
@@ -58,18 +58,18 @@ describe('pages -> Review and Confirm', () => {
 
       // enter the address
       cy.get('[data-cy="address-country"]').click()
-      cy.get('[data-cy="address-country"]').get('li').contains(testData.address.country).click()
-      cy.get('[data-cy="address-line1-autocomplete"]').type(testData.address.streetAddress)
-      cy.get('[data-cy="address-city"]').type(testData.address.city)
+      cy.get('[data-cy="address-country"]').get('li').contains(testData.profile1.address.country).click()
+      cy.get('[data-cy="address-line1-autocomplete"]').type(testData.profile1.address.streetAddress)
+      cy.get('[data-cy="address-city"]').type(testData.profile1.address.city)
       cy.get('[data-cy="address-region-select"]').click()
-      cy.get('[data-cy="address-region-select"]').get('li').contains(testData.address.province[0]).click()
-      cy.get('[data-cy="address-postal-code"]').type(testData.address.postalCode)
+      cy.get('[data-cy="address-region-select"]').get('li').contains(testData.profile1.address.province[0]).click()
+      cy.get('[data-cy="address-postal-code"]').type(testData.profile1.address.postalCode)
 
       // select the citizenship info
       cy.get('[data-cy="countryOfCitizenshipRadioGroup"]').get('[type="radio"][value="citizen"]').check()
 
       // enter tax number and select tax residency
-      cy.get('[name="taxNumber"]').type(testData.taxNumber)
+      cy.get('[name="taxNumber"]').type(testData.profile1.taxNumber)
       cy.get('[data-cy="testTaxResidency"]').get('[type="radio"][value="true"]').check()
 
       // click 'Done' button to add the individual
@@ -88,22 +88,22 @@ describe('pages -> Review and Confirm', () => {
 
       // check if the summary table contain the correct data
       const summaryTable = cy.get('[data-cy="individualsSummaryTable"]')
-      summaryTable.get('[data-cy=summary-table-name]').contains(testData.fullName.toUpperCase())
-      summaryTable.get('[data-cy=summary-table-name]').contains(testData.preferredName)
-      summaryTable.get('[data-cy=summary-table-name]').contains(testData.email)
-      summaryTable.get('[data-cy=summary-table-address]').contains(testData.address.streetAddress)
-      summaryTable.get('[data-cy=summary-table-address]').contains(testData.address.city)
-      summaryTable.get('[data-cy=summary-table-address]').contains(testData.address.province[1])
-      summaryTable.get('[data-cy=summary-table-address]').contains(testData.address.postalCode)
-      summaryTable.get('[data-cy=summary-table-address]').contains(testData.address.country)
-      summaryTable.get('[data-cy=summary-table-details]').contains(testData.taxNumber)
-      summaryTable.get('[data-cy=summary-table-details]').contains(testData.summaryTable.citizenship)
-      summaryTable.get('[data-cy=summary-table-details]').contains(testData.summaryTable.taxResidency)
+      summaryTable.get('[data-cy=summary-table-name]').contains(testData.profile1.fullName.toUpperCase())
+      summaryTable.get('[data-cy=summary-table-name]').contains(testData.profile1.preferredName)
+      summaryTable.get('[data-cy=summary-table-name]').contains(testData.profile1.email)
+      summaryTable.get('[data-cy=summary-table-address]').contains(testData.profile1.address.streetAddress)
+      summaryTable.get('[data-cy=summary-table-address]').contains(testData.profile1.address.city)
+      summaryTable.get('[data-cy=summary-table-address]').contains(testData.profile1.address.province[1])
+      summaryTable.get('[data-cy=summary-table-address]').contains(testData.profile1.address.postalCode)
+      summaryTable.get('[data-cy=summary-table-address]').contains(testData.profile1.address.country)
+      summaryTable.get('[data-cy=summary-table-details]').contains(testData.profile1.taxNumber)
+      summaryTable.get('[data-cy=summary-table-details]').contains(testData.profile1.summaryTable.citizenship)
+      summaryTable.get('[data-cy=summary-table-details]').contains(testData.profile1.summaryTable.taxResidency)
 
       summaryTable.get('[data-cy=summary-table-dates]').contains(expectedDate)
 
-      summaryTable.get('[data-cy=summary-table-controls]').contains(testData.summaryTable.shareControl)
-      summaryTable.get('[data-cy=summary-table-controls]').contains(testData.summaryTable.directorControl)
+      summaryTable.get('[data-cy=summary-table-controls]').contains(testData.profile1.summaryTable.shareControl)
+      summaryTable.get('[data-cy=summary-table-controls]').contains(testData.profile1.summaryTable.directorControl)
 
       // can click 'back' to go back to non review page
       cy.get('[data-cy=button-control-right-button]').eq(0).should('have.text', 'Back')

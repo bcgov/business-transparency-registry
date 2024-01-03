@@ -65,7 +65,7 @@
           </div>
         </td>
         <template v-if="edit">
-          <td data-cy="summary-table-edit-button">
+          <td data-cy="summary-table-buttons">
             <div class="flex flex-nowrap justify-end">
               <UButton
                 :ui="{
@@ -76,6 +76,7 @@
                 :label="t('buttons.edit')"
                 variant="editButton"
                 :disabled="isEditing"
+                data-cy="edit-button"
                 @click="openEditingMode(index)"
               />
               <UPopover>
@@ -84,6 +85,7 @@
                   icon="i-mdi-menu-down"
                   variant="removeButton"
                   :disabled="isEditing"
+                  data-cy="popover-button"
                 />
                 <template #panel>
                   <div class="mx-2 my-2">
@@ -93,6 +95,7 @@
                       :label="t('buttons.remove')"
                       color="primary"
                       variant="removeButton"
+                      data-cy="remove-button"
                       @click="removeSignificantIndividual(index)"
                     />
                   </div>
@@ -116,6 +119,15 @@
               @update="updateSignificantIndividual($event.index, $event.updatedSI)"
               @remove="removeSignificantIndividual(index)"
             />
+          </div>
+        </td>
+      </tr>
+    </template>
+    <template #empty-state>
+      <tr v-if="isEmptyState">
+        <td colspan="100%">
+          <div class="text-sm text-center text-gray-700 px-3 py-4">
+            {{ $t('texts.tables.emptyTexts.individualsSummaryTable') }}
           </div>
         </td>
       </tr>
@@ -146,6 +158,10 @@ const { t } = useI18n()
 const headers = [
   t('labels.name'), t('labels.address'), t('labels.details'), t('labels.significanceDates'), t('labels.control')
 ]
+
+const isEmptyState = computed(() => {
+  return props.individuals.every(individual => individual.action === FilingActionE.REMOVE)
+})
 
 function getTaxResidentText (isTaxResident: boolean) {
   if (isTaxResident) {

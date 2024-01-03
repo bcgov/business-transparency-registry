@@ -14,13 +14,15 @@
       </thead>
       <tbody class="divide-y divide-gray-200">
         <slot v-for="(item, index) in items" :item="item" :index="index" name="table-row" />
-        <tr v-if="!items.length">
-          <td colspan="100%">
-            <div class="text-sm text-center text-gray-700 px-3 py-4">
-              {{ emptyState }}
-            </div>
-          </td>
-        </tr>
+        <slot :items="items" name="empty-state">
+          <tr v-if="!items.length">
+            <td colspan="100%">
+              <div class="text-sm text-center text-gray-700 px-3 py-4">
+                {{ emptyState }}
+              </div>
+            </td>
+          </tr>
+        </slot>
       </tbody>
     </table>
   </div>
