@@ -1,6 +1,4 @@
 <template>
-  {{ modelValue }}
-  {{ modelValue === undefined }}
   <div data-cy="isUnableToObtainOrConfirmInformation">
     <p class="font-bold py-3">
       {{ $t('labels.unableToObtainOrConfirmInformation.title') }}
