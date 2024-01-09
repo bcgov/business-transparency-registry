@@ -63,10 +63,6 @@
         <p>
           {{ $t('texts.beneficialOwnershipAssessmentText1') }}
         </p>
-        <br>
-        <p>
-          {{ $t('texts.beneficialOwnershipAssessmentText2') }}
-        </p>
       </div>
       <UForm
         ref="ownerFormBase"
