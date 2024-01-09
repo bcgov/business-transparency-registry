@@ -111,7 +111,7 @@ const props = defineProps({
   modelValue: { type: Object as PropType<BtrAddressI>, required: true }
 })
 
-const country: Ref<BtrCountryI | null> = ref(null)
+const country: Ref<BtrCountryI | null> = ref(props.modelValue.country.name === '' ? null : props.modelValue.country)
 watch(country, (newCountry: BtrCountryI, _: BtrCountryI) => {
   address.value.country = newCountry
 })

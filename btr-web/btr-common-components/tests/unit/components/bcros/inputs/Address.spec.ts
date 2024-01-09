@@ -17,5 +17,5 @@ it('can mount BcrosInputsAddress component', async () => {
     await mountSuspended(BcrosInputsAddress, { props: { label: 'Test Address', id: 'testId', modelValue: adr } })
   expect(component.findComponent('#testId')).toBeTruthy()
   expect(component.text()).contains('Test Address')
-  expect(component.text()).contains('Country')
+  expect(component.text()).contains('Canada')
 })

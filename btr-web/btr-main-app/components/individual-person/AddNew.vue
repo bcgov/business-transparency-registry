@@ -1,7 +1,7 @@
 <template>
   <div data-cy="addIndividualPerson">
     <!-- NB: we may be adding this back in later -->
-    <!-- <div>
+    <!-- <div v-if="!isEditing">
       <p>
         {{ $t('texts.addIndividualPerson') }}
       </p>
@@ -142,7 +142,7 @@
           id="addNewPersonBirthdate"
           class="mt-3"
           :max-date="new Date()"
-          :placeholder="$t('placeholders.dateSelect.birthdate')"
+          :placeholder="significantIndividual.profile.birthDate || $t('placeholders.dateSelect.birthdate')"
           @selection="significantIndividual.profile.birthDate = dateToString($event, 'YYYY-MM-DD')"
         />
       </div>
@@ -203,23 +203,34 @@
       <IndividualPersonControlUnableToObtainOrConfirmInformation v-model="significantIndividual.missingInfoReason" />
     </template>
     <div class="grid mt-10 w-full">
-      <div class="justify-self-end flex">
+      <div :class="isEditing ? 'flex justify-between' : 'flex justify-end'">
         <UButton
-          class="px-10 py-4"
-          :label="t('buttons.cancel')"
-          color="primary"
+          v-if="isEditing"
+          class="px-10 py-4 mr-5"
+          :label="t('buttons.remove')"
+          color="red"
           variant="outline"
-          data-cy="new-si-cancel-btn"
-          @click="$emit('cancel', true)"
+          data-cy="edit-si-remove-btn"
+          @click="$emit('remove', true)"
         />
-        <UButton
-          class="ml-5 px-10 py-4"
-          :label="t('buttons.done')"
-          color="primary"
-          valriant="solid"
-          data-cy="new-si-done-btn"
-          @click="addSignificantIndividual()"
-        />
+        <div class="flex">
+          <UButton
+            class="px-10 py-4"
+            :label="t('buttons.cancel')"
+            color="primary"
+            variant="outline"
+            data-cy="new-si-cancel-btn"
+            @click="$emit('cancel', true)"
+          />
+          <UButton
+            class="ml-5 px-10 py-4"
+            :label="t('buttons.done')"
+            color="primary"
+            variant="solid"
+            data-cy="new-si-done-btn"
+            @click="handleDoneButtonClick()"
+          />
+        </div>
       </div>
     </div>
   </div>
@@ -229,20 +240,45 @@
 import { z } from 'zod'
 
 const { t } = useI18n()
-const emits = defineEmits<{ add: [value: SignificantIndividualI], cancel: [value: any]}>()
-const props = defineProps<{ setSignificantIndividual?: SignificantIndividualI, startDate?: string }>()
+
+const emits = defineEmits<{
+  add: [value: SignificantIndividualI],
+  cancel: [value: any],
+  update: [value: any],
+  remove: [value: any]
+}>()
+
+const props = defineProps<{
+  index?: number,
+  setSignificantIndividual?: SignificantIndividualI,
+  startDate?: string
+}>()
 const defaultSI = getEmptySI(props.startDate || '')
 // NOTE: not setting this as modelValue because it is a nested object so mutating it gets complicated
 const significantIndividual: Ref<SignificantIndividualI> = ref(props.setSignificantIndividual || defaultSI)
+
+const isEditing = computed(() => significantIndividual.value.action === FilingActionE.EDIT)
 
 watch(() => props.startDate, (val) => {
   significantIndividual.value.startDate = val
 })
 
+function handleDoneButtonClick () {
+  if (isEditing.value) {
+    updateSignificantIndividual()
+  } else {
+    addSignificantIndividual()
+  }
+}
+
 function addSignificantIndividual () {
   // FUTURE: validate form / scroll to 1st error
   // emit significantIndividual so it gets added to the filing
   emits('add', significantIndividual.value)
+}
+
+function updateSignificantIndividual () {
+  emits('update', { index: props.index, updatedSI: significantIndividual.value })
 }
 
 // NB: we may be adding the toggle functionality back in later
