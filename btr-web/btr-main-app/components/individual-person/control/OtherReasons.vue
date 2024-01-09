@@ -22,10 +22,10 @@
 
 <script setup lang="ts">
 const emit = defineEmits<{(e: 'update:modelValue', value: string | undefined): void }>()
-defineProps({
-  modelValue: { type: String, default: undefined },
+const props = defineProps({
+  modelValue: { type: String, default: '' },
   variant: { type: String, default: 'bcGov' }
 })
 
-const otherReasons = ref('')
+const otherReasons = ref(props.modelValue)
 </script>

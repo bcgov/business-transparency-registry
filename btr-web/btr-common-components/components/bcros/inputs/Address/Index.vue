@@ -4,7 +4,7 @@
       <!-- country -->
       <USelectMenu
         v-model="country"
-        :ui-menu="{ placeholder: countryError ? 'text-red-500' : 'text-gray-600' }"
+        :ui-menu="{ placeholder: countryError ? 'text-red-500' : 'text-gray-700' }"
         by="alpha_2"
         class="w-full"
         :placeholder="$t('labels.country')"
@@ -55,7 +55,7 @@
         <USelectMenu
           v-if="address.country.alpha_2==='US' || address?.country.alpha_2==='CA'"
           v-model="address.region"
-          :ui-menu="{ placeholder: regionInvalid ? 'text-red-500' : 'text-gray-600' }"
+          :ui-menu="{ placeholder: regionInvalid ? 'text-red-500' : 'text-gray-700' }"
           :options="regions"
           :placeholder="$t('labels.state')"
           class="pr-4 w-full"
@@ -111,7 +111,7 @@ const props = defineProps({
   modelValue: { type: Object as PropType<BtrAddressI>, required: true }
 })
 
-const country: Ref<BtrCountryI | null> = ref(null)
+const country: Ref<BtrCountryI | null> = ref(props.modelValue.country.name === '' ? null : props.modelValue.country)
 watch(country, (newCountry: BtrCountryI, _: BtrCountryI) => {
   address.value.country = newCountry
 })

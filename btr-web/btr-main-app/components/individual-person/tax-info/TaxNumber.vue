@@ -38,7 +38,7 @@
 const HAS_TAX_NUMBER = 'hasTaxNumber'
 const NO_TAX_NUMBER = 'noTaxNumber'
 
-defineProps({
+const props = defineProps({
   id: { type: String, required: true },
   name: { type: String, default: 'name' },
   modelValue: {
@@ -56,10 +56,12 @@ const emit = defineEmits<{
 }>()
 
 // Indicate which radio button is selected.
-const selectedButton = ref('')
+const selectedButton = ref(
+  props.modelValue.hasTaxNumber === undefined ? '' : (props.modelValue.hasTaxNumber ? HAS_TAX_NUMBER : NO_TAX_NUMBER)
+)
 
 // The tax number input value
-const taxNumber = ref('')
+const taxNumber = ref(props.modelValue.taxNumber ? props.modelValue.taxNumber : '')
 
 watch(taxNumber, (newTaxNumber) => {
   // when the user starts typing, the radio HAS_TAX_NUMBER button should be selected

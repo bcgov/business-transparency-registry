@@ -10,8 +10,9 @@
             'bg-gray-100',
             'hover:bg-gray-200',
             'text-left',
-            'border-b-2',
-            errorVersion ? 'border-red-500' : 'border-gray-500',
+            'border-b-[1px]',
+            'focus:border-b-2',
+            errorVersion ? 'border-red-500' : 'border-gray-700',
             'focus:outline-none',
             'sm:text-sm',
             'h-[56px]',
@@ -21,7 +22,7 @@
           <ComboboxInput
             :placeholder="$t('labels.line1')"
             class="bg-transparent pl-2 w-full h-full focus:outline-none"
-            :class="errorVersion ? 'placeholder-red-500' : 'placeholder-gray-600'"
+            :class="errorVersion ? 'placeholder-red-500' : 'placeholder-gray-700'"
             @keyup="doTheSearch($event.target.value)"
             @blur="$emit('blur', $event)"
           />

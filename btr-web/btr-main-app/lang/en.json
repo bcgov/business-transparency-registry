@@ -1,6 +1,7 @@
 {
   "labels": {
     "addIndividual": "Add an Individual",
+    "editIndividual": "Edit an Individual",
     "beneficialOwnershipAssessment": "Beneficial Ownership Assessment",
     "control": "Control",
     "citizenships": "Citizenship(s)",
@@ -43,7 +44,9 @@
       "cancel": "Cancel transparent register information"
     },
     "cancel": "Cancel",
-    "done": "Done"
+    "done": "Done",
+    "remove": "Remove",
+    "edit": "Edit"
   },
   "texts": {
     "note": "Note: ",

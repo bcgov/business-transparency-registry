@@ -7,7 +7,7 @@
         :value="option.value"
       />
       <label :for="`radio-${option.value}`" class="ml-5">
-        <div class="text-base text-black">
+        <div class="text-base text-gray-900">
           {{ option.label }}
         </div>
       </label>

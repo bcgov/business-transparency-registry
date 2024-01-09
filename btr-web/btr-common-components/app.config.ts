@@ -5,35 +5,37 @@ export default defineAppConfig({
     red: 'bcGovRed',
     button: {
       variant: {
-        solid: 'hover:bg-opacity-[.92] hover:bg-{color}-500'
+        solid: 'hover:bg-opacity-[.92] hover:bg-{color}-500',
+        editButton: 'text-primary border-0 border-r-2 border-gray',
+        removeButton: 'text-primary border-0'
       }
     },
     formGroup: {
       label: { base: 'block text-base font-bold py-3 text-gray-900' }
     },
     input: {
-      base: 'bg-gray-100 hover:bg-gray-200 h-[56px] border-b-2 focus:ring-0',
+      base: 'bg-gray-100 hover:bg-gray-200 h-[56px] border-b-[1px] focus:border-b-2 focus:ring-0',
       rounded: 'rounded-none rounded-t-md',
       variant: {
-        bcGov: 'focus:border-primary-500 placeholder-gray-600 focus:placeholder-primary-500',
+        bcGov: 'border-gray-700 placeholder-gray-700 focus:border-primary-500 focus:placeholder-primary-500',
         error: 'border-red-500 focus:border-red-500 placeholder-red-500 focus:placeholder-red-500',
-        primary: 'border-primary-500 placeholder-primary-500'
+        primary: 'border-primary-500 placeholder-primary-500 border-b-2'
       }
     },
     select: {
-      base: 'bg-gray-100 hover:bg-gray-200 h-[56px] border-b-2 focus:ring-0',
+      base: 'bg-gray-100 hover:bg-gray-200 h-[56px] border-b-[1px] focus:border-b-2 focus:ring-0',
       rounded: 'rounded-none rounded-t-md',
       variant: {
-        bcGov: 'border-gray-500',
+        bcGov: 'border-gray-700',
         error: 'border-red-500'
       },
       icon: {
-        base: 'text-gray-600'
+        base: 'text-gray-700'
       }
     },
     selectMenu: {
       rounded: 'rounded-none',
-      placeholder: 'text-gray-600',
+      placeholder: 'text-gray-700',
       option: {
         rounded: 'rounded-none',
         active: 'text-primary-500',
@@ -47,10 +49,10 @@ export default defineAppConfig({
       }
     },
     textarea: {
-      base: 'bg-gray-100 hover:bg-gray-200 border-b-2 h-20 focus:ring-0 text-gray-900',
+      base: 'bg-gray-100 hover:bg-gray-200 border-b-[1px] focus:border-b-2 h-20 focus:ring-0 text-gray-900',
       rounded: 'rounded-none rounded-t-md',
       variant: {
-        bcGov: 'focus:border-primary-500 placeholder-gray-600 focus:placeholder-primary-500',
+        bcGov: 'border-gray-700 placeholder-gray-700 focus:border-primary-500 focus:placeholder-primary-500',
         error: 'border-red-500 focus:border-red-500 placeholder-red-500 focus:placeholder-red-500'
       }
     },
