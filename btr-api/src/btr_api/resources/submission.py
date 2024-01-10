@@ -49,17 +49,16 @@ from btr_api.models import Submission
 from btr_api.services.json_schema import SchemaService
 from btr_api.services.submission import SubmissionService
 
-
 bp = Blueprint("submission", __name__)
 
 
 @bp.route("/", methods=("GET",))
 @bp.route("/<id>", methods=("GET",))
-def registers(submission_id: int | None = None):
+def registers(id: int | None = None):  # pylint: disable=redefined-builtin
     """Get the submissions, or sepcific submission by id."""
     try:
-        if submission_id:
-            if submission := Submission.find_by_id(submission_id):
+        if id:
+            if submission := Submission.find_by_id(id):
                 return jsonify(type=submission.type, submission=submission.payload)
             return {}, HTTPStatus.NOT_FOUND
 
