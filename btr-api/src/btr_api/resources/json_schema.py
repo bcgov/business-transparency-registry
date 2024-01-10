@@ -30,6 +30,13 @@
 # CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
+"""
+This module defines a Flask blueprint for JSON-Schema endpoints.
+
+It provides an endpoint to get a specific JSON schema by its name.
+
+The module uses a `SchemaService` to interact with the schema storage.
+"""
 from flask import Blueprint, current_app
 from flask import jsonify
 
@@ -40,6 +47,16 @@ bp = Blueprint("json-schemas", __name__)
 
 @bp.route("/<schema_name>", methods=("GET",))
 def get_schema(schema_name: str):
+    """
+    This method is used to retrieve a schema by its name.
+
+    Parameters:
+        schema_name (str): The name of the schema to retrieve.
+
+    Returns:
+        A JSON response with the schema and schema_name if the schema is found.
+        A JSON response with the error message and status code 404 if the schema is not found.
+    """
     schema_service = SchemaService()
     schema = None
     try:

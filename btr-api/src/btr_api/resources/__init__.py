@@ -31,6 +31,11 @@
 # CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
+"""
+This module is responsible for registering the endpoints.
+
+The register_endpoints function registers the provided blueprints and URL prefixes to the Flask application.
+"""
 from flask import Flask
 
 from .base import bp as base_endpoint
@@ -41,6 +46,14 @@ from .json_schema import bp as json_schema_endpoint
 
 
 def register_endpoints(app: Flask):
+    """
+    Register Endpoints
+
+    Registers the provided blueprints and URL prefixes to the Flask application.
+
+    :param app: The Flask application to register the endpoints to.
+    :type app: Flask
+    """
     # Allow base route to match with, and without a trailing slash
     app.url_map.strict_slashes = False
 

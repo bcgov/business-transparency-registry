@@ -31,6 +31,13 @@
 # CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
+"""
+Module Name: Blueprint Ops
+Description: This module contains routes that are used to check the health and readiness of the API.
+The module includes two routes, "/healthz", and "/readyz", which respond with status messages indicating the health and
+readiness of the API respectively.
+Health is determined by the ability to execute a simple SELECT 1 query on the connected database.
+"""
 from http import HTTPStatus
 
 from flask import Blueprint, current_app
@@ -38,13 +45,23 @@ from sqlalchemy import exc, text
 
 from btr_api.models import db
 
-
 bp = Blueprint("ops", __name__)
+
 
 @bp.route("/healthz", methods=("GET",))
 def healthy():
+    """
+    Check the health of the API.
+
+    This method is used to check the health of the API by testing the database connection.
+    It sends a SELECT 1 query to the database and if it executes successfully, the API is considered healthy.
+
+    Returns:
+        A dictionary with the message 'api is healthy' and the HTTP status code 200 if the API is healthy.
+        A dictionary with the message 'api is down' and the HTTP status code 500 if the database connection fails.
+    """
     try:
-      db.session.execute(text('select 1'))
+        db.session.execute(text('select 1'))
     except exc.SQLAlchemyError as db_exception:
         current_app.logger.error('DB connection pool unhealthy:' + repr(db_exception))
         return {'message': 'api is down'}, HTTPStatus.INTERNAL_SERVER_ERROR

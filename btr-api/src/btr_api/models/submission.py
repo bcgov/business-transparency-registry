@@ -34,8 +34,6 @@
 """Sample submission class."""
 from __future__ import annotations
 
-from datetime import datetime
-
 from sqlalchemy import desc, func
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import backref
@@ -49,8 +47,8 @@ from ..common.enum import BaseEnum
 class SubmissionType(BaseEnum):
     """Enum of the roles used across the domain."""
 
-    other = auto()
-    standard = auto()
+    other = auto()  # pylint: disable=invalid-name
+    standard = auto()  # pylint: disable=invalid-name
 
 
 class Submission(Versioned, db.Model):
@@ -61,7 +59,9 @@ class Submission(Versioned, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     type = db.Column(db.Enum(SubmissionType), default=SubmissionType.other)
     effective_date = db.Column(db.Date(), nullable=True)
-    submitted_datetime = db.Column("submitted_datetime", db.DateTime(timezone=True), server_default=func.now())
+    submitted_datetime = (
+        db.Column("submitted_datetime", db.DateTime(timezone=True),
+                  server_default=func.now()))  # pylint:disable=not-callable
     payload = db.Column("payload", JSONB)
 
     # Relationships
@@ -74,7 +74,6 @@ class Submission(Versioned, db.Model):
                                 backref=backref('filing_submitter', uselist=False),
                                 foreign_keys=[submitter_id])
 
-
     def save(self):
         """Save and commit immediately."""
         db.session.add(self)
@@ -85,9 +84,9 @@ class Submission(Versioned, db.Model):
         db.session.add(self)
 
     @classmethod
-    def find_by_id(cls, id):
+    def find_by_id(cls, submission_id):
         """Return the submission by id."""
-        return cls.query.filter_by(id=id).one_or_none()
+        return cls.query.filter_by(id=submission_id).one_or_none()
 
     @classmethod
     def get_filtered_submissions(cls):

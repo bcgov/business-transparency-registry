@@ -33,12 +33,11 @@
 # POSSIBILITY OF SUCH DAMAGE.
 """Date time utilities."""
 import time as _time
-from datetime import date  # noqa: F401
 from datetime import datetime as _datetime
 from datetime import timezone
 
 
-class datetime(_datetime):
+class datetime(_datetime):  # pylint: disable=invalid-name
     """Alternative to the built-in datetime.
 
     that has a timezone on the UTC call.
