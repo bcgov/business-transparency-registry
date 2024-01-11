@@ -31,6 +31,13 @@
 # CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
+"""
+This module defines submission-related API endpoints.
+
+It provides endpoints to create and retrieve submission objects.
+The 'registers' and 'create_register' functions define the 'GET' and 'POST' methods respectively.
+
+"""
 from http import HTTPStatus
 
 from flask import Blueprint
@@ -42,13 +49,12 @@ from btr_api.models import Submission
 from btr_api.services.json_schema import SchemaService
 from btr_api.services.submission import SubmissionService
 
-
 bp = Blueprint("submission", __name__)
 
 
 @bp.route("/", methods=("GET",))
 @bp.route("/<id>", methods=("GET",))
-def registers(id: int | None = None):
+def registers(id: int | None = None):  # pylint: disable=redefined-builtin
     """Get the submissions, or sepcific submission by id."""
     try:
         if id:
@@ -66,6 +72,12 @@ def registers(id: int | None = None):
 
 @bp.route("/", methods=("POST",))
 def create_register():
+    """
+    Create a new register.
+
+    Returns:
+        A tuple containing the response JSON and the HTTP status code.
+    """
     schema_name = "significantIndividualsFiling"
     schema_service = SchemaService()
     schema = schema_service.get_schema(schema_name)

@@ -31,15 +31,31 @@
 # CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
-import json
-from datetime import date, datetime
+"""
+This module includes classes for working with OwnershipDetails entity.
+OwnershipDetailsSerializer is to convert ownership details data between Python objects
+and dictionary representation. OwnershipDetailsService is utilized to setup ownership details from ownership
+dictionary and Person model.
+
+Classes:
+    OwnershipDetailsSerializer: Convert ownership details data between Python objects and dictionary representation.
+    OwnershipDetailsService: Setup ownership details from ownership dictionary and Person model.
+"""
+
+from datetime import date
 
 from btr_api.exceptions import BusinessException
 from btr_api.models import OwnershipDetails as OwnershipDetailsModel, Person as PersonModel
 from btr_api.services.person import PersonSerializer
 
 
-class OwnershipDetailsSerializer(object):
+class OwnershipDetailsSerializer:
+    """
+    Class: OwnershipDetailsSerializer
+
+    Serializer class for converting ownership details data between Python objects and dictionary representation.
+    """
+
     @staticmethod
     def from_dict(owner_dict: dict) -> OwnershipDetailsModel | None:
         """Create Person from json dict"""
@@ -87,9 +103,30 @@ class OwnershipDetailsSerializer(object):
         }
 
 
-class OwnershipDetailsService(object):
+class OwnershipDetailsService:  # pylint: disable=too-few-public-methods
+    """
+    This class provides a static method to create ownership details from an owner dictionary and a person model.
+    """
+
     @staticmethod
     def create_ownership_details_from_owner(owner_dict: dict, person: PersonModel) -> OwnershipDetailsModel:
+        """
+        create_ownership_details_from_owner(owner_dict: dict, person: PersonModel)
+
+        Example Usage:
+            owner_dict = {
+                "name": "John Doe",
+                "address": "123 Main Street"
+            }
+            person = PersonModel(name="Jane Smith", age=30, address="456 Elm Street")
+            ownership_details = OwnershipDetailsService.create_ownership_details_from_owner(owner_dict, person)
+
+        :param owner_dict: A dictionary representing the details of the owner.
+        :param person: An instance of the PersonModel class representing the owner.
+
+        :return: An instance of the OwnershipDetailsModel class with the owner details set.
+
+        """
         ownership_details = OwnershipDetailsSerializer.from_dict(owner_dict)
         ownership_details.person = person
         return ownership_details

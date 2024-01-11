@@ -31,6 +31,17 @@
 # CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
+"""
+This module is used for setting up various configurations for the application.
+Each configuration inherits from the base configuration and can override the properties as needed.
+
+The `Config` class contains the base configuration with common settings for all environments.
+
+The `Production`, `Sandbox`, `Development`, and `Testing` classes set specific settings for each environment.
+
+Environment variables are used to store the necessary values for each setting.
+"""
+
 import os
 
 from dotenv import find_dotenv
@@ -41,7 +52,7 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 load_dotenv(find_dotenv())
 
 
-class Config:
+class Config:  # pylint: disable=too-few-public-methods
     """Base class configuration that should set reasonable defaults.
 
     Used as the base for all the other configurations.
@@ -67,26 +78,37 @@ class Config:
         SQLALCHEMY_DATABASE_URI = f"postgresql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
 
     GCP_AUTH_KEY = os.getenv("GCP_AUTH_KEY", None)
-    
+
     LD_SDK_KEY = os.getenv("LD_SDK_KEY", None)
 
 
-class Production(Config):
+class Production(Config):  # pylint: disable=too-few-public-methods
+    """Production class configuration that should override vars for production.
+    """
     DEBUG = False
     TESTING = False
 
 
-class Sandbox(Config):
+class Sandbox(Config):  # pylint: disable=too-few-public-methods
+    """Sandbox class configuration that should override vars for Sandbox.
+    """
+
     DEVELOPMENT = True
     DEBUG = True
 
 
-class Development(Config):
+class Development(Config):  # pylint: disable=too-few-public-methods
+    """Development class configuration that should override vars for Development.
+    """
+
     DEVELOPMENT = True
     DEBUG = True
 
 
-class Testing(Config):
+class Testing(Config):  # pylint: disable=too-few-public-methods
+    """Testing class configuration that should override vars for Testing.
+    """
+
     TESTING = True
 
     DATABASE_TEST_USERNAME = os.getenv("DATABASE_TEST_USERNAME", "")
@@ -96,5 +118,6 @@ class Testing(Config):
     DATABASE_TEST_PORT = int(os.getenv("DATABASE_TEST_PORT", "5432"))  # POSTGRESQL
 
     SQLALCHEMY_DATABASE_URI = (
-        f"postgresql://{DATABASE_TEST_USERNAME}:{DATABASE_TEST_PASSWORD}@{DATABASE_TEST_HOST}:{DATABASE_TEST_PORT}/{DATABASE_TEST_NAME}"
+        f"postgresql://{DATABASE_TEST_USERNAME}:{DATABASE_TEST_PASSWORD}@"
+        f"{DATABASE_TEST_HOST}:{DATABASE_TEST_PORT}/{DATABASE_TEST_NAME}"
     )

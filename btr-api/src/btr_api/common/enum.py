@@ -32,7 +32,7 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 """Enum Utilities."""
-from enum import auto  # noqa: F401
+from enum import auto  # noqa: F401 pylint: disable=W0611
 from enum import Enum
 from enum import EnumMeta
 from typing import Optional
@@ -41,14 +41,14 @@ from typing import Optional
 class BaseMeta(EnumMeta):
     """Meta class for the enum."""
 
-    def __contains__(self, other):
+    def __contains__(cls, other):
         """Return True if 'in' the Enum."""
         try:
-            self(other)
+            cls(other)  # pylint: disable=no-value-for-parameter
         except ValueError:
             return False
-        else:
-            return True
+
+        return True
 
 
 class BaseEnum(str, Enum, metaclass=BaseMeta):
@@ -70,6 +70,6 @@ class BaseEnum(str, Enum, metaclass=BaseMeta):
                 return enum_value
         return None
 
-    def _generate_next_value_(name, start, count, last_values):
+    def _generate_next_value_(name, start, count, last_values):  # pylint:disable=no-self-argument
         """Return the name of the key."""
         return name

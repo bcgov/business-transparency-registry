@@ -31,6 +31,11 @@
 # CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
+
+"""
+This module defines Blueprint for owners endpoint and its related functionality.
+"""
+
 from http import HTTPStatus
 
 from flask import Blueprint
@@ -40,16 +45,31 @@ from btr_api.exceptions import exception_response
 from btr_api.models import OwnershipDetails
 from btr_api.services.ownership_details import OwnershipDetailsSerializer
 
-
 bp = Blueprint("owners", __name__)
 
 
 @bp.route("/<business_identifier>", methods=("GET", "OPTIONS",))
 def owners(business_identifier: int):
-    """Return the current owners for the business."""
+    """
+    Query the database for the owners of a business with the given business identifier.
+
+    Parameters:
+        business_identifier (int): The unique identifier of the business.
+
+    Returns:
+        tuple: A tuple containing a JSON response and an HTTP status code.
+
+    Example:
+        To get the owners for a business with the identifier 123:
+
+        owners(123)
+
+        The function will return a JSON response and an HTTP status code.
+
+    """
     try:
-      owners = OwnershipDetails.find_current_for_business(business_identifier)
-      return jsonify([OwnershipDetailsSerializer.to_dict(owner) for owner in owners]), HTTPStatus.OK
+        business_owners = OwnershipDetails.find_current_for_business(business_identifier)
+        return jsonify([OwnershipDetailsSerializer.to_dict(owner) for owner in business_owners]), HTTPStatus.OK
 
     except Exception as exception:  # noqa: B902
         return exception_response(exception)

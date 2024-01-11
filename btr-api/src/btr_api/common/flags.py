@@ -86,7 +86,7 @@ class Flags():
             if app and has_app_context():
                 app.logger.warn('issue registering flag service', err)
 
-    def teardown(self, exception):  # pylint: disable=unused-argument,no-self-use; flask method signature
+    def teardown(self, exception):  # pylint: disable=unused-argument,useless-option-value; flask method signature
         """Destroy all objects created by this extension.
 
         Ensure we close the client connection nicely.
@@ -111,7 +111,7 @@ class Flags():
     def get_flag_context(user: btr_api.models.User, account_id: int = None) -> Context:
         """Convert User into a Flag user dict."""
         if isinstance(user, btr_api.models.User):
-            userCtx = Context(
+            user_ctx = Context(
                 kind='user',
                 key=user.sub,
                 attributes={
@@ -125,7 +125,7 @@ class Flags():
             key='',
             allow_empty_key=True,
             multi_contexts=[
-                userCtx or Context(kind='user', key='anonymous'),
+                user_ctx or Context(kind='user', key='anonymous'),
                 Context(kind='org', key=str(account_id) if account_id else 'anonymous'),
             ]
         )
@@ -140,7 +140,7 @@ class Flags():
         try:
             return client.variation(flag, flag_context, None)
         except Exception as err:  # noqa: B902
-            current_app.logger.error('Unable to read flags: %s' % repr(err), exc_info=True)
+            current_app.logger.error(f'Unable to read flags: {repr(err)}', exc_info=True)
             return None
 
     @staticmethod

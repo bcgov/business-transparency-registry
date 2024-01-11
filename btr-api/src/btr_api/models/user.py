@@ -48,6 +48,7 @@ from ..common.enum import BaseEnum
 class UserRoles(BaseEnum):
     """Enum of the roles used across the domain."""
 
+    # pylint: disable=invalid-name
     admin_edit = auto()
     basic = auto()
     bn_edit = auto()
@@ -55,6 +56,7 @@ class UserRoles(BaseEnum):
     public_user = auto()
     staff = auto()
     system = auto()
+    # pylint: enable=invalid-name
 
 
 class User(db.Model):
@@ -145,7 +147,7 @@ class User(db.Model):
             return user
         except Exception as err:
             current_app.logger.error(err.with_traceback(None))
-            raise Exception(
+            raise Exception(  # pylint: disable=broad-exception-raised
                 "unable_to_get_or_create_user",
                 '{"code": "unable_to_get_or_create_user",'
                 '"description": "Unable to get or create user from the JWT"}',

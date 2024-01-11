@@ -31,13 +31,22 @@
 # CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
-import json
+"""
+This module contains classes related to the serialization and service of a Person Model. The classes here
+are used to convert a PersonModel from and to a dictionary, and also to create a PersonModel from an owner dictionary.
+
+Classes:
+    PersonSerializer: A serializer to convert Person Model to dictionary and vice-versa.
+    PersonService: A service to create Person Model objects from owner's dictionary.
+"""
 from datetime import date
 
 from btr_api.models import Person as PersonModel
 
 
-class PersonSerializer(object):
+class PersonSerializer:
+    """ serializer for PersonModel """
+
     @staticmethod
     def from_dict(json_dict: dict) -> PersonModel:
         """Create Person from json dict"""
@@ -53,14 +62,14 @@ class PersonSerializer(object):
 
         person.email = json_dict.get('email')
         person.address = json_dict.get('address')
-    
+
         person.is_permanent_resident = json_dict.get('citizenshipCA') == 'pr'
         person.is_canadian_citizen = json_dict.get('citizenshipCA') == 'citizen'
         person.citizenships_ex_ca = json_dict.get('citizenshipExCA')
 
         person.tax_number = json_dict.get('taxNumber')
         person.is_canadian_tax_resident = json_dict.get('isTaxResident')
-        
+
         person.competency = json_dict.get('competency')
 
         return person
@@ -91,9 +100,25 @@ class PersonSerializer(object):
         }
 
 
-class PersonService(object):
+class PersonService:  # pylint: disable=too-few-public-methods
+    """
+    The `PersonService` class provides a static method for creating a `PersonModel` object from an owner dictionary.
+    """
+
     @staticmethod
     def create_person_from_owner(owner_dict: dict) -> PersonModel | None:
+        """
+        create_person_from_owner(owner_dict: dict) -> PersonModel | None
+
+        This method takes a dictionary representing an owner and creates a person object from it.
+
+        Parameters:
+            owner_dict (dict): A dictionary representing the owner. Should contain key 'profile' that has profile dict.
+
+        Returns:
+            PersonModel | None: If the profile dictionary is found in the owner dictionary,
+            a PersonModel object is created from it and returned. Otherwise, None is returned.
+        """
         if person_dict := owner_dict.get('profile'):
             person: PersonModel = PersonSerializer.from_dict(person_dict)
             return person
