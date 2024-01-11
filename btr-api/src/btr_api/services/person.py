@@ -33,7 +33,7 @@
 # POSSIBILITY OF SUCH DAMAGE.
 """
 This module contains classes related to the serialization and service of a Person Model. The classes here
-are used to convert a Person Model from and to a dictionary, and also to create a Person Model from an owner's dictionary.
+are used to convert a PersonModel from and to a dictionary, and also to create a PersonModel from an owner dictionary.
 
 Classes:
     PersonSerializer: A serializer to convert Person Model to dictionary and vice-versa.

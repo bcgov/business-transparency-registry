@@ -65,9 +65,11 @@ class SubmissionService:  # pylint: disable=too-few-public-methods
         Creates a submission object from the provided submission dictionary.
 
         Parameters:
-        - submission_dict (dict): A dictionary representing the submission details. It should consist of the following keys:
+        - submission_dict (dict): A dictionary representing the submission details.
+          It should consist of the following keys:
             - 'effectiveDate' (str): The effective date of the submission in ISO format.
-            - 'significantIndividuals' (list): A list of dictionaries containing information about significant individuals.
+            - 'significantIndividuals' (list):
+                A list of dictionaries containing information about significant individuals.
                 Each dictionary should include the following keys:
                 - 'profile' (dict, optional): A dictionary representing the profile of the significant individual.
                     It should have the 'uuid' key, which provides the UUID of the person. If not provided, a new person
