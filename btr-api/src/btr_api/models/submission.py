@@ -65,8 +65,6 @@ class Submission(Versioned, db.Model):
     payload = db.Column("payload", JSONB)
 
     # Relationships
-    owners = db.relationship('OwnershipDetails', lazy='dynamic')
-
     submitter_id = db.Column('submitter_id', db.Integer,
                              db.ForeignKey('users.id'))
 

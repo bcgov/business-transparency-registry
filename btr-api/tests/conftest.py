@@ -13,10 +13,7 @@
 # limitations under the License.
 """Common setup and fixtures for the pytest suite used by this service."""
 import contextlib
-import datetime
-import time
-from contextlib import contextmanager, suppress
-from typing import Final
+from contextlib import contextmanager
 
 import psycopg2
 import pytest
@@ -82,9 +79,9 @@ def drop_test_db(user: str = None,
         DATABASE_URI = database_uri
     else:
         DATABASE_URI = f"postgresql://{user}:{password}@{host}:{port}/{user}"
-    
+
     DATABASE_URI = DATABASE_URI[:DATABASE_URI.rfind("/")] + '/postgres'
-    
+
     close_all = f"""
         SELECT pg_terminate_backend(pg_stat_activity.pid)
         FROM pg_stat_activity

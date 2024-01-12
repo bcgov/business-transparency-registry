@@ -1,5 +1,6 @@
 import unittest
-from unittest.mock import patch
+from unittest.mock import patch, Mock
+
 from btr_api.models.submission import Submission, SubmissionType, db
 
 
@@ -20,7 +21,7 @@ class TestSubmission(unittest.TestCase):
         mock_add.assert_called_once_with(submission)
 
     @patch.object(db.Model, 'query')
-    def  test_find_by_id(self, mock_query):
+    def test_find_by_id(self, mock_query):
         submission = Submission()
         submission.find_by_id(1)
         mock_query.filter_by.assert_called_once_with(id=1)  # assert that filter_by is called once

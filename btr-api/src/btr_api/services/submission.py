@@ -44,9 +44,7 @@ The individual services can be invoked as per the requirements.
 """
 from datetime import date
 
-from btr_api.models import Person as PersonModel, Submission as SubmissionModel
-from btr_api.services.ownership_details import OwnershipDetailsService
-from btr_api.services.person import PersonService
+from btr_api.models import Submission as SubmissionModel
 
 
 class SubmissionService:  # pylint: disable=too-few-public-methods
@@ -85,14 +83,7 @@ class SubmissionService:  # pylint: disable=too-few-public-methods
         submission.payload = submission_dict
 
         for significant_individual in submission_dict['significantIndividuals']:
-            if person_uuid := significant_individual.get('profile', {}).get('uuid'):
-                person = PersonModel.find_by_uuid(search_uuid=person_uuid)
-            else:
-                person = PersonService.create_person_from_owner(owner_dict=significant_individual)
 
             significant_individual['businessIdentifier'] = submission_dict['businessIdentifier']
-            owner = OwnershipDetailsService.create_ownership_details_from_owner(owner_dict=significant_individual,
-                                                                                person=person)
-            submission.owners.append(owner)
 
         return submission
