@@ -37,7 +37,6 @@ including creating a submission. Each service is encapsulated in its own class.
 
 The `SubmissionService` class provides the method `create_submission`,
 which accepts a dictionary as an input and returns a SubmissionModel object.
-In this process, it also interacts with the `PersonService` and `OwnershipDetailsService`.
 
 The individual services can be invoked as per the requirements.
 
