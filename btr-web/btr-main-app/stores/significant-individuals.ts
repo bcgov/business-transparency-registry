@@ -42,7 +42,9 @@ export const useSignificantIndividuals = defineStore('significantIndividuals', (
 
   /** Update the significant individual at the given index */
   function filingUpdateSI (index: number, significantIndividual: SignificantIndividualI) {
-    significantIndividual.action = FilingActionE.ADD
+    if (!significantIndividual.action) {
+      significantIndividual.action = FilingActionE.EDIT
+    }
     currentSIFiling.value.significantIndividuals.splice(index, 1, significantIndividual)
   }
 
