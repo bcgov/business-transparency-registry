@@ -1,6 +1,5 @@
 """ Tests to ensure that the submission based end-points work correctly.
 """
-import json
 from http import HTTPStatus
 
 import pytest
