@@ -83,7 +83,7 @@ def latest_submission_for_entity(business_identifier: str):
         if submissions:
             return jsonify(SubmissionSerializer.to_dict(submissions[0]))
 
-        return None, HTTPStatus.NOT_FOUND
+        return {}, HTTPStatus.NOT_FOUND
 
     except Exception as exception:  # noqa: B902
         return exception_response(exception)
