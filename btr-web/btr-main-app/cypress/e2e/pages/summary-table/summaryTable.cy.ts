@@ -178,38 +178,45 @@ describe('pages -> Beneficial Owner Change', () => {
   })
 
   it('test the DONE button in the Edit form', () => {
-    cy.fixture('individuals').then((testData) => {
-      cy.get('[data-cy=summary-table-name]').contains(testData.profile1.fullName.toUpperCase())
-
+    cy.get('[data-cy=summary-table-name]').first().invoke('text').then((textOrig) => {
       cy.get('[data-cy=edit-button]').first().click()
 
-      cy.get('#individual-person-full-name').clear().type('NEW NAME')
+      const textEntered = 'NEW NAME'
+      cy.get('#individual-person-full-name').clear().type(textEntered)
       cy.get('[data-cy=new-si-done-btn]').click()
-      cy.get('[data-cy=summary-table-name]').contains('NEW N')
-      cy.get('[data-cy=summary-table-name]').should('not.contain', testData.profile1.fullName.toUpperCase())
-
-      cy.get('[data-cy=individualsSummaryTable]').should('not.contain', 'Edit an Individual')
-      cy.get('[data-cy=edit-button]').eq(0).should('not.have.attr', 'disabled')
-      cy.get('[data-cy=edit-button]').eq(1).should('not.have.attr', 'disabled')
-      cy.get('[data-cy=add-new-btn]').should('not.have.attr', 'disabled')
+      cy.get('[data-cy=summary-table-name]').first().invoke('text').should((textNew) => {
+        expect(textNew).to.contain(textEntered)
+        expect(textOrig).not.to.contain(textNew)
+      })
     })
+
+    cy.get('[data-cy=individualsSummaryTable]').should('not.contain', 'Edit an Individual')
+    cy.get('[data-cy=edit-button]').eq(0).should('not.have.attr', 'disabled')
+    cy.get('[data-cy=edit-button]').eq(1).should('not.have.attr', 'disabled')
+    cy.get('[data-cy=add-new-btn]').should('not.have.attr', 'disabled')
   })
 
   it('test the REMOVE button in the Summary Table', () => {
-    for (let i = 0; i < 2; i++) {
-      cy.get('[data-cy=popover-button]').first().click()
-      cy.get('[data-cy=remove-button]').click()
-    }
+    // remove all significant individuals from the table
+    cy.get('[data-cy=popover-button]').then((buttons) => {
+      for (let i = 0; i < buttons.length; i++) {
+        cy.get('[data-cy=popover-button]').first().click()
+        cy.get('[data-cy=remove-button]').click()
+      }
+    })
 
     cy.get('[data-cy="individualsSummaryTable"]').get('td')
       .should('contain.text', 'No significant individuals added yet')
   })
 
   it('test the REMOVE button in the Edit form', () => {
-    for (let i = 0; i < 2; i++) {
-      cy.get('[data-cy=edit-button]').first().click()
-      cy.get('[data-cy=edit-si-remove-btn]').click()
-    }
+    // remove all significant individuals from the table
+    cy.get('[data-cy=popover-button]').then((buttons) => {
+      for (let i = 0; i < buttons.length; i++) {
+        cy.get('[data-cy=edit-button]').first().click()
+        cy.get('[data-cy=edit-si-remove-btn]').click()
+      }
+    })
 
     cy.get('[data-cy="individualsSummaryTable"]').get('td')
       .should('contain.text', 'No significant individuals added yet')

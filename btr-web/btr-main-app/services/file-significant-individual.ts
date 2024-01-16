@@ -38,6 +38,7 @@ const getCurrentOwners = async (businessIdentifier: string) => {
     for (const si of data.value) {
       si.percentOfShares = si.percentOfShares ? si.percentOfShares.toString() : '0'
       si.percentOfVotes = si.percentOfVotes ? si.percentOfVotes.toString() : '0'
+      si.profile.citizenshipsExCA = si.profile.citizenshipsExCA || []
     }
   }
   return { data: data.value, error: error.value }

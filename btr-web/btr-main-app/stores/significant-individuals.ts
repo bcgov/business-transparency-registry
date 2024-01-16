@@ -72,7 +72,6 @@ export const useSignificantIndividuals = defineStore('significantIndividuals', (
 
   /** Submit the current significant individual filing */
   async function filingSubmit () {
-    console.info('Submit', currentSIFiling.value)
     submitting.value = true
     const { error } = await fileSIApi.submitSignificantIndividualFiling(currentSIFiling.value)
     if (error) {
@@ -89,7 +88,6 @@ export const useSignificantIndividuals = defineStore('significantIndividuals', (
 
   /** Get the current significant individuals for the business */
   async function getSIs (businessIdentifier: string) {
-    console.info('getSIs', businessIdentifier)
     const { data, error } = await fileSIApi.getCurrentOwners(businessIdentifier)
     if (error) {
       console.error(error)
