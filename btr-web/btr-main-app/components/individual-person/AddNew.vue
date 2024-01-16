@@ -137,8 +137,10 @@
         <BcrosInputsDateSelect
           id="addNewPersonBirthdate"
           class="mt-3"
+          :initial-date="significantIndividual.profile.birthDate
+            ? dateStringToDate(significantIndividual.profile.birthDate) : undefined"
           :max-date="new Date()"
-          :placeholder="significantIndividual.profile.birthDate || $t('placeholders.dateSelect.birthdate')"
+          :placeholder="$t('placeholders.dateSelect.birthdate')"
           @selection="significantIndividual.profile.birthDate = dateToString($event, 'YYYY-MM-DD')"
         />
       </div>
@@ -240,7 +242,7 @@ const { t } = useI18n()
 const emits = defineEmits<{
   add: [value: SignificantIndividualI],
   cancel: [value: any],
-  update: [value: any],
+  update: [value: { index: number | undefined, updatedSI: SignificantIndividualI }],
   remove: [value: any]
 }>()
 
