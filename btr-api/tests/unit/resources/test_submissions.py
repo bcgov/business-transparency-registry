@@ -80,6 +80,5 @@ def test_get_latest_for_entity(client, session):
         # Confirm outcome
         assert rv.status_code == HTTPStatus.OK
 
-        assert "Test identifier 0" in rv.json
-        assert "124" in rv.json
-        assert "123" not in rv.json
+        assert "Test identifier 0" == rv.json.get("business_identifier")
+        assert "{id:124}" == rv.json.get("payload")

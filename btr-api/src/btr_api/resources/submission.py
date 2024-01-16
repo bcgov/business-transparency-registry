@@ -81,7 +81,7 @@ def latest_submission_for_entity(business_identifier: str):
     try:
         submissions = SubmissionModel.get_latest_submissions(submission_filter=sf)
         if submissions:
-            return jsonify(SubmissionSerializer.to_str(submissions[0]))
+            return jsonify(SubmissionSerializer.to_dict(submissions[0]))
 
         return None, HTTPStatus.NOT_FOUND
 
