@@ -54,35 +54,28 @@ class SubmissionService:  # pylint: disable=too-few-public-methods
     the necessary information for creating a submission.
 
     """
+
     @staticmethod
     def create_submission(submission_dict: dict) -> SubmissionModel:
         """
-        create_submission(submission_dict: dict) -> SubmissionModel
 
-        Creates a submission object from the provided submission dictionary.
+        Create Submission
+
+        This method is a static method that creates a new submission using the provided submission dictionary.
 
         Parameters:
-        - submission_dict (dict): A dictionary representing the submission details.
-          It should consist of the following keys:
-            - 'effectiveDate' (str): The effective date of the submission in ISO format.
-            - 'significantIndividuals' (list):
-                A list of dictionaries containing information about significant individuals.
-                Each dictionary should include the following keys:
-                - 'profile' (dict, optional): A dictionary representing the profile of the significant individual.
-                    It should have the 'uuid' key, which provides the UUID of the person. If not provided, a new person
-                    will be created using the information from 'significantIndividuals'.
-                - 'businessIdentifier' (str): The business identifier associated with the submission.
+        - submission_dict (dict): A dictionary containing the submission data. It should have the following keys:
+            - 'effectiveDate': A string representing the effective date of the submission in ISO format (YYYY-MM-DD).
+            - 'businessIdentifier': A string representing the business identifier for the submission.
+            - Any other key-value pairs representing additional payload data.
 
         Returns:
-        - submission (SubmissionModel): An instance of the SubmissionModel class, representing the created submission.
+        - SubmissionModel: A SubmissionModel object that represents the created submission.
 
         """
         submission = SubmissionModel()
         submission.effective_date = date.fromisoformat(submission_dict['effectiveDate'])
+        submission.business_identifier = submission_dict['businessIdentifier']
         submission.payload = submission_dict
-
-        for significant_individual in submission_dict['significantIndividuals']:
-
-            significant_individual['businessIdentifier'] = submission_dict['businessIdentifier']
 
         return submission
