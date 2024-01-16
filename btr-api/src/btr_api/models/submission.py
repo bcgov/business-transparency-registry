@@ -108,8 +108,11 @@ class Submission(Versioned, db.Model):
 
 
 class SubmissionSerializer:
+    """Serializer for submissions. Can convert to dict, string from submission model. """
+
     @staticmethod
     def to_str(submission: Submission):
+        """Return string representation of submission model."""
         return str(SubmissionSerializer.to_dict(submission))
 
     @staticmethod
@@ -127,5 +130,6 @@ class SubmissionSerializer:
         }
 
 
-class SubmissionFilter:
+class SubmissionFilter:  # pylint: disable=too-few-public-methods
+    """ Class for storing data used for filtering submission model. """
     business_identifier: str | None = None
