@@ -63,10 +63,10 @@ class Submission(Versioned, db.Model):
         db.Column("submitted_datetime", db.DateTime(timezone=True),
                   server_default=func.now()))  # pylint:disable=not-callable
     payload = db.Column("payload", JSONB)
+    business_identifier = db.Column(db.String(255), nullable=True)
 
     # Relationships
-    submitter_id = db.Column('submitter_id', db.Integer,
-                             db.ForeignKey('users.id'))
+    submitter_id = db.Column('submitter_id', db.Integer, db.ForeignKey('users.id'))
 
     submitter = db.relationship('User',
                                 backref=backref('filing_submitter', uselist=False),
@@ -91,3 +91,41 @@ class Submission(Versioned, db.Model):
         """Return the submissions."""
         query = cls.query.order_by(desc(Submission.submitted_datetime))
         return query.all()
+
+    @classmethod
+    def get_latest_submissions(cls, submission_filter=None):
+        """Return submissions sorted by submitted datetime and filtered by filter."""
+
+        if submission_filter is None:
+            return cls.get_filtered_submissions()
+
+        query = cls.query
+        if submission_filter.business_identifier:
+            query = query.filter_by(business_identifier=submission_filter.business_identifier)
+
+        query = query.order_by(desc(Submission.submitted_datetime))
+        return query.all()
+
+
+class SubmissionSerializer:
+    @staticmethod
+    def to_str(submission: Submission):
+        return str(SubmissionSerializer.to_dict(submission))
+
+    @staticmethod
+    def to_dict(submission: Submission) -> dict:
+        """Return the submission class as a dict."""
+
+        return {
+            'id': submission.id,
+            'type': submission.type.value,
+            'effective_date': submission.effective_date.isoformat() if submission.effective_date else None,
+            'submitted_datetime': submission.submitted_datetime.isoformat(),
+            'payload': submission.payload,
+            'business_identifier': submission.business_identifier,
+            'submitter_id': submission.submitter_id
+        }
+
+
+class SubmissionFilter:
+    business_identifier: str | None = None

@@ -45,7 +45,8 @@ from flask import jsonify
 from flask import request
 
 from btr_api.exceptions import exception_response
-from btr_api.models import Submission
+from btr_api.models import Submission as SubmissionModel
+from btr_api.models.submission import SubmissionSerializer, SubmissionFilter
 from btr_api.services.json_schema import SchemaService
 from btr_api.services.submission import SubmissionService
 
@@ -58,13 +59,31 @@ def registers(id: int | None = None):  # pylint: disable=redefined-builtin
     """Get the submissions, or sepcific submission by id."""
     try:
         if id:
-            if submission := Submission.find_by_id(id):
+            if submission := SubmissionModel.find_by_id(id):
                 return jsonify(type=submission.type, submission=submission.payload)
             return {}, HTTPStatus.NOT_FOUND
 
-        submissions = Submission.get_filtered_submissions()
+        submissions = SubmissionModel.get_filtered_submissions()
+        submissions = [SubmissionSerializer.to_dict(submission) for submission in submissions]
 
         return jsonify(submissions)
+
+    except Exception as exception:  # noqa: B902
+        return exception_response(exception)
+
+
+@bp.route("/entity/<business_identifier>", methods=("GET",))
+def latest_submission_for_entity(business_identifier: str):
+    """Get the latest submission for specified business identifier."""
+    sf = SubmissionFilter()
+    sf.business_identifier = business_identifier
+
+    try:
+        submissions = SubmissionModel.get_latest_submissions(submission_filter=sf)
+        if submissions:
+            return jsonify(SubmissionSerializer.to_str(submissions[0]))
+
+        return None, HTTPStatus.NOT_FOUND
 
     except Exception as exception:  # noqa: B902
         return exception_response(exception)

@@ -1,8 +1,10 @@
 """ Tests to ensure that the submission based end-points work correctly.
 """
+import json
 from http import HTTPStatus
 
 import pytest
+import requests
 
 from btr_api.models import Submission as SubmissionModel
 from btr_api.models import SubmissionType
@@ -56,3 +58,29 @@ def test_post_plots(client, session):
     with nested_session(session):
         rv = client.post("/plots", json=TEST_SI_FILING, content_type='application/json')
         assert rv.status_code == HTTPStatus.CREATED
+
+
+def test_get_latest_for_entity(client, session):
+    """Assure delete submission works."""
+    with nested_session(session):
+        # Setup
+        s1 = SubmissionModel(type=SubmissionType.other, business_identifier="Test identifier 0", payload="{id:123}")
+        s2 = SubmissionModel(type=SubmissionType.other, business_identifier="Test identifier 0", payload="{id:124}")
+        s3 = SubmissionModel(type=SubmissionType.other, business_identifier="Test identifier 4", payload="{id:125}")
+
+        session.add(s1)
+        session.commit()
+        session.add(s2)
+        session.commit()
+        session.add(s3)
+        session.commit()
+        bi = requests.utils.quote("Test identifier 0")
+        # Test
+        rv = client.get(f"/plots/entity/{bi}")
+
+        # Confirm outcome
+        assert rv.status_code == HTTPStatus.OK
+
+        assert "Test identifier 0" in rv.json
+        assert "124" in rv.json
+        assert "123" not in rv.json

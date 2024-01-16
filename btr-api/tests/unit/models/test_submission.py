@@ -1,40 +1,62 @@
-import unittest
-from unittest.mock import patch, Mock
-
-from btr_api.models.submission import Submission, SubmissionType, db
+import pytest
+from btr_api.models.submission import Submission, SubmissionType, db, SubmissionFilter
 
 
-class TestSubmission(unittest.TestCase):
+def test_find_by_id(client, session):
+    # Prepare data
+    submission = Submission(type=SubmissionType.other, business_identifier="Test identifier")
+    session.add(submission)
+    session.commit()
 
-    @patch.object(db.session, 'commit')
-    @patch.object(db.session, 'add')
-    def test_save(self, mock_add, mock_commit):
-        submission = Submission()
-        submission.save()
-        mock_add.assert_called_once_with(submission)
-        mock_commit.assert_called_once()  # commit should be called once
+    # Do test
+    result = Submission.find_by_id(submission.id)
 
-    @patch.object(db.session, 'add')
-    def test_save_to_session(self, mock_add):
-        submission = Submission()
-        submission.save_to_session()
-        mock_add.assert_called_once_with(submission)
-
-    @patch.object(db.Model, 'query')
-    def test_find_by_id(self, mock_query):
-        submission = Submission()
-        submission.find_by_id(1)
-        mock_query.filter_by.assert_called_once_with(id=1)  # assert that filter_by is called once
-
-    @patch.object(db.Model, 'query')
-    def test_get_filtered_submissions(self, mock_query):
-        submission = Submission()
-        submission.get_filtered_submissions()
-        mock_query.order_by.assert_called_once()  # assert that order_by is called once
+    # Verify result
+    assert result == submission
 
 
-class TestSubmissionType(unittest.TestCase):
+def test_get_filtered_submissions(client, session):
+    # Prepare data
+    session.add_all([Submission(type=SubmissionType.other, business_identifier="Test identifier"),
+                     Submission(type=SubmissionType.standard, business_identifier="Another identifier")])
+    session.commit()
+    all_submissions = Submission.query.all()
+    # Do test
+    result = Submission.get_filtered_submissions()
 
-    def test_enum_values(self):
-        self.assertEqual(SubmissionType.other.value, 'other')
-        self.assertEqual(SubmissionType.standard.value, 'standard')
+    # Verify result
+    assert len(result) == len(all_submissions)
+
+
+def test_get_latest_submissions(client, session):
+    # Prepare data
+    submission1 = Submission(type=SubmissionType.other, business_identifier="Test identifier", payload="{id:123}")
+    submission2 = Submission(type=SubmissionType.other, business_identifier="Test identifier", payload="{id:124}")
+    submission3 = Submission(type=SubmissionType.other, business_identifier="Test identifier", payload="{id:125}")
+
+    session.add(submission1)
+    session.commit()
+    session.add(submission2)
+    session.commit()
+    session.add(submission3)
+    session.commit()
+
+    # Do test
+    result = Submission.get_latest_submissions()
+
+    # Verify result
+    assert result[0] == submission3
+    assert submission1 in result
+    assert submission2 in result
+
+
+def test_save_to_session(client, session):
+    # Prepare data
+    submission = Submission(type=SubmissionType.other, business_identifier="Test identifier")
+
+    # Do test
+    submission.save_to_session()
+
+    # Verify result
+    session.flush()
+    assert submission in session
