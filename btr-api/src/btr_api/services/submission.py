@@ -37,16 +37,13 @@ including creating a submission. Each service is encapsulated in its own class.
 
 The `SubmissionService` class provides the method `create_submission`,
 which accepts a dictionary as an input and returns a SubmissionModel object.
-In this process, it also interacts with the `PersonService` and `OwnershipDetailsService`.
 
 The individual services can be invoked as per the requirements.
 
 """
 from datetime import date
 
-from btr_api.models import Person as PersonModel, Submission as SubmissionModel
-from btr_api.services.ownership_details import OwnershipDetailsService
-from btr_api.services.person import PersonService
+from btr_api.models import Submission as SubmissionModel
 
 
 class SubmissionService:  # pylint: disable=too-few-public-methods
@@ -57,42 +54,28 @@ class SubmissionService:  # pylint: disable=too-few-public-methods
     the necessary information for creating a submission.
 
     """
+
     @staticmethod
     def create_submission(submission_dict: dict) -> SubmissionModel:
         """
-        create_submission(submission_dict: dict) -> SubmissionModel
 
-        Creates a submission object from the provided submission dictionary.
+        Create Submission
+
+        This method is a static method that creates a new submission using the provided submission dictionary.
 
         Parameters:
-        - submission_dict (dict): A dictionary representing the submission details.
-          It should consist of the following keys:
-            - 'effectiveDate' (str): The effective date of the submission in ISO format.
-            - 'significantIndividuals' (list):
-                A list of dictionaries containing information about significant individuals.
-                Each dictionary should include the following keys:
-                - 'profile' (dict, optional): A dictionary representing the profile of the significant individual.
-                    It should have the 'uuid' key, which provides the UUID of the person. If not provided, a new person
-                    will be created using the information from 'significantIndividuals'.
-                - 'businessIdentifier' (str): The business identifier associated with the submission.
+        - submission_dict (dict): A dictionary containing the submission data. It should have the following keys:
+            - 'effectiveDate': A string representing the effective date of the submission in ISO format (YYYY-MM-DD).
+            - 'businessIdentifier': A string representing the business identifier for the submission.
+            - Any other key-value pairs representing additional payload data.
 
         Returns:
-        - submission (SubmissionModel): An instance of the SubmissionModel class, representing the created submission.
+        - SubmissionModel: A SubmissionModel object that represents the created submission.
 
         """
         submission = SubmissionModel()
         submission.effective_date = date.fromisoformat(submission_dict['effectiveDate'])
+        submission.business_identifier = submission_dict['businessIdentifier']
         submission.payload = submission_dict
-
-        for significant_individual in submission_dict['significantIndividuals']:
-            if person_uuid := significant_individual.get('profile', {}).get('uuid'):
-                person = PersonModel.find_by_uuid(search_uuid=person_uuid)
-            else:
-                person = PersonService.create_person_from_owner(owner_dict=significant_individual)
-
-            significant_individual['businessIdentifier'] = submission_dict['businessIdentifier']
-            owner = OwnershipDetailsService.create_ownership_details_from_owner(owner_dict=significant_individual,
-                                                                                person=person)
-            submission.owners.append(owner)
 
         return submission

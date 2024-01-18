@@ -3,12 +3,10 @@
 from http import HTTPStatus
 
 import pytest
+import requests
 
 from btr_api.models import Submission as SubmissionModel
-from btr_api.models import Person as PersonModel
 from btr_api.models import SubmissionType
-from btr_api.services.person import PersonService
-from btr_api.services.ownership_details import OwnershipDetailsService
 
 from tests.unit import nested_session, TEST_SI_FILING
 
@@ -47,19 +45,11 @@ def test_get_plots(client, session, test_name, submission_type, payload):
 def test_post_plots_db_mocked(client, mocker):
     """Assure post submission works (db mocked)."""
     mock_submission_save = mocker.patch.object(SubmissionModel, 'save')
-    mock_find_by_uuid = mocker.patch.object(PersonModel, 'find_by_uuid')
-    mock_create_person = mocker.patch.object(PersonService, 'create_person_from_owner')
-    mock_create_ownership = mocker.patch.object(OwnershipDetailsService, 'create_ownership_details_from_owner')
 
     rv = client.post("/plots", json=TEST_SI_FILING, content_type='application/json')
     assert rv.status_code == HTTPStatus.CREATED
 
     mock_submission_save.assert_called_once()
-    mock_find_by_uuid.assert_not_called()
-    mock_create_person.assert_called()
-    mock_create_ownership.assert_called()
-
-    assert mock_create_ownership.call_count == len(TEST_SI_FILING['significantIndividuals'])
 
 
 def test_post_plots(client, session):
@@ -67,3 +57,28 @@ def test_post_plots(client, session):
     with nested_session(session):
         rv = client.post("/plots", json=TEST_SI_FILING, content_type='application/json')
         assert rv.status_code == HTTPStatus.CREATED
+
+
+def test_get_latest_for_entity(client, session):
+    """Assure delete submission works."""
+    with nested_session(session):
+        # Setup
+        s1 = SubmissionModel(type=SubmissionType.other, business_identifier="Test identifier 0", payload="{id:123}")
+        s2 = SubmissionModel(type=SubmissionType.other, business_identifier="Test identifier 0", payload="{id:124}")
+        s3 = SubmissionModel(type=SubmissionType.other, business_identifier="Test identifier 4", payload="{id:125}")
+
+        session.add(s1)
+        session.commit()
+        session.add(s2)
+        session.commit()
+        session.add(s3)
+        session.commit()
+        bi = requests.utils.quote("Test identifier 0")
+        # Test
+        rv = client.get(f"/plots/entity/{bi}")
+
+        # Confirm outcome
+        assert rv.status_code == HTTPStatus.OK
+
+        assert "Test identifier 0" == rv.json.get("business_identifier")
+        assert "{id:124}" == rv.json.get("payload")
