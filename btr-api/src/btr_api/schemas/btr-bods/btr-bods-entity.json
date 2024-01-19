@@ -1,0 +1,77 @@
+{
+  "$id": "https://btr.gov.bc.ca/.well_known/schemas/entity-statement.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "version": "0.3",
+  "title": "Entity statement",
+  "description": "A statement identifying and describing the entity that is the subject of the ownership or control described in an ownership or control statement.",
+  "type": "object",
+  "properties": {
+    "statementID": {
+      "$ref": "https://btr.gov.bc.ca/.well_known/schemas/components.json#/definitions/ID",
+      "propertyOrder": 1
+    },
+    "statementType": {
+      "title": "Statement type",
+      "description": "This MUST be 'entityStatement'.",
+      "type": "string",
+      "enum": [
+        "entityStatement"
+      ],
+      "propertyOrder": 2
+    },
+    "statementDate": {
+      "$ref": "https://btr.gov.bc.ca/.well_known/schemas/components.json#/definitions/StatementDate",
+      "propertyOrder": 3
+    },
+    "isComponent": {
+      "title": "Is component",
+      "description": "Does this Entity Statement represent a component of an indirect ownership-or-control relationship? Where `isComponent` is 'true': (1) the `statementID` of this Entity Statement MUST be an element in the `componentStatementIDs` array of that primary Ownership-or-control Statement, (2) this Entity Statement MUST come before that primary Ownership-or-control Statement in a BODS package or stream, (3) the replacement of this Entity Statement SHOULD be considered when replacing the primary Ownership-or-control Statement. The primary Ownership-or-control Statement MUST have a `isComponent` value of 'false'.",
+      "type": "boolean"
+    },
+    "entityType": {
+      "title": "Type",
+      "description": "From the entityType codelist. What kind of entity is this? The 'registeredEntity' code covers any legal entity created through an act of official registration, usually resulting in an identifier being assigned to the entity. The ‘legalEntity’ code covers other bodies with distinct legal personality (international institutions, statutory corporations etc.). The 'arrangement' code covers artificial entities, described in the data model for the purpose of associating one or more natural or legal persons together in an ownership or control relationship, but without implying that the parties to this arrangement have any other form of collective legal identity.",
+      "type": "string",
+      "enum": [
+        "registeredEntity",
+        "legalEntity",
+        "arrangement",
+        "anonymousEntity",
+        "unknownEntity",
+        "state",
+        "stateBody"
+      ],
+      "codelist": "entityType.csv",
+      "openCodelist": false,
+      "propertyOrder": 4
+    },
+    "name": {
+      "title": "Entity name",
+      "description": "The declared name of this entity.",
+      "type": "string",
+      "propertyOrder": 10
+    },
+    "identifiers": {
+      "title": "Identifiers",
+      "description": "One or more official identifiers for this entity. Where available, official registration numbers should be provided.",
+      "type": "array",
+      "items": {
+        "$ref": "https://btr.gov.bc.ca/.well_known/schemas/components.json#/definitions/Identifier"
+      },
+      "propertyOrder": 20
+    },
+    "source": {
+      "title": "Source",
+      "description": "The source of information about this entity, or of information that supports an anonymous or unknown entity statement.",
+      "$ref": "https://btr.gov.bc.ca/.well_known/schemas/components.json#/definitions/Source",
+      "propertyOrder": 89
+    }
+  },
+  "required": [
+    "statementID",
+    "statementType",
+    "isComponent",
+    "entityType",
+    "publicationDetails"
+  ]
+}

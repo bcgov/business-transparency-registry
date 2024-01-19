@@ -38,6 +38,7 @@ It provides endpoints to create and retrieve submission objects.
 The 'registers' and 'create_register' functions define the 'GET' and 'POST' methods respectively.
 
 """
+import json
 from http import HTTPStatus
 
 from flask import Blueprint
@@ -97,11 +98,11 @@ def create_register():
     Returns:
         A tuple containing the response JSON and the HTTP status code.
     """
-    schema_name = "significantIndividualsFiling"
+    schema_name = "btr-filing.schema.json"
     schema_service = SchemaService()
-    schema = schema_service.get_schema(schema_name)
-    if not schema:
-        return {}, HTTPStatus.INTERNAL_SERVER_ERROR
+    # schema = schema_service.get_schema(schema_name)
+    # if not schema:
+    #     return {}, HTTPStatus.INTERNAL_SERVER_ERROR
 
     try:
         if json_input := request.get_json():

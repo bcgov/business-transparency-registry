@@ -1,0 +1,42 @@
+{
+  "$id": "https://btr.gov.bc.ca/.well_known/schemas/btr-filing.schema.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Significant Individual Filing",
+  "description": "This is object describing significant individual filing.",
+  "type": "object",
+  "properties": {
+    "businessIdentifier": {
+      "type": "string"
+    },
+    "effectiveDate": {
+      "type": "string",
+      "format": "date"
+    },
+    "entityStatement": {
+      "$ref": "https://btr.gov.bc.ca/.well_known/schemas/entity-statement.json"
+    },
+    "personStatements": {
+      "title": "Person statements",
+      "description": "An array of natural persons that have control or ownership in filing for the entity.",
+      "type": "array",
+      "items": {
+        "$ref": "https://btr.gov.bc.ca/.well_known/schemas/person-statement.json"
+      }
+    },
+    "ownershipOrControlStatements": {
+      "title": "Ownership or Control statements",
+      "description": "An array of ownership or control statements in this filing.",
+      "type": "array",
+      "items": {
+        "$ref": "https://btr.gov.bc.ca/.well_known/schemas/ownership-or-control-statement.json"
+      }
+    }
+  },
+  "required": [
+    "businessIdentifier",
+    "effectiveDate",
+    "entityStatement",
+    "personStatements",
+    "ownershipOrControlStatements"
+  ]
+}

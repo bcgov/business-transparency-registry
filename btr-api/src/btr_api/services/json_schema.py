@@ -48,10 +48,7 @@ Usage:
 import json
 import os
 
-from jsonschema import (
-    Draft7Validator,
-    FormatChecker,
-)
+from btr_api.schemas.utils import validate
 
 
 class SchemaService:
@@ -95,27 +92,21 @@ class SchemaService:
         Raises:
             Exception: If the schema_name parameter is empty.
         """
-        if not schema_name:
-            raise Exception('invalid schema name')  # pylint: disable=broad-exception-raised
 
-        schema = self.get_schema(schema_name=schema_name)
-        validator = Draft7Validator(schema, format_checker=FormatChecker())
+        is_valid, validation_errors = validate(data, schema_name)
+        if not is_valid:
+            errors = []
+            for error in validation_errors:
+                # Serialize the error into a dictionary
+                errors.append({
+                    "message": error.message,
+                    "json_path": error.json_path,
+                    "relative_path": list(error.relative_path),
+                    "context": [context.message for context in error.context],
+                })
+            return False, errors
 
-        if validator.is_valid(data):
-            return True, []
-
-        validation_errors = sorted(validator.iter_errors(data), key=lambda e: e.path)
-
-        errors = []
-        for error in validation_errors:
-            # Serialize the error into a dictionary
-            errors.append({
-                "message": error.message,
-                "json_path": error.json_path,
-                "relative_path": list(error.relative_path),
-                "context": [context.message for context in error.context],
-            })
-        return False, errors
+        return True, []
 
     def load_schema(self, schema_name: str) -> dict | None:
         """
