@@ -19,10 +19,6 @@
           "url": "http://source.url"
         }
       }
-    },
-    "source": {
-      "source": "sample source",
-      "extractionDate": "YYYY-MM-DD"
     }
   },
   "personStatements": [
@@ -73,10 +69,10 @@
       "statementDate": "2023-02-28",
       "isComponent": false,
       "subject": {
-        "describedByEntityStatement": "describedID"
+        "describedByEntityStatement": "bd4061d6-1a24-4356-93f3-c489b56610a2"
       },
       "interestedParty": {
-        "name": "Party"
+        "describedByPersonStatement": "bd4061d6-1a24-4356-93f3-c489b56610a4"
       },
       "publicationDetails": {
         "publicationDate": "2022-12-31",
@@ -96,7 +92,32 @@
         "retrievedAt": "2023-02-28T23:17:17Z",
         "asserted": "2023-02-18"
       },
-      "interests": []
+      "interests": [
+        {
+          "type": "otherInfluenceOrControl",
+          "directOrIndirect": "direct",
+          "beneficialOwnershipOrControl": true,
+          "details": "",
+          "share": {
+            "exact": 27
+          },
+          "startDate": "2023-03-01"
+        },
+        {
+          "type": "shareholding",
+          "directOrIndirect": "unknown",
+          "beneficialOwnershipOrControl": true,
+          "details": "SharesThroughRightsOrExercisedInConcert",
+          "startDate": "2023-03-01"
+        },
+        {
+          "type": "appointmentOfBoard",
+          "directOrIndirect": "direct",
+          "beneficialOwnershipOrControl": true,
+          "details": "",
+          "startDate": "2023-01-01"
+        }
+      ]
     }
   ]
 }

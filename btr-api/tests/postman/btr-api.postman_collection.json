@@ -156,42 +156,6 @@
 					"response": []
 				},
 				{
-					"name": "create no person and ownership statements",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{token}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"businessIdentifier\": \"string_value\",\n    \"effectiveDate\": \"2023-01-01\",\n    \"entityStatement\": {\n        \"statementID\": \"sampleID\",\n        \"statementType\": \"entityStatement\",\n        \"isComponent\": false,\n        \"entityType\": \"registeredEntity\",\n        \"name\": \"sample entity name\",\n        \"identifiers\": [\"1\"],\n        \"source\": {\n            \"source\": \"sample source\",\n            \"extractionDate\": \"YYYY-MM-DD\"\n        }\n    },\n    \"personStatements\": [\n        {\n            \"statementID\": \"sampleID\",\n            \"statementType\": \"personStatement\",\n            \"isComponent\": false,\n            \"personType\": \"knownPerson\",\n            \"names\": [\n                {\n                    \"fullName\": \"sample full name\"\n                }\n            ],\n            \"identifiers\": [\"1\"],\n            \"source\": {\n                \"url\": \"sample url\",\n                \"extractionDate\": \"YYYY-MM-DD\"\n            }\n        }\n    ],\n    \"ownershipOrControlStatements\": [\n        {\n            \"statementID\": \"sampleID\",\n            \"statementType\": \"ownershipOrControlStatement\",\n            \"isComponent\": false,\n            \"subject\": {\n                \"describedByEntityStatement\": \"sample entity statement\"\n            },\n            \"interestedParty\": {\n                \"describedByPersonStatement\": \"sample person statement\"\n            },\n            \"interests\": [\n                {\n                    \"type\": \"shareholding\",\n                    \"interestLevel\": \"unknown\",\n                    \"beneficialOwnershipOrControl\": true\n                }\n            ],\n            \"source\": {\n                \"url\": \"sample url\",\n                \"extractionDate\": \"YYYY-MM-DD\"\n            }\n        }\n    ]\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{internal_url}}/plots",
-							"host": [
-								"{{internal_url}}"
-							],
-							"path": [
-								"plots"
-							]
-						}
-					},
-					"response": []
-				},
-				{
 					"name": "fetch",
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
