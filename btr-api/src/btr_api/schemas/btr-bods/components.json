@@ -166,7 +166,12 @@
           "minLength": 2,
           "maxLength": 2
         }
-      }
+      },
+      "required": [
+        "address",
+        "postCode",
+        "country"
+      ]
     },
     "Name": {
       "title": "Name",
@@ -208,7 +213,10 @@
           "description": "Patronymic names are important in some countries. Iceland does not have a concept of family name in the way that many other European countries do, for example. In Bulgaria and Russia, patronymic names are in every day usage, for example, the 'Sergeyevich' in 'Mikhail Sergeyevich Gorbachev'.",
           "type": "string"
         }
-      }
+      },
+      "required": [
+        "fullName"
+      ]
     },
     "Interest": {
       "title": "Interest",

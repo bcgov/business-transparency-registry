@@ -148,6 +148,21 @@
       "description": "The source of information about this person, or of information that supports an unknown or anonymous person statement.",
       "$ref": "https://btr.gov.bc.ca/.well_known/schemas/components.json#/definitions/Source",
       "propertyOrder": 89
+    },
+    "hasTaxNumber": {
+      "type": "boolean"
+    },
+    "email": {
+      "type": "string",
+      "format": "email"
+    },
+    "isTaxResident": {
+      "type": "boolean"
+    },
+    "preferredName": {
+      "title": "Preferred name",
+      "description": "Name person prefers on using, that is different then their legal name",
+      "type": "string"
     }
   },
   "required": [
@@ -155,6 +170,10 @@
     "statementType",
     "personType",
     "isComponent",
-    "publicationDetails"
+    "publicationDetails",
+    "hasTaxNumber",
+    "email",
+    "nationalities",
+    "preferredName"
   ]
 }
