@@ -158,11 +158,6 @@
     },
     "isTaxResident": {
       "type": "boolean"
-    },
-    "preferredName": {
-      "title": "Preferred name",
-      "description": "Name person prefers on using, that is different then their legal name",
-      "type": "string"
     }
   },
   "required": [
@@ -174,6 +169,6 @@
     "hasTaxNumber",
     "email",
     "nationalities",
-    "preferredName"
+    "names"
   ]
 }

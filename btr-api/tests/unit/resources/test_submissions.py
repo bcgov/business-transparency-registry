@@ -1,5 +1,7 @@
 """ Tests to ensure that the submission based end-points work correctly.
 """
+import json
+import os
 from http import HTTPStatus
 
 import pytest
@@ -44,19 +46,31 @@ def test_get_plots(client, session, test_name, submission_type, payload):
 
 def test_post_plots_db_mocked(client, mocker):
     """Assure post submission works (db mocked)."""
+    current_dir = os.path.dirname(__file__)
+
     mock_submission_save = mocker.patch.object(SubmissionModel, 'save')
+    with open(
+        os.path.join(current_dir, "..", "..", "mocks", "significantIndividualsFiling", 'valid.json')
+    ) as file:
+        json_data = json.load(file)
+        rv = client.post("/plots", json=json_data, content_type='application/json')
+        assert rv.status_code == HTTPStatus.CREATED
 
-    rv = client.post("/plots", json=TEST_SI_FILING, content_type='application/json')
-    assert rv.status_code == HTTPStatus.CREATED
-
-    mock_submission_save.assert_called_once()
+        mock_submission_save.assert_called_once()
 
 
 def test_post_plots(client, session):
     """Assure post submission works."""
-    with nested_session(session):
-        rv = client.post("/plots", json=TEST_SI_FILING, content_type='application/json')
-        assert rv.status_code == HTTPStatus.CREATED
+    current_dir = os.path.dirname(__file__)
+
+    with open(
+        os.path.join(current_dir, "..", "..", "mocks", "significantIndividualsFiling", 'valid.json')
+    ) as file:
+        json_data = json.load(file)
+        with nested_session(session):
+            rv = client.post("/plots", json=json_data, content_type='application/json')
+            print(rv.data)
+            assert rv.status_code == HTTPStatus.CREATED
 
 
 def test_get_latest_for_entity(client, session):

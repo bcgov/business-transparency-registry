@@ -1,55 +1,102 @@
 {
   "businessIdentifier": "12345",
-  "folioNumber": "67890",
-  "effectiveDate": "2022-01-01",
-  "significantIndividuals": [
+  "effectiveDate": "2023-03-01",
+  "entityStatement": {
+    "statementID": "bd4061d6-1a24-4356-93f3-c489b56610a2",
+    "statementType": "entityStatement",
+    "statementDate": "2023-02-28",
+    "isComponent": false,
+    "entityType": "registeredEntity",
+    "name": "Your Entity",
+    "identifiers": [],
+    "publicationDetails": {
+      "publicationDate": "2022-12-31",
+      "bodsVersion": "1.0",
+      "publisher": {
+        "uri": "http://publisher.uri",
+        "name": "Publisher Name",
+        "source": {
+          "url": "http://source.url"
+        }
+      }
+    },
+    "source": {
+      "source": "sample source",
+      "extractionDate": "YYYY-MM-DD"
+    }
+  },
+  "personStatements": [
     {
-      "controlType": {
-        "directControl": true,
-        "indirectControl": false,
-        "significantInfluence": false,
-        "inConcertControl": true
-      },
-      "percentOfShares": 100,
-      "percentOfVotes": 85,
-      "profile": {
-        "address": {
-          "country": {
-            "alpha_2": "US",
-            "name": "United States",
-            "numericCode": "840"
-          },
-          "line1": "123 Main St",
-          "city": "Los Angeles",
-          "region": "CA",
-          "postalCode": "90001"
-        },
-        "competency": {
-          "decisionMaking": true,
-          "financialAffairs": false
-        },
-        "birthDate": "1980-01-01",
-        "citizenshipCA": "citizen",
-        "citizenshipsExCA": [
-          {
-            "name": "Germany",
-            "alpha_2": "DE"
-          },
-          {
-            "name": "France",
-            "alpha_2": "FR"
+      "statementID": "bd4061d6-1a24-4356-93f3-c489b56610a4",
+      "statementType": "personStatement",
+      "statementDate": "2023-02-28",
+      "isComponent": false,
+      "personType": "knownPerson",
+      "names": [
+        {
+          "type": "individual",
+          "fullName": "Full Name"
+        }
+      ],
+      "publicationDetails": {
+        "publicationDate": "2022-12-31",
+        "bodsVersion": "1.0",
+        "publisher": {
+          "uri": "http://publisher.uri",
+          "name": "Publisher Name",
+          "source": {
+            "url": "http://source.url"
           }
-        ],
-        "email": "test@example.com",
-        "hasTaxNumber": true,
-        "isTaxResident": false,
-        "fullName": "John Doe",
-        "preferredName": "John",
-        "taxNumber": "987654321",
-        "uuid": "e2dd8f31-a097-4c8a-9f92-76e6f92f63f4"
+        }
       },
-      "startDate": "2022-01-01"
+      "hasTaxNumber": true,
+      "email": "test@test.gov.bc.ca",
+      "nationalities": [
+        {
+          "name": "Canada",
+          "code": "CA"
+        }
+      ],
+      "source": {
+        "description": "The description",
+        "url": "https://yourwebsite.com",
+        "metadata": "Metadata",
+        "retrievedAt": "2023-02-28T23:17:17Z",
+        "asserted": "2023-02-18"
+      }
     }
   ],
-  "certified": true
+  "ownershipOrControlStatements": [
+    {
+      "statementID": "bd4061d6-1a24-4356-93f3-c489b56610a3",
+      "statementType": "ownershipOrControlStatement",
+      "statementDate": "2023-02-28",
+      "isComponent": false,
+      "subject": {
+        "describedByEntityStatement": "describedID"
+      },
+      "interestedParty": {
+        "name": "Party"
+      },
+      "publicationDetails": {
+        "publicationDate": "2022-12-31",
+        "bodsVersion": "1.0",
+        "publisher": {
+          "uri": "http://publisher.uri",
+          "name": "Publisher Name",
+          "source": {
+            "url": "http://source.url"
+          }
+        }
+      },
+      "source": {
+        "description": "The description",
+        "url": "https://yourwebsite.com",
+        "metadata": "Metadata",
+        "retrievedAt": "2023-02-28T23:17:17Z",
+        "asserted": "2023-02-18"
+      },
+      "interests": []
+    }
+  ]
 }

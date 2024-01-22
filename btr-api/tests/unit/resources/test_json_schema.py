@@ -8,7 +8,7 @@ import pytest
 @pytest.mark.parametrize(
     "test_name, schema_name, expected_status",
     [
-        ("Existing schema", "significantIndividualsFiling", HTTPStatus.OK),
+        ("Existing schema", "components", HTTPStatus.OK),
         ("Non existing schema", "nonExistingSchema", HTTPStatus.NOT_FOUND)
     ],
 )

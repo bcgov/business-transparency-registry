@@ -125,7 +125,7 @@ class SchemaService:
         """
         try:
             schema_file_name = f"{schema_name}.json"
-            schema_file_path = os.path.join(SchemaService.scripts_directory(), schema_file_name)
+            schema_file_path = os.path.join(SchemaService.scripts_directory(), 'btr-bods', schema_file_name)
             if not os.path.exists(schema_file_path):
                 raise ValueError(f'Schema file could not be found: {schema_file_name}')
             with open(schema_file_path, 'r', encoding='UTF-8') as schema_file:

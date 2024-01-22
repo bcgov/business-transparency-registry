@@ -38,7 +38,6 @@ It provides endpoints to create and retrieve submission objects.
 The 'registers' and 'create_register' functions define the 'GET' and 'POST' methods respectively.
 
 """
-import json
 from http import HTTPStatus
 
 from flask import Blueprint

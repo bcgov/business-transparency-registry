@@ -14,26 +14,10 @@ from btr_api.services.json_schema import SchemaService
             "'2022-01-01----' is not a 'date'"
         ),
         (
-            "Address Line 1 to long",
-            "address_line1_too_long.json",
-            "'123 Main St 123 Main St123 Main St123 Main St123 Main St123 Main St123 Main St123 Main St123 Main St123 "
-            "Main St123 Main St123 Main St123 Main St123 Main St123 Main St123 Main St' is too long"
-        ),
-        (
             "Missing required fields -- effectiveDate",
             "effective_date_missing.json",
             "'effectiveDate' is a required property"
-        ),
-        (
-            "Max size exceeds maximum of 100 -- percent shares",
-            "percent_shares_more_then_100.json",
-            "101 is greater than the maximum of 100"
-        ),
-        (
-            "Not a number -- percent shares",
-            "percent_shares_not_a_number.json",
-            "'100' is not of type 'number'"
-        ),
+        )
     ],
 )
 def test_invalid_significant_individuals_filing_schema(
@@ -45,7 +29,7 @@ def test_invalid_significant_individuals_filing_schema(
     ) as file:
         data = json.load(file)
         ss = SchemaService()
-        [valid, errors] = ss.validate(schema_name="significantIndividualsFiling", data=data)
+        [valid, errors] = ss.validate(schema_name="btr-filing.schema.json", data=data)
         assert valid is False
         assert expected_error in [error["message"] for error in errors]
 
@@ -58,7 +42,7 @@ def test_valid_significant_individuals_filing_schema():
     ) as file:
         data = json.load(file)
         ss = SchemaService()
-        [valid, errors] = ss.validate(schema_name="significantIndividualsFiling", data=data)
+        [valid, errors] = ss.validate(schema_name="btr-filing.schema.json", data=data)
         print(errors)
         assert valid is True
         assert len(errors) == 0

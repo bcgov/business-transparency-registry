@@ -23,7 +23,6 @@ from jsonschema import Draft7Validator, SchemaError
 from referencing import Registry, Resource
 from referencing.jsonschema import DRAFT7
 
-
 BASE_URI = 'https://btr.gov.bc.ca/.well_known/schemas'
 
 
