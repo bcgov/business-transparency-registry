@@ -134,30 +134,38 @@
       "description": "A free text address string, providing as much address data as is relevant, suitable for processing using address parsing algorithms. For some uses (for example, Place of Birth) only a town and country are required.",
       "type": "object",
       "properties": {
-        "type": {
-          "title": "Type",
-          "description": "What type of address is this? See the addressType codelist.",
+        "street": {
           "type": "string",
-          "enum": [
-            "placeOfBirth",
-            "residence",
-            "registered",
-            "service",
-            "alternative",
-            "business"
+          "maxLength": 50,
+          "description": "Street address and name."
+        },
+        "streetAdditional": {
+          "type": "string",
+          "maxLength": 50,
+          "description": "Additional street address information."
+        },
+        "city": {
+          "type": "string",
+          "maxLength": 40,
+          "description": "City, Town, or Village."
+        },
+        "region": {
+          "type": [
+            "string",
+            "null"
           ],
-          "codelist": "addressType.csv",
-          "openCodelist": false
+          "maxLength": 2,
+          "description": "For Canada or USA, 2 character province or state code."
         },
-        "address": {
-          "title": "Address",
-          "description": "The address, with each line or component of the address separated by a line-break or comma. Where postal codes are isolated fields in source systems, this `address` field SHOULD NOT include the postal code.",
-          "type": "string"
+        "postalCode": {
+          "type": "string",
+          "maxLength": 15,
+          "description": "Postal Code in A1A 1A1 format for Canada, or zip code for US addresses."
         },
-        "postCode": {
-          "title": "Postcode",
-          "description": "The postal code for this address.",
-          "type": "string"
+        "locationDescription": {
+          "type": "string",
+          "maxLength": 80,
+          "description": "Additional description, or description how to reach address that has no postal code/street etc.."
         },
         "country": {
           "title": "Country",
@@ -166,12 +174,7 @@
           "minLength": 2,
           "maxLength": 2
         }
-      },
-      "required": [
-        "address",
-        "postCode",
-        "country"
-      ]
+      }
     },
     "Name": {
       "title": "Name",
