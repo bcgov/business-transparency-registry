@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div data-cy="owner-change">
     <h1 class="font-bold text-3xl" data-cy="page-header">
       {{ $t('pageHeadings.significantIndividualChange') }}
     </h1>
