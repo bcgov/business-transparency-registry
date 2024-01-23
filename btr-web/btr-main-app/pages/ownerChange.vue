@@ -32,20 +32,20 @@
       :label="$t('labels.addIndividual')"
       variant="outline"
       data-cy="add-new-btn"
-      @click="expandNewSI = true"
+      @click="handleAddNewButtonClick"
     />
     <div
       v-if="expandNewSI"
       class="mt-10 p-10 pt-8 bg-white rounded flex flex-row"
       :class="showAddIndividualError ? 'border-l-[3px] border-bcGovRed-500' : ''"
     >
-      <label class="font-bold text-lg min-w-[190px] mt-2" :class="showAddIndividualError ? 'text-bcGovRed-500' : ''">
+      <label class="font-bold min-w-[190px] mt-3" :class="showAddIndividualError ? 'text-bcGovRed-500' : ''">
         {{ $t('labels.addIndividual') }}
       </label>
       <IndividualPersonAddNew
         class="ml-8"
         :start-date="currentSIFiling.effectiveDate"
-        @cancel="expandNewSI = false"
+        @cancel="cancelAddNewSI"
         @add="addNewSI($event)"
       />
     </div>
@@ -54,6 +54,7 @@
       :individuals="currentSIFiling.significantIndividuals || []"
       :edit="true"
       :is-editing="isEditing"
+      :editing-disabled="isAddingNewSI"
       @toggle-editing-mode="toggleEditingMode"
     />
   </div>
@@ -69,6 +70,8 @@ const expandNewSI = ref(false)
 
 const isEditing = ref(false)
 
+const isAddingNewSI = ref(false)
+
 const toggleEditingMode = () => {
   isEditing.value = !isEditing.value
 }
@@ -82,9 +85,19 @@ const significantIndividualChangeDate = (event: Date) => {
   addBtrPayFees()
 }
 
+function handleAddNewButtonClick () {
+  expandNewSI.value = true
+  isAddingNewSI.value = true
+}
 function addNewSI (si: SignificantIndividualI) {
   significantIndividuals.filingAddSI(si)
   expandNewSI.value = false
+  isAddingNewSI.value = false
+}
+
+function cancelAddNewSI () {
+  expandNewSI.value = false
+  isAddingNewSI.value = false
 }
 
 onBeforeMount(async () => {

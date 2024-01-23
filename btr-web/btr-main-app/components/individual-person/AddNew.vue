@@ -201,15 +201,15 @@
       <IndividualPersonControlUnableToObtainOrConfirmInformation v-model="significantIndividual.missingInfoReason" />
     </template>
     <div class="grid mt-10 w-full">
-      <div :class="isEditing ? 'flex justify-between' : 'flex justify-end'">
+      <div class="flex justify-between">
         <UButton
-          v-if="isEditing"
           class="px-10 py-4 mr-5"
           :label="t('buttons.remove')"
           color="red"
           variant="outline"
           data-cy="edit-si-remove-btn"
-          @click="$emit('remove', true)"
+          :disabled="!isEditing"
+          @click="$emit('remove')"
         />
         <div class="flex">
           <UButton
@@ -218,7 +218,7 @@
             color="primary"
             variant="outline"
             data-cy="new-si-cancel-btn"
-            @click="$emit('cancel', true)"
+            @click="$emit('cancel')"
           />
           <UButton
             class="ml-5 px-10 py-4"
@@ -241,9 +241,9 @@ const { t } = useI18n()
 
 const emits = defineEmits<{
   add: [value: SignificantIndividualI],
-  cancel: [value: any],
+  cancel: [],
   update: [value: { index: number | undefined, updatedSI: SignificantIndividualI }],
-  remove: [value: any]
+  remove: []
 }>()
 
 const props = defineProps<{
