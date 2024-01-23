@@ -75,16 +75,16 @@
                 icon="i-mdi-pencil"
                 :label="t('buttons.edit')"
                 variant="editButton"
-                :disabled="isEditing"
+                :disabled="editingDisabled || isEditing"
                 data-cy="edit-button"
                 @click="openEditingMode(index)"
               />
-              <UPopover>
+              <UPopover :popper="{ placement: 'bottom-end' }">
                 <UButton
                   :ui="{ padding: { default: 'py-0' } }"
                   icon="i-mdi-menu-down"
                   variant="removeButton"
-                  :disabled="isEditing"
+                  :disabled="editingDisabled || isEditing"
                   data-cy="popover-button"
                 />
                 <template #panel>
@@ -108,13 +108,13 @@
       <tr v-if="isEditing && editingIndex === index">
         <td data-cy="summary-table-edit-form" colspan="100%">
           <div class="bg-white rounded flex flex-row">
-            <label class="font-bold text-lg min-w-[190px] mt-2">
+            <label class="font-bold text-base text-gray-900 min-w-[190px] mt-3">
               {{ $t('labels.editIndividual') }}
             </label>
             <IndividualPersonAddNew
               :index="index"
               :set-significant-individual="copyIndividualToEdit()"
-              class="ml-8"
+              class="ml-8 text-base text-gray-900"
               @cancel="closeEditingMode"
               @update="updateSignificantIndividual($event.index, $event.updatedSI)"
               @remove="removeSignificantIndividual(index)"
@@ -147,6 +147,10 @@ const props = defineProps({
     default: false
   },
   isEditing: {
+    type: Boolean,
+    default: false
+  },
+  editingDisabled: {
     type: Boolean,
     default: false
   }

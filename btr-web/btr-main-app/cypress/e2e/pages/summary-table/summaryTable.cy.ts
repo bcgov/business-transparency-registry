@@ -221,4 +221,19 @@ describe('pages -> Beneficial Owner Change', () => {
     cy.get('[data-cy="individualsSummaryTable"]').get('td')
       .should('contain.text', 'No significant individuals added yet')
   })
+
+  it('Editing should be disabled when the user is adding a new SI', () => {
+    cy.get('[data-cy=add-new-btn]').click()
+    cy.get('[data-cy=edit-button]').then((buttons) => {
+      for (let i = 0; i < buttons.length; i++) {
+        cy.get('[data-cy=edit-button]').first().should('have.attr', 'disabled')
+      }
+    })
+    cy.get('[data-cy=new-si-cancel-btn]').click()
+    cy.get('[data-cy=edit-button]').then((buttons) => {
+      for (let i = 0; i < buttons.length; i++) {
+        cy.get('[data-cy=edit-button]').first().should('not.have.attr', 'disabled')
+      }
+    })
+  })
 })
