@@ -1,10 +1,10 @@
 {
 	"info": {
-		"_postman_id": "a8396735-2789-44ea-871d-3449456dc19d",
+		"_postman_id": "c041c574-d841-463f-a192-8c0b95a25554",
 		"name": "btr-api",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "6835935",
-		"_collection_link": "https://warped-escape-616276.postman.co/workspace/bc-registries~8ef8e652-492a-4d19-b978-d4f0da255b2c/collection/6835935-a8396735-2789-44ea-871d-3449456dc19d?action=share&source=collection_link&creator=6835935"
+		"_exporter_id": "18245960",
+		"_collection_link": "https://solar-spaceship-554441.postman.co/workspace/BaseApi~c3dcd8d9-dd08-48b8-bc11-94c7e12e1d47/collection/18245960-c041c574-d841-463f-a192-8c0b95a25554?action=share&source=collection_link&creator=18245960"
 	},
 	"item": [
 		{
@@ -120,7 +120,7 @@
 			"name": "submission",
 			"item": [
 				{
-					"name": "BC0871427",
+					"name": "create",
 					"request": {
 						"auth": {
 							"type": "bearer",
@@ -133,6 +133,45 @@
 							]
 						},
 						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"businessIdentifier\": \"string_value\",\n    \"effectiveDate\": \"2023-01-01\",\n    \"entityStatement\": {\n        \"statementID\": \"sampleID\",\n        \"statementType\": \"entityStatement\",\n        \"isComponent\": false,\n        \"entityType\": \"registeredEntity\",\n        \"name\": \"sample entity name\",\n        \"identifiers\": [\"1\"],\n        \"source\": {\n            \"source\": \"sample source\",\n            \"extractionDate\": \"YYYY-MM-DD\"\n        }\n    },\n    \"personStatements\": [\n        {\n            \"statementID\": \"sampleID\",\n            \"statementType\": \"personStatement\",\n            \"isComponent\": false,\n            \"personType\": \"knownPerson\",\n            \"names\": [\n                {\n                    \"fullName\": \"sample full name\"\n                }\n            ],\n            \"identifiers\": [\"1\"],\n            \"source\": {\n                \"url\": \"sample url\",\n                \"extractionDate\": \"YYYY-MM-DD\"\n            }\n        }\n    ],\n    \"ownershipOrControlStatements\": [\n        {\n            \"statementID\": \"sampleID\",\n            \"statementType\": \"ownershipOrControlStatement\",\n            \"isComponent\": false,\n            \"subject\": {\n                \"describedByEntityStatement\": \"sample entity statement\"\n            },\n            \"interestedParty\": {\n                \"describedByPersonStatement\": \"sample person statement\"\n            },\n            \"interests\": [\n                {\n                    \"type\": \"shareholding\",\n                    \"interestLevel\": \"unknown\",\n                    \"beneficialOwnershipOrControl\": true\n                }\n            ],\n            \"source\": {\n                \"url\": \"sample url\",\n                \"extractionDate\": \"YYYY-MM-DD\"\n            }\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{internal_url}}/plots",
+							"host": [
+								"{{internal_url}}"
+							],
+							"path": [
+								"plots"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "fetch",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
 						"header": [],
 						"body": {
 							"mode": "raw",
@@ -154,14 +193,12 @@
 						}
 					},
 					"response": []
-				}
-			]
-		},
-		{
-			"name": "owners",
-			"item": [
+				},
 				{
-					"name": "BC0871427 current",
+					"name": "get latest for entity",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
 					"request": {
 						"auth": {
 							"type": "bearer",
@@ -175,63 +212,26 @@
 						},
 						"method": "GET",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"businessIdentifier\": \"BC0871427\",\n    \"effectiveDate\": \"2020-10-03\",\n    \"significantIndividuals\": [\n        {\n            \"percentOfShares\": \"20\",\n            \"percentOfVotes\": \"10\",\n            \"controlType\": {\n                \"sharesVotes\": {\n                    \"registeredOwner\": true,\n                    \"beneficialOwner\": false,\n                    \"indirectControl\": false,\n                    \"inConcertControl\": true\n                },\n                \"directors\": {\n                    \"directControl\": true,\n                    \"indirectControl\": true,\n                    \"significantInfluence\": false,\n                    \"inConcertControl\": true\n                },\n                \"other\": \"\"\n            },\n            \"missingInfoReason\": null,\n            \"startDate\": \"2020-04-21\",\n            \"action\": \"add\",\n            \"profile\": {\n                \"fullName\": \"John Smith\",\n                \"preferredName\": \"John\",\n                \"email\": \"123@test.com\",\n                \"address\": {\n                    \"country\": { \"name\": \"Canada\", \"alpha_2\": \"CA\" },\n                    \"line1\": \"111 test street\",\n                    \"line2\": null,\n                    \"city\": \"Vancouver\",\n                    \"region\": \"BC\",\n                    \"postalCode\": \"V0E 1H5\"\n                },\n                \"competency\": {\n                    \"decisionMaking\": true,\n                    \"financialAffairs\": true\n                },\n                \"birthDate\": \"2000-03-19\",\n                \"citizenshipCA\": \"citizen\",\n                \"citizenshipsExCA\": [],\n                \"isTaxResident\": true,\n                \"hasTaxNumber\": true,\n                \"taxNumber\": \"000 000 000\"\n            }\n        }\n    ]\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
-							"raw": "{{internal_url}}/owners/BC0871427",
+							"raw": "{{internal_url}}/plots",
 							"host": [
 								"{{internal_url}}"
 							],
 							"path": [
-								"owners",
-								"BC0871427"
+								"plots"
 							]
 						}
 					},
-					"response": [
-						{
-							"name": "BC0871427 current",
-							"originalRequest": {
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "{{internal_url}}/owners/BC0871427",
-									"host": [
-										"{{internal_url}}"
-									],
-									"path": [
-										"owners",
-										"BC0871427"
-									]
-								}
-							},
-							"status": "OK",
-							"code": 200,
-							"_postman_previewlanguage": "json",
-							"header": [
-								{
-									"key": "Server",
-									"value": "Werkzeug/3.0.1 Python/3.11.4"
-								},
-								{
-									"key": "Date",
-									"value": "Fri, 15 Dec 2023 18:21:32 GMT"
-								},
-								{
-									"key": "Content-Type",
-									"value": "application/json"
-								},
-								{
-									"key": "Content-Length",
-									"value": "888"
-								},
-								{
-									"key": "Connection",
-									"value": "close"
-								}
-							],
-							"cookie": [],
-							"body": "[\n    {\n        \"controlType\": {\n            \"directors\": {\n                \"directControl\": true,\n                \"inConcertControl\": true,\n                \"indirectControl\": true,\n                \"significantInfluence\": false\n            },\n            \"other\": \"\",\n            \"sharesVotes\": {\n                \"beneficialOwner\": false,\n                \"inConcertControl\": true,\n                \"indirectControl\": false,\n                \"registeredOwner\": true\n            }\n        },\n        \"endDate\": null,\n        \"missingInfoReason\": null,\n        \"percentOfShares\": 20,\n        \"percentOfVotes\": 10,\n        \"profile\": {\n            \"address\": {\n                \"city\": \"Vancouver\",\n                \"country\": {\n                    \"alpha_2\": \"CA\",\n                    \"name\": \"Canada\"\n                },\n                \"line1\": \"111 test street\",\n                \"line2\": null,\n                \"postalCode\": \"V0E 1H5\",\n                \"region\": \"BC\"\n            },\n            \"birthDate\": \"2000-03-19\",\n            \"citizenshipCA\": \"citizen\",\n            \"citizenshipsExCa\": null,\n            \"competency\": {\n                \"decisionMaking\": true,\n                \"financialAffairs\": true\n            },\n            \"email\": \"123@test.com\",\n            \"fullName\": \"John Smith\",\n            \"hasTaxNumber\": true,\n            \"isTaxResident\": true,\n            \"preferredName\": \"John\",\n            \"taxNumber\": \"000 000 000\",\n            \"uuid\": \"1ff28004-894e-43dc-af03-86aeb925d95e\"\n        },\n        \"startDate\": \"2020-04-21\",\n        \"uuid\": \"482564ad-311e-4b48-85d3-d1199d2dc6b1\"\n    }\n]"
-						}
-					]
+					"response": []
 				}
 			]
 		}

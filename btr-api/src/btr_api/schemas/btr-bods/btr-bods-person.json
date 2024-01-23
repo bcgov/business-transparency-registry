@@ -1,0 +1,174 @@
+{
+  "$id": "https://btr.gov.bc.ca/.well_known/schemas/person-statement.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "version": "0.3",
+  "type": "object",
+  "title": "Person statement",
+  "description": "A person statement describes the information known about a natural person at a particular point in time, or from a given submission of information",
+  "properties": {
+    "statementID": {
+      "$ref": "https://btr.gov.bc.ca/.well_known/schemas/components.json#/definitions/ID",
+      "propertyOrder": 1
+    },
+    "statementType": {
+      "title": "Statement type",
+      "description": "This MUST be 'personStatement'.",
+      "type": "string",
+      "enum": [
+        "personStatement"
+      ],
+      "propertyOrder": 2
+    },
+    "statementDate": {
+      "$ref": "https://btr.gov.bc.ca/.well_known/schemas/components.json#/definitions/StatementDate",
+      "propertyOrder": 3
+    },
+    "isComponent": {
+      "title": "Is component",
+      "description": "Does this Person Statement represent a component of an indirect ownership-or-control relationship? Where `isComponent` is 'true': (1) the `statementID` of this Person Statement MUST be an element in the `componentStatementIDs` array of that primary Ownership-or-control Statement, (2) this Person Statement MUST come before that primary Ownership-or-control Statement in a BODS package or stream, (3) the replacement of this Person Statement SHOULD be considered when replacing the primary Ownership-or-control Statement. The primary Ownership-or-control Statement MUST have a `isComponent` value of 'false'.",
+      "type": "boolean"
+    },
+    "personType": {
+      "title": "Person type",
+      "description": "Use the personType codelist. The ultimate beneficial owner of a legal entity is always a natural person. Where the beneficial owner has been identified, but information about them cannot be disclosed, use 'anonymousPerson'. Where the beneficial owner has not been clearly identified, use 'unknownPerson'. Where the beneficial owner has been identified use knownPerson. Where a person has the type 'anonymousPerson' or 'unknownPerson' a reason for the absence of information SHOULD be provided in 'unspecifiedPersonDetails')",
+      "type": "string",
+      "enum": [
+        "anonymousPerson",
+        "unknownPerson",
+        "knownPerson"
+      ],
+      "propertyOrder": 4,
+      "codelist": "personType.csv",
+      "openCodelist": false
+    },
+    "unspecifiedPersonDetails": {
+      "title": "Unspecified person details",
+      "description": "An explanation of why this person has a `personType` of 'anonymousPerson' or 'unknownPerson'. A `reason` MUST be specified.",
+      "type": "object",
+      "properties": {
+        "reason": {
+          "title": "Reason",
+          "description": "The reason that an interested party cannot be specified. From the unspecifiedReason codelist.",
+          "type": "string",
+          "enum": [
+            "noBeneficialOwners",
+            "subjectUnableToConfirmOrIdentifyBeneficialOwner",
+            "interestedPartyHasNotProvidedInformation",
+            "subjectExemptFromDisclosure",
+            "interestedPartyExemptFromDisclosure",
+            "unknown",
+            "informationUnknownToPublisher"
+          ],
+          "codelist": "unspecifiedReason.csv",
+          "openCodelist": false
+        },
+        "description": {
+          "title": "Description",
+          "description": "Any supporting information about the absence of a confirmed beneficial owner. This field may be used to provide set phrases from a source system, or for a free-text explanation.",
+          "type": "string"
+        }
+      },
+      "required": [
+        "reason"
+      ],
+      "propertyOrder": 5
+    },
+    "names": {
+      "title": "Names",
+      "description": "One or more known names for this individual.",
+      "type": "array",
+      "items": {
+        "$ref": "https://btr.gov.bc.ca/.well_known/schemas/components.json#/definitions/Name"
+      },
+      "propertyOrder": 10
+    },
+    "identifiers": {
+      "title": "Identifiers",
+      "description": "One or more official identifiers for this perrson. Where available, official registration numbers should be provided.",
+      "type": "array",
+      "items": {
+        "$ref": "https://btr.gov.bc.ca/.well_known/schemas/components.json#/definitions/Identifier"
+      },
+      "propertyOrder": 20
+    },
+    "nationalities": {
+      "title": "Nationality",
+      "description": "An array of ISO 2-Digit country codes representing nationalities held by this individual.",
+      "type": "array",
+      "items": {
+        "$ref": "https://btr.gov.bc.ca/.well_known/schemas/components.json#/definitions/Country"
+      },
+      "propertyOrder": 30
+    },
+    "birthDate": {
+      "title": "Date of birth",
+      "description": "The date of birth for this individual. Please provide as precise a date as possible in ISO 8601 format. When only the year or year and month is known, these can be given as YYYY or YYYY-MM.",
+      "type": "string",
+      "format": "date",
+      "propertyOrder": 35
+    },
+    "deathDate": {
+      "title": "Death date",
+      "description": "If this individual is no longer alive, provide their date of death. Please provide as precise a date as possible in ISO 8601 format. When only the year or year and month is known, these can be given as YYYY or YYYY-MM.",
+      "type": "string",
+      "format": "date",
+      "propertyOrder": 36
+    },
+    "placeOfResidence": {
+      "title": "Place of residence",
+      "$ref": "https://btr.gov.bc.ca/.well_known/schemas/components.json#/definitions/Address",
+      "propertyOrder": 50
+    },
+    "taxResidencies": {
+      "title": "Tax residency",
+      "description": "An array of ISO 2-Digit country codes representing the tax residencies held by this individual.",
+      "type": "array",
+      "items": {
+        "$ref": "https://btr.gov.bc.ca/.well_known/schemas/components.json#/definitions/Country"
+      },
+      "propertyOrder": 55
+    },
+    "addresses": {
+      "title": "Addresses",
+      "description": "One or more addresses for this entity.",
+      "type": "array",
+      "items": {
+        "$ref": "https://btr.gov.bc.ca/.well_known/schemas/components.json#/definitions/Address"
+      },
+      "propertyOrder": 60
+    },
+    "publicationDetails": {
+      "title": "Publication details",
+      "description": "Information concerning the original publication of this statement.",
+      "$ref": "https://btr.gov.bc.ca/.well_known/schemas/components.json#/definitions/PublicationDetails",
+      "propertyOrder": 85
+    },
+    "source": {
+      "title": "Source",
+      "description": "The source of information about this person, or of information that supports an unknown or anonymous person statement.",
+      "$ref": "https://btr.gov.bc.ca/.well_known/schemas/components.json#/definitions/Source",
+      "propertyOrder": 89
+    },
+    "hasTaxNumber": {
+      "type": "boolean"
+    },
+    "email": {
+      "type": "string",
+      "format": "email"
+    },
+    "isTaxResident": {
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "statementID",
+    "statementType",
+    "personType",
+    "isComponent",
+    "publicationDetails",
+    "hasTaxNumber",
+    "email",
+    "nationalities",
+    "names"
+  ]
+}
