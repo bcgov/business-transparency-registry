@@ -80,6 +80,10 @@ class Config:  # pylint: disable=too-few-public-methods
     GCP_AUTH_KEY = os.getenv("GCP_AUTH_KEY", None)
 
     LD_SDK_KEY = os.getenv("LD_SDK_KEY", None)
+    
+    JWT_OIDC_USERNAME = os.getenv('JWT_OIDC_USERNAME', 'username')
+    JWT_OIDC_FIRSTNAME = os.getenv('JWT_OIDC_FIRSTNAME', 'firstname')
+    JWT_OIDC_LASTNAME = os.getenv('JWT_OIDC_LASTNAME', 'lastname')
 
 
 class Production(Config):  # pylint: disable=too-few-public-methods
