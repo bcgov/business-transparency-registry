@@ -50,7 +50,7 @@ class PayService:
     default_invoice_payload: dict = {}
     svc_url: str = None
     timeout: int = None
-    
+
     def __init__(self, app: Flask = None, default_invoice_payload: dict = None):
         """Initialize the Solr environment."""
         if app:
@@ -82,7 +82,9 @@ class PayService:
             headers = {'Authorization': 'Bearer ' + token,
                        'Content-Type': 'application/json',
                        'Account-Id': account_id}
-            resp = requests.post(url=self.svc_url + '/payment-requests', json=payload, headers=headers, timeout=self.timeout)
+            resp = requests.post(url=self.svc_url + '/payment-requests',
+                                 json=payload, headers=headers,
+                                 timeout=self.timeout)
 
             if resp.status_code != HTTPStatus.OK or not (resp.json()).get('id', None):
                 error = f'{resp.status_code} - {str(resp.json())}'

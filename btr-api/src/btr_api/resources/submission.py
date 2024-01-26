@@ -111,7 +111,7 @@ def create_register():
         [valid, errors] = schema_service.validate(schema_name, json_input)
         if not valid:
             return {"errors": errors}, HTTPStatus.BAD_REQUEST
-        
+
         # create submission
         submission = SubmissionService.create_submission(json_input, user.id)
 

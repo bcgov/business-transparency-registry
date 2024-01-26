@@ -80,7 +80,7 @@ class Config:  # pylint: disable=too-few-public-methods
     GCP_AUTH_KEY = os.getenv("GCP_AUTH_KEY", None)
 
     LD_SDK_KEY = os.getenv("LD_SDK_KEY", None)
-    
+
     # JWT_OIDC Settings
     JWT_OIDC_WELL_KNOWN_CONFIG = os.getenv('JWT_OIDC_WELL_KNOWN_CONFIG')
     JWT_OIDC_ALGORITHMS = os.getenv('JWT_OIDC_ALGORITHMS')
@@ -96,11 +96,11 @@ class Config:  # pylint: disable=too-few-public-methods
             JWT_OIDC_JWKS_CACHE_TIMEOUT = 300
     except (TypeError, ValueError):
         JWT_OIDC_JWKS_CACHE_TIMEOUT = 300
-    
+
     JWT_OIDC_USERNAME = os.getenv('JWT_OIDC_USERNAME', 'username')
     JWT_OIDC_FIRSTNAME = os.getenv('JWT_OIDC_FIRSTNAME', 'firstname')
     JWT_OIDC_LASTNAME = os.getenv('JWT_OIDC_LASTNAME', 'lastname')
-    
+
     PAYMENT_SVC_URL = os.getenv('PAY_API_URL', '') + os.getenv('PAY_API_VERSION', '')
 
 
@@ -143,7 +143,7 @@ class Testing(Config):  # pylint: disable=too-few-public-methods
         f"postgresql://{DATABASE_TEST_USERNAME}:{DATABASE_TEST_PASSWORD}@"
         f"{DATABASE_TEST_HOST}:{DATABASE_TEST_PORT}/{DATABASE_TEST_NAME}"
     )
-    
+
     # JWT OIDC settings
     # JWT_OIDC_TEST_MODE will set jwt_manager to use
     JWT_OIDC_TEST_MODE = True
