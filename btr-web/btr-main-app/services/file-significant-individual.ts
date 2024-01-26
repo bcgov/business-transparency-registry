@@ -147,6 +147,8 @@ const submitSignificantIndividualFiling = async (sif: SignificantIndividualFilin
 }
 
 const getCurrentOwners = async (businessIdentifier: string) => {
+  // todo: fixme: will be updated in next PR; with ticket #19211
+  // https://github.com/bcgov/entity/issues/19211
   // const url = `${constructBtrApiURL()}/owners/${businessIdentifier}`
   // const { data, error } =
   //         await useFetchBcros<SignificantIndividualI[]>(url)
