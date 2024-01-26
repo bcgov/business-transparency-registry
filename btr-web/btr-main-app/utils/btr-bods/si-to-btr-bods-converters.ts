@@ -102,47 +102,55 @@ const _getSharesVotesInterests = (si: SignificantIndividualI) => {
   const interests: BodsInterestI[] = []
 
   if (si.controlType.sharesVotes.registeredOwner) {
-    const interest = _createInterestSharesVotes(si, BodsInterestDirectOrIndirectTypeI.DIRECT, 'registeredOwner')
     if (si.percentOfVotes) {
+      const interest = _createInterestSharesVotes(si, BodsInterestDirectOrIndirectTypeI.DIRECT, 'registeredOwner')
       _addVotes(interest, parseFloat(si.percentOfVotes as string), BodsInterestTypeE.VOTING_RIGHTS)
+      interests.push(interest)
     }
     if (si.percentOfShares) {
+      const interest = _createInterestSharesVotes(si, BodsInterestDirectOrIndirectTypeI.DIRECT, 'registeredOwner')
       _addVotes(interest, parseFloat(si.percentOfShares as string), BodsInterestTypeE.SHAREHOLDING)
+      interests.push(interest)
     }
-    interests.push(interest)
   }
 
   if (si.controlType.sharesVotes.indirectControl) {
-    const interest = _createInterestSharesVotes(si, BodsInterestDirectOrIndirectTypeI.INDIRECT, 'indirectControl')
     if (si.percentOfVotes) {
+      const interest = _createInterestSharesVotes(si, BodsInterestDirectOrIndirectTypeI.INDIRECT, 'indirectControl')
       _addVotes(interest, parseFloat(si.percentOfVotes as string), BodsInterestTypeE.VOTING_RIGHTS)
+      interests.push(interest)
     }
     if (si.percentOfShares) {
+      const interest = _createInterestSharesVotes(si, BodsInterestDirectOrIndirectTypeI.INDIRECT, 'indirectControl')
       _addVotes(interest, parseFloat(si.percentOfShares as string), BodsInterestTypeE.SHAREHOLDING)
+      interests.push(interest)
     }
-    interests.push(interest)
   }
 
   if (si.controlType.sharesVotes.inConcertControl) {
-    const interest = _createInterestSharesVotes(si, BodsInterestDirectOrIndirectTypeI.INDIRECT, 'inConcertControl')
     if (si.percentOfVotes) {
+      const interest = _createInterestSharesVotes(si, BodsInterestDirectOrIndirectTypeI.INDIRECT, 'inConcertControl')
       _addVotes(interest, parseFloat(si.percentOfVotes as string), BodsInterestTypeE.VOTING_RIGHTS)
+      interests.push(interest)
     }
     if (si.percentOfShares) {
+      const interest = _createInterestSharesVotes(si, BodsInterestDirectOrIndirectTypeI.INDIRECT, 'inConcertControl')
       _addVotes(interest, parseFloat(si.percentOfShares as string), BodsInterestTypeE.SHAREHOLDING)
+      interests.push(interest)
     }
-    interests.push(interest)
   }
 
   if (si.controlType.sharesVotes.beneficialOwner) {
-    const interest = _createInterestSharesVotes(si, BodsInterestDirectOrIndirectTypeI.INDIRECT, 'beneficialOwner')
     if (si.percentOfVotes) {
+      const interest = _createInterestSharesVotes(si, BodsInterestDirectOrIndirectTypeI.INDIRECT, 'beneficialOwner')
       _addVotes(interest, parseFloat(si.percentOfVotes as string), BodsInterestTypeE.VOTING_RIGHTS)
+      interests.push(interest)
     }
     if (si.percentOfShares) {
+      const interest = _createInterestSharesVotes(si, BodsInterestDirectOrIndirectTypeI.INDIRECT, 'beneficialOwner')
       _addVotes(interest, parseFloat(si.percentOfShares as string), BodsInterestTypeE.SHAREHOLDING)
+      interests.push(interest)
     }
-    interests.push(interest)
   }
   return interests
 }
