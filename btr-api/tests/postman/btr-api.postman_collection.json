@@ -1,10 +1,10 @@
 {
 	"info": {
-		"_postman_id": "c041c574-d841-463f-a192-8c0b95a25554",
+		"_postman_id": "99a59bd2-1c1b-4f23-bcbe-c117ab694f09",
 		"name": "btr-api",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "18245960",
-		"_collection_link": "https://solar-spaceship-554441.postman.co/workspace/BaseApi~c3dcd8d9-dd08-48b8-bc11-94c7e12e1d47/collection/18245960-c041c574-d841-463f-a192-8c0b95a25554?action=share&source=collection_link&creator=18245960"
+		"_exporter_id": "6835935",
+		"_collection_link": "https://warped-escape-616276.postman.co/workspace/bc-registries~8ef8e652-492a-4d19-b978-d4f0da255b2c/collection/6835935-99a59bd2-1c1b-4f23-bcbe-c117ab694f09?action=share&source=collection_link&creator=6835935"
 	},
 	"item": [
 		{
@@ -133,10 +133,16 @@
 							]
 						},
 						"method": "POST",
-						"header": [],
+						"header": [
+							{
+								"key": "Account-Id",
+								"value": "{{staff_account_id}}",
+								"type": "text"
+							}
+						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"businessIdentifier\": \"string_value\",\n    \"effectiveDate\": \"2023-01-01\",\n    \"entityStatement\": {\n        \"statementID\": \"sampleID\",\n        \"statementType\": \"entityStatement\",\n        \"isComponent\": false,\n        \"entityType\": \"registeredEntity\",\n        \"name\": \"sample entity name\",\n        \"identifiers\": [\"1\"],\n        \"source\": {\n            \"source\": \"sample source\",\n            \"extractionDate\": \"YYYY-MM-DD\"\n        }\n    },\n    \"personStatements\": [\n        {\n            \"statementID\": \"sampleID\",\n            \"statementType\": \"personStatement\",\n            \"isComponent\": false,\n            \"personType\": \"knownPerson\",\n            \"names\": [\n                {\n                    \"fullName\": \"sample full name\"\n                }\n            ],\n            \"identifiers\": [\"1\"],\n            \"source\": {\n                \"url\": \"sample url\",\n                \"extractionDate\": \"YYYY-MM-DD\"\n            }\n        }\n    ],\n    \"ownershipOrControlStatements\": [\n        {\n            \"statementID\": \"sampleID\",\n            \"statementType\": \"ownershipOrControlStatement\",\n            \"isComponent\": false,\n            \"subject\": {\n                \"describedByEntityStatement\": \"sample entity statement\"\n            },\n            \"interestedParty\": {\n                \"describedByPersonStatement\": \"sample person statement\"\n            },\n            \"interests\": [\n                {\n                    \"type\": \"shareholding\",\n                    \"interestLevel\": \"unknown\",\n                    \"beneficialOwnershipOrControl\": true\n                }\n            ],\n            \"source\": {\n                \"url\": \"sample url\",\n                \"extractionDate\": \"YYYY-MM-DD\"\n            }\n        }\n    ]\n}",
+							"raw": "{\n  \"businessIdentifier\": \"12345\",\n  \"effectiveDate\": \"2023-03-01\",\n  \"entityStatement\": {\n    \"statementID\": \"bd4061d6-1a24-4356-93f3-c489b56610a2\",\n    \"statementType\": \"entityStatement\",\n    \"statementDate\": \"2023-02-28\",\n    \"isComponent\": false,\n    \"entityType\": \"registeredEntity\",\n    \"name\": \"Your Entity\",\n    \"identifiers\": [],\n    \"publicationDetails\": {\n      \"publicationDate\": \"2022-12-31\",\n      \"bodsVersion\": \"1.0\",\n      \"publisher\": {\n        \"uri\": \"http://publisher.uri\",\n        \"name\": \"Publisher Name\",\n        \"source\": {\n          \"url\": \"http://source.url\"\n        }\n      }\n    }\n  },\n  \"personStatements\": [\n    {\n      \"statementID\": \"bd4061d6-1a24-4356-93f3-c489b56610a4\",\n      \"statementType\": \"personStatement\",\n      \"statementDate\": \"2023-02-28\",\n      \"isComponent\": false,\n      \"personType\": \"knownPerson\",\n      \"names\": [\n        {\n          \"type\": \"individual\",\n          \"fullName\": \"Full Name\"\n        }\n      ],\n      \"publicationDetails\": {\n        \"publicationDate\": \"2022-12-31\",\n        \"bodsVersion\": \"1.0\",\n        \"publisher\": {\n          \"uri\": \"http://publisher.uri\",\n          \"name\": \"Publisher Name\",\n          \"source\": {\n            \"url\": \"http://source.url\"\n          }\n        }\n      },\n      \"hasTaxNumber\": true,\n      \"email\": \"test@test.gov.bc.ca\",\n      \"nationalities\": [\n        {\n          \"name\": \"Canada\",\n          \"code\": \"CA\"\n        }\n      ],\n      \"source\": {\n        \"description\": \"The description\",\n        \"url\": \"https://yourwebsite.com\",\n        \"metadata\": \"Metadata\",\n        \"retrievedAt\": \"2023-02-28T23:17:17Z\",\n        \"asserted\": \"2023-02-18\"\n      }\n    }\n  ],\n  \"ownershipOrControlStatements\": [\n    {\n      \"statementID\": \"bd4061d6-1a24-4356-93f3-c489b56610a3\",\n      \"statementType\": \"ownershipOrControlStatement\",\n      \"statementDate\": \"2023-02-28\",\n      \"isComponent\": false,\n      \"subject\": {\n        \"describedByEntityStatement\": \"bd4061d6-1a24-4356-93f3-c489b56610a2\"\n      },\n      \"interestedParty\": {\n        \"describedByPersonStatement\": \"bd4061d6-1a24-4356-93f3-c489b56610a4\"\n      },\n      \"publicationDetails\": {\n        \"publicationDate\": \"2022-12-31\",\n        \"bodsVersion\": \"1.0\",\n        \"publisher\": {\n          \"uri\": \"http://publisher.uri\",\n          \"name\": \"Publisher Name\",\n          \"source\": {\n            \"url\": \"http://source.url\"\n          }\n        }\n      },\n      \"source\": {\n        \"description\": \"The description\",\n        \"url\": \"https://yourwebsite.com\",\n        \"metadata\": \"Metadata\",\n        \"retrievedAt\": \"2023-02-28T23:17:17Z\",\n        \"asserted\": \"2023-02-18\"\n      },\n      \"interests\": [\n        {\n          \"type\": \"otherInfluenceOrControl\",\n          \"directOrIndirect\": \"direct\",\n          \"beneficialOwnershipOrControl\": true,\n          \"details\": \"\",\n          \"share\": {\n            \"exact\": 27\n          },\n          \"startDate\": \"2023-03-01\"\n        },\n        {\n          \"type\": \"shareholding\",\n          \"directOrIndirect\": \"unknown\",\n          \"beneficialOwnershipOrControl\": true,\n          \"details\": \"SharesThroughRightsOrExercisedInConcert\",\n          \"startDate\": \"2023-03-01\"\n        },\n        {\n          \"type\": \"appointmentOfBoard\",\n          \"directOrIndirect\": \"direct\",\n          \"beneficialOwnershipOrControl\": true,\n          \"details\": \"\",\n          \"startDate\": \"2023-01-01\"\n        }\n      ]\n    }\n  ]\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -156,10 +162,58 @@
 					"response": []
 				},
 				{
-					"name": "fetch",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
+					"name": "receipt",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Account-Id",
+								"value": "{{staff_account_id}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"corpName\": \"test corpName\",\n    \"filingDateTime\": \"2024-01-25\",\n    \"filingIdentifier\": \"1\",\n    \"businessNumber\": \"123\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{pay_api_url}}/payment-requests/:invoice_id/receipts",
+							"host": [
+								"{{pay_api_url}}"
+							],
+							"path": [
+								"payment-requests",
+								":invoice_id",
+								"receipts"
+							],
+							"variable": [
+								{
+									"key": "invoice_id",
+									"value": "33600",
+									"description": "invoice id in pay db"
+								}
+							]
+						}
 					},
+					"response": []
+				},
+				{
+					"name": "fetch",
 					"request": {
 						"auth": {
 							"type": "bearer",
@@ -173,15 +227,6 @@
 						},
 						"method": "GET",
 						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"businessIdentifier\": \"BC0871427\",\n    \"effectiveDate\": \"2020-10-03\",\n    \"significantIndividuals\": [\n        {\n            \"percentOfShares\": \"20\",\n            \"percentOfVotes\": \"10\",\n            \"controlType\": {\n                \"sharesVotes\": {\n                    \"registeredOwner\": true,\n                    \"beneficialOwner\": false,\n                    \"indirectControl\": false,\n                    \"inConcertControl\": true\n                },\n                \"directors\": {\n                    \"directControl\": true,\n                    \"indirectControl\": true,\n                    \"significantInfluence\": false,\n                    \"inConcertControl\": true\n                },\n                \"other\": \"\"\n            },\n            \"missingInfoReason\": null,\n            \"startDate\": \"2020-04-21\",\n            \"action\": \"add\",\n            \"profile\": {\n                \"fullName\": \"John Smith\",\n                \"preferredName\": \"John\",\n                \"email\": \"123@test.com\",\n                \"address\": {\n                    \"country\": { \"name\": \"Canada\", \"alpha_2\": \"CA\" },\n                    \"line1\": \"111 test street\",\n                    \"line2\": null,\n                    \"city\": \"Vancouver\",\n                    \"region\": \"BC\",\n                    \"postalCode\": \"V0E 1H5\"\n                },\n                \"competency\": {\n                    \"decisionMaking\": true,\n                    \"financialAffairs\": true\n                },\n                \"birthDate\": \"2000-03-19\",\n                \"citizenshipCA\": \"citizen\",\n                \"citizenshipsExCA\": [],\n                \"isTaxResident\": true,\n                \"hasTaxNumber\": true,\n                \"taxNumber\": \"000 000 000\"\n            }\n        }\n    ]\n}\n",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
 						"url": {
 							"raw": "{{internal_url}}/plots",
 							"host": [
@@ -196,9 +241,6 @@
 				},
 				{
 					"name": "get latest for entity",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
 					"request": {
 						"auth": {
 							"type": "bearer",
@@ -212,22 +254,21 @@
 						},
 						"method": "GET",
 						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"businessIdentifier\": \"BC0871427\",\n    \"effectiveDate\": \"2020-10-03\",\n    \"significantIndividuals\": [\n        {\n            \"percentOfShares\": \"20\",\n            \"percentOfVotes\": \"10\",\n            \"controlType\": {\n                \"sharesVotes\": {\n                    \"registeredOwner\": true,\n                    \"beneficialOwner\": false,\n                    \"indirectControl\": false,\n                    \"inConcertControl\": true\n                },\n                \"directors\": {\n                    \"directControl\": true,\n                    \"indirectControl\": true,\n                    \"significantInfluence\": false,\n                    \"inConcertControl\": true\n                },\n                \"other\": \"\"\n            },\n            \"missingInfoReason\": null,\n            \"startDate\": \"2020-04-21\",\n            \"action\": \"add\",\n            \"profile\": {\n                \"fullName\": \"John Smith\",\n                \"preferredName\": \"John\",\n                \"email\": \"123@test.com\",\n                \"address\": {\n                    \"country\": { \"name\": \"Canada\", \"alpha_2\": \"CA\" },\n                    \"line1\": \"111 test street\",\n                    \"line2\": null,\n                    \"city\": \"Vancouver\",\n                    \"region\": \"BC\",\n                    \"postalCode\": \"V0E 1H5\"\n                },\n                \"competency\": {\n                    \"decisionMaking\": true,\n                    \"financialAffairs\": true\n                },\n                \"birthDate\": \"2000-03-19\",\n                \"citizenshipCA\": \"citizen\",\n                \"citizenshipsExCA\": [],\n                \"isTaxResident\": true,\n                \"hasTaxNumber\": true,\n                \"taxNumber\": \"000 000 000\"\n            }\n        }\n    ]\n}\n",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
 						"url": {
-							"raw": "{{internal_url}}/plots",
+							"raw": "{{internal_url}}/plots/entity/:identifier",
 							"host": [
 								"{{internal_url}}"
 							],
 							"path": [
-								"plots"
+								"plots",
+								"entity",
+								":identifier"
+							],
+							"variable": [
+								{
+									"key": "identifier",
+									"value": "12345"
+								}
 							]
 						}
 					},

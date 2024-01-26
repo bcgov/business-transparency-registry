@@ -45,12 +45,14 @@ from flask import Flask
 from .common.auth import jwt
 from .common.flags import Flags
 from .common.run_version import get_run_version
-from .config import Config
-from .config import Production
+from .config import Config, Production
+from .logging import set_log_level_by_flag, setup_logging
 from .models import db
 from .resources import register_endpoints
 from .services import btr_pay
 from .translations import babel
+
+setup_logging(os.path.join(os.path.abspath(os.path.dirname(__file__)), 'logging.conf'))  # important to do this first
 
 
 def create_app(environment: Config = Production, **kwargs) -> Flask:
@@ -64,7 +66,7 @@ def create_app(environment: Config = Production, **kwargs) -> Flask:
         sentry_sdk.init(
             dsn=dsn,
             integrations=[FlaskIntegration()],
-            release=f'legal-api@{get_run_version()}',
+            release=f'btr-api@{get_run_version()}',
             send_default_pii=False
         )
 
@@ -72,10 +74,20 @@ def create_app(environment: Config = Production, **kwargs) -> Flask:
     btr_pay.init_app(app)
     # td is testData instance passed in to support testing
     td = kwargs.get('ld_test_data', None)
-    Flags().init_app(app, td)    # queue.init_app(app)
+    Flags().init_app(app, td)
     babel.init_app(app)
     register_endpoints(app)
     setup_jwt_manager(app, jwt)
+
+    @app.before_request
+    def before_request():  # pylint: disable=unused-variable
+        set_log_level_by_flag()
+
+    @app.after_request
+    def add_version(response):  # pylint: disable=unused-variable
+        version = get_run_version()
+        response.headers['API'] = f'btr-api/{version}'
+        return response
 
     return app
 

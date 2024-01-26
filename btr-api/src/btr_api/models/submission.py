@@ -64,6 +64,8 @@ class Submission(Versioned, db.Model):
                   server_default=func.now()))  # pylint:disable=not-callable
     payload = db.Column("payload", JSONB)
     business_identifier = db.Column(db.String(255), nullable=True)
+    # maps to invoice id created by the pay-api (used for getting receipt)
+    invoice_id = db.Column(db.Integer, nullable=True)
 
     # Relationships
     submitter_id = db.Column('submitter_id', db.Integer, db.ForeignKey('users.id'))
@@ -82,7 +84,7 @@ class Submission(Versioned, db.Model):
         db.session.add(self)
 
     @classmethod
-    def find_by_id(cls, submission_id):
+    def find_by_id(cls, submission_id) -> Submission | None:
         """Return the submission by id."""
         return cls.query.filter_by(id=submission_id).one_or_none()
 

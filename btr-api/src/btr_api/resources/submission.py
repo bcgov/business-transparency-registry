@@ -98,7 +98,6 @@ def create_register():
     Returns:
         A tuple containing the response JSON and the HTTP status code.
     """
-    print('HERE')
     try:
         # TODO: check auth / validate user access
         user = UserModel.get_or_create_user_by_jwt(g.jwt_oidc_token_info)
@@ -115,16 +114,18 @@ def create_register():
         
         # create submission
         submission = SubmissionService.create_submission(json_input, user.id)
-        submission.save()
 
         try:
             # create invoice in pay system
-            btr_pay.create_invoice(account_id, jwt, json_input)
+            invoice_resp = btr_pay.create_invoice(account_id, jwt, json_input)
+            submission.invoice_id = invoice_resp.json()['id']
         except ExternalServiceException:
             # Log error and continue to return successfully (does NOT block the submission)
             # TODO: save this information to a table so that a daily job can pick these up and retry them
             # Current process is for OPs to retry the invoice creation manually
             current_app.logger.error('Error creating invoice for submission: %s', submission.id)
+
+        submission.save()
 
         return jsonify(id=submission.id), HTTPStatus.CREATED
 

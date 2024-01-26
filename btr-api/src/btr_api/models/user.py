@@ -98,7 +98,7 @@ class User(db.Model):
         return self.username if self.username else None
 
     @classmethod
-    def find_by_id(cls, submitter_id: int = None):
+    def find_by_id(cls, submitter_id: int = None) -> User | None:
         """Return a User if they exist and match the provided submitter id."""
         return cls.query.filter_by(id=submitter_id).one_or_none()
 
@@ -128,8 +128,7 @@ class User(db.Model):
                 login_source=token["loginSource"],
             )
             current_app.logger.debug(f"Creating user JWT:{token}; User:{user}")
-            db.session.add(user)
-            db.session.commit()
+            user.save()
             return user
         return None
 
