@@ -4,7 +4,6 @@ import SiToBtrBodsConverters from '~/utils/btr-bods/si-to-btr-bods-converters'
 
 import { SignificantIndividualFilingI } from '~/interfaces/significant-individual-filing-i'
 import { IdAsNumberI } from '~/interfaces/common-ids-i'
-import { SignificantIndividualI } from '~/interfaces/significant-individual-i'
 import { BtrBodsEntityI } from '~/interfaces/btr-bods/btr-bods-entity-i'
 import { BtrFilingI } from '~/interfaces/btr-bods/btr-filing-i'
 import { BodsEntityTypesE, BodsStatementTypeE } from '~/enums/btr-bods-e'
@@ -146,13 +145,15 @@ const submitSignificantIndividualFiling = async (sif: SignificantIndividualFilin
   return { data: data.value, error: error.value }
 }
 
-const getCurrentOwners = async (businessIdentifier: string) => {
+const getCurrentOwners = async (businessIdentifier: string) => { // @ts-ignore
+  const url = `${constructBtrApiURL()}/owners/${businessIdentifier}`
+  const { data, error } =
+    await useFetchBcros<SignificantIndividualI[]>(url)
+
+  // eslint-disable-next-line no-console
+  console.log(data, error)
   // todo: fixme: will be updated in next PR; with ticket #19211
   // https://github.com/bcgov/entity/issues/19211
-  // const url = `${constructBtrApiURL()}/owners/${businessIdentifier}`
-  // const { data, error } =
-  //         await useFetchBcros<SignificantIndividualI[]>(url)
-  //
   // if (data.value) {
   //   for (const si of data.value) {
   //     si.percentOfShares = si.percentOfShares ? si.percentOfShares.toString() : '0'

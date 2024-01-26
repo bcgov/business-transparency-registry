@@ -5,17 +5,17 @@ import {
   BodsSourceTypeE
 } from '~/enums/btr-bods-e'
 
+export interface BodsAgentI {
+  name?: string
+  uri?: string
+}
+
 export interface BodsSourceI {
   type?: BodsSourceTypeE[]
   description?: string
   url?: string
   retrievedAt?: string // iso date time
   assertedBy?: BodsAgentI[]
-}
-
-export interface BodsAgentI {
-  name?: string
-  uri?: string
 }
 
 export interface BodsIdentifierI {

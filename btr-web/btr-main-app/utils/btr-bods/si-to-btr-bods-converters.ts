@@ -6,7 +6,6 @@ import {
   BodsPersonTypeE
 } from '~/enums/btr-bods-e'
 import { SignificantIndividualI } from '~/interfaces/significant-individual-i'
-import { BtrBodsSources } from '~/utils/btr-bods/btr-bods-implementations'
 
 const getBodsNamesFromSi = (si: SignificantIndividualI) => {
   const names: BodsNameI[] = [
@@ -37,7 +36,7 @@ const getBodsIdentifiersFromSi = (si: SignificantIndividualI) => {
   return identifiers
 }
 
-const getPersonType = (si: SignificantIndividualI): BodsPersonTypeE => {
+const getPersonType = (_si: SignificantIndividualI): BodsPersonTypeE => {
   // future: when we have requirements to hide person details we can use
   // BodsPersonTypeE.ANONYMOUS_PERSON
   return BodsPersonTypeE.KNOWN_PERSON
