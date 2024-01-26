@@ -36,8 +36,6 @@ import pytest
 
 from btr_api.services import PayService, btr_pay
 
-from tests.unit.utils import create_jwt
-
 
 def test_init(app):
     """Assure the init works as expected."""
