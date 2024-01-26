@@ -180,10 +180,19 @@ const getBodsNationalitiesFromSi = (si: SignificantIndividualI): BodsCountryI[] 
   return citizenships
 }
 
+const getTaxResidenciesFromSi = (si: SignificantIndividualI): BodsCountryI[] => {
+  const taxResidencies: BodsCountryI[] = []
+  if (si.profile.isTaxResident) {
+    taxResidencies.push({ name: 'Canada', code: 'CA' })
+  }
+  return taxResidencies
+}
+
 export default {
   getBodsNamesFromSi,
   getBodsIdentifiersFromSi,
-  getInterests,
   getBodsNationalitiesFromSi,
+  getInterests,
+  getTaxResidenciesFromSi,
   getPersonType
 }

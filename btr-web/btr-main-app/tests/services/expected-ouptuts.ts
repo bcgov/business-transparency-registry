@@ -1,0 +1,110 @@
+export const OwnershipOrControlStatements = {
+  ownershipOrControlStatements: [
+    {
+      statementID: '50f92ffb-adeb-491e-bbfe-5ac2470f124c',
+      interestedParty: {
+        describedByPersonStatement: 'db102217-429c-439e-9075-13c4e84fbb4d'
+      },
+      interests: [
+        {
+          type: 'appointmentOfBoard',
+          directOrIndirect: 'direct',
+          details: 'controlType.directors.directControl',
+          startDate: '2025-01-01',
+          endDate: undefined
+        },
+        {
+          type: 'appointmentOfBoard',
+          directOrIndirect: 'indirect',
+          details: 'controlType.directors.indirectControl',
+          startDate: '2025-01-01',
+          endDate: undefined
+        },
+        {
+          directOrIndirect: 'direct',
+          details: 'controlType.directors.registeredOwner',
+          startDate: '2025-01-01',
+          endDate: undefined,
+          share: { maximum: 25, exclusiveMaximum: false },
+          type: 'votingRights'
+        },
+        {
+          directOrIndirect: 'direct',
+          details: 'controlType.directors.registeredOwner',
+          startDate: '2025-01-01',
+          endDate: undefined,
+          share: { maximum: 75, exclusiveMaximum: false },
+          type: 'shareholding'
+        }
+      ],
+      isComponent: false,
+      publicationDetails: {
+        bodsVersion: '0.3',
+        publicationDate: '2024-01-26',
+        publisher: {
+          name: 'BCROS - BC Registries and Online Services',
+          url: 'https://www.bcregistry.gov.bc.ca/'
+        }
+      },
+      source: {
+        type: ['selfDeclaration'],
+        assertedBy: [{ name: 'Test Name' }]
+      },
+      statementDate: '2024-01-26',
+      statementType: 'ownershipOrControlStatement',
+      subject: { describedByEntityStatement: '' }
+    }
+  ],
+  personStatements: [
+    {
+      placeOfResidence: {
+        city: 'Victoria',
+        country: { name: 'Canada', alpha_2: 'CA' },
+        line1: '1234 test street',
+        postalCode: 'V1A 2B3',
+        region: 'BC',
+        line2: '',
+        locationDescription: ''
+      },
+      addresses: [
+        {
+          city: 'Victoria',
+          country: { name: 'Canada', alpha_2: 'CA' },
+          line1: '1234 test street',
+          postalCode: 'V1A 2B3',
+          region: 'BC',
+          line2: '',
+          locationDescription: ''
+        }
+      ],
+      birthDate: '2000-03-19',
+      email: '1@1.com',
+      hasTaxNumber: true,
+      identifiers: [{ id: '000 000 000', scheme: 'CAN-TAXID', schemeName: 'ITN' }],
+      isComponent: false,
+      names: [
+        { fullName: 'Test Name', type: 'individual' },
+        { fullName: 'Waffles Test', type: 'alternative' }
+      ],
+      nationalities: [{ name: 'Canada', code: 'CA' }],
+      isPermanentResidentCa: false,
+      personType: 'knownPerson',
+      publicationDetails: {
+        bodsVersion: '0.3',
+        publicationDate: '2024-01-26',
+        publisher: {
+          name: 'BCROS - BC Registries and Online Services',
+          url: 'https://www.bcregistry.gov.bc.ca/'
+        }
+      },
+      source: {
+        type: ['selfDeclaration'],
+        assertedBy: [{ name: 'Test Name' }]
+      },
+      statementDate: '2024-01-26',
+      statementType: 'personStatement',
+      taxResidencies: [{ name: 'Canada', code: 'CA' }],
+      statementID: 'db102217-429c-439e-9075-13c4e84fbb4d'
+    }
+  ]
+}

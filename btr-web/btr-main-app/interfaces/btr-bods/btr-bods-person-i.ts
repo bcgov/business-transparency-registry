@@ -25,12 +25,11 @@ export interface BtrBodsPersonI {
   birthDate?: string
   deathDate?: string
   placeOfResidence: BodsBtrAddressI
-  taxResidencies: BtrCountryI[]
+  taxResidencies: BodsCountryI[]
   addresses: BodsBtrAddressI[]
   publicationDetails: BodsPublicationDetailsI
   source: BodsSourceI
 
   hasTaxNumber: boolean
   email: string
-  isTaxResident: boolean
 }

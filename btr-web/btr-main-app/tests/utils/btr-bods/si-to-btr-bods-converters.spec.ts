@@ -90,4 +90,11 @@ describe('Btr to Bods util converters Tests', () => {
     const result2 = SiToBtrBodsConverters.getBodsNationalitiesFromSi(input)
     expect(result2).toEqual(expectedOutput2)
   })
+
+  it('getTaxResidenciesFromSi', () => {
+    const input = testSI
+    const expectedOutput = [{ name: 'Canada', code: 'CA' }]
+    const result = SiToBtrBodsConverters.getTaxResidenciesFromSi(input)
+    expect(result).toEqual(expectedOutput)
+  })
 })

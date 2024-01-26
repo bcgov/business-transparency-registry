@@ -83,7 +83,6 @@ const getPersonAndOwnershipAndControlStatements = (sif: SignificantIndividualFil
       hasTaxNumber: si.profile.hasTaxNumber,
       identifiers: SiToBtrBodsConverters.getBodsIdentifiersFromSi(si),
       isComponent: false,
-      isTaxResident: si.profile.isTaxResident,
       names: SiToBtrBodsConverters.getBodsNamesFromSi(si),
       nationalities: SiToBtrBodsConverters.getBodsNationalitiesFromSi(si),
       isPermanentResidentCa: si.profile.citizenshipCA === CitizenshipTypeE.PR,
@@ -92,7 +91,7 @@ const getPersonAndOwnershipAndControlStatements = (sif: SignificantIndividualFil
       source,
       statementDate: isoDateString,
       statementType: BodsStatementTypeE.PERSON_STATEMENT,
-      taxResidencies: [],
+      taxResidencies: SiToBtrBodsConverters.getTaxResidenciesFromSi(si),
       statementID: UUIDv4()
     }
 
@@ -166,6 +165,7 @@ const getCurrentOwners = async (businessIdentifier: string) => { // @ts-ignore
 }
 
 export default {
+  getPersonAndOwnershipAndControlStatements,
   submitSignificantIndividualFiling,
   getCurrentOwners
 }
