@@ -160,9 +160,6 @@
     "email": {
       "type": "string",
       "format": "email"
-    },
-    "isTaxResident": {
-      "type": "boolean"
     }
   },
   "required": [

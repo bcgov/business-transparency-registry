@@ -1,4 +1,3 @@
-import { BtrCountryI } from '../../../btr-common-components/interfaces/btr-address-i'
 import { BodsPersonTypeE, BodsStatementTypeE, BodsUnspecifiedPersonDetailsTypeE } from '~/enums/btr-bods-e'
 import {
   BodsBtrAddressI,
