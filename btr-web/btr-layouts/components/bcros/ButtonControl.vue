@@ -3,7 +3,7 @@
     <div class="grid grid-cols-2 m-auto px-4 w-full max-w-[1360px]">
       <div v-if="leftButtons" class="flex gap-4">
         <UButton
-          v-for="button, i in leftButtons"
+          v-for="(button, i) in leftButtons"
           :key="'left-button-' + i"
           class="px-4 py-3"
           :color="button.color || 'primary'"
@@ -18,7 +18,7 @@
       <div class="col-auto justify-self-end">
         <div v-if="rightButtons" class="flex gap-4">
           <UButton
-            v-for="button, i in rightButtons"
+            v-for="(button, i) in rightButtons"
             :key="'right-button-' + i"
             class="px-4 py-3"
             :class="button.class"

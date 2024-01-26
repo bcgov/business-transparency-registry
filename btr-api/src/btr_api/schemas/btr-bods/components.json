@@ -169,10 +169,22 @@
         },
         "country": {
           "title": "Country",
-          "description": "The 2-letter country code (ISO 3166-1) for this address.",
-          "type": "string",
-          "minLength": 2,
-          "maxLength": 2
+          "description": "Country object with The 2-letter country code (ISO 3166-1) for this address and name.",
+          "type": "object",
+          "properties": {
+            "alpha_2": {
+              "type": "string",
+              "minLength": 2,
+              "maxLength": 2
+            },
+            "name": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "alpha_2",
+            "name"
+          ]
         }
       }
     },

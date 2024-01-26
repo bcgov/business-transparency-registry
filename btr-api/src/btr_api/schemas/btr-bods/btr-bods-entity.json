@@ -60,6 +60,11 @@
       },
       "propertyOrder": 20
     },
+    "publicationDetails": {
+      "title": "Publication details",
+      "description": "Information concerning the original publication of this statement.",
+      "$ref": "https://btr.gov.bc.ca/.well_known/schemas/components.json#/definitions/PublicationDetails"
+    },
     "source": {
       "title": "Source",
       "description": "The source of information about this entity, or of information that supports an anonymous or unknown entity statement.",

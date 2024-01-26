@@ -100,6 +100,11 @@
       },
       "propertyOrder": 30
     },
+    "isPermanentResidentCa": {
+      "title": "Permanent resident of Canada",
+      "type": "boolean",
+      "description": "It can contain flag to denote that this person is permanent resident, rather then citizen"
+    },
     "birthDate": {
       "title": "Date of birth",
       "description": "The date of birth for this individual. Please provide as precise a date as possible in ISO 8601 format. When only the year or year and month is known, these can be given as YYYY or YYYY-MM.",
