@@ -47,10 +47,7 @@ from btr_api.common.flags import Flags
 
 
 def setup_logging(conf):
-    """Create the services logger.
-
-    TODO should be reworked to load in the proper loggers and remove others
-    """
+    """Create the services logger."""
     # pylint: disable=consider-using-f-string
     # log_file_path = path.join(path.abspath(path.dirname(__file__)), conf)
 
