@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "btr-api"
-version = "0.1.0"
+version = "0.2.0"
 description = ""
 authors = ["thorwolpert <thor@wolpert.ca>"]
 license = "BSD 3-Clause"

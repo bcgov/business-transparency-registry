@@ -1,4 +1,4 @@
-# Copyright © 2023 Province of British Columbia
+# Copyright © 2024 Province of British Columbia
 #
 # Licensed under the BSD 3 Clause License, (the "License");
 # you may not use this file except in compliance with the License.
@@ -31,57 +31,14 @@
 # CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
-"""Application Specific Exceptions, to manage api errors."""
-from dataclasses import dataclass
-from http import HTTPStatus
+"""This module wraps helper services used by the API."""
+from .json_schema import SchemaService
+from .pay import PayService
+from .submission import SubmissionService
 
-
-@dataclass
-class BaseExceptionE(Exception):
-    """Base exception class for custom exceptions."""
-
-    error: str
-    message: str = None
-    status_code: HTTPStatus = None
-
-
-@dataclass
-class AuthorizationException(BaseExceptionE):
-    """Authorization exception."""
-
-    def __post_init__(self):
-        """Return a valid AuthorizationException."""
-        self.error = f'{self.error}, {self.status_code}'
-        self.message = 'Unauthorized access.'
-        self.status_code = HTTPStatus.UNAUTHORIZED
-
-
-@dataclass
-class BusinessException(BaseExceptionE):
-    """Business rules exception."""
-
-    def __post_init__(self):
-        """Return a valid BusinessException."""
-        if not self.message:
-            self.message = 'Business exception.'
-
-
-@dataclass
-class DatabaseException(BaseExceptionE):
-    """Database insert/update exception."""
-
-    def __post_init__(self):
-        """Return a valid DatabaseException."""
-        self.message = 'Database error while processing request.'
-        self.status_code = HTTPStatus.INTERNAL_SERVER_ERROR
-
-
-@dataclass
-class ExternalServiceException(BaseExceptionE):
-    """3rd party service exception."""
-
-    def __post_init__(self):
-        """Return a valid ExternalServiceException."""
-        self.message = '3rd party service error while processing request.'
-        self.error = f'{repr(self.error)}, {self.status_code}'
-        self.status_code = HTTPStatus.SERVICE_UNAVAILABLE
+PAYMENT_REQUEST_TEMPLATE = {
+    'filingInfo': {'filingTypes': [{'filingTypeCode': 'REGSIGIN'}]},
+    'businessInfo': {'corpType': 'BTR'}
+}
+btr_pay = PayService(default_invoice_payload={'filingInfo': {'filingTypes': [{'filingTypeCode': 'REGSIGIN'}]},
+                                              'businessInfo': {'corpType': 'BTR'}})

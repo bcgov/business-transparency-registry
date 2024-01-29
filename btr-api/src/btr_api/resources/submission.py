@@ -40,15 +40,14 @@ The 'registers' and 'create_register' functions define the 'GET' and 'POST' meth
 """
 from http import HTTPStatus
 
-from flask import Blueprint
-from flask import jsonify
-from flask import request
+from flask import Blueprint, current_app, g, jsonify, request
+from flask_cors import cross_origin
 
-from btr_api.exceptions import exception_response
-from btr_api.models import Submission as SubmissionModel
+from btr_api.common.auth import jwt
+from btr_api.exceptions import ExternalServiceException, exception_response
+from btr_api.models import Submission as SubmissionModel, User as UserModel
 from btr_api.models.submission import SubmissionSerializer, SubmissionFilter
-from btr_api.services.json_schema import SchemaService
-from btr_api.services.submission import SubmissionService
+from btr_api.services import btr_pay, SchemaService, SubmissionService
 
 bp = Blueprint("submission", __name__)
 
@@ -90,6 +89,8 @@ def latest_submission_for_entity(business_identifier: str):
 
 
 @bp.route("/", methods=("POST",))
+@cross_origin(origin='*')
+@jwt.requires_auth
 def create_register():
     """
     Create a new register.
@@ -97,24 +98,36 @@ def create_register():
     Returns:
         A tuple containing the response JSON and the HTTP status code.
     """
-    schema_name = "btr-filing.schema.json"
-    schema_service = SchemaService()
-    # schema = schema_service.get_schema(schema_name)
-    # if not schema:
-    #     return {}, HTTPStatus.INTERNAL_SERVER_ERROR
-
     try:
-        if json_input := request.get_json():
-            # normally do some validation here
-            [valid, errors] = schema_service.validate(schema_name, json_input)
-            if not valid:
-                return {"errors": errors}, HTTPStatus.BAD_REQUEST
+        # TODO: check auth / validate user access
+        user = UserModel.get_or_create_user_by_jwt(g.jwt_oidc_token_info)
+        account_id = request.headers.get('Account-Id', None)
 
-            submission = SubmissionService.create_submission(json_input)
-            submission.save()
-            return jsonify(id=submission.id), HTTPStatus.CREATED
+        json_input = request.get_json()
 
-        return {}, HTTPStatus.BAD_REQUEST
+        # validate payload; TODO: implement business rules validations
+        schema_name = "btr-filing.schema.json"
+        schema_service = SchemaService()
+        [valid, errors] = schema_service.validate(schema_name, json_input)
+        if not valid:
+            return {"errors": errors}, HTTPStatus.BAD_REQUEST
+
+        # create submission
+        submission = SubmissionService.create_submission(json_input, user.id)
+
+        try:
+            # create invoice in pay system
+            invoice_resp = btr_pay.create_invoice(account_id, jwt, json_input)
+            submission.invoice_id = invoice_resp.json()['id']
+        except ExternalServiceException:
+            # Log error and continue to return successfully (does NOT block the submission)
+            # TODO: save this information to a table so that a daily job can pick these up and retry them
+            # Current process is for OPs to retry the invoice creation manually
+            current_app.logger.error('Error creating invoice for submission: %s', submission.id)
+
+        submission.save()
+
+        return jsonify(id=submission.id), HTTPStatus.CREATED
 
     except Exception as exception:  # noqa: B902
         return exception_response(exception)

@@ -56,7 +56,7 @@ class SubmissionService:  # pylint: disable=too-few-public-methods
     """
 
     @staticmethod
-    def create_submission(submission_dict: dict) -> SubmissionModel:
+    def create_submission(submission_dict: dict, submitter_id: int) -> SubmissionModel:
         """
 
         Create Submission
@@ -68,6 +68,7 @@ class SubmissionService:  # pylint: disable=too-few-public-methods
             - 'effectiveDate': A string representing the effective date of the submission in ISO format (YYYY-MM-DD).
             - 'businessIdentifier': A string representing the business identifier for the submission.
             - Any other key-value pairs representing additional payload data.
+        - submitter_id (int): The id of the user who is creating the submission.
 
         Returns:
         - SubmissionModel: A SubmissionModel object that represents the created submission.
@@ -77,5 +78,6 @@ class SubmissionService:  # pylint: disable=too-few-public-methods
         submission.effective_date = date.fromisoformat(submission_dict['effectiveDate'])
         submission.business_identifier = submission_dict['businessIdentifier']
         submission.payload = submission_dict
+        submission.submitter_id = submitter_id
 
         return submission
