@@ -47,3 +47,5 @@ export const BtrBodsBcrosPublicationDetails = (): BodsPublicationDetailsI => {
     publisher: BcrosAsBodsPublisher
   }
 }
+
+export const BtrSourceDescriptionProvidedByBtrGovBC: string = 'Using Gov BC - BTR - Web UI'

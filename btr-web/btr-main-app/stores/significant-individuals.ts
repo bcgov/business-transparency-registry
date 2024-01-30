@@ -1,8 +1,8 @@
 import { defineStore } from 'pinia'
 import { StatusCodes } from 'http-status-codes'
 import { Ref } from 'vue'
-import { SignificantIndividualI } from '../interfaces/significant-individual-i'
 import { ErrorI } from '../../btr-common-components/interfaces/error-i'
+import { SignificantIndividualI } from '~/interfaces/significant-individual-i'
 import fileSIApi from '@/services/file-significant-individual'
 
 /** Manages Significant */

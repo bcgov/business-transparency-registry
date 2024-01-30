@@ -85,7 +85,7 @@ const _createInterestSharesVotes = (
 ): BodsInterestI => {
   return {
     directOrIndirect,
-    details: `controlType.directors.${flagName}`,
+    details: `controlType.sharesOrVotes.${flagName}`,
     startDate: si.startDate,
     endDate: si.endDate
   }
@@ -161,7 +161,10 @@ const getInterests = (si: SignificantIndividualI): BodsInterestI[] => {
   interests = interests.concat(_getDirectorsInterests(si))
   interests = interests.concat(_getSharesVotesInterests(si))
   if (si.controlType.other) {
-    interests.push({})
+    interests.push({
+      type: BodsInterestTypeE.OTHER_INFLUENCE_OR_CONTROL,
+      details: si.controlType.other
+    })
   }
   return interests
 }

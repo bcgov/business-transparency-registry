@@ -10,10 +10,11 @@ import { BodsEntityTypesE, BodsStatementTypeE } from '~/enums/btr-bods-e'
 import {
   BtrBodsBcrosPublicationDetails,
   BtrBodsPublishers,
-  BtrBodsSources
+  BtrBodsSources, BtrSourceDescriptionProvidedByBtrGovBC
 } from '~/utils/btr-bods/btr-bods-implementations'
 import { BtrBodsOwnershipOrControlI } from '~/interfaces/btr-bods/btr-bods-ownership-or-control-i'
 import { BtrBodsPersonI } from '~/interfaces/btr-bods/btr-bods-person-i'
+import { getSIsFromBtrBodsSubmission } from '~/utils/btr-bods/bods-to-si-converters'
 
 const constructBtrApiURL = () => {
   const runtimeConfig = useRuntimeConfig()
@@ -74,8 +75,10 @@ const getPersonAndOwnershipAndControlStatements = (sif: SignificantIndividualFil
   for (const si of sif.significantIndividuals) {
     const source = BtrBodsSources.SELF_DECLARATION
     source.assertedBy = [{ name: si.profile.fullName }]
+    source.description = BtrSourceDescriptionProvidedByBtrGovBC
 
     const personStatement: BtrBodsPersonI = {
+      missingInfoReason: si.missingInfoReason,
       placeOfResidence: si.profile.address,
       addresses: [si.profile.address],
       birthDate: si.profile.birthDate,
@@ -145,23 +148,13 @@ const submitSignificantIndividualFiling = async (sif: SignificantIndividualFilin
 }
 
 const getCurrentOwners = async (businessIdentifier: string) => { // @ts-ignore
-  const url = `${constructBtrApiURL()}/owners/${businessIdentifier}`
+  const url = `${constructBtrApiURL()}/plots/entity/${businessIdentifier}`
   const { data, error } =
-    await useFetchBcros<SignificantIndividualI[]>(url)
-
-  // eslint-disable-next-line no-console
-  console.log(data, error)
-  // todo: fixme: will be updated in next PR; with ticket #19211
-  // https://github.com/bcgov/entity/issues/19211
-  // if (data.value) {
-  //   for (const si of data.value) {
-  //     si.percentOfShares = si.percentOfShares ? si.percentOfShares.toString() : '0'
-  //     si.percentOfVotes = si.percentOfVotes ? si.percentOfVotes.toString() : '0'
-  //     si.profile.citizenshipsExCA = si.profile.citizenshipsExCA || []
-  //   }
-  // }
-  // return { data: data.value, error: error.value }
-  return { data: [], error: undefined }
+    await useFetchBcros<{ payload: BtrFilingI }>(url)
+  if (data.value?.payload) {
+    return { data: getSIsFromBtrBodsSubmission(data.value.payload), error: error.value }
+  }
+  return { data: data.value, error: error.value }
 }
 
 export default {
