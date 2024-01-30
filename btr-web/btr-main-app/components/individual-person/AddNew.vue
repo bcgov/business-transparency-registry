@@ -241,7 +241,7 @@
 
 <script setup lang="ts">
 import { z, ZodError, ZodIssue } from 'zod'
-import { CitizenshipTypeE } from '../../../btr-common-components/enums/citizenship-type-e';
+import { CitizenshipTypeE } from '../../../btr-common-components/enums/citizenship-type-e'
 import type { FormError } from '#ui/types'
 
 const { t } = useI18n()
