@@ -1,4 +1,4 @@
-import { describe, expect } from 'vitest'
+import { describe, expect, vi } from 'vitest'
 import { testSI } from '../utils/mockedData'
 
 import { OwnershipOrControlStatements as expectedOutput } from './expected-ouptuts'
@@ -7,6 +7,8 @@ import FilingService from '~/services/file-significant-individual'
 
 describe('File significant individuals service Tests', () => {
   it('getPersonAndOwnershipAndControlStatements', () => {
+    const mockDate = new Date(2024, 0, 26)
+    vi.setSystemTime(mockDate)
     const testExpectedOutput = expectedOutput
     const result = FilingService.getPersonAndOwnershipAndControlStatements(
       {
@@ -25,5 +27,7 @@ describe('File significant individuals service Tests', () => {
     testExpectedOutput.personStatements[0].statementID = result.personStatements[0].statementID
 
     expect(result).toEqual(testExpectedOutput)
+    vi.setSystemTime(new Date())
+    console.log((new Date()).toISOString())
   })
 })

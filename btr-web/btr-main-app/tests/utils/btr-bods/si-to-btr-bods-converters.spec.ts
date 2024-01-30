@@ -53,7 +53,7 @@ describe('Btr to Bods util converters Tests', () => {
           type: BodsInterestTypeE.VOTING_RIGHTS,
           share: { maximum: 25, exclusiveMaximum: false },
           directOrIndirect: 'direct',
-          details: 'controlType.directors.registeredOwner',
+          details: 'controlType.sharesOrVotes.registeredOwner',
           startDate: '2025-01-01',
           endDate: undefined
         },
@@ -61,7 +61,7 @@ describe('Btr to Bods util converters Tests', () => {
           type: BodsInterestTypeE.SHAREHOLDING,
           share: { maximum: 75, exclusiveMaximum: false },
           directOrIndirect: 'direct',
-          details: 'controlType.directors.registeredOwner',
+          details: 'controlType.sharesOrVotes.registeredOwner',
           startDate: '2025-01-01',
           endDate: undefined
         }

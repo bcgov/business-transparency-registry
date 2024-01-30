@@ -22,7 +22,7 @@ export const OwnershipOrControlStatements = {
         },
         {
           directOrIndirect: 'direct',
-          details: 'controlType.directors.registeredOwner',
+          details: 'controlType.sharesOrVotes.registeredOwner',
           startDate: '2025-01-01',
           endDate: undefined,
           share: { maximum: 25, exclusiveMaximum: false },
@@ -30,7 +30,7 @@ export const OwnershipOrControlStatements = {
         },
         {
           directOrIndirect: 'direct',
-          details: 'controlType.directors.registeredOwner',
+          details: 'controlType.sharesOrVotes.registeredOwner',
           startDate: '2025-01-01',
           endDate: undefined,
           share: { maximum: 75, exclusiveMaximum: false },
@@ -47,6 +47,7 @@ export const OwnershipOrControlStatements = {
         }
       },
       source: {
+        description: 'Using Gov BC - BTR - Web UI',
         type: ['selfDeclaration'],
         assertedBy: [{ name: 'Test Name' }]
       },
@@ -82,6 +83,7 @@ export const OwnershipOrControlStatements = {
       hasTaxNumber: true,
       identifiers: [{ id: '000 000 000', scheme: 'CAN-TAXID', schemeName: 'ITN' }],
       isComponent: false,
+      missingInfoReason: '',
       names: [
         { fullName: 'Test Name', type: 'individual' },
         { fullName: 'Waffles Test', type: 'alternative' }
@@ -98,6 +100,7 @@ export const OwnershipOrControlStatements = {
         }
       },
       source: {
+        description: 'Using Gov BC - BTR - Web UI',
         type: ['selfDeclaration'],
         assertedBy: [{ name: 'Test Name' }]
       },
