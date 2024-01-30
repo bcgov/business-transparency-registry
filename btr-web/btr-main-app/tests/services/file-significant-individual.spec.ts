@@ -28,6 +28,5 @@ describe('File significant individuals service Tests', () => {
 
     expect(result).toEqual(testExpectedOutput)
     vi.setSystemTime(new Date())
-    console.log((new Date()).toISOString())
   })
 })
