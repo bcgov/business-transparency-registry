@@ -511,3 +511,142 @@ export const btrSubmissionExampleMock = {
   submitter_id: null,
   type: 'other'
 }
+
+export const expectedSisOutput = [{
+  controlType: {
+    directors: {
+      directControl: true,
+      inConcertControl: true,
+      indirectControl: true,
+      significantInfluence: true
+    },
+    sharesVotes: {
+      beneficialOwner: true,
+      inConcertControl: true,
+      indirectControl: true,
+      registeredOwner: true
+    },
+    other: 'everything'
+  },
+  missingInfoReason: '',
+  percentOfShares: 99,
+  percentOfVotes: 0,
+  profile: {
+    fullName: 'Hrvoje Feketele',
+    preferredName: 'baba jaga',
+    address: {
+      city: 'Beamsville',
+      country: { alpha_2: 'CA', name: 'Canada' },
+      line1: '4520 Ontario',
+      line2: 'This is optional test',
+      locationDescription: 'This is optional extra description test',
+      postalCode: 'L0R 1B0',
+      region: 'ON'
+    },
+    competency: {
+      decisionMaking: undefined,
+      financialAffairs: undefined
+    },
+    birthDate: '1901-01-01',
+    citizenshipCA: 'other',
+    citizenshipsExCA: [{ name: 'Argentina', alpha_2: 'AR' },
+      { name: 'British Indian Ocean Territory', alpha_2: 'IO' },
+      { name: 'Cocos (Keeling) Islands', alpha_2: 'CC' }],
+    email: 'hrvoje.fekete+1@gmail.com',
+    hasTaxNumber: false,
+    taxNumber: undefined,
+    isTaxResident: false
+  },
+  startDate: '2024-01-04',
+  uuid: 'b0882814-34e2-42e9-b065-a550d94c9df1'
+}, {
+  controlType: {
+    directors: {
+      directControl: false,
+      inConcertControl: true,
+      indirectControl: false,
+      significantInfluence: false
+    },
+    sharesVotes: {
+      beneficialOwner: false,
+      inConcertControl: false,
+      indirectControl: true,
+      registeredOwner: true
+    },
+    other: 'This is something tottaly else'
+  },
+  missingInfoReason: 'It actually really is unless it is not',
+  percentOfShares: 34,
+  percentOfVotes: 77,
+  profile: {
+    fullName: 'Hrvoje Fekete',
+    preferredName: 'Johnny',
+    address: {
+      city: 'Scarborough',
+      country: { alpha_2: 'CA', name: 'Canada' },
+      line1: 'F-3331 Danforth Ave',
+      line2: '',
+      locationDescription: '',
+      postalCode: 'M1L 1C5',
+      region: 'ON'
+    },
+    competency: {
+      decisionMaking: undefined,
+      financialAffairs: undefined
+    },
+    birthDate: '1991-01-24',
+    citizenshipCA: 'permanentResident',
+    citizenshipsExCA: [],
+    email: 'hrvoje.fekete@gmail.com',
+    hasTaxNumber: true,
+    taxNumber: '046 454 286',
+    isTaxResident: true
+  },
+  startDate: '2024-01-04',
+  uuid: 'b04ce8de-cd95-4fa2-991d-3a06fe34deb0'
+}, {
+  controlType: {
+    directors: {
+      directControl: true,
+      inConcertControl: false,
+      indirectControl: true,
+      significantInfluence: false
+    },
+    sharesVotes: {
+      beneficialOwner: false,
+      inConcertControl: false,
+      indirectControl: false,
+      registeredOwner: false
+    },
+    other: ''
+  },
+  missingInfoReason: undefined,
+  percentOfShares: 0,
+  percentOfVotes: 0,
+  profile: {
+    fullName: 'Hrvoje Fekete',
+    preferredName: '',
+    taxNumber: undefined,
+    address: {
+      city: 'Vancouver',
+      country: { alpha_2: 'CA', name: 'Canada' },
+      line1: '403-1265 Barclay St',
+      line2: '',
+      locationDescription: '',
+      postalCode: 'V6E 1H5',
+      region: 'BC'
+    },
+    competency: {
+      decisionMaking: undefined,
+      financialAffairs: undefined
+    },
+    birthDate: undefined,
+    citizenshipCA: 'citizen',
+    citizenshipsExCA: [],
+    email: 'hrvoje.fekete@gmail.com',
+    hasTaxNumber: false,
+    isTaxResident: true
+  },
+  startDate: '2024-01-04',
+  uuid: '0a9d4f95-ca72-42b4-8906-05d889e4bb52'
+}]
