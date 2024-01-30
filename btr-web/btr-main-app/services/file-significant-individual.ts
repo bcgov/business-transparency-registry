@@ -151,6 +151,7 @@ const getCurrentOwners = async (businessIdentifier: string) => { // @ts-ignore
   const url = `${constructBtrApiURL()}/plots/entity/${businessIdentifier}`
   const { data, error } =
     await useFetchBcros<{ payload: BtrFilingI }>(url)
+
   if (data.value?.payload) {
     return { data: getSIsFromBtrBodsSubmission(data.value.payload), error: error.value }
   }

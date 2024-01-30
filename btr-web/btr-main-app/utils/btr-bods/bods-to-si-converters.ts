@@ -1,27 +1,26 @@
+import { BtrCountryI } from '../../../btr-common-components/interfaces/btr-address-i'
+import { CitizenshipTypeE } from '../../../btr-common-components/enums/citizenship-type-e'
 import { BodsInterestTypeE, BodsNameTypeE } from '~/enums/btr-bods-e'
 import { SignificantIndividualI } from '~/interfaces/significant-individual-i'
 import { BtrFilingI } from '~/interfaces/btr-bods/btr-filing-i'
 import { BtrBodsOwnershipOrControlI } from '~/interfaces/btr-bods/btr-bods-ownership-or-control-i'
 import { BtrBodsPersonI } from '~/interfaces/btr-bods/btr-bods-person-i'
-import { BtrCountryI } from '../../../btr-common-components/interfaces/btr-address-i'
-import { CitizenshipTypeE } from '../../../btr-common-components/enums/citizenship-type-e'
 import { BtrSourceDescriptionProvidedByBtrGovBC } from '~/utils/btr-bods/btr-bods-implementations'
 import { ControlOfDirectorsI } from '~/interfaces/control-of-directors-i'
 import { ControlOfSharesI } from '~/interfaces/control-of-shares-i'
 
-
-const _find_ownership_or_control_statement = (submission: BtrFilingI, person_statement_id: string): BtrBodsOwnershipOrControlI | null => {
-  for (const oocs of submission.ownershipOrControlStatements) {
-    if (oocs.interestedParty.describedByPersonStatement === person_statement_id) {
-      return oocs
+const _findOwnershipOrControlStatement =
+  (submission: BtrFilingI, personStatementId: string): BtrBodsOwnershipOrControlI | null => {
+    for (const oocs of submission.ownershipOrControlStatements) {
+      if (oocs.interestedParty.describedByPersonStatement === personStatementId) {
+        return oocs
+      }
     }
+    return null
   }
-  return null
-}
-
 
 const _getSiName = (btrBodsPerson: BtrBodsPersonI, nameType: BodsNameTypeE): string => {
-  let bodsName = btrBodsPerson.names.find((name) => name.type === nameType)
+  const bodsName = btrBodsPerson.names.find(name => name.type === nameType)
   let retVal = ''
   if (bodsName) {
     retVal = bodsName.fullName || (`${bodsName.givenName} ${bodsName.familyName}`)
@@ -49,7 +48,7 @@ const _getCitizenships = (btrBodsPerson: BtrBodsPersonI): {
     })
   }
 
-  return { citizenshipsCA: citizenshipsCA, citizenshipsExCA: citizenships }
+  return { citizenshipsCA, citizenshipsExCA: citizenships }
 }
 
 function _getTaxNumber (btrBodsPerson: BtrBodsPersonI) {
@@ -60,7 +59,7 @@ function _getTaxNumber (btrBodsPerson: BtrBodsPersonI) {
   return taxIdentifierCa?.id || undefined
 }
 
-const _get_si_person = (btrBodsPerson: BtrBodsPersonI): ProfileI => {
+const _getSiPerson = (btrBodsPerson: BtrBodsPersonI): ProfileI => {
   const { citizenshipsCA, citizenshipsExCA } = _getCitizenships(btrBodsPerson)
 
   return {
@@ -73,15 +72,15 @@ const _get_si_person = (btrBodsPerson: BtrBodsPersonI): ProfileI => {
     },
     birthDate: btrBodsPerson.birthDate,
     citizenshipCA: citizenshipsCA,
-    citizenshipsExCA: citizenshipsExCA,
+    citizenshipsExCA,
     email: btrBodsPerson.email,
     hasTaxNumber: btrBodsPerson.hasTaxNumber,
     taxNumber: _getTaxNumber(btrBodsPerson),
-    isTaxResident: !!(btrBodsPerson.taxResidencies.find((country) => country.code === 'CA'))
+    isTaxResident: !!(btrBodsPerson.taxResidencies.find(country => country.code === 'CA'))
   }
 }
 
-const _get_max = (oocs: BtrBodsOwnershipOrControlI, interestType: BodsInterestTypeE): number => {
+const _getMaxInterestValue = (oocs: BtrBodsOwnershipOrControlI, interestType: BodsInterestTypeE): number => {
   let max = 0
 
   let maxCalc = (oldValue: number, newValue: number): number => oldValue + newValue
@@ -95,10 +94,10 @@ const _get_max = (oocs: BtrBodsOwnershipOrControlI, interestType: BodsInterestTy
   for (const interest of oocs.interests) {
     if (interest.type === interestType) {
       max = maxCalc(max,
-        interest.share?.exact
-        || interest.share?.maximum
-        || interest.share?.minimum
-        || 0
+        interest.share?.exact ||
+        interest.share?.maximum ||
+        interest.share?.minimum ||
+        0
       )
     }
   }
@@ -106,24 +105,27 @@ const _get_max = (oocs: BtrBodsOwnershipOrControlI, interestType: BodsInterestTy
   return max > 100 ? 100 : max
 }
 
+const isControlType = (oocs: BtrBodsOwnershipOrControlI, details: string) => {
+  return !!oocs.interests.find(interest => interest.details === details)
+}
 
 const _getControlDirector = (oocs: BtrBodsOwnershipOrControlI): ControlOfDirectorsI => {
-  //todo: decide how to convert non BTR ones to our UI display; if we want at all // same as shares and votes
+  // todo: decide how to convert non BTR ones to our UI display; if we want at all // same as shares and votes
   return {
-    directControl: !!oocs.interests.find(interest => interest.details === 'controlType.directors.directControl'),
-    inConcertControl: !!oocs.interests.find(interest => interest.details === 'controlType.directors.inConcertControl'),
-    indirectControl: !!oocs.interests.find(interest => interest.details === 'controlType.directors.indirectControl'),
-    significantInfluence: !!oocs.interests.find(interest => interest.details === 'controlType.directors.significantInfluence')
+    directControl: isControlType(oocs, 'controlType.directors.directControl'),
+    inConcertControl: isControlType(oocs, 'controlType.directors.inConcertControl'),
+    indirectControl: isControlType(oocs, 'controlType.directors.indirectControl'),
+    significantInfluence: isControlType(oocs, 'controlType.directors.significantInfluence')
   }
 }
 
 const _getControlSharesVotes = (oocs: BtrBodsOwnershipOrControlI): ControlOfSharesI => {
-  //todo: decide how to convert non BTR ones to our UI display; if we want at all // same as directors
+  // todo: decide how to convert non BTR ones to our UI display; if we want at all // same as directors
   return {
-    beneficialOwner: !!oocs.interests.find(interest => interest.details === 'controlType.sharesOrVotes.beneficialOwner'),
-    inConcertControl: !!oocs.interests.find(interest => interest.details === 'controlType.sharesOrVotes.inConcertControl'),
-    indirectControl: !!oocs.interests.find(interest => interest.details === 'controlType.sharesOrVotes.indirectControl'),
-    registeredOwner: !!oocs.interests.find(interest => interest.details === 'controlType.sharesOrVotes.registeredOwner')
+    beneficialOwner: isControlType(oocs, 'controlType.sharesOrVotes.beneficialOwner'),
+    inConcertControl: isControlType(oocs, 'controlType.sharesOrVotes.inConcertControl'),
+    indirectControl: isControlType(oocs, 'controlType.sharesOrVotes.indirectControl'),
+    registeredOwner: isControlType(oocs, 'controlType.sharesOrVotes.registeredOwner')
   }
 }
 
@@ -132,9 +134,11 @@ function _getControlOther (oocs: BtrBodsOwnershipOrControlI) {
   return other?.details || ''
 }
 
-const _get_si = (person: BtrBodsPersonI, oocs: BtrBodsOwnershipOrControlI, startDate: string): SignificantIndividualI => {
-  const votes = _get_max(oocs, BodsInterestTypeE.VOTING_RIGHTS)
-  const shares = _get_max(oocs, BodsInterestTypeE.SHAREHOLDING)
+const _getSi = (
+  person: BtrBodsPersonI, oocs: BtrBodsOwnershipOrControlI, startDate: string
+): SignificantIndividualI => {
+  const votes = _getMaxInterestValue(oocs, BodsInterestTypeE.VOTING_RIGHTS)
+  const shares = _getMaxInterestValue(oocs, BodsInterestTypeE.SHAREHOLDING)
 
   return {
     controlType: {
@@ -145,8 +149,8 @@ const _get_si = (person: BtrBodsPersonI, oocs: BtrBodsOwnershipOrControlI, start
     missingInfoReason: person.missingInfoReason,
     percentOfShares: shares,
     percentOfVotes: votes,
-    profile: _get_si_person(person),
-    startDate: startDate,
+    profile: _getSiPerson(person),
+    startDate,
     uuid: person.statementID
   }
 }
@@ -155,9 +159,9 @@ export const getSIsFromBtrBodsSubmission = (submission: BtrFilingI): Significant
   const sis: SignificantIndividualI[] = []
 
   for (const person of submission.personStatements) {
-    const oocs = _find_ownership_or_control_statement(submission, person.statementID)
+    const oocs = _findOwnershipOrControlStatement(submission, person.statementID)
     if (person && oocs) {
-      sis.push(_get_si(person, oocs, submission.effectiveDate));
+      sis.push(_getSi(person, oocs, submission.effectiveDate))
     }
   }
 
