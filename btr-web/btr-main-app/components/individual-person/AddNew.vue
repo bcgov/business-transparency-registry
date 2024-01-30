@@ -164,9 +164,9 @@
         </p>
         <BcrosInputsCountriesOfCitizenship
           id="countriesOfCitizenship"
-          :errors="citizenshipErrors"
           v-model:canadianCitizenship="significantIndividual.profile.citizenshipCA"
           v-model:citizenships="significantIndividual.profile.citizenshipsExCA"
+          :errors="citizenshipErrors"
         />
       </div>
       <UForm
@@ -185,7 +185,8 @@
             id="addNewPersonTaxNumber"
             v-model="taxInfoModel"
             name="taxNumber"
-            :variant="taxNumebrInvalid ? 'error' : 'bcGov'"
+            :variant="taxNumebrInvalid || taxNumberErrors.length > 0 ? 'error' : 'bcGov'"
+            :errors="taxNumberErrors"
             data-cy="testTaxNumber"
           />
         </div>
@@ -200,10 +201,13 @@
         <IndividualPersonTaxInfoTaxResidency
           id="addNewPersonTaxResidency"
           v-model="significantIndividual.profile.isTaxResident"
+          :errors="taxResidencyErrors"
           data-cy="testTaxResidency"
         />
       </div>
       <IndividualPersonControlUnableToObtainOrConfirmInformation v-model="significantIndividual.missingInfoReason" />
+
+      {{ validationResult }}
     </template>
     <div class="grid mt-10 w-full">
       <div class="flex justify-between">
@@ -241,7 +245,6 @@
 
 <script setup lang="ts">
 import { z, ZodError, ZodIssue } from 'zod'
-import { CitizenshipTypeE } from '../../../btr-common-components/enums/citizenship-type-e'
 import type { FormError } from '#ui/types'
 
 const { t } = useI18n()
@@ -336,6 +339,8 @@ const controlOfSharesErrors: Ref<FormError[]> = ref([])
 const controlOfDirectorsErrors: Ref<FormError[]> = ref([])
 const birthDateErrors: Ref<FormError[]> = ref([])
 const citizenshipErrors: Ref<FormError[]> = ref([])
+const taxNumberErrors: Ref<FormError[]> = ref([])
+const taxResidencyErrors: Ref<FormError[]> = ref([])
 
 const validationResult = ref()
 
@@ -374,6 +379,8 @@ watch(() => validationResult.value, (val: ZodError) => {
     citizenshipErrors.value = errors.filter(
       (error: FormError) => (error.path === 'citizenshipCA' || error.path === 'citizenshipsExCA')
     )
+    taxNumberErrors.value = errors.filter((error: FormError) => error.path === 'hasTaxNumber')
+    taxResidencyErrors.value = errors.filter((error: FormError) => error.path === 'taxResidency')
   }
 })
 
@@ -453,15 +460,25 @@ watch(() => significantIndividual.value.profile.birthDate, (val: string) => {
 // When a type of citizenship is selected, remove the empty citizenship error
 watch(() => significantIndividual.value.profile.citizenshipCA, (val: CitizenshipTypeE) => {
   if ([CitizenshipTypeE.CITIZEN, CitizenshipTypeE.PR, CitizenshipTypeE.OTHER].includes(val)) {
-    citizenshipErrors.value = citizenshipErrors.value.filter((error: FormError) => error.path !== 'citizenshipCA')
+    citizenshipErrors.value = []
   }
 })
 
 // When a country is selected for other citizenships, remove the error
 watch(() => significantIndividual.value.profile.citizenshipsExCA, (val: { name: string, alpha_2: string }[]) => {
   if (val.length > 0) {
-    citizenshipErrors.value = citizenshipErrors.value.filter((error: FormError) => error.path !== 'citizenshipsExCA')
+    citizenshipErrors.value = []
   }
+})
+
+// When one of the tax number radio buttons is selected, remove the empty tax number error
+watch(() => significantIndividual.value.profile.hasTaxNumber, () => {
+  taxNumberErrors.value = []
+})
+
+// When one of the tax residency radio buttons is selected, remove the empty tax residency error
+watch(() => significantIndividual.value.profile.isTaxResident, () => {
+  taxResidencyErrors.value = []
 })
 
 // tax number input

@@ -99,14 +99,26 @@ export function validateOtherCountrySelection (formData: FormInputI): boolean {
   return formData.citizenshipCA !== CitizenshipTypeE.OTHER || formData.citizenshipsExCA.length > 0
 }
 
+/**
+ * Check if one of the CRA Tax Number options has been selected
+ * @param formData the form data
+ */
 export function validateTaxNumberInfo (formData: FormInputI): boolean {
   return formData.taxNumber !== undefined || formData.hasTaxNumber === false
 }
 
+/**
+ * Check if one of the Tax Residency options has been selected
+ * @param formData the form data
+ */
 export function validateTaxResidency (formData: FormInputI): boolean {
-  return formData.isTaxResident !== undefined
+  return formData.taxResidency !== undefined
 }
 
-export function validateMissingInfoReasonTextarea(formData: FormInputI): boolean {
-  return formData.missingInfoReason === undefined || formData.missingInfoReason.length <= 1000
+/**
+ * Check if the text in the 'Unable to Obtain or Confirm Information' textarea is less than or equal to 4000 characters
+ * @param formData the form data
+ */
+export function validateMissingInfoReasonTextarea (formData: FormInputI): boolean {
+  return formData.missingInfoReason === undefined || formData.missingInfoReason.length <= 4000
 }

@@ -30,12 +30,12 @@ export const missingOtherCountry = {
 
 export const missingTaxNumberInfo = {
   message: 'Please select a CRA Tax Number option',
-  path: ['taxNumber']
+  path: ['hasTaxNumber']
 }
 
 export const missingTaxResidency = {
   message: 'Please select a Tax Residency option',
-  path: ['isTaxResident']
+  path: ['taxResidency']
 }
 
 export const noMissingInfoReason = {

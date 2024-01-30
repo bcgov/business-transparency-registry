@@ -20,8 +20,8 @@
       <div class="ml-9">
         {{ $t('labels.countryOfCitizenship.selectAll') }}
         <BcrosInputsCountriesOfCitizenshipDropdown
-          class="text-gray-900"
           v-model="citizenshipsInternal"
+          class="text-gray-900"
           :disabled="citizenshipType !== CitizenshipTypeE.OTHER"
         />
       </div>
@@ -34,6 +34,7 @@
 
 <script setup lang="ts">
 import type { FormError } from '#ui/types'
+
 const { t } = useI18n()
 const emit = defineEmits<{
   'update:citizenships': [value: Array<BtrCountryI>]
@@ -78,5 +79,4 @@ const options = [{
 }]
 
 const hasError = computed<Boolean>(() => props.errors.length > 0)
-const errorTextColor = computed(() => (hasError.value ? { label: 'text-red-500' } : {}))
 </script>
