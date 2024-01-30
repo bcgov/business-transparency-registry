@@ -1,41 +1,53 @@
 <template>
-  <Popover v-slot="{ close, open }" class="bcros-date-select flex relative focus:ring-0">
-    <PopoverButton class="bcros-date-select__btn bg-gray-100 grow cursor-text focus:ring-0 rounded-t-md">
-      <UInput
-        :ui="{ icon: { base: open ? 'text-primary-500' : iconClass } }"
-        :model-value="selectedDateDisplay"
-        icon="i-mdi-calendar"
-        :placeholder="placeholder || ''"
-        trailing
-        type="text"
-        :variant="open ? 'primary' : variant || 'bcGov'"
-        data-cy="date-select"
-      />
-    </PopoverButton>
-    <transition
-      enter-active-class="transition duration-200 ease-out"
-      enter-from-class="translate-y-1 opacity-0"
-      enter-to-class="translate-y-0 opacity-100"
-      leave-active-class="transition duration-150 ease-in"
-      leave-from-class="translate-y-0 opacity-100"
-      leave-to-class="translate-y-1 opacity-0"
-    >
-      <PopoverPanel class="absolute z-20 mt-14">
-        <BcrosDatePicker
-          :default-selected-date="selectedDate"
-          :set-max-date="maxDate"
-          @selected-date="updateDate($event); close()"
+  <div>
+    <Popover v-slot="{ close, open }" class="bcros-date-select flex relative focus:ring-0">
+      <PopoverButton class="bcros-date-select__btn bg-gray-100 grow cursor-text focus:ring-0 rounded-t-md">
+        <UInput
+          :ui="{ icon: { base: open ? 'text-primary-500' : iconClass } }"
+          :model-value="selectedDateDisplay"
+          icon="i-mdi-calendar"
+          :placeholder="placeholder || ''"
+          trailing
+          type="text"
+          :variant="open ? 'primary' : variant || 'bcGov'"
+          data-cy="date-select"
         />
-      </PopoverPanel>
-    </transition>
-  </Popover>
+      </PopoverButton>
+      <transition
+        enter-active-class="transition duration-200 ease-out"
+        enter-from-class="translate-y-1 opacity-0"
+        enter-to-class="translate-y-0 opacity-100"
+        leave-active-class="transition duration-150 ease-in"
+        leave-from-class="translate-y-0 opacity-100"
+        leave-to-class="translate-y-1 opacity-0"
+      >
+        <PopoverPanel class="absolute z-20 mt-14">
+          <BcrosDatePicker
+            :default-selected-date="selectedDate"
+            :set-max-date="maxDate"
+            @selected-date="updateDate($event); close()"
+          />
+        </PopoverPanel>
+      </transition>
+    </Popover>
+    <div v-if="hasError" class="py-2 text-sm text-red-500">
+      {{ errors[0].message }}
+    </div>
+  </div>
 </template>
 
 <script setup lang="ts">
 import { ComputedRef, Ref, computed, ref, watch } from 'vue'
 import { Popover, PopoverButton, PopoverPanel } from '@headlessui/vue'
+import type { FormError } from '#ui/types'
 
-const props = defineProps<{ initialDate?: Date, maxDate?: Date, placeholder?: string, variant?: string }>()
+const props = defineProps<{
+  initialDate?: Date,
+  maxDate?: Date,
+  placeholder?: string,
+  variant?: string,
+  errors?: FormError[]
+}>()
 
 const emit = defineEmits<{(e: 'selection', value: Date | null): void }>()
 
@@ -49,6 +61,8 @@ const updateDate = (val: Date | null) => {
 const selectedDateDisplay: ComputedRef<string> = computed(
   () => selectedDate.value ? dateToString(selectedDate.value, 'YYYY-MM-DD') : ''
 )
+
+const hasError = computed<Boolean>(() => props.errors !== undefined && props.errors.length > 0)
 
 // colouring
 const iconClass = computed(() => {

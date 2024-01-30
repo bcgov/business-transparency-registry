@@ -38,8 +38,12 @@
           v-model="typeOfControl[type.value]"
           :name="type.value"
           :label="type.label"
+          :ui="errorTextColor"
           class="py-2"
         />
+      </div>
+      <div v-if="hasError" class="py-2 text-sm text-red-500">
+        {{ errors[0].message }}
       </div>
     </div>
     <p class="pb-5">
@@ -54,8 +58,11 @@
 </template>
 
 <script setup lang="ts">
+import type { FormError } from '#ui/types'
+
 const prop = defineProps({
   id: { type: String, required: true },
+  errors: { type: Object as PropType<FormError[]>, required: true },
   modelValue: {
     type: Object as PropType<ControlOfSharesI>,
     default: () => ({
@@ -76,5 +83,7 @@ const types = [
 ]
 
 const typeOfControl: Ref<ControlOfSharesI> = ref(prop.modelValue)
+const hasError = computed<Boolean>(() => prop.errors.length > 0)
+const errorTextColor = computed(() => (hasError.value ? { label: 'text-red-500' } : {}))
 
 </script>
