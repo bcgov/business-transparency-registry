@@ -43,6 +43,6 @@ export const testSI: SignificantIndividualI = {
   missingInfoReason: '',
   percentOfShares: '75',
   percentOfVotes: '25',
-  startDate: '',
+  startDate: '2025-01-01',
   action: FilingActionE.ADD
 }
