@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div data-cy="default-layout">
     <BcrosHeader />
     <BcrosBreadcrumb v-if="crumbConstructors.length > 0" :crumb-constructors="crumbConstructors" />
     <div class="mx-auto px-4 w-full max-w-[1360px]">

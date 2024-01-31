@@ -1,0 +1,47 @@
+[
+  {
+      "accountStatus": "ACTIVE",
+      "accountType": "PREMIUM",
+      "id": 1234,
+      "label": "Test Dev 1",
+      "productSettings": "/account/1234/restricted-product",
+      "type": "ACCOUNT",
+      "urlorigin": "https://dev.bcregistry.ca/business/auth",
+      "urlpath": "/account/1234/settings"
+  },
+  {
+      "accountStatus": "ACTIVE",
+      "accountType": "PREMIUM",
+      "id": 1235,
+      "label": "Test Dev 2",
+      "productSettings": "/account/1235/restricted-product",
+      "type": "ACCOUNT",
+      "urlorigin": "https://dev.bcregistry.ca/business/auth",
+      "urlpath": "/account/1235/settings"
+  },
+  {
+      "accountStatus": "ACTIVE",
+      "accountType": "BASIC",
+      "additionalLabel": "Business branch",
+      "id": 1236,
+      "label": "Test dev 3",
+      "productSettings": "/account/1236/restricted-product",
+      "type": "ACCOUNT",
+      "urlorigin": "https://dev.bcregistry.ca/business/auth",
+      "urlpath": "/account/1236/settings"
+  },
+  {
+      "id": 8583,
+      "label": "USER PROFILE",
+      "type": "USER_PROFILE",
+      "urlorigin": "https://dev.bcregistry.ca/business/auth",
+      "urlpath": "/userprofile"
+  },
+  {
+      "id": 9984,
+      "label": "CREATE ACCOUNT",
+      "type": "CREATE_ACCOUNT",
+      "urlorigin": "https://dev.bcregistry.ca/business/auth",
+      "urlpath": "/setup-account"
+  }
+]

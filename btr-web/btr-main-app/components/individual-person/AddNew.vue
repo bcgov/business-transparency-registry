@@ -56,14 +56,14 @@
     </div> -->
     <!-- NB: we may be adding the toggle back in later -->
     <template v-if="showAddInfoManually">
-      <div class="flex-col mt-5 py-5">
+      <!-- <div class="flex-col mt-5 py-5">
         <p class="font-bold py-3">
           {{ $t('labels.beneficialOwnershipAssessment') }}
         </p>
         <p>
           {{ $t('texts.beneficialOwnershipAssessmentText1') }}
         </p>
-      </div>
+      </div> -->
       <UForm
         ref="ownerFormBase"
         :schema="ownershipSchema"
