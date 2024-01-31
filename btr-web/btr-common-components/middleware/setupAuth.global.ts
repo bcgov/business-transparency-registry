@@ -9,7 +9,7 @@ export default defineNuxtRouteMiddleware(async (to) => {
       to.params.currentAccountId as string || to.query.currentAccountId as string
     )
 
-    if (sessionStorage.getItem('FAKE_LOGIN')) {
+    if (process.client && sessionStorage.getItem('FAKE_LOGIN')) {
       const { kc } = useBcrosKeycloak()
       // set test kc values
       kc.tokenParsed = {
