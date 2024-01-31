@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div data-cy="business-layout">
     <BcrosHeader />
     <BcrosBreadcrumb v-if="crumbConstructors.length > 0" :crumb-constructors="crumbConstructors" />
     <BcrosBusinessDetails />

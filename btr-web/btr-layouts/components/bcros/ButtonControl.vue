@@ -1,5 +1,5 @@
 <template>
-  <div id="bcros-button-control" class="bg-white pt-8 pb-[60px]">
+  <div id="bcros-button-control" class="bg-white pt-8 pb-[60px]" data-cy="button-control">
     <div class="grid grid-cols-2 m-auto px-4 w-full max-w-[1360px]">
       <div v-if="leftButtons" class="flex gap-4">
         <UButton

@@ -8,6 +8,25 @@ export default defineNuxtRouteMiddleware(async (to) => {
       { url: kcURL, realm: kcRealm, clientId: kcClient },
       to.params.currentAccountId as string || to.query.currentAccountId as string
     )
+
+    if (process.client && sessionStorage?.getItem('FAKE_LOGIN')) {
+      const { kc } = useBcrosKeycloak()
+      // set test kc values
+      kc.tokenParsed = {
+        firstname: 'TestFirst',
+        lastname: 'TestLast',
+        name: 'TestFirst TestLast',
+        username: 'testUsername',
+        email: 'testEmail@test.com',
+        sub: 'testSub',
+        loginSource: 'IDIR',
+        realm_access: { roles: ['basic'] }
+      }
+      kc.authenticated = true
+      const account = useBcrosAccount()
+      await account.setUserName()
+      await account.setAccountInfo()
+    }
   }
   // initialize ldarkly
   useBcrosLaunchdarkly().init()

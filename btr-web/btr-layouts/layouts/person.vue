@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div data-cy="person-layout">
     <BcrosHeader :person-mode="true" />
     <BcrosBreadcrumb v-if="crumbConstructors.length > 0" :crumb-constructors="crumbConstructors" />
     <BcrosPersonDetails />

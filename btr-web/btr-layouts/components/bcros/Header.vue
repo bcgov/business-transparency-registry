@@ -2,6 +2,7 @@
   <div
     id="bcros-main-header"
     class="bg-bcGovColor-header border-b-2 border-bcGovColor-navDivider"
+    data-cy="header"
   >
     <div
       id="bcros-main-header__container"
