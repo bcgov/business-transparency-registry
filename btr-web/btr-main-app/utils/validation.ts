@@ -119,6 +119,16 @@ export function validateTaxResidency (formData: FormInputI): boolean {
  * Check if the text in the 'Unable to Obtain or Confirm Information' textarea is less than or equal to 4000 characters
  * @param formData the form data
  */
-export function validateMissingInfoReasonTextarea (formData: FormInputI): boolean {
+export function validateMissingInfoTextarea (formData: FormInputI): boolean {
   return formData.missingInfoReason === undefined || formData.missingInfoReason.length <= 4000
+}
+
+/**
+ * If the 'Unable to Obtain or Confirm Information' checkbox is checked, the textarea cannot be empty
+ * @param formData the form data
+ */
+export function validateMissingInfoReason (formData: FormInputI): boolean {
+  console.log(formData.missingInfo)
+  console.log(formData.missingInfoReason)
+  return !formData.missingInfo || (formData.missingInfoReason !== '' && formData.missingInfoReason !== undefined)
 }

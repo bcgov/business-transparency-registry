@@ -1,5 +1,5 @@
 export const missingSharesAndVotes = {
-  message: 'Please enter a percentage of shares and/or votes111',
+  message: 'Please enter a percentage of shares and/or votes',
   path: ['percentOfShares', 'percentOfVotes']
 }
 
@@ -40,5 +40,5 @@ export const missingTaxResidency = {
 
 export const noMissingInfoReason = {
   message: 'Please indicate steps taken',
-  path: ['stepsTaken']
+  path: ['missingInfoReason']
 }

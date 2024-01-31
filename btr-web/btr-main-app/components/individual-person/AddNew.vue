@@ -205,9 +205,12 @@
           data-cy="testTaxResidency"
         />
       </div>
-      <IndividualPersonControlUnableToObtainOrConfirmInformation v-model="significantIndividual.missingInfoReason" />
-
-      {{ validationResult }}
+      <IndividualPersonControlUnableToObtainOrConfirmInformation
+        v-model="significantIndividual.missingInfoReason"
+        :missing-info="missingInfo"
+        :errors="missingInfoReasonErrors"
+        @update:missing-info="missingInfo = $event"
+      />
     </template>
     <div class="grid mt-10 w-full">
       <div class="flex justify-between">
@@ -271,39 +274,6 @@ watch(() => props.startDate, (val) => {
   significantIndividual.value.startDate = val
 })
 
-function handleDoneButtonClick () {
-  validateForm()
-  if (validationResult.value.success) {
-    if (isEditing.value) {
-      updateSignificantIndividual()
-    } else {
-      addSignificantIndividual()
-    }
-  }
-}
-
-function validateForm () {
-  const data: FormInputI = {
-    fullName: significantIndividual.value.profile.fullName,
-    preferredName: significantIndividual.value.profile.preferredName,
-    email: significantIndividual.value.profile.email,
-    percentOfShares: significantIndividual.value.percentOfShares,
-    percentOfVotes: significantIndividual.value.percentOfVotes,
-    controlOfShares: significantIndividual.value.controlType.sharesVotes,
-    otherReasons: significantIndividual.value.controlType.other,
-    controlOfDirectors: significantIndividual.value.controlType.directors,
-    birthDate: significantIndividual.value.profile.birthDate,
-    citizenshipCA: significantIndividual.value.profile.citizenshipCA,
-    citizenshipsExCA: significantIndividual.value.profile.citizenshipsExCA,
-    hasTaxNumber: significantIndividual.value.profile.hasTaxNumber,
-    taxNumber: significantIndividual.value.profile.taxNumber,
-    taxResidency: significantIndividual.value.profile.isTaxResident,
-    missingInfoReason: significantIndividual.value.missingInfoReason
-  }
-
-  validationResult.value = formSchema.safeParse(data)
-}
-
 function addSignificantIndividual () {
   // FUTURE: validate form / scroll to 1st error
   // emit significantIndividual so it gets added to the filing
@@ -331,6 +301,7 @@ const fullNameInvalid = ref(false)
 const preferredNameInvalid = ref(false)
 const emailInvalid = ref(false)
 const taxNumebrInvalid = ref(false)
+const missingInfo = ref(false)
 
 const percentOfSharesInvalid = ref(false)
 const percentOfVotesInvalid = ref(false)
@@ -341,8 +312,43 @@ const birthDateErrors: Ref<FormError[]> = ref([])
 const citizenshipErrors: Ref<FormError[]> = ref([])
 const taxNumberErrors: Ref<FormError[]> = ref([])
 const taxResidencyErrors: Ref<FormError[]> = ref([])
+const missingInfoReasonErrors: Ref<FormError[]> = ref([])
 
 const validationResult = ref()
+
+function handleDoneButtonClick () {
+  validateForm()
+  if (validationResult.value.success) {
+    if (isEditing.value) {
+      updateSignificantIndividual()
+    } else {
+      addSignificantIndividual()
+    }
+  }
+}
+
+function validateForm () {
+  const data: FormInputI = {
+    fullName: significantIndividual.value.profile.fullName,
+    preferredName: significantIndividual.value.profile.preferredName,
+    email: significantIndividual.value.profile.email,
+    percentOfShares: significantIndividual.value.percentOfShares,
+    percentOfVotes: significantIndividual.value.percentOfVotes,
+    controlOfShares: significantIndividual.value.controlType.sharesVotes,
+    otherReasons: significantIndividual.value.controlType.other,
+    controlOfDirectors: significantIndividual.value.controlType.directors,
+    birthDate: significantIndividual.value.profile.birthDate,
+    citizenshipCA: significantIndividual.value.profile.citizenshipCA,
+    citizenshipsExCA: significantIndividual.value.profile.citizenshipsExCA,
+    hasTaxNumber: significantIndividual.value.profile.hasTaxNumber,
+    taxNumber: significantIndividual.value.profile.taxNumber,
+    taxResidency: significantIndividual.value.profile.isTaxResident,
+    missingInfo: missingInfo.value,
+    missingInfoReason: significantIndividual.value.missingInfoReason
+  }
+
+  validationResult.value = formSchema.safeParse(data)
+}
 
 watch(() => profileFormBase.value?.errors, (val: { path: string }[]) => {
   fullNameInvalid.value = val.filter(val => val.path === 'fullName').length > 0
@@ -381,6 +387,7 @@ watch(() => validationResult.value, (val: ZodError) => {
     )
     taxNumberErrors.value = errors.filter((error: FormError) => error.path === 'hasTaxNumber')
     taxResidencyErrors.value = errors.filter((error: FormError) => error.path === 'taxResidency')
+    missingInfoReasonErrors.value = errors.filter((error: FormError) => error.path === 'missingInfoReason')
   }
 })
 
@@ -422,13 +429,18 @@ watch(
       controlOfSharesErrors.value = []
     }
 
-    // if the "in-concert control" checkbox is unchecked, and the percentOfShares and percentOfVotes are < 25%,
-    // remove the type of control error as this field is now optional
+    // When the "in-concert control" checkbox is unchecked
     if (!values[3]) {
       const shares = parseInt(significantIndividual.value.percentOfShares)
       const votes = parseInt(significantIndividual.value.percentOfVotes)
+      // if the percentOfShares and percentOfVotes are < 25%, remove the type of control error
       if ((Number.isNaN(shares) || shares < 25) && (Number.isNaN(votes) || votes < 25)) {
         controlOfSharesErrors.value = []
+      }
+
+      // if no control type is selected, remove the errors for missing percentage of shares and votes
+      if (!values[0] && !values[1] && !values[2]) {
+        removeEmptyPercentageErrors()
       }
     }
   }
@@ -481,6 +493,18 @@ watch(() => significantIndividual.value.profile.isTaxResident, () => {
   taxResidencyErrors.value = []
 })
 
+watch(() => significantIndividual.value.missingInfoReason, (val: string) => {
+  if (val !== '') {
+    missingInfoReasonErrors.value = []
+  }
+})
+
+watch(() => missingInfo.value, (val: boolean) => {
+  if (!val) {
+    missingInfoReasonErrors.value = []
+  }
+})
+
 // tax number input
 const taxInfoModel = computed({
   get () {
@@ -525,7 +549,8 @@ const formSchema = z.object({
   hasTaxNumber: z.boolean().optional(),
   taxNumber: getTaxNumberValidator(),
   taxResidency: z.boolean().optional(),
-  missingInfoReason: z.string()
+  missingInfo: z.boolean().optional(),
+  missingInfoReason: z.string().optional()
 }).refine(
   validateSharesAndVotes, missingSharesAndVotes
 ).refine(
@@ -545,6 +570,16 @@ const formSchema = z.object({
 ).refine(
   validateTaxResidency, missingTaxResidency
 ).refine(
-  validateMissingInfoReasonTextarea
-)
+  validateMissingInfoTextarea
+).refine(
+  validateMissingInfoReason, noMissingInfoReason)
+
+function removeEmptyPercentageErrors () {
+  const currentErrors = ownerFormBase.value.getErrors()
+  const updatedErrors = currentErrors.filter((error: FormError) => {
+    return !(error.path === missingSharesAndVotes.path[0] && error.message === missingSharesAndVotes.message) &&
+      !(error.path === missingSharesAndVotes.path[1] && error.message === missingSharesAndVotes.message)
+  })
+  ownerFormBase.value.setErrors(updatedErrors)
+}
 </script>
