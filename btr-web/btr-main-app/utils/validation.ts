@@ -128,7 +128,5 @@ export function validateMissingInfoTextarea (formData: FormInputI): boolean {
  * @param formData the form data
  */
 export function validateMissingInfoReason (formData: FormInputI): boolean {
-  console.log(formData.missingInfo)
-  console.log(formData.missingInfoReason)
   return !formData.missingInfo || (formData.missingInfoReason !== '' && formData.missingInfoReason !== undefined)
 }

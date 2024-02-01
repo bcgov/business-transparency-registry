@@ -212,7 +212,6 @@
         :errors="missingInfoReasonErrors"
         @update:missing-info="missingInfo = $event"
       />
-      {{ validationResult }}
     </template>
     <div class="grid mt-10 w-full">
       <div class="flex justify-between">
@@ -341,8 +340,6 @@ function validateForm () {
     otherReasons: significantIndividual.value.controlType.other,
     controlOfDirectors: significantIndividual.value.controlType.directors,
     birthDate: significantIndividual.value.profile.birthDate,
-
-    // country: significantIndividual.value.profile.address.country,
     country: {
       name: significantIndividual.value.profile.address.country.name,
       alpha_2: significantIndividual.value.profile.address.country.alpha_2
@@ -414,6 +411,7 @@ watch(
   (values: string[]) => {
     // If the percenOfShares and percentOfVotes are not empty, remove the empty value errors
     if (values[0] !== '' || values[1] !== '') {
+      const missingSharesAndVotes = getMissingSharesAndVotesError()
       const currentErrors = ownerFormBase.value.getErrors()
       const updatedErrors = currentErrors.filter((error: FormError) => {
         return !(error.path === missingSharesAndVotes.path[0] && error.message === missingSharesAndVotes.message) &&
@@ -462,6 +460,16 @@ watch(
     }
   }
 )
+
+function removeEmptyPercentageErrors () {
+  const missingSharesAndVotes = getMissingSharesAndVotesError()
+  const currentErrors = ownerFormBase.value.getErrors()
+  const updatedErrors = currentErrors.filter((error: FormError) => {
+    return !(error.path === missingSharesAndVotes.path[0] && error.message === missingSharesAndVotes.message) &&
+      !(error.path === missingSharesAndVotes.path[1] && error.message === missingSharesAndVotes.message)
+  })
+  ownerFormBase.value.setErrors(updatedErrors)
+}
 
 // When the type of director control checkboxes are changed, re-assess the condition and remove errors if necessary
 watch(
@@ -556,58 +564,40 @@ const formSchema = z.object({
     inConcertControl: z.boolean()
   }),
   birthDate: z.union([z.string(), z.null()]),
-  country: z.object({
-    name: z.string(),
-    alpha_2: z.string()
-  }).refine(
-    (val: BtrCountryI)=>{
-      console.log("country", val)
-      return val.name !== ''}, { message: 'Please enter a valid country' }
-  ),
-  line1: z.string().min(1, { message: 'Please enter a valid address' }),
+  country: getAddressCountryValidator(),
+  line1: getAddressLine1Validator(),
   line2: z.string().optional(),
-  city: z.string().min(1, { message: 'Please enter a valid city' }),
-  region: z.string().min(1, { message: 'Please enter a valid region' }),
-  postalCode: z.string().min(1, { message: 'Please enter a valid postal code' }),
+  city: getAddressCityValidator(),
+  region: getAddressRegionValidator(),
+  postalCode: getAddressPostalCodeValidator(),
   locationDescription: z.string().optional(),
   citizenshipCA: z.union([z.nativeEnum(CitizenshipTypeE), z.literal('')]),
-  citizenshipsExCA: z.array(
-    z.object({ name: z.string(), alpha_2: z.string() })
-  ),
+  citizenshipsExCA: z.array(z.object({ name: z.string(), alpha_2: z.string() })),
   hasTaxNumber: z.boolean().optional(),
   taxNumber: getTaxNumberValidator(),
   taxResidency: z.boolean().optional(),
   missingInfo: z.boolean().optional(),
   missingInfoReason: z.string().optional()
 }).refine(
-  validateSharesAndVotes, missingSharesAndVotes
+  validateSharesAndVotes, getMissingSharesAndVotesError()
 ).refine(
-  validateControlOfShares, missingControlOfShares
+  validateControlOfShares, getMissingControlOfSharesError()
 ).refine(
-  validateControlOfDirectors, missingControlOfDirectors
+  validateControlOfDirectors, getMissingControlOfDirectorsError()
 ).refine(
   validateOtherReason
 ).refine(
-  validateBirthDate, missingBirthDate
+  validateBirthDate, getMissingBirthDateError()
 ).refine(
-  validateCitizenship, missingCitizenship
+  validateCitizenship, getMissingCitizenshipError()
 ).refine(
-  validateOtherCountrySelection, missingOtherCountry
+  validateOtherCountrySelection, getMissingOtherCountryError()
 ).refine(
-  validateTaxNumberInfo, missingTaxNumberInfo
+  validateTaxNumberInfo, getMissingTaxNumberInfoError()
 ).refine(
-  validateTaxResidency, missingTaxResidency
+  validateTaxResidency, getMissingTaxResidencyError()
 ).refine(
   validateMissingInfoTextarea
 ).refine(
-  validateMissingInfoReason, noMissingInfoReason)
-
-function removeEmptyPercentageErrors () {
-  const currentErrors = ownerFormBase.value.getErrors()
-  const updatedErrors = currentErrors.filter((error: FormError) => {
-    return !(error.path === missingSharesAndVotes.path[0] && error.message === missingSharesAndVotes.message) &&
-      !(error.path === missingSharesAndVotes.path[1] && error.message === missingSharesAndVotes.message)
-  })
-  ownerFormBase.value.setErrors(updatedErrors)
-}
+  validateMissingInfoReason, getNoMissingInfoReasonError())
 </script>

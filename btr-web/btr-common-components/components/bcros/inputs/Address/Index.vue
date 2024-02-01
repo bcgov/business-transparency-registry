@@ -104,6 +104,10 @@
 <script setup lang="ts">
 import { z } from 'zod'
 import { FormError } from '#ui/types'
+import { getAddressLine1Validator, getAddressCityValidator, getAddressRegionValidator, getAddressPostalCodeValidator }
+  from '../../../../../btr-main-app/utils/validators'
+
+const { t } = useI18n()
 
 const emit = defineEmits<{ 'update:modelValue': [value: BtrAddressI] }>()
 const props = defineProps({
@@ -167,7 +171,7 @@ watch(() => addressForm.value?.errors, (val: { path: string }[]) => {
   if (val.filter(val => val.path === 'country').length > 0 ||
   (countryBlurred.value && !address.value.country?.name)) {
     // this will be triggered after the country menu closes (unlike the actual blur event)
-    countryError.value = 'Please select a country'
+    countryError.value = t('errors.validation.address.country')
   } else {
     countryError.value = ''
   }
@@ -185,11 +189,11 @@ watch(() => props.errors, (val: FormError[]) => {
 
 const addressSchema = z.object({
   country: z.object({}),
-  line1: z.string().min(1),
+  line1: getAddressLine1Validator(),
   line2: z.string().optional(),
-  city: z.string().min(1),
-  region: z.string().min(1),
-  postalCode: z.string().min(1),
+  city: getAddressCityValidator(),
+  region: getAddressRegionValidator(),
+  postalCode: getAddressPostalCodeValidator(),
   locationDescription: z.string().optional()
 })
 </script>

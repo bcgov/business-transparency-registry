@@ -152,12 +152,40 @@
         "empty": "Please enter a percentage of shares and/or votes",
         "specialCharacter": "Numbers only",
         "maxValueReached": "Must be between 1 and 100",
-        "invalidFormat": "Enter a number between 1 and 100"
+        "invalidFormat": "Enter a number between 1 and 100",
+        "required": "Please enter a percentage of shares and/or votes"
+      },
+      "sharesAndVotes": {
+        "required": "Please indicate at least one type of control"
+      },
+      "controlOfDirectors": {
+        "required": "Please indicate at least one type of control"
+      },
+      "birthDate": {
+        "required": "Please enter a birth date"
+      },
+      "citizenship": {
+        "required": "Please indicate citizenship/permanent residency",
+        "otherCountry": "Please select at least one country"
+      },
+      "address": {
+        "country": "Please select a country",
+        "line1": "Address Line 1 is required",
+        "city": "Please enter a city",
+        "region": "Please select a region",
+        "postalCode": "Please enter a postal code"
       },
       "taxNumber": {
         "specialCharacter": "The CRA tax number should not contain special characters",
         "invalidLength": "The CRA tax number should be 9 digits long",
-        "invalidNumber": "The CRA tax number is invalid"
+        "invalidNumber": "The CRA tax number is invalid",
+        "required": "Please select a CRA Tax Number option"
+      },
+      "taxResidency": {
+        "required": "Please select a Tax Residency option"
+      },
+      "missingInfoReason": {
+        "required": "Please indicate steps taken"
       },
       "folioNumber": {
         "maxLengthExceeded": "The Folio or Reference number should be up to 30 characters",

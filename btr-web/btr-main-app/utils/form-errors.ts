@@ -1,44 +1,71 @@
-export const missingSharesAndVotes = {
-  message: 'Please enter a percentage of shares and/or votes',
-  path: ['percentOfShares', 'percentOfVotes']
+export function getMissingSharesAndVotesError () {
+  const { t } = useI18n()
+  return {
+    message: t('errors.validation.controlPercentage.required'),
+    path: ['percentOfShares', 'percentOfVotes']
+  }
 }
 
-export const missingControlOfShares = {
-  message: 'Please indicate at least one type of control',
-  path: ['controlOfShares']
+export function getMissingControlOfSharesError () {
+  const { t } = useI18n()
+  return {
+    message: t('errors.validation.sharesAndVotes.required'),
+    path: ['controlOfShares']
+  }
 }
 
-export const missingControlOfDirectors = {
-  message: 'Please indicate at least one type of control',
-  path: ['controlOfDirectors']
+export function getMissingControlOfDirectorsError () {
+  const { t } = useI18n()
+  return {
+    message: t('errors.validation.controlOfDirectors.required'),
+    path: ['controlOfDirectors']
+  }
 }
 
-export const missingBirthDate = {
-  message: 'Please enter a birth date',
-  path: ['birthDate']
+export function getMissingBirthDateError () {
+  const { t } = useI18n()
+  return {
+    message: t('errors.validation.birthDate.required'),
+    path: ['birthDate']
+  }
 }
 
-export const missingCitizenship = {
-  message: 'Please indicate citizenship/permanent residency',
-  path: ['citizenshipCA']
+export function getMissingCitizenshipError () {
+  const { t } = useI18n()
+  return {
+    message: t('errors.validation.citizenship.required'),
+    path: ['citizenshipCA']
+  }
 }
 
-export const missingOtherCountry = {
-  message: 'Please select at least one country',
-  path: ['citizenshipsExCA']
+export function getMissingOtherCountryError () {
+  const { t } = useI18n()
+  return {
+    message: t('errors.validation.citizenship.otherCountry'),
+    path: ['citizenshipsExCA']
+  }
 }
 
-export const missingTaxNumberInfo = {
-  message: 'Please select a CRA Tax Number option',
-  path: ['hasTaxNumber']
+export function getMissingTaxNumberInfoError () {
+  const { t } = useI18n()
+  return {
+    message: t('errors.validation.taxNumber.required'),
+    path: ['hasTaxNumber']
+  }
 }
 
-export const missingTaxResidency = {
-  message: 'Please select a Tax Residency option',
-  path: ['taxResidency']
+export function getMissingTaxResidencyError () {
+  const { t } = useI18n()
+  return {
+    message: t('errors.validation.taxResidency.required'),
+    path: ['taxResidency']
+  }
 }
 
-export const noMissingInfoReason = {
-  message: 'Please indicate steps taken',
-  path: ['missingInfoReason']
+export function getNoMissingInfoReasonError () {
+  const { t } = useI18n()
+  return {
+    message: t('errors.validation.missingInfoReason.required'),
+    path: ['missingInfoReason']
+  }
 }
