@@ -153,6 +153,7 @@
           id="addNewPersonLastKnownAddress"
           v-model="significantIndividual.profile.address"
           :label="$t('labels.lastKnownAddress')"
+          :errors="addressErrors"
         />
       </div>
       <div class="flex-col py-5">
@@ -211,6 +212,7 @@
         :errors="missingInfoReasonErrors"
         @update:missing-info="missingInfo = $event"
       />
+      {{ validationResult }}
     </template>
     <div class="grid mt-10 w-full">
       <div class="flex justify-between">
@@ -313,6 +315,7 @@ const citizenshipErrors: Ref<FormError[]> = ref([])
 const taxNumberErrors: Ref<FormError[]> = ref([])
 const taxResidencyErrors: Ref<FormError[]> = ref([])
 const missingInfoReasonErrors: Ref<FormError[]> = ref([])
+const addressErrors: Ref<FormError[]> = ref([])
 
 const validationResult = ref()
 
@@ -338,6 +341,19 @@ function validateForm () {
     otherReasons: significantIndividual.value.controlType.other,
     controlOfDirectors: significantIndividual.value.controlType.directors,
     birthDate: significantIndividual.value.profile.birthDate,
+
+    // country: significantIndividual.value.profile.address.country,
+    country: {
+      name: significantIndividual.value.profile.address.country.name,
+      alpha_2: significantIndividual.value.profile.address.country.alpha_2
+    },
+    line1: significantIndividual.value.profile.address.line1,
+    line2: significantIndividual.value.profile.address.line2,
+    city: significantIndividual.value.profile.address.city,
+    region: significantIndividual.value.profile.address.region,
+    postalCode: significantIndividual.value.profile.address.postalCode,
+    locationDescription: significantIndividual.value.profile.address.locationDescription,
+
     citizenshipCA: significantIndividual.value.profile.citizenshipCA,
     citizenshipsExCA: significantIndividual.value.profile.citizenshipsExCA,
     hasTaxNumber: significantIndividual.value.profile.hasTaxNumber,
@@ -378,6 +394,7 @@ watch(() => validationResult.value, (val: ZodError) => {
     ownerFormBase.value.setErrors(errors)
     profileFormBase.value.setErrors(errors)
     profileFormExtended.value.setErrors(errors)
+    addressErrors.value = errors
 
     controlOfSharesErrors.value = errors.filter((error: FormError) => error.path === 'controlOfShares')
     controlOfDirectorsErrors.value = errors.filter((error: FormError) => error.path === 'controlOfDirectors')
@@ -539,9 +556,20 @@ const formSchema = z.object({
     inConcertControl: z.boolean()
   }),
   birthDate: z.union([z.string(), z.null()]),
-
-  // TO-DO: validating address field on form submit
-
+  country: z.object({
+    name: z.string(),
+    alpha_2: z.string()
+  }).refine(
+    (val: BtrCountryI)=>{
+      console.log("country", val)
+      return val.name !== ''}, { message: 'Please enter a valid country' }
+  ),
+  line1: z.string().min(1, { message: 'Please enter a valid address' }),
+  line2: z.string().optional(),
+  city: z.string().min(1, { message: 'Please enter a valid city' }),
+  region: z.string().min(1, { message: 'Please enter a valid region' }),
+  postalCode: z.string().min(1, { message: 'Please enter a valid postal code' }),
+  locationDescription: z.string().optional(),
   citizenshipCA: z.union([z.nativeEnum(CitizenshipTypeE), z.literal('')]),
   citizenshipsExCA: z.array(
     z.object({ name: z.string(), alpha_2: z.string() })

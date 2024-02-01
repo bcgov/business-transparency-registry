@@ -8,6 +8,15 @@ export interface FormInputI {
   otherReason: string
   controlOfDirectors: ControlOfDirectorsI
   birthDate: string
+
+  country: BtrCountryI,
+  line1: string
+  line2: string
+  city: string
+  region: string
+  postalCode: string
+  locationDescription: string
+
   citizenshipCA: CitizenshipTypeE
   citizenshipsExCA: BtrCountryI[]
   hasTaxNumber: boolean

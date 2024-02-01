@@ -20,16 +20,14 @@
       style="min-height: 50px"
       :placeholder="$t('labels.unableToObtainOrConfirmInformation.textAreaPlaceholder')"
       class="py-2 w-full"
-      variant="bcGov"
+      :variant="hasError ? 'error' : 'bcGov'"
       resize
       :max-char="4000"
+      :errors="errors"
       data-cy="isUnableToObtainOrConfirmInformationTextArea"
       @keydown="isUnableToObtainOrConfirmInformationDetailsKeyDown"
       @change="emit('update:modelValue', isUnableToObtainOrConfirmInformationDetails || undefined)"
     />
-    <div v-if="hasError" class="text-sm text-red-500">
-      {{ errors[0].message }}
-    </div>
     <BcrosAlertsMessage v-if="isUnableToObtainOrConfirmInformation" :flavour="AlertsFlavourE.ALERT">
       <p class="py-2">
         <strong>{{ $t('labels.unableToObtainOrConfirmInformation.alert.important') }}</strong>
