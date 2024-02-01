@@ -114,18 +114,19 @@ def create_register():
 
         # create submission
         submission = SubmissionService.create_submission(json_input, user.id)
-
+        # save before attempting invoice creation so that we can log the id for ops if there's an error
+        submission.save()
         try:
             # create invoice in pay system
             invoice_resp = btr_pay.create_invoice(account_id, jwt, json_input)
             submission.invoice_id = invoice_resp.json()['id']
-        except ExternalServiceException:
+            submission.save()
+        except ExternalServiceException as err:
             # Log error and continue to return successfully (does NOT block the submission)
             # TODO: save this information to a table so that a daily job can pick these up and retry them
             # Current process is for OPs to retry the invoice creation manually
+            current_app.logger.info(err.error)
             current_app.logger.error('Error creating invoice for submission: %s', submission.id)
-
-        submission.save()
 
         return jsonify(id=submission.id), HTTPStatus.CREATED
 

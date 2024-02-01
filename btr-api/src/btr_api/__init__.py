@@ -67,7 +67,8 @@ def create_app(environment: Config = Production, **kwargs) -> Flask:
             dsn=dsn,
             integrations=[FlaskIntegration()],
             release=f'btr-api@{get_run_version()}',
-            send_default_pii=False
+            send_default_pii=False,
+            environment=app.config.get('POD_NAMESPACE', 'unknown')
         )
 
     db.init_app(app)
