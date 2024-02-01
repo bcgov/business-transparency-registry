@@ -81,7 +81,7 @@ class Config:  # pylint: disable=too-few-public-methods
     GCP_AUTH_KEY = os.getenv("GCP_AUTH_KEY", None)
 
     LD_SDK_KEY = os.getenv("LD_SDK_KEY", None)
-    
+
     SENTRY_DSN = os.getenv("SENTRY_DSN", None)
 
     # JWT_OIDC Settings
