@@ -86,10 +86,10 @@ class PayService:
                                  json=payload, headers=headers,
                                  timeout=self.timeout)
 
-            if resp.status_code != HTTPStatus.OK or not (resp.json()).get('id', None):
+            if resp.status_code not in [HTTPStatus.OK, HTTPStatus.CREATED] or not (resp.json()).get('id', None):
                 error = f'{resp.status_code} - {str(resp.json())}'
                 self.app.logger.debug('Invalid response from pay-api: %s', error)
-                raise ExternalServiceException(error='', status_code=HTTPStatus.PAYMENT_REQUIRED)
+                raise ExternalServiceException(error=error, status_code=HTTPStatus.PAYMENT_REQUIRED)
 
             return resp
 
@@ -97,8 +97,8 @@ class PayService:
             # pass along
             raise exc
         except (requests.exceptions.ConnectionError, requests.exceptions.Timeout) as err:
-            self.app.logger.error('Pay-api connection failure:', repr(err))
+            self.app.logger.debug('Pay-api connection failure:', repr(err))
             raise ExternalServiceException(error=repr(err), status_code=HTTPStatus.PAYMENT_REQUIRED) from err
         except Exception as err:
-            self.app.logger.error('Pay-api integration (create invoice) failure:', repr(err))
+            self.app.logger.debug('Pay-api integration (create invoice) failure:', repr(err))
             raise ExternalServiceException(error=repr(err), status_code=HTTPStatus.PAYMENT_REQUIRED) from err

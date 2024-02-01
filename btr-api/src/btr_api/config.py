@@ -63,6 +63,7 @@ class Config:  # pylint: disable=too-few-public-methods
     CSRF_ENABLED = True
     SECRET_KEY = "this-really-needs-to-be-changed"
     PROJECT_ROOT = os.path.abspath(os.path.dirname(__file__))
+    POD_NAMESPACE = os.getenv("POD_NAMESPACE", None)
 
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
@@ -80,6 +81,8 @@ class Config:  # pylint: disable=too-few-public-methods
     GCP_AUTH_KEY = os.getenv("GCP_AUTH_KEY", None)
 
     LD_SDK_KEY = os.getenv("LD_SDK_KEY", None)
+
+    SENTRY_DSN = os.getenv("SENTRY_DSN", None)
 
     # JWT_OIDC Settings
     JWT_OIDC_WELL_KNOWN_CONFIG = os.getenv('JWT_OIDC_WELL_KNOWN_CONFIG')

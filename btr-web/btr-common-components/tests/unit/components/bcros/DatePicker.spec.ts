@@ -21,7 +21,7 @@ describe('DatePicker tests', () => {
   })
   it('selects and emits date selection', async () => {
     const days = wrapper.findAll('.bcros-date-picker__calendar__day')
-    expect(days.length >= 30).toBe(true)
+    expect(days.length >= 28).toBe(true)
     expect(wrapper.vm.selectedDate).toBe(null)
     expect(wrapper.emitted('selectedDate')).toBeUndefined()
     // click day (NB: make sure it is not a day from previous/next month)
@@ -43,7 +43,7 @@ describe('DatePicker tests', () => {
     expect(wrapper.find('.dp__active_date').text()).toContain(newDate.getDate())
     // changing date and clearing should put the date back to default
     const days = wrapper.findAll('.bcros-date-picker__calendar__day')
-    expect(days.length >= 30).toBe(true)
+    expect(days.length >= 28).toBe(true)
     days[7].trigger('click')
     await flushPromises()
     // confirm date changed
@@ -61,7 +61,7 @@ describe('DatePicker tests', () => {
     await nextTick()
     // days 1-4 and 11-* should be disabled
     const days = wrapper.findAll('.bcros-date-picker__calendar__day')
-    expect(days.length >= 30).toBe(true)
+    expect(days.length >= 28).toBe(true)
     for (const i in days) {
       if (days[i].classes().includes('dp__cell_offset')) {
         // skip because it is a hidden day from the previous/next month

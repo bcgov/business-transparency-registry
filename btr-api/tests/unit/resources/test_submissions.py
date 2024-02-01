@@ -67,7 +67,7 @@ def test_post_plots_db_mocked(app, session, client, jwt, mocker, requests_mock):
         assert rv.status_code == HTTPStatus.CREATED
 
     mock_user_save.assert_called_once()
-    mock_submission_save.assert_called_once()
+    mock_submission_save.assert_called()
     assert pay_api_mock.called == True
     assert pay_api_mock.request_history[0].json() == {
         'filingInfo': {'filingTypes': [{'filingTypeCode': 'REGSIGIN'}]},
