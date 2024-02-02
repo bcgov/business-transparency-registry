@@ -27,20 +27,25 @@
         :value="NO_TAX_NUMBER"
         @change="handleRadioButtonChange(NO_TAX_NUMBER)"
       />
-      <label for="noTaxNumberRadioButton" class="ml-5">
+      <label for="noTaxNumberRadioButton" class="ml-5" :class="{ 'text-red-500': hasError}">
         {{ $t('labels.noTaxNumberLabel') }}
       </label>
+    </div>
+    <div v-if="hasError" class="text-sm text-red-500">
+      {{ errors[0].message }}
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
+import type { FormError } from '#ui/types'
 const HAS_TAX_NUMBER = 'hasTaxNumber'
 const NO_TAX_NUMBER = 'noTaxNumber'
 
 const props = defineProps({
   id: { type: String, required: true },
   name: { type: String, default: 'name' },
+  errors: { type: Object as PropType<FormError[]>, required: true },
   modelValue: {
     type: Object,
     default: () => ({
@@ -59,6 +64,8 @@ const emit = defineEmits<{
 const selectedButton = ref(
   props.modelValue.hasTaxNumber === undefined ? '' : (props.modelValue.hasTaxNumber ? HAS_TAX_NUMBER : NO_TAX_NUMBER)
 )
+
+const hasError = computed<Boolean>(() => props.errors.length > 0)
 
 // The tax number input value
 const taxNumber = ref(props.modelValue.taxNumber ? props.modelValue.taxNumber : '')

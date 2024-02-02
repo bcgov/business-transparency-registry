@@ -103,12 +103,15 @@
 
 <script setup lang="ts">
 import { z } from 'zod'
+import { FormError } from '#ui/types'
+const { t } = useI18n()
 
 const emit = defineEmits<{ 'update:modelValue': [value: BtrAddressI] }>()
 const props = defineProps({
   label: { type: String, default: '' },
   id: { type: String, required: true },
-  modelValue: { type: Object as PropType<BtrAddressI>, required: true }
+  modelValue: { type: Object as PropType<BtrAddressI>, required: true },
+  errors: { type: Object as PropType<FormError[]>, default: () => ([] as FormError[]) }
 })
 
 const country: Ref<BtrCountryI | null> = ref(props.modelValue.country.name === '' ? null : props.modelValue.country)
@@ -162,10 +165,10 @@ const postalCodeInvalid = ref(false)
 const descriptionInvalid = ref(false)
 
 watch(() => addressForm.value?.errors, (val: { path: string }[]) => {
-  // FUTURE: use zod address schema to validate the country in 18883
-  if (countryBlurred.value && !address.value.country?.name) {
+  if (val.filter(val => val.path === 'country').length > 0 ||
+  (countryBlurred.value && !address.value.country?.name)) {
     // this will be triggered after the country menu closes (unlike the actual blur event)
-    countryError.value = 'Please select a country'
+    countryError.value = t('errors.validation.address.country')
   } else {
     countryError.value = ''
   }
@@ -177,14 +180,17 @@ watch(() => addressForm.value?.errors, (val: { path: string }[]) => {
   descriptionInvalid.value = val.filter(val => val.path === 'locationDescription').length > 0
 })
 
-// FUTURE: update these validations in 18883
+watch(() => props.errors, (val: FormError[]) => {
+  addressForm.value.setErrors(val)
+})
+
 const addressSchema = z.object({
   country: z.object({}),
-  line1: z.string().min(1),
+  line1: getAddressLine1Validator(),
   line2: z.string().optional(),
-  city: z.string().min(1),
-  region: z.string().min(1),
-  postalCode: z.string().min(1),
+  city: getAddressCityValidator(),
+  region: getAddressRegionValidator(),
+  postalCode: getAddressPostalCodeValidator(),
   locationDescription: z.string().optional()
 })
 </script>

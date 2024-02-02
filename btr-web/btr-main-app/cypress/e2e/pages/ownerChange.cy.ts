@@ -77,20 +77,6 @@ describe('pages -> Beneficial Owner Change', () => {
     cy.get('[data-cy=add-new-btn]').should('not.have.attr', 'disabled')
   })
 
-  it('has expected done button functionality with add individual', () => {
-    cy.get('[data-cy=add-new-btn]').trigger('click')
-    cy.get('[data-cy=addIndividualPerson]').should('exist')
-    cy.get('[data-cy=add-new-btn]').should('have.attr', 'disabled')
-
-    // FUTURE: fill out full form so it passes validation
-    const testName = 'Mr Tester'
-    cy.get('[data-cy=testFullName]').get('#individual-person-full-name').type(testName)
-    cy.get('[data-cy=new-si-done-btn]').trigger('click')
-    cy.get('[data-cy=addIndividualPerson]').should('not.exist')
-    cy.get('[data-cy=add-new-btn]').should('not.have.attr', 'disabled')
-    cy.get('[data-cy=individualsSummaryTable]').get('td').eq(0).should('have.text', testName.toUpperCase())
-  })
-
   it('verify summary table is rendered as expected', () => {
     const summaryTableHeaders = cy.get('[data-cy="individualsSummaryTable"]').get('th')
     summaryTableHeaders

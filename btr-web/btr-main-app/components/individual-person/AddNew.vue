@@ -8,7 +8,7 @@
     </div> -->
     <UForm
       ref="profileFormBase"
-      :schema="profileSchema"
+      :schema="formSchema"
       :state="significantIndividual.profile"
       @change="addBtrPayFees"
     >
@@ -66,7 +66,7 @@
       </div> -->
       <UForm
         ref="ownerFormBase"
-        :schema="ownershipSchema"
+        :schema="formSchema"
         :state="significantIndividual"
       >
         <div class="flex-col pt-5">
@@ -100,6 +100,7 @@
           v-model="significantIndividual.controlType.sharesVotes"
           name="typeOfControl"
           data-cy="testTypeOfControl"
+          :errors="controlOfSharesErrors"
         />
       </div>
       <div class="flex-col py-5">
@@ -116,6 +117,7 @@
           v-model="significantIndividual.controlType.directors"
           name="controlOfDirectors"
           data-cy="testControlOfDirectors"
+          :errors="controlOfDirectorsErrors"
         />
         <p>
           <span class="font-bold">{{ $t('texts.note') }}</span>
@@ -141,6 +143,8 @@
             ? dateStringToDate(significantIndividual.profile.birthDate) : undefined"
           :max-date="new Date()"
           :placeholder="$t('placeholders.dateSelect.birthdate')"
+          :variant="birthDateErrors.length > 0 ? 'error' : 'bcGov'"
+          :errors="birthDateErrors"
           @selection="significantIndividual.profile.birthDate = dateToString($event, 'YYYY-MM-DD')"
         />
       </div>
@@ -149,6 +153,7 @@
           id="addNewPersonLastKnownAddress"
           v-model="significantIndividual.profile.address"
           :label="$t('labels.lastKnownAddress')"
+          :errors="addressErrors"
         />
       </div>
       <div class="flex-col py-5">
@@ -162,11 +167,12 @@
           id="countriesOfCitizenship"
           v-model:canadianCitizenship="significantIndividual.profile.citizenshipCA"
           v-model:citizenships="significantIndividual.profile.citizenshipsExCA"
+          :errors="citizenshipErrors"
         />
       </div>
       <UForm
         ref="profileFormExtended"
-        :schema="profileSchema"
+        :schema="formSchema"
         :state="significantIndividual.profile"
       >
         <div>
@@ -180,7 +186,8 @@
             id="addNewPersonTaxNumber"
             v-model="taxInfoModel"
             name="taxNumber"
-            :variant="taxNumebrInvalid ? 'error' : 'bcGov'"
+            :variant="taxNumebrInvalid || taxNumberErrors.length > 0 ? 'error' : 'bcGov'"
+            :errors="taxNumberErrors"
             data-cy="testTaxNumber"
           />
         </div>
@@ -195,10 +202,16 @@
         <IndividualPersonTaxInfoTaxResidency
           id="addNewPersonTaxResidency"
           v-model="significantIndividual.profile.isTaxResident"
+          :errors="taxResidencyErrors"
           data-cy="testTaxResidency"
         />
       </div>
-      <IndividualPersonControlUnableToObtainOrConfirmInformation v-model="significantIndividual.missingInfoReason" />
+      <IndividualPersonControlUnableToObtainOrConfirmInformation
+        v-model="significantIndividual.missingInfoReason"
+        :missing-info="missingInfo"
+        :errors="missingInfoReasonErrors"
+        @update:missing-info="missingInfo = $event"
+      />
     </template>
     <div class="grid mt-10 w-full">
       <div class="flex justify-between">
@@ -235,7 +248,8 @@
 </template>
 
 <script setup lang="ts">
-import { z } from 'zod'
+import { z, ZodError, ZodIssue } from 'zod'
+import type { FormError } from '#ui/types'
 
 const { t } = useI18n()
 
@@ -260,14 +274,6 @@ const isEditing = computed(() => significantIndividual.value.action === FilingAc
 watch(() => props.startDate, (val) => {
   significantIndividual.value.startDate = val
 })
-
-function handleDoneButtonClick () {
-  if (isEditing.value) {
-    updateSignificantIndividual()
-  } else {
-    addSignificantIndividual()
-  }
-}
 
 function addSignificantIndividual () {
   // FUTURE: validate form / scroll to 1st error
@@ -296,9 +302,66 @@ const fullNameInvalid = ref(false)
 const preferredNameInvalid = ref(false)
 const emailInvalid = ref(false)
 const taxNumebrInvalid = ref(false)
+const missingInfo = ref(false)
 
 const percentOfSharesInvalid = ref(false)
 const percentOfVotesInvalid = ref(false)
+
+const controlOfSharesErrors: Ref<FormError[]> = ref([])
+const controlOfDirectorsErrors: Ref<FormError[]> = ref([])
+const birthDateErrors: Ref<FormError[]> = ref([])
+const citizenshipErrors: Ref<FormError[]> = ref([])
+const taxNumberErrors: Ref<FormError[]> = ref([])
+const taxResidencyErrors: Ref<FormError[]> = ref([])
+const missingInfoReasonErrors: Ref<FormError[]> = ref([])
+const addressErrors: Ref<FormError[]> = ref([])
+
+const validationResult = ref()
+
+function handleDoneButtonClick () {
+  validateForm()
+  if (validationResult.value.success) {
+    if (isEditing.value) {
+      updateSignificantIndividual()
+    } else {
+      addSignificantIndividual()
+    }
+  }
+}
+
+function validateForm () {
+  const data: FormInputI = {
+    fullName: significantIndividual.value.profile.fullName,
+    preferredName: significantIndividual.value.profile.preferredName,
+    email: significantIndividual.value.profile.email,
+    percentOfShares: significantIndividual.value.percentOfShares,
+    percentOfVotes: significantIndividual.value.percentOfVotes,
+    controlOfShares: significantIndividual.value.controlType.sharesVotes,
+    otherReasons: significantIndividual.value.controlType.other,
+    controlOfDirectors: significantIndividual.value.controlType.directors,
+    birthDate: significantIndividual.value.profile.birthDate,
+    country: {
+      name: significantIndividual.value.profile.address.country.name,
+      alpha_2: significantIndividual.value.profile.address.country.alpha_2
+    },
+    line1: significantIndividual.value.profile.address.line1,
+    line2: significantIndividual.value.profile.address.line2,
+    city: significantIndividual.value.profile.address.city,
+    region: significantIndividual.value.profile.address.region,
+    postalCode: significantIndividual.value.profile.address.postalCode,
+    locationDescription: significantIndividual.value.profile.address.locationDescription,
+
+    citizenshipCA: significantIndividual.value.profile.citizenshipCA,
+    citizenshipsExCA: significantIndividual.value.profile.citizenshipsExCA,
+    hasTaxNumber: significantIndividual.value.profile.hasTaxNumber,
+    taxNumber: significantIndividual.value.profile.taxNumber,
+    taxResidency: significantIndividual.value.profile.isTaxResident,
+    missingInfo: missingInfo.value,
+    missingInfoReason: significantIndividual.value.missingInfoReason
+  }
+
+  validationResult.value = formSchema.safeParse(data)
+}
 
 watch(() => profileFormBase.value?.errors, (val: { path: string }[]) => {
   fullNameInvalid.value = val.filter(val => val.path === 'fullName').length > 0
@@ -313,17 +376,152 @@ watch(() => ownerFormBase.value?.errors, (val: { path: string }[]) => {
   percentOfVotesInvalid.value = val.filter(val => val.path === 'percentOfVotes').length > 0
 })
 
-const profileSchema = z.object({
-  fullName: getFullNameValidator(),
-  preferredName: getPreferredNameValidator(),
-  email: getEmailValidator(),
-  hasTaxNumber: z.boolean(),
-  taxNumber: getTaxNumberValidator()
+watch(() => validationResult.value, (val: ZodError) => {
+  if (!val.success) {
+    const errors: FormError[] = []
+    val.error.issues.forEach((issue: ZodIssue[]) => {
+      issue.path.forEach((pathName: string) => {
+        errors.push({
+          path: pathName,
+          message: issue.message
+        })
+      })
+    })
+
+    ownerFormBase.value.setErrors(errors)
+    profileFormBase.value.setErrors(errors)
+    profileFormExtended.value.setErrors(errors)
+    addressErrors.value = errors
+
+    controlOfSharesErrors.value = errors.filter((error: FormError) => error.path === 'controlOfShares')
+    controlOfDirectorsErrors.value = errors.filter((error: FormError) => error.path === 'controlOfDirectors')
+    birthDateErrors.value = errors.filter((error: FormError) => error.path === 'birthDate')
+    citizenshipErrors.value = errors.filter(
+      (error: FormError) => (error.path === 'citizenshipCA' || error.path === 'citizenshipsExCA')
+    )
+    taxNumberErrors.value = errors.filter((error: FormError) => error.path === 'hasTaxNumber')
+    taxResidencyErrors.value = errors.filter((error: FormError) => error.path === 'taxResidency')
+    missingInfoReasonErrors.value = errors.filter((error: FormError) => error.path === 'missingInfoReason')
+  }
 })
 
-const ownershipSchema = z.object({
-  percentOfShares: getPercentageValidator(),
-  percentOfVotes: getPercentageValidator()
+// When the percentOfShares and percentOfVotes are changed, re-assess the confition and remove errors if necessary
+watch(
+  [() => significantIndividual.value.percentOfShares, () => significantIndividual.value.percentOfVotes],
+  (values: string[]) => {
+    // If the percenOfShares and percentOfVotes are not empty, remove the empty value errors
+    if (values[0] !== '' || values[1] !== '') {
+      removeEmptyPercentageErrors()
+    }
+
+    // If the percentOfShares and percentOfVotes are < 25%, and the "in-concert control" checkbox is not checked,
+    // the type of control error should be remove as this field is now optional
+    const shares = parseInt(values[0])
+    const votes = parseInt(values[1])
+    if ((Number.isNaN(shares) || shares < 25) && (Number.isNaN(votes) || votes < 25) &&
+      !significantIndividual.value.controlType.sharesVotes.inConcertControl) {
+      controlOfSharesErrors.value = []
+    }
+  }
+)
+
+// When the control type checkboxes are changed, re-assess the condition and remove errors if necessary
+watch(
+  [() => significantIndividual.value.controlType.sharesVotes.registeredOwner,
+    () => significantIndividual.value.controlType.sharesVotes.beneficialOwner,
+    () => significantIndividual.value.controlType.sharesVotes.indirectControl,
+    () => significantIndividual.value.controlType.sharesVotes.inConcertControl
+  ],
+  (values: boolean[]) => {
+    // if any of the control type is selected, remove the type of control error
+    if (values[0] || values[1] || values[2]) {
+      controlOfSharesErrors.value = []
+    }
+
+    // When the "in-concert control" checkbox is unchecked
+    if (!values[3]) {
+      const shares = parseInt(significantIndividual.value.percentOfShares)
+      const votes = parseInt(significantIndividual.value.percentOfVotes)
+      // if the percentOfShares and percentOfVotes are < 25%, remove the type of control error
+      if ((Number.isNaN(shares) || shares < 25) && (Number.isNaN(votes) || votes < 25)) {
+        controlOfSharesErrors.value = []
+      }
+
+      // if no control type is selected, remove the errors for missing percentage of shares and votes
+      if (!values[0] && !values[1] && !values[2]) {
+        removeEmptyPercentageErrors()
+      }
+    }
+  }
+)
+
+function removeEmptyPercentageErrors () {
+  const missingSharesAndVotes = getMissingSharesAndVotesError()
+  const currentErrors = ownerFormBase.value.getErrors()
+  const updatedErrors = currentErrors.filter((error: FormError) => {
+    return !(error.path === missingSharesAndVotes.path[0] && error.message === missingSharesAndVotes.message) &&
+      !(error.path === missingSharesAndVotes.path[1] && error.message === missingSharesAndVotes.message)
+  })
+  ownerFormBase.value.setErrors(updatedErrors)
+}
+
+// When the type of director control checkboxes are changed, re-assess the condition and remove errors if necessary
+watch(
+  [() => significantIndividual.value.controlType.directors.directControl,
+    () => significantIndividual.value.controlType.directors.indirectControl,
+    () => significantIndividual.value.controlType.directors.significantInfluence,
+    () => significantIndividual.value.controlType.directors.inConcertControl
+  ],
+  (values: boolean[]) => {
+    // if any of the control type is selected, or if the "in-concert control" checkbox is unchecked
+    // remove the type of control error
+    if (values[0] || values[1] || values[2] || !values[3]) {
+      controlOfDirectorsErrors.value = []
+    }
+  }
+)
+
+// When the birth date is entered, remove the empty birth date error
+watch(() => significantIndividual.value.profile.birthDate, (val: string) => {
+  if (val !== '') {
+    birthDateErrors.value = []
+  }
+})
+
+// When a type of citizenship is selected, remove the empty citizenship error
+watch(() => significantIndividual.value.profile.citizenshipCA, (val: CitizenshipTypeE) => {
+  if ([CitizenshipTypeE.CITIZEN, CitizenshipTypeE.PR, CitizenshipTypeE.OTHER].includes(val)) {
+    citizenshipErrors.value = []
+  }
+})
+
+// When a country is selected for other citizenships, remove the error
+watch(() => significantIndividual.value.profile.citizenshipsExCA, (val: { name: string, alpha_2: string }[]) => {
+  if (val.length > 0) {
+    citizenshipErrors.value = []
+  }
+})
+
+// When one of the tax number radio buttons is selected, remove the empty tax number error
+watch(() => significantIndividual.value.profile.hasTaxNumber, () => {
+  taxNumberErrors.value = []
+})
+
+// When one of the tax residency radio buttons is selected, remove the empty tax residency error
+watch(() => significantIndividual.value.profile.isTaxResident, () => {
+  taxResidencyErrors.value = []
+})
+
+watch(() => significantIndividual.value.missingInfoReason, (val: string) => {
+  if (val !== '') {
+    missingInfoReasonErrors.value = []
+  }
+})
+
+watch(() => missingInfo.value, (val: boolean) => {
+  if (!val) {
+    missingInfoReasonErrors.value = []
+  }
 })
 
 // tax number input
@@ -339,4 +537,61 @@ const taxInfoModel = computed({
     significantIndividual.value.profile.taxNumber = value.taxNumber
   }
 })
+
+const formSchema = z.object({
+  fullName: getFullNameValidator(),
+  preferredName: getPreferredNameValidator(),
+  email: getEmailValidator(),
+  percentOfShares: getPercentageValidator(),
+  percentOfVotes: getPercentageValidator(),
+  controlOfShares: z.object({
+    registeredOwner: z.boolean(),
+    beneficialOwner: z.boolean(),
+    indirectControl: z.boolean(),
+    inConcertControl: z.boolean()
+  }),
+  otherReasons: z.string(),
+  controlOfDirectors: z.object({
+    directControl: z.boolean(),
+    indirectControl: z.boolean(),
+    significantInfluence: z.boolean(),
+    inConcertControl: z.boolean()
+  }),
+  birthDate: z.union([z.string(), z.null()]),
+  country: getAddressCountryValidator(),
+  line1: getAddressLine1Validator(),
+  line2: z.string().optional(),
+  city: getAddressCityValidator(),
+  region: getAddressRegionValidator(),
+  postalCode: getAddressPostalCodeValidator(),
+  locationDescription: z.string().optional(),
+  citizenshipCA: z.union([z.nativeEnum(CitizenshipTypeE), z.literal('')]),
+  citizenshipsExCA: z.array(z.object({ name: z.string(), alpha_2: z.string() })),
+  hasTaxNumber: z.boolean().optional(),
+  taxNumber: getTaxNumberValidator(),
+  taxResidency: z.boolean().optional(),
+  missingInfo: z.boolean().optional(),
+  missingInfoReason: z.string().optional()
+}).refine(
+  validateSharesAndVotes, getMissingSharesAndVotesError()
+).refine(
+  validateControlOfShares, getMissingControlOfSharesError()
+).refine(
+  validateControlOfDirectors, getMissingControlOfDirectorsError()
+).refine(
+  validateOtherReason
+).refine(
+  validateBirthDate, getMissingBirthDateError()
+).refine(
+  validateCitizenship, getMissingCitizenshipError()
+).refine(
+  validateOtherCountrySelection, getMissingOtherCountryError()
+).refine(
+  validateTaxNumberInfo, getMissingTaxNumberInfoError()
+).refine(
+  validateTaxResidency, getMissingTaxResidencyError()
+).refine(
+  validateMissingInfoTextarea
+).refine(
+  validateMissingInfoReason, getNoMissingInfoReasonError())
 </script>

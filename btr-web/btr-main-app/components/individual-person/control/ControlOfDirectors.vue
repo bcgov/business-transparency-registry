@@ -5,8 +5,12 @@
         v-model="controlOfDirectors[type.value]"
         :name="type.value"
         :label="type.label"
+        :ui="errorTextColor"
         class="py-2"
       />
+    </div>
+    <div v-if="hasError" class="py-2 text-sm text-red-500">
+      {{ errors[0].message }}
     </div>
     <UCheckbox
       v-model="controlOfDirectors.inConcertControl"
@@ -36,9 +40,11 @@
 </template>
 
 <script setup lang="ts">
+import type { FormError } from '#ui/types'
 
 const prop = defineProps({
   id: { type: String, required: true },
+  errors: { type: Object as PropType<FormError[]>, required: true },
   modelValue: {
     type: Object as PropType<ControlOfDirectorsI>,
     default: () => ({
@@ -58,4 +64,7 @@ const types = [
 ]
 
 const controlOfDirectors: Ref<ControlOfDirectorsI> = ref(prop.modelValue)
+const hasError = computed<Boolean>(() => prop.errors.length > 0)
+const errorTextColor = computed(() => (hasError.value ? { label: 'text-red-500' } : {}))
+
 </script>

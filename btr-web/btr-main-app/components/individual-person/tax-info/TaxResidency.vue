@@ -1,6 +1,11 @@
 <template>
   <UFormGroup :label="label" name="taxResidency" class="flex flex-col py-5">
-    <div v-for="(option, index) in options" :key="index" class="flex items-center mb-2 py-1">
+    <div
+      v-for="(option, index) in options"
+      :key="index"
+      class="flex items-center mb-2 py-1"
+      :class="{ 'text-red-500': hasError}"
+    >
       <URadio
         :id="`radio-${option.value}`"
         v-model="selectedValue"
@@ -11,16 +16,21 @@
         {{ option.label }}
       </label>
     </div>
+    <div v-if="hasError" class="text-sm text-red-500">
+      {{ errors[0].message }}
+    </div>
   </UFormGroup>
 </template>
 
 <script setup lang="ts">
 import { ref, watch } from 'vue'
+import type { FormError } from '#ui/types'
 
 const props = defineProps({
   id: { type: String, required: true },
   label: { type: [String], default: '' },
-  modelValue: { type: Boolean, default: undefined }
+  modelValue: { type: Boolean, default: undefined },
+  errors: { type: Object as PropType<FormError[]>, required: true }
 })
 
 const emit = defineEmits<{(e: 'update:modelValue', value: boolean): void}>()
@@ -36,4 +46,6 @@ const options = [
 watch(selectedValue, (newValue) => {
   emit('update:modelValue', newValue as boolean)
 })
+
+const hasError = computed<Boolean>(() => props.errors.length > 0)
 </script>

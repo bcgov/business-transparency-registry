@@ -20,9 +20,10 @@
       style="min-height: 50px"
       :placeholder="$t('labels.unableToObtainOrConfirmInformation.textAreaPlaceholder')"
       class="py-2 w-full"
-      variant="bcGov"
+      :variant="hasError ? 'error' : 'bcGov'"
       resize
       :max-char="4000"
+      :errors="errors"
       data-cy="isUnableToObtainOrConfirmInformationTextArea"
       @keydown="isUnableToObtainOrConfirmInformationDetailsKeyDown"
       @change="emit('update:modelValue', isUnableToObtainOrConfirmInformationDetails || undefined)"
@@ -40,12 +41,18 @@
 </template>
 
 <script setup lang="ts">
-const emit = defineEmits<{(e: 'update:modelValue', value: string | undefined): void }>()
+import { FormError } from '#ui/types'
+
+const emit = defineEmits<{(e: 'update:modelValue', value: string | undefined): void,
+  (e: 'update:missing-info', value: boolean): void}>()
+
 const props = defineProps({
-  modelValue: { type: String, default: undefined }
+  modelValue: { type: String, default: undefined },
+  missingInfo: { type: Boolean, default: false },
+  errors: { type: Object as PropType<FormError[]>, required: true }
 })
 
-const isUnableToObtainOrConfirmInformation = ref(props.modelValue !== undefined && props.modelValue !== '')
+const isUnableToObtainOrConfirmInformation = ref(props.missingInfo)
 const isUnableToObtainOrConfirmInformationDetails = ref(props.modelValue || '')
 
 const isUnableToObtainOrConfirmInformationCheckboxChange = () => {
@@ -56,4 +63,14 @@ const isUnableToObtainOrConfirmInformationCheckboxChange = () => {
 const isUnableToObtainOrConfirmInformationDetailsKeyDown = () => {
   isUnableToObtainOrConfirmInformation.value = true
 }
+
+watch(isUnableToObtainOrConfirmInformation, (newValue) => {
+  emit('update:missing-info', newValue)
+})
+
+watch(isUnableToObtainOrConfirmInformationDetails, (newValue) => {
+  emit('update:modelValue', newValue)
+})
+
+const hasError = computed<Boolean>(() => props.errors.length > 0)
 </script>
