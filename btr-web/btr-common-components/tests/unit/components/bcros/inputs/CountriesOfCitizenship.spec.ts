@@ -11,7 +11,7 @@ const i18n = createI18n({
 
 it('can mount BcrosInputsCountriesOfCitizenship component', async () => {
   const component = await mountSuspended(BcrosInputsCountriesOfCitizenship,
-    { global: { plugins: [i18n] }, props: { citizenships: [] } })
+    { global: { plugins: [i18n] }, props: { citizenships: [], errors: [] } })
   expect(component.find('[data-cy="countryOfCitizenshipRadioGroup"]').exists()).toBe(true)
   expect(component.find('[data-cy="countryOfCitizenshipDropdown"]').exists()).toBe(true)
   expect(component.find('[data-cy="countryOfCitizenshipDropdownButton"]').exists()).toBe(true)
