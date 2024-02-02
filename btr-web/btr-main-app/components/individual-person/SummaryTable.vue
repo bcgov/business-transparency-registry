@@ -6,7 +6,10 @@
     :empty-state="$t('texts.tables.emptyTexts.individualsSummaryTable')"
   >
     <template #table-row="{ item, index }">
-      <tr v-if="item.action != FilingActionE.REMOVE && editingIndex != index">
+      <tr
+        v-if="item.action != FilingActionE.REMOVE && editingIndex != index"
+        class="border-0"
+      >
         <td data-cy="summary-table-name">
           <span class="font-bold">{{ item.profile.fullName.toUpperCase() }}</span><br>
           <span v-if="item.profile.preferredName">{{ item.profile.preferredName }}<br></span>
@@ -34,9 +37,12 @@
           <span>{{ getTaxResidentText(item.profile.isTaxResident) }}</span>
         </td>
         <td data-cy="summary-table-dates">
-          {{ $t('texts.dateRange', {
-            start: item.startDate ? item.startDate : $t('labels.unknown'),
-            end: item.endDate ? item.endDate : $t('labels.current') }) }}
+          {{
+            $t('texts.dateRange', {
+              start: item.startDate ? item.startDate : $t('labels.unknown'),
+              end: item.endDate ? item.endDate : $t('labels.current')
+            })
+          }}
         </td>
         <td data-cy="summary-table-controls">
           <div v-if="Object.values(item.controlType.sharesVotes).includes(true)">
@@ -105,6 +111,20 @@
           </td>
         </template>
       </tr>
+      <!-- standard class or css style without !important was not working -->
+      <tr
+        v-if="displayAdditional(item, editingIndex)"
+        style="border-top-width: 0!important"
+      >
+        <td colspan="6">
+          <p v-if="item.externalInfluence === ExternalInfluenceE.CAN_BE_INFLUENCED">
+            {{ $t('labels.externalInfluence.canBeInfluenced') }}
+          </p>
+          <p v-if="item.externalInfluence === ExternalInfluenceE.CAN_INFLUENCE">
+            {{ $t('labels.externalInfluence.canInfluence') }}
+          </p>
+        </td>
+      </tr>
       <tr v-if="isEditing && editingIndex === index">
         <td data-cy="summary-table-edit-form" colspan="100%">
           <div class="bg-white rounded flex flex-row">
@@ -136,6 +156,9 @@
 </template>
 
 <script setup lang="ts">
+import { ExternalInfluenceE } from '~/enums/external-influence-e'
+import { SignificantIndividualI } from '~/interfaces/significant-individual-i'
+
 const emit = defineEmits(['toggle-editing-mode'])
 const props = defineProps({
   individuals: {
@@ -166,6 +189,16 @@ const headers = [
 const isEmptyState = computed(() => {
   return props.individuals.every(individual => individual.action === FilingActionE.REMOVE)
 })
+
+const displayAdditional = (item: SignificantIndividualI) => {
+  return (
+    item.action !== FilingActionE.REMOVE &&
+    (
+      item.externalInfluence === ExternalInfluenceE.CAN_INFLUENCE ||
+      item.externalInfluence === ExternalInfluenceE.CAN_BE_INFLUENCED
+    )
+  )
+}
 
 function getTaxResidentText (isTaxResident: boolean) {
   if (isTaxResident) {
