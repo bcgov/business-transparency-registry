@@ -104,8 +104,6 @@
 <script setup lang="ts">
 import { z } from 'zod'
 import { FormError } from '#ui/types'
-import { getAddressCityValidator, getAddressLine1Validator, getAddressPostalCodeValidator, getAddressRegionValidator }
-  from '../../../../utils/validation/validators'
 const { t } = useI18n()
 
 const emit = defineEmits<{ 'update:modelValue': [value: BtrAddressI] }>()

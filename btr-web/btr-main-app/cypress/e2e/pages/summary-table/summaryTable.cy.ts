@@ -1,7 +1,7 @@
 import { dateToString } from '../../../../../btr-common-components/utils/date'
 import payFeesForBtrRegsigin from '../../../fixtures/payFeeForBtrRegsigin.json'
 
-describe('pages -> Beneficial Owner Change', () => {
+describe('pages -> Summary Table', () => {
   beforeEach(() => {
     cy.visit('/')
     // Select the effective date

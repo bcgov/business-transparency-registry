@@ -1,6 +1,6 @@
 import payFeesForBtrRegsigin from '../../fixtures/payFeeForBtrRegsigin.json'
 
-describe('pages -> Beneficial Owner Change', () => {
+describe('pages -> Form Validation', () => {
   let i18nCommon: any
   let i18n: any
   beforeEach(() => {
