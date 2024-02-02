@@ -16,6 +16,7 @@ it('can mount BcrosInputsAddress component', async () => {
     postalCode: '',
     region: ''
   }
+
   const validationErrors: FormError[] = []
 
   const component =
