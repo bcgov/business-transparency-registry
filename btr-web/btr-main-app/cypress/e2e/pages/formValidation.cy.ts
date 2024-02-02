@@ -65,7 +65,43 @@ describe('pages -> Beneficial Owner Change', () => {
     cy.contains(i18n.errors.validation.controlPercentage.empty).should('not.exist')
     cy.contains(i18n.errors.validation.sharesAndVotes.required).should('not.exist')
 
-    // TO-DO more tests convering all the validation rules for the percentage of shares and votes
-    // and the control types.
+    // If one of the control types is selected, the percentage of shares and votes should be required
+    // To remove the error,
+    // 1) enter percent of shares or percent of votes
+    // 2) uncheck the control type
+    cy.get('[name="registeredOwner"]').check()
+    cy.get('[data-cy=new-si-done-btn]').click()
+    cy.contains(i18n.errors.validation.controlPercentage.empty).should('exist')
+    cy.get('[name="registeredOwner"]').uncheck()
+    cy.contains(i18n.errors.validation.controlPercentage.empty).should('not.exist')
+    cy.get('[name="registeredOwner"]').check()
+    cy.get('[data-cy=new-si-done-btn]').click()
+    cy.get('[name="percentOfShares"]').type('30').blur()
+    cy.contains(i18n.errors.validation.controlPercentage.empty).should('not.exist')
+
+    // if the in-concert control is selected, the percentage of shares and votes is required, and the
+    // control type is required
+    cy.get('[data-cy=new-si-cancel-btn]').click()
+    cy.get('[data-cy=add-new-btn]').click()
+    cy.get('[name="inConcertControl"]').check()
+    cy.get('[data-cy=new-si-done-btn]').click()
+    cy.contains(i18n.errors.validation.controlPercentage.empty).should('exist')
+    cy.contains(i18n.errors.validation.controlOfDirectors.required).should('exist')
+    // unchecking the in-concert control should remove the errors
+    cy.get('[name="inConcertControl"]').uncheck()
+    cy.contains(i18n.errors.validation.controlPercentage.empty).should('not.exist')
+    cy.contains(i18n.errors.validation.controlOfDirectors.required).should('not.exist')
+
+    // if either the percent of shares or the percent of votes is >= 25%, the control type is required
+    cy.get('[data-cy=new-si-cancel-btn]').click()
+    cy.get('[data-cy=add-new-btn]').click()
+    cy.get('[name="percentOfShares"]').type('10').blur()
+    cy.get('[data-cy=new-si-done-btn]').click()
+    cy.contains(i18n.errors.validation.controlOfDirectors.required).should('not.exist')
+    cy.get('[name="percentOfShares"]').clear().type('30').blur()
+    cy.get('[data-cy=new-si-done-btn]').click()
+    cy.contains(i18n.errors.validation.controlOfDirectors.required).should('exist')
+    cy.get('[name="registeredOwner"]').check()
+    cy.contains(i18n.errors.validation.controlOfDirectors.required).should('not.exist')
   })
 })
