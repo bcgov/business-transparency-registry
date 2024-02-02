@@ -1,25 +1,18 @@
-import { dateToString } from '../../../../btr-common-components/utils/date'
 import payFeesForBtrRegsigin from '../../fixtures/payFeeForBtrRegsigin.json'
 
 describe('pages -> Beneficial Owner Change', () => {
   let i18nCommon: any
   let i18n: any
   beforeEach(() => {
-    cy.readFile('/Users/peinanwang/Work/business-transparency-registry/btr-web/btr-common-components/lang/en.json')
-      .then((json) => {
-        i18nCommon = json
-      })
-    cy.readFile('/Users/peinanwang/Work/business-transparency-registry/btr-web/btr-main-app/lang/en.json')
-      .then((json) => {
-        i18n = json
-      })
+    cy.readFile('../btr-common-components/lang/en.json').then((json) => { i18nCommon = json })
+    cy.readFile('lang/en.json').then((json) => { i18n = json })
     cy.visit('/')
     cy.wait(1000)
-
     cy.intercept(
       'GET',
       'https://pay-api-dev.apps.silver.devops.gov.bc.ca/api/v1/fees/BTR/REGSIGIN',
-      { data: payFeesForBtrRegsigin })
+      { data: payFeesForBtrRegsigin }
+    )
   })
 
   it('Validations are applied throughout the form', () => {
