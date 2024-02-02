@@ -206,7 +206,7 @@
           data-cy="testTaxResidency"
         />
       </div>
-      <div>
+      <div data-cy="significant-individual-external-influence">
         <p class="font-bold py-3">
           {{ $t('labels.externalInfluence.title') }}
         </p>
@@ -218,6 +218,7 @@
             id="radio-can-influence"
             v-model="significantIndividual.externalInfluence"
             :value="ExternalInfluenceE.NO_EXTERNAL_INFLUENCE"
+            data-cy="external-influence-radio-no-influence"
           />
           <label for="radio-can-influence" class="ml-5">
             <BcrosI18HelperBold translationPath="labels.externalInfluence.noExternalInfluence" />
@@ -228,6 +229,7 @@
             id="radio-can-influence"
             v-model="significantIndividual.externalInfluence"
             :value="ExternalInfluenceE.CAN_INFLUENCE"
+            data-cy="external-influence-radio-can-influence"
           />
           <label for="radio-can-influence" class="ml-5">
             <BcrosI18HelperBold translationPath="labels.externalInfluence.canInfluence" />
@@ -238,6 +240,7 @@
             id="radio-can-be-influenced"
             v-model="significantIndividual.externalInfluence"
             :value="ExternalInfluenceE.CAN_BE_INFLUENCED"
+            data-cy="external-influence-radio-can-be-influenced"
           />
           <label for="radio-can-influence" class="ml-5">
             <BcrosI18HelperBold translationPath="labels.externalInfluence.canBeInfluenced" />

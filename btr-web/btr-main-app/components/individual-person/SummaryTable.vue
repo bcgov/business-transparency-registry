@@ -113,8 +113,9 @@
       </tr>
       <!-- standard class or css style without !important was not working -->
       <tr
-        v-if="displayAdditional(item, editingIndex)"
+        v-if="displayAdditional(item) && editingIndex != index"
         style="border-top-width: 0!important"
+        data-cy="summary-table-external-influence"
       >
         <td colspan="6">
           <p v-if="item.externalInfluence === ExternalInfluenceE.CAN_BE_INFLUENCED">

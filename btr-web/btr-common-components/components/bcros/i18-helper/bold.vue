@@ -1,5 +1,5 @@
 <template>
-  <span v-html="textToDisplay"></span>
+  <span :data-cy="'i18n-bold-helper-' + translationPath" v-html="textToDisplay"></span>
 </template>
 
 <script setup lang="ts">
