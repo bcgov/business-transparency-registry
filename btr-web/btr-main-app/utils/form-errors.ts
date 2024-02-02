@@ -1,7 +1,7 @@
 export function getMissingSharesAndVotesError () {
-  const { t } = useI18n()
+  const { $i18n } = useNuxtApp()
   return {
-    message: t('errors.validation.controlPercentage.required'),
+    message: $i18n.t('errors.validation.controlPercentage.empty'),
     path: ['percentOfShares', 'percentOfVotes']
   }
 }

@@ -411,13 +411,7 @@ watch(
   (values: string[]) => {
     // If the percenOfShares and percentOfVotes are not empty, remove the empty value errors
     if (values[0] !== '' || values[1] !== '') {
-      const missingSharesAndVotes = getMissingSharesAndVotesError()
-      const currentErrors = ownerFormBase.value.getErrors()
-      const updatedErrors = currentErrors.filter((error: FormError) => {
-        return !(error.path === missingSharesAndVotes.path[0] && error.message === missingSharesAndVotes.message) &&
-          !(error.path === missingSharesAndVotes.path[1] && error.message === missingSharesAndVotes.message)
-      })
-      ownerFormBase.value.setErrors(updatedErrors)
+      removeEmptyPercentageErrors()
     }
 
     // If the percentOfShares and percentOfVotes are < 25%, and the "in-concert control" checkbox is not checked,
