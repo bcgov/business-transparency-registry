@@ -2,6 +2,7 @@
 import { it, expect } from 'vitest'
 import { mountSuspended } from 'vitest-environment-nuxt/utils'
 import { createI18n } from 'vue-i18n'
+import { FormError } from '#ui/types'
 
 import { BcrosInputsCountriesOfCitizenship, BcrosInputsCountriesOfCitizenshipDropdown } from '#components'
 
@@ -10,8 +11,9 @@ const i18n = createI18n({
 })
 
 it('can mount BcrosInputsCountriesOfCitizenship component', async () => {
+  const validationErrors: FormError[] = []
   const component = await mountSuspended(BcrosInputsCountriesOfCitizenship,
-    { global: { plugins: [i18n] }, props: { citizenships: [], errors: [] } })
+    { global: { plugins: [i18n] }, props: { citizenships: [], errors: validationErrors } })
   expect(component.find('[data-cy="countryOfCitizenshipRadioGroup"]').exists()).toBe(true)
   expect(component.find('[data-cy="countryOfCitizenshipDropdown"]').exists()).toBe(true)
   expect(component.find('[data-cy="countryOfCitizenshipDropdownButton"]').exists()).toBe(true)
