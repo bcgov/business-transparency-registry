@@ -91,9 +91,6 @@ devDependencies:
   vitest:
     specifier: ^0.33.0
     version: 0.33.0(happy-dom@12.1.2)(jsdom@22.1.0)(sass@1.69.2)
-  vue-i18n:
-    specifier: ^9.9.0
-    version: 9.9.1(vue@3.3.4)
   vue-tsc:
     specifier: 1.8.15
     version: 1.8.15(typescript@5.2.2)

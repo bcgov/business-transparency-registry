@@ -22,9 +22,6 @@ devDependencies:
   vitest-environment-nuxt:
     specifier: 0.11.0
     version: 0.11.0(rollup@3.29.4)(vitest@0.33.0)(vue-router@4.2.5)(vue@3.3.4)
-  vue-i18n:
-    specifier: ^9.9.0
-    version: 9.9.1(vue@3.3.4)
 
 packages:
 
