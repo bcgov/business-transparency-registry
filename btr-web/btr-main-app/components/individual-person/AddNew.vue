@@ -211,7 +211,7 @@
           {{ $t('labels.externalInfluence.title') }}
         </p>
         <p>
-          <BcrosI18HelperBold translationPath="texts.externalInfluence.text" />
+          <BcrosI18HelperBold translation-path="texts.externalInfluence.text" />
         </p>
         <div class="flex items-center mb-2 py-1">
           <URadio
@@ -221,7 +221,7 @@
             data-cy="external-influence-radio-no-influence"
           />
           <label for="radio-can-influence" class="ml-5">
-            <BcrosI18HelperBold translationPath="labels.externalInfluence.noExternalInfluence" />
+            <BcrosI18HelperBold translation-path="labels.externalInfluence.noExternalInfluence" />
           </label>
         </div>
         <div class="flex items-center mb-2 py-1">
@@ -232,7 +232,7 @@
             data-cy="external-influence-radio-can-influence"
           />
           <label for="radio-can-influence" class="ml-5">
-            <BcrosI18HelperBold translationPath="labels.externalInfluence.canInfluence" />
+            <BcrosI18HelperBold translation-path="labels.externalInfluence.canInfluence" />
           </label>
         </div>
         <div class="flex items-center mb-2 py-1">
@@ -243,7 +243,7 @@
             data-cy="external-influence-radio-can-be-influenced"
           />
           <label for="radio-can-influence" class="ml-5">
-            <BcrosI18HelperBold translationPath="labels.externalInfluence.canBeInfluenced" />
+            <BcrosI18HelperBold translation-path="labels.externalInfluence.canBeInfluenced" />
           </label>
         </div>
       </div>
@@ -312,7 +312,6 @@ const significantIndividual: Ref<SignificantIndividualI> = ref(props.setSignific
 if (!significantIndividual.value.externalInfluence) {
   significantIndividual.value.externalInfluence = ExternalInfluenceE.NO_EXTERNAL_INFLUENCE
 }
-
 
 const isEditing = computed(() => significantIndividual.value.action === FilingActionE.EDIT)
 

@@ -1,5 +1,6 @@
 <template>
-  <span :data-cy="'i18n-bold-helper-' + translationPath" v-html="textToDisplay"></span>
+  <!-- eslint-disable-next-line -->
+  <span :data-cy="'i18n-bold-helper-' + translationPath" v-html="textToDisplay" />
 </template>
 
 <script setup lang="ts">
