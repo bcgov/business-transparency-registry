@@ -67,11 +67,11 @@ export function validateControlOfDirectors (formData: FormInputI): boolean {
 }
 
 /**
- * Check if the text in the 'Other Reason' textarea is less than or equal to 1000 characters
+ * Check if the text in the 'Other Reasons' textarea is less than or equal to 1000 characters
  * @param formData the form data
  */
-export function validateOtherReason (formData: FormInputI): boolean {
-  return formData.otherReason === undefined || formData.otherReason.length <= 1000
+export function validateOtherReasons (formData: FormInputI): boolean {
+  return formData.otherReasons === undefined || formData.otherReasons.length <= 1000
 }
 
 /**

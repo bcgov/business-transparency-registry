@@ -346,7 +346,9 @@ const fullNameInvalid = ref(false)
 const preferredNameInvalid = ref(false)
 const emailInvalid = ref(false)
 const taxNumebrInvalid = ref(false)
-const missingInfo = ref(false)
+const missingInfo = ref(
+  significantIndividual.value.missingInfoReason !== undefined && significantIndividual.value.missingInfoReason !== ''
+)
 
 const percentOfSharesInvalid = ref(false)
 const percentOfVotesInvalid = ref(false)
@@ -594,7 +596,7 @@ const formSchema = z.object({
     indirectControl: z.boolean(),
     inConcertControl: z.boolean()
   }),
-  otherReasons: z.string(),
+  otherReasons: z.string().optional(),
   controlOfDirectors: z.object({
     directControl: z.boolean(),
     indirectControl: z.boolean(),
@@ -623,7 +625,7 @@ const formSchema = z.object({
 ).refine(
   validateControlOfDirectors, getMissingControlOfDirectorsError()
 ).refine(
-  validateOtherReason
+  validateOtherReasons
 ).refine(
   validateBirthDate, getMissingBirthDateError()
 ).refine(

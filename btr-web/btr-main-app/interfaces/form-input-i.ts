@@ -5,7 +5,7 @@ export interface FormInputI {
   percentOfShares: string
   percentOfVotes: string
   controlOfShares: ControlOfSharesI
-  otherReason: string
+  otherReasons: string
   controlOfDirectors: ControlOfDirectorsI
   birthDate: string
 
