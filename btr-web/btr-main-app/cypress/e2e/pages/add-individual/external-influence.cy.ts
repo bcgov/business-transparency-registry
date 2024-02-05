@@ -29,14 +29,14 @@ describe('pages -> Add individual', () => {
       .should('be.checked')
 
     // verify correct parts are bolded
-    cy.get('[data-cy="i18n-bold-helper-labels.externalInfluence.noInfluence"]')
-      .contains('There is <strong>no written agreement</strong>' +
+    cy.get('[data-cy="i18n-bold-helper-labels.externalInfluence.noExternalInfluence"]')
+      .should('contain.html', 'There is <strong>no written agreement</strong>' +
         ' involving influence of, or by, this individual and another individual regarding control of the business.')
     cy.get('[data-cy="i18n-bold-helper-labels.externalInfluence.canInfluence"]')
-      .contains('A written agreement <strong>allows this individual</strong>' +
+      .should('contain.html', 'A written agreement <strong>allows this individual</strong>' +
         ' to direct or influence another individual’s decision making')
     cy.get('[data-cy="i18n-bold-helper-labels.externalInfluence.canBeInfluenced"]')
-      .contains('A written agreement <strong>allows another individual</strong>' +
+      .should('contain.html', 'A written agreement <strong>allows another individual</strong>' +
         ' to direct or influence this individual’s decision making')
   })
 })
