@@ -6,10 +6,7 @@
     :empty-state="$t('texts.tables.emptyTexts.individualsSummaryTable')"
   >
     <template #table-row="{ item, index }">
-      <tr
-        v-if="item.action != FilingActionE.REMOVE && editingIndex != index"
-        class="border-0"
-      >
+      <tr v-if="item.action != FilingActionE.REMOVE && editingIndex != index">
         <td data-cy="summary-table-name">
           <span class="font-bold">{{ item.profile.fullName.toUpperCase() }}</span><br>
           <span v-if="item.profile.preferredName">{{ item.profile.preferredName }}<br></span>

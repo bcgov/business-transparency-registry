@@ -226,17 +226,6 @@
         </div>
         <div class="flex items-center mb-2 py-1">
           <URadio
-            id="radio-can-influence"
-            v-model="significantIndividual.externalInfluence"
-            :value="ExternalInfluenceE.CAN_INFLUENCE"
-            data-cy="external-influence-radio-can-influence"
-          />
-          <label for="radio-can-influence" class="ml-5">
-            <BcrosI18HelperBold translation-path="labels.externalInfluence.canInfluence" />
-          </label>
-        </div>
-        <div class="flex items-center mb-2 py-1">
-          <URadio
             id="radio-can-be-influenced"
             v-model="significantIndividual.externalInfluence"
             :value="ExternalInfluenceE.CAN_BE_INFLUENCED"
@@ -244,6 +233,17 @@
           />
           <label for="radio-can-influence" class="ml-5">
             <BcrosI18HelperBold translation-path="labels.externalInfluence.canBeInfluenced" />
+          </label>
+        </div>
+        <div class="flex items-center mb-2 py-1">
+          <URadio
+            id="radio-can-influence"
+            v-model="significantIndividual.externalInfluence"
+            :value="ExternalInfluenceE.CAN_INFLUENCE"
+            data-cy="external-influence-radio-can-influence"
+          />
+          <label for="radio-can-influence" class="ml-5">
+            <BcrosI18HelperBold translation-path="labels.externalInfluence.canInfluence" />
           </label>
         </div>
       </div>
