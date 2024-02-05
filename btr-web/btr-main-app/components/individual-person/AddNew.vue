@@ -383,7 +383,7 @@ function validateForm () {
     percentOfShares: significantIndividual.value.percentOfShares,
     percentOfVotes: significantIndividual.value.percentOfVotes,
     controlOfShares: significantIndividual.value.controlType.sharesVotes,
-    otherReason: significantIndividual.value.controlType.other,
+    otherReasons: significantIndividual.value.controlType.other,
     controlOfDirectors: significantIndividual.value.controlType.directors,
     birthDate: significantIndividual.value.profile.birthDate,
     country: {
@@ -596,7 +596,7 @@ const formSchema = z.object({
     indirectControl: z.boolean(),
     inConcertControl: z.boolean()
   }),
-  otherReason: z.string().optional(),
+  otherReasons: z.string().optional(),
   controlOfDirectors: z.object({
     directControl: z.boolean(),
     indirectControl: z.boolean(),
@@ -625,7 +625,7 @@ const formSchema = z.object({
 ).refine(
   validateControlOfDirectors, getMissingControlOfDirectorsError()
 ).refine(
-  validateOtherReason
+  validateOtherReasons
 ).refine(
   validateBirthDate, getMissingBirthDateError()
 ).refine(
