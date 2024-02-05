@@ -80,6 +80,7 @@ export const OwnershipOrControlStatements = {
       ],
       birthDate: '2000-03-19',
       email: '1@1.com',
+      externalInfluence: "CanInfluence",
       hasTaxNumber: true,
       identifiers: [{ id: '000 000 000', scheme: 'CAN-TAXID', schemeName: 'ITN' }],
       isComponent: false,
