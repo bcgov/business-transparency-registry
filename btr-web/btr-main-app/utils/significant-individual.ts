@@ -1,6 +1,6 @@
 /** Get a new significant individual with all default fields
  * @param startDate expected iso date string (YYYY-MM-DD)
-*/
+ */
 export function getEmptySI (startDate: string) {
   return {
     profile: {
@@ -42,6 +42,7 @@ export function getEmptySI (startDate: string) {
       },
       other: ''
     },
+    externalInfluence: ExternalInfluenceE.NO_EXTERNAL_INFLUENCE,
     missingInfoReason: '',
     percentOfShares: '',
     percentOfVotes: '',

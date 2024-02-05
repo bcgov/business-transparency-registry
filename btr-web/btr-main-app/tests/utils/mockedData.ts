@@ -40,6 +40,7 @@ export const testSI: SignificantIndividualI = {
     },
     other: ''
   },
+  externalInfluence: ExternalInfluenceE.CAN_INFLUENCE,
   missingInfoReason: '',
   percentOfShares: '75',
   percentOfVotes: '25',

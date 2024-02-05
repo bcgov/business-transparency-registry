@@ -39,7 +39,7 @@ describe('AddIndividualPersonSummaryTable tests', () => {
   })
   it('updates SummaryTable with data dynamically', async () => {
     await wrapper.setProps({ individuals: [si] })
-    expect(wrapper.find('[data-cy=individualsSummaryTable]').findAll('td').length).toBe(6)
+    expect(wrapper.find('[data-cy=individualsSummaryTable] tbody tr').findAll('td').length).toBe(6)
     expect(wrapper.find('[data-cy=summary-table-name]').exists()).toBe(true)
     expect(wrapper.find('[data-cy=summary-table-address]').exists()).toBe(true)
     expect(wrapper.find('[data-cy=summary-table-details]').exists()).toBe(true)

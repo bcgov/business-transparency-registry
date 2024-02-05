@@ -206,6 +206,47 @@
           data-cy="testTaxResidency"
         />
       </div>
+      <div data-cy="significant-individual-external-influence">
+        <p class="font-bold py-3">
+          {{ $t('labels.externalInfluence.title') }}
+        </p>
+        <p>
+          <BcrosI18HelperBold translation-path="texts.externalInfluence.text" />
+        </p>
+        <div class="flex items-center mb-2 py-1">
+          <URadio
+            id="radio-can-influence"
+            v-model="significantIndividual.externalInfluence"
+            :value="ExternalInfluenceE.NO_EXTERNAL_INFLUENCE"
+            data-cy="external-influence-radio-no-influence"
+          />
+          <label for="radio-can-influence" class="ml-5">
+            <BcrosI18HelperBold translation-path="labels.externalInfluence.noExternalInfluence" />
+          </label>
+        </div>
+        <div class="flex items-center mb-2 py-1">
+          <URadio
+            id="radio-can-be-influenced"
+            v-model="significantIndividual.externalInfluence"
+            :value="ExternalInfluenceE.CAN_BE_INFLUENCED"
+            data-cy="external-influence-radio-can-be-influenced"
+          />
+          <label for="radio-can-influence" class="ml-5">
+            <BcrosI18HelperBold translation-path="labels.externalInfluence.canBeInfluenced" />
+          </label>
+        </div>
+        <div class="flex items-center mb-2 py-1">
+          <URadio
+            id="radio-can-influence"
+            v-model="significantIndividual.externalInfluence"
+            :value="ExternalInfluenceE.CAN_INFLUENCE"
+            data-cy="external-influence-radio-can-influence"
+          />
+          <label for="radio-can-influence" class="ml-5">
+            <BcrosI18HelperBold translation-path="labels.externalInfluence.canInfluence" />
+          </label>
+        </div>
+      </div>
       <IndividualPersonControlUnableToObtainOrConfirmInformation
         v-model="significantIndividual.missingInfoReason"
         :missing-info="missingInfo"
@@ -268,6 +309,9 @@ const props = defineProps<{
 const defaultSI = getEmptySI(props.startDate || '')
 // NOTE: not setting this as modelValue because it is a nested object so mutating it gets complicated
 const significantIndividual: Ref<SignificantIndividualI> = ref(props.setSignificantIndividual || defaultSI)
+if (!significantIndividual.value.externalInfluence) {
+  significantIndividual.value.externalInfluence = ExternalInfluenceE.NO_EXTERNAL_INFLUENCE
+}
 
 const isEditing = computed(() => significantIndividual.value.action === FilingActionE.EDIT)
 
