@@ -346,7 +346,9 @@ const fullNameInvalid = ref(false)
 const preferredNameInvalid = ref(false)
 const emailInvalid = ref(false)
 const taxNumebrInvalid = ref(false)
-const missingInfo = ref(false)
+const missingInfo = ref(
+  significantIndividual.value.missingInfoReason !== undefined && significantIndividual.value.missingInfoReason !== ''
+)
 
 const percentOfSharesInvalid = ref(false)
 const percentOfVotesInvalid = ref(false)
@@ -381,7 +383,7 @@ function validateForm () {
     percentOfShares: significantIndividual.value.percentOfShares,
     percentOfVotes: significantIndividual.value.percentOfVotes,
     controlOfShares: significantIndividual.value.controlType.sharesVotes,
-    otherReasons: significantIndividual.value.controlType.other,
+    otherReason: significantIndividual.value.controlType.other,
     controlOfDirectors: significantIndividual.value.controlType.directors,
     birthDate: significantIndividual.value.profile.birthDate,
     country: {
@@ -594,7 +596,7 @@ const formSchema = z.object({
     indirectControl: z.boolean(),
     inConcertControl: z.boolean()
   }),
-  otherReasons: z.string(),
+  otherReason: z.string().optional(),
   controlOfDirectors: z.object({
     directControl: z.boolean(),
     indirectControl: z.boolean(),
