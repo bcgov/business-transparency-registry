@@ -30,7 +30,7 @@
         </PopoverPanel>
       </transition>
     </Popover>
-    <div v-if="hasError" class="py-2 text-sm text-red-500">
+    <div v-if="hasError" class="py-2 text-sm text-bcGovRed-500">
       {{ errors[0].message }}
     </div>
   </div>
@@ -70,7 +70,7 @@ const iconClass = computed(() => {
     return 'text-primary-500'
   }
   if (props.variant === 'error') {
-    return 'text-red-500'
+    return 'text-bcGovRed-500'
   }
   return 'text-gray-700'
 })
