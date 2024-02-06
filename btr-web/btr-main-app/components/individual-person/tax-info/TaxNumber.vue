@@ -27,11 +27,11 @@
         :value="NO_TAX_NUMBER"
         @change="handleRadioButtonChange(NO_TAX_NUMBER)"
       />
-      <label for="noTaxNumberRadioButton" class="ml-5" :class="{ 'text-bcGovRed-500': hasError}">
+      <label for="noTaxNumberRadioButton" class="ml-5" :class="{ 'text-red-500': hasError}">
         {{ $t('labels.noTaxNumberLabel') }}
       </label>
     </div>
-    <div v-if="hasError" class="text-sm text-bcGovRed-500">
+    <div v-if="hasError" class="text-sm text-red-500">
       {{ errors[0].message }}
     </div>
   </div>

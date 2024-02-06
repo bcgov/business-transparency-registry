@@ -4,7 +4,7 @@
       <!-- country -->
       <USelectMenu
         v-model="country"
-        :ui-menu="{ placeholder: countryError ? 'text-bcGovRed-500' : 'text-gray-700' }"
+        :ui-menu="{ placeholder: countryError ? 'text-red-500' : 'text-gray-700' }"
         by="alpha_2"
         class="w-full"
         :placeholder="$t('labels.country')"
@@ -55,7 +55,7 @@
         <USelectMenu
           v-if="address.country.alpha_2==='US' || address?.country.alpha_2==='CA'"
           v-model="address.region"
-          :ui-menu="{ placeholder: regionInvalid ? 'text-bcGovRed-500' : 'text-gray-700' }"
+          :ui-menu="{ placeholder: regionInvalid ? 'text-red-500' : 'text-gray-700' }"
           :options="regions"
           :placeholder="$t('labels.state')"
           class="pr-4 w-full"

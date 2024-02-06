@@ -42,7 +42,7 @@
           class="py-2"
         />
       </div>
-      <div v-if="hasError" class="py-2 text-sm text-bcGovRed-500">
+      <div v-if="hasError" class="py-2 text-sm text-red-500">
         {{ errors[0].message }}
       </div>
     </div>
@@ -84,6 +84,6 @@ const types = [
 
 const typeOfControl: Ref<ControlOfSharesI> = ref(prop.modelValue)
 const hasError = computed<Boolean>(() => prop.errors.length > 0)
-const errorTextColor = computed(() => (hasError.value ? { label: 'text-bcGovRed-500' } : {}))
+const errorTextColor = computed(() => (hasError.value ? { label: 'text-red-500' } : {}))
 
 </script>

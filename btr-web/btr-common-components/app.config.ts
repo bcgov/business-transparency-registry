@@ -11,15 +11,14 @@ export default defineAppConfig({
       }
     },
     formGroup: {
-      label: { base: 'block text-base font-bold py-3 text-gray-900' },
-      error: 'text-bcGovRed-500'
+      label: { base: 'block text-base font-bold py-3 text-gray-900' }
     },
     input: {
       base: 'bg-gray-100 hover:bg-gray-200 h-[56px] border-b-[1px] focus:border-b-2 focus:ring-0',
       rounded: 'rounded-none rounded-t-md',
       variant: {
         bcGov: 'border-gray-700 placeholder-gray-700 focus:border-primary-500 focus:placeholder-primary-500',
-        error: 'border-bcGovRed-500 focus:border-bcGovRed-500 placeholder-bcGovRed-500 focus:placeholder-bcGovRed-500',
+        error: 'border-red-500 focus:border-red-500 placeholder-red-500 focus:placeholder-red-500',
         primary: 'border-primary-500 placeholder-primary-500 border-b-2'
       }
     },
@@ -28,7 +27,7 @@ export default defineAppConfig({
       rounded: 'rounded-none rounded-t-md',
       variant: {
         bcGov: 'border-gray-700',
-        error: 'border-bcGovRed-500'
+        error: 'border-red-500'
       },
       icon: {
         base: 'text-gray-700'
@@ -54,7 +53,7 @@ export default defineAppConfig({
       rounded: 'rounded-none rounded-t-md',
       variant: {
         bcGov: 'border-gray-700 placeholder-gray-700 focus:border-primary-500 focus:placeholder-primary-500',
-        error: 'border-bcGovRed-500 focus:border-bcGovRed-500 placeholder-bcGovRed-500 focus:placeholder-bcGovRed-500'
+        error: 'border-red-500 focus:border-red-500 placeholder-red-500 focus:placeholder-red-500'
       }
     },
     table: {

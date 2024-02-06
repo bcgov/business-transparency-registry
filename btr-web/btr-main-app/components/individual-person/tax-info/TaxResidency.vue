@@ -4,7 +4,7 @@
       v-for="(option, index) in options"
       :key="index"
       class="flex items-center mb-2 py-1"
-      :class="{ 'text-bcGovRed-500': hasError}"
+      :class="{ 'text-red-500': hasError}"
     >
       <URadio
         :id="`radio-${option.value}`"
@@ -16,7 +16,7 @@
         {{ option.label }}
       </label>
     </div>
-    <div v-if="hasError" class="text-sm text-bcGovRed-500">
+    <div v-if="hasError" class="text-sm text-red-500">
       {{ errors[0].message }}
     </div>
   </UFormGroup>
