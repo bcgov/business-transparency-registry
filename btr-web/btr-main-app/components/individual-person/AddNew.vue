@@ -213,18 +213,18 @@
         <p>
           <BcrosI18HelperBold translation-path="texts.externalInfluence.text" />
         </p>
-        <div class="flex items-center mb-2 py-1">
+        <div class="flex items-top mb-2 py-1">
           <URadio
-            id="radio-can-influence"
+            id="radio-no-influence"
             v-model="significantIndividual.externalInfluence"
             :value="ExternalInfluenceE.NO_EXTERNAL_INFLUENCE"
             data-cy="external-influence-radio-no-influence"
           />
-          <label for="radio-can-influence" class="ml-5">
+          <label for="radio-no-influence" class="ml-5">
             <BcrosI18HelperBold translation-path="labels.externalInfluence.noExternalInfluence" />
           </label>
         </div>
-        <div class="flex items-center mb-2 py-1">
+        <div class="flex items-top mb-2 py-1">
           <URadio
             id="radio-can-be-influenced"
             v-model="significantIndividual.externalInfluence"
@@ -235,7 +235,7 @@
             <BcrosI18HelperBold translation-path="labels.externalInfluence.canBeInfluenced" />
           </label>
         </div>
-        <div class="flex items-center mb-2 py-1">
+        <div class="flex items-top mb-2 py-1">
           <URadio
             id="radio-can-influence"
             v-model="significantIndividual.externalInfluence"

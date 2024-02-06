@@ -110,7 +110,7 @@
       </tr>
       <!-- standard class or css style without !important was not working -->
       <tr
-        v-if="displayAdditional(item) && editingIndex != index"
+        v-if="item.action != FilingActionE.REMOVE && editingIndex != index"
         style="border-top-width: 0!important"
         data-cy="summary-table-external-influence"
       >
@@ -118,8 +118,11 @@
           <p v-if="item.externalInfluence === ExternalInfluenceE.CAN_BE_INFLUENCED">
             {{ $t('labels.externalInfluence.canBeInfluenced') }}
           </p>
-          <p v-if="item.externalInfluence === ExternalInfluenceE.CAN_INFLUENCE">
+          <p v-else-if="item.externalInfluence === ExternalInfluenceE.CAN_INFLUENCE">
             {{ $t('labels.externalInfluence.canInfluence') }}
+          </p>
+          <p v-else>
+            {{ $t('labels.externalInfluence.noExternalInfluence') }}
           </p>
         </td>
       </tr>
@@ -187,16 +190,6 @@ const headers = [
 const isEmptyState = computed(() => {
   return props.individuals.every(individual => individual.action === FilingActionE.REMOVE)
 })
-
-const displayAdditional = (item: SignificantIndividualI) => {
-  return (
-    item.action !== FilingActionE.REMOVE &&
-    (
-      item.externalInfluence === ExternalInfluenceE.CAN_INFLUENCE ||
-      item.externalInfluence === ExternalInfluenceE.CAN_BE_INFLUENCED
-    )
-  )
-}
 
 function getTaxResidentText (isTaxResident: boolean) {
   if (isTaxResident) {
