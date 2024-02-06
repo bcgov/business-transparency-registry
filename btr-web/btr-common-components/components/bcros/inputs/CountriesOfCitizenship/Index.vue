@@ -2,7 +2,7 @@
   <div>
     <div
       class="flex flex-col py-5"
-      :class="{ 'text-red-500': hasError}"
+      :class="{ 'text-bcGovRed-500': hasError}"
       data-cy="countryOfCitizenshipRadioGroup"
     >
       <div v-for="option in options" :key="option.value" class="flex items-center mb-2 py-1">
@@ -12,7 +12,7 @@
           :value="option.value"
         />
         <label :for="`radio-${option.value}`" class="ml-5">
-          <div class="text-base" :class="hasError ? 'text-red-500' : 'text-gray-900'">
+          <div class="text-base" :class="hasError ? 'text-bcGovRed-500' : 'text-gray-900'">
             {{ option.label }}
           </div>
         </label>
@@ -26,7 +26,7 @@
         />
       </div>
     </div>
-    <div v-if="hasError" class="text-sm text-red-500">
+    <div v-if="hasError" class="text-sm text-bcGovRed-500">
       {{ errors[0].message }}
     </div>
   </div>
