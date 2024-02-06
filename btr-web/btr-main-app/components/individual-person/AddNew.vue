@@ -219,6 +219,7 @@
             v-model="significantIndividual.externalInfluence"
             :value="ExternalInfluenceE.NO_EXTERNAL_INFLUENCE"
             data-cy="external-influence-radio-no-influence"
+            class="pt-1"
           />
           <label for="radio-no-influence" class="ml-5">
             <BcrosI18HelperBold translation-path="labels.externalInfluence.noExternalInfluence" />
@@ -230,6 +231,7 @@
             v-model="significantIndividual.externalInfluence"
             :value="ExternalInfluenceE.CAN_BE_INFLUENCED"
             data-cy="external-influence-radio-can-be-influenced"
+            class="pt-1"
           />
           <label for="radio-can-influence" class="ml-5">
             <BcrosI18HelperBold translation-path="labels.externalInfluence.canBeInfluenced" />
@@ -241,6 +243,7 @@
             v-model="significantIndividual.externalInfluence"
             :value="ExternalInfluenceE.CAN_INFLUENCE"
             data-cy="external-influence-radio-can-influence"
+            class="pt-1"
           />
           <label for="radio-can-influence" class="ml-5">
             <BcrosI18HelperBold translation-path="labels.externalInfluence.canInfluence" />
