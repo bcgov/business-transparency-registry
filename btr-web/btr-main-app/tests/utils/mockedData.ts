@@ -1,5 +1,7 @@
 import { FilingActionE } from '~/enums/filing-action-e'
 
+export const SI_EXAMPLE_DATE = '2001-01-01'
+
 export const testSI: SignificantIndividualI = {
   profile: {
     fullName: 'Test Name',
@@ -44,6 +46,6 @@ export const testSI: SignificantIndividualI = {
   missingInfoReason: '',
   percentOfShares: '75',
   percentOfVotes: '25',
-  startDate: '2025-01-01',
+  startDate: SI_EXAMPLE_DATE,
   action: FilingActionE.ADD
 }

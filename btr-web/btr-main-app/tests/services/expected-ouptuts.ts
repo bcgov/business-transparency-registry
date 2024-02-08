@@ -1,3 +1,5 @@
+import { SI_EXAMPLE_DATE } from '~/tests/utils/mockedData'
+
 export const OwnershipOrControlStatements = {
   ownershipOrControlStatements: [
     {
@@ -10,20 +12,20 @@ export const OwnershipOrControlStatements = {
           type: 'appointmentOfBoard',
           directOrIndirect: 'direct',
           details: 'controlType.directors.directControl',
-          startDate: '2025-01-01',
+          startDate: SI_EXAMPLE_DATE,
           endDate: undefined
         },
         {
           type: 'appointmentOfBoard',
           directOrIndirect: 'indirect',
           details: 'controlType.directors.indirectControl',
-          startDate: '2025-01-01',
+          startDate: SI_EXAMPLE_DATE,
           endDate: undefined
         },
         {
           directOrIndirect: 'direct',
           details: 'controlType.sharesOrVotes.registeredOwner',
-          startDate: '2025-01-01',
+          startDate: SI_EXAMPLE_DATE,
           endDate: undefined,
           share: { maximum: 25, exclusiveMaximum: false },
           type: 'votingRights'
@@ -31,7 +33,7 @@ export const OwnershipOrControlStatements = {
         {
           directOrIndirect: 'direct',
           details: 'controlType.sharesOrVotes.registeredOwner',
-          startDate: '2025-01-01',
+          startDate: SI_EXAMPLE_DATE,
           endDate: undefined,
           share: { maximum: 75, exclusiveMaximum: false },
           type: 'shareholding'
@@ -51,7 +53,7 @@ export const OwnershipOrControlStatements = {
         type: ['selfDeclaration'],
         assertedBy: [{ name: 'Test Name' }]
       },
-      statementDate: '2024-01-26',
+      statementDate: SI_EXAMPLE_DATE,
       statementType: 'ownershipOrControlStatement',
       subject: { describedByEntityStatement: '' }
     }
@@ -105,7 +107,7 @@ export const OwnershipOrControlStatements = {
         type: ['selfDeclaration'],
         assertedBy: [{ name: 'Test Name' }]
       },
-      statementDate: '2024-01-26',
+      statementDate: SI_EXAMPLE_DATE,
       statementType: 'personStatement',
       taxResidencies: [{ name: 'Canada', code: 'CA' }],
       statementID: 'db102217-429c-439e-9075-13c4e84fbb4d'

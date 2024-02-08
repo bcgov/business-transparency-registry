@@ -1,5 +1,5 @@
 import { describe, expect } from 'vitest'
-import { testSI } from '../mockedData'
+import { SI_EXAMPLE_DATE, testSI } from '../mockedData'
 
 import { BodsInterestTypeE, BodsNameTypeE, BodsPersonTypeE } from '~/enums/btr-bods-e'
 
@@ -39,14 +39,14 @@ describe('Btr to Bods util converters Tests', () => {
           type: BodsInterestTypeE.APPOINTMENT_OF_BOARD,
           directOrIndirect: 'direct',
           details: 'controlType.directors.directControl',
-          startDate: '2025-01-01',
+          startDate: SI_EXAMPLE_DATE,
           endDate: undefined
         },
         {
           type: BodsInterestTypeE.APPOINTMENT_OF_BOARD,
           directOrIndirect: 'indirect',
           details: 'controlType.directors.indirectControl',
-          startDate: '2025-01-01',
+          startDate: SI_EXAMPLE_DATE,
           endDate: undefined
         },
         {
@@ -54,7 +54,7 @@ describe('Btr to Bods util converters Tests', () => {
           share: { maximum: 25, exclusiveMaximum: false },
           directOrIndirect: 'direct',
           details: 'controlType.sharesOrVotes.registeredOwner',
-          startDate: '2025-01-01',
+          startDate: SI_EXAMPLE_DATE,
           endDate: undefined
         },
         {
@@ -62,7 +62,7 @@ describe('Btr to Bods util converters Tests', () => {
           share: { maximum: 75, exclusiveMaximum: false },
           directOrIndirect: 'direct',
           details: 'controlType.sharesOrVotes.registeredOwner',
-          startDate: '2025-01-01',
+          startDate: SI_EXAMPLE_DATE,
           endDate: undefined
         }
       ]
