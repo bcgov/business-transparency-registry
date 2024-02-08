@@ -152,7 +152,7 @@ const _getSi = (
     percentOfShares: shares,
     percentOfVotes: votes,
     profile: _getSiPerson(person),
-    startDate,
+    startDate: person.statementDate,
     uuid: person.statementID
   }
 }
