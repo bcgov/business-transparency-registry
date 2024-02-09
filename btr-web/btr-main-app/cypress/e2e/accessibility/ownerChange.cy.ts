@@ -19,10 +19,6 @@ describe('accessibility -> Beneficial Owner Change', () => {
 
     // NB: these tests will be uncommented when their corresponding tickets are worked on
 
-    // Open date picker 19440
-    // cy.get('[data-cy=date-select]').click()
-    // cy.checkA11y('[data-cy=effective-date-select]')
-
     // Expanding the form - pre filled out 19442
     // cy.get('[data-cy=add-new-btn]').click()
     // cy.checkA11y('[data-cy=addIndividualPerson]')
@@ -137,5 +133,14 @@ describe('accessibility -> Beneficial Owner Change', () => {
       }
     })
     cy.checkA11y('[data-cy=individualsSummaryTable]')
+  })
+
+  it('Verifies the date selector passes AA', () => {
+    cy.checkA11y('[data-cy=effective-date-select]')
+    // Open date picker
+    cy.get('[data-cy=date-select]').click()
+    // ignoring the aria-dialog-name rule because it fails on the imported datepicker component
+    // - ticket created to resolve: https://github.com/bcgov/entity/issues/19777
+    cy.checkA11y('[data-cy=effective-date-select]', { rules: { 'aria-dialog-name': { enabled: false } } })
   })
 })
