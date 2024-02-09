@@ -95,21 +95,27 @@ describe('accessibility -> Beneficial Owner Change', () => {
     // cy.checkA11y('[data-cy=isUnableToObtainOrConfirmInformation]')
 
     // summary table 19444
-    // cy.checkA11y('[data-cy=individualsSummaryTable]')
-    // open action buttons
-    // cy.get('[data-cy=popover-button]').eq(0).click()
-    // cy.checkA11y('[data-cy=individualsSummaryTable]')
+    cy.checkA11y('[data-cy=individualsSummaryTable]')
+    // open the popover panel
+    cy.get('[data-cy=popover-button]').eq(0).click()
+    cy.checkA11y('[data-cy=individualsSummaryTable]')
+    // close the popover panel
+    cy.get('[data-cy=popover-button]').eq(0).click()
+
+    // This will be uncommented when all accessibility issues in the form are resolved
     // edit form
     // cy.get('[data-cy=edit-button]').eq(0).click()
     // cy.checkA11y('[data-cy=individualsSummaryTable]')
+    // cy.get('[data-cy=new-si-cancel-btn]').click()
+
     // empty table
-    // cy.get('[data-cy=popover-button]').then((buttons) => {
-    //   for (let i = 0; i < buttons.length; i++) {
-    //     cy.get('[data-cy=popover-button]').first().click()
-    //     cy.get('[data-cy=remove-button]').click()
-    //   }
-    // })
-    // cy.checkA11y('[data-cy=individualsSummaryTable]')
+    cy.get('[data-cy=popover-button]').then((buttons) => {
+      for (let i = 0; i < buttons.length; i++) {
+        cy.get('[data-cy=popover-button]').first().click()
+        cy.get('[data-cy=remove-button]').click()
+      }
+    })
+    cy.checkA11y('[data-cy=individualsSummaryTable]')
 
     // NB: uncomment once all above are passing
     // cy.checkA11y('[data-cy=owner-change]')

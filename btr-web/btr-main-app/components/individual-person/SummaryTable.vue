@@ -43,27 +43,27 @@
         </td>
         <td data-cy="summary-table-controls">
           <div v-if="Object.values(item.controlType.sharesVotes).includes(true)">
-            <h4 class="font-bold italic">
+            <span class="font-bold italic">
               {{ $t('labels.shares') }}
-            </h4>
+            </span>
             <p>{{ getSharesControlText(item) }}</p>
             <p v-if="item.controlType.sharesVotes.inConcertControl">
               {{ $t('texts.sharesAndVotes.summary.inConcert') }}
             </p>
           </div>
           <div v-if="Object.values(item.controlType.directors).includes(true)" class="mt-3">
-            <h4 class="font-bold italic">
+            <span class="font-bold italic">
               {{ $t('labels.directors') }}
-            </h4>
+            </span>
             <p>{{ getDirectorsControlText(item.controlType.directors) }}</p>
             <p v-if="item.controlType.directors.inConcertControl">
               {{ $t('texts.controlOfDirectors.summary.inConcert') }}
             </p>
           </div>
           <div v-if="item.controlType.other" class="mt-3">
-            <h4 class="font-bold italic">
+            <span class="font-bold italic">
               {{ $t('labels.other') }}
-            </h4>
+            </span>
             <p>{{ item.controlType.other }}</p>
           </div>
         </td>
@@ -72,7 +72,7 @@
             <div class="flex flex-nowrap justify-end">
               <UButton
                 :ui="{
-                  rounded: 'rounded-none',
+                  rounded: 'rounded-none focus-visible:rounded-md',
                   padding: { default: 'py-0' }
                 }"
                 icon="i-mdi-pencil"
@@ -82,28 +82,31 @@
                 data-cy="edit-button"
                 @click="openEditingMode(index)"
               />
-              <UPopover :popper="{ placement: 'bottom-end' }">
-                <UButton
-                  :ui="{ padding: { default: 'py-0' } }"
-                  icon="i-mdi-menu-down"
-                  variant="removeButton"
-                  :disabled="editingDisabled || isEditing"
+              <Popover class="relative inline-block text-left">
+                <PopoverButton
+                  class="py-2 pl-2"
+                  aria-label="show more options"
                   data-cy="popover-button"
-                />
-                <template #panel>
-                  <div class="mx-2 my-2">
-                    <UButton
-                      :ui="{ padding: { default: 'py-0' } }"
-                      icon="i-mdi-delete"
-                      :label="t('buttons.remove')"
-                      color="primary"
-                      variant="removeButton"
-                      data-cy="remove-button"
-                      @click="removeSignificantIndividual(index)"
-                    />
+                  :disabled="editingDisabled || isEditing"
+                >
+                  <UIcon class="text-lg text-primary" name="i-mdi-menu-down" />
+                </PopoverButton>
+                <PopoverPanel class="absolute mt-2 left-0 w-full">
+                  <div class="flex justify-end">
+                    <div class="border border-gray-200 rounded-md p-2 shadow-lg">
+                      <UButton
+                        :ui="{ padding: { default: 'py-0' } }"
+                        icon="i-mdi-delete"
+                        :label="t('buttons.remove')"
+                        color="primary"
+                        variant="removeButton"
+                        data-cy="remove-button"
+                        @click="removeSignificantIndividual(index)"
+                      />
+                    </div>
                   </div>
-                </template>
-              </UPopover>
+                </PopoverPanel>
+              </Popover>
             </div>
           </td>
         </template>
@@ -157,6 +160,7 @@
 </template>
 
 <script setup lang="ts">
+import { Popover, PopoverButton, PopoverPanel } from '@headlessui/vue'
 import { ExternalInfluenceE } from '~/enums/external-influence-e'
 import { SignificantIndividualI } from '~/interfaces/significant-individual-i'
 
