@@ -6,8 +6,8 @@ export default defineAppConfig({
     button: {
       variant: {
         solid: 'hover:bg-opacity-[.92] hover:bg-{color}-500',
-        editButton: 'text-primary border-0 border-r-2 border-gray',
-        removeButton: 'text-primary border-0'
+        editButton: 'text-primary border-0 border-r-2 border-gray focus-visible:ring-2 focus-visible:ring-primary',
+        removeButton: 'text-primary border-0 focus-visible:ring-2 focus-visible:ring-primary'
       }
     },
     formGroup: {
