@@ -103,8 +103,9 @@ describe('accessibility -> Beneficial Owner Change', () => {
      * - 'nested-interactive': <UPopover> will fail this check
      * - 'aria-hidden-focus': <UPopover> will fail this check
      * - 'color-contrast': the issue only occurs for the 'Remove' button in the popover panel.
-     *   The right text color is rendered, but the some pixels on the edge of some letters are in a wrong color.
-     *   Cypress tends to use the wrong color to test the color contrast.
+     *    The right text color is rendered, but the some pixels on the edge of some letters are in a wrong color.
+     *    Cypress tends to use the wrong color to test the color contrast.
+     * Ticket #19775 is created to resolve these issues.
      */
     cy.get('[data-cy=popover-button]').eq(0).click()
     cy.checkA11y('[data-cy=summary-table-buttons]', {
