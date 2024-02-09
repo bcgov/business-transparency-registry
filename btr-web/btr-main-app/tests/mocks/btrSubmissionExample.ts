@@ -559,7 +559,7 @@ export const expectedSisOutput = [{
     taxNumber: undefined,
     isTaxResident: false
   },
-  startDate: '2024-01-04',
+  startDate: '2024-01-30',
   uuid: 'b0882814-34e2-42e9-b065-a550d94c9df1'
 }, {
   controlType: {
@@ -605,7 +605,7 @@ export const expectedSisOutput = [{
     taxNumber: '046 454 286',
     isTaxResident: true
   },
-  startDate: '2024-01-04',
+  startDate: '2024-01-30',
   uuid: 'b04ce8de-cd95-4fa2-991d-3a06fe34deb0'
 }, {
   controlType: {
@@ -651,6 +651,6 @@ export const expectedSisOutput = [{
     hasTaxNumber: false,
     isTaxResident: true
   },
-  startDate: '2024-01-04',
+  startDate: '2024-01-30',
   uuid: '0a9d4f95-ca72-42b4-8906-05d889e4bb52'
 }]

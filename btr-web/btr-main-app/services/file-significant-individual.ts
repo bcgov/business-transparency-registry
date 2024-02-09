@@ -71,9 +71,6 @@ const getPersonAndOwnershipAndControlStatements = (sif: SignificantIndividualFil
     personStatements: []
   }
 
-  const today = new Date()
-  const isoDateString = today.toISOString().substring(0, 10)
-
   for (const si of sif.significantIndividuals) {
     const source = BtrBodsSources.SELF_DECLARATION
     source.assertedBy = [{ name: si.profile.fullName }]
@@ -95,7 +92,7 @@ const getPersonAndOwnershipAndControlStatements = (sif: SignificantIndividualFil
       personType: SiToBtrBodsConverters.getPersonType(si),
       publicationDetails: BtrBodsBcrosPublicationDetails(),
       source,
-      statementDate: isoDateString,
+      statementDate: si.startDate,
       statementType: BodsStatementTypeE.PERSON_STATEMENT,
       taxResidencies: SiToBtrBodsConverters.getTaxResidenciesFromSi(si),
       statementID: UUIDv4()
@@ -108,7 +105,7 @@ const getPersonAndOwnershipAndControlStatements = (sif: SignificantIndividualFil
       isComponent: false,
       publicationDetails: BtrBodsBcrosPublicationDetails(),
       source,
-      statementDate: isoDateString,
+      statementDate: si.startDate,
       statementType: BodsStatementTypeE.OWNERSHIP_OR_CONTROL_STATEMENT,
       subject: { describedByEntityStatement: '' }
 
