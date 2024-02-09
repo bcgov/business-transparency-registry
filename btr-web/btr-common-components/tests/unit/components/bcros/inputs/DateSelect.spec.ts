@@ -13,15 +13,14 @@ describe('DateSelect tests', () => {
 
   it('renders DateSelect', () => {
     // test everything renders
-    expect(wrapper.find('.bcros-date-select').exists()).toBe(true)
-    expect(wrapper.find('.bcros-date-select__btn').exists()).toBe(true)
+    expect(wrapper.find('[data-cy=date-select]').exists()).toBe(true)
     // datepicker should be hidden until select is clicked
     expect(wrapper.findComponent(BcrosDatePicker).exists()).toBe(false)
   })
   it('allows / emits date selection with predicted functionality', async () => {
     expect(wrapper.findComponent(BcrosDatePicker).exists()).toBe(false)
     // click select
-    wrapper.find('.bcros-date-select__btn').trigger('click')
+    wrapper.find('[data-cy=date-select]').trigger('click')
     await flushPromises()
     // verify datepicker is showing
     expect(wrapper.findComponent(BcrosDatePicker).exists()).toBe(true)

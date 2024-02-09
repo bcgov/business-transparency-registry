@@ -1,44 +1,35 @@
 <template>
-  <div>
-    <Popover v-slot="{ close, open }" class="bcros-date-select flex relative focus:ring-0">
-      <PopoverButton class="bcros-date-select__btn bg-gray-100 grow cursor-text focus:ring-0 rounded-t-md">
-        <UInput
-          :ui="{ icon: { base: open ? 'text-primary-500' : iconClass } }"
-          :model-value="selectedDateDisplay"
-          icon="i-mdi-calendar"
-          :placeholder="placeholder || ''"
-          trailing
-          type="text"
-          :variant="open ? 'primary' : variant || 'bcGov'"
-          data-cy="date-select"
-        />
-      </PopoverButton>
-      <transition
-        enter-active-class="transition duration-200 ease-out"
-        enter-from-class="translate-y-1 opacity-0"
-        enter-to-class="translate-y-0 opacity-100"
-        leave-active-class="transition duration-150 ease-in"
-        leave-from-class="translate-y-0 opacity-100"
-        leave-to-class="translate-y-1 opacity-0"
-      >
-        <PopoverPanel class="absolute z-20 mt-14">
-          <BcrosDatePicker
-            :default-selected-date="selectedDate"
-            :set-max-date="maxDate"
-            @selected-date="updateDate($event); close()"
-          />
-        </PopoverPanel>
-      </transition>
-    </Popover>
-    <div v-if="hasError" class="py-2 text-sm text-red-500">
-      {{ errors[0].message }}
+  <div class="min-h-[84px]">
+    <UInput
+      :ui="{ icon: { base: showDatePicker && !errorMessage ? 'text-primary-500' : iconClass } }"
+      :model-value="selectedDateDisplay"
+      icon="i-mdi-calendar"
+      :placeholder="placeholder || ''"
+      trailing
+      type="text"
+      :variant="errorMessage ? 'error' : variant || 'bcGov'"
+      data-cy="date-select"
+      @click="showDatePicker = true"
+      @keydown.enter="showDatePicker = true"
+      @update:model-value="handleManualDateEntry($event)"
+    />
+    <BcrosDatePicker
+      v-if="showDatePicker"
+      ref="dateSelectPickerRef"
+      class="absolute z-20"
+      :default-selected-date="selectedDate"
+      :set-max-date="maxDate"
+      @selected-date="updateDate($event); showDatePicker = false"
+    />
+    <div class="mt-2 text-sm text-red-500">
+      {{ errorMessage }}
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ComputedRef, Ref, computed, ref, watch } from 'vue'
-import { Popover, PopoverButton, PopoverPanel } from '@headlessui/vue'
+import { MaybeElementRef, onClickOutside } from '@vueuse/core'
 import type { FormError } from '#ui/types'
 
 const props = defineProps<{
@@ -51,6 +42,12 @@ const props = defineProps<{
 
 const emit = defineEmits<{(e: 'selection', value: Date | null): void }>()
 
+// @ts-ignore
+const dateSelectPickerRef: MaybeElementRef = ref(null)
+const showDatePicker = ref(false)
+
+onClickOutside(dateSelectPickerRef, () => { showDatePicker.value = false })
+
 const selectedDate: Ref<Date | null> = ref(props.initialDate || null)
 watch(() => selectedDate.value, val => emit('selection', val))
 
@@ -62,7 +59,22 @@ const selectedDateDisplay: ComputedRef<string> = computed(
   () => selectedDate.value ? dateToString(selectedDate.value, 'YYYY-MM-DD') : ''
 )
 
-const hasError = computed<Boolean>(() => props.errors !== undefined && props.errors.length > 0)
+const handleManualDateEntry = (input: string) => {
+  const dateRegex = /^\d{4}-\d{2}-\d{2}$/
+  const inputDate = dateStringToDate(input)
+  const validDate = inputDate && (!props.maxDate || inputDate < props.maxDate)
+  if (!input || (input.match(dateRegex) !== null && validDate)) {
+    updateDate(inputDate)
+    showDatePicker.value = false
+  }
+}
+
+const errorMessage = computed(() => {
+  if (props.errors !== undefined && props.errors.length > 0) {
+    return props.errors[0].message
+  }
+  return ''
+})
 
 // colouring
 const iconClass = computed(() => {

@@ -7,7 +7,7 @@
       {{ $t('texts.significantIndividualChange') }}
     </p>
     <div
-      class="mt-10 p-10 bg-white rounded flex"
+      class="mt-10 p-10 pb-3 bg-white rounded flex"
       :class="showSignificantDateError ? 'border-l-[3px] border-bcGovRed-500' : ''"
       data-cy="effective-date-select"
     >

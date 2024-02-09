@@ -37,6 +37,7 @@
     "vue-tsc": "1.8.15"
   },
   "dependencies": {
+    "@vueuse/core": "^10.7.2",
     "axios": "^1.5.1",
     "http-status-codes": "^2.3.0",
     "launchdarkly-vue-client-sdk": "^2.0.4",
