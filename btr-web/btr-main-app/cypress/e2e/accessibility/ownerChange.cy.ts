@@ -94,7 +94,11 @@ describe('accessibility -> Beneficial Owner Change', () => {
     // cy.get('[data-cy=isUnableToObtainOrConfirmInformationCheckbox]').check()
     // cy.checkA11y('[data-cy=isUnableToObtainOrConfirmInformation]')
 
-    // summary table 19444
+    // NB: uncomment once all above are passing
+    // cy.checkA11y('[data-cy=owner-change]')
+  })
+
+  it('checks the summary table passes accessibility', () => {
     cy.checkA11y('[data-cy=individualsSummaryTable]', { rules: { 'nested-interactive': { enabled: false } } })
 
     /**
@@ -133,8 +137,5 @@ describe('accessibility -> Beneficial Owner Change', () => {
       }
     })
     cy.checkA11y('[data-cy=individualsSummaryTable]')
-
-    // NB: uncomment once all above are passing
-    // cy.checkA11y('[data-cy=owner-change]')
   })
 })
