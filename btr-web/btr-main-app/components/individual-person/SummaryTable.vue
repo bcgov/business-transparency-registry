@@ -82,31 +82,28 @@
                 data-cy="edit-button"
                 @click="openEditingMode(index)"
               />
-              <Popover class="relative inline-block text-left">
-                <PopoverButton
-                  class="py-2 pl-2"
+              <UPopover :popper="{ placement: 'bottom-end' }">
+                <UButton
+                  :ui="{ padding: { default: 'py-0' } }"
+                  icon="i-mdi-menu-down"
                   aria-label="show more options"
-                  data-cy="popover-button"
+                  variant="removeButton"
                   :disabled="editingDisabled || isEditing"
-                >
-                  <UIcon class="text-lg text-primary" name="i-mdi-menu-down" />
-                </PopoverButton>
-                <PopoverPanel class="absolute mt-2 left-0 w-full">
-                  <div class="flex justify-end">
-                    <div class="border border-gray-200 rounded-md p-2 shadow-lg">
-                      <UButton
-                        :ui="{ padding: { default: 'py-0' } }"
-                        icon="i-mdi-delete"
-                        :label="t('buttons.remove')"
-                        color="primary"
-                        variant="removeButton"
-                        data-cy="remove-button"
-                        @click="removeSignificantIndividual(index)"
-                      />
-                    </div>
-                  </div>
-                </PopoverPanel>
-              </Popover>
+                  data-cy="popover-button"
+                />
+                <template #panel>
+                  <UButton
+                    :ui="{ padding: { default: 'py-0' } }"
+                    class="m-2"
+                    icon="i-mdi-delete"
+                    :label="t('buttons.remove')"
+                    color="primary"
+                    variant="removeButton"
+                    data-cy="remove-button"
+                    @click="removeSignificantIndividual(index)"
+                  />
+                </template>
+              </UPopover>
             </div>
           </td>
         </template>
@@ -160,7 +157,6 @@
 </template>
 
 <script setup lang="ts">
-import { Popover, PopoverButton, PopoverPanel } from '@headlessui/vue'
 import { ExternalInfluenceE } from '~/enums/external-influence-e'
 import { SignificantIndividualI } from '~/interfaces/significant-individual-i'
 
