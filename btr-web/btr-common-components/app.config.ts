@@ -1,8 +1,8 @@
 export default defineAppConfig({
   ui: {
-    primary: 'bcGovBlue',
+    primary: 'blue',
     gray: 'bcGovGray',
-    red: 'bcGovRed',
+    red: 'red',
     button: {
       variant: {
         solid: 'hover:bg-opacity-[.92] hover:bg-{color}-500',

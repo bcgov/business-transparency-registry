@@ -7,8 +7,8 @@
       {{ $t('texts.myRegDetails') }}
     </p>
     <div class="max-w-[750px] pt-10">
-      <div class="bg-bcGovBlue-50 flex p-5 rounded-t-[5px]">
-        <UIcon class="text-bcGovBlue-400 text-2xl" name="i-mdi-account-details" />
+      <div class="bg-blue-50 flex p-5 rounded-t-[5px]">
+        <UIcon class="text-blue-400 text-2xl" name="i-mdi-account-details" />
         <h3 class="font-bold ml-2" data-cy="myRegDetailsSectionHeader">
           {{ $t('sectionHeadings.profileDetails') }}
         </h3>
