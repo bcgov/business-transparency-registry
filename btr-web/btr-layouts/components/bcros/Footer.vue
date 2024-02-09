@@ -1,5 +1,5 @@
 <template>
-  <footer
+  <div
     id="bcros-main-footer"
     class="flex items-center h-[56px] border-t-2 border-bcGovColor-navDivider bg-bcGovColor-footer text-sm"
     data-cy="footer"
@@ -27,14 +27,14 @@
               arrow: true
             }"
           >
-            <div class="icon-container" role="img" tabindex="0">
+            <div class="icon-container" role="img" aria-label="information" tabindex="0">
               <UIcon class="text-2xl text-white" name="i-mdi-information-outline" />
             </div>
           </UTooltip>
         </div>
       </nav>
     </div>
-  </footer>
+  </div>
 </template>
 
 <script setup lang="ts">

@@ -56,7 +56,7 @@ describe('accessibility -> Business Layout', () => {
     cy.checkA11y({ exclude: ['[data-cy=owner-change]'], include: ['[data-cy=button-control]'] })
 
     // footer only 19455
-    // cy.checkA11y({ exclude: ['[data-cy=owner-change]'], include: ['[data-cy=footer]'] })
+    cy.checkA11y({ exclude: ['[data-cy=owner-change]'], include: ['[data-cy=footer]'] })
 
     // full layout (uncomment once all of the above are passing)
     // cy.checkA11y({ exclude: ['[data-cy=owner-change]'], include: ['[data-cy=business-layout]'] })
