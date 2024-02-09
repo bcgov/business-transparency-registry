@@ -1,5 +1,3 @@
-import { SI_EXAMPLE_DATE } from '~/tests/utils/mockedData'
-
 export const btrSubmissionExampleMock = {
   business_identifier: 'BC0871427',
   effective_date: '2024-01-04',

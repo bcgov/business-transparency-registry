@@ -135,9 +135,7 @@ function _getControlOther (oocs: BtrBodsOwnershipOrControlI) {
   return other?.details || ''
 }
 
-const _getSi = (
-  person: BtrBodsPersonI, oocs: BtrBodsOwnershipOrControlI, startDate: string
-): SignificantIndividualI => {
+const _getSi = (person: BtrBodsPersonI, oocs: BtrBodsOwnershipOrControlI): SignificantIndividualI => {
   const votes = _getMaxInterestValue(oocs, BodsInterestTypeE.VOTING_RIGHTS)
   const shares = _getMaxInterestValue(oocs, BodsInterestTypeE.SHAREHOLDING)
 
@@ -163,7 +161,7 @@ export const getSIsFromBtrBodsSubmission = (submission: BtrFilingI): Significant
   for (const person of submission.personStatements) {
     const oocs = _findOwnershipOrControlStatement(submission, person.statementID)
     if (person && oocs) {
-      sis.push(_getSi(person, oocs, submission.effectiveDate))
+      sis.push(_getSi(person, oocs))
     }
   }
 
