@@ -1,5 +1,5 @@
 <template>
-  <div class="flex self-center h-[32px] w-[32px] bg-bcGovBlue-300">
+  <div class="flex self-center h-[32px] w-[32px] bg-blue-300">
     <p data-cy="al-avatar" class="m-auto self-center text-xl font-bold" :class="avatarClasses">
       {{ username.slice(0,1) }}
     </p>

@@ -1,5 +1,5 @@
 <template>
-  <div id="bcros-breadcrumb" class="bg-bcGovBlue-350" data-cy="breadcrumb">
+  <div id="bcros-breadcrumb" class="bg-blue-350" data-cy="breadcrumb">
     <div class="flex flex-wrap divide-x divide-white mx-auto py-[7px] px-4 h-[45px] w-full max-w-[1360px] text-white">
       <UButton
         class="mr-3 mt-[1px] px-1 h-[28px] w-[28px] rounded-full"

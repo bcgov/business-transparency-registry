@@ -71,7 +71,7 @@ export default <Partial<Config>>{
           800: '#343a40',
           900: '#212529'
         },
-        bcGovBlue: {
+        blue: {
           50: '#e0e7ed',
           100: '#b3c2d1',
           200: '#8099b3',
@@ -84,7 +84,7 @@ export default <Partial<Config>>{
           800: '#002049',
           900: '#001438'
         },
-        bcGovGreen: {
+        green: {
           // generated on http://mcg.mbitson.com/#!?mcgpalette0=%232e8540 using #2E8540 as base
           50: '#E6F0E8',
           100: '#C0DAC6',
@@ -101,7 +101,7 @@ export default <Partial<Config>>{
           A400: '#28FF44',
           A700: '#0EFF2E'
         },
-        bcGovRed: {
+        red: {
           // generated on http://mcg.mbitson.com/#!?mcgpalette0=%232e8540 using #D3272C as base
           50: '#FAE5E6',
           100: '#F2BEC0',
@@ -118,7 +118,7 @@ export default <Partial<Config>>{
           A400: '#FF7F80',
           A700: '#FF6567'
         },
-        bcGovOrange: {
+        orange: {
           // generated on http://mcg.mbitson.com/#!?mcgpalette0=%232e8540 using #F8661A as base
           50: '#FEEDE4',
           100: '#FDD1BA',

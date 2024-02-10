@@ -36,20 +36,20 @@ const flavourIconClass = ref('')
 switch (props.flavour) {
   case AlertsFlavourE.ALERT:
     flavourIcon.value = 'i-mdi-alert'
-    flavourIconClass.value = 'text-bcGovRed-500'
-    flavourContainerClass.value = 'border-2 border-bcGovRed-500 bg-bcGovRed-100'
+    flavourIconClass.value = 'text-red-500'
+    flavourContainerClass.value = 'border-2 border-red-500 bg-red-100'
     break
   case AlertsFlavourE.SUCCESS:
     flavourIcon.value = 'i-mdi-success-circle'
-    flavourContainerClass.value = 'border-2 border-bcGovGreen-500 bg-bcGovGreen-100'
+    flavourContainerClass.value = 'border-2 border-green-500 bg-green-100'
     break
   case AlertsFlavourE.WARNING:
     flavourIcon.value = 'i-mdi-warning-circle'
-    flavourContainerClass.value = 'border-2 border-bcGovOrange-500 bg-bcGovOrange-100'
+    flavourContainerClass.value = 'border-2 border-orange-500 bg-orange-100'
     break
   case AlertsFlavourE.INFO:
     flavourIcon.value = 'i-mdi-warning-circle'
-    flavourContainerClass.value = 'border-2 border-solid border-bcGovBlue-500 bg-bcGovBlue-100'
+    flavourContainerClass.value = 'border-2 border-solid border-blue-500 bg-blue-100'
     break
   case AlertsFlavourE.MESSAGE:
     flavourIcon.value = null

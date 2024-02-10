@@ -8,10 +8,10 @@
     </p>
     <div
       class="mt-10 p-10 pb-3 bg-white rounded flex"
-      :class="showSignificantDateError ? 'border-l-[3px] border-bcGovRed-500' : ''"
+      :class="showSignificantDateError ? 'border-l-[3px] border-red-500' : ''"
       data-cy="effective-date-select"
     >
-      <label class="text-lg w-[190px]" :class="showSignificantDateError ? 'text-bcGovRed-500' : ''">
+      <label class="text-lg w-[190px]" :class="showSignificantDateError ? 'text-red-500' : ''">
         {{ $t('labels.significantIndividualChangeDate') }}
       </label>
       <div class="ml-8 flex-auto">
@@ -37,9 +37,9 @@
     <div
       v-if="expandNewSI"
       class="mt-10 p-10 pt-8 bg-white rounded flex flex-row"
-      :class="showAddIndividualError ? 'border-l-[3px] border-bcGovRed-500' : ''"
+      :class="showAddIndividualError ? 'border-l-[3px] border-red-500' : ''"
     >
-      <label class="font-bold min-w-[190px] mt-3" :class="showAddIndividualError ? 'text-bcGovRed-500' : ''">
+      <label class="font-bold min-w-[190px] mt-3" :class="showAddIndividualError ? 'text-red-500' : ''">
         {{ $t('labels.addIndividual') }}
       </label>
       <IndividualPersonAddNew
