@@ -27,7 +27,7 @@
               arrow: true
             }"
           >
-            <div class="icon-container" role="img" tabindex="0">
+            <div class="icon-container" role="img" aria-label="information" tabindex="0">
               <UIcon class="text-2xl text-white" name="i-mdi-information-outline" />
             </div>
           </UTooltip>

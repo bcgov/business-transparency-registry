@@ -1,14 +1,14 @@
 <template>
   <div class="grid grid-cols-1 shadowIt">
-    <header v-if="hasHeader">
+    <div v-if="hasHeader">
       <slot name="header" />
-    </header>
+    </div>
     <div v-if="hasDefault">
       <slot name="default" />
     </div>
-    <footer v-if="hasFooter">
+    <div v-if="hasFooter">
       <slot name="footer" />
-    </footer>
+    </div>
   </div>
 </template>
 
