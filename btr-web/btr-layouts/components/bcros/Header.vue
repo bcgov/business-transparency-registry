@@ -1,5 +1,5 @@
 <template>
-  <div
+  <header
     id="bcros-main-header"
     class="bg-bcGovColor-header border-b-2 border-bcGovColor-navDivider"
     data-cy="header"
@@ -61,7 +61,7 @@
         </div>
       </nav>
     </div>
-  </div>
+  </header>
 </template>
 
 <script setup lang="ts">
