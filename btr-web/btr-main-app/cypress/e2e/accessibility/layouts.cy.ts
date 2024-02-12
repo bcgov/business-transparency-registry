@@ -31,8 +31,9 @@ describe('accessibility -> Business Layout', () => {
     cy.injectAxe()
     // header only (logged out) 19450
     cy.checkA11y({ exclude: ['[data-cy=owner-change]'], include: ['[data-cy=header]'] })
-    // cy.get('[data-cy=logged-out-menu]').click()
-    // cy.checkA11y({ exclude: ['[data-cy=owner-change]'], include: ['[data-cy=header]'] })
+    cy.get('[data-cy=logged-out-menu]').click()
+    cy.wait(300)
+    cy.checkA11y({ exclude: ['[data-cy=owner-change]'], include: ['[data-cy=header]'] })
 
     // breadcrumb only 19579
     // cy.checkA11y({ exclude: ['[data-cy=owner-change]'], include: ['[data-cy=breadcrumb]'] })
