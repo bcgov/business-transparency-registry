@@ -3,7 +3,6 @@
     id="bcros-main-footer"
     class="flex items-center h-[56px] border-t-2 border-bcGovColor-navDivider bg-bcGovColor-footer text-sm"
     data-cy="footer"
-    aria-label="Footer"
   >
     <div class="m-auto px-4 h-[30.5px] w-full max-w-[1360px]">
       <nav class="flex flex-grow">
