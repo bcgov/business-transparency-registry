@@ -1,6 +1,5 @@
 import moment from 'moment'
-import { dateToString } from '../../../../btr-common-components/utils/date'
-import payFeesForBtrRegsigin from '~/cypress/fixtures/payFeeForBtrRegsigin.json'
+// todo: techdebt ticket add test for "Significant Individual Change Date" #19793
 
 describe('pages -> Beneficial Owner Change', () => {
   beforeEach(() => {

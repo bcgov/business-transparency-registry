@@ -84,7 +84,7 @@ const significantIndividualChangeDate = (event: Date) => {
   const effectiveDate = dateToString(event, 'YYYY-MM-DD')
   currentSIFiling.value.effectiveDate = effectiveDate
   for (const si of currentSIFiling.value.significantIndividuals) {
-    if(si.action === FilingActionE.ADD){
+    if (si.action === FilingActionE.ADD) {
       si.startDate = effectiveDate
     }
   }
