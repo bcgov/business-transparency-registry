@@ -81,7 +81,11 @@ const showSignificantDateError = ref(false)
 const showAddIndividualError = ref(false)
 
 const significantIndividualChangeDate = (event: Date) => {
-  currentSIFiling.value.effectiveDate = dateToString(event, 'YYYY-MM-DD')
+  const effectiveDate = dateToString(event, 'YYYY-MM-DD')
+  currentSIFiling.value.effectiveDate = effectiveDate
+  for (const si of currentSIFiling.value.significantIndividuals) {
+    si.startDate = effectiveDate
+  }
   addBtrPayFees()
 }
 
@@ -89,6 +93,7 @@ function handleAddNewButtonClick () {
   expandNewSI.value = true
   isAddingNewSI.value = true
 }
+
 function addNewSI (si: SignificantIndividualI) {
   significantIndividuals.filingAddSI(si)
   expandNewSI.value = false
