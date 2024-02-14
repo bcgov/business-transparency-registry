@@ -160,8 +160,7 @@
       "controlPercentage": {
         "empty": "Please enter a percentage of shares and/or votes",
         "specialCharacter": "Numbers only",
-        "maxValueReached": "Must be between 1 and 100",
-        "invalidFormat": "Enter a number between 1 and 100"
+        "invalidPercentage": "Must be between 1 and 100"
       },
       "sharesAndVotes": {
         "required": "Please indicate at least one type of control"
