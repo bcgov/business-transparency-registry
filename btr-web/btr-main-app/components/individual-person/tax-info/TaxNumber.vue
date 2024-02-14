@@ -2,11 +2,11 @@
   <div class="flex flex-col py-5">
     <div class="flex mb-2 py-1">
       <URadio
-        :aria-label="$t('placeholders.taxNumber')"
         id="taxNumberRadioButton"
         v-model="selectedButton"
         :value="HAS_TAX_NUMBER"
         class="mt-3"
+        :aria-label="$t('placeholders.taxNumber')"
         @change="handleRadioButtonChange(HAS_TAX_NUMBER)"
       />
       <UFormGroup :name="name" class="ml-5">
