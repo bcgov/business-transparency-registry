@@ -73,22 +73,20 @@ describe('accessibility -> Beneficial Owner Change', () => {
 
     // Expanding the form - dynamic elements 19443
     // address line 1 expansion
-    // cy.get('[data-cy=add-new-btn]').click()
-    // cy.get('[data-cy=address-line1-autocomplete]').type('123')
-    // cy.checkA11y('[data-cy=address-street-options]')
+    cy.get('[data-cy=add-new-btn]').click()
+    cy.get('[data-cy=address-line1-autocomplete]').type('123')
+    cy.checkA11y('[data-cy=address-street-options]')
     // countries of citizenship dropdown
-    // cy.get('[data-cy=add-new-btn]').click()
-    // cy.get('[data-cy=address-line1-autocomplete]').type('123')
-    // cy.get('[data-cy=countryOfCitizenshipRadioGroup]').get('[type=radio][value=other]').check()
-    // cy.checkA11y('[data-cy=countryOfCitizenshipDropdown]')
-    // cy.get('[data-cy=countryOfCitizenshipDropdownButton]').click()
-    // cy.get('[data-cy=countryOfCitizenshipDropdownOption]').eq(0).click({ force: true })
-    // cy.get('[data-cy=countryOfCitizenshipDropdownOption]').eq(4).click({ force: true })
-    // cy.checkA11y('[data-cy=countryOfCitizenshipDropdown]')
+    cy.get('[data-cy=address-line1-autocomplete]').type('123')
+    cy.get('[data-cy=countryOfCitizenshipRadioGroup]').get('[type=radio][value=other]').check()
+    cy.checkA11y('[data-cy=countryOfCitizenshipDropdown]')
+    cy.get('[data-cy=countryOfCitizenshipDropdownButton]').click()
+    cy.get('[data-cy=countryOfCitizenshipDropdownOption]').eq(0).click({ force: true })
+    cy.get('[data-cy=countryOfCitizenshipDropdownOption]').eq(4).click({ force: true })
+    cy.checkA11y('[data-cy=countryOfCitizenshipDropdown]')
     // not possible to obtain data checkbox clicked
-    // cy.get('[data-cy=add-new-btn]').click()
-    // cy.get('[data-cy=isUnableToObtainOrConfirmInformationCheckbox]').check()
-    // cy.checkA11y('[data-cy=isUnableToObtainOrConfirmInformation]')
+    cy.get('[data-cy=isUnableToObtainOrConfirmInformationCheckbox]').check()
+    cy.checkA11y('[data-cy=isUnableToObtainOrConfirmInformation]')
 
     // NB: uncomment once all above are passing
     // cy.checkA11y('[data-cy=owner-change]')

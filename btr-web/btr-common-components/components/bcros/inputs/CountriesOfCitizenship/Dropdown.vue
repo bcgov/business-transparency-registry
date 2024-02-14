@@ -22,6 +22,7 @@
       <ComboboxButton
         class="w-full h-full px-[10px] text-left"
         data-cy="countryOfCitizenshipDropdownButton"
+        tabindex="0"
       >
         <span
           v-if="nonCaCitizenships.length === 0"
@@ -48,66 +49,64 @@
         <UIcon class="float-right text-2xl " name="i-mdi-chevron-down" />
       </ComboboxButton>
       <div v-show="open" class="absolute z-10 w-full">
-        <ul>
-          <ComboboxInput
-            :placeholder="$t('labels.countryOfCitizenship.findCountry')"
-            :class="[
-              'w-full',
-              'focus:outline-none',
-              'sm:text-sm',
-              'p-3',
-              'bg-gray-100',
-              'border-b-2',
-              'border-primary-500',
-              'placeholder-primary-500'
-            ]"
-            data-cy="countryOfCitizenshipDropdownFilter"
-            @change="filterCountries($event.target.value)"
-          />
-          <ComboboxOptions
-            :class="[
-              'relative',
-              'max-h-60',
-              'w-full',
-              'overflow-auto',
-              'bg-white',
-              'py-1',
-              'text-base',
-              'shadow-lg',
-              'focus:outline-none',
-              'sm:text-sm',
-              'bg-gray-500',
-              'z-10'
-            ]"
-            as="div"
+        <ComboboxInput
+          :placeholder="$t('labels.countryOfCitizenship.findCountry')"
+          :class="[
+            'w-full',
+            'focus:outline-none',
+            'sm:text-sm',
+            'p-3',
+            'bg-gray-100',
+            'border-b-2',
+            'border-primary-500',
+            'placeholder-primary-500'
+          ]"
+          data-cy="countryOfCitizenshipDropdownFilter"
+          @change="filterCountries($event.target.value)"
+        />
+        <ComboboxOptions
+          :class="[
+            'relative',
+            'max-h-60',
+            'w-full',
+            'overflow-auto',
+            'bg-white',
+            'py-1',
+            'text-base',
+            'shadow-lg',
+            'focus:outline-none',
+            'sm:text-sm',
+            'bg-gray-500',
+            'z-10'
+          ]"
+          as="div"
+        >
+          <ComboboxOption
+            v-for="country in countriesWithoutCa"
+            :key="country.alpha_2"
+            v-slot="{ active }"
+            :value="country"
+            as="template"
           >
-            <ComboboxOption
-              v-for="country in countriesWithoutCa"
-              :key="country.alpha_2"
-              v-slot="{ active }"
-              :value="country"
-              as="template"
+            <div
+              class="cursor-default select-none py-2 pl-10 pr-4"
+              :class="{ 'bg-gray-100': active }"
+              data-cy="countryOfCitizenshipDropdownOption"
             >
-              <li
-                class="cursor-default select-none py-2 pl-10 pr-4"
-                :class="{ 'bg-gray-100': active }"
-                data-cy="countryOfCitizenshipDropdownOption"
-              >
-                <span v-if="isInSelected(country)" class="float-right text-outcomes-success">
-                  <UIcon name="i-mdi-check" />
-                  {{ $t('labels.countryOfCitizenship.selected') }}
-                </span>
-                <span v-else class="float-right text-primary">
-                  <UIcon name="i-mdi-add" />
-                  {{ $t('labels.countryOfCitizenship.select') }}
-                </span>
-                <span>
-                  {{ country.name }}
-                </span>
-              </li>
-            </ComboboxOption>
-          </ComboboxOptions>
-        </ul>
+              <span v-if="isInSelected(country)" class="float-right text-outcomes-success">
+                <UIcon name="i-mdi-check" />
+                {{ $t('labels.countryOfCitizenship.selected') }}
+              </span>
+              <span v-else class="float-right text-primary">
+                <UIcon name="i-mdi-add" />
+                {{ $t('labels.countryOfCitizenship.select') }}
+              </span>
+              <span>
+                {{ country.name }}
+              </span>
+            </div>
+          </ComboboxOption>
+        </ComboboxOptions>
       </div>
     </Combobox>
   </div>

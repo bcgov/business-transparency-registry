@@ -24,5 +24,5 @@ const props = defineProps({
   variant: { type: String, default: 'bcGov' }
 })
 
-const percentColour = computed(() => props.variant === 'error' ? 'text-red-500' : 'text-gray-500')
+const percentColour = computed(() => props.variant === 'error' ? 'text-red-500' : 'text-gray-700')
 </script>
