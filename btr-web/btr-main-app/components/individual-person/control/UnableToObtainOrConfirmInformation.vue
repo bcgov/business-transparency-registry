@@ -60,8 +60,10 @@ const isUnableToObtainOrConfirmInformationCheckboxChange = () => {
     isUnableToObtainOrConfirmInformationDetails.value = ''
   }
 }
-const isUnableToObtainOrConfirmInformationDetailsKeyDown = () => {
-  isUnableToObtainOrConfirmInformation.value = true
+const isUnableToObtainOrConfirmInformationDetailsKeyDown = (event: KeyboardEvent) => {
+  if (event.key !== 'Tab') {
+    isUnableToObtainOrConfirmInformation.value = true
+  }
 }
 
 watch(isUnableToObtainOrConfirmInformation, (newValue) => {
