@@ -37,7 +37,7 @@
             <span class="font-bold text-sm mr-auto">
               {{ $t('widgets.feeSummary.total') }}
             </span>
-            <span class="font-normal text-sm text-gray-400 float-right ml-2">
+            <span class="font-normal text-sm text-gray-700 float-right ml-2">
               {{ $t('currency.cad') }}
             </span>
             <span
