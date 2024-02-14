@@ -6,6 +6,7 @@
         color="white"
         :disabled="breadcrumbs.length < 2"
         icon="i-mdi-arrow-left"
+        aria-label="back"
         data-cy="crumb-back"
         @click="back()"
       />

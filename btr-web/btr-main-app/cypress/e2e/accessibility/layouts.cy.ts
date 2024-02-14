@@ -36,7 +36,7 @@ describe('accessibility -> Business Layout', () => {
     cy.checkA11y({ exclude: ['[data-cy=owner-change]'], include: ['[data-cy=header]'] })
 
     // breadcrumb only 19579
-    // cy.checkA11y({ exclude: ['[data-cy=owner-change]'], include: ['[data-cy=breadcrumb]'] })
+    cy.checkA11y({ exclude: ['[data-cy=owner-change]'], include: ['[data-cy=breadcrumb]'] })
 
     // business details only
     cy.checkA11y({ exclude: ['[data-cy=owner-change]'], include: ['[data-cy=business-details]'] })
