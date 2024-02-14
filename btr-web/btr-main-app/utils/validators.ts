@@ -48,10 +48,10 @@ export function getTaxNumberValidator () {
 
 export function getPercentageValidator () {
   const { t } = useI18n()
-  return z.string()
-    .refine(validatePercentageWholeNumber, t('errors.validation.controlPercentage.specialCharacter'))
-    .refine(validatePercentageFormat, t('errors.validation.controlPercentage.invalidFormat'))
-    .refine(validatePercentageValue, t('errors.validation.controlPercentage.maxValueReached'))
+  return z.union([z.number(), z.string()])
+    .refine(validatePercentageNumber, t('errors.validation.controlPercentage.specialCharacter'))
+    .refine(validatePercentageFormat, t('errors.validation.controlPercentage.invalidPercentage'))
+    .refine(validatePercentageValue, t('errors.validation.controlPercentage.invalidPercentage'))
 }
 
 export function getAddressCountryValidator () {

@@ -20,7 +20,7 @@ const props = defineProps({
   id: { type: String, required: true },
   name: { type: String, default: 'name' },
   placeholder: { type: String, default: '' },
-  modelValue: { type: String, default: '' },
+  modelValue: { type: [String, Number], default: '' },
   variant: { type: String, default: 'bcGov' }
 })
 

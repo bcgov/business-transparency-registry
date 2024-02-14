@@ -42,13 +42,18 @@ describe('accessibility -> Business Layout', () => {
     cy.checkA11y({ exclude: ['[data-cy=owner-change]'], include: ['[data-cy=business-details]'] })
 
     // fee summary only 19577
+    // the color-contrast check is disabled until the gray color AA issue is resolved in ticket #19782
     // pre-form touched
-    // cy.checkA11y({ exclude: ['[data-cy=owner-change]'], include: ['[data-cy=pay-fees-widget]'] })
+    cy.checkA11y({ exclude: ['[data-cy=owner-change]'], include: ['[data-cy=pay-fees-widget]'] }, {
+      rules: { 'color-contrast': { enabled: false } }
+    })
     // post-form touched
-    // cy.get('[data-cy=date-select]').click()
-    // cy.wait(250)
-    // cy.get('.bcros-date-picker__calendar__day.dp__today').parent().click()
-    // cy.checkA11y({ exclude: ['[data-cy=owner-change]'], include: ['[data-cy=pay-fees-widget]'] })
+    cy.get('[data-cy=date-select]').click()
+    cy.wait(250)
+    cy.get('.bcros-date-picker__calendar__day.dp__today').parent().click()
+    cy.checkA11y({ exclude: ['[data-cy=owner-change]'], include: ['[data-cy=pay-fees-widget]'] }, {
+      rules: { 'color-contrast': { enabled: false } }
+    })
 
     // filing control buttons only
     cy.checkA11y({ exclude: ['[data-cy=owner-change]'], include: ['[data-cy=button-control]'] })
