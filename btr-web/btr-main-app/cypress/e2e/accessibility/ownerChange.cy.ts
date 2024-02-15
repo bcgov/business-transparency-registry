@@ -20,33 +20,51 @@ describe('accessibility -> Beneficial Owner Change', () => {
     // NB: these tests will be uncommented when their corresponding tickets are worked on
 
     // Expanding the form - pre filled out 19442
-    // cy.get('[data-cy=add-new-btn]').click()
-    // cy.checkA11y('[data-cy=addIndividualPerson]')
+    cy.get('[data-cy=add-new-btn]').click()
+    cy.checkA11y('[data-cy=addIndividualPerson]',
+      {
+        rules: {
+          // todo: fixme: nested-interactive should be removed/set to true after resolving it after
+          //  discussion with nuxt-ui team
+          // first ticket for opening discussions: https://github.com/bcgov/entity/issues/19775
+          'nested-interactive': { enabled: false }
+        }
+      }
+    )
 
     // Expanding the form - filled out 19442
-    // cy.fixture('individuals').then((testData) => {
-    //   cy.get('[data-cy=add-new-btn]').click()
-    //   cy.get('#individual-person-full-name').type(testData.profile1.fullName)
-    //   cy.get('#individual-person-preferred-name').type(testData.profile1.preferredName)
-    //   cy.get('#individual-person-email').type(testData.profile1.email)
-    //   cy.get('[name=percentOfShares]').type(testData.profile1.percentOfShares)
-    //   cy.get('[name=percentOfVotes]').type(testData.profile1.percentOfVotes)
-    //   cy.get('[data-cy=testTypeOfControl]').get('[name=registeredOwner]').check()
-    //   cy.get('[data-cy=testControlOfDirectors]').get('[name=directControl]').check()
-    //   cy.get('#addNewPersonBirthdate').trigger('click')
-    //   cy.get('[data-cy=date-picker]').get('.bcros-date-picker__calendar__day.dp__today').trigger('click')
-    //   cy.get('[data-cy=address-country]').click()
-    //   cy.get('[data-cy=address-country]').get('li').contains(testData.profile1.address.country).click()
-    //   cy.get('[data-cy=address-line1-autocomplete]').type(testData.profile1.address.streetAddress)
-    //   cy.get('[data-cy=address-city]').type(testData.profile1.address.city)
-    //   cy.get('[data-cy=address-region-select]').click()
-    //   cy.get('[data-cy=address-region-select]').get('li').contains(testData.profile1.address.province[0]).click()
-    //   cy.get('[data-cy=address-postal-code]').type(testData.profile1.address.postalCode)
-    //   cy.get('[data-cy=countryOfCitizenshipRadioGroup]').get('[type=radio][value=citizen]').check()
-    //   cy.get('[name=taxNumber]').type(testData.profile1.taxNumber)
-    //   cy.get('[data-cy=testTaxResidency]').get('[type=radio][value=true]').check()
-    //   cy.checkA11y('[data-cy=addIndividualPerson]')
-    // })
+    // continue from previous expanded form, fill it out
+    cy.fixture('individuals').then((testData) => {
+      cy.get('#individual-person-full-name').type(testData.profile1.fullName)
+      cy.get('#individual-person-preferred-name').type(testData.profile1.preferredName)
+      cy.get('#individual-person-email').type(testData.profile1.email)
+      cy.get('[name=percentOfShares]').type(testData.profile1.percentOfShares)
+      cy.get('[name=percentOfVotes]').type(testData.profile1.percentOfVotes)
+      cy.get('[data-cy=testTypeOfControl]').get('[name=registeredOwner]').check()
+      cy.get('[data-cy=testControlOfDirectors]').get('[name=directControl]').check()
+      cy.get('#addNewPersonBirthdate').trigger('click')
+      cy.get('[data-cy=date-picker]').get('.bcros-date-picker__calendar__day.dp__today').trigger('click')
+      cy.get('[data-cy=address-country]').click()
+      cy.get('[data-cy=address-country]').get('li').contains(testData.profile1.address.country).click()
+      cy.get('[data-cy=address-line1-autocomplete]').type(testData.profile1.address.streetAddress)
+      cy.get('[data-cy=address-city]').type(testData.profile1.address.city)
+      cy.get('[data-cy=address-region-select]').click()
+      cy.get('[data-cy=address-region-select]').get('li').contains(testData.profile1.address.province[0]).click()
+      cy.get('[data-cy=address-postal-code]').type(testData.profile1.address.postalCode)
+      cy.get('[data-cy=countryOfCitizenshipRadioGroup]').get('[type=radio][value=citizen]').check()
+      cy.get('[name=taxNumber]').type(testData.profile1.taxNumber)
+      cy.get('[data-cy=testTaxResidency]').get('[type=radio][value=true]').check()
+      cy.checkA11y('[data-cy=addIndividualPerson]',
+        {
+          rules: {
+            // todo: fixme: nested-interactive should be removed/set to true after resolving it after
+            //  discussion with nuxt-ui team
+            // first ticket for opening discussions: https://github.com/bcgov/entity/issues/19775
+            'nested-interactive': { enabled: false }
+          }
+        }
+      )
+    })
 
     // Expanding the form - validations on 19441
     // FUTURE: just click 'Done' btn once validations for it are working
