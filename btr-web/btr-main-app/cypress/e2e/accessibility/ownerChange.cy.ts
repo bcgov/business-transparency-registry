@@ -91,7 +91,6 @@ describe('accessibility -> Beneficial Owner Change', () => {
 
     // Expanding the form - dynamic elements 19443
     // address line 1 expansion
-    cy.get('[data-cy=add-new-btn]').click()
     cy.get('[data-cy=address-line1-autocomplete]').type('123')
     cy.checkA11y('[data-cy=address-street-options]')
     // countries of citizenship dropdown
