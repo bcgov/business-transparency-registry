@@ -30,7 +30,7 @@ fake = Faker()
 def _get_ooc_interests():
     """Return the ooc interests."""
     ooc_interests: dict[str, list[dict]] = {}
-    with open('bods_csvs/ooc_interests.csv') as ooc_interests_csv:
+    with open('bods_csvs/ooc_interests.csv', encoding='utf-8') as ooc_interests_csv:
         reader = csv.DictReader(ooc_interests_csv)
         for row in reader:
             ooc_interests.setdefault(row['_link_ooc_statement'], []).append({
@@ -52,7 +52,7 @@ def _get_ooc_interests():
 def _get_ooc_stmnts(ooc_interests: dict[str, list], limit: int):
     """Return the ooc statements."""
     ooc_stmnts: list[dict] = []
-    with open('bods_csvs/ooc_statement.csv') as oocs_csv:
+    with open('bods_csvs/ooc_statement.csv', encoding='utf-8') as oocs_csv:
         reader = csv.DictReader(oocs_csv)
         for row in reader:
             if row['subject_describedByEntityStatement'] and row['interestedParty_describedByPersonStatement']:
@@ -61,7 +61,8 @@ def _get_ooc_stmnts(ooc_interests: dict[str, list], limit: int):
                     'statementType': row['statementType'],
                     'statementDate': row['statementDate'],
                     'subject': {'describedByEntityStatement': row['subject_describedByEntityStatement']},
-                    'interestedParty': {'describedByPersonStatement': row['interestedParty_describedByPersonStatement']},
+                    'interestedParty': {
+                        'describedByPersonStatement': row['interestedParty_describedByPersonStatement']},
                     'interests': ooc_interests.get(row['_link'], [])
                 })
                 # TODO: remove below
@@ -73,7 +74,7 @@ def _get_ooc_stmnts(ooc_interests: dict[str, list], limit: int):
 def _get_entity_stmnts():
     """Return the entity statements."""
     entity_stmnts: dict[str, dict] = {}
-    with open('bods_csvs/entity_statement.csv') as entities_csv:
+    with open('bods_csvs/entity_statement.csv', encoding='utf-8') as entities_csv:
         reader = csv.DictReader(entities_csv)
         for row in reader:
             entity_stmnts[row['statementID']] = {
@@ -102,7 +103,7 @@ def _get_entity_stmnts():
 def _get_names():
     """Return the person names."""
     names: dict[str, list] = {}
-    with open('bods_csvs/person_names.csv') as person_names_csv:
+    with open('bods_csvs/person_names.csv', encoding='utf-8') as person_names_csv:
         reader = csv.DictReader(person_names_csv)
         for row in reader:
             names.setdefault(row['_link_person_statement'], []).append({
@@ -117,7 +118,7 @@ def _get_names():
 def _get_nationalities():
     """Return the person nationalities."""
     nationalities: dict[str, list] = {}
-    with open('bods_csvs/person_nationalities.csv') as person_nationalities_csv:
+    with open('bods_csvs/person_nationalities.csv', encoding='utf-8') as person_nationalities_csv:
         reader = csv.DictReader(person_nationalities_csv)
         for row in reader:
             nationalities.setdefault(row['_link_person_statement'], []).append({
@@ -130,7 +131,7 @@ def _get_nationalities():
 def _get_addresses():
     """Return the person addresses."""
     addresses: dict[str, list] = {}
-    with open('bods_csvs/person_addresses.csv') as person_address_csv:
+    with open('bods_csvs/person_addresses.csv', encoding='utf-8') as person_address_csv:
         reader = csv.DictReader(person_address_csv)
         for row in reader:
             addresses.setdefault(row['_link_person_statement'], []).append({
@@ -140,7 +141,7 @@ def _get_addresses():
                 'region': '',
                 'postalCode': '',
                 'locationDescription': row['address'],
-                'country': pycountry.countries.get(alpha_2=row['country']) or row['country'] 
+                'country': pycountry.countries.get(alpha_2=row['country']) or row['country']
             })
     return addresses
 
@@ -153,10 +154,10 @@ def _get_person_stmnts(addresses: dict, names: dict, nationalities: dict):
         """Return a randomly generated email."""
         return (fake.name()).replace(' ', '_') + '@test.com'
 
-    with open('bods_csvs/person_statement.csv') as persons_csv:
+    with open('bods_csvs/person_statement.csv', encoding='utf-8') as persons_csv:
         reader = csv.DictReader(persons_csv)
-        person_addresses = addresses.get(row['_link'], [])
         for row in reader:
+            person_addresses = addresses.get(row['_link'], [])
             person_stmnts[row['statementID']] = {
                 'statementID': row['statementID'],
                 'statementType': row['statementType'],
@@ -209,7 +210,7 @@ def _get_filings(ooc_stmnts: list, entity_stmnts: dict, person_stmnts: dict):
             else:
                 # initialize filing for this entity / date
                 filings.setdefault(entity_id, {})[ooc_date] = {
-                    'businessIdentifier': entity_stmnts[entity_id]['identifiers'][0]['id'],  # TODO: update when getting actual identifiers
+                    'businessIdentifier': entity_stmnts[entity_id]['identifiers'][0]['id'],
                     'effectiveDate': ooc_date,
                     'entityStatement': entity_stmnts[entity_id],
                     'personStatements': [person_stmnts[person_id]],
