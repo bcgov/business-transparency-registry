@@ -186,7 +186,7 @@ const { t } = useI18n()
 const headers = [
   t('labels.name'), t('labels.address'), t('labels.details'), t('labels.significanceDates'), t('labels.control')
 ]
-
+console.log('>>>!!!!!!>>>>>>', props.individuals)
 const isEmptyState = computed(() => {
   return props.individuals.every(individual => individual.action === FilingActionE.REMOVE)
 })
