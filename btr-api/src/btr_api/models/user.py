@@ -110,7 +110,7 @@ class User(db.Model):
         return None
 
     @classmethod
-    def create_from_jwt_token(cls, token: dict):
+    def create_from_jwt_token(cls, token: dict) -> User | None:
         """Create a user record from the provided JWT token.
 
         Use the values found in the vaild JWT for the realm
@@ -133,7 +133,7 @@ class User(db.Model):
         return None
 
     @classmethod
-    def get_or_create_user_by_jwt(cls, jwt_oidc_token):
+    def get_or_create_user_by_jwt(cls, jwt_oidc_token) -> User:
         """Return a valid user for audit tracking purposes."""
         # GET existing or CREATE new user based on the JWT info
         try:
@@ -153,12 +153,12 @@ class User(db.Model):
             ) from err
 
     @classmethod
-    def find_by_username(cls, username):
+    def find_by_username(cls, username) -> User | None:
         """Return the oldest User record for the provided username."""
         return cls.query.filter_by(username=username).order_by(User.creation_date.desc()).first()
 
     @classmethod
-    def find_by_sub(cls, sub):
+    def find_by_sub(cls, sub) -> User | None:
         """Return a User based on the unique sub field."""
         return cls.query.filter_by(sub=sub).one_or_none()
 

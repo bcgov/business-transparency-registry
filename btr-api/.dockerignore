@@ -8,4 +8,5 @@ __pycache__
 .vscode
 Dockerfile
 devops
+sample_data
 tests

@@ -150,4 +150,5 @@ htmlcov/
 # IDEs
 .idea
 
-.env
+# bods csvs
+**/bods_csvs/*
