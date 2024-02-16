@@ -170,7 +170,7 @@ describe('pages -> Beneficial Owner Change', () => {
       // click 'Done' button to add the individual
       cy.get('[data-cy=new-si-done-btn]').click()
     })
-    // verify only one has todays date, then switch to tomorrow and check that only one date has changed
+    // verify only new entry has date set for today. All other elements should have different dates.
     cy.get('td:contains("' + expectedDate + '")').should('have.length', 2)
 
   })
