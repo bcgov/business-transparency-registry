@@ -1,5 +1,5 @@
 import moment from 'moment'
-// todo: techdebt ticket add test for "Significant Individual Change Date" #19793
+// todo: techdebt ticket add test for "Significant Individual Filing Effective Date" #19793
 
 describe('pages -> Beneficial Owner Change', () => {
   beforeEach(() => {
@@ -14,7 +14,7 @@ describe('pages -> Beneficial Owner Change', () => {
   it('rendered expected information', () => {
     cy.get('[data-cy=page-header]').should('have.text', 'Significant Individual Change')
     cy.get('[data-cy=page-info-text]').should('contain.text', 'Select the date of your significant')
-    cy.get('[data-cy=effective-date-select]').should('have.text', 'Significant Individual Change Date')
+    cy.get('[data-cy=effective-date-select]').should('have.text', 'Significant Individual Filing Effective Date')
     cy.get('[data-cy=add-new-btn]').should('have.text', 'Add an Individual')
     cy.get('[data-cy=addIndividualPerson]').should('not.exist')
     cy.get('[data-cy="individualsSummaryTable"]').should('exist')

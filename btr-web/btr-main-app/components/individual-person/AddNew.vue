@@ -233,7 +233,7 @@
             data-cy="external-influence-radio-can-be-influenced"
             class="pt-1"
           />
-          <label for="radio-can-influence" class="ml-5">
+          <label for="radio-can-be-influenced" class="ml-5">
             <BcrosI18HelperBold translation-path="labels.externalInfluence.canBeInfluenced" />
           </label>
         </div>

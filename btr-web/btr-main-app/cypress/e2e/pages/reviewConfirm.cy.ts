@@ -81,7 +81,7 @@ describe('pages -> Review and Confirm', () => {
       // verify the url changes to /review-confirm
       cy.url().should('include', '/review-confirm')
 
-      // check the significant individual change date is correct
+      // check the Significant Individual Filing Effective Date is correct
       const today = new Date()
       const expectedDate = dateToString(today, 'YYYY-MM-DD')
       cy.get('[data-cy=effective-date-select]').contains(expectedDate)

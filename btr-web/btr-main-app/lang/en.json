@@ -20,7 +20,7 @@
     "sharesAndVotes": "Control of Shares and Votes",
     "significanceDates": "Significance Dates",
     "significantIndividuals": "Significant Individuals",
-    "significantIndividualChangeDate": "Significant Individual Change Date",
+    "significantIndividualChangeDate": "Significant Individual Filing Effective Date",
     "lastKnownAddress": "Last Known Address",
     "citizenshipPermanentResidency": "Citizenship / Permanent Residency",
     "taxNumber": "Canada Revenue Agency (CRA) Tax Number",
@@ -151,7 +151,7 @@
   "placeholders": {
     "dateSelect": {
       "birthdate": "Select Date",
-      "significantIndividualChange": "Significant Individual Change Date"
+      "significantIndividualChange": "Significant Individual Filing Effective Date"
     },
     "taxNumber": "CRA Tax Number (SIN, ITN, or TTN)"
   },
