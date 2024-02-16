@@ -1,6 +1,4 @@
 import moment from 'moment'
-import business from '~/cypress/fixtures/business.json'
-import payFeesForBtrRegsigin from '~/cypress/fixtures/payFeeForBtrRegsigin.json'
 import { dateToString } from '../../../../btr-common-components/utils/date'
 
 describe('pages -> Beneficial Owner Change', () => {
@@ -101,7 +99,6 @@ describe('pages -> Beneficial Owner Change', () => {
 
   it('on update Significant Individual Filing Effective Date ' +
     'verifies that only newly added items have their date changed ', () => {
-
     cy.fixture('plotsEntityExistingSiResponse').then((plotsEntityExistingSiResponse) => {
       cy.intercept(
         'GET',
@@ -172,6 +169,5 @@ describe('pages -> Beneficial Owner Change', () => {
     })
     // verify only new entry has date set for today. All other elements should have different dates.
     cy.get('td:contains("' + expectedDate + '")').should('have.length', 2)
-
   })
 })
