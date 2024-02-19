@@ -3,15 +3,7 @@ import { dateToString } from '../../../../btr-common-components/utils/date'
 
 describe('pages -> Beneficial Owner Change', () => {
   beforeEach(() => {
-    cy.fixture('plotsEntityExistingSiResponse').then((plotsEntityExistingSiResponse) => {
-      cy.intercept(
-        'GET',
-        '/plots/entity/BC0871427',
-        plotsEntityExistingSiResponse)
-        .as('plotsEntityApiCall')
-      cy.visit('/')
-      cy.wait('@plotsEntityApiCall')
-    })
+    cy.visit('/')
   })
 
   it('redirected to owner change page', () => {
@@ -107,6 +99,16 @@ describe('pages -> Beneficial Owner Change', () => {
 
   it('on update Significant Individual Filing Effective Date ' +
     'verifies that only newly added items have their date changed ', () => {
+    cy.fixture('plotsEntityExistingSiResponse').then((plotsEntityExistingSiResponse) => {
+      cy.intercept(
+        'GET',
+        '/plots/entity/BC0871427',
+        plotsEntityExistingSiResponse)
+        .as('plotsEntityApiCall')
+      cy.visit('/')
+      cy.wait('@plotsEntityApiCall')
+    })
+
     cy.fixture('payFeeForBtrRegsigin').then((payFeesForBtrRegsigin) => {
       cy.intercept(
         'GET',
