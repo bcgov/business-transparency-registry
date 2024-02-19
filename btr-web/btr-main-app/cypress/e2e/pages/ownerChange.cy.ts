@@ -3,7 +3,15 @@ import { dateToString } from '../../../../btr-common-components/utils/date'
 
 describe('pages -> Beneficial Owner Change', () => {
   beforeEach(() => {
-    cy.visit('/')
+    cy.fixture('plotsEntityExistingSiResponse').then((plotsEntityExistingSiResponse) => {
+      cy.intercept(
+        'GET',
+        '/plots/entity/BC0871427',
+        plotsEntityExistingSiResponse)
+        .as('plotsEntityApiCall')
+      cy.visit('/')
+      cy.wait('@plotsEntityApiCall')
+    })
   })
 
   it('redirected to owner change page', () => {
@@ -99,16 +107,6 @@ describe('pages -> Beneficial Owner Change', () => {
 
   it('on update Significant Individual Filing Effective Date ' +
     'verifies that only newly added items have their date changed ', () => {
-    cy.fixture('plotsEntityExistingSiResponse').then((plotsEntityExistingSiResponse) => {
-      cy.intercept(
-        'GET',
-        'http://localhost:5000/plots/entity/BC0871427',
-        plotsEntityExistingSiResponse)
-        .as('plotsEntityApiCall')
-      cy.visit('/')
-      cy.wait('@plotsEntityApiCall')
-    })
-
     cy.fixture('payFeeForBtrRegsigin').then((payFeesForBtrRegsigin) => {
       cy.intercept(
         'GET',
@@ -168,6 +166,6 @@ describe('pages -> Beneficial Owner Change', () => {
       cy.get('[data-cy=new-si-done-btn]').click()
     })
     // verify only new entry has date set for today. All other elements should have different dates.
-    cy.get('td:contains("' + expectedDate + '")').should('have.length', 2)
+    cy.get('[data-cy="summary-table-dates"]:contains("' + expectedDate + '")').should('have.length', 1)
   })
 })
