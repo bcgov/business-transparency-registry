@@ -2,13 +2,7 @@ import payFeesForBtrRegsigin from '../../fixtures/payFeeForBtrRegsigin.json'
 
 describe('accessibility -> Review and Confirm', () => {
   beforeEach(() => {
-    cy.intercept(
-      'GET',
-      'https://pay-api-dev.apps.silver.devops.gov.bc.ca/api/v1/fees/BTR/REGSIGIN',
-      payFeesForBtrRegsigin)
-    cy.visit('/')
-    cy.wait(3000)
-    cy.injectAxe()
+    cy.visitHomePageWithFakeDataAndAxeInject()
   })
 
   it('checks page passes accessibility (empty form)', () => {
@@ -20,15 +14,15 @@ describe('accessibility -> Review and Confirm', () => {
       }
     })
     cy.get('[data-cy=button-control-right-button]').click()
-    cy.wait(3000)
+    cy.location('pathname').should('include', '/review-confirm')
     cy.checkA11y('[data-cy=review-confirm]')
   })
 
   it('checks page passes accessibility (form filled out)', () => {
     // enter form data
-    cy.get('[data-cy=date-select]').click()
-    cy.wait(250)
-    cy.get('.bcros-date-picker__calendar__day.dp__today').parent().click()
+    cy.get('[data-cy=date-select]').click().then(() => {
+      cy.get('.bcros-date-picker__calendar__day.dp__today').parent().click()
+    })
     cy.fixture('individuals').then((testData) => {
       cy.get('[data-cy=add-new-btn]').click()
       cy.get('#individual-person-full-name').type(testData.profile1.fullName)
@@ -52,12 +46,12 @@ describe('accessibility -> Review and Confirm', () => {
       cy.get('[data-cy=testTaxResidency]').get('[type=radio][value=true]').check()
     })
     // // go to review / confirm page
-    cy.get('[data-cy=button-control-right-button]').click()
-    cy.wait(3000)
-    // // enter folio
-    cy.get('[data-cy="significantIndividualChangeFolioNumberTextArea"]').type('123123')
-    // // check certify
-    cy.get('[data-cy="certify-section-checkbox"]').check()
+    cy.get('[data-cy=button-control-right-button]').click().then(() => {
+      // // enter folio
+      cy.get('[data-cy="significantIndividualChangeFolioNumberTextArea"]').type('123123')
+      // // check certify
+      cy.get('[data-cy="certify-section-checkbox"]').check()
+    })
     // check AA
     cy.checkA11y('[data-cy=review-confirm]')
   })

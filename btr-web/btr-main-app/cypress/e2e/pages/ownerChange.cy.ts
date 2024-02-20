@@ -99,27 +99,17 @@ describe('pages -> Beneficial Owner Change', () => {
 
   it('on update Significant Individual Filing Effective Date ' +
     'verifies that only newly added items have their date changed ', () => {
-    cy.fixture('plotsEntityExistingSiResponse').then((plotsEntityExistingSiResponse) => {
-      cy.intercept(
-        'GET',
-        '/plots/entity/BC0871427',
-        plotsEntityExistingSiResponse)
-        .as('plotsEntityApiCall')
-      cy.visit('/')
-      cy.wait('@plotsEntityApiCall')
-    })
-
-    cy.fixture('payFeeForBtrRegsigin').then((payFeesForBtrRegsigin) => {
-      cy.intercept(
-        'GET',
-        'https://pay-api-dev.apps.silver.devops.gov.bc.ca/api/v1/fees/BTR/REGSIGIN',
-        { data: payFeesForBtrRegsigin })
-    })
+    cy.interceptPostsEntityApi().as('plotsEntityApiCall')
+    cy.interceptPayFeeApi().as('payFeeApi')
+    cy.visit('/')
+    cy.wait(['@plotsEntityApiCall', '@payFeeApi'])
 
     // select the date of today
-    cy.get('[data-cy=date-select]').click()
-    cy.wait(250)
-    cy.get('.bcros-date-picker__calendar__day.dp__today').parent().click()
+    cy.get('[data-cy=date-select]')
+      .click()
+      .then(() => {
+        cy.get('.bcros-date-picker__calendar__day.dp__today').parent().click()
+      })
 
     const today = new Date()
     const expectedDate = dateToString(today, 'YYYY-MM-DD')

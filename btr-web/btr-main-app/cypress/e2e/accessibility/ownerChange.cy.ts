@@ -2,13 +2,7 @@ import payFeesForBtrRegsigin from '../../fixtures/payFeeForBtrRegsigin.json'
 
 describe('accessibility -> Beneficial Owner Change', () => {
   beforeEach(() => {
-    cy.intercept(
-      'GET',
-      'https://pay-api-dev.apps.silver.devops.gov.bc.ca/api/v1/fees/BTR/REGSIGIN',
-      payFeesForBtrRegsigin)
-    cy.visit('/')
-    cy.wait(3000)
-    cy.injectAxe()
+    cy.visitHomePageWithFakeDataAndAxeInject()
   })
 
   it('checks page passes accessibility', () => {
