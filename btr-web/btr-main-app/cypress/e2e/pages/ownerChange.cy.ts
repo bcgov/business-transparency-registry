@@ -1,5 +1,5 @@
 import moment from 'moment'
-// todo: techdebt ticket add test for "Significant Individual Filing Effective Date" #19793
+import { dateToString } from '../../../../btr-common-components/utils/date'
 
 describe('pages -> Beneficial Owner Change', () => {
   beforeEach(() => {
@@ -95,5 +95,79 @@ describe('pages -> Beneficial Owner Change', () => {
     cy.get('[data-cy=button-control-right-button]').eq(0).should('have.text', 'Review and Confirm')
     cy.get('[data-cy=button-control-right-button]').eq(0).click()
     cy.url().should('include', '/review-confirm')
+  })
+
+  it('on update Significant Individual Filing Effective Date ' +
+    'verifies that only newly added items have their date changed ', () => {
+    cy.fixture('plotsEntityExistingSiResponse').then((plotsEntityExistingSiResponse) => {
+      cy.intercept(
+        'GET',
+        '/plots/entity/BC0871427',
+        plotsEntityExistingSiResponse)
+        .as('plotsEntityApiCall')
+      cy.visit('/')
+      cy.wait('@plotsEntityApiCall')
+    })
+
+    cy.fixture('payFeeForBtrRegsigin').then((payFeesForBtrRegsigin) => {
+      cy.intercept(
+        'GET',
+        'https://pay-api-dev.apps.silver.devops.gov.bc.ca/api/v1/fees/BTR/REGSIGIN',
+        { data: payFeesForBtrRegsigin })
+    })
+
+    // select the date of today
+    cy.get('[data-cy=date-select]').click()
+    cy.wait(250)
+    cy.get('.bcros-date-picker__calendar__day.dp__today').parent().click()
+
+    const today = new Date()
+    const expectedDate = dateToString(today, 'YYYY-MM-DD')
+    // ensure no dates in summary table have todays date
+    cy.get('td:contains("' + expectedDate + '")').should('have.length', 0)
+
+    cy.fixture('individuals').then((testData) => {
+      // click 'Add an Individual' button and expand the form
+      cy.get('[data-cy=add-new-btn]').click()
+      // cy.get('[data-cy=showAddIndividualPersonManually]').click()
+
+      // fill out the form
+      cy.get('#individual-person-full-name').type(testData.profile1.fullName)
+      cy.get('#individual-person-preferred-name').type(testData.profile1.preferredName)
+      cy.get('#individual-person-email').type(testData.profile1.email)
+
+      // enter shares percent
+      cy.get('[name="percentOfShares"]').type(testData.profile1.percentOfShares)
+      cy.get('[name="percentOfVotes"]').type(testData.profile1.percentOfVotes)
+
+      // select the control type (registred owner + direct control)
+      cy.get('[data-cy="testTypeOfControl"]').get('[name="registeredOwner"]').check()
+      cy.get('[data-cy="testControlOfDirectors"]').get('[name="directControl"]').check()
+
+      // select the birthdate (here we just use today's date for simplicity)
+      cy.get('#addNewPersonBirthdate').trigger('click')
+      cy.get('[data-cy=date-picker]').get('.bcros-date-picker__calendar__day.dp__today').trigger('click')
+
+      // enter the address
+      cy.get('[data-cy="address-country"]').click()
+      cy.get('[data-cy="address-country"]').get('li').contains(testData.profile1.address.country).click()
+      cy.get('[data-cy="address-line1-autocomplete"]').type(testData.profile1.address.streetAddress)
+      cy.get('[data-cy="address-city"]').type(testData.profile1.address.city)
+      cy.get('[data-cy="address-region-select"]').click()
+      cy.get('[data-cy="address-region-select"]').get('li').contains(testData.profile1.address.province[0]).click()
+      cy.get('[data-cy="address-postal-code"]').type(testData.profile1.address.postalCode)
+
+      // select the citizenship info
+      cy.get('[data-cy="countryOfCitizenshipRadioGroup"]').get('[type="radio"][value="citizen"]').check()
+
+      // enter tax number and select tax residency
+      cy.get('[name="taxNumber"]').type(testData.profile1.taxNumber)
+      cy.get('[data-cy="testTaxResidency"]').get('[type="radio"][value="true"]').check()
+
+      // click 'Done' button to add the individual
+      cy.get('[data-cy=new-si-done-btn]').click()
+    })
+    // verify only new entry has date set for today. All other elements should have different dates.
+    cy.get('[data-cy="summary-table-dates"]:contains("' + expectedDate + '")').should('have.length', 1)
   })
 })

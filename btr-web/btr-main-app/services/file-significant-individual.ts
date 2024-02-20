@@ -155,6 +155,7 @@ const getCurrentOwners = async (businessIdentifier: string) => { // @ts-ignore
   if (data.value?.payload) {
     return { data: getSIsFromBtrBodsSubmission(data.value.payload), error: error.value }
   }
+
   return { data: data.value, error: error.value }
 }
 
