@@ -86,7 +86,7 @@ const _getMaxInterestValue = (oocs: BtrBodsOwnershipOrControlI, interestType: Bo
 
   let maxCalc = (oldValue: number, newValue: number): number => oldValue + newValue
 
-  if (oocs.source.description === BtrSourceDescriptionProvidedByBtrGovBC) {
+  if (oocs.source?.description === BtrSourceDescriptionProvidedByBtrGovBC) {
     maxCalc = (currentValue: number, newValue: number): number => {
       return Math.max(currentValue, newValue)
     }

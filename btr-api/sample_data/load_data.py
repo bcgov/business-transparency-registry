@@ -20,21 +20,23 @@ from faker import Faker
 from flask import current_app
 
 from btr_api import create_app
-from btr_api.models import User
+from btr_api.models import User, db
 from btr_api.services import SubmissionService
 
 
 fake = Faker()
 
 
-def _get_ooc_interests():
+def _get_ooc_interests(limit: int = None):
     """Return the ooc interests."""
     ooc_interests: dict[str, list[dict]] = {}
     with open('bods_csvs/ooc_interests.csv', encoding='utf-8') as ooc_interests_csv:
         reader = csv.DictReader(ooc_interests_csv)
         for row in reader:
+            type = row['type'].split('-')
+            type = type[0] + ''.join(ele.title() for ele in type[1:])
             ooc_interests.setdefault(row['_link_ooc_statement'], []).append({
-                'type': row['type'],
+                'type': type,
                 'beneficialOwnershipOrControl': True,
                 'details': row['details'],
                 'directOrIndirect': 'unknown',
@@ -46,16 +48,18 @@ def _get_ooc_interests():
                 'startDate': row['startDate'],
                 'endDate': row['endDate'],
             })
+            if limit and len(ooc_interests.keys()) == limit:
+                return ooc_interests
     return ooc_interests
 
 
-def _get_ooc_stmnts(ooc_interests: dict[str, list], limit: int):
+def _get_ooc_stmnts(ooc_interests: dict[str, list], limit: int = None):
     """Return the ooc statements."""
     ooc_stmnts: list[dict] = []
     with open('bods_csvs/ooc_statement.csv', encoding='utf-8') as oocs_csv:
         reader = csv.DictReader(oocs_csv)
         for row in reader:
-            if row['subject_describedByEntityStatement'] and row['interestedParty_describedByPersonStatement']:
+            if row['subject_describedByEntityStatement'] and row['interestedParty_describedByPersonStatement'] and len(ooc_interests.get(row['_link'], [])) > 0 and row['statementDate']:
                 ooc_stmnts.append({
                     'statementID': row['statementID'],
                     'statementType': row['statementType'],
@@ -65,13 +69,12 @@ def _get_ooc_stmnts(ooc_interests: dict[str, list], limit: int):
                         'describedByPersonStatement': row['interestedParty_describedByPersonStatement']},
                     'interests': ooc_interests.get(row['_link'], [])
                 })
-                # TODO: remove below
-                if len(ooc_stmnts) == limit:
-                    break
+                if limit and len(ooc_stmnts) == limit:
+                    return ooc_stmnts
     return ooc_stmnts
 
 
-def _get_entity_stmnts():
+def _get_entity_stmnts(limit: int = None):
     """Return the entity statements."""
     entity_stmnts: dict[str, dict] = {}
     with open('bods_csvs/entity_statement.csv', encoding='utf-8') as entities_csv:
@@ -97,10 +100,12 @@ def _get_entity_stmnts():
                 'foundingDate': row['foundingDate'],
                 'dissolutionDate': row['dissolutionDate'],
             }
+            if limit and len(entity_stmnts.keys()) == limit:
+                return entity_stmnts
     return entity_stmnts
 
 
-def _get_names():
+def _get_names(limit: int = None):
     """Return the person names."""
     names: dict[str, list] = {}
     with open('bods_csvs/person_names.csv', encoding='utf-8') as person_names_csv:
@@ -112,10 +117,12 @@ def _get_names():
                 'familyName': row['familyName'],
                 'givenName': row['givenName']
             })
+            if limit and len(names.keys()) == limit:
+                return names
     return names
 
 
-def _get_nationalities():
+def _get_nationalities(limit: int = None):
     """Return the person nationalities."""
     nationalities: dict[str, list] = {}
     with open('bods_csvs/person_nationalities.csv', encoding='utf-8') as person_nationalities_csv:
@@ -125,15 +132,20 @@ def _get_nationalities():
                 'code': row['code'],
                 'name': row['name']
             })
+            if limit and len(nationalities.keys()) == limit:
+                return nationalities
     return nationalities
 
 
-def _get_addresses():
+def _get_addresses(limit: int = None):
     """Return the person addresses."""
     addresses: dict[str, list] = {}
     with open('bods_csvs/person_addresses.csv', encoding='utf-8') as person_address_csv:
         reader = csv.DictReader(person_address_csv)
         for row in reader:
+            country = row['country']
+            if country_info := pycountry.countries.get(alpha_2=row['country']):
+                country = country_info.name
             addresses.setdefault(row['_link_person_statement'], []).append({
                 'type': row['type'],
                 'street': '',
@@ -141,12 +153,14 @@ def _get_addresses():
                 'region': '',
                 'postalCode': '',
                 'locationDescription': row['address'],
-                'country': pycountry.countries.get(alpha_2=row['country']) or row['country']
+                'country': country
             })
+            if limit and len(addresses.keys()) == limit:
+                return addresses
     return addresses
 
 
-def _get_person_stmnts(addresses: dict, names: dict, nationalities: dict):
+def _get_person_stmnts(addresses: dict, names: dict, nationalities: dict, limit: int = None):
     """Return the person statements."""
     person_stmnts = {}
 
@@ -158,35 +172,38 @@ def _get_person_stmnts(addresses: dict, names: dict, nationalities: dict):
         reader = csv.DictReader(persons_csv)
         for row in reader:
             person_addresses = addresses.get(row['_link'], [])
-            person_stmnts[row['statementID']] = {
-                'statementID': row['statementID'],
-                'statementType': row['statementType'],
-                'statementDate': row['statementDate'],
-                'isComponent': row['isComponent'],
-                'personType': row['personType'],
-                'names': names[row['_link']],
-                'nationalities': nationalities[row['_link']],
-                'identifiers': [
-                    # NOTE: fake identifiers + tax numbers based on _link
-                    {'id': f"TST-P{row['_link']}", 'scheme': 'TST-P'},
-                    {'id': f"TST-TAX{row['_link']}", 'scheme': 'TST-TAX'},
-                ],
-                'publicationDetails': {
-                    'publicationDate': row['publicationDetails_publicationDate'],
-                    'bodsVersion': '0.3',
-                    'publisher': {
-                        'name': row['publicationDetails_publisher_name'],
-                        'url': row['publicationDetails_publisher_url']
-                    }
-                },
-                'birthDate': row['birthDate'],
-                'addresses': person_addresses,
-                'placeOfResidence': person_addresses[0] if len(person_addresses) > 0 else None,
-                # NOTE: below is fake info
-                'taxResidencies': nationalities[row['_link']],
-                'email': get_random_email(),
-                'externalInfluence': 'NoExternalInfluence'
-            }
+            if names.get(row['_link'], None) and len(person_addresses) > 0 and nationalities.get(row['_link'], None):
+                person_stmnts[row['statementID']] = {
+                    'statementID': row['statementID'],
+                    'statementType': row['statementType'],
+                    'statementDate': row['statementDate'],
+                    'isComponent': row['isComponent'],
+                    'personType': row['personType'],
+                    'names': names[row['_link']],
+                    'nationalities': nationalities.get(row['_link'], []),
+                    'identifiers': [
+                        # NOTE: fake identifiers + tax numbers based on _link
+                        {'id': f"TST-P{row['_link']}", 'scheme': 'TST-P'},
+                        {'id': f"TST-TAX{row['_link']}", 'scheme': 'TST-TAX'},
+                    ],
+                    'publicationDetails': {
+                        'publicationDate': row['publicationDetails_publicationDate'],
+                        'bodsVersion': '0.3',
+                        'publisher': {
+                            'name': row['publicationDetails_publisher_name'],
+                            'url': row['publicationDetails_publisher_url']
+                        }
+                    },
+                    'birthDate': row['birthDate'],
+                    'addresses': person_addresses,
+                    'placeOfResidence': person_addresses[0] if len(person_addresses) > 0 else None,
+                    # NOTE: below is fake info
+                    'taxResidencies': nationalities.get(row['_link'], []),
+                    'email': get_random_email(),
+                    'externalInfluence': 'NoExternalInfluence'
+                }
+                if limit and len(person_stmnts.keys()) == limit:
+                    return person_stmnts
     return person_stmnts
 
 
@@ -196,10 +213,10 @@ def _get_filings(ooc_stmnts: list, entity_stmnts: dict, person_stmnts: dict):
     filings: dict[str, dict[str, dict]] = {}
     for ooc in ooc_stmnts:
         entity_id = ooc['subject']['describedByEntityStatement']
-        if len(ooc['interests']) > 0 and entity_id in entity_stmnts.keys():
+        person_id = ooc['interestedParty']['describedByPersonStatement']
+        if len(ooc['interests']) > 0 and entity_id in entity_stmnts.keys() and person_id in person_stmnts.keys():
             # has interests and an entity statement so add to filings
             ooc_date = ooc['statementDate']
-            person_id = ooc['interestedParty']['describedByPersonStatement']
 
             if ooc_date in filings.get(entity_id, {}).keys():
                 # filing for this date is already initialized so add this entry to it
@@ -223,30 +240,31 @@ def _get_filings(ooc_stmnts: list, entity_stmnts: dict, person_stmnts: dict):
 
 def load_data():
     """Load data via csv files BTR."""
+    max = 1000000
     user = User.find_by_username('service-account-nds')
     if not user:
         current_app.logger.debug('error user not found.')
         return
     # get interests of oocs
-    ooc_interests = _get_ooc_interests()
+    ooc_interests = _get_ooc_interests(max)
     current_app.logger.debug('got interests')
-    ooc_stmnts = _get_ooc_stmnts(ooc_interests, 10)
+    ooc_stmnts = _get_ooc_stmnts(ooc_interests, max)
     current_app.logger.debug('got ooc statements')
     del ooc_interests
 
-    entity_stmnts = _get_entity_stmnts()
+    entity_stmnts = _get_entity_stmnts(max)
     current_app.logger.debug('got entity statements')
 
     # get the person names, nationalities, addresses
-    names = _get_names()
+    names = _get_names(max)
     current_app.logger.debug('got names')
-    nationalities = _get_nationalities()
+    nationalities = _get_nationalities(max)
     current_app.logger.debug('got nationalities')
-    addresses = _get_addresses()
+    addresses = _get_addresses(max)
     current_app.logger.debug('got addresses')
 
     # get the person statements
-    person_stmnts = _get_person_stmnts(names=names, nationalities=nationalities, addresses=addresses)
+    person_stmnts = _get_person_stmnts(names=names, nationalities=nationalities, addresses=addresses, limit=max)
     current_app.logger.debug('got person statements')
     del names
     del nationalities
@@ -255,9 +273,19 @@ def load_data():
     # group by businesses, then by ooc dates, then do a filing with all ooc info per date
     filings = _get_filings(ooc_stmnts=ooc_stmnts, entity_stmnts=entity_stmnts, person_stmnts=person_stmnts)
     current_app.logger.debug('got filings')
-    for filing in filings.values():
-        current_app.logger.debug(filing)
-        (SubmissionService.create_submission(filing, user.id)).save()
+    count = 0
+    for business_filings_by_date in filings.values():
+        # the sort will ensure the filings are saved in order of the date
+        for filing in dict(sorted(business_filings_by_date.items())).values():
+            del filing['personIds']
+            (SubmissionService.create_submission(filing, user.id)).save_to_session()
+            count += 1
+            if count%1000 == 0:
+                db.session.commit()
+                current_app.logger.debug(f'Records loaded: {count}')
+    # commit to db
+    db.session.commit()
+    current_app.logger.debug(f'Successfully loaded {count} records')
 
 
 if __name__ == '__main__':

@@ -6,27 +6,31 @@ from http import HTTPStatus
 
 import pytest
 import requests
+from sqlalchemy import text
 
 from btr_api.models import Submission as SubmissionModel, User as UserModel
 from btr_api.models import SubmissionType
+from btr_api.services import SubmissionService
 
 from tests.unit import nested_session
 from tests.unit.utils import create_header
 
 
 @pytest.mark.parametrize(
-    "test_name, submission_type, payload",
-    [("no id", SubmissionType.other, None), ("simple json", SubmissionType.other, {"racoondog": "red"})],
+    'test_name, submission_type, payload',
+    [('no id', SubmissionType.other, None), ('simple json', SubmissionType.other, {'racoondog': 'red'})],
 )
 def test_get_plots(client, session, jwt, test_name, submission_type, payload):
     """Get the plot submissions.
     A parameterized set of tests that runs defined scenarios.
     """
     with nested_session(session):
+        session.execute(text('delete from submission'))
         # Setup
-        id = ""
+        id = ''
         if payload:
             sub = SubmissionModel()
+            sub.business_identifier = 'identifier0'
             sub.payload = payload
             sub.type = submission_type
             session.add(sub)
@@ -34,7 +38,7 @@ def test_get_plots(client, session, jwt, test_name, submission_type, payload):
             id = sub.id
 
         # Test
-        rv = client.get(f"/plots/{id}",
+        rv = client.get(f'/plots/{id}',
                         headers=create_header(jwt,['basic'], **{'Accept-Version': 'v1',
                                                                 'content-type': 'application/json',
                                                                 'Account-Id': 1}))
@@ -56,10 +60,10 @@ def test_post_plots_db_mocked(app, session, client, jwt, mocker, requests_mock):
     mock_user_save = mocker.patch.object(UserModel, 'save')
     mock_submission_save = mocker.patch.object(SubmissionModel, 'save')
     with open(
-        os.path.join(current_dir, "..", "..", "mocks", "significantIndividualsFiling", 'valid.json')
+        os.path.join(current_dir, '..', '..', 'mocks', 'significantIndividualsFiling', 'valid.json')
     ) as file:
         json_data = json.load(file)
-        rv = client.post("/plots",
+        rv = client.post('/plots',
                          json=json_data,
                          headers=create_header(jwt, ['basic'], **{'Accept-Version': 'v1',
                                                                   'content-type': 'application/json',
@@ -84,12 +88,12 @@ def test_post_plots(app, client, session, jwt, requests_mock):
 
     current_dir = os.path.dirname(__file__)
     with open(
-        os.path.join(current_dir, "..", "..", "mocks", "significantIndividualsFiling", 'valid.json')
+        os.path.join(current_dir, '..', '..', 'mocks', 'significantIndividualsFiling', 'valid.json')
     ) as file:
         json_data = json.load(file)
         with nested_session(session):
             mocked_username = 'wibbly wabble'
-            rv = client.post("/plots",
+            rv = client.post('/plots',
                              json=json_data,
                              headers=create_header(jwt_manager=jwt,
                                                    roles=['basic'],
@@ -120,11 +124,11 @@ def test_post_plots_pay_error(app, client, session, jwt, requests_mock):
 
     current_dir = os.path.dirname(__file__)
     with open(
-        os.path.join(current_dir, "..", "..", "mocks", "significantIndividualsFiling", 'valid.json')
+        os.path.join(current_dir, '..', '..', 'mocks', 'significantIndividualsFiling', 'valid.json')
     ) as file:
         json_data = json.load(file)
         with nested_session(session):
-            rv = client.post("/plots",
+            rv = client.post('/plots',
                              json=json_data,
                              headers=create_header(jwt_manager=jwt,
                                                    roles=['basic'],
@@ -144,25 +148,37 @@ def test_post_plots_pay_error(app, client, session, jwt, requests_mock):
 
 
 def test_get_latest_for_entity(client, session):
-    """Assure delete submission works."""
+    """Assure latest submission details are returned."""
     with nested_session(session):
         # Setup
-        s1 = SubmissionModel(type=SubmissionType.other, business_identifier="Test identifier 0", payload="{id:123}")
-        s2 = SubmissionModel(type=SubmissionType.other, business_identifier="Test identifier 0", payload="{id:124}")
-        s3 = SubmissionModel(type=SubmissionType.other, business_identifier="Test identifier 4", payload="{id:125}")
+        user = UserModel()
+        user.save()
+        test_identifier = 'id0'
+        s1_dict = {
+            'businessIdentifier': test_identifier,
+            'effectiveDate': '2020-01-13',
+            'ownershipOrControlStatements': {'details': 's1'}
+        }
+        s2_dict = {
+            'businessIdentifier': test_identifier,
+            'effectiveDate': '2021-01-13',
+            'ownershipOrControlStatements': {'details': 's2'}
+        }
+        s3_dict = {
+            'businessIdentifier': test_identifier + 's3',
+            'effectiveDate': '2024-04-22',
+            'ownershipOrControlStatements': {'details': 's3'}
+        }
+        (SubmissionService.create_submission(s1_dict, user.id)).save()
+        (SubmissionService.create_submission(s2_dict, user.id)).save()
+        (SubmissionService.create_submission(s3_dict, user.id)).save()
 
-        session.add(s1)
-        session.commit()
-        session.add(s2)
-        session.commit()
-        session.add(s3)
-        session.commit()
-        bi = requests.utils.quote("Test identifier 0")
         # Test
-        rv = client.get(f"/plots/entity/{bi}")
+        rv = client.get(f'/plots/entity/{test_identifier}')
 
         # Confirm outcome
         assert rv.status_code == HTTPStatus.OK
 
-        assert "Test identifier 0" == rv.json.get("business_identifier")
-        assert "{id:124}" == rv.json.get("payload")
+        assert test_identifier == rv.json.get('business_identifier')
+        assert s2_dict['effectiveDate'] == rv.json.get('effective_date')
+        assert s2_dict == rv.json.get('payload')
