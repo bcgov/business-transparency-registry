@@ -64,16 +64,16 @@ Cypress.Commands.add('interceptBusinessContact', () => {
   })
 })
 
-Cypress.Commands.add('loadAllApiFakeData', () => {
+Cypress.Commands.add('visitHomePageWithFakeData', () => {
   cy.interceptPostsEntityApi().as('existingSIs')
   cy.interceptPayFeeApi().as('payFeeApi')
   cy.interceptBusinessContact().as('businessContact')
   cy.interceptBusinessSlim().as('businessApiCall')
+  cy.visit('/')
+  cy.wait(['@existingSIs', '@businessApiCall', '@payFeeApi', '@businessContact'])
 })
 
 Cypress.Commands.add('visitHomePageWithFakeDataAndAxeInject', () => {
-  cy.loadAllApiFakeData()
-  cy.visit('/')
-  cy.wait(['@existingSIs', '@businessApiCall', '@payFeeApi', '@businessContact'])
+  cy.visitHomePageWithFakeData()
   cy.injectAxe()
 })

@@ -3,7 +3,10 @@ import business from '../../fixtures/business.json'
 describe('accessibility -> Business Layout', () => {
   beforeEach(() => {
     // setup intercepts
-    cy.loadAllApiFakeData()
+    cy.interceptPostsEntityApi().as('existingSIs')
+    cy.interceptPayFeeApi().as('payFeeApi')
+    cy.interceptBusinessContact().as('businessContact')
+    cy.interceptBusinessSlim().as('businessApiCall')
   })
 
   it('checks business layout passes accessibility (logged out)', () => {
