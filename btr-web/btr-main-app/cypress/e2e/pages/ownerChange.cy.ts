@@ -78,19 +78,6 @@ describe('pages -> Beneficial Owner Change', () => {
     cy.get('[data-cy=add-new-btn]').should('not.have.attr', 'disabled')
   })
 
-  it('verify summary table is rendered as expected', () => {
-    const summaryTableHeaders = cy.get('[data-cy="individualsSummaryTable"]').get('th')
-    summaryTableHeaders
-      .should('contain', 'Name')
-      .and('contain', 'Address')
-      .and('contain', 'Details')
-      .and('contain', 'Significance Dates')
-      .and('contain', 'Control')
-    // body should contain correct empty text
-    cy.get('[data-cy="individualsSummaryTable"]').get('td')
-      .should('contain.text', 'No significant individuals added yet')
-  })
-
   it('goes to review confirm page when review confirm is clicked', () => {
     cy.get('[data-cy=button-control-right-button]').eq(0).should('have.text', 'Review and Confirm')
     cy.get('[data-cy=button-control-right-button]').eq(0).click()
@@ -155,5 +142,31 @@ describe('pages -> Beneficial Owner Change', () => {
     })
     // verify only new entry has date set for today. All other elements should have different dates.
     cy.get('[data-cy="summary-table-dates"]:contains("' + expectedDate + '")').should('have.length', 1)
+  })
+})
+
+describe
+
+describe('pages -> Beneficial Owner Change - no preloaded data in tables', () => {
+  beforeEach(() => {
+    cy.interceptPostsEntityApiEmpty().as('existingSIs')
+    cy.interceptPayFeeApi().as('payFeeApi')
+    cy.interceptBusinessContact().as('businessContact')
+    cy.interceptBusinessSlim().as('businessApiCall')
+    cy.visit('/')
+    cy.wait(['@existingSIs', '@businessApiCall', '@payFeeApi', '@businessContact'])
+  })
+
+  it('verify summary table is rendered as expected', () => {
+    const summaryTableHeaders = cy.get('[data-cy="individualsSummaryTable"]').get('th')
+    summaryTableHeaders
+      .should('contain', 'Name')
+      .and('contain', 'Address')
+      .and('contain', 'Details')
+      .and('contain', 'Significance Dates')
+      .and('contain', 'Control')
+    // body should contain correct empty text
+    cy.get('[data-cy="individualsSummaryTable"]').get('td')
+      .should('contain.text', 'No significant individuals added yet')
   })
 })
