@@ -3,7 +3,7 @@ import { dateToString } from '../../../../btr-common-components/utils/date'
 
 describe('pages -> Beneficial Owner Change', () => {
   beforeEach(() => {
-    cy.visit('/')
+    cy.visitHomePageWithFakeData()
   })
 
   it('redirected to owner change page', () => {
@@ -99,10 +99,6 @@ describe('pages -> Beneficial Owner Change', () => {
 
   it('on update Significant Individual Filing Effective Date ' +
     'verifies that only newly added items have their date changed ', () => {
-    cy.interceptPostsEntityApi().as('plotsEntityApiCall')
-    cy.interceptPayFeeApi().as('payFeeApi')
-    cy.visit('/')
-    cy.wait(['@plotsEntityApiCall', '@payFeeApi'])
 
     // select the date of today
     cy.get('[data-cy=date-select]')

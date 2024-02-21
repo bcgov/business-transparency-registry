@@ -6,13 +6,8 @@ describe('pages -> Form Validation', () => {
   beforeEach(() => {
     cy.readFile('../btr-common-components/lang/en.json').then((json) => { i18nCommon = json })
     cy.readFile('lang/en.json').then((json) => { i18n = json })
-    cy.visit('/')
-    cy.wait(1000)
-    cy.intercept(
-      'GET',
-      'https://pay-api-dev.apps.silver.devops.gov.bc.ca/api/v1/fees/BTR/REGSIGIN',
-      { data: payFeesForBtrRegsigin }
-    )
+
+    cy.visitHomePageWithFakeData()
   })
 
   it('Validations are applied throughout the form', () => {
