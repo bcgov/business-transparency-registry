@@ -143,18 +143,18 @@ def _get_addresses(limit: int = None):
     with open('bods_csvs/person_addresses.csv', encoding='utf-8') as person_address_csv:
         reader = csv.DictReader(person_address_csv)
         for row in reader:
-            country = row['country']
-            if country_info := pycountry.countries.get(alpha_2=row['country']):
-                country = country_info.name
-            addresses.setdefault(row['_link_person_statement'], []).append({
+            address = {
                 'type': row['type'],
                 'street': '',
                 'city': '',
                 'region': '',
                 'postalCode': '',
                 'locationDescription': row['address'],
-                'country': country
-            })
+                'country': row['country'],
+            }
+            if country_info := pycountry.countries.get(alpha_2=row['country']):
+                address['countryName'] = country_info.name
+            addresses.setdefault(row['_link_person_statement'], []).append(address)
             if limit and len(addresses.keys()) == limit:
                 return addresses
     return addresses
