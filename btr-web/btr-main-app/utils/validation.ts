@@ -46,7 +46,7 @@ export function validateSharesAndVotes (formData: FormInputI): boolean {
 
 /**
  * Validate the Type of Control checkboxes. Return false when type of control is required but no selections are made.
- * Case 1: If the combination of shares and votes is >= 25%, at least one of the Type of Control checkboxes is required.
+ * Case 1: If the percentage of shares or votes is >= 25%, at least one of the Type of Control checkboxes is required.
  * Case 2: If the 'exercised in concert'is selected, at least one of the Type of Control checkboxes is required.
  * @param formData the form data
  */
@@ -56,7 +56,7 @@ export function validateControlOfShares (formData: FormInputI): boolean {
   const percentOfShares: number = Number(formData.percentOfShares)
   const percentOfVotes: number = Number(formData.percentOfVotes)
 
-  if (percentOfShares + percentOfVotes >= 25 || inConcertControlSelected) {
+  if (percentOfShares >= 25 || percentOfVotes >= 25 || inConcertControlSelected) {
     return typeOfControlSelected
   } else {
     return true

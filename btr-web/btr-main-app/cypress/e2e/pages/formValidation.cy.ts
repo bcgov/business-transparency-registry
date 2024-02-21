@@ -85,14 +85,13 @@ describe('pages -> Form Validation', () => {
     cy.contains(i18n.errors.validation.controlPercentage.empty).should('not.exist')
     cy.contains(i18n.errors.validation.controlOfDirectors.required).should('not.exist')
 
-    // if the combination of share percentage and vote percentage is >= 25%, the control type is required
+    // if either the percent of shares or the percent of votes is >= 25%, the control type is required
     cy.get('[data-cy=new-si-cancel-btn]').click()
     cy.get('[data-cy=add-new-btn]').click()
     cy.get('[name="percentOfShares"]').type('10').blur()
-    cy.get('[name="percentOfVotes"]').type('14').blur()
     cy.get('[data-cy=new-si-done-btn]').click()
     cy.contains(i18n.errors.validation.controlOfDirectors.required).should('not.exist')
-    cy.get('[name="percentOfVotes"]').clear().type('15').blur()
+    cy.get('[name="percentOfShares"]').clear().type('30').blur()
     cy.get('[data-cy=new-si-done-btn]').click()
     cy.contains(i18n.errors.validation.controlOfDirectors.required).should('exist')
     cy.get('[name="registeredOwner"]').check()

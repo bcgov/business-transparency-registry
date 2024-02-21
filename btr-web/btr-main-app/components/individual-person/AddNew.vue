@@ -463,18 +463,12 @@ watch(
       removeEmptyPercentageErrors()
     }
 
-    // If percentOfShares + percentOfVotes are < 25%, and the "in-concert control" checkbox is not checked,
+    // If the percentOfShares and percentOfVotes are < 25%, and the "in-concert control" checkbox is not checked,
     // the type of control error should be remove as this field is now optional
-    const shares = Number(values[0])
-    const votes = Number(values[1])
-    let total = 0
-    if (!Number.isNaN(shares)) {
-      total += shares
-    }
-    if (!Number.isNaN(votes)) {
-      total += votes
-    }
-    if (total < 25 && !significantIndividual.value.controlType.sharesVotes.inConcertControl) {
+    const shares = parseInt(values[0])
+    const votes = parseInt(values[1])
+    if ((Number.isNaN(shares) || shares < 25) && (Number.isNaN(votes) || votes < 25) &&
+      !significantIndividual.value.controlType.sharesVotes.inConcertControl) {
       controlOfSharesErrors.value = []
     }
   }
@@ -495,17 +489,10 @@ watch(
 
     // When the "in-concert control" checkbox is unchecked
     if (!values[3]) {
-      const shares = Number(significantIndividual.value.percentOfShares)
-      const votes = Number(significantIndividual.value.percentOfVotes)
-      // if percentOfShares + percentOfVotes are < 25%, remove the type of control error
-      let total = 0
-      if (!Number.isNaN(shares)) {
-        total += shares
-      }
-      if (!Number.isNaN(votes)) {
-        total += votes
-      }
-      if (total < 25) {
+      const shares = parseInt(significantIndividual.value.percentOfShares)
+      const votes = parseInt(significantIndividual.value.percentOfVotes)
+      // if the percentOfShares and percentOfVotes are < 25%, remove the type of control error
+      if ((Number.isNaN(shares) || shares < 25) && (Number.isNaN(votes) || votes < 25)) {
         controlOfSharesErrors.value = []
       }
 
