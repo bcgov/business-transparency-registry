@@ -2,7 +2,7 @@ describe('Layout -> Breadcrumb', () => {
   beforeEach(() => {
     cy.visit('/')
     // cypress does not wait for hydration so need to wait manually (effects button clicks in some cases)
-    cy.wait(1000)
+    cy.wait(100)
   })
 
   it('renders breadcrumbs', () => {
