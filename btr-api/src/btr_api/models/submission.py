@@ -63,7 +63,7 @@ class Submission(Versioned, db.Model):
         db.Column("submitted_datetime", db.DateTime(timezone=True),
                   server_default=func.now()))  # pylint:disable=not-callable
     payload = db.Column("payload", JSONB)
-    business_identifier = db.Column(db.String(255), nullable=True)
+    business_identifier = db.Column(db.String(255), nullable=False, unique=True)
     # maps to invoice id created by the pay-api (used for getting receipt)
     invoice_id = db.Column(db.Integer, nullable=True)
 
@@ -89,23 +89,14 @@ class Submission(Versioned, db.Model):
         return cls.query.filter_by(id=submission_id).one_or_none()
 
     @classmethod
+    def find_by_business_identifier(cls, identifier: str) -> Submission | None:
+        """Return the submission by business_identifier."""
+        return cls.query.filter_by(business_identifier=identifier).one_or_none()
+
+    @classmethod
     def get_filtered_submissions(cls):
         """Return the submissions."""
         query = cls.query.order_by(desc(Submission.submitted_datetime))
-        return query.all()
-
-    @classmethod
-    def get_latest_submissions(cls, submission_filter=None):
-        """Return submissions sorted by submitted datetime and filtered by filter."""
-
-        if submission_filter is None:
-            return cls.get_filtered_submissions()
-
-        query = cls.query
-        if submission_filter.business_identifier:
-            query = query.filter_by(business_identifier=submission_filter.business_identifier)
-
-        query = query.order_by(desc(Submission.submitted_datetime))
         return query.all()
 
 
@@ -130,8 +121,3 @@ class SubmissionSerializer:
             'business_identifier': submission.business_identifier,
             'submitter_id': submission.submitter_id
         }
-
-
-class SubmissionFilter:  # pylint: disable=too-few-public-methods
-    """ Class for storing data used for filtering submission model. """
-    business_identifier: str | None = None

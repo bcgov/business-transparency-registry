@@ -46,7 +46,7 @@ from flask_cors import cross_origin
 from btr_api.common.auth import jwt
 from btr_api.exceptions import ExternalServiceException, exception_response
 from btr_api.models import Submission as SubmissionModel, User as UserModel
-from btr_api.models.submission import SubmissionSerializer, SubmissionFilter
+from btr_api.models.submission import SubmissionSerializer
 from btr_api.services import btr_pay, SchemaService, SubmissionService
 
 bp = Blueprint("submission", __name__)
@@ -72,15 +72,13 @@ def registers(id: int | None = None):  # pylint: disable=redefined-builtin
 
 
 @bp.route("/entity/<business_identifier>", methods=("GET",))
-def latest_submission_for_entity(business_identifier: str):
-    """Get the latest submission for specified business identifier."""
-    sf = SubmissionFilter()
-    sf.business_identifier = business_identifier
+def get_entity_submission(business_identifier: str):
+    """Get the current submission for specified business identifier."""
 
     try:
-        submissions = SubmissionModel.get_latest_submissions(submission_filter=sf)
-        if submissions:
-            return jsonify(SubmissionSerializer.to_dict(submissions[0]))
+        submission = SubmissionModel.find_by_business_identifier(business_identifier)
+        if submission:
+            return jsonify(SubmissionSerializer.to_dict(submission))
 
         return {}, HTTPStatus.NOT_FOUND
 
@@ -115,7 +113,7 @@ def create_register():
         # create submission
         submission = SubmissionService.create_submission(json_input, user.id)
         # save before attempting invoice creation so that we can log the id for ops if there's an error
-        submission.save()
+        submission.save_to_session()
         try:
             # create invoice in pay system
             invoice_resp = btr_pay.create_invoice(account_id, jwt, json_input)

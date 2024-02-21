@@ -61,7 +61,7 @@ class SubmissionService:  # pylint: disable=too-few-public-methods
 
         Create Submission
 
-        This method is a static method that creates a new submission using the provided submission dictionary.
+        This method creates/replaces the current submission for the business using the provided submission dict.
 
         Parameters:
         - submission_dict (dict): A dictionary containing the submission data. It should have the following keys:
@@ -74,10 +74,13 @@ class SubmissionService:  # pylint: disable=too-few-public-methods
         - SubmissionModel: A SubmissionModel object that represents the created submission.
 
         """
-        submission = SubmissionModel()
+        submission = SubmissionModel.find_by_business_identifier(submission_dict['businessIdentifier'])
+        if not submission:
+            submission = SubmissionModel()
+            submission.business_identifier = submission_dict['businessIdentifier']
         submission.effective_date = date.fromisoformat(submission_dict['effectiveDate'])
-        submission.business_identifier = submission_dict['businessIdentifier']
         submission.payload = submission_dict
         submission.submitter_id = submitter_id
+        submission.invoice_id = None
 
         return submission

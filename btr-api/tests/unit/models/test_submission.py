@@ -1,9 +1,11 @@
-import pytest
-from btr_api.models.submission import Submission, SubmissionType, db, SubmissionFilter
+from sqlalchemy import text
+
+from btr_api.models.submission import Submission, SubmissionType
 
 
-def test_find_by_id(client, session):
+def test_find_by_id(session):
     # Prepare data
+    session.execute(text('delete from submission'))
     submission = Submission(type=SubmissionType.other, business_identifier="Test identifier")
     session.add(submission)
     session.commit()
@@ -15,8 +17,9 @@ def test_find_by_id(client, session):
     assert result == submission
 
 
-def test_get_filtered_submissions(client, session):
+def test_get_filtered_submissions(session):
     # Prepare data
+    session.execute(text('delete from submission'))
     session.add_all([Submission(type=SubmissionType.other, business_identifier="Test identifier"),
                      Submission(type=SubmissionType.standard, business_identifier="Another identifier")])
     session.commit()
@@ -28,30 +31,9 @@ def test_get_filtered_submissions(client, session):
     assert len(result) == len(all_submissions)
 
 
-def test_get_latest_submissions(client, session):
+def test_save_to_session(session):
     # Prepare data
-    submission1 = Submission(type=SubmissionType.other, business_identifier="Test identifier", payload="{id:123}")
-    submission2 = Submission(type=SubmissionType.other, business_identifier="Test identifier", payload="{id:124}")
-    submission3 = Submission(type=SubmissionType.other, business_identifier="Test identifier", payload="{id:125}")
-
-    session.add(submission1)
-    session.commit()
-    session.add(submission2)
-    session.commit()
-    session.add(submission3)
-    session.commit()
-
-    # Do test
-    result = Submission.get_latest_submissions()
-
-    # Verify result
-    assert result[0] == submission3
-    assert submission1 in result
-    assert submission2 in result
-
-
-def test_save_to_session(client, session):
-    # Prepare data
+    session.execute(text('delete from submission'))
     submission = Submission(type=SubmissionType.other, business_identifier="Test identifier")
 
     # Do test
