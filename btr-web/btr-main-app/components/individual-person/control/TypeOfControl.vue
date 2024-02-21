@@ -7,7 +7,7 @@
     >
       <template #label>
         {{ $t('texts.sharesAndVotes.inConcertControl.part1') }}
-        <UTooltip
+        <BcrosTooltip
           class="underline underline-offset-4 decoration-dotted"
           :popper="{
             placement: 'top',
@@ -15,13 +15,13 @@
           }"
           data-cy="testInConcertControlTooltip"
         >
-          <template #text>
+          <template #tooltip-text>
             <span class="whitespace-normal place-content: center">
               {{ $t('texts.sharesAndVotes.inConcertControl.tooltipContent') }}
             </span>
           </template>
           {{ $t('texts.sharesAndVotes.inConcertControl.tooltip') }}
-        </UTooltip>
+        </BcrosTooltip>
         {{ $t('texts.sharesAndVotes.inConcertControl.part2') }}
       </template>
     </UCheckbox>
