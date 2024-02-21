@@ -1,5 +1,3 @@
-import payFeesForBtrRegsigin from '../../fixtures/payFeeForBtrRegsigin.json'
-
 describe('accessibility -> Beneficial Owner Change', () => {
   beforeEach(() => {
     cy.visitHomePageWithFakeDataAndAxeInject()

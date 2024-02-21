@@ -86,7 +86,6 @@ describe('pages -> Beneficial Owner Change', () => {
 
   it('on update Significant Individual Filing Effective Date ' +
     'verifies that only newly added items have their date changed ', () => {
-
     // select the date of today
     cy.get('[data-cy=date-select]')
       .click()
@@ -144,8 +143,6 @@ describe('pages -> Beneficial Owner Change', () => {
     cy.get('[data-cy="summary-table-dates"]:contains("' + expectedDate + '")').should('have.length', 1)
   })
 })
-
-describe
 
 describe('pages -> Beneficial Owner Change - no preloaded data in tables', () => {
   beforeEach(() => {

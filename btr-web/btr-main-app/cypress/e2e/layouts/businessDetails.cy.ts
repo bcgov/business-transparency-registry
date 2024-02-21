@@ -13,7 +13,7 @@ describe('Layout -> Business Details', () => {
       `https://auth-api-dev.apps.silver.devops.gov.bc.ca/api/v1/entities/${business.identifier}`,
       contact).as('businessDetails')
     cy.visit(`/${business.identifier}/beneficial-owner-change`)
-    cy.wait(['@businessDetailsSlim','@businessDetails'])
+    cy.wait(['@businessDetailsSlim', '@businessDetails'])
 
     cy.get('#bcros-business-details').should('exist')
     cy.get('[data-cy=business-details-name]').should('contain.text', business.legalName)
@@ -45,7 +45,7 @@ describe('Layout -> Business Details', () => {
       contact).as('businessDetails').as('businessDetailsSlim')
 
     cy.visit(`/${businessCP.identifier}/beneficial-owner-change`)
-    cy.wait(['@businessDetailsSlim','@businessDetails'])
+    cy.wait(['@businessDetailsSlim', '@businessDetails'])
 
     cy.get('[data-cy=business-details-name]').should('contain.text', 'BC Cooperative Association')
     cy.get('[data-cy=business-details-info]').get('dt').eq(1).should('contain.text', 'Incorporation Number')

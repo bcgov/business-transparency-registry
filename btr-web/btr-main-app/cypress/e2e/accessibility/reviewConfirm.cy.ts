@@ -1,5 +1,3 @@
-import payFeesForBtrRegsigin from '../../fixtures/payFeeForBtrRegsigin.json'
-
 describe('accessibility -> Review and Confirm', () => {
   beforeEach(() => {
     cy.visitHomePageWithFakeDataAndAxeInject()

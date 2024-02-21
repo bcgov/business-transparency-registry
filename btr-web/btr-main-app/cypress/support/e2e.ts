@@ -1,5 +1,4 @@
 import 'cypress-axe'
-import business from '~/cypress/fixtures/business.json'
 
 Cypress.Commands.add('interceptPostsEntityApi', () => {
   cy.fixture('plotsEntityExistingSiResponse').then((plotsEntityExistingSiResponse) => {
@@ -27,7 +26,7 @@ Cypress.Commands.add('interceptPayFeeApi', () => {
 })
 
 Cypress.Commands.add('interceptLearApiEmptyResponse', () => {
-  cy.fixture('payFeeForBtrRegsigin').then((payFeesForBtrRegsigin) => {
+  cy.fixture('payFeeForBtrRegsigin').then(() => {
     cy.intercept(
       'GET',
       'https://pay-api-dev.apps.silver.devops.gov.bc.ca/api/v1/fees/BTR/REGSIGIN',
