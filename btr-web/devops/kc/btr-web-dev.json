@@ -18,9 +18,7 @@
         "https://bcregistry-btr-dev*"
     ],
     "webOrigins": [
-        "https://bcregistry-btr-dev.web.app",
-        "https://bcregistry-btr-dev*",
-        "http://localhost:3000"
+        "*"
     ],
     "notBefore": 0,
     "bearerOnly": false,
