@@ -17,7 +17,7 @@ describe('accessibility -> Business Layout', () => {
     // header only (logged out) 19450
     cy.checkA11y({ exclude: ['[data-cy=owner-change]'], include: ['[data-cy=header]'] })
     cy.get('[data-cy=logged-out-menu]').click()
-    cy.wait(100)
+    cy.wait(250)
     cy.checkA11y({ exclude: ['[data-cy=owner-change]'], include: ['[data-cy=header]'] })
 
     // breadcrumb only 19579
@@ -30,9 +30,9 @@ describe('accessibility -> Business Layout', () => {
     // pre-form touched
     cy.checkA11y({ exclude: ['[data-cy=owner-change]'], include: ['[data-cy=pay-fees-widget]'] })
     // post-form touched
-    cy.get('[data-cy=date-select]').click().then(() => {
-      cy.get('.bcros-date-picker__calendar__day.dp__today').parent().click()
-    })
+    cy.get('[data-cy=date-select]').click()
+    cy.wait(250)
+    cy.get('.bcros-date-picker__calendar__day.dp__today').parent().click()
     cy.checkA11y({ exclude: ['[data-cy=owner-change]'], include: ['[data-cy=pay-fees-widget]'] })
 
     // filing control buttons only
@@ -57,8 +57,7 @@ describe('accessibility -> Business Layout', () => {
     // header only (logged in) 17802
     cy.checkA11y({ exclude: ['[data-cy=owner-change]'], include: ['[data-cy=header]'] })
     cy.get('[data-cy=logged-in-menu]').click()
-
-    cy.wait(100)
+    cy.wait(250)
     cy.checkA11y({ exclude: ['[data-cy=owner-change]'], include: ['[data-cy=header]'] })
 
     // full layout (uncomment once all of the above are passing)
