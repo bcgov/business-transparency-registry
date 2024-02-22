@@ -1,0 +1,58 @@
+{
+    "clientId": "btr-service",
+    "name": "",
+    "description": "",
+    "rootUrl": "",
+    "adminUrl": "",
+    "baseUrl": "",
+    "surrogateAuthRequired": false,
+    "enabled": true,
+    "alwaysDisplayInConsole": false,
+    "clientAuthenticatorType": "client-secret",
+    "redirectUris": [
+        "/*"
+    ],
+    "webOrigins": [
+        "https://bcregistry-btr-test.web.app",
+        "http://localhost:3000"
+    ],
+    "notBefore": 0,
+    "bearerOnly": true,
+    "consentRequired": false,
+    "standardFlowEnabled": false,
+    "implicitFlowEnabled": false,
+    "directAccessGrantsEnabled": false,
+    "serviceAccountsEnabled": false,
+    "publicClient": false,
+    "frontchannelLogout": false,
+    "protocol": "openid-connect",
+    "attributes": {
+        "backchannel.logout.session.required": "true",
+        "client_credentials.use_refresh_token": "false",
+        "display.on.consent.screen": "false",
+        "oauth2.device.authorization.grant.enabled": "false",
+        "backchannel.logout.revoke.offline.tokens": "false",
+        "use.refresh.tokens": "true",
+        "exclude.session.state.from.auth.response": "false"
+    },
+    "authenticationFlowBindingOverrides": {},
+    "fullScopeAllowed": true,
+    "nodeReRegistrationTimeout": -1,
+    "defaultClientScopes": [
+        "web-origins",
+        "profile",
+        "roles",
+        "email"
+    ],
+    "optionalClientScopes": [
+        "address",
+        "phone",
+        "offline_access",
+        "microprofile-jwt"
+    ],
+    "access": {
+        "view": true,
+        "configure": true,
+        "manage": true
+    }
+}
