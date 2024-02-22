@@ -3,13 +3,15 @@ import payFeesForBtrRegsigin from '../../fixtures/payFeeForBtrRegsigin.json'
 
 describe('pages -> Review and Confirm', () => {
   beforeEach(() => {
-    cy.visit('/')
-    cy.wait(1000)
+    cy.interceptPayFeeApi().as('payFeeApi')
+    cy.interceptBusinessContact().as('businessContact')
+    cy.interceptBusinessSlim().as('businessApiCall')
   })
 
   it('verify pay fee widget is visible and base state is available', () => {
     cy.visit('/BC0871427/beneficial-owner-change/review-confirm')
-    cy.wait(1000)
+    cy.wait(['@businessApiCall', '@payFeeApi', '@businessContact'])
+
     cy.viewport(2560, 1440)
     cy.intercept(
       'GET',
@@ -25,15 +27,13 @@ describe('pages -> Review and Confirm', () => {
 
   it('integration test for adding an individual and reviewing the summary', () => {
     cy.fixture('individuals').then((testData) => {
-      cy.intercept(
-        'GET',
-        'https://pay-api-dev.apps.silver.devops.gov.bc.ca/api/v1/fees/BTR/REGSIGIN',
-        { data: payFeesForBtrRegsigin })
-
+      cy.interceptPostsEntityApi().as('existingSIs')
+      cy.visit('/')
+      cy.wait(['@existingSIs', '@businessApiCall', '@payFeeApi', '@businessContact'])
       // select the date of today
-      cy.get('[data-cy=date-select]').click()
-      cy.wait(250)
-      cy.get('.bcros-date-picker__calendar__day.dp__today').parent().click()
+      cy.get('[data-cy=date-select]').click().then(() => {
+        cy.get('.bcros-date-picker__calendar__day.dp__today').parent().click()
+      })
 
       // click 'Add an Individual' button and expand the form
       cy.get('[data-cy=add-new-btn]').click()

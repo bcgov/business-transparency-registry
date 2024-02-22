@@ -1,7 +1,6 @@
 describe('pages -> Add individual', () => {
   beforeEach(() => {
-    cy.visit('/')
-    cy.wait(1000)
+    cy.visitHomePageWithFakeData()
   })
 
   it('verify TaxResidency component is working', () => {

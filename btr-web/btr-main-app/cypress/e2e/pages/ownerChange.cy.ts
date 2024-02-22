@@ -3,7 +3,7 @@ import { dateToString } from '../../../../btr-common-components/utils/date'
 
 describe('pages -> Beneficial Owner Change', () => {
   beforeEach(() => {
-    cy.visit('/')
+    cy.visitHomePageWithFakeData()
   })
 
   it('redirected to owner change page', () => {
@@ -78,19 +78,6 @@ describe('pages -> Beneficial Owner Change', () => {
     cy.get('[data-cy=add-new-btn]').should('not.have.attr', 'disabled')
   })
 
-  it('verify summary table is rendered as expected', () => {
-    const summaryTableHeaders = cy.get('[data-cy="individualsSummaryTable"]').get('th')
-    summaryTableHeaders
-      .should('contain', 'Name')
-      .and('contain', 'Address')
-      .and('contain', 'Details')
-      .and('contain', 'Significance Dates')
-      .and('contain', 'Control')
-    // body should contain correct empty text
-    cy.get('[data-cy="individualsSummaryTable"]').get('td')
-      .should('contain.text', 'No significant individuals added yet')
-  })
-
   it('goes to review confirm page when review confirm is clicked', () => {
     cy.get('[data-cy=button-control-right-button]').eq(0).should('have.text', 'Review and Confirm')
     cy.get('[data-cy=button-control-right-button]').eq(0).click()
@@ -99,27 +86,12 @@ describe('pages -> Beneficial Owner Change', () => {
 
   it('on update Significant Individual Filing Effective Date ' +
     'verifies that only newly added items have their date changed ', () => {
-    cy.fixture('plotsEntityExistingSiResponse').then((plotsEntityExistingSiResponse) => {
-      cy.intercept(
-        'GET',
-        '/plots/entity/BC0871427',
-        plotsEntityExistingSiResponse)
-        .as('plotsEntityApiCall')
-      cy.visit('/')
-      cy.wait('@plotsEntityApiCall')
-    })
-
-    cy.fixture('payFeeForBtrRegsigin').then((payFeesForBtrRegsigin) => {
-      cy.intercept(
-        'GET',
-        'https://pay-api-dev.apps.silver.devops.gov.bc.ca/api/v1/fees/BTR/REGSIGIN',
-        { data: payFeesForBtrRegsigin })
-    })
-
     // select the date of today
-    cy.get('[data-cy=date-select]').click()
-    cy.wait(250)
-    cy.get('.bcros-date-picker__calendar__day.dp__today').parent().click()
+    cy.get('[data-cy=date-select]')
+      .click()
+      .then(() => {
+        cy.get('.bcros-date-picker__calendar__day.dp__today').parent().click()
+      })
 
     const today = new Date()
     const expectedDate = dateToString(today, 'YYYY-MM-DD')
@@ -169,5 +141,29 @@ describe('pages -> Beneficial Owner Change', () => {
     })
     // verify only new entry has date set for today. All other elements should have different dates.
     cy.get('[data-cy="summary-table-dates"]:contains("' + expectedDate + '")').should('have.length', 1)
+  })
+})
+
+describe('pages -> Beneficial Owner Change - no preloaded data in tables', () => {
+  beforeEach(() => {
+    cy.interceptPostsEntityApiEmpty().as('existingSIs')
+    cy.interceptPayFeeApi().as('payFeeApi')
+    cy.interceptBusinessContact().as('businessContact')
+    cy.interceptBusinessSlim().as('businessApiCall')
+    cy.visit('/')
+    cy.wait(['@existingSIs', '@businessApiCall', '@payFeeApi', '@businessContact'])
+  })
+
+  it('verify summary table is rendered as expected', () => {
+    const summaryTableHeaders = cy.get('[data-cy="individualsSummaryTable"]').get('th')
+    summaryTableHeaders
+      .should('contain', 'Name')
+      .and('contain', 'Address')
+      .and('contain', 'Details')
+      .and('contain', 'Significance Dates')
+      .and('contain', 'Control')
+    // body should contain correct empty text
+    cy.get('[data-cy="individualsSummaryTable"]').get('td')
+      .should('contain.text', 'No significant individuals added yet')
   })
 })

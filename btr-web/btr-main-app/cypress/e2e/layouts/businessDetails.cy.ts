@@ -7,13 +7,14 @@ describe('Layout -> Business Details', () => {
     cy.intercept(
       'GET',
       `https://legal-api-dev.apps.silver.devops.gov.bc.ca/api/v2/businesses/${business.identifier}?slim=true`,
-      { business })
+      { business }).as('businessDetailsSlim')
     cy.intercept(
       'GET',
       `https://auth-api-dev.apps.silver.devops.gov.bc.ca/api/v1/entities/${business.identifier}`,
-      contact)
+      contact).as('businessDetails')
     cy.visit(`/${business.identifier}/beneficial-owner-change`)
-    cy.wait(1000)
+    cy.wait(['@businessDetailsSlim', '@businessDetails'])
+
     cy.get('#bcros-business-details').should('exist')
     cy.get('[data-cy=business-details-name]').should('contain.text', business.legalName)
     cy.get('[data-cy=business-details-name]').should('contain.text', 'BC Benefit Company')
@@ -37,13 +38,15 @@ describe('Layout -> Business Details', () => {
     cy.intercept(
       'GET',
       `https://legal-api-dev.apps.silver.devops.gov.bc.ca/api/v2/businesses/${businessCP.identifier}?slim=true`,
-      { business: businessCP })
+      { business: businessCP }).as('businessDetailsSlim')
     cy.intercept(
       'GET',
       `https://auth-api-dev.apps.silver.devops.gov.bc.ca/api/v1/entities/${businessCP.identifier}`,
-      contact)
+      contact).as('businessDetails').as('businessDetailsSlim')
+
     cy.visit(`/${businessCP.identifier}/beneficial-owner-change`)
-    cy.wait(1000)
+    cy.wait(['@businessDetailsSlim', '@businessDetails'])
+
     cy.get('[data-cy=business-details-name]').should('contain.text', 'BC Cooperative Association')
     cy.get('[data-cy=business-details-info]').get('dt').eq(1).should('contain.text', 'Incorporation Number')
     cy.get('[data-cy=business-details-info]').get('dd').eq(1).should('contain.text', businessCP.identifier)

@@ -1,7 +1,6 @@
 describe('Layout -> ButtonControl', () => {
   it('shows button control in the business layout for SI change', () => {
-    cy.visit('/')
-    cy.wait(1000)
+    cy.visitHomePageWithFakeData()
     cy.get('#bcros-button-control').should('exist')
     cy.get('[data-cy=button-control-left-button]').should('have.length', 3)
     cy.get('[data-cy=button-control-left-button]').eq(0).should('have.text', 'Cancel')
@@ -12,8 +11,12 @@ describe('Layout -> ButtonControl', () => {
   })
 
   it('shows button control in the business layout for SI change review', () => {
+    cy.interceptPayFeeApi().as('payFeeApi')
+    cy.interceptBusinessContact().as('businessContact')
+    cy.interceptBusinessSlim().as('businessApiCall')
     cy.visit('/BC0871427/beneficial-owner-change/review-confirm')
-    cy.wait(1000)
+    cy.wait(['@businessApiCall', '@payFeeApi', '@businessContact'])
+
     cy.get('#bcros-button-control').should('exist')
     cy.get('[data-cy=button-control-left-button]').should('have.length', 3)
     cy.get('[data-cy=button-control-left-button]').eq(0).should('have.text', 'Cancel')

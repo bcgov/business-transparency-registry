@@ -1,65 +1,8 @@
 import { dateToString } from '../../../../../btr-common-components/utils/date'
-import payFeesForBtrRegsigin from '../../../fixtures/payFeeForBtrRegsigin.json'
 
 describe('pages -> Summary Table', () => {
   beforeEach(() => {
-    cy.visit('/')
-    // Select the effective date
-    cy.get('[data-cy=date-select]').click()
-    cy.wait(250)
-    cy.get('.bcros-date-picker__calendar__day.dp__today').parent().click()
-    cy.fixture('individuals').then((testData) => {
-      cy.intercept(
-        'GET',
-        'https://pay-api-dev.apps.silver.devops.gov.bc.ca/api/v1/fees/BTR/REGSIGIN',
-        { data: payFeesForBtrRegsigin })
-
-      // Add the first individual
-      cy.get('[data-cy=add-new-btn]').click()
-      cy.get('#individual-person-full-name').type(testData.profile1.fullName)
-      cy.get('#individual-person-preferred-name').type(testData.profile1.preferredName)
-      cy.get('#individual-person-email').type(testData.profile1.email)
-      cy.get('[name="percentOfShares"]').type(testData.profile1.percentOfShares)
-      cy.get('[name="percentOfVotes"]').type(testData.profile1.percentOfVotes)
-      cy.get('[data-cy="testTypeOfControl"]').get('[name="registeredOwner"]').check()
-      cy.get('[data-cy="testControlOfDirectors"]').get('[name="directControl"]').check()
-      cy.get('#addNewPersonBirthdate').trigger('click')
-      cy.get('[data-cy=date-picker]').get('.bcros-date-picker__calendar__day.dp__today').trigger('click')
-      cy.get('[data-cy="address-country"]').click()
-      cy.get('[data-cy="address-country"]').get('li').contains(testData.profile1.address.country).click()
-      cy.get('[data-cy="address-line1-autocomplete"]').type(testData.profile1.address.streetAddress)
-      cy.get('[data-cy="address-city"]').type(testData.profile1.address.city)
-      cy.get('[data-cy="address-region-select"]').click()
-      cy.get('[data-cy="address-region-select"]').get('li').contains(testData.profile1.address.province[0]).click()
-      cy.get('[data-cy="address-postal-code"]').type(testData.profile1.address.postalCode)
-      cy.get('[data-cy="countryOfCitizenshipRadioGroup"]').get('[type="radio"][value="citizen"]').check()
-      cy.get('[name="taxNumber"]').type(testData.profile1.taxNumber)
-      cy.get('[data-cy="testTaxResidency"]').get('[type="radio"][value="true"]').check()
-      cy.get('[data-cy=new-si-done-btn]').click()
-
-      // Add the second individual
-      cy.get('[data-cy=add-new-btn]').click()
-      cy.get('#individual-person-full-name').type(testData.profile2.fullName)
-      cy.get('#individual-person-preferred-name').type(testData.profile2.preferredName)
-      cy.get('#individual-person-email').type(testData.profile2.email)
-      cy.get('[name="percentOfShares"]').type(testData.profile2.percentOfShares)
-      cy.get('[name="percentOfVotes"]').type(testData.profile2.percentOfVotes)
-      cy.get('[data-cy="testTypeOfControl"]').get('[name="registeredOwner"]').check()
-      cy.get('[data-cy="testControlOfDirectors"]').get('[name="directControl"]').check()
-      cy.get('#addNewPersonBirthdate').trigger('click')
-      cy.get('[data-cy=date-picker]').get('.bcros-date-picker__calendar__day.dp__today').trigger('click')
-      cy.get('[data-cy="address-country"]').click()
-      cy.get('[data-cy="address-country"]').get('li').contains(testData.profile2.address.country).click()
-      cy.get('[data-cy="address-line1-autocomplete"]').type(testData.profile2.address.streetAddress)
-      cy.get('[data-cy="address-city"]').type(testData.profile2.address.city)
-      cy.get('[data-cy="address-region-select"]').click()
-      cy.get('[data-cy="address-region-select"]').get('li').contains(testData.profile2.address.province[0]).click()
-      cy.get('[data-cy="address-postal-code"]').type(testData.profile2.address.postalCode)
-      cy.get('[data-cy="countryOfCitizenshipRadioGroup"]').get('[type="radio"][value="citizen"]').check()
-      cy.get('[name="taxNumber"]').type(testData.profile2.taxNumber)
-      cy.get('[data-cy="testTaxResidency"]').get('[type="radio"][value="true"]').check()
-      cy.get('[data-cy=new-si-done-btn]').click()
-    })
+    cy.visitHomePageWithFakeData()
   })
 
   it('summary table headers are rendered', () => {
@@ -73,6 +16,8 @@ describe('pages -> Summary Table', () => {
   })
 
   it('summary table body is rendered', () => {
+    cy.addTestIndividuals()
+
     cy.fixture('individuals').then((testData) => {
       const today = new Date()
       const expectedDate = dateToString(today, 'YYYY-MM-DD')
@@ -130,6 +75,7 @@ describe('pages -> Summary Table', () => {
     cy.fixture('individuals').then((testData) => {
       const today = new Date()
       const expectedDate = dateToString(today, 'YYYY-MM-DD')
+      cy.addTestIndividuals()
 
       cy.get('[data-cy=edit-button]').first().click()
 
@@ -155,6 +101,8 @@ describe('pages -> Summary Table', () => {
 
   it('test the CANCEL button in the Edit form', () => {
     cy.fixture('individuals').then((testData) => {
+      cy.addTestIndividuals()
+
       cy.get('[data-cy=summary-table-name]').contains(testData.profile1.fullName.toUpperCase())
 
       cy.get('[data-cy=edit-button]').first().click()
