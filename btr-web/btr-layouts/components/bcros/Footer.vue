@@ -20,6 +20,7 @@
         <div class="flex flex-auto justify-end">
           <BcrosTooltip
             id="footer-tooltip"
+            class="mt-1"
             :text="`BTR UI v${appVersion}`"
             :popper="{
               placement: 'left',

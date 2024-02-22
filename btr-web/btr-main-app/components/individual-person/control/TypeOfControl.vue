@@ -13,10 +13,13 @@
             placement: 'top',
             arrow: true
           }"
-          data-cy="testInConcertControlTooltip"
+          data-cy="in-concert-control-tooltip"
         >
           <template #tooltip-text>
-            <span class="whitespace-normal place-content: center">
+            <span
+              class="whitespace-normal place-content: center"
+              data-cy="in-concert-control-tooltip-content"
+            >
               {{ $t('texts.sharesAndVotes.inConcertControl.tooltipContent') }}
             </span>
           </template>

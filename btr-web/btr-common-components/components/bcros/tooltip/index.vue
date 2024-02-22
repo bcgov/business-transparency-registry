@@ -2,7 +2,6 @@
   <UTooltip
     :id="id"
     ref="tooltipRef"
-    class="mt-1"
     :text="text"
     :popper="popper"
     tabindex="0"

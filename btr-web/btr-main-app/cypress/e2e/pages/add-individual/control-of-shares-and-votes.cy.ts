@@ -26,8 +26,10 @@ describe('pages -> Add individual', () => {
     cy.get('[data-cy=add-new-btn]').trigger('click')
     // cy.get('[data-cy="showAddIndividualPersonManually"]').trigger('click')
 
-    cy.get('[data-cy="testInConcertControlTooltip"]').trigger('mouseover')
-    cy.contains(en.texts.controlOfDirectors.inConcertControl.tooltipContent).should('exist')
+    cy.get('[data-cy="in-concert-control-tooltip"]').trigger('mouseover')
+    cy.get('[data-cy="in-concert-control-tooltip-content"').should('exist')
+    cy.get('[data-cy="in-concert-control-tooltip"]').trigger('mouseleave')
+    cy.get('[data-cy="in-concert-control-tooltip-content"').should('not.exist')
   })
 
   it('test the error message for special characters', () => {

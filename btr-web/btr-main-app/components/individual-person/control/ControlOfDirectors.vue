@@ -25,10 +25,13 @@
             placement: 'top',
             arrow: true
           }"
-          data-cy="testControlOfDirectorsTooltip"
+          data-cy="control-of-directors-tooltip"
         >
           <template #tooltip-text>
-            <span class="whitespace-normal place-content: center">
+            <span
+              class="whitespace-normal place-content: center"
+              data-cy="control-of-directors-tooltip-content"
+            >
               {{ $t('texts.controlOfDirectors.inConcertControl.tooltipContent') }}
             </span>
           </template>

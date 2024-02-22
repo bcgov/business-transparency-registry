@@ -1,3 +1,9 @@
+<<<<<<< HEAD
+=======
+import payFeesForBtrRegsigin from '../../fixtures/payFeeForBtrRegsigin.json'
+import 'cypress-plugin-tab'
+
+>>>>>>> a524c42 (update cypress tests for tooltip)
 describe('accessibility -> Beneficial Owner Change', () => {
   beforeEach(() => {
     cy.visitHomePageWithFakeDataAndAxeInject()
@@ -146,5 +152,25 @@ describe('accessibility -> Beneficial Owner Change', () => {
     // ignoring the aria-dialog-name rule because it fails on the imported datepicker component
     // - ticket created to resolve: https://github.com/bcgov/entity/issues/19777
     cy.checkA11y('[data-cy=effective-date-select]', { rules: { 'aria-dialog-name': { enabled: false } } })
+  })
+
+  it('Check if the tooltip works on tab focus', () => {
+    cy.get('[data-cy=add-new-btn]').click()
+
+    /**
+     * Typing tab key does not work in Cypress.
+     * The official doc (https://docs.cypress.io/api/commands/type#Tabbing) suggests using the cypress-plugin-tab plugin
+     * https://github.com/kuceb/cypress-plugin-tab
+     * The module is in beta and may have unexpected behavior.
+     */
+
+    // tab into the tooltip text in Type of Control section
+    cy.get('[name="percentOfVotes"]').tab().tab()
+    cy.get('[data-cy="in-concert-control-tooltip-content"').should('exist')
+
+    // Note: the tooltip does not lose focus when tabbed out by tab()
+    // here we use blur() to simulate tabbing out
+    cy.get('[data-cy="in-concert-control-tooltip"]').blur()
+    cy.get('[data-cy="in-concert-control-tooltip-content"').should('not.exist')
   })
 })
