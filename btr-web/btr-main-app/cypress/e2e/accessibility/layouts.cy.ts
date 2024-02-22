@@ -16,9 +16,9 @@ describe('accessibility -> Business Layout', () => {
     cy.injectAxe()
     // header only (logged out) 19450
     cy.checkA11y({ exclude: ['[data-cy=owner-change]'], include: ['[data-cy=header]'] })
-    cy.get('[data-cy=logged-out-menu]').click().then(() => {
-      cy.checkA11y({ exclude: ['[data-cy=owner-change]'], include: ['[data-cy=header]'] })
-    })
+    cy.get('[data-cy=logged-out-menu]').click()
+    cy.wait(100)
+    cy.checkA11y({ exclude: ['[data-cy=owner-change]'], include: ['[data-cy=header]'] })
 
     // breadcrumb only 19579
     cy.checkA11y({ exclude: ['[data-cy=owner-change]'], include: ['[data-cy=breadcrumb]'] })
@@ -56,9 +56,10 @@ describe('accessibility -> Business Layout', () => {
 
     // header only (logged in) 17802
     cy.checkA11y({ exclude: ['[data-cy=owner-change]'], include: ['[data-cy=header]'] })
-    cy.get('[data-cy=logged-in-menu]').click().then(() => {
-      cy.checkA11y({ exclude: ['[data-cy=owner-change]'], include: ['[data-cy=header]'] })
-    })
+    cy.get('[data-cy=logged-in-menu]').click()
+
+    cy.wait(100)
+    cy.checkA11y({ exclude: ['[data-cy=owner-change]'], include: ['[data-cy=header]'] })
 
     // full layout (uncomment once all of the above are passing)
     // cy.checkA11y({ exclude: ['[data-cy=owner-change]'], include: ['[data-cy=business-layout]'] })
