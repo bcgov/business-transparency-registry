@@ -24,7 +24,7 @@ defineProps<{
   popper: PopperOptions
 }>()
 
-const tooltipRef = ref(null)
+const tooltipRef = ref()
 
 function showTooltipPopup () {
   if (tooltipRef.value) {
