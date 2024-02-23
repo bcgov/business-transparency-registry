@@ -50,7 +50,8 @@ export default defineNuxtConfig({
       legalApiURL: `${process.env.VUE_APP_LEGAL_API_URL || ''}${process.env.VUE_APP_LEGAL_API_VERSION_2 || ''}`,
       payApiURL: `${process.env.VUE_APP_PAY_API_URL || ''}${process.env.VUE_APP_PAY_API_VERSION || ''}`,
       btrApiURL: `${process.env.VUE_APP_BTR_API_URL || ''}${process.env.VUE_APP_BTR_API_VERSION || ''}`,
-      registryHomeURL: process.env.VUE_APP_REGISTRY_HOME_URL || ''
+      registryHomeURL: process.env.VUE_APP_REGISTRY_HOME_URL || '',
+      appEnv: `${process.env.VUE_APP_POD_NAMESPACE || 'unknown'}`
     }
   },
   css: ['~/../assets/scss/global.scss'],
