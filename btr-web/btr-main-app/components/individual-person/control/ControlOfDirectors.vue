@@ -19,21 +19,24 @@
     >
       <template #label>
         {{ $t('texts.controlOfDirectors.inConcertControl.text') }}
-        <UTooltip
+        <BcrosTooltip
           class="underline underline-offset-4 decoration-dotted"
           :popper="{
             placement: 'top',
             arrow: true
           }"
-          data-cy="testControlOfDirectorsTooltip"
+          data-cy="control-of-directors-tooltip"
         >
-          <template #text>
-            <span class="whitespace-normal place-content: center">
+          <template #tooltip-text>
+            <span
+              class="whitespace-normal place-content: center"
+              data-cy="control-of-directors-tooltip-content"
+            >
               {{ $t('texts.controlOfDirectors.inConcertControl.tooltipContent') }}
             </span>
           </template>
           {{ $t('texts.controlOfDirectors.inConcertControl.tooltip') }}
-        </UTooltip>
+        </BcrosTooltip>
       </template>
     </UCheckbox>
   </div>

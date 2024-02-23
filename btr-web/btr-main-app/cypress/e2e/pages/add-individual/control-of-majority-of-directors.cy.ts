@@ -1,12 +1,5 @@
 describe('pages -> Add individual', () => {
-  let en: any
-
   beforeEach(() => {
-    // load the English version of the language file
-    cy.readFile('lang/en.json').then((json) => {
-      en = json
-    })
-
     cy.visit('/')
   })
 
@@ -28,7 +21,9 @@ describe('pages -> Add individual', () => {
 
     const checkboxes = cy.get('[data-cy="testControlOfDirectors"]').should('exist')
 
-    checkboxes.get('[data-cy="testControlOfDirectorsTooltip"]').trigger('mouseover')
-    cy.contains(en.texts.sharesAndVotes.inConcertControl.tooltipContent).should('exist')
+    checkboxes.get('[data-cy="control-of-directors-tooltip"]').trigger('mouseover')
+    cy.get('[data-cy="control-of-directors-tooltip-content"').should('exist')
+    checkboxes.get('[data-cy="control-of-directors-tooltip"]').trigger('mouseleave')
+    cy.get('[data-cy="control-of-directors-tooltip-content"').should('not.exist')
   })
 })

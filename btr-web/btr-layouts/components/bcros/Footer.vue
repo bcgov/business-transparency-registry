@@ -18,7 +18,7 @@
           </li>
         </ul>
         <div class="flex flex-auto justify-end">
-          <UTooltip
+          <BcrosTooltip
             id="footer-tooltip"
             class="mt-1"
             :text="`BTR UI v${appVersion}`"
@@ -27,10 +27,10 @@
               arrow: true
             }"
           >
-            <div class="icon-container" role="img" aria-label="information" tabindex="0">
+            <div class="icon-container" role="img" aria-label="information">
               <UIcon class="text-2xl text-white" name="i-mdi-information-outline" />
             </div>
-          </UTooltip>
+          </BcrosTooltip>
         </div>
       </nav>
     </div>
