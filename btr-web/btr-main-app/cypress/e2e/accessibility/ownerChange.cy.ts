@@ -65,27 +65,10 @@ describe('accessibility -> Beneficial Owner Change', () => {
     })
 
     // Expanding the form - validations on 19441
-    // FUTURE: just click 'Done' btn once validations for it are working
-    // cy.get('[data-cy=add-new-btn]').click()
-    // cy.get('#individual-person-full-name').as('name').focus()
-    // cy.get('@name').blur()
-    // cy.get('#individual-person-email').as('email').focus()
-    // cy.get('@email').blur()
-    // cy.get('[name=percentOfShares]').type('108')
-    // cy.get('[name=percentOfVotes]').type('f')
-    // cy.get('[data-cy=address-country]').as('country').focus()
-    // cy.get('@country').blur()
-    // cy.get('[data-cy=address-street]').as('street').focus()
-    // cy.get('@street').blur()
-    // cy.get('[data-cy=address-city]').as('city').focus()
-    // cy.get('@city').blur()
-    // cy.get('[data-cy=address-region-input]').as('region').focus()
-    // cy.get('@region').blur()
-    // cy.get('[data-cy=address-postal-code]').as('postal').focus()
-    // cy.get('@postal').blur()
-    // cy.get('[name=taxNumber]').as('taxNumber').focus()
-    // cy.get('@taxNumber').blur()
-    // cy.checkA11y('[data-cy=addIndividualPerson]')
+    cy.get('[data-cy=new-si-cancel-btn]').click()
+    cy.get('[data-cy=add-new-btn]').click()
+    cy.get('[data-cy=new-si-done-btn]').click()
+    cy.checkA11y('[data-cy=addIndividualPerson]', { rules: { 'nested-interactive': { enabled: false } } })
 
     // Expanding the form - dynamic elements 19443
     // address line 1 expansion
