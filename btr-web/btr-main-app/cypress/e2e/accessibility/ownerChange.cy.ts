@@ -1,9 +1,5 @@
-<<<<<<< HEAD
-=======
-import payFeesForBtrRegsigin from '../../fixtures/payFeeForBtrRegsigin.json'
 import 'cypress-plugin-tab'
 
->>>>>>> a524c42 (update cypress tests for tooltip)
 describe('accessibility -> Beneficial Owner Change', () => {
   beforeEach(() => {
     cy.visitHomePageWithFakeDataAndAxeInject()
