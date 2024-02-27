@@ -63,6 +63,14 @@ def test_post_plots_db_mocked(app, session, client, jwt, mocker, requests_mock):
         os.path.join(current_dir, '..', '..', 'mocks', 'significantIndividualsFiling', 'valid.json')
     ) as file:
         json_data = json.load(file)
+
+        mocked_entity_response = {"business" : {"adminFreeze" : False, "state" : "ACTIVE"}}
+        identifier = json_data['businessIdentifier']
+        legal_api_mock = requests_mock.get(
+            f"{app.config.get('LEGAL_SVC_URL')}/businesses/{identifier}",
+            json=mocked_entity_response
+        )
+
         rv = client.post('/plots',
                          json=json_data,
                          headers=create_header(jwt, ['basic'], **{'Accept-Version': 'v1',
@@ -73,12 +81,11 @@ def test_post_plots_db_mocked(app, session, client, jwt, mocker, requests_mock):
     mock_user_save.assert_called_once()
     mock_submission_save.assert_called()
     assert pay_api_mock.called == True
+    assert legal_api_mock.called == True
     assert pay_api_mock.request_history[0].json() == {
         'filingInfo': {'filingTypes': [{'filingTypeCode': 'REGSIGIN'}]},
         'businessInfo': {'corpType': 'BTR', 'businessIdentifier': json_data['businessIdentifier']},
         'details': [{'label': 'Incorporation Number: ', 'value': json_data['businessIdentifier']}]}
-    
-    
 
 
 def test_post_plots(app, client, session, jwt, requests_mock):
@@ -91,6 +98,14 @@ def test_post_plots(app, client, session, jwt, requests_mock):
         os.path.join(current_dir, '..', '..', 'mocks', 'significantIndividualsFiling', 'valid.json')
     ) as file:
         json_data = json.load(file)
+
+        mocked_entity_response = {"business" : {"adminFreeze" : False, "state" : "ACTIVE"}}
+        identifier = json_data['businessIdentifier']
+        legal_api_mock = requests_mock.get(
+            f"{app.config.get('LEGAL_SVC_URL')}/businesses/{identifier}",
+            json=mocked_entity_response
+        )
+        
         with nested_session(session):
             mocked_username = 'wibbly wabble'
             rv = client.post('/plots',
@@ -106,6 +121,7 @@ def test_post_plots(app, client, session, jwt, requests_mock):
             submission_id = rv.json.get('id')
             assert submission_id
             assert pay_api_mock.called == True
+            assert legal_api_mock.called == True
             # check submission details
             created_submission = SubmissionModel.find_by_id(submission_id)
             assert created_submission
@@ -127,6 +143,14 @@ def test_post_plots_pay_error(app, client, session, jwt, requests_mock):
         os.path.join(current_dir, '..', '..', 'mocks', 'significantIndividualsFiling', 'valid.json')
     ) as file:
         json_data = json.load(file)
+
+        mocked_entity_response = {"business" : {"adminFreeze" : False, "state" : "ACTIVE"}}
+        identifier = json_data['businessIdentifier']
+        legal_api_mock = requests_mock.get(
+            f"{app.config.get('LEGAL_SVC_URL')}/businesses/{identifier}",
+            json=mocked_entity_response
+        )
+
         with nested_session(session):
             rv = client.post('/plots',
                              json=json_data,
@@ -139,12 +163,75 @@ def test_post_plots_pay_error(app, client, session, jwt, requests_mock):
             submission_id = rv.json.get('id')
             assert submission_id
             assert pay_api_mock.called == True
+            assert legal_api_mock.called == True
             # check submission details
             created_submission = SubmissionModel.find_by_id(submission_id)
             assert created_submission
             assert created_submission.business_identifier == json_data['businessIdentifier']
             # no pay link
             assert not created_submission.invoice_id
+
+
+def test_post_plots_frozen_entity(app, client, session, jwt, requests_mock):
+    """Assure no submission is created for a frozen entity."""
+    pay_api_mock = requests_mock.post(f"{app.config.get('PAYMENT_SVC_URL')}/payment-requests", exc=requests.exceptions.ConnectTimeout)
+
+    current_dir = os.path.dirname(__file__)
+    with open(
+        os.path.join(current_dir, '..', '..', 'mocks', 'significantIndividualsFiling', 'valid.json')
+    ) as file:
+        json_data = json.load(file)
+
+        mocked_entity_response = {"business" : {"adminFreeze" : True, "state" : "ACTIVE"}}
+        identifier = json_data['businessIdentifier']
+        legal_api_mock = requests_mock.get(
+            f"{app.config.get('LEGAL_SVC_URL')}/businesses/{identifier}",
+            json=mocked_entity_response
+        )
+
+        with nested_session(session):
+            rv = client.post('/plots',
+                             json=json_data,
+                             headers=create_header(jwt_manager=jwt,
+                                                   roles=['basic'],
+                                                   **{'Accept-Version': 'v1',
+                                                      'content-type': 'application/json',
+                                                      'Account-Id': 1}))
+            assert rv.status_code == HTTPStatus.BAD_REQUEST
+            assert rv.json.get('error') == ['The business is frozen']
+            assert legal_api_mock.called == True
+            assert pay_api_mock.called == False
+
+
+def test_post_plots_historical_entity(app, client, session, jwt, requests_mock):
+    """Assure no submission is created for a historical entity."""
+    pay_api_mock = requests_mock.post(f"{app.config.get('PAYMENT_SVC_URL')}/payment-requests", exc=requests.exceptions.ConnectTimeout)
+
+    current_dir = os.path.dirname(__file__)
+    with open(
+        os.path.join(current_dir, '..', '..', 'mocks', 'significantIndividualsFiling', 'valid.json')
+    ) as file:
+        json_data = json.load(file)
+
+        mocked_entity_response = {"business" : {"adminFreeze" : False, "state" : "HISTORICAL"}}
+        identifier = json_data['businessIdentifier']
+        legal_api_mock = requests_mock.get(
+            f"{app.config.get('LEGAL_SVC_URL')}/businesses/{identifier}",
+            json=mocked_entity_response
+        )
+
+        with nested_session(session):
+            rv = client.post('/plots',
+                             json=json_data,
+                             headers=create_header(jwt_manager=jwt,
+                                                   roles=['basic'],
+                                                   **{'Accept-Version': 'v1',
+                                                      'content-type': 'application/json',
+                                                      'Account-Id': 1}))
+            assert rv.status_code == HTTPStatus.BAD_REQUEST
+            assert rv.json.get('error') == ['The business is not active']
+            assert legal_api_mock.called == True
+            assert pay_api_mock.called == False
 
 
 def test_get_latest_for_entity(client, session):

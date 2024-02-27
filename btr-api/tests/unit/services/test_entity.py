@@ -31,17 +31,38 @@
 # CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
-"""This module wraps helper services used by the API."""
-from .json_schema import SchemaService
-from .pay import PayService
-from .submission import SubmissionService
-from .entity import EntityService
+"""Tests to assure the pay service."""
+import pytest
 
-PAYMENT_REQUEST_TEMPLATE = {
-    'filingInfo': {'filingTypes': [{'filingTypeCode': 'REGSIGIN'}]},
-    'businessInfo': {'corpType': 'BTR'}
-}
-btr_pay = PayService(default_invoice_payload={'filingInfo': {'filingTypes': [{'filingTypeCode': 'REGSIGIN'}]},
-                                              'businessInfo': {'corpType': 'BTR'}})
+from btr_api.services import EntityService, btr_entity
 
-btr_entity = EntityService()
+
+def test_init_app(app):
+    """Assure the init works as expected."""
+    mock_svc_url = 'https://fakeurl1'
+    mock_timeout = 99
+
+    app.config.update(LEGAL_SVC_URL=mock_svc_url)
+    app.config.update(LEGAL_SVC_TIMEOUT=mock_timeout)
+    new_entity = EntityService()
+    new_entity.init_app(app)
+    
+    assert new_entity.app == app
+    assert new_entity.svc_url == mock_svc_url
+    assert new_entity.timeout == mock_timeout
+
+
+def test_get_entity(app, jwt, mocker, requests_mock):
+    """Assure the get_entity function works as expected in btr_entity."""
+    def mock_get_token():
+        return 'token'
+    mocker.patch.object(jwt, 'get_token_auth_header', mock_get_token)
+    identifier = '12345'
+    mocked_response = {'mock': 'response'}
+    legal_api_mock = requests_mock.get(f"{app.config.get('LEGAL_SVC_URL')}/businesses/{identifier}", json=mocked_response)
+    
+    btr_entity.init_app(app)
+    resp = btr_entity.get_entity(jwt, identifier)
+
+    assert legal_api_mock.called == True
+    assert resp.json() == mocked_response

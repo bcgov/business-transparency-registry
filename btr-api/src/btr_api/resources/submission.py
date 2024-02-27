@@ -47,7 +47,8 @@ from btr_api.common.auth import jwt
 from btr_api.exceptions import ExternalServiceException, exception_response
 from btr_api.models import Submission as SubmissionModel, User as UserModel
 from btr_api.models.submission import SubmissionSerializer
-from btr_api.services import btr_pay, SchemaService, SubmissionService
+from btr_api.services import btr_pay, btr_entity, SchemaService, SubmissionService
+from btr_api.services.validator import validate_entity
 
 bp = Blueprint("submission", __name__)
 
@@ -109,6 +110,15 @@ def create_register():
         [valid, errors] = schema_service.validate(schema_name, json_input)
         if not valid:
             return {"errors": errors}, HTTPStatus.BAD_REQUEST
+
+        # get entity
+        identifier = json_input['businessIdentifier']
+        entity = btr_entity.get_entity(jwt, identifier).json()
+
+        # validate entity; return BAD_REQUEST for historial companies and frozem company
+        entity_errors = validate_entity(entity)
+        if entity_errors:
+            return {"error": entity_errors}, HTTPStatus.BAD_REQUEST
 
         # create submission
         submission = SubmissionService.create_submission(json_input, user.id)
