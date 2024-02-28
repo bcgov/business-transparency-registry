@@ -44,7 +44,7 @@ from flask import Blueprint, current_app, g, jsonify, request
 from flask_cors import cross_origin
 
 from btr_api.common.auth import jwt
-from btr_api.exceptions import ExternalServiceException, exception_response
+from btr_api.exceptions import ExternalServiceException, exception_response, error_request_response
 from btr_api.models import Submission as SubmissionModel, User as UserModel
 from btr_api.models.submission import SubmissionSerializer
 from btr_api.services import btr_pay, btr_entity, SchemaService, SubmissionService
@@ -109,7 +109,7 @@ def create_register():
         schema_service = SchemaService()
         [valid, errors] = schema_service.validate(schema_name, json_input)
         if not valid:
-            return {"errors": errors}, HTTPStatus.BAD_REQUEST
+            return error_request_response('Invalid schema', HTTPStatus.BAD_REQUEST, errors)
 
         # get entity
         identifier = json_input['businessIdentifier']
@@ -117,7 +117,7 @@ def create_register():
 
         # validate entity; return FORBIDDEN for historial and frozen companies
         if entity_errors := validate_entity(entity):
-            return {"errors": entity_errors}, HTTPStatus.FORBIDDEN
+            return error_request_response('Invalid entity', HTTPStatus.FORBIDDEN, entity_errors)
 
         # create submission
         submission = SubmissionService.create_submission(json_input, user.id)
