@@ -105,6 +105,7 @@ class Config:  # pylint: disable=too-few-public-methods
     JWT_OIDC_LASTNAME = os.getenv('JWT_OIDC_LASTNAME', 'lastname')
 
     PAYMENT_SVC_URL = os.getenv('PAY_API_URL', '') + os.getenv('PAY_API_VERSION', '')
+    LEGAL_SVC_URL = os.getenv('LEGAL_API_URL', '') + os.getenv('LEGAL_API_VERSION_2', '')
 
 
 class Production(Config):  # pylint: disable=too-few-public-methods
@@ -147,6 +148,7 @@ class Testing(Config):  # pylint: disable=too-few-public-methods
         f"{DATABASE_TEST_HOST}:{DATABASE_TEST_PORT}/{DATABASE_TEST_NAME}"
     )
     PAYMENT_SVC_URL = 'https://test-pay-url'
+    LEGAL_SVC_URL = 'https://test-legal-url'
 
     # JWT OIDC settings
     # JWT_OIDC_TEST_MODE will set jwt_manager to use

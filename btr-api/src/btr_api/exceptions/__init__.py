@@ -14,4 +14,4 @@
 """Application Specific Exceptions/Responses, to manage handled errors."""
 from .exceptions import (AuthorizationException, BusinessException, DatabaseException,  # noqa: I001
                          ExternalServiceException)  # noqa: I001
-from .responses import bad_request_response, exception_response
+from .responses import error_request_response, exception_response

@@ -1,4 +1,4 @@
-# Copyright © 2023 Province of British Columbia
+# Copyright © 2024 Province of British Columbia
 #
 # Licensed under the BSD 3 Clause License, (the "License");
 # you may not use this file except in compliance with the License.
@@ -31,29 +31,38 @@
 # CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
-"""Exception responses."""
-from http import HTTPStatus
+"""Tests to assure the pay service."""
+import pytest
 
-from flask import jsonify, current_app
-
-from .exceptions import BaseExceptionE
+from btr_api.services import EntityService, btr_entity
 
 
-def error_request_response(message: str, http_status: HTTPStatus, errors: list[dict[str, str]] = None):
-    """Build generic request response with errors."""
-    return jsonify({'message': message, 'details': errors or []}), http_status
+def test_init_app(app):
+    """Assure the init works as expected."""
+    mock_svc_url = 'https://fakeurl1'
+    mock_timeout = 99
+
+    app.config.update(LEGAL_SVC_URL=mock_svc_url)
+    app.config.update(LEGAL_SVC_TIMEOUT=mock_timeout)
+    new_entity = EntityService()
+    new_entity.init_app(app)
+    
+    assert new_entity.app == app
+    assert new_entity.svc_url == mock_svc_url
+    assert new_entity.timeout == mock_timeout
 
 
-def exception_response(exception: BaseExceptionE):
-    """Build exception error response."""
-    current_app.logger.error(repr(exception))
-    try:
-        message = exception.message or 'Error processing request.'
-        detail = exception.error or repr(exception)
-        status_code = exception.status_code or HTTPStatus.INTERNAL_SERVER_ERROR
-    except Exception:  # noqa B902; Catch all scenario.
-        # uncaught exception
-        message = 'Error processing request.'
-        detail = repr(exception)
-        status_code = HTTPStatus.INTERNAL_SERVER_ERROR
-    return jsonify({'message': message, 'detail': detail}), status_code
+def test_get_entity(app, jwt, mocker, requests_mock):
+    """Assure the get_entity function works as expected in btr_entity."""
+    def mock_get_token():
+        return 'token'
+    mocker.patch.object(jwt, 'get_token_auth_header', mock_get_token)
+    identifier = '12345'
+    mocked_response = {'mock': 'response'}
+    legal_api_mock = requests_mock.get(f"{app.config.get('LEGAL_SVC_URL')}/businesses/{identifier}", json=mocked_response)
+    
+    btr_entity.init_app(app)
+    resp = btr_entity.get_entity(jwt, identifier)
+
+    assert legal_api_mock.called == True
+    assert resp.json() == mocked_response

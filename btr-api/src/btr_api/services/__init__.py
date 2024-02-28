@@ -35,6 +35,7 @@
 from .json_schema import SchemaService
 from .pay import PayService
 from .submission import SubmissionService
+from .entity import EntityService
 
 PAYMENT_REQUEST_TEMPLATE = {
     'filingInfo': {'filingTypes': [{'filingTypeCode': 'REGSIGIN'}]},
@@ -42,3 +43,5 @@ PAYMENT_REQUEST_TEMPLATE = {
 }
 btr_pay = PayService(default_invoice_payload={'filingInfo': {'filingTypes': [{'filingTypeCode': 'REGSIGIN'}]},
                                               'businessInfo': {'corpType': 'BTR'}})
+
+btr_entity = EntityService()
