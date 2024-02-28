@@ -43,7 +43,7 @@ from btr_api.exceptions import ExternalServiceException
 
 class EntityService:
     """
-    A class that provides utility functions for connecting with the BC Registries entity api.
+    A class that provides utility functions for connecting with the BC Registries legal api.
     """
     app: Flask = None
     svc_url: str = None

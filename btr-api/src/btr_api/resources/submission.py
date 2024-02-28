@@ -115,10 +115,9 @@ def create_register():
         identifier = json_input['businessIdentifier']
         entity = btr_entity.get_entity(jwt, identifier).json()
 
-        # validate entity; return BAD_REQUEST for historial companies and frozem company
-        entity_errors = validate_entity(entity)
-        if entity_errors:
-            return {"error": entity_errors}, HTTPStatus.BAD_REQUEST
+        # validate entity; return FORBIDDEN for historial and frozen companies
+        if entity_errors := validate_entity(entity):
+            return {"errors": entity_errors}, HTTPStatus.FORBIDDEN
 
         # create submission
         submission = SubmissionService.create_submission(json_input, user.id)
