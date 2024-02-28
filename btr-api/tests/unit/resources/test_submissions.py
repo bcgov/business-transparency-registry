@@ -122,7 +122,7 @@ def test_post_plots(app, session, client, jwt, mocker, requests_mock, test_name,
             
             elif expected_response == HTTPStatus.FORBIDDEN:
                 assert pay_api_mock.called == False
-                assert rv.json.get('error') == legal_api_errors
+                assert rv.json.get('errors') == legal_api_errors
 
 
 def test_get_latest_for_entity(client, session):
