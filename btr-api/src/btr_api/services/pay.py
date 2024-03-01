@@ -52,7 +52,7 @@ class PayService:
     timeout: int = None
 
     def __init__(self, app: Flask = None, default_invoice_payload: dict = None):
-        """Initialize the Solr environment."""
+        """Initialize the pay service."""
         if app:
             self.init_app(app)
         if default_invoice_payload:

@@ -95,7 +95,7 @@ const getPersonAndOwnershipAndControlStatements = (sif: SignificantIndividualFil
       statementDate: si.startDate,
       statementType: BodsStatementTypeE.PERSON_STATEMENT,
       taxResidencies: SiToBtrBodsConverters.getTaxResidenciesFromSi(si),
-      statementID: UUIDv4()
+      statementID: si.uuid || UUIDv4()
     }
 
     const oocs: BtrBodsOwnershipOrControlI = {
@@ -108,7 +108,6 @@ const getPersonAndOwnershipAndControlStatements = (sif: SignificantIndividualFil
       statementDate: si.startDate,
       statementType: BodsStatementTypeE.OWNERSHIP_OR_CONTROL_STATEMENT,
       subject: { describedByEntityStatement: '' }
-
     }
 
     ret.personStatements.push(personStatement)

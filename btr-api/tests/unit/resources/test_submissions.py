@@ -55,6 +55,8 @@ def test_get_plots(client, session, jwt, test_name, submission_type, payload):
 def test_post_plots_db_mocked(app, session, client, jwt, mocker, requests_mock):
     """Assure post submission works (db mocked)."""
     pay_api_mock = requests_mock.post(f"{app.config.get('PAYMENT_SVC_URL')}/payment-requests", json={'id': 978})
+    auth_mock = requests_mock.post(app.config.get('SSO_SVC_TOKEN_URL'), json={'access_token': 'token'})
+    bor_api_mock = requests_mock.put(f"{app.config.get('BOR_SVC_URL')}/internal/solr/update", json={'message': 'Update accepted'})
 
     current_dir = os.path.dirname(__file__)
     mock_user_save = mocker.patch.object(UserModel, 'save')
@@ -80,18 +82,51 @@ def test_post_plots_db_mocked(app, session, client, jwt, mocker, requests_mock):
 
     mock_user_save.assert_called_once()
     mock_submission_save.assert_called()
-    assert pay_api_mock.called == True
     assert legal_api_mock.called == True
+    assert pay_api_mock.called == True
+    assert auth_mock.called == True
+    assert bor_api_mock.called == True
     assert pay_api_mock.request_history[0].json() == {
         'filingInfo': {'filingTypes': [{'filingTypeCode': 'REGSIGIN'}]},
         'businessInfo': {'corpType': 'BTR', 'businessIdentifier': json_data['businessIdentifier']},
         'details': [{'label': 'Incorporation Number: ', 'value': json_data['businessIdentifier']}]}
+    assert bor_api_mock.request_history[0].json() == {
+        'business': {'adminFreeze': False, 'state': 'ACTIVE'},
+        'owners': [{
+            'interestedParty': {
+                'describedByPersonStatement': 'bd4061d6-1a24-4356-93f3-c489b56610a4',
+                'email': 'test@test.gov.bc.ca',
+                'hasTaxNumber': True,
+                'isComponent': False,
+                'names': [{'fullName': 'Full Name', 'type': 'individual'}],
+                'nationalities': [{'code': 'CA', 'name': 'Canada'}],
+                'personType': 'knownPerson',
+                'publicationDetails': {'bodsVersion': '1.0', 'publicationDate': '2022-12-31', 'publisher': {'name': 'Publisher Name', 'source': {'url': 'http://source.url'}, 'uri': 'http://publisher.uri'}},
+                'source': {'asserted': '2023-02-18', 'description': 'The description', 'metadata': 'Metadata', 'retrievedAt': '2023-02-28T23:17:17Z', 'url': 'https://yourwebsite.com'},
+                'statementDate': '2023-02-28',
+                'statementID': 'bd4061d6-1a24-4356-93f3-c489b56610a4',
+                'statementType': 'personStatement'
+            },
+            'interests': [
+                {'beneficialOwnershipOrControl': True, 'details': '', 'directOrIndirect': 'direct', 'share': {'exact': 27}, 'startDate': '2023-03-01', 'type': 'otherInfluenceOrControl'},
+                {'beneficialOwnershipOrControl': True, 'details': 'SharesThroughRightsOrExercisedInConcert', 'directOrIndirect': 'unknown', 'startDate': '2023-03-01', 'type': 'shareholding'},
+                {'beneficialOwnershipOrControl': True, 'details': '', 'directOrIndirect': 'direct', 'startDate': '2023-01-01', 'type': 'appointmentOfBoard'}],
+            'isComponent': False,
+            'publicationDetails': {'bodsVersion': '1.0', 'publicationDate': '2022-12-31', 'publisher': {'name': 'Publisher Name', 'source': {'url': 'http://source.url'}, 'uri': 'http://publisher.uri'}},
+            'source': {'asserted': '2023-02-18', 'description': 'The description', 'metadata': 'Metadata', 'retrievedAt': '2023-02-28T23:17:17Z', 'url': 'https://yourwebsite.com'},
+            'statementDate': '2023-02-28',
+            'statementID': 'bd4061d6-1a24-4356-93f3-c489b56610a3',
+            'statementType': 'ownershipOrControlStatement',
+            'subject': {'describedByEntityStatement': 'bd4061d6-1a24-4356-93f3-c489b56610a2'}}],
+        'ceasedOwners': []}
 
 
 def test_post_plots(app, client, session, jwt, requests_mock):
     """Assure post submission works."""
     mocked_invoice_id = 9876
     pay_api_mock = requests_mock.post(f"{app.config.get('PAYMENT_SVC_URL')}/payment-requests", json={'id': mocked_invoice_id})
+    auth_mock = requests_mock.post(app.config.get('SSO_SVC_TOKEN_URL'), json={'access_token': 'token'})
+    bor_api_mock = requests_mock.put(f"{app.config.get('BOR_SVC_URL')}/internal/solr/update", json={'message': 'Update accepted'})
 
     current_dir = os.path.dirname(__file__)
     with open(
@@ -120,8 +155,9 @@ def test_post_plots(app, client, session, jwt, requests_mock):
             assert rv.status_code == HTTPStatus.CREATED
             submission_id = rv.json.get('id')
             assert submission_id
-            assert pay_api_mock.called == True
             assert legal_api_mock.called == True
+            assert pay_api_mock.called == True
+            assert bor_api_mock.called == True
             # check submission details
             created_submission = SubmissionModel.find_by_id(submission_id)
             assert created_submission
@@ -137,6 +173,8 @@ def test_post_plots(app, client, session, jwt, requests_mock):
 def test_post_plots_pay_error(app, client, session, jwt, requests_mock):
     """Assure post submission works (pay error)."""
     pay_api_mock = requests_mock.post(f"{app.config.get('PAYMENT_SVC_URL')}/payment-requests", exc=requests.exceptions.ConnectTimeout)
+    auth_mock = requests_mock.post(app.config.get('SSO_SVC_TOKEN_URL'), json={'access_token': 'token'})
+    bor_api_mock = requests_mock.put(f"{app.config.get('BOR_SVC_URL')}/internal/solr/update", json={'message': 'Update accepted'})
 
     current_dir = os.path.dirname(__file__)
     with open(
@@ -162,14 +200,96 @@ def test_post_plots_pay_error(app, client, session, jwt, requests_mock):
             assert rv.status_code == HTTPStatus.CREATED
             submission_id = rv.json.get('id')
             assert submission_id
-            assert pay_api_mock.called == True
             assert legal_api_mock.called == True
+            assert pay_api_mock.called == True
+            assert auth_mock.called == True
+            assert bor_api_mock.called == True
             # check submission details
             created_submission = SubmissionModel.find_by_id(submission_id)
             assert created_submission
             assert created_submission.business_identifier == json_data['businessIdentifier']
             # no pay link
             assert not created_submission.invoice_id
+
+
+def test_post_plots_auth_error(app, client, session, jwt, requests_mock):
+    """Assure post submission works (auth get token error)."""
+    pay_api_mock = requests_mock.post(f"{app.config.get('PAYMENT_SVC_URL')}/payment-requests", json={'id': 1234})
+    auth_mock = requests_mock.post(app.config.get('SSO_SVC_TOKEN_URL'), exc=requests.exceptions.ConnectTimeout)
+    bor_api_mock = requests_mock.put(f"{app.config.get('BOR_SVC_URL')}/internal/solr/update", json={})
+
+    current_dir = os.path.dirname(__file__)
+    with open(
+        os.path.join(current_dir, '..', '..', 'mocks', 'significantIndividualsFiling', 'valid.json')
+    ) as file:
+        json_data = json.load(file)
+
+        mocked_entity_response = {"business" : {"adminFreeze" : False, "state" : "ACTIVE"}}
+        identifier = json_data['businessIdentifier']
+        legal_api_mock = requests_mock.get(
+            f"{app.config.get('LEGAL_SVC_URL')}/businesses/{identifier}",
+            json=mocked_entity_response
+        )
+
+        with nested_session(session):
+            rv = client.post('/plots',
+                             json=json_data,
+                             headers=create_header(jwt_manager=jwt,
+                                                   roles=['basic'],
+                                                   **{'Accept-Version': 'v1',
+                                                      'content-type': 'application/json',
+                                                      'Account-Id': 1}))
+            assert rv.status_code == HTTPStatus.CREATED
+            submission_id = rv.json.get('id')
+            assert submission_id
+            assert legal_api_mock.called == True
+            assert pay_api_mock.called == True
+            assert auth_mock.called == True
+            assert bor_api_mock.called == False
+            # check submission details
+            created_submission = SubmissionModel.find_by_id(submission_id)
+            assert created_submission
+            assert created_submission.business_identifier == json_data['businessIdentifier']
+
+
+def test_post_plots_bor_error(app, client, session, jwt, requests_mock):
+    """Assure post submission works (bor error)."""
+    pay_api_mock = requests_mock.post(f"{app.config.get('PAYMENT_SVC_URL')}/payment-requests", json={'id': 1234})
+    auth_mock = requests_mock.post(app.config.get('SSO_SVC_TOKEN_URL'), json={'access_token': 'token'})
+    bor_api_mock = requests_mock.put(f"{app.config.get('BOR_SVC_URL')}/internal/solr/update", exc=requests.exceptions.ConnectTimeout)
+
+    current_dir = os.path.dirname(__file__)
+    with open(
+        os.path.join(current_dir, '..', '..', 'mocks', 'significantIndividualsFiling', 'valid.json')
+    ) as file:
+        json_data = json.load(file)
+
+        mocked_entity_response = {"business" : {"adminFreeze" : False, "state" : "ACTIVE"}}
+        identifier = json_data['businessIdentifier']
+        legal_api_mock = requests_mock.get(
+            f"{app.config.get('LEGAL_SVC_URL')}/businesses/{identifier}",
+            json=mocked_entity_response
+        )
+
+        with nested_session(session):
+            rv = client.post('/plots',
+                             json=json_data,
+                             headers=create_header(jwt_manager=jwt,
+                                                   roles=['basic'],
+                                                   **{'Accept-Version': 'v1',
+                                                      'content-type': 'application/json',
+                                                      'Account-Id': 1}))
+            assert rv.status_code == HTTPStatus.CREATED
+            submission_id = rv.json.get('id')
+            assert submission_id
+            assert legal_api_mock.called == True
+            assert pay_api_mock.called == True
+            assert auth_mock.called == True
+            assert bor_api_mock.called == True
+            # check submission details
+            created_submission = SubmissionModel.find_by_id(submission_id)
+            assert created_submission
+            assert created_submission.business_identifier == json_data['businessIdentifier']
 
 
 @pytest.mark.parametrize("test_name, admin_freeze, state, expected_response, errors", [
@@ -180,6 +300,8 @@ def test_post_plots_invalid_entity(app, client, session, jwt, requests_mock, tes
     """Assure no submission is created for frozen and historical entities."""
     mocked_invoice_id = 9876
     pay_api_mock = requests_mock.post(f"{app.config.get('PAYMENT_SVC_URL')}/payment-requests", json={'id': mocked_invoice_id})
+    auth_mock = requests_mock.post(app.config.get('SSO_SVC_TOKEN_URL'), json={'access_token': 'token'})
+    bor_api_mock = requests_mock.put(f"{app.config.get('BOR_SVC_URL')}/internal/solr/update", json={'message': 'Update accepted'})
 
     current_dir = os.path.dirname(__file__)
     with open(
@@ -206,6 +328,8 @@ def test_post_plots_invalid_entity(app, client, session, jwt, requests_mock, tes
             assert rv.json.get('details') == errors
             assert legal_api_mock.called == True
             assert pay_api_mock.called == False
+            assert auth_mock.called == False
+            assert bor_api_mock.called == False
 
 
 def test_get_latest_for_entity(client, session):
