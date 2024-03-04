@@ -106,6 +106,11 @@ class Config:  # pylint: disable=too-few-public-methods
 
     PAYMENT_SVC_URL = os.getenv('PAY_API_URL', '') + os.getenv('PAY_API_VERSION', '')
     LEGAL_SVC_URL = os.getenv('LEGAL_API_URL', '') + os.getenv('LEGAL_API_VERSION_2', '')
+    BOR_SVC_URL = os.getenv('BOR_API_URL', '') + os.getenv('BOR_API_VERSION', '')
+
+    SSO_SVC_TOKEN_URL = os.getenv('KEYCLOAK_AUTH_TOKEN_URL')
+    SVC_ACC_CLIENT_ID = os.getenv('BTR_SERVICE_ACCOUNT_CLIENT_ID')
+    SVC_ACC_CLIENT_SECRET = os.getenv('BTR_SERVICE_ACCOUNT_SECRET')
 
 
 class Production(Config):  # pylint: disable=too-few-public-methods
@@ -149,6 +154,11 @@ class Testing(Config):  # pylint: disable=too-few-public-methods
     )
     PAYMENT_SVC_URL = 'https://test-pay-url'
     LEGAL_SVC_URL = 'https://test-legal-url'
+    BOR_SVC_URL = 'https://test-bor-url'
+
+    SSO_SVC_TOKEN_URL = 'https://test-token-url'
+    SVC_ACC_CLIENT_ID = 'service-account'
+    SVC_ACC_CLIENT_SECRET = 'fake'
 
     # JWT OIDC settings
     # JWT_OIDC_TEST_MODE will set jwt_manager to use

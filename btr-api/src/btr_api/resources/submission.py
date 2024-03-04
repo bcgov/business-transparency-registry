@@ -47,7 +47,7 @@ from btr_api.common.auth import jwt
 from btr_api.exceptions import ExternalServiceException, exception_response, error_request_response
 from btr_api.models import Submission as SubmissionModel, User as UserModel
 from btr_api.models.submission import SubmissionSerializer
-from btr_api.services import btr_pay, btr_entity, SchemaService, SubmissionService
+from btr_api.services import SchemaService, SubmissionService, btr_auth, btr_bor, btr_entity, btr_pay
 from btr_api.services.validator import validate_entity
 
 bp = Blueprint("submission", __name__)
@@ -113,7 +113,7 @@ def create_register():
 
         # get entity
         identifier = json_input['businessIdentifier']
-        entity = btr_entity.get_entity(jwt, identifier).json()
+        entity: dict = btr_entity.get_entity(jwt, identifier).json()
 
         # validate entity; return FORBIDDEN for historial and frozen companies
         if entity_errors := validate_entity(entity):
@@ -127,13 +127,25 @@ def create_register():
             # create invoice in pay system
             invoice_resp = btr_pay.create_invoice(account_id, jwt, json_input)
             submission.invoice_id = invoice_resp.json()['id']
-            submission.save()
         except ExternalServiceException as err:
             # Log error and continue to return successfully (does NOT block the submission)
             # TODO: save this information to a table so that a daily job can pick these up and retry them
             # Current process is for OPs to retry the invoice creation manually
             current_app.logger.info(err.error)
             current_app.logger.error('Error creating invoice for submission: %s', submission.id)
+
+        submission.save()
+        try:
+            # update record in BOR (search)
+            token = btr_auth.get_bearer_token()
+            btr_bor.update_owners(submission, entity, token)
+
+        except ExternalServiceException as err:
+            # Log error and continue to return successfully (does NOT block the submission)
+            # TODO: save this information to a table so that a daily job can pick these up and retry them
+            # Current process is for OPs to retry the invoice creation manually
+            current_app.logger.info(err.error)
+            current_app.logger.error('Error updating record in BOR for submission: %s', submission.id)
 
         return jsonify(id=submission.id), HTTPStatus.CREATED
 
