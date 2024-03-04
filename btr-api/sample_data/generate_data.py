@@ -128,10 +128,8 @@ def _get_person_stmnts(statement_date: str, locale: str, num: int = 1):
         address = {
             'street': fake.street_address(),
             'city': fake.city(),
-            'country': {
-                'alpha_2': address_country.alpha_2,
-                'name': address_country.name
-            },
+            'country': address_country.alpha_2,
+            'countryName': address_country.name,
             'postalCode': fake.postcode()
         }
 
