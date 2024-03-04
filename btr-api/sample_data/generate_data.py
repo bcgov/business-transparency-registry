@@ -93,7 +93,7 @@ def _get_entity_stmnt(statement_date: str):
         'identifiers': [{'id': f"TST-E{fake.uuid4()}", 'scheme': 'TST-E'}],
         'publicationDetails': {
             "publicationDate":  statement_date,
-            "bodsVersion": "1.0",
+            "bodsVersion": "3.0",
             "publisher": {
                 "uri": "http://publisher.uri",
                 "name": "Publisher Name",
@@ -155,7 +155,7 @@ def _get_person_stmnts(statement_date: str, locale: str, num: int = 1):
             'isComponent': fake.random_element([True, False]),
             'publicationDetails': {
                 "publicationDate":  statement_date,
-                "bodsVersion": "1.0",
+                "bodsVersion": "3.0",
                 "publisher": {
                     "uri": "http://publisher.uri",
                     "name": "Publisher Name",
