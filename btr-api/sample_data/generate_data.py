@@ -118,12 +118,10 @@ def _get_person_stmnts(statement_date: str, locale: str, num: int = 1):
         return pycountry.countries.get(alpha_2=locale.split('_')[1])
 
     for _ in range(num):
-        name = {
-            'type': fake.random_element(['legal', 'knownAs', 'previous']),
-            'fullName': fake.name(),
-            'familyName': fake.last_name(),
-            'givenName': fake.first_name()
-        }
+        names = [
+            { 'type': 'individual', 'fullName': fake.name()},
+            { 'type': 'alternative', 'fullName': fake.name()}
+        ]
 
         address_country = get_country_from_locale()
 
@@ -166,7 +164,7 @@ def _get_person_stmnts(statement_date: str, locale: str, num: int = 1):
                     }
                 }
             },
-            'names': name,
+            'names': names,
             'nationalities': [nationality],
             'identifiers': [
                 # NOTE: fake identifiers + tax numbers
@@ -199,7 +197,7 @@ def _get_filing(entity_stmnt: dict, person_stmnts: dict, ooc_stmnts: list):
 def generate_data():
     """Generate sample data for search."""
     user = User.find_by_username('service-account-nds')
-    
+
     if not user:
         current_app.logger.debug('error user not found.')
         return
