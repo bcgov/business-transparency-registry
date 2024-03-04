@@ -27,7 +27,7 @@ fake = Faker()
 
 INTEREST_TYPES = ['otherInfluenceOrControl', 'shareholding', 'votingRights']
 
-# 1) the locale used for generating fake data, 
+# 1) the locale used for generating sample data, 
 # 2) the number of filings to generate, and
 # 3) the number of SI individuals in a filing
 SETTING = {
@@ -105,13 +105,17 @@ def _get_entity_stmnt(statement_date: str):
     }
 
 
-def _get_person_stmnts(statement_date: str, num: int = 1):
+def _get_person_stmnts(statement_date: str, locale: str, num: int = 1):
     """Return the person statements."""
     person_stmnts: list[dict] = []
 
     def get_random_email():
         """Return a randomly generated email."""
         return (fake.name()).replace(' ', '_') + '@test.com'
+    
+    def get_country_from_locale():
+        """Return the country object based on the given locale."""
+        return pycountry.countries.get(alpha_2=locale.split('_')[1])
 
     for _ in range(num):
         name = {
@@ -121,17 +125,28 @@ def _get_person_stmnts(statement_date: str, num: int = 1):
             'givenName': fake.first_name()
         }
 
+        address_country = get_country_from_locale()
+
         address = {
-            'type': fake.random_element(['legal', 'knownAs', 'previous']),
-            'fullName': fake.name(),
-            'familyName': fake.last_name(),
-            'givenName': fake.first_name()
+            'street': fake.street_address(),
+            'city': fake.city(),
+            'country': {
+                'alpha_2': address_country.alpha_2,
+                'name': address_country.name
+            },
+            'postalCode': fake.postcode()
         }
 
-        random_country = fake.random_element(pycountry.countries)
+        if address_country.alpha_2 == 'CA':
+            address['region'] = fake.province_abbr()
+        elif address_country.alpha_2 == 'US':
+            address['region'] = fake.state_abbr()
+
+        nationality_country = fake.random_element(pycountry.countries)
+
         nationality = {
-            'code': random_country.alpha_2,
-            'name': random_country.name
+            'code': nationality_country.alpha_2,
+            'name': nationality_country.name
         }
 
         person_stmnts.append({
@@ -154,7 +169,7 @@ def _get_person_stmnts(statement_date: str, num: int = 1):
             'names': name,
             'nationalities': [nationality],
             'identifiers': [
-                # NOTE: fake identifiers + tax numbers based on _link
+                # NOTE: fake identifiers + tax numbers
                 {'id': f"TST-P{fake.uuid4()}", 'scheme': 'TST-P'},
                 {'id': f"TST-TAX{fake.uuid4()}", 'scheme': 'TST-TAX'},
             ],
@@ -184,7 +199,7 @@ def _get_filing(entity_stmnt: dict, person_stmnts: dict, ooc_stmnts: list):
 def generate_data():
     """Generate sample data for search."""
     user = User.find_by_username('service-account-nds')
-
+    
     if not user:
         current_app.logger.debug('error user not found.')
         return
@@ -194,8 +209,9 @@ def generate_data():
     for locale, settings in SETTING.items():
         fake = Faker(locale)
         for _ in range(settings[0]):
-            entity_stmnt = _get_entity_stmnt(get_fake_date())
-            person_stmnts = _get_person_stmnts(get_fake_date(), settings[1])
+            date = get_fake_date()
+            entity_stmnt = _get_entity_stmnt(date)
+            person_stmnts = _get_person_stmnts(date, locale, settings[1])
             ooc_stmnts = _get_ooc_stmnts(entity_stmnt, person_stmnts)
             filing = _get_filing(entity_stmnt, person_stmnts, ooc_stmnts)
             SubmissionService.create_submission(filing, user.id).save_to_session()
