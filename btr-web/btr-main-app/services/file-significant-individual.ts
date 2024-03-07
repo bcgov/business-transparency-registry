@@ -76,11 +76,12 @@ const getPersonAndOwnershipAndControlStatements = (sif: SignificantIndividualFil
     source.assertedBy = [{ name: si.profile.fullName }]
     source.description = BtrSourceDescriptionProvidedByBtrGovBC
 
+    const address = SiToBtrBodsConverters.getBodsAddressFromSi(si)
     const personStatement: BtrBodsPersonI = {
       externalInfluence: si.externalInfluence || ExternalInfluenceE.NO_EXTERNAL_INFLUENCE,
       missingInfoReason: si.missingInfoReason,
-      placeOfResidence: si.profile.address,
-      addresses: [si.profile.address],
+      placeOfResidence: address,
+      addresses: [address],
       birthDate: si.profile.birthDate,
       email: si.profile.email,
       hasTaxNumber: si.profile.hasTaxNumber,

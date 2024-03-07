@@ -271,12 +271,10 @@ export const btrSubmissionExampleMock = {
         addresses: [
           {
             city: 'Beamsville',
-            country: {
-              alpha_2: 'CA',
-              name: 'Canada'
-            },
-            line1: '4520 Ontario',
-            line2: 'This is optional test',
+            country: 'CA',
+            countryName: 'Canada',
+            street: '4520 Ontario',
+            streetAdditional: 'This is optional test',
             locationDescription: 'This is optional extra description test',
             postalCode: 'L0R 1B0',
             region: 'ON'
@@ -317,12 +315,10 @@ export const btrSubmissionExampleMock = {
         personType: 'knownPerson',
         placeOfResidence: {
           city: 'Beamsville',
-          country: {
-            alpha_2: 'CA',
-            name: 'Canada'
-          },
-          line1: '4520 Ontario',
-          line2: 'This is optional test',
+          country: 'CA',
+          countryName: 'Canada',
+          street: '4520 Ontario',
+          streetAdditional: 'This is optional test',
           locationDescription: 'This is optional extra description test',
           postalCode: 'L0R 1B0',
           region: 'ON'
@@ -355,12 +351,10 @@ export const btrSubmissionExampleMock = {
         addresses: [
           {
             city: 'Scarborough',
-            country: {
-              alpha_2: 'CA',
-              name: 'Canada'
-            },
-            line1: 'F-3331 Danforth Ave',
-            line2: '',
+            country: 'CA',
+            countryName: 'Canada',
+            street: 'F-3331 Danforth Ave',
+            streetAdditional: '',
             locationDescription: '',
             postalCode: 'M1L 1C5',
             region: 'ON'
@@ -393,12 +387,10 @@ export const btrSubmissionExampleMock = {
         personType: 'knownPerson',
         placeOfResidence: {
           city: 'Scarborough',
-          country: {
-            alpha_2: 'CA',
-            name: 'Canada'
-          },
-          line1: 'F-3331 Danforth Ave',
-          line2: '',
+          country: 'CA',
+          countryName: 'Canada',
+          street: 'F-3331 Danforth Ave',
+          streetAdditional: '',
           locationDescription: '',
           postalCode: 'M1L 1C5',
           region: 'ON'
@@ -436,12 +428,10 @@ export const btrSubmissionExampleMock = {
         addresses: [
           {
             city: 'Vancouver',
-            country: {
-              alpha_2: 'CA',
-              name: 'Canada'
-            },
-            line1: '403-1265 Barclay St',
-            line2: '',
+            country: 'CA',
+            countryName: 'Canada',
+            street: '403-1265 Barclay St',
+            streetAdditional: '',
             locationDescription: '',
             postalCode: 'V6E 1H5',
             region: 'BC'
@@ -467,12 +457,10 @@ export const btrSubmissionExampleMock = {
         personType: 'knownPerson',
         placeOfResidence: {
           city: 'Vancouver',
-          country: {
-            alpha_2: 'CA',
-            name: 'Canada'
-          },
-          line1: '403-1265 Barclay St',
-          line2: '',
+          country: 'CA',
+          countryName: 'Canada',
+          street: '403-1265 Barclay St',
+          streetAdditional: '',
           locationDescription: '',
           postalCode: 'V6E 1H5',
           region: 'BC'

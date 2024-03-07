@@ -154,7 +154,6 @@
             "string",
             "null"
           ],
-          "maxLength": 2,
           "description": "For Canada or USA, 2 character province or state code."
         },
         "postalCode": {
@@ -168,23 +167,13 @@
           "description": "Additional description, or description how to reach address that has no postal code/street etc.."
         },
         "country": {
-          "title": "Country",
-          "description": "Country object with The 2-letter country code (ISO 3166-1) for this address and name.",
-          "type": "object",
-          "properties": {
-            "alpha_2": {
-              "type": "string",
-              "minLength": 2,
-              "maxLength": 2
-            },
-            "name": {
-              "type": "string"
-            }
-          },
-          "required": [
-            "alpha_2",
-            "name"
-          ]
+          "type": "string",
+          "maxLength": 2,
+          "description": "The 2-letter country code (ISO 3166-1) for this address."
+        },
+        "countryName": {
+          "type": "string",
+          "description": "The name of the country for this address."
         }
       }
     },

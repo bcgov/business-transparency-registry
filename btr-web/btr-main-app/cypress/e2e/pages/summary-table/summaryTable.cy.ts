@@ -126,6 +126,8 @@ describe('pages -> Summary Table', () => {
   })
 
   it('test the DONE button in the Edit form', () => {
+    cy.addTestIndividuals()
+
     cy.get('[data-cy=summary-table-name]').first().invoke('text').then((textOrig) => {
       cy.get('[data-cy=edit-button]').first().click()
 
