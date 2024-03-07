@@ -35,6 +35,7 @@ export interface BodsBtrAddressI {
   postalCode: string
   locationDescription: string
   country: string
+  countryName: string
 }
 
 export interface BodsNameI {

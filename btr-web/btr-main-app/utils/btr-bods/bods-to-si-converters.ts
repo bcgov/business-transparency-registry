@@ -1,10 +1,11 @@
-import { BtrCountryI } from '../../../btr-common-components/interfaces/btr-address-i'
+import { BtrCountryI, BtrAddressI } from '../../../btr-common-components/interfaces/btr-address-i'
 import { CitizenshipTypeE } from '../../../btr-common-components/enums/citizenship-type-e'
 import { BodsInterestTypeE, BodsNameTypeE } from '~/enums/btr-bods-e'
 import { SignificantIndividualI } from '~/interfaces/significant-individual-i'
 import { BtrFilingI } from '~/interfaces/btr-bods/btr-filing-i'
 import { BtrBodsOwnershipOrControlI } from '~/interfaces/btr-bods/btr-bods-ownership-or-control-i'
 import { BtrBodsPersonI } from '~/interfaces/btr-bods/btr-bods-person-i'
+import { BodsBtrAddressI } from '~/interfaces/btr-bods/components-i'
 import { BtrSourceDescriptionProvidedByBtrGovBC } from '~/utils/btr-bods/btr-bods-implementations'
 import { ControlOfDirectorsI } from '~/interfaces/control-of-directors-i'
 import { ControlOfSharesI } from '~/interfaces/control-of-shares-i'
@@ -52,6 +53,23 @@ const _getCitizenships = (btrBodsPerson: BtrBodsPersonI): {
   return { citizenshipsCA, citizenshipsExCA: citizenships }
 }
 
+function _getSIAddress (btrBodsAddress: BodsBtrAddressI) {
+  const country: BtrCountryI = {
+    name: btrBodsAddress.countryName,
+    alpha_2: btrBodsAddress.country
+  }
+  const address: BtrAddressI = {
+    line1: btrBodsAddress.street,
+    line2: btrBodsAddress.streetAdditional,
+    city: btrBodsAddress.city,
+    region: btrBodsAddress.region,
+    postalCode: btrBodsAddress.postalCode,
+    locationDescription: btrBodsAddress.locationDescription,
+    country
+  }
+  return address
+}
+
 function _getTaxNumber (btrBodsPerson: BtrBodsPersonI) {
   const taxIdentifierCa =
     btrBodsPerson.identifiers.find(identifier =>
@@ -66,7 +84,7 @@ const _getSiPerson = (btrBodsPerson: BtrBodsPersonI): ProfileI => {
   return {
     fullName: _getSiName(btrBodsPerson, BodsNameTypeE.INDIVIDUAL),
     preferredName: _getSiName(btrBodsPerson, BodsNameTypeE.ALTERNATIVE),
-    address: btrBodsPerson.addresses ? btrBodsPerson.addresses[0] : {},
+    address: btrBodsPerson.addresses ? _getSIAddress(btrBodsPerson.addresses[0]) : {},
     competency: {
       decisionMaking: btrBodsPerson.decisionMaking,
       financialAffairs: btrBodsPerson.financialAffairs

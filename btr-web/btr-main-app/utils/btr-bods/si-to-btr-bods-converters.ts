@@ -1,4 +1,6 @@
-import { BodsCountryI, BodsIdentifierI, BodsInterestI, BodsNameI } from '~/interfaces/btr-bods/components-i'
+import {
+  BodsCountryI, BodsIdentifierI, BodsInterestI, BodsNameI, BodsBtrAddressI
+} from '~/interfaces/btr-bods/components-i'
 import {
   BodsInterestDirectOrIndirectTypeI,
   BodsInterestTypeE,
@@ -6,6 +8,19 @@ import {
   BodsPersonTypeE
 } from '~/enums/btr-bods-e'
 import { SignificantIndividualI } from '~/interfaces/significant-individual-i'
+
+const getBodsAddressFromSi = (si: SignificantIndividualI): BodsBtrAddressI => {
+  return {
+    street: si.profile.address.line1,
+    streetAdditional: si.profile.address.line2,
+    city: si.profile.address.city,
+    region: si.profile.address.region,
+    postalCode: si.profile.address.postalCode,
+    locationDescription: si.profile.address.locationDescription,
+    country: si.profile.address.country.alpha_2,
+    countryName: si.profile.address.country.name
+  }
+}
 
 const getBodsNamesFromSi = (si: SignificantIndividualI) => {
   const names: BodsNameI[] = [
@@ -192,6 +207,7 @@ const getTaxResidenciesFromSi = (si: SignificantIndividualI): BodsCountryI[] => 
 }
 
 export default {
+  getBodsAddressFromSi,
   getBodsNamesFromSi,
   getBodsIdentifiersFromSi,
   getBodsNationalitiesFromSi,

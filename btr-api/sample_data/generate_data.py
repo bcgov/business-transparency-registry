@@ -172,6 +172,7 @@ def _get_person_stmnts(statement_date: str, locale: str, num: int = 1):
             
             'birthDate': statement_date,
             'addresses': [address],
+            'placeOfResidence': address,
             'taxResidencies': [nationality],
             'email': get_random_email(),
             'hasTaxNumber': fake.random_element([True, False])

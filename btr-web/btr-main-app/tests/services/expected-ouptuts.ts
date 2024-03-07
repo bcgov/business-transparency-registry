@@ -62,21 +62,23 @@ export const OwnershipOrControlStatements = {
     {
       placeOfResidence: {
         city: 'Victoria',
-        country: { name: 'Canada', alpha_2: 'CA' },
-        line1: '1234 test street',
+        country: 'CA',
+        countryName: 'Canada',
+        street: '1234 test street',
         postalCode: 'V1A 2B3',
         region: 'BC',
-        line2: '',
+        streetAdditional: '',
         locationDescription: ''
       },
       addresses: [
         {
           city: 'Victoria',
-          country: { name: 'Canada', alpha_2: 'CA' },
-          line1: '1234 test street',
+          country: 'CA',
+          countryName: 'Canada',
+          street: '1234 test street',
           postalCode: 'V1A 2B3',
           region: 'BC',
-          line2: '',
+          streetAdditional: '',
           locationDescription: ''
         }
       ],
