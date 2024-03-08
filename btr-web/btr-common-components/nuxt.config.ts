@@ -1,5 +1,6 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
+  ssr: false,
   ui: {
     icons: ['mdi'] // add here more icon sets from iconifiy if needed.
   },
