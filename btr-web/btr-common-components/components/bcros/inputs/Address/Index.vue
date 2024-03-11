@@ -4,7 +4,7 @@
       <!-- country -->
       <USelectMenu
         v-model="country"
-        :ui-menu="{ placeholder: countryError ? 'text-red-500' : 'text-gray-700' }"
+        :ui-menu="{ label: countryError ? 'text-red-500' : 'text-gray-700' }"
         by="alpha_2"
         class="w-full"
         :placeholder="$t('labels.country')"

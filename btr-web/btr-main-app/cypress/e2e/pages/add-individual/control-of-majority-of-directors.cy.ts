@@ -21,7 +21,7 @@ describe('pages -> Add individual', () => {
 
     const checkboxes = cy.get('[data-cy="testControlOfDirectors"]').should('exist')
 
-    checkboxes.get('[data-cy="control-of-directors-tooltip"]').trigger('mouseover')
+    checkboxes.get('[data-cy="control-of-directors-tooltip"]').trigger('mouseenter')
     cy.get('[data-cy="control-of-directors-tooltip-content"').should('exist')
     checkboxes.get('[data-cy="control-of-directors-tooltip"]').trigger('mouseleave')
     cy.get('[data-cy="control-of-directors-tooltip-content"').should('not.exist')
