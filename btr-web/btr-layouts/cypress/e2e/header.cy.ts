@@ -7,9 +7,13 @@ describe('Layout -> Header (logged out)', () => {
   const headerMenus = headerContainerActions + '__menus'
 
   beforeEach(() => {
+    cy.intercept('GET', 'https://app.launchdarkly.com/**').as('DARKLY')
+    cy.intercept('POST', 'https://events.launchdarkly.com/**').as('DARKLY_POST')
+    cy.intercept('GET', 'https://dev.loginproxy.gov.bc.ca/**').as('LOGIN_PROXY')
     cy.visit('/')
     // give time for the keycloak init / page hydration
-    cy.wait(3000)
+    cy.wait(['@DARKLY', '@DARKLY_POST', '@LOGIN_PROXY'])
+    cy.wait(100)
   })
 
   it('renders header in logged out state', () => {
@@ -42,7 +46,7 @@ describe('Layout -> Header (logged out)', () => {
     Cypress.config('defaultCommandTimeout', 30000)
     cy.get('[data-cy=logged-out-menu]').click()
     cy.get('[data-cy="menu-item"]').eq(0).click()
-    cy.wait(3000)
+    cy.wait(['@DARKLY', '@LOGIN_PROXY'])
     cy.origin('https://idtest.gov.bc.ca', () => {
       cy.url().should('include', 'login/entry#start')
     })
@@ -52,7 +56,7 @@ describe('Layout -> Header (logged out)', () => {
     Cypress.config('defaultCommandTimeout', 30000)
     cy.get('[data-cy=logged-out-menu]').click()
     cy.get('[data-cy="menu-item"]').eq(1).click()
-    cy.wait(3000)
+    cy.wait(['@DARKLY', '@LOGIN_PROXY'])
     cy.origin('https://logontest7.gov.bc.ca', () => {
       cy.url().should('include', 'clp-cgi/capBceid/logon.cgi')
     })
@@ -62,7 +66,7 @@ describe('Layout -> Header (logged out)', () => {
     Cypress.config('defaultCommandTimeout', 30000)
     cy.get('[data-cy=logged-out-menu]').click()
     cy.get('[data-cy="menu-item"]').eq(2).click()
-    cy.wait(3000)
+    cy.wait(['@DARKLY', '@LOGIN_PROXY'])
     cy.origin('https://logontest7.gov.bc.ca', () => {
       cy.url().should('include', 'clp-cgi/int/logon.cgi')
     })
@@ -71,7 +75,7 @@ describe('Layout -> Header (logged out)', () => {
   it('redirects to create account when clicked', () => {
     Cypress.config('defaultCommandTimeout', 30000)
     cy.get('[data-cy=logged-out-create-accnt]').click()
-    cy.wait(3000)
+    cy.wait(['@DARKLY', '@LOGIN_PROXY'])
     cy.origin('https://dev.account.bcregistry.gov.bc.ca', () => {
       cy.url().should('include', 'choose-authentication-method')
     })

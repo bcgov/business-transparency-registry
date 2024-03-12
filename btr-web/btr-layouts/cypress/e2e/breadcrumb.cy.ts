@@ -1,8 +1,11 @@
 describe('Layout -> Breadcrumb', () => {
   beforeEach(() => {
+    cy.intercept('GET', 'https://app.launchdarkly.com/**').as('DARKLY')
+    cy.intercept('POST', 'https://events.launchdarkly.com/**').as('DARKLY_POST')
+    cy.intercept('GET', 'https://dev.loginproxy.gov.bc.ca/**').as('LOGIN_PROXY')
     cy.visit('/')
-    // cypress does not wait for hydration so need to wait manually (effects button clicks in some cases)
-    cy.wait(1000)
+    // give time for the keycloak init / page hydration
+    cy.wait(['@DARKLY', '@DARKLY_POST', '@LOGIN_PROXY', '@LOGIN_PROXY', '@LOGIN_PROXY', '@LOGIN_PROXY'])
   })
 
   it('renders breadcrumbs', () => {
