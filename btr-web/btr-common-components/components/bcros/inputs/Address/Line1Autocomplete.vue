@@ -1,6 +1,6 @@
 <template>
   <div class="relative w-full">
-    <Combobox :nullable="true" v-model="val">
+    <Combobox v-model="val" :nullable="true">
       <div class="mt-1">
         <div
           :class="[
@@ -81,6 +81,7 @@ import { BtrAddressI } from '~/interfaces/btr-address-i'
 
 const runtimeConfig = useRuntimeConfig()
 
+// eslint-disable-next-line func-call-spacing
 const emit = defineEmits<{
   (e: 'addrAutoCompleted', value: BtrAddressI): void
   (e: 'update:modelValue', value: string): void
