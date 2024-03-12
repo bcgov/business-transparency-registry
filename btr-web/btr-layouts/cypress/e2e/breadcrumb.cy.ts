@@ -5,7 +5,7 @@ describe('Layout -> Breadcrumb', () => {
     cy.intercept('GET', 'https://dev.loginproxy.gov.bc.ca/**').as('LOGIN_PROXY')
     cy.visit('/')
     // give time for the keycloak init / page hydration
-    cy.wait(['@LOGIN_PROXY', '@DARKLY', '@DARKLY_POST'])
+    cy.wait(['@LOGIN_PROXY'])
   })
 
   it('renders breadcrumbs', () => {
