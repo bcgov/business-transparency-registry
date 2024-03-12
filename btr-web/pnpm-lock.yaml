@@ -15,7 +15,7 @@ dependencies:
     specifier: ^2.3.0
     version: 2.3.0
   launchdarkly-vue-client-sdk:
-    specifier: 2.0.4
+    specifier: ^2.0.4
     version: 2.0.4(vue@3.4.21)
   moment:
     specifier: ^2.29.4
