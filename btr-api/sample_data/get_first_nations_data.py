@@ -1,3 +1,11 @@
+'''
+There is no existing list of First Nations names that we can directly use. 
+The following script is to generate a list of First Nations names from a the 'ethno_historic_sites.csv' file in
+https://github.com/bcgov/inclusive-names-service/tree/main/docs/test_data
+
+'first_nation_names.csv' has been created. It can be updated in the future if we have a 
+better source of First Nations names.
+'''
 import requests
 import csv
 import re

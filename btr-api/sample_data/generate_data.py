@@ -34,9 +34,9 @@ INTEREST_TYPES = ['otherInfluenceOrControl', 'shareholding', 'votingRights']
 # B: the number of filings to generate (each filing will have a unique business identifier),
 # C: the number of SI individuals in a filing
 SETTING = {
-    'en_CA': [2, 4],
-    'fr_CA': [2, 3],
-    'first_nations_CA': [1, 2]
+    'en_CA': [1000, 1],
+    'fr_CA': [500, 2],
+    'first_nations_CA': [500, 2]
 }
 
 def get_fake_date() -> str:
@@ -226,8 +226,7 @@ def _get_filing(entity_stmnt: dict, person_stmnts: dict, ooc_stmnts: list, local
 
 def generate_data():
     """Generate sample data for search."""
-    # user = User.find_by_username('service-account-nds')
-    user = User.find_by_username('bcsc/zgcbnhm6u7fprxi7ajt6kff7gsky43ta')
+    user = User.find_by_username('service-account-nds')
 
     if not user:
         current_app.logger.debug('error user not found.')
