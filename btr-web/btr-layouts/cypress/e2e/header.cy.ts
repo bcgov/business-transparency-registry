@@ -7,7 +7,7 @@ describe('Layout -> Header (logged out)', () => {
   const headerMenus = headerContainerActions + '__menus'
 
   beforeEach(() => {
-    cy.intercept('GET', 'https://app.launchdarkly.com/**').as('DARKLY')
+    cy.intercept('https://app.launchdarkly.com/**').as('DARKLY')
     cy.intercept('POST', 'https://events.launchdarkly.com/**').as('DARKLY_POST')
     cy.intercept('GET', 'https://dev.loginproxy.gov.bc.ca/**').as('LOGIN_PROXY')
     cy.visit('/')
