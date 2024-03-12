@@ -78,5 +78,5 @@ const options = [{
   label: t('labels.countryOfCitizenship.others')
 }]
 
-const hasError = computed<Boolean>(() => props.errors.length > 0)
+const hasError = computed<Boolean>(() => props.errors?.length > 0)
 </script>

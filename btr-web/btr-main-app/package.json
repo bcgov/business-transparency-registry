@@ -37,7 +37,6 @@
     "vitest-environment-nuxt": "0.11.0"
   },
   "dependencies": {
-    "nuxt": "^3.7.4",
     "pinia": "^2.1.7"
   }
 }
