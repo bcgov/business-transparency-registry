@@ -1,6 +1,6 @@
 <template>
   <div class="relative w-full">
-    <Combobox v-model="line1">
+    <Combobox :nullable="true" v-model="val">
       <div class="mt-1">
         <div
           :class="[
@@ -21,6 +21,7 @@
         >
           <ComboboxInput
             :placeholder="$t('labels.line1')"
+            :display-value="() => line1"
             class="bg-transparent pl-2 w-full h-full focus:outline-none"
             :class="errorVersion ? 'placeholder-red-500' : 'placeholder-gray-700'"
             data-cy="address-street"
@@ -49,7 +50,6 @@
             :key="address.Id"
             v-slot="{ selected, active }"
             as="template"
-            :value="address"
           >
             <li
               class="cursor-default select-none py-2 pl-10 pr-4"
@@ -82,9 +82,9 @@ import { BtrAddressI } from '~/interfaces/btr-address-i'
 const runtimeConfig = useRuntimeConfig()
 
 const emit = defineEmits<{
-  addrAutoCompleted: [value: BtrAddressI]
-  'update:modelValue': [value: string]
-  blur: [value: FocusEvent]
+  (e: 'addrAutoCompleted', value: BtrAddressI): void
+  (e: 'update:modelValue', value: string): void
+  (e: 'blur', value: FocusEvent): void
 }>()
 const props = defineProps({
   countryIso3166Alpha2: { type: String, required: false, default: 'CA' },
@@ -98,6 +98,8 @@ const canadaPostApiKey = runtimeConfig.public.addressCompleteKey
 const suggestedAddresses: Ref<Array<CanadaPostApiFindResponseItemI>> = ref([])
 // @ts-ignore
 const line1: Ref<string> = ref(props.modelValue)
+const val = ref()
+val.value = { id: 'empty' }
 const selectFromDropdown = async (address: CanadaPostApiFindResponseItemI, event: Event) => {
   if (address?.Next === 'Find') {
     event.stopPropagation()
