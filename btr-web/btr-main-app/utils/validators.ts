@@ -25,14 +25,14 @@ export function getFullNameValidator () {
   return z.preprocess(normalizeName as (arg: unknown) => unknown, z.string()
     .min(1, t('errors.validation.fullName.empty'))
     .max(150, t('errors.validation.fullName.maxLengthExceeded'))
-    .refine(validateNameCharacters, t('errors.validation.fullName.specialCharacter')))
+  )
 }
 
 export function getPreferredNameValidator () {
   const { t } = useI18n()
   return z.preprocess(normalizeName as (arg: unknown) => unknown, z.string()
     .max(150, t('errors.validation.preferredName.maxLengthExceeded'))
-    .refine(validatePreferredName, t('errors.validation.preferredName.specialCharacter')))
+  )
 }
 
 export function getTaxNumberValidator () {

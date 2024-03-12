@@ -12,12 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 """The BTR data generator script."""
+import csv
 import sys
 
 import pycountry
 from faker import Faker
 from flask import current_app
-from random import sample, randint
+from random import sample, randint, shuffle
 
 from btr_api import create_app
 from btr_api.models import User, db
@@ -27,13 +28,15 @@ fake = Faker()
 
 INTEREST_TYPES = ['otherInfluenceOrControl', 'shareholding', 'votingRights']
 
-# 1) the locale used for generating sample data, 
-# 2) the number of filings to generate, and
-# 3) the number of SI individuals in a filing
+# Data generation setup: 
+# mapping of locale to the number of filings and the number of SI individuals in a filing (A: [B, C])
+# A: the locale used for generating sample data, 
+# B: the number of filings to generate (each filing will have a unique business identifier),
+# C: the number of SI individuals in a filing
 SETTING = {
-    'en_CA': [10, 3],
-    'fr_FR': [2, 2],
-    'jp_JP': [1, 1]
+    'en_CA': [2, 4],
+    'fr_CA': [2, 3],
+    'first_nations_CA': [1, 2]
 }
 
 def get_fake_date() -> str:
@@ -55,8 +58,8 @@ def _get_ooc_interests(date):
         if interest['type'] in ['shareholding', 'votingRights']:
             interest['share'] = { 'exact': fake.random_int(25, 100) }
             interest['details'] = 'controlType.sharesOrVotes.registeredOwner'
-        else:
-            interest['details'] = 'controlType.other'
+        elif interest['type'] == 'otherInfluenceOrControl':
+            interest['details'] = 'other reasons'
 
         ooc_interests.append(interest)
 
@@ -105,6 +108,26 @@ def _get_entity_stmnt(statement_date: str):
     }
 
 
+def _get_first_nations_names(num: int):
+    """Return the first nations names."""
+    first_nations_names = []
+    with open('first_nation_names.csv', mode='r', newline='', encoding='utf-8') as file:
+        reader = csv.reader(file)
+        for row in reader:
+            if row:
+                full_name = row[0]
+                if len(row) == 2:
+                    preferred_name = row[1]
+                else:
+                    preferred_name = ''
+                first_nations_names.append((full_name, preferred_name))
+                if len(first_nations_names) == num:
+                    break
+    
+    shuffle(first_nations_names)
+    return first_nations_names
+
+
 def _get_person_stmnts(statement_date: str, locale: str, num: int = 1):
     """Return the person statements."""
     person_stmnts: list[dict] = []
@@ -115,13 +138,21 @@ def _get_person_stmnts(statement_date: str, locale: str, num: int = 1):
     
     def get_country_from_locale():
         """Return the country object based on the given locale."""
-        return pycountry.countries.get(alpha_2=locale.split('_')[1])
+        return pycountry.countries.get(alpha_2=locale.split('_')[-1])
 
-    for _ in range(num):
-        names = [
-            { 'type': 'individual', 'fullName': fake.name()},
-            { 'type': 'alternative', 'fullName': fake.name()}
-        ]
+    first_nations_names = _get_first_nations_names(num)
+
+    for i in range(num):
+        if locale == 'first_nations_CA':
+            names = [
+                { 'type': 'individual', 'fullName': first_nations_names[i][0] },
+                { 'type': 'alternative', 'fullName': first_nations_names[i][1]}
+            ]
+        else:
+            names = [
+                { 'type': 'individual', 'fullName': fake.name()},
+                { 'type': 'alternative', 'fullName': fake.name()}
+            ]
 
         address_country = get_country_from_locale()
 
@@ -181,10 +212,10 @@ def _get_person_stmnts(statement_date: str, locale: str, num: int = 1):
     return person_stmnts
 
 
-def _get_filing(entity_stmnt: dict, person_stmnts: dict, ooc_stmnts: list):
+def _get_filing(entity_stmnt: dict, person_stmnts: dict, ooc_stmnts: list, locale: str):
     """Return the filing based on the given statements."""
     filings = {
-        'businessIdentifier': 'sample-business-' + fake.uuid4(),
+        'businessIdentifier': locale + '_business_' + fake.uuid4(),
         'effectiveDate': entity_stmnt['statementDate'],
         'entityStatement': entity_stmnt,
         'personStatements': person_stmnts,
@@ -195,7 +226,8 @@ def _get_filing(entity_stmnt: dict, person_stmnts: dict, ooc_stmnts: list):
 
 def generate_data():
     """Generate sample data for search."""
-    user = User.find_by_username('service-account-nds')
+    # user = User.find_by_username('service-account-nds')
+    user = User.find_by_username('bcsc/zgcbnhm6u7fprxi7ajt6kff7gsky43ta')
 
     if not user:
         current_app.logger.debug('error user not found.')
@@ -204,13 +236,17 @@ def generate_data():
     global fake
 
     for locale, settings in SETTING.items():
-        fake = Faker(locale)
+        if locale == 'first_nations_CA':
+            fake = Faker('en_CA')
+        else:
+            fake = Faker(locale)
+        
         for _ in range(settings[0]):
             date = get_fake_date()
             entity_stmnt = _get_entity_stmnt(date)
             person_stmnts = _get_person_stmnts(date, locale, settings[1])
             ooc_stmnts = _get_ooc_stmnts(entity_stmnt, person_stmnts)
-            filing = _get_filing(entity_stmnt, person_stmnts, ooc_stmnts)
+            filing = _get_filing(entity_stmnt, person_stmnts, ooc_stmnts, locale)
             SubmissionService.create_submission(filing, user.id).save_to_session()
         
         db.session.commit()

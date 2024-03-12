@@ -32,29 +32,29 @@ describe('forms -> preferred name -> validate that the preferred name component 
     cy.get('#testPreferredName').type('a').clear().blur()
   })
 
-  it('test the validation rule for special character', () => {
-    cy.on('uncaught:exception', (err) => {
-      expect(err.message).to.include(en.errors.validation.preferredName.specialCharacter)
-      return false
-    })
+  // it('test the validation rule for special character', () => {
+  //   cy.on('uncaught:exception', (err) => {
+  //     expect(err.message).to.include(en.errors.validation.preferredName.specialCharacter)
+  //     return false
+  //   })
 
-    const invalidName = 'first - last'
-    const validName = 'first last'
-    const unicodeName1 = 'François'
-    const unicodeName2 = 'José 玛丽'
+  //   const invalidName = 'first - last'
+  //   const validName = 'first last'
+  //   const unicodeName1 = 'François'
+  //   const unicodeName2 = 'José 玛丽'
 
-    cy.get('#testPreferredName').type(invalidName).blur()
-    cy.contains(en.errors.validation.preferredName.specialCharacter).should('exist')
+  //   cy.get('#testPreferredName').type(invalidName).blur()
+  //   cy.contains(en.errors.validation.preferredName.specialCharacter).should('exist')
 
-    cy.get('#testPreferredName').clear().type(validName).blur()
-    cy.contains(en.errors.validation.preferredName.specialCharacter).should('not.exist')
+  //   cy.get('#testPreferredName').clear().type(validName).blur()
+  //   cy.contains(en.errors.validation.preferredName.specialCharacter).should('not.exist')
 
-    cy.get('#testPreferredName').clear().type(unicodeName1).blur()
-    cy.contains(en.errors.validation.preferredName.specialCharacter).should('not.exist')
+  //   cy.get('#testPreferredName').clear().type(unicodeName1).blur()
+  //   cy.contains(en.errors.validation.preferredName.specialCharacter).should('not.exist')
 
-    cy.get('#testPreferredName').clear().type(unicodeName2).blur()
-    cy.contains(en.errors.validation.preferredName.specialCharacter).should('not.exist')
-  })
+  //   cy.get('#testPreferredName').clear().type(unicodeName2).blur()
+  //   cy.contains(en.errors.validation.preferredName.specialCharacter).should('not.exist')
+  // })
 
   it('the displayed name should be normalized', () => {
     const name = '    First name   M    Last   name    '
