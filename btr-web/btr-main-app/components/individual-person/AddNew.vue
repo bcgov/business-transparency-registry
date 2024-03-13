@@ -64,6 +64,17 @@
           {{ $t('texts.beneficialOwnershipAssessmentText1') }}
         </p>
       </div> -->
+      
+      <UForm>
+        <IndividualPersonControlPercentageDropdown
+          id="shareRange"
+          v-model="shareRange"
+        />
+        {{ shareRange }}
+      </UForm>
+
+
+
       <UForm
         ref="ownerFormBase"
         :schema="formSchema"
@@ -294,6 +305,9 @@
 <script setup lang="ts">
 import { z, ZodError, ZodIssue } from 'zod'
 import type { FormError } from '#ui/types'
+
+const shareRange = ref('')
+
 
 const { t } = useI18n()
 
