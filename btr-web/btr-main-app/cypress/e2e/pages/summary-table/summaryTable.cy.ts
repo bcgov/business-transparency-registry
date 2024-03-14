@@ -91,7 +91,7 @@ describe('pages -> Summary Table', () => {
         .get('[data-cy="address-line1-autocomplete"] input')
         .should('have.value', testData.profile1.address.streetAddress)
         .get('[data-cy="address-city"]').should('have.value', testData.profile1.address.city)
-        .get('[data-cy="address-region-select"]').contains(testData.profile1.address.province[1])
+        .get('[data-cy="address-region-select"]').contains(testData.profile1.address.province[0])
         .get('[data-cy="address-postal-code"]').should('have.value', testData.profile1.address.postalCode)
         .get('[data-cy="countryOfCitizenshipRadioGroup"]').get('[type="radio"][value="citizen"]').should('be.checked')
         .get('[name="taxNumber"]').should('have.value', testData.profile1.taxNumber)

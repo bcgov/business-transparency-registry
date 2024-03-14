@@ -1,5 +1,5 @@
 export function getBcrosHomeDashboardCrumb (): BreadcrumbI {
-  const { t } = useI18n()
+  const t = useNuxtApp().$i18n.t
   return {
     text: t('breadcrumbs.registryDashboard'),
     href: useRuntimeConfig().public.registryDashboardURL
@@ -7,12 +7,12 @@ export function getBcrosHomeDashboardCrumb (): BreadcrumbI {
 }
 
 export function getBeneficialOwnerChangeCrumb (): BreadcrumbI {
-  const { t } = useI18n()
+  const t = useNuxtApp().$i18n.t
   return { text: t('breadcrumbs.beneficialOwnerChange') }
 }
 
 export function getBusinessDashboardCrumb (): BreadcrumbI {
-  const { t } = useI18n()
+  const t = useNuxtApp().$i18n.t
   const account = useBcrosAccount()
   return {
     text: t('breadcrumbs.businessDashboard'),
@@ -30,6 +30,6 @@ export function getBusinessNameCrumb (): BreadcrumbI {
 }
 
 export function getMyRegDetailsCrumb (): BreadcrumbI {
-  const { t } = useI18n()
+  const t = useNuxtApp().$i18n.t
   return { text: t('breadcrumbs.myRegDetails') }
 }

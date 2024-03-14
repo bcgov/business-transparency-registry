@@ -18,7 +18,7 @@ describe('pages -> Add individual', () => {
       .should('not.be.checked')
 
     // click not checked
-    cy.get('[data-cy="external-influence-radio-can-be-influenced"]')
+    cy.get('input[data-cy="external-influence-radio-can-be-influenced"]')
       .click()
 
     cy.get('[data-cy="external-influence-radio-no-influence"]')

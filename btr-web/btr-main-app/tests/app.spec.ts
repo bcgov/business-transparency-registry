@@ -1,6 +1,6 @@
 import { expect, describe, test } from 'vitest'
 import { VueWrapper } from '@vue/test-utils'
-import { mountSuspended } from 'vitest-environment-nuxt/utils'
+import { mountSuspended } from '@nuxt/test-utils/runtime'
 import { mockedI18n } from '../../btr-common-components/tests/unit/utils/mockedi18n'
 import app from '~/app.vue'
 

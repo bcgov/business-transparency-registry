@@ -34,8 +34,8 @@ export default defineAppConfig({
       }
     },
     selectMenu: {
+      label: 'text-gray-700',
       rounded: 'rounded-none',
-      placeholder: 'text-gray-700',
       option: {
         rounded: 'rounded-none',
         active: 'text-primary-500',

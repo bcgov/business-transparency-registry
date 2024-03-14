@@ -1,6 +1,6 @@
 // @vitest-environment nuxt
 import { it, expect } from 'vitest'
-import { mountSuspended } from 'vitest-environment-nuxt/utils'
+import { mountSuspended } from '@nuxt/test-utils/runtime'
 import { createI18n } from 'vue-i18n'
 import { FormError } from '#ui/types'
 

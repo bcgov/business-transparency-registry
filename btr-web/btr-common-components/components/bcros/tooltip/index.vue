@@ -1,6 +1,5 @@
 <template>
   <UTooltip
-    :id="id"
     ref="tooltipRef"
     :text="text"
     :popper="popper"
@@ -24,19 +23,15 @@ defineProps<{
 }>()
 
 const tooltipRef = ref()
-
-function showTooltipPopup () {
+const showTooltipPopup = () => {
   if (tooltipRef.value) {
-    tooltipRef.value.onMouseOver()
+    tooltipRef.value.onMouseEnter()
   }
 }
 
-function closeTooltipPopup () {
+const closeTooltipPopup = () => {
   if (tooltipRef.value) {
     tooltipRef.value.onMouseLeave()
   }
 }
 </script>
-
-<style scoped>
-</style>

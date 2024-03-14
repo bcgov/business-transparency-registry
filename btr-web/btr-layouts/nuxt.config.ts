@@ -20,7 +20,7 @@ export default defineNuxtConfig({
     '@nuxtjs/eslint-module',
     '@nuxtjs/i18n',
     '@pinia/nuxt',
-    'nuxt-vitest'
+    '@nuxt/test-utils/module'
   ],
   imports: {
     dirs: ['enums', 'interfaces', 'stores']
