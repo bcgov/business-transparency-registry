@@ -1,5 +1,5 @@
 import { expect, describe, test } from 'vitest'
-import { mountSuspended } from 'vitest-environment-nuxt/utils'
+import { mountSuspended } from '@nuxt/test-utils/runtime'
 
 import { BcrosFooter } from '#components'
 

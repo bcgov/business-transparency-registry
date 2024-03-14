@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import { VueWrapper, flushPromises } from '@vue/test-utils'
-import { mountSuspended } from 'vitest-environment-nuxt/utils'
+import { mountSuspended } from '@nuxt/test-utils/runtime'
 import { mockedI18n } from '../../utils/mockedi18n'
 
 import {

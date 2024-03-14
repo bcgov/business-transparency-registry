@@ -1,7 +1,7 @@
 // @vitest-environment nuxt
-import { describe, it, expect } from 'vitest'
+import { describe, it, expect, beforeEach, afterEach } from 'vitest'
 import { VueWrapper, flushPromises } from '@vue/test-utils'
-import { mountSuspended } from 'vitest-environment-nuxt/utils'
+import { mountSuspended } from '@nuxt/test-utils/runtime'
 
 import { BcrosDatePicker, BcrosInputsDateSelect } from '#components'
 
