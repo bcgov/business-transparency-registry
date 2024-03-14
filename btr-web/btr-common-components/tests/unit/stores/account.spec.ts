@@ -1,13 +1,14 @@
 import { describe, expect, it, vi } from 'vitest'
-import { setActivePinia, createPinia } from 'pinia'
-import { axiosRequestMocks, axiosDefaultMock } from '../utils/mockedAxios'
-import { testParsedToken, testProfile, testUserSettings } from '../utils/mockedData'
-import { useBcrosAccount } from '@/stores/account'
-import { useBcrosKeycloak } from '@/stores/keycloak'
+// import { setActivePinia, createPinia } from 'pinia'
+// import { axiosRequestMocks, axiosDefaultMock } from '../utils/mockedAxios'
+import { axiosDefaultMock } from '../utils/mockedAxios'
+// import { testParsedToken, testProfile, testUserSettings } from '../utils/mockedData'
+// import { useBcrosAccount } from '@/stores/account'
+// import { useBcrosKeycloak } from '@/stores/keycloak'
 
 describe('Account Store Tests', () => {
-  let account: any
-  let keycloak: any
+  // let account: any
+  // let keycloak: any
   // axios mocks
   vi.mock('axios', () => { return { default: { ...axiosDefaultMock } } })
 

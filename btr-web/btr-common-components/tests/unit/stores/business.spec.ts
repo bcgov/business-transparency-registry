@@ -1,7 +1,9 @@
 import { describe, expect, it, vi } from 'vitest'
 import { setActivePinia, createPinia, storeToRefs } from 'pinia'
-import { axiosRequestMocks, axiosDefaultMock } from '../utils/mockedAxios'
-import { testBusinessBEN, testBusinessSP, testBusinessContact } from '../utils/mockedData'
+// import { axiosRequestMocks, axiosDefaultMock } from '../utils/mockedAxios'
+import { axiosDefaultMock } from '../utils/mockedAxios'
+// import { testBusinessBEN, testBusinessSP, testBusinessContact } from '../utils/mockedData'
+import { testBusinessBEN, testBusinessSP } from '../utils/mockedData'
 import { useBcrosBusiness } from '@/stores/business'
 
 describe('Business Store Tests', () => {
@@ -10,8 +12,8 @@ describe('Business Store Tests', () => {
   const {
     currentBusiness,
     currentBusinessIdentifier,
-    currentBusinessName,
-    currentBusinessContact
+    currentBusinessName
+    //, currentBusinessContact
   } = storeToRefs(business)
   // axios mocks
   vi.mock('axios', () => { return { default: { ...axiosDefaultMock } } })
@@ -71,7 +73,8 @@ describe('Business Store Tests', () => {
   //   expect(axiosRequestMocks.get).not.toHaveBeenCalled()
   // })
   //
-  // it('loads corresponding business data if a different business is cached when load business is called', async () => {
+  // it('loads corresponding business data if a different business is cached when load business is called',
+  // async () => {
   //   currentBusiness.value = testBusinessSP
   //   expect(axiosRequestMocks.get).not.toHaveBeenCalled()
   //   await business.loadBusiness(testBusinessBEN.business.identifier)

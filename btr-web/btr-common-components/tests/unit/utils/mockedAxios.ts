@@ -1,5 +1,5 @@
 import { vi } from 'vitest'
-import { testProfile, testUserSettings, testBusinessBEN, testBusinessSP, testBusinessContact } from './mockedData'
+// import { testProfile, testUserSettings, testBusinessBEN, testBusinessSP, testBusinessContact } from './mockedData'
 
 export const axiosRequestMocks = {}
 // todo: re-evaluate if fix or remove this hoisted mock #20310
