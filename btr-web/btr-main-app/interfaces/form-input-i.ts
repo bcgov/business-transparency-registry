@@ -2,8 +2,9 @@ export interface FormInputI {
   fullName: string
   preferredName: string
   email: string
-  percentOfShares: string | number
-  percentOfVotes: string | number
+  percentOfShares: PercentageRangeE
+  percentOfVotes: PercentageRangeE
+
   controlOfShares: ControlOfSharesI
   otherReasons: string
   controlOfDirectors: ControlOfDirectorsI

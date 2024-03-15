@@ -64,17 +64,6 @@
           {{ $t('texts.beneficialOwnershipAssessmentText1') }}
         </p>
       </div> -->
-      
-      <UForm>
-        <IndividualPersonControlPercentageDropdown
-          id="shareRange"
-          v-model="shareRange"
-        />
-        {{ shareRange }}
-      </UForm>
-
-
-
       <UForm
         ref="ownerFormBase"
         :schema="formSchema"
@@ -87,7 +76,7 @@
           <p>
             {{ $t('texts.sharesAndVotes.controlPercentage') }}
           </p>
-          <IndividualPersonControlPercentage
+          <!-- <IndividualPersonControlPercentage
             id="percentageOfShares"
             v-model="significantIndividual.percentOfShares"
             name="percentOfShares"
@@ -101,6 +90,24 @@
             name="percentOfVotes"
             placeholder="Percent of Votes"
             :variant="percentOfVotesInvalid ? 'error' : 'bcGov'"
+            data-cy="testPercentOfVotes"
+          /> -->
+          <IndividualPersonControlPercentageDropdown
+            id="percentageOfShares"
+            v-model="significantIndividual.percentOfShares"
+            name="percentOfShares"
+            :errors="percentOfSharesErrors"
+            :placeholder="'% of shares'"
+            type="shares"
+            data-cy="testPercentOfShares"
+          />
+          <IndividualPersonControlPercentageDropdown
+            id="percentageOfVotes"
+            v-model="significantIndividual.percentOfVotes"
+            name="percentOfVotes"
+            :errors="percenOfVotesErrors"
+            :placeholder="'% of votes'"
+            type="votes"
             data-cy="testPercentOfVotes"
           />
         </div>
@@ -306,9 +313,6 @@
 import { z, ZodError, ZodIssue } from 'zod'
 import type { FormError } from '#ui/types'
 
-const shareRange = ref('')
-
-
 const { t } = useI18n()
 
 const emits = defineEmits<{
@@ -367,8 +371,8 @@ const missingInfo = ref(
   significantIndividual.value.missingInfoReason !== undefined && significantIndividual.value.missingInfoReason !== ''
 )
 
-const percentOfSharesInvalid = ref(false)
-const percentOfVotesInvalid = ref(false)
+const percentOfSharesErrors: Ref<FormError[]> = ref([])
+const percenOfVotesErrors: Ref<FormError[]> = ref([])
 
 const controlOfSharesErrors: Ref<FormError[]> = ref([])
 const controlOfDirectorsErrors: Ref<FormError[]> = ref([])
@@ -413,7 +417,6 @@ function validateForm () {
     region: significantIndividual.value.profile.address.region,
     postalCode: significantIndividual.value.profile.address.postalCode,
     locationDescription: significantIndividual.value.profile.address.locationDescription,
-
     citizenshipCA: significantIndividual.value.profile.citizenshipCA,
     citizenshipsExCA: significantIndividual.value.profile.citizenshipsExCA,
     hasTaxNumber: significantIndividual.value.profile.hasTaxNumber,
@@ -431,12 +434,9 @@ watch(() => profileFormBase.value?.errors, (val: { path: string }[]) => {
   preferredNameInvalid.value = val.filter(val => val.path === 'preferredName').length > 0
   emailInvalid.value = val.filter(val => val.path === 'email').length > 0
 })
+
 watch(() => profileFormExtended.value?.errors, (val: { path: string }[]) => {
   taxNumebrInvalid.value = val.filter(val => val.path === 'taxNumber').length > 0
-})
-watch(() => ownerFormBase.value?.errors, (val: { path: string }[]) => {
-  percentOfSharesInvalid.value = val.filter(val => val.path === 'percentOfShares').length > 0
-  percentOfVotesInvalid.value = val.filter(val => val.path === 'percentOfVotes').length > 0
 })
 
 watch(() => validationResult.value, (val: ZodError) => {
@@ -450,12 +450,11 @@ watch(() => validationResult.value, (val: ZodError) => {
         })
       })
     })
-
-    ownerFormBase.value.setErrors(errors)
     profileFormBase.value.setErrors(errors)
     profileFormExtended.value.setErrors(errors)
     addressErrors.value = errors
-
+    percentOfSharesErrors.value = errors.filter((error: FormError) => error.path === 'percentOfShares')
+    percenOfVotesErrors.value = errors.filter((error: FormError) => error.path === 'percentOfVotes')
     controlOfSharesErrors.value = errors.filter((error: FormError) => error.path === 'controlOfShares')
     controlOfDirectorsErrors.value = errors.filter((error: FormError) => error.path === 'controlOfDirectors')
     birthDateErrors.value = errors.filter((error: FormError) => error.path === 'birthDate')
@@ -471,17 +470,15 @@ watch(() => validationResult.value, (val: ZodError) => {
 // When the percentOfShares and percentOfVotes are changed, re-assess the confition and remove errors if necessary
 watch(
   [() => significantIndividual.value.percentOfShares, () => significantIndividual.value.percentOfVotes],
-  (values: string[]) => {
+  (values: PercentageRangeE[]) => {
     // If the percenOfShares and percentOfVotes are not empty, remove the empty value errors
-    if (values[0] !== '' || values[1] !== '') {
+    if (values[0] !== PercentageRangeE.NO_SELECTION || values[1] !== PercentageRangeE.NO_SELECTION) {
       removeEmptyPercentageErrors()
     }
 
     // If the percentOfShares and percentOfVotes are < 25%, and the "in-concert control" checkbox is not checked,
     // the type of control error should be remove as this field is now optional
-    const shares = parseInt(values[0])
-    const votes = parseInt(values[1])
-    if ((Number.isNaN(shares) || shares < 25) && (Number.isNaN(votes) || votes < 25) &&
+    if (values[0] === PercentageRangeE.LESS_THAN_25 && values[1] === PercentageRangeE.LESS &&
       !significantIndividual.value.controlType.sharesVotes.inConcertControl) {
       controlOfSharesErrors.value = []
     }
@@ -503,10 +500,13 @@ watch(
 
     // When the "in-concert control" checkbox is unchecked
     if (!values[3]) {
-      const shares = parseInt(significantIndividual.value.percentOfShares)
-      const votes = parseInt(significantIndividual.value.percentOfVotes)
+      const shares: PercentageRangeE = significantIndividual.value.percentOfShares
+      const votes: PercentageRangeE = significantIndividual.value.percentOfVotes
       // if the percentOfShares and percentOfVotes are < 25%, remove the type of control error
-      if ((Number.isNaN(shares) || shares < 25) && (Number.isNaN(votes) || votes < 25)) {
+      if (
+        (shares === PercentageRangeE.NO_SELECTION || shares === PercentageRangeE.LESS_THAN_25) &&
+        (votes === PercentageRangeE.NO_SELECTION || votes === PercentageRangeE.LESS_THAN_25)
+      ) {
         controlOfSharesErrors.value = []
       }
 
@@ -519,13 +519,8 @@ watch(
 )
 
 function removeEmptyPercentageErrors () {
-  const missingSharesAndVotes = getMissingSharesAndVotesError()
-  const currentErrors = ownerFormBase.value.getErrors()
-  const updatedErrors = currentErrors.filter((error: FormError) => {
-    return !(error.path === missingSharesAndVotes.path[0] && error.message === missingSharesAndVotes.message) &&
-      !(error.path === missingSharesAndVotes.path[1] && error.message === missingSharesAndVotes.message)
-  })
-  ownerFormBase.value.setErrors(updatedErrors)
+  percentOfSharesErrors.value = []
+  percenOfVotesErrors.value = []
 }
 
 // When the type of director control checkboxes are changed, re-assess the condition and remove errors if necessary
@@ -605,8 +600,8 @@ const formSchema = z.object({
   fullName: getFullNameValidator(),
   preferredName: getPreferredNameValidator(),
   email: getEmailValidator(),
-  percentOfShares: getPercentageValidator(),
-  percentOfVotes: getPercentageValidator(),
+  percentOfShares: z.nativeEnum(PercentageRangeE),
+  percentOfVotes: z.nativeEnum(PercentageRangeE),
   controlOfShares: z.object({
     registeredOwner: z.boolean(),
     beneficialOwner: z.boolean(),
