@@ -8,6 +8,7 @@ import {
   BodsPersonTypeE
 } from '~/enums/btr-bods-e'
 import { SignificantIndividualI } from '~/interfaces/significant-individual-i'
+import { PercentageRangeE } from '~/enums/percentage-range-e'
 
 const getBodsAddressFromSi = (si: SignificantIndividualI): BodsBtrAddressI => {
   return {
@@ -105,66 +106,94 @@ const _createInterestSharesVotes = (
     endDate: si.endDate
   }
 }
-const _addVotes = (interest: BodsInterestI, maximum: number, sharesOrVotes: BodsInterestTypeE) => {
+
+// const _addVotes = (interest: BodsInterestI, maximum: number, sharesOrVotes: BodsInterestTypeE) => {
+//   interest.share = {
+//     maximum,
+//     exclusiveMaximum: false
+//   }
+//   interest.type = sharesOrVotes
+// }
+
+const _getPercentageRange = (interest: BodsInterestI, range: PercentageRangeE, sharesAndVotes: BodsInterestTypeE) => {
   interest.share = {
-    maximum,
+    exclusiveMinimum: true,
     exclusiveMaximum: false
   }
-  interest.type = sharesOrVotes
+
+  interest.type = sharesAndVotes
+
+  switch (range) {
+    case PercentageRangeE.LESS_THAN_25:
+      interest.share.minimum = 0
+      interest.share.maximum = 25
+      break
+    case PercentageRangeE.BETWEEN_25_AND_50:
+      interest.share.minimum = 25
+      interest.share.maximum = 50
+      break
+    case PercentageRangeE.BETWEEN_50_AND_75:
+      interest.share.minimum = 50
+      interest.share.maximum = 75
+      break
+    case PercentageRangeE.MORE_THAN_75:
+      interest.share.minimum = 75
+      interest.share.maximum = 100
+      interest.share.exclusiveMaximum = true
+      break
+  }
 }
 
-// TO-DO
 const _getSharesVotesInterests = (si: SignificantIndividualI) => {
   const interests: BodsInterestI[] = []
-
   if (si.controlType.sharesVotes.registeredOwner) {
-    if (si.percentOfVotes) {
+    if (si.percentOfVotes !== PercentageRangeE.NO_SELECTION) {
       const interest = _createInterestSharesVotes(si, BodsInterestDirectOrIndirectTypeI.DIRECT, 'registeredOwner')
-      _addVotes(interest, parseFloat(si.percentOfVotes as string), BodsInterestTypeE.VOTING_RIGHTS)
+      _getPercentageRange(interest, si.percentOfVotes, BodsInterestTypeE.VOTING_RIGHTS)
       interests.push(interest)
     }
-    if (si.percentOfShares) {
+    if (si.percentOfShares !== PercentageRangeE.NO_SELECTION) {
       const interest = _createInterestSharesVotes(si, BodsInterestDirectOrIndirectTypeI.DIRECT, 'registeredOwner')
-      _addVotes(interest, parseFloat(si.percentOfShares as string), BodsInterestTypeE.SHAREHOLDING)
+      _getPercentageRange(interest, si.percentOfShares, BodsInterestTypeE.SHAREHOLDING)
       interests.push(interest)
     }
   }
 
   if (si.controlType.sharesVotes.indirectControl) {
-    if (si.percentOfVotes) {
+    if (si.percentOfVotes !== PercentageRangeE.NO_SELECTION) {
       const interest = _createInterestSharesVotes(si, BodsInterestDirectOrIndirectTypeI.INDIRECT, 'indirectControl')
-      _addVotes(interest, parseFloat(si.percentOfVotes as string), BodsInterestTypeE.VOTING_RIGHTS)
+      _getPercentageRange(interest, si.percentOfVotes, BodsInterestTypeE.VOTING_RIGHTS)
       interests.push(interest)
     }
-    if (si.percentOfShares) {
+    if (si.percentOfShares !== PercentageRangeE.NO_SELECTION) {
       const interest = _createInterestSharesVotes(si, BodsInterestDirectOrIndirectTypeI.INDIRECT, 'indirectControl')
-      _addVotes(interest, parseFloat(si.percentOfShares as string), BodsInterestTypeE.SHAREHOLDING)
+      _getPercentageRange(interest, si.percentOfShares, BodsInterestTypeE.SHAREHOLDING)
       interests.push(interest)
     }
   }
 
   if (si.controlType.sharesVotes.inConcertControl) {
-    if (si.percentOfVotes) {
+    if (si.percentOfVotes !== PercentageRangeE.NO_SELECTION) {
       const interest = _createInterestSharesVotes(si, BodsInterestDirectOrIndirectTypeI.INDIRECT, 'inConcertControl')
-      _addVotes(interest, parseFloat(si.percentOfVotes as string), BodsInterestTypeE.VOTING_RIGHTS)
+      _getPercentageRange(interest, si.percentOfVotes, BodsInterestTypeE.VOTING_RIGHTS)
       interests.push(interest)
     }
-    if (si.percentOfShares) {
+    if (si.percentOfShares !== PercentageRangeE.NO_SELECTION) {
       const interest = _createInterestSharesVotes(si, BodsInterestDirectOrIndirectTypeI.INDIRECT, 'inConcertControl')
-      _addVotes(interest, parseFloat(si.percentOfShares as string), BodsInterestTypeE.SHAREHOLDING)
+      _getPercentageRange(interest, si.percentOfShares, BodsInterestTypeE.SHAREHOLDING)
       interests.push(interest)
     }
   }
 
   if (si.controlType.sharesVotes.beneficialOwner) {
-    if (si.percentOfVotes) {
+    if (si.percentOfVotes !== PercentageRangeE.NO_SELECTION) {
       const interest = _createInterestSharesVotes(si, BodsInterestDirectOrIndirectTypeI.INDIRECT, 'beneficialOwner')
-      _addVotes(interest, parseFloat(si.percentOfVotes as string), BodsInterestTypeE.VOTING_RIGHTS)
+      _getPercentageRange(interest, si.percentOfVotes, BodsInterestTypeE.VOTING_RIGHTS)
       interests.push(interest)
     }
-    if (si.percentOfShares) {
+    if (si.percentOfShares !== PercentageRangeE.NO_SELECTION) {
       const interest = _createInterestSharesVotes(si, BodsInterestDirectOrIndirectTypeI.INDIRECT, 'beneficialOwner')
-      _addVotes(interest, parseFloat(si.percentOfShares as string), BodsInterestTypeE.SHAREHOLDING)
+      _getPercentageRange(interest, si.percentOfShares, BodsInterestTypeE.SHAREHOLDING)
       interests.push(interest)
     }
   }
