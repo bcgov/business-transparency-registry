@@ -32,8 +32,10 @@ describe('accessibility -> Beneficial Owner Change', () => {
       cy.get('#individual-person-full-name').type(testData.profile1.fullName)
       cy.get('#individual-person-preferred-name').type(testData.profile1.preferredName)
       cy.get('#individual-person-email').type(testData.profile1.email)
-      cy.get('[name=percentOfShares]').type(testData.profile1.percentOfShares)
-      cy.get('[name=percentOfVotes]').type(testData.profile1.percentOfVotes)
+      cy.get('[data-cy=testPercentOfShares]').click()
+      cy.get('[data-cy=testPercentOfShares]').find('li').first().click()
+      cy.get('[data-cy=testPercentOfVotes]').click()
+      cy.get('[data-cy=testPercentOfVotes]').find('li').first().click()
       cy.get('[data-cy=testTypeOfControl]').get('[name=registeredOwner]').check()
       cy.get('[data-cy=testControlOfDirectors]').get('[name=directControl]').check()
       cy.get('#addNewPersonBirthdate').trigger('click')
@@ -144,7 +146,7 @@ describe('accessibility -> Beneficial Owner Change', () => {
      */
 
     // tab into the tooltip text in Type of Control section
-    cy.get('[name="percentOfVotes"]').tab().tab()
+    cy.get('[name="inConcertControl"]').tab()
     cy.get('[data-cy="in-concert-control-tooltip-content"').should('exist')
 
     // Note: the tooltip does not lose focus when tabbed out by tab()

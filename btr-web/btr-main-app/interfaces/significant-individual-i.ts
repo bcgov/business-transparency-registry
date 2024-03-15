@@ -1,7 +1,6 @@
 import { ProfileI } from './profile-i'
 import { FilingActionE } from '~/enums/filing-action-e'
 import { ExternalInfluenceE } from '~/enums/external-influence-e'
-import { PercentageRangeE } from '#ui-colors/imports'
 
 export interface SignificantIndividualI {
   controlType: {

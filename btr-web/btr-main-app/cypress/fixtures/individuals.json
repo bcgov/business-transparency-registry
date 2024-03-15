@@ -3,8 +3,8 @@
     "fullName": "John Smith",
     "preferredName": "John",
     "email": "123@test.com",
-    "percentOfShares": "20",
-    "percentOfVotes": "10",
+    "percentOfShares": "moreThan75",
+    "percentOfVotes": "moreThan75",
     "address": {
       "country": "Canada",
       "streetAddress": "111 test street",

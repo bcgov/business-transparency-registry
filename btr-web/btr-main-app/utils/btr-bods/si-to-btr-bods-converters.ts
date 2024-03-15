@@ -113,6 +113,7 @@ const _addVotes = (interest: BodsInterestI, maximum: number, sharesOrVotes: Bods
   interest.type = sharesOrVotes
 }
 
+// TO-DO
 const _getSharesVotesInterests = (si: SignificantIndividualI) => {
   const interests: BodsInterestI[] = []
 

@@ -98,7 +98,7 @@
             name="percentOfShares"
             :errors="percentOfSharesErrors"
             :placeholder="'% of shares'"
-            type="shares"
+            percentage-type="shares"
             data-cy="testPercentOfShares"
           />
           <IndividualPersonControlPercentageDropdown
@@ -107,7 +107,7 @@
             name="percentOfVotes"
             :errors="percenOfVotesErrors"
             :placeholder="'% of votes'"
-            type="votes"
+            percentage-type="votes"
             data-cy="testPercentOfVotes"
           />
         </div>

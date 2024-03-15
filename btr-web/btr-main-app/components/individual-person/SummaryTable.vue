@@ -209,13 +209,36 @@ function getSharesControlText (significantIndividual: SignificantIndividualI) {
     { value: significantIndividual.controlType.sharesVotes.beneficialOwner, field: 'beneficial' },
     { value: significantIndividual.controlType.sharesVotes.indirectControl, field: 'indirect' }
   ])
+
+  const shareRanges: Map<PercentageRangeE, string> = new Map([
+    [PercentageRangeE.MORE_THAN_75, t('texts.sharesAndVotes.percentageRange.moreThan75', { sharesOrVotes: 'shares' })],
+    [PercentageRangeE.BETWEEN_50_AND_75, t('texts.sharesAndVotes.percentageRange.between50And75',
+      { sharesOrVotes: 'shares' })],
+    [PercentageRangeE.BETWEEN_25_AND_50, t('texts.sharesAndVotes.percentageRange.between25And50',
+      { sharesOrVotes: 'shares' })],
+    [PercentageRangeE.LESS_THAN_25, t('texts.sharesAndVotes.percentageRange.lessThan25', { sharesOrVotes: 'shares' })],
+    [PercentageRangeE.NO_SELECTION, '']
+  ])
+
+  const voteRanges: Map<PercentageRangeE, string> = new Map([
+    [PercentageRangeE.MORE_THAN_75, t('texts.sharesAndVotes.percentageRange.moreThan75', { sharesOrVotes: 'votes' })],
+    [PercentageRangeE.BETWEEN_50_AND_75, t('texts.sharesAndVotes.percentageRange.between50And75',
+      { sharesOrVotes: 'votes' })],
+    [PercentageRangeE.BETWEEN_25_AND_50, t('texts.sharesAndVotes.percentageRange.between25And50',
+      { sharesOrVotes: 'votes' })],
+    [PercentageRangeE.LESS_THAN_25, t('texts.sharesAndVotes.percentageRange.lessThan25', { sharesOrVotes: 'votes' })],
+    [PercentageRangeE.NO_SELECTION, '']
+  ])
+
+  let sharesAndVotes: string = shareRanges.get(significantIndividual.percentOfShares) || ''
+  if (sharesAndVotes !== '') {
+    sharesAndVotes += '; '
+  }
+  sharesAndVotes += voteRanges.get(significantIndividual.percentOfVotes)
+
   if (field) {
     return t(
-      `texts.sharesAndVotes.summary.${field}`,
-      {
-        sharePercent: significantIndividual.percentOfShares || '0',
-        votePercent: significantIndividual.percentOfVotes || '0'
-      })
+      `texts.sharesAndVotes.summary.${field}`, { sharesAndVotes })
   }
   return ''
 }

@@ -72,6 +72,12 @@
     "noCRATaxNumber": "No CRA Tax Number",
     "sharesAndVotes": {
       "controlPercentage": "Enter the percentage of shares issued for the business and/or shares entitled to votes at general meetings this individual owns or ultimately controls (or can exercise ultimate effective control over).",
+      "percentageRange": {
+        "lessThan25": "Less than 25% of {sharesOrVotes}",
+        "between25And50": "At least 25% and up to 50% of {sharesOrVotes}",
+        "between50And75": "More than 50% and up to 75% of {sharesOrVotes}",
+        "moreThan75": "More than 75% of {sharesOrVotes}"
+      },
       "inConcertControl": {
         "part1": "This individual has shares or votes exercised in concert with ",
         "tooltip": "other individuals",
@@ -86,13 +92,13 @@
       "note2": "If shares in this business are held in trust, you must list the trustees as the registered owner, and you must also list the beneficiaries of the trust as the beneficial owners of the shares.",
       "note3": "Beneficiaries do not have to be listed in the transparency register if their beneficial interest is conditional on the death of another individual.",
       "summary": {
-        "beneficial": "Beneficial owner of {sharePercent}% of shares, {votePercent}% of votes",
-        "beneficialindirect": "Beneficial owner and Indirect control of {sharePercent}% of shares, {votePercent}% of votes",
-        "indirect": "Indirect control of {sharePercent}% of shares, {votePercent}% of votes",
-        "registered": "Registered owner of {sharePercent}% of shares, {votePercent}% of votes",
-        "registeredbeneficial": "Registered owner and Beneficial owner of {sharePercent}% of shares, {votePercent}% of votes",
-        "registeredbeneficialindirect": "Registered owner, Beneficial owner, and Indirect control of {sharePercent}% of shares, {votePercent}% of votes",
-        "registeredindirect": "Registered owner and Indirect control of {sharePercent}% of shares, {votePercent}% of votes",
+        "beneficial": "Beneficial owner: {sharesAndVotes}",
+        "beneficialindirect": "Beneficial owner and Indirect control: {sharesAndVotes}",
+        "indirect": "Indirect control: {sharesAndVotes}",
+        "registered": "Registered owner: {sharesAndVotes}",
+        "registeredbeneficial": "Registered owner and Beneficial owner: {sharesAndVotes}",
+        "registeredbeneficialindirect": "Registered owner, Beneficial owner, and Indirect control: {sharesAndVotes}",
+        "registeredindirect": "Registered owner and Indirect control: {sharesAndVotes}",
         "inConcert": "25% or more of shares or votes exercised in concert"
       }
     },

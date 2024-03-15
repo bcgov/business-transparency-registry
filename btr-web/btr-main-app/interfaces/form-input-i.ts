@@ -4,7 +4,6 @@ export interface FormInputI {
   email: string
   percentOfShares: PercentageRangeE
   percentOfVotes: PercentageRangeE
-
   controlOfShares: ControlOfSharesI
   otherReasons: string
   controlOfDirectors: ControlOfDirectorsI
