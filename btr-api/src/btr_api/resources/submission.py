@@ -110,7 +110,7 @@ def create_register():
         if not valid:
             return error_request_response('Invalid schema', HTTPStatus.BAD_REQUEST, errors)
 
-        business_identifier = json_input.get('business_identifier')
+        business_identifier = json_input.get('businessIdentifier')
         btr_auth.is_authorized(request=request, business_identifier=business_identifier)
 
         # get entity
