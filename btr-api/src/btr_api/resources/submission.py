@@ -53,24 +53,16 @@ from btr_api.services.validator import validate_entity
 bp = Blueprint("submission", __name__)
 
 
-@bp.route("/", methods=("GET",))
 @bp.route("/<id>", methods=("GET",))
 def registers(id: int | None = None):  # pylint: disable=redefined-builtin
     """Get the submissions, or specific submission by id."""
     try:
-        if id:
-            if submission := SubmissionModel.find_by_id(id):
-                return jsonify(type=submission.type, submission=submission.payload)
+        if submission := SubmissionModel.find_by_id(id):
+            return jsonify(type=submission.type, submission=submission.payload)
 
-            btr_auth.is_authorized(request=request, business_identifier=submission.business_identifier)
+        btr_auth.is_authorized(request=request, business_identifier=submission.business_identifier)
 
-            return {}, HTTPStatus.NOT_FOUND
-
-        # todo: remove in next commit, as we will not have multiple submissions
-        submissions = SubmissionModel.get_filtered_submissions()
-        submissions = [SubmissionSerializer.to_dict(submission) for submission in submissions]
-
-        return jsonify(submissions)
+        return {}, HTTPStatus.NOT_FOUND
 
     except AuthException as aex:
         exception_response(aex)
