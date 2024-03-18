@@ -20,7 +20,7 @@ from tests.unit.utils import create_header
     'test_name, submission_type, payload',
     [('simple json', SubmissionType.other, {'racoondog': 'red'})],
 )
-def test_get_plots(client, session, jwt, test_name, submission_type, payload):
+def test_get_plots(app, client, session, jwt, requests_mock, test_name, submission_type, payload):
     """Get the plot submissions.
     A parameterized set of tests that runs defined scenarios.
     """
@@ -37,6 +37,8 @@ def test_get_plots(client, session, jwt, test_name, submission_type, payload):
             session.commit()
             id = sub.id
 
+        requests_mock.get(f"{app.config.get('AUTH_SVC_URL')}/entities/{sub.business_identifier}/authorizations",
+                          json={"orgMembership": "COORDINATOR", 'roles': ['change_role', 'view']})
         # Test
         rv = client.get(f'/plots/{id}',
                         headers=create_header(jwt, ['basic'], **{'Accept-Version': 'v1',
@@ -50,6 +52,51 @@ def test_get_plots(client, session, jwt, test_name, submission_type, payload):
             for key, value in payload.items():
                 assert key in rv.text
                 assert value in rv.text
+
+
+_valid_auth_response = {"orgMembership": "COORDINATOR", 'roles': ['change_role', 'view']}
+_forbidden_auth_response = {}
+
+
+@pytest.mark.parametrize(
+    "test_name, business_identifier, auth_svc_response, has_auth_header, expected_http_status",
+    [
+        ('Good path', 'identifier0', _valid_auth_response, True, HTTPStatus.OK),
+        ('Bad path, no auth header', 'identifier0', _valid_auth_response, False, HTTPStatus.UNAUTHORIZED),
+        ('Bad path, not allowed', 'identifier0', _forbidden_auth_response, True, HTTPStatus.FORBIDDEN)
+    ]
+)
+def test_get_plots_auth(app, client, session, jwt, requests_mock, test_name, business_identifier, auth_svc_response,
+                        has_auth_header, expected_http_status):
+    """Test scenarios connected to authentication on plots endpoint."""
+    with nested_session(session):
+        session.execute(text('delete from submission'))
+        # Setup
+        sub = SubmissionModel()
+        sub.business_identifier = 'identifier0'
+        sub.payload = {'racoondog': 'red'}
+        sub.type = SubmissionType.other
+        session.add(sub)
+        session.commit()
+        search_id = sub.id
+
+        requests_mock.get(f"{app.config.get('AUTH_SVC_URL')}/entities/{business_identifier}/authorizations",
+                          json=auth_svc_response)
+
+        headers = create_header(jwt,
+                                ['basic'],
+                                **{'Accept-Version': 'v1',
+                                   'content-type': 'application/json',
+                                   'Account-Id': 1})
+
+        if not has_auth_header:
+            headers = {'Accept-Version': 'v1', 'content-type': 'application/json', 'Account-Id': 1}
+
+        # Test
+        rv = client.get(f'/plots/{search_id}', headers=headers)
+
+    # Confirm outcome
+    assert rv.status_code == expected_http_status
 
 
 def test_post_plots_db_mocked(app, session, client, jwt, mocker, requests_mock):

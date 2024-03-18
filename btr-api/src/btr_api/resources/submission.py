@@ -58,14 +58,13 @@ def registers(id: int | None = None):  # pylint: disable=redefined-builtin
     """Get the submissions, or specific submission by id."""
     try:
         if submission := SubmissionModel.find_by_id(id):
+            btr_auth.is_authorized(request=request, business_identifier=submission.business_identifier)
             return jsonify(type=submission.type, submission=submission.payload)
-
-        btr_auth.is_authorized(request=request, business_identifier=submission.business_identifier)
 
         return {}, HTTPStatus.NOT_FOUND
 
     except AuthException as aex:
-        exception_response(aex)
+        return exception_response(aex)
     except Exception as exception:  # noqa: B902
         return exception_response(exception)
 
@@ -83,6 +82,8 @@ def get_entity_submission(business_identifier: str):
 
         return {}, HTTPStatus.NOT_FOUND
 
+    except AuthException as aex:
+        return exception_response(aex)
     except Exception as exception:  # noqa: B902
         return exception_response(exception)
 
@@ -151,5 +152,7 @@ def create_register():
 
         return jsonify(id=submission.id), HTTPStatus.CREATED
 
+    except AuthException as aex:
+        return exception_response(aex)
     except Exception as exception:  # noqa: B902
         return exception_response(exception)
