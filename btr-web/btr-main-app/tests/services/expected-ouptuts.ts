@@ -29,7 +29,7 @@ export const OwnershipOrControlStatements = {
           endDate: undefined,
           share: {
             exclusiveMaximum: false,
-            exclusiveMinimum: true,
+            exclusiveMinimum: false,
             maximum: 50,
             minimum: 25
           },

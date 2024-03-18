@@ -212,9 +212,9 @@ function getSharesControlText (significantIndividual: SignificantIndividualI) {
 
   const shareRanges: Map<PercentageRangeE, string> = new Map([
     [PercentageRangeE.MORE_THAN_75, t('texts.sharesAndVotes.percentageRange.moreThan75', { sharesOrVotes: 'shares' })],
-    [PercentageRangeE.BETWEEN_50_AND_75, t('texts.sharesAndVotes.percentageRange.between50And75',
+    [PercentageRangeE.MORE_THAN_50_TO_75, t('texts.sharesAndVotes.percentageRange.moreThan50To75',
       { sharesOrVotes: 'shares' })],
-    [PercentageRangeE.BETWEEN_25_AND_50, t('texts.sharesAndVotes.percentageRange.between25And50',
+    [PercentageRangeE.AT_LEAST_25_TO_50, t('texts.sharesAndVotes.percentageRange.atLeast25To50',
       { sharesOrVotes: 'shares' })],
     [PercentageRangeE.LESS_THAN_25, t('texts.sharesAndVotes.percentageRange.lessThan25', { sharesOrVotes: 'shares' })],
     [PercentageRangeE.NO_SELECTION, '']
@@ -222,9 +222,9 @@ function getSharesControlText (significantIndividual: SignificantIndividualI) {
 
   const voteRanges: Map<PercentageRangeE, string> = new Map([
     [PercentageRangeE.MORE_THAN_75, t('texts.sharesAndVotes.percentageRange.moreThan75', { sharesOrVotes: 'votes' })],
-    [PercentageRangeE.BETWEEN_50_AND_75, t('texts.sharesAndVotes.percentageRange.between50And75',
+    [PercentageRangeE.MORE_THAN_50_TO_75, t('texts.sharesAndVotes.percentageRange.moreThan50To75',
       { sharesOrVotes: 'votes' })],
-    [PercentageRangeE.BETWEEN_25_AND_50, t('texts.sharesAndVotes.percentageRange.between25And50',
+    [PercentageRangeE.AT_LEAST_25_TO_50, t('texts.sharesAndVotes.percentageRange.atLeast25To50',
       { sharesOrVotes: 'votes' })],
     [PercentageRangeE.LESS_THAN_25, t('texts.sharesAndVotes.percentageRange.lessThan25', { sharesOrVotes: 'votes' })],
     [PercentageRangeE.NO_SELECTION, '']

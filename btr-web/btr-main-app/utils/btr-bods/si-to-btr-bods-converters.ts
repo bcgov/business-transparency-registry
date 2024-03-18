@@ -107,39 +107,36 @@ const _createInterestSharesVotes = (
   }
 }
 
-// const _addVotes = (interest: BodsInterestI, maximum: number, sharesOrVotes: BodsInterestTypeE) => {
-//   interest.share = {
-//     maximum,
-//     exclusiveMaximum: false
-//   }
-//   interest.type = sharesOrVotes
-// }
-
 const _getPercentageRange = (interest: BodsInterestI, range: PercentageRangeE, sharesAndVotes: BodsInterestTypeE) => {
+  // the default range is (min, max]
   interest.share = {
     exclusiveMinimum: true,
     exclusiveMaximum: false
   }
-
   interest.type = sharesAndVotes
 
   switch (range) {
     case PercentageRangeE.LESS_THAN_25:
+      // [0, 25)
       interest.share.minimum = 0
       interest.share.maximum = 25
+      interest.share.exclusiveMinimum = false
       break
-    case PercentageRangeE.BETWEEN_25_AND_50:
+    case PercentageRangeE.AT_LEAST_25_TO_50:
+      // [25, 50]
       interest.share.minimum = 25
       interest.share.maximum = 50
+      interest.share.exclusiveMinimum = false
       break
-    case PercentageRangeE.BETWEEN_50_AND_75:
+    case PercentageRangeE.MORE_THAN_50_TO_75:
+      // (50, 75]
       interest.share.minimum = 50
       interest.share.maximum = 75
       break
     case PercentageRangeE.MORE_THAN_75:
+      // (75, 100]
       interest.share.minimum = 75
       interest.share.maximum = 100
-      interest.share.exclusiveMaximum = true
       break
   }
 }

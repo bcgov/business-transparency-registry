@@ -33,12 +33,12 @@ const options = [
     label: t('texts.sharesAndVotes.percentageRange.moreThan75', { sharesOrVotes: props.percentageType })
   },
   {
-    range: PercentageRangeE.BETWEEN_50_AND_75,
-    label: t('texts.sharesAndVotes.percentageRange.between50And75', { sharesOrVotes: props.percentageType })
+    range: PercentageRangeE.MORE_THAN_50_TO_75,
+    label: t('texts.sharesAndVotes.percentageRange.moreThan50To75', { sharesOrVotes: props.percentageType })
   },
   {
-    range: PercentageRangeE.BETWEEN_25_AND_50,
-    label: t('texts.sharesAndVotes.percentageRange.between25And50', { sharesOrVotes: props.percentageType })
+    range: PercentageRangeE.AT_LEAST_25_TO_50,
+    label: t('texts.sharesAndVotes.percentageRange.atLeast25To50', { sharesOrVotes: props.percentageType })
   },
   {
     range: PercentageRangeE.LESS_THAN_25,

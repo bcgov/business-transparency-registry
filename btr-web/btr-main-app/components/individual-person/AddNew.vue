@@ -76,22 +76,6 @@
           <p>
             {{ $t('texts.sharesAndVotes.controlPercentage') }}
           </p>
-          <!-- <IndividualPersonControlPercentage
-            id="percentageOfShares"
-            v-model="significantIndividual.percentOfShares"
-            name="percentOfShares"
-            placeholder="Percent of Shares"
-            :variant="percentOfSharesInvalid ? 'error' : 'bcGov'"
-            data-cy="testPercentOfShares"
-          />
-          <IndividualPersonControlPercentage
-            id="percentageOfVotes"
-            v-model="significantIndividual.percentOfVotes"
-            name="percentOfVotes"
-            placeholder="Percent of Votes"
-            :variant="percentOfVotesInvalid ? 'error' : 'bcGov'"
-            data-cy="testPercentOfVotes"
-          /> -->
           <IndividualPersonControlPercentageDropdown
             id="percentageOfShares"
             v-model="significantIndividual.percentOfShares"
@@ -478,7 +462,7 @@ watch(
 
     // If the percentOfShares and percentOfVotes are < 25%, and the "in-concert control" checkbox is not checked,
     // the type of control error should be remove as this field is now optional
-    if (values[0] === PercentageRangeE.LESS_THAN_25 && values[1] === PercentageRangeE.LESS &&
+    if (values[0] === PercentageRangeE.LESS_THAN_25 && values[1] === PercentageRangeE.LESS_THAN_25 &&
       !significantIndividual.value.controlType.sharesVotes.inConcertControl) {
       controlOfSharesErrors.value = []
     }

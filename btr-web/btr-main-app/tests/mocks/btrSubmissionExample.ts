@@ -70,7 +70,7 @@ export const btrSubmissionExampleMock = {
             directOrIndirect: 'direct',
             share: {
               exclusiveMaximum: false,
-              exclusiveMinimum: true,
+              exclusiveMinimum: false,
               maximum: 50,
               minimum: 25
             },
@@ -82,7 +82,7 @@ export const btrSubmissionExampleMock = {
             directOrIndirect: 'indirect',
             share: {
               exclusiveMaximum: false,
-              exclusiveMinimum: true,
+              exclusiveMinimum: false,
               maximum: 50,
               minimum: 25
             },
@@ -94,7 +94,7 @@ export const btrSubmissionExampleMock = {
             directOrIndirect: 'indirect',
             share: {
               exclusiveMaximum: false,
-              exclusiveMinimum: true,
+              exclusiveMinimum: false,
               maximum: 50,
               minimum: 25
             },
@@ -106,7 +106,7 @@ export const btrSubmissionExampleMock = {
             directOrIndirect: 'indirect',
             share: {
               exclusiveMaximum: false,
-              exclusiveMinimum: true,
+              exclusiveMinimum: false,
               maximum: 50,
               minimum: 25
             },
@@ -161,7 +161,7 @@ export const btrSubmissionExampleMock = {
             directOrIndirect: 'direct',
             share: {
               exclusiveMaximum: false,
-              exclusiveMinimum: true,
+              exclusiveMinimum: false,
               maximum: 50,
               minimum: 25
             },
@@ -535,7 +535,7 @@ export const expectedSisOutput = [{
   },
   externalInfluence: 'NoExternalInfluence',
   missingInfoReason: '',
-  percentOfShares: 'between25And50',
+  percentOfShares: 'atLeast25To50',
   percentOfVotes: 'noSelection',
   profile: {
     fullName: 'Hrvoje Feketele',
@@ -583,8 +583,8 @@ export const expectedSisOutput = [{
   },
   externalInfluence: 'NoExternalInfluence',
   missingInfoReason: 'It actually really is unless it is not',
-  percentOfShares: 'between50And75',
-  percentOfVotes: 'between25And50',
+  percentOfShares: 'moreThan50To75',
+  percentOfVotes: 'atLeast25To50',
   profile: {
     fullName: 'Hrvoje Fekete',
     preferredName: 'Johnny',

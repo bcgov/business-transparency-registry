@@ -45,8 +45,8 @@ export const testSI: SignificantIndividualI = {
   },
   externalInfluence: ExternalInfluenceE.CAN_INFLUENCE,
   missingInfoReason: '',
-  percentOfShares: PercentageRangeE.BETWEEN_50_AND_75,
-  percentOfVotes: PercentageRangeE.BETWEEN_25_AND_50,
+  percentOfShares: PercentageRangeE.MORE_THAN_50_TO_75,
+  percentOfVotes: PercentageRangeE.AT_LEAST_25_TO_50,
   startDate: SI_EXAMPLE_DATE,
   action: FilingActionE.ADD
 }

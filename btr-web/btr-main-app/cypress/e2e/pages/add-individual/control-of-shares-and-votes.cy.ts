@@ -36,7 +36,7 @@ describe('pages -> Add individual', () => {
     cy.get('[data-cy=add-new-btn]').trigger('click')
 
     const shareRange1 = en.texts.sharesAndVotes.percentageRange.moreThan75.replace('{sharesOrVotes}', 'shares')
-    const shareRange2 = en.texts.sharesAndVotes.percentageRange.between25And50.replace('{sharesOrVotes}', 'shares')
+    const shareRange2 = en.texts.sharesAndVotes.percentageRange.atLeast25To50.replace('{sharesOrVotes}', 'shares')
     cy.get('[data-cy=testPercentOfShares]').click().find('li').eq(0).click()
     cy.get('input[name="percentOfShares[label]"]').invoke('val').should('eq', shareRange1)
     cy.get('input[name="percentOfShares[label]"]').invoke('val').should('not.eq', shareRange2)

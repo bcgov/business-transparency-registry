@@ -100,31 +100,6 @@ const _getSiPerson = (btrBodsPerson: BtrBodsPersonI): ProfileI => {
   }
 }
 
-// const _getMaxInterestValue = (oocs: BtrBodsOwnershipOrControlI, interestType: BodsInterestTypeE): number => {
-//   let max = 0
-
-//   let maxCalc = (oldValue: number, newValue: number): number => oldValue + newValue
-
-//   if (oocs.source?.description === BtrSourceDescriptionProvidedByBtrGovBC) {
-//     maxCalc = (currentValue: number, newValue: number): number => {
-//       return Math.max(currentValue, newValue)
-//     }
-//   }
-
-//   for (const interest of oocs.interests) {
-//     if (interest.type === interestType) {
-//       max = maxCalc(max,
-//         interest.share?.exact ||
-//         interest.share?.maximum ||
-//         interest.share?.minimum ||
-//         0
-//       )
-//     }
-//   }
-
-//   return max > 100 ? 100 : max
-// }
-
 const _getPercentageRange = (oocs: BtrBodsOwnershipOrControlI, interestType: BodsInterestTypeE): PercentageRangeE => {
   /**
    * Note: we assume the min and max values for all interests in oocs.interests are the same.
@@ -151,9 +126,9 @@ const _getPercentageRange = (oocs: BtrBodsOwnershipOrControlI, interestType: Bod
   if (min === 0 && max === 25) {
     range = PercentageRangeE.LESS_THAN_25
   } else if (min === 25 && max === 50) {
-    range = PercentageRangeE.BETWEEN_25_AND_50
+    range = PercentageRangeE.AT_LEAST_25_TO_50
   } else if (min === 50 && max === 75) {
-    range = PercentageRangeE.BETWEEN_50_AND_75
+    range = PercentageRangeE.MORE_THAN_50_TO_75
   } else if (min === 75 && max === 100) {
     range = PercentageRangeE.MORE_THAN_75
   }

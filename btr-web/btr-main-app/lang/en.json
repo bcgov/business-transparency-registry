@@ -74,8 +74,8 @@
       "controlPercentage": "Enter the percentage of shares issued for the business and/or shares entitled to votes at general meetings this individual owns or ultimately controls (or can exercise ultimate effective control over).",
       "percentageRange": {
         "lessThan25": "Less than 25% of {sharesOrVotes}",
-        "between25And50": "At least 25% and up to 50% of {sharesOrVotes}",
-        "between50And75": "More than 50% and up to 75% of {sharesOrVotes}",
+        "atLeast25To50": "At least 25% and up to 50% of {sharesOrVotes}",
+        "moreThan50To75": "More than 50% and up to 75% of {sharesOrVotes}",
         "moreThan75": "More than 75% of {sharesOrVotes}"
       },
       "inConcertControl": {

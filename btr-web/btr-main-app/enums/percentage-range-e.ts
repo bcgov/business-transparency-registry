@@ -1,7 +1,7 @@
 export enum PercentageRangeE {
   NO_SELECTION = 'noSelection',
   LESS_THAN_25 = 'lessThan25',
-  BETWEEN_25_AND_50 = 'between25And50',
-  BETWEEN_50_AND_75 = 'between50And75',
+  AT_LEAST_25_TO_50 = 'atLeast25To50',
+  MORE_THAN_50_TO_75 = 'moreThan50To75',
   MORE_THAN_75 = 'moreThan75'
 }
