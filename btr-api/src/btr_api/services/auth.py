@@ -90,6 +90,7 @@ class AuthService:
                                              'reason': err.with_traceback(None)}]) from err
 
     def get_authorization_header(self, request) -> str:
+        """Gets authorization header from request."""
         authorization_header = request.headers.get('Authorization', None)
         if not authorization_header:
             error = f'Missing authorization header: {request.headers}'
