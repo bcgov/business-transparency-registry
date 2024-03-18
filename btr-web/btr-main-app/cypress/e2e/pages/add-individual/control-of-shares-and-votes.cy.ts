@@ -32,76 +32,16 @@ describe('pages -> Add individual', () => {
     cy.get('[data-cy="in-concert-control-tooltip-content"').should('not.exist')
   })
 
-  it('test the error message for special characters', () => {
-    cy.on('uncaught:exception', (err) => {
-      expect(err.message).to.include(en.errors.validation.controlPercentage.specialCharacter)
-      return false
-    })
-
+  it('test the dropdown menu for percent of shares', () => {
     cy.get('[data-cy=add-new-btn]').trigger('click')
-    // cy.get('[data-cy="showAddIndividualPersonManually"]').trigger('click')
-    cy.get('[name="percentOfShares"]').type('10ab').blur()
-    cy.contains(en.errors.validation.controlPercentage.specialCharacter).should('exist')
-    cy.get('[name="percentOfShares"]').clear().type('--').blur()
-    cy.contains(en.errors.validation.controlPercentage.specialCharacter).should('exist')
-    cy.get('[name="percentOfShares"]').clear().blur()
-    cy.contains(en.errors.validation.controlPercentage.specialCharacter).should('not.exist')
 
-    // cy.get('[name="percentOfVotes"]').type('25.5').blur()
-    // cy.contains(en.errors.validation.controlPercentage.specialCharacter).should('not.exist')
-    cy.get('[name="percentOfVotes"]').clear().blur()
-    cy.contains(en.errors.validation.controlPercentage.specialCharacter).should('not.exist')
-  })
-
-  it('test the error message for leading zeros', () => {
-    cy.on('uncaught:exception', (err) => {
-      expect(err.message).to.include(en.errors.validation.controlPercentage.invalidFormat)
-      return false
-    })
-
-    cy.get('[data-cy=add-new-btn]').trigger('click')
-    // cy.get('[data-cy="showAddIndividualPersonManually"]').trigger('click')
-    cy.get('[name="percentOfShares"]').type('0').blur()
-    cy.contains(en.errors.validation.controlPercentage.invalidPercentage).should('exist')
-    cy.get('[name="percentOfShares"]').clear().type('012').blur()
-    cy.contains(en.errors.validation.controlPercentage.invalidPercentage).should('exist')
-    cy.get('[name="percentOfShares"]').clear().blur()
-    cy.contains(en.errors.validation.controlPercentage.invalidPercentage).should('not.exist')
-
-    cy.get('[name="percentOfVotes"]').type('0').blur()
-    cy.contains(en.errors.validation.controlPercentage.invalidPercentage).should('exist')
-    cy.get('[name="percentOfVotes"]').clear().type('0012').blur()
-    cy.contains(en.errors.validation.controlPercentage.invalidPercentage).should('exist')
-    cy.get('[name="percentOfVotes"]').clear().blur()
-    cy.contains(en.errors.validation.controlPercentage.invalidPercentage).should('not.exist')
-  })
-
-  it('test the error message for invalid range', () => {
-    cy.on('uncaught:exception', (err) => {
-      expect(err.message).to.include(en.errors.validation.controlPercentage.invalidPercentage)
-      return false
-    })
-
-    cy.get('[data-cy=add-new-btn]').trigger('click')
-    // cy.get('[data-cy="showAddIndividualPersonManually"]').trigger('click')
-    cy.get('[name="percentOfShares"]').type('101').blur()
-    cy.contains(en.errors.validation.controlPercentage.invalidPercentage).should('exist')
-    cy.get('[name="percentOfShares"]').clear().type('100').blur()
-    cy.contains(en.errors.validation.controlPercentage.invalidPercentage).should('not.exist')
-
-    cy.get('[name="percentOfVotes"]').type('120').blur()
-    cy.contains(en.errors.validation.controlPercentage.invalidPercentage).should('exist')
-    cy.get('[name="percentOfVotes"]').clear().type('1').blur()
-    cy.contains(en.errors.validation.controlPercentage.invalidPercentage).should('not.exist')
-
-    // Note: we might want to accept 0 in the future. For now, the valid range is [1, 100]
-    cy.get('[name="percentOfShares"]').type('0').blur()
-    cy.contains(en.errors.validation.controlPercentage.invalidPercentage).should('exist')
-    cy.get('[name="percentOfShares"]').clear().type('-10').blur()
-    cy.contains(en.errors.validation.controlPercentage.invalidPercentage).should('exist')
-    cy.get('[name="percentOfVotes"]').clear().type('0').blur()
-    cy.contains(en.errors.validation.controlPercentage.invalidPercentage).should('exist')
-    cy.get('[name="percentOfVotes"]').clear().type('-2').blur()
-    cy.contains(en.errors.validation.controlPercentage.invalidPercentage).should('exist')
+    const shareRange1 = en.texts.sharesAndVotes.percentageRange.moreThan75.replace('{sharesOrVotes}', 'shares')
+    const shareRange2 = en.texts.sharesAndVotes.percentageRange.between25And50.replace('{sharesOrVotes}', 'shares')
+    cy.get('[data-cy=testPercentOfShares]').click().find('li').eq(0).click()
+    cy.get('input[name="percentOfShares[label]"]').invoke('val').should('eq', shareRange1)
+    cy.get('input[name="percentOfShares[label]"]').invoke('val').should('not.eq', shareRange2)
+    cy.get('[data-cy=testPercentOfShares]').click().find('li').eq(2).click()
+    cy.get('input[name="percentOfShares[label]"]').invoke('val').should('eq', shareRange2)
+    cy.get('input[name="percentOfShares[label]"]').invoke('val').should('not.eq', shareRange1)
   })
 })
