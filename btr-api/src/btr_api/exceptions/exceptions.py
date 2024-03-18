@@ -46,14 +46,16 @@ class BaseExceptionE(Exception):
 
 
 @dataclass
-class AuthorizationException(BaseExceptionE):
-    """Authorization exception."""
+class AuthException(BaseExceptionE):
+    """Authorization/Authentication exception."""
 
     def __post_init__(self):
         """Return a valid AuthorizationException."""
         self.error = f'{self.error}, {self.status_code}'
-        self.message = 'Unauthorized access.'
-        self.status_code = HTTPStatus.UNAUTHORIZED
+        if not self.message:
+            self.message = 'Unauthorized access.'
+        if not self.status_code:
+            self.status_code = HTTPStatus.FORBIDDEN
 
 
 @dataclass

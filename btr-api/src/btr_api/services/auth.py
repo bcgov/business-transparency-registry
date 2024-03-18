@@ -38,7 +38,7 @@ import requests
 from requests import exceptions
 from flask import Flask
 
-from btr_api.exceptions import ExternalServiceException
+from btr_api.exceptions import ExternalServiceException, AuthException
 
 
 class AuthService:
@@ -88,3 +88,46 @@ class AuthService:
             raise ExternalServiceException(HTTPStatus.SERVICE_UNAVAILABLE,
                                            [{'message': 'Unable to get service account token.',
                                              'reason': err.with_traceback(None)}]) from err
+
+    def get_authorization_header(self, request) -> str:
+        authorization_header = request.headers.get('Authorization', None)
+        if not authorization_header:
+            error = f'Missing authorization header: {request.headers}'
+            self.app.logger.debug('Cannot find authorization_header in request.')
+            raise AuthException(error=error, status_code=HTTPStatus.UNAUTHORIZED)
+
+        return authorization_header
+
+    def is_authorized(self, request, business_identifier: str) -> bool:
+        """Authorize the user for access to the service."""
+        try:
+            auth_token = self.get_authorization_header(request)
+            # make api call
+            headers = {'Authorization': auth_token}
+            auth_url = f'{self.svc_url}/entities/{business_identifier}/authorizations'
+
+            resp = requests.get(url=auth_url, headers=headers, timeout=self.timeout)
+
+            if resp.status_code >= HTTPStatus.INTERNAL_SERVER_ERROR:
+                error = f'{resp.status_code} - {str(resp.json())}'
+                self.app.logger.debug('Invalid response from auth-api: %s', error)
+                raise ExternalServiceException(error=error, status_code=HTTPStatus.SERVICE_UNAVAILABLE)
+
+            if resp.status_code != HTTPStatus.OK or not resp.json().get('roles'):
+                error = f'Unauthorized access to business: {business_identifier}'
+                self.app.logger.debug(error)
+                raise AuthException(error=error, status_code=HTTPStatus.FORBIDDEN)
+
+            return True
+        except AuthException as e:
+            # pass along
+            raise e
+        except ExternalServiceException as exc:
+            # pass along
+            raise exc
+        except (requests.exceptions.ConnectionError, requests.exceptions.Timeout) as err:
+            self.app.logger.debug('Auth connection failure:', repr(err))
+            raise ExternalServiceException(error=repr(err), status_code=HTTPStatus.SERVICE_UNAVAILABLE) from err
+        except Exception as err:
+            self.app.logger.debug('Generic Auth verification failure:', repr(err))
+            raise ExternalServiceException(error=repr(err), status_code=HTTPStatus.SERVICE_UNAVAILABLE) from err
