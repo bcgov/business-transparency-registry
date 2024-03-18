@@ -78,8 +78,8 @@ describe('AddIndividualPersonSummaryTable tests', () => {
     si.controlType.sharesVotes.beneficialOwner = true
     si.controlType.sharesVotes.indirectControl = true
     si.controlType.sharesVotes.inConcertControl = true
-    si.percentOfShares = '43'
-    si.percentOfVotes = '10'
+    si.percentOfShares = 'between25And50'
+    si.percentOfVotes = 'between50And75'
     si.controlType.directors.directControl = false
     si.controlType.directors.indirectControl = false
     si.controlType.directors.significantInfluence = false
@@ -88,8 +88,9 @@ describe('AddIndividualPersonSummaryTable tests', () => {
     await wrapper.setProps({ individuals: [si] })
     let controls = wrapper.find('[data-cy=summary-table-controls]')
     expect(controls.text()).toContain('Shares')
-    expect(controls.text())
-      .toContain('Registered owner, Beneficial owner, and Indirect control of 43% of shares, 10% of votes')
+    expect(controls.text()).toContain('Registered owner, Beneficial owner, and Indirect control')
+    expect(controls.text()).toContain('At least 25% and up to 50% of shares')
+    expect(controls.text()).toContain('More than 50% and up to 75% of votes')
     expect(controls.text()).toContain('25% or more of shares or votes exercised in concert')
     expect(controls.text()).not.toContain('Directors')
     expect(controls.text()).not.toContain('Other')
@@ -141,8 +142,7 @@ describe('AddIndividualPersonSummaryTable tests', () => {
     controls = wrapper.find('[data-cy=summary-table-controls]')
     expect(controls.text()).toContain('Shares')
     expect(controls.text()).toContain('Shares')
-    expect(controls.text())
-      .toContain('Registered owner and Indirect control of 43% of shares, 10% of votes')
+    expect(controls.text()).toContain('Registered owner and Indirect control')
     expect(controls.text()).toContain('25% or more of shares or votes exercised in concert')
     expect(controls.text()).toContain('Directors')
     expect(controls.text())

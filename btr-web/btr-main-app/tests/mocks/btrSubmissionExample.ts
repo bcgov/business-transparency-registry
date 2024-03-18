@@ -70,7 +70,9 @@ export const btrSubmissionExampleMock = {
             directOrIndirect: 'direct',
             share: {
               exclusiveMaximum: false,
-              maximum: 99
+              exclusiveMinimum: true,
+              maximum: 50,
+              minimum: 25
             },
             startDate: '2024-01-04',
             type: 'shareholding'
@@ -80,7 +82,9 @@ export const btrSubmissionExampleMock = {
             directOrIndirect: 'indirect',
             share: {
               exclusiveMaximum: false,
-              maximum: 99
+              exclusiveMinimum: true,
+              maximum: 50,
+              minimum: 25
             },
             startDate: '2024-01-04',
             type: 'shareholding'
@@ -90,7 +94,9 @@ export const btrSubmissionExampleMock = {
             directOrIndirect: 'indirect',
             share: {
               exclusiveMaximum: false,
-              maximum: 99
+              exclusiveMinimum: true,
+              maximum: 50,
+              minimum: 25
             },
             startDate: '2024-01-04',
             type: 'shareholding'
@@ -100,7 +106,9 @@ export const btrSubmissionExampleMock = {
             directOrIndirect: 'indirect',
             share: {
               exclusiveMaximum: false,
-              maximum: 99
+              exclusiveMinimum: true,
+              maximum: 50,
+              minimum: 25
             },
             startDate: '2024-01-04',
             type: 'shareholding'
@@ -153,7 +161,9 @@ export const btrSubmissionExampleMock = {
             directOrIndirect: 'direct',
             share: {
               exclusiveMaximum: false,
-              maximum: 77
+              exclusiveMinimum: true,
+              maximum: 50,
+              minimum: 25
             },
             startDate: '2024-01-05',
             type: 'votingRights'
@@ -163,7 +173,9 @@ export const btrSubmissionExampleMock = {
             directOrIndirect: 'direct',
             share: {
               exclusiveMaximum: false,
-              maximum: 34
+              exclusiveMinimum: true,
+              maximum: 75,
+              minimum: 50
             },
             startDate: '2024-01-05',
             type: 'shareholding'
@@ -173,7 +185,9 @@ export const btrSubmissionExampleMock = {
             directOrIndirect: 'indirect',
             share: {
               exclusiveMaximum: false,
-              maximum: 77
+              exclusiveMinimum: true,
+              maximum: 50,
+              minimum: 25
             },
             startDate: '2024-01-05',
             type: 'votingRights'
@@ -183,7 +197,9 @@ export const btrSubmissionExampleMock = {
             directOrIndirect: 'indirect',
             share: {
               exclusiveMaximum: false,
-              maximum: 34
+              exclusiveMinimum: true,
+              maximum: 75,
+              minimum: 50
             },
             startDate: '2024-01-05',
             type: 'shareholding'
@@ -519,8 +535,8 @@ export const expectedSisOutput = [{
   },
   externalInfluence: 'NoExternalInfluence',
   missingInfoReason: '',
-  percentOfShares: 99,
-  percentOfVotes: 0,
+  percentOfShares: 'between25And50',
+  percentOfVotes: 'noSelection',
   profile: {
     fullName: 'Hrvoje Feketele',
     preferredName: 'baba jaga',
@@ -567,8 +583,8 @@ export const expectedSisOutput = [{
   },
   externalInfluence: 'NoExternalInfluence',
   missingInfoReason: 'It actually really is unless it is not',
-  percentOfShares: 34,
-  percentOfVotes: 77,
+  percentOfShares: 'between50And75',
+  percentOfVotes: 'between25And50',
   profile: {
     fullName: 'Hrvoje Fekete',
     preferredName: 'Johnny',
@@ -613,8 +629,8 @@ export const expectedSisOutput = [{
   },
   externalInfluence: 'NoExternalInfluence',
   missingInfoReason: undefined,
-  percentOfShares: 0,
-  percentOfVotes: 0,
+  percentOfShares: 'noSelection',
+  percentOfVotes: 'noSelection',
   profile: {
     fullName: 'Hrvoje Fekete',
     preferredName: '',

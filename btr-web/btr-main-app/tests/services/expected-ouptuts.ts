@@ -27,7 +27,12 @@ export const OwnershipOrControlStatements = {
           details: 'controlType.sharesOrVotes.registeredOwner',
           startDate: SI_EXAMPLE_DATE,
           endDate: undefined,
-          share: { maximum: 25, exclusiveMaximum: false },
+          share: {
+            exclusiveMaximum: false,
+            exclusiveMinimum: true,
+            maximum: 50,
+            minimum: 25
+          },
           type: 'votingRights'
         },
         {
@@ -35,7 +40,12 @@ export const OwnershipOrControlStatements = {
           details: 'controlType.sharesOrVotes.registeredOwner',
           startDate: SI_EXAMPLE_DATE,
           endDate: undefined,
-          share: { maximum: 75, exclusiveMaximum: false },
+          share: {
+            exclusiveMaximum: false,
+            exclusiveMinimum: true,
+            maximum: 75,
+            minimum: 50
+          },
           type: 'shareholding'
         }
       ],
