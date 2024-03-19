@@ -38,7 +38,7 @@ def test_get_plots(app, client, session, jwt, requests_mock, test_name, submissi
             id = sub.id
 
         requests_mock.get(f"{app.config.get('AUTH_SVC_URL')}/entities/{sub.business_identifier}/authorizations",
-                          json={"orgMembership": "COORDINATOR", 'roles': ['change_role', 'view']})
+                          json={"orgMembership": "COORDINATOR", 'roles': ['edit', 'view']})
         # Test
         rv = client.get(f'/plots/{id}',
                         headers=create_header(jwt, ['basic'], **{'Accept-Version': 'v1',
@@ -54,7 +54,8 @@ def test_get_plots(app, client, session, jwt, requests_mock, test_name, submissi
                 assert value in rv.text
 
 
-_valid_auth_response = {"orgMembership": "COORDINATOR", 'roles': ['change_role', 'view']}
+_valid_auth_response = {"orgMembership": "COORDINATOR", 'roles': ['edit', 'view']}
+_forbidden_auth_response2 = {"orgMembership": "COORDINATOR", 'roles': ['no_edit_role', 'view']}
 _forbidden_auth_response = {}
 
 
@@ -63,6 +64,7 @@ _forbidden_auth_response = {}
     [
         ('Good path', 'identifier0', _valid_auth_response, True, HTTPStatus.OK),
         ('Bad path, no auth header', 'identifier0', _valid_auth_response, False, HTTPStatus.UNAUTHORIZED),
+        ('Bad path, no edit role', 'identifier0', _forbidden_auth_response2, True, HTTPStatus.FORBIDDEN),
         ('Bad path, not allowed', 'identifier0', _forbidden_auth_response, True, HTTPStatus.FORBIDDEN)
     ]
 )
@@ -117,7 +119,7 @@ def test_post_plots_db_mocked(app, session, client, jwt, mocker, requests_mock):
         mocked_entity_response = {"business": {"adminFreeze": False, "state": "ACTIVE"}}
         identifier = json_data['businessIdentifier']
         requests_mock.get(f"{app.config.get('AUTH_SVC_URL')}/entities/{identifier}/authorizations",
-                          json={"orgMembership": "COORDINATOR", 'roles': ['change_role', 'view']})
+                          json={"orgMembership": "COORDINATOR", 'roles': ['edit', 'view']})
         legal_api_mock = requests_mock.get(
             f"{app.config.get('LEGAL_SVC_URL')}/businesses/{identifier}",
             json=mocked_entity_response
@@ -199,7 +201,7 @@ def test_post_plots(app, client, session, jwt, requests_mock):
         mocked_entity_response = {"business": {"adminFreeze": False, "state": "ACTIVE"}}
         identifier = json_data['businessIdentifier']
         requests_mock.get(f"{app.config.get('AUTH_SVC_URL')}/entities/{identifier}/authorizations",
-                          json={"orgMembership": "COORDINATOR", 'roles': ['change_role', 'view']})
+                          json={"orgMembership": "COORDINATOR", 'roles': ['edit', 'view']})
         legal_api_mock = requests_mock.get(
             f"{app.config.get('LEGAL_SVC_URL')}/businesses/{identifier}",
             json=mocked_entity_response
@@ -251,7 +253,7 @@ def test_post_plots_pay_error(app, client, session, jwt, requests_mock):
         mocked_entity_response = {"business": {"adminFreeze": False, "state": "ACTIVE"}}
         identifier = json_data['businessIdentifier']
         requests_mock.get(f"{app.config.get('AUTH_SVC_URL')}/entities/{identifier}/authorizations",
-                          json={"orgMembership": "COORDINATOR", 'roles': ['change_role', 'view']})
+                          json={"orgMembership": "COORDINATOR", 'roles': ['edit', 'view']})
         legal_api_mock = requests_mock.get(
             f"{app.config.get('LEGAL_SVC_URL')}/businesses/{identifier}",
             json=mocked_entity_response
@@ -295,7 +297,7 @@ def test_post_plots_auth_error(app, client, session, jwt, requests_mock):
         mocked_entity_response = {"business": {"adminFreeze": False, "state": "ACTIVE"}}
         identifier = json_data['businessIdentifier']
         requests_mock.get(f"{app.config.get('AUTH_SVC_URL')}/entities/{identifier}/authorizations",
-                          json={"orgMembership": "COORDINATOR", 'roles': ['change_role', 'view']})
+                          json={"orgMembership": "COORDINATOR", 'roles': ['edit', 'view']})
         legal_api_mock = requests_mock.get(
             f"{app.config.get('LEGAL_SVC_URL')}/businesses/{identifier}",
             json=mocked_entity_response
@@ -309,8 +311,6 @@ def test_post_plots_auth_error(app, client, session, jwt, requests_mock):
                                                    **{'Accept-Version': 'v1',
                                                       'content-type': 'application/json',
                                                       'Account-Id': 1}))
-            print(">" * 80)
-            print(rv)
             assert rv.status_code == HTTPStatus.CREATED
             submission_id = rv.json.get('id')
             assert submission_id
@@ -340,7 +340,7 @@ def test_post_plots_bor_error(app, client, session, jwt, requests_mock):
         mocked_entity_response = {"business": {"adminFreeze": False, "state": "ACTIVE"}}
         identifier = json_data['businessIdentifier']
         requests_mock.get(f"{app.config.get('AUTH_SVC_URL')}/entities/{identifier}/authorizations",
-                          json={"orgMembership": "COORDINATOR", 'roles': ['change_role', 'view']})
+                          json={"orgMembership": "COORDINATOR", 'roles': ['edit', 'view']})
         legal_api_mock = requests_mock.get(
             f"{app.config.get('LEGAL_SVC_URL')}/businesses/{identifier}",
             json=mocked_entity_response
@@ -390,7 +390,7 @@ def test_post_plots_invalid_entity(app, client, session, jwt, requests_mock, tes
         mocked_entity_response = {"business": {"adminFreeze": admin_freeze, "state": state}}
         identifier = json_data['businessIdentifier']
         requests_mock.get(f"{app.config.get('AUTH_SVC_URL')}/entities/{identifier}/authorizations",
-                          json={"orgMembership": "COORDINATOR", 'roles': ['change_role', 'view']})
+                          json={"orgMembership": "COORDINATOR", 'roles': ['edit', 'view']})
         legal_api_mock = requests_mock.get(
             f"{app.config.get('LEGAL_SVC_URL')}/businesses/{identifier}",
             json=mocked_entity_response
@@ -439,7 +439,7 @@ def test_get_latest_for_entity(app, client, session, jwt, requests_mock):
         (SubmissionService.create_submission(s3_dict, user.id)).save()
 
         requests_mock.get(f"{app.config.get('AUTH_SVC_URL')}/entities/{test_identifier}/authorizations",
-                          json={"orgMembership": "COORDINATOR", 'roles': ['change_role', 'view']})
+                          json={"orgMembership": "COORDINATOR", 'roles': ['edit', 'view']})
         # Test
         rv = client.get(f'/plots/entity/{test_identifier}',
                         headers=create_header(jwt_manager=jwt,
