@@ -100,7 +100,9 @@ const _getSiPerson = (btrBodsPerson: BtrBodsPersonI): ProfileI => {
   }
 }
 
-const _getPercentageRange = (oocs: BtrBodsOwnershipOrControlI, interestType: BodsInterestTypeE): PercentageRangeE => {
+const _getPercentageRange = (
+  oocs: BtrBodsOwnershipOrControlI, interestType: BodsInterestTypeE, businessIdentifier: string, person: BtrBodsPersonI
+): PercentageRangeE => {
   /**
    * Note: we assume the min and max values for all interests in oocs.interests are the same.
    * The first occurance of the interest that matches the interestType will be used to determine the range.
@@ -131,6 +133,14 @@ const _getPercentageRange = (oocs: BtrBodsOwnershipOrControlI, interestType: Bod
     range = PercentageRangeE.MORE_THAN_50_TO_75
   } else if (min === 75 && max === 100) {
     range = PercentageRangeE.MORE_THAN_75
+  } else {
+    range = PercentageRangeE.NO_SELECTION
+    if (!max || !min) {
+      const error = `Unable to determine the ${interestType} percentage range; ` +
+        `business: ${businessIdentifier}, individual name: ${person.names[0].fullName}`
+
+      console.error(error)
+    }
   }
 
   return range
@@ -165,9 +175,11 @@ function _getControlOther (oocs: BtrBodsOwnershipOrControlI) {
   return other?.details || ''
 }
 
-const _getSi = (person: BtrBodsPersonI, oocs: BtrBodsOwnershipOrControlI): SignificantIndividualI => {
-  const votes = _getPercentageRange(oocs, BodsInterestTypeE.VOTING_RIGHTS)
-  const shares = _getPercentageRange(oocs, BodsInterestTypeE.SHAREHOLDING)
+const _getSi = (
+  person: BtrBodsPersonI, oocs: BtrBodsOwnershipOrControlI, businessIdentifier: string
+): SignificantIndividualI => {
+  const votes = _getPercentageRange(oocs, BodsInterestTypeE.VOTING_RIGHTS, businessIdentifier, person)
+  const shares = _getPercentageRange(oocs, BodsInterestTypeE.SHAREHOLDING, businessIdentifier, person)
 
   return {
     controlType: {
@@ -187,11 +199,11 @@ const _getSi = (person: BtrBodsPersonI, oocs: BtrBodsOwnershipOrControlI): Signi
 
 export const getSIsFromBtrBodsSubmission = (submission: BtrFilingI): SignificantIndividualI[] => {
   const sis: SignificantIndividualI[] = []
-
+  const businessIdentifier = submission.businessIdentifier
   for (const person of submission.personStatements) {
     const oocs = _findOwnershipOrControlStatement(submission, person.statementID)
     if (person && oocs) {
-      sis.push(_getSi(person, oocs))
+      sis.push(_getSi(person, oocs, businessIdentifier))
     }
   }
 
