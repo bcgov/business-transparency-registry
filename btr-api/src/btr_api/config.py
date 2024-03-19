@@ -104,6 +104,7 @@ class Config:  # pylint: disable=too-few-public-methods
     JWT_OIDC_FIRSTNAME = os.getenv('JWT_OIDC_FIRSTNAME', 'firstname')
     JWT_OIDC_LASTNAME = os.getenv('JWT_OIDC_LASTNAME', 'lastname')
 
+    AUTH_SVC_URL = os.getenv('AUTH_API_URL', '') + os.getenv('AUTH_API_VERSION', '')
     PAYMENT_SVC_URL = os.getenv('PAY_API_URL', '') + os.getenv('PAY_API_VERSION', '')
     LEGAL_SVC_URL = os.getenv('LEGAL_API_URL', '') + os.getenv('LEGAL_API_VERSION_2', '')
     BOR_SVC_URL = os.getenv('BOR_API_URL', '') + os.getenv('BOR_API_VERSION', '')
@@ -152,6 +153,8 @@ class Testing(Config):  # pylint: disable=too-few-public-methods
         f"postgresql://{DATABASE_TEST_USERNAME}:{DATABASE_TEST_PASSWORD}@"
         f"{DATABASE_TEST_HOST}:{DATABASE_TEST_PORT}/{DATABASE_TEST_NAME}"
     )
+
+    AUTH_SVC_URL = 'https://test-auth-svc-url'
     PAYMENT_SVC_URL = 'https://test-pay-url'
     LEGAL_SVC_URL = 'https://test-legal-url'
     BOR_SVC_URL = 'https://test-bor-url'

@@ -44,7 +44,7 @@ from flask import Blueprint, current_app, g, jsonify, request
 from flask_cors import cross_origin
 
 from btr_api.common.auth import jwt
-from btr_api.exceptions import ExternalServiceException, exception_response, error_request_response
+from btr_api.exceptions import ExternalServiceException, exception_response, error_request_response, AuthException
 from btr_api.models import Submission as SubmissionModel, User as UserModel
 from btr_api.models.submission import SubmissionSerializer
 from btr_api.services import SchemaService, SubmissionService, btr_auth, btr_bor, btr_entity, btr_pay
@@ -53,21 +53,18 @@ from btr_api.services.validator import validate_entity
 bp = Blueprint("submission", __name__)
 
 
-@bp.route("/", methods=("GET",))
 @bp.route("/<id>", methods=("GET",))
 def registers(id: int | None = None):  # pylint: disable=redefined-builtin
-    """Get the submissions, or sepcific submission by id."""
+    """Get the submissions, or specific submission by id."""
     try:
-        if id:
-            if submission := SubmissionModel.find_by_id(id):
-                return jsonify(type=submission.type, submission=submission.payload)
-            return {}, HTTPStatus.NOT_FOUND
+        if submission := SubmissionModel.find_by_id(id):
+            btr_auth.is_authorized(request=request, business_identifier=submission.business_identifier)
+            return jsonify(type=submission.type, submission=submission.payload)
 
-        submissions = SubmissionModel.get_filtered_submissions()
-        submissions = [SubmissionSerializer.to_dict(submission) for submission in submissions]
+        return {}, HTTPStatus.NOT_FOUND
 
-        return jsonify(submissions)
-
+    except AuthException as aex:
+        return exception_response(aex)
     except Exception as exception:  # noqa: B902
         return exception_response(exception)
 
@@ -77,12 +74,16 @@ def get_entity_submission(business_identifier: str):
     """Get the current submission for specified business identifier."""
 
     try:
+        btr_auth.is_authorized(request=request, business_identifier=business_identifier)
+
         submission = SubmissionModel.find_by_business_identifier(business_identifier)
         if submission:
             return jsonify(SubmissionSerializer.to_dict(submission))
 
         return {}, HTTPStatus.NOT_FOUND
 
+    except AuthException as aex:
+        return exception_response(aex)
     except Exception as exception:  # noqa: B902
         return exception_response(exception)
 
@@ -98,7 +99,6 @@ def create_register():
         A tuple containing the response JSON and the HTTP status code.
     """
     try:
-        # TODO: check auth / validate user access
         user = UserModel.get_or_create_user_by_jwt(g.jwt_oidc_token_info)
         account_id = request.headers.get('Account-Id', None)
 
@@ -110,6 +110,9 @@ def create_register():
         [valid, errors] = schema_service.validate(schema_name, json_input)
         if not valid:
             return error_request_response('Invalid schema', HTTPStatus.BAD_REQUEST, errors)
+
+        business_identifier = json_input.get('businessIdentifier')
+        btr_auth.is_authorized(request=request, business_identifier=business_identifier)
 
         # get entity
         identifier = json_input['businessIdentifier']
@@ -149,5 +152,7 @@ def create_register():
 
         return jsonify(id=submission.id), HTTPStatus.CREATED
 
+    except AuthException as aex:
+        return exception_response(aex)
     except Exception as exception:  # noqa: B902
         return exception_response(exception)
