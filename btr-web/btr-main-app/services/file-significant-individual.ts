@@ -24,14 +24,6 @@ const constructBtrApiURL = () => {
   return `${btrApiURL}`
 }
 
-// const convertPercentsToNumber = (sif: SignificantIndividualFilingI) => {
-//   for (const si of sif.significantIndividuals) {
-//     si.percentOfShares = parseFloat(si.percentOfShares.toString()) || 0
-//     si.percentOfVotes = parseFloat(si.percentOfVotes.toString()) || 0
-//   }
-//   return sif
-// }
-
 function getCurrentBusinessAsBtrBodsEntityI () {
   const businessStore = useBcrosBusiness()
   const currentBusiness = businessStore.currentBusiness
