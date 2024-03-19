@@ -135,7 +135,7 @@ const _getPercentageRange = (
     range = PercentageRangeE.MORE_THAN_75
   } else {
     range = PercentageRangeE.NO_SELECTION
-    if (!max || !min) {
+    if (max || min) {
       const error = `Unable to determine the ${interestType} percentage range; ` +
         `business: ${businessIdentifier}, individual name: ${person.names[0].fullName}`
 
