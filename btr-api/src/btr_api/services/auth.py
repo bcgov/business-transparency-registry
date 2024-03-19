@@ -59,7 +59,7 @@ class AuthService:
     def init_app(self, app: Flask):
         """Initialize app dependent variables."""
         self.app = app
-        self.svc_url = app.config.get('AUTH_SVC_URL')
+        self.svc_url = app.config.get('AUTH_API_URL')
         self.timeout = app.config.get('AUTH_API_TIMEOUT', 20)
         self.sso_svc_token_url = app.config.get('SSO_SVC_TOKEN_URL')
         self.sso_svc_timeout = app.config.get('SSO_SVC_TIMEOUT', 20)

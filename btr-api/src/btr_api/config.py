@@ -104,7 +104,7 @@ class Config:  # pylint: disable=too-few-public-methods
     JWT_OIDC_FIRSTNAME = os.getenv('JWT_OIDC_FIRSTNAME', 'firstname')
     JWT_OIDC_LASTNAME = os.getenv('JWT_OIDC_LASTNAME', 'lastname')
 
-    AUTH_SVC_URL = os.getenv('AUTH_SVC_URL', '')
+    AUTH_API_URL = os.getenv('AUTH_API_URL', '') + os.getenv('AUTH_API_VERSION', '')
     PAYMENT_SVC_URL = os.getenv('PAY_API_URL', '') + os.getenv('PAY_API_VERSION', '')
     LEGAL_SVC_URL = os.getenv('LEGAL_API_URL', '') + os.getenv('LEGAL_API_VERSION_2', '')
     BOR_SVC_URL = os.getenv('BOR_API_URL', '') + os.getenv('BOR_API_VERSION', '')
