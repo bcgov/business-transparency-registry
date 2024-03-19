@@ -10,8 +10,8 @@ export interface SignificantIndividualI {
   }
   externalInfluence: ExternalInfluenceE
   missingInfoReason: string
-  percentOfShares: string | number
-  percentOfVotes: string | number
+  percentOfShares: PercentageRangeE
+  percentOfVotes: PercentageRangeE
   profile: ProfileI
   startDate: string // YYYY-MM-DDT
   endDate?: string // YYYY-MM-DDT

@@ -1,38 +1,3 @@
-// /**
-//  * Check if the input value is a whole number with no non-digit characters
-//  * Empty string is considered valid
-//  * @param value the input string or number
-//  */
-// export function validatePercentageWholeNumber (value: string): boolean {
-//   const regex = /^[0-9]*$/
-//   return value === '' || regex.test(value)
-// }
-
-/**
- * Check if the input value is a valid number
- * @param value the input string or number
- */
-export function validatePercentageNumber (value: string | number): boolean {
-  return typeof value === 'number' || !isNaN(Number(value))
-}
-
-/**
- * Check if the input value is in a valid format with no leading zeros
- * Empty string is considered valid
- * @param value the input string or number
- */
-export function validatePercentageFormat (value: string | number): boolean {
-  return typeof value === 'number' || value === '' || value[0] !== '0'
-}
-
-/**
- * Check if the input value is a valid percentage number from 1 to 100
- * @param value the input string or number
- */
-export function validatePercentageValue (value: string | number): boolean {
-  return value === '' || (Number(value) >= 1 && Number(value) <= 100)
-}
-
 /**
  * Check if the percentage of shares and the percentage of votes are required.
  * If any of the Type of Control checkboxes are checked, at least one of the percentage fields is required.
@@ -40,8 +5,11 @@ export function validatePercentageValue (value: string | number): boolean {
  */
 export function validateSharesAndVotes (formData: FormInputI): boolean {
   const controlOfShares = formData.controlOfShares
-  return !Object.values(controlOfShares).some(Boolean) ||
-    (formData.percentOfShares !== '' || formData.percentOfVotes !== '')
+
+  return !Object.values(controlOfShares).some(Boolean) || (
+    formData.percentOfShares !== PercentageRangeE.NO_SELECTION ||
+    formData.percentOfVotes !== PercentageRangeE.NO_SELECTION
+  )
 }
 
 /**
@@ -53,10 +21,15 @@ export function validateSharesAndVotes (formData: FormInputI): boolean {
 export function validateControlOfShares (formData: FormInputI): boolean {
   const typeOfControlSelected: boolean = Object.values(formData.controlOfShares).slice(0, 3).some(Boolean)
   const inConcertControlSelected: boolean = formData.controlOfShares.inConcertControl
-  const percentOfShares: number = Number(formData.percentOfShares)
-  const percentOfVotes: number = Number(formData.percentOfVotes)
+  const percentagesOver25: PercentageRangeE[] = [
+    PercentageRangeE.AT_LEAST_25_TO_50, PercentageRangeE.MORE_THAN_50_TO_75, PercentageRangeE.MORE_THAN_75
+  ]
 
-  if (percentOfShares >= 25 || percentOfVotes >= 25 || inConcertControlSelected) {
+  if (
+    percentagesOver25.includes(formData.percentOfShares) ||
+    percentagesOver25.includes(formData.percentOfVotes) ||
+    inConcertControlSelected
+  ) {
     return typeOfControlSelected
   } else {
     return true

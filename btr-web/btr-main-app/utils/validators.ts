@@ -46,14 +46,6 @@ export function getTaxNumberValidator () {
   ])
 }
 
-export function getPercentageValidator () {
-  const { t } = useI18n()
-  return z.union([z.number(), z.string()])
-    .refine(validatePercentageNumber, t('errors.validation.controlPercentage.specialCharacter'))
-    .refine(validatePercentageFormat, t('errors.validation.controlPercentage.invalidPercentage'))
-    .refine(validatePercentageValue, t('errors.validation.controlPercentage.invalidPercentage'))
-}
-
 export function getAddressCountryValidator () {
   const { t } = useI18n()
   return z.object({ name: z.string(), alpha_2: z.string() }).refine(

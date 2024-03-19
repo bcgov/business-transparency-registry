@@ -44,9 +44,9 @@ describe('pages -> Review and Confirm', () => {
       cy.get('#individual-person-preferred-name').type(testData.profile1.preferredName)
       cy.get('#individual-person-email').type(testData.profile1.email)
 
-      // enter shares percent
-      cy.get('[name="percentOfShares"]').type(testData.profile1.percentOfShares)
-      cy.get('[name="percentOfVotes"]').type(testData.profile1.percentOfVotes)
+      // enter shares and votes percentage
+      cy.get('[data-cy=testPercentOfShares]').click().find('li').eq(0).click()
+      cy.get('[data-cy=testPercentOfVotes]').click().find('li').eq(0).click()
 
       // select the control type (registred owner + direct control)
       cy.get('[data-cy="testTypeOfControl"]').get('[name="registeredOwner"]').check()

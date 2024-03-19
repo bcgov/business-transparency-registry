@@ -5,7 +5,7 @@ import { mockedI18n } from '../../utils/mockedi18n'
 
 import {
   IndividualPersonAddNew, BcrosInputsDateSelect, BcrosInputsAddress, IndividualPersonTaxInfoTaxNumber,
-  IndividualPersonTaxInfoTaxResidency, IndividualPersonControlPercentage,
+  IndividualPersonTaxInfoTaxResidency, IndividualPersonControlPercentageDropdown,
   IndividualPersonControlTypeOfControl, IndividualPersonControlOfDirectors, IndividualPersonControlOtherReasons
 } from '#components'
 
@@ -57,7 +57,7 @@ describe('AddIndividualPerson tests', () => {
   it('renders the control of shares and votes', () => {
     // await wrapper.find('#add-person-manually-toggle').trigger('click')
     // await flushPromises()
-    expect(wrapper.findComponent(IndividualPersonControlPercentage).exists()).toBe(true)
+    expect(wrapper.findComponent(IndividualPersonControlPercentageDropdown).exists()).toBe(true)
     expect(wrapper.findComponent(IndividualPersonControlTypeOfControl).exists()).toBe(true)
   })
 

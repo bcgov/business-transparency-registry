@@ -6,10 +6,11 @@ import { BtrFilingI } from '~/interfaces/btr-bods/btr-filing-i'
 import { BtrBodsOwnershipOrControlI } from '~/interfaces/btr-bods/btr-bods-ownership-or-control-i'
 import { BtrBodsPersonI } from '~/interfaces/btr-bods/btr-bods-person-i'
 import { BodsBtrAddressI } from '~/interfaces/btr-bods/components-i'
-import { BtrSourceDescriptionProvidedByBtrGovBC } from '~/utils/btr-bods/btr-bods-implementations'
+// import { BtrSourceDescriptionProvidedByBtrGovBC } from '~/utils/btr-bods/btr-bods-implementations'
 import { ControlOfDirectorsI } from '~/interfaces/control-of-directors-i'
 import { ControlOfSharesI } from '~/interfaces/control-of-shares-i'
 import { ExternalInfluenceE } from '~/enums/external-influence-e'
+import { PercentageRangeE } from '~/enums/percentage-range-e'
 
 const _findOwnershipOrControlStatement =
   (submission: BtrFilingI, personStatementId: string): BtrBodsOwnershipOrControlI | null => {
@@ -99,29 +100,50 @@ const _getSiPerson = (btrBodsPerson: BtrBodsPersonI): ProfileI => {
   }
 }
 
-const _getMaxInterestValue = (oocs: BtrBodsOwnershipOrControlI, interestType: BodsInterestTypeE): number => {
-  let max = 0
-
-  let maxCalc = (oldValue: number, newValue: number): number => oldValue + newValue
-
-  if (oocs.source?.description === BtrSourceDescriptionProvidedByBtrGovBC) {
-    maxCalc = (currentValue: number, newValue: number): number => {
-      return Math.max(currentValue, newValue)
-    }
-  }
+const _getPercentageRange = (
+  oocs: BtrBodsOwnershipOrControlI, interestType: BodsInterestTypeE, businessIdentifier: string, person: BtrBodsPersonI
+): PercentageRangeE => {
+  /**
+   * Note: we assume the min and max values for all interests in oocs.interests are the same.
+   * The first occurance of the interest that matches the interestType will be used to determine the range.
+   *
+   * We need to confirm:
+   * 1) for oocs (ownershipOrControlStatement) provided by BtrSourceDescriptionProvidedByBtrGovBC,
+   *    is it possible for two interests to have different min and max values?
+   *
+   * 2) how do we want to handle the oocs from external sources?
+   */
+  let min: number | undefined = 0
+  let max: number | undefined = 0
+  let range: PercentageRangeE = PercentageRangeE.NO_SELECTION
 
   for (const interest of oocs.interests) {
     if (interest.type === interestType) {
-      max = maxCalc(max,
-        interest.share?.exact ||
-        interest.share?.maximum ||
-        interest.share?.minimum ||
-        0
-      )
+      min = interest.share?.minimum
+      max = interest.share?.maximum
+      break
     }
   }
 
-  return max > 100 ? 100 : max
+  if (min === 0 && max === 25) {
+    range = PercentageRangeE.LESS_THAN_25
+  } else if (min === 25 && max === 50) {
+    range = PercentageRangeE.AT_LEAST_25_TO_50
+  } else if (min === 50 && max === 75) {
+    range = PercentageRangeE.MORE_THAN_50_TO_75
+  } else if (min === 75 && max === 100) {
+    range = PercentageRangeE.MORE_THAN_75
+  } else {
+    range = PercentageRangeE.NO_SELECTION
+    if (!max || !min) {
+      const error = `Unable to determine the ${interestType} percentage range; ` +
+        `business: ${businessIdentifier}, individual name: ${person.names[0].fullName}`
+
+      console.error(error)
+    }
+  }
+
+  return range
 }
 
 const isControlType = (oocs: BtrBodsOwnershipOrControlI, details: string) => {
@@ -153,9 +175,11 @@ function _getControlOther (oocs: BtrBodsOwnershipOrControlI) {
   return other?.details || ''
 }
 
-const _getSi = (person: BtrBodsPersonI, oocs: BtrBodsOwnershipOrControlI): SignificantIndividualI => {
-  const votes = _getMaxInterestValue(oocs, BodsInterestTypeE.VOTING_RIGHTS)
-  const shares = _getMaxInterestValue(oocs, BodsInterestTypeE.SHAREHOLDING)
+const _getSi = (
+  person: BtrBodsPersonI, oocs: BtrBodsOwnershipOrControlI, businessIdentifier: string
+): SignificantIndividualI => {
+  const votes = _getPercentageRange(oocs, BodsInterestTypeE.VOTING_RIGHTS, businessIdentifier, person)
+  const shares = _getPercentageRange(oocs, BodsInterestTypeE.SHAREHOLDING, businessIdentifier, person)
 
   return {
     controlType: {
@@ -175,11 +199,11 @@ const _getSi = (person: BtrBodsPersonI, oocs: BtrBodsOwnershipOrControlI): Signi
 
 export const getSIsFromBtrBodsSubmission = (submission: BtrFilingI): SignificantIndividualI[] => {
   const sis: SignificantIndividualI[] = []
-
+  const businessIdentifier = submission.businessIdentifier
   for (const person of submission.personStatements) {
     const oocs = _findOwnershipOrControlStatement(submission, person.statementID)
     if (person && oocs) {
-      sis.push(_getSi(person, oocs))
+      sis.push(_getSi(person, oocs, businessIdentifier))
     }
   }
 

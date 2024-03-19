@@ -24,14 +24,6 @@ const constructBtrApiURL = () => {
   return `${btrApiURL}`
 }
 
-const convertPercentsToNumber = (sif: SignificantIndividualFilingI) => {
-  for (const si of sif.significantIndividuals) {
-    si.percentOfShares = parseFloat(si.percentOfShares.toString()) || 0
-    si.percentOfVotes = parseFloat(si.percentOfVotes.toString()) || 0
-  }
-  return sif
-}
-
 function getCurrentBusinessAsBtrBodsEntityI () {
   const businessStore = useBcrosBusiness()
   const currentBusiness = businessStore.currentBusiness
@@ -133,7 +125,7 @@ const convertToBtrBodsForSubmit = (sif: SignificantIndividualFilingI): BtrFiling
 }
 
 const submitSignificantIndividualFiling = async (sif: SignificantIndividualFilingI) => {
-  sif = convertPercentsToNumber(sif)
+  // sif = convertPercentsToNumber(sif)
   const submitData = convertToBtrBodsForSubmit(sif)
 
   const url = constructBtrApiURL() + '/plots'
