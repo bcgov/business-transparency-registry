@@ -3,8 +3,8 @@
     "fullName": "John Smith",
     "preferredName": "John",
     "email": "123@test.com",
-    "percentOfShares": "20",
-    "percentOfVotes": "10",
+    "percentOfShares": "moreThan75",
+    "percentOfVotes": "moreThan75",
     "address": {
       "country": "Canada",
       "streetAddress": "111 test street",
@@ -17,7 +17,7 @@
     "summaryTable": {
       "citizenship": "Citizenship(s):Canada",
       "taxResidency": "Tax Resident of Canada",
-      "shareControl": "Registered owner of 20% of shares, 10% of votes",
+      "shareControl": "Registered owner: More than 75% of shares; More than 75% of votes",
       "directorControl": "Direct control of the majority of directors"
     }
   },
@@ -25,8 +25,8 @@
     "fullName": "John Doe",
     "preferredName": "John",
     "email": "test@testemail.com",
-    "percentOfShares": "30",
-    "percentOfVotes": "10",
+    "percentOfShares": "moreThan75",
+    "percentOfVotes": "moreThan75",
     "address": {
       "country": "Canada",
       "streetAddress": "111 test street",
@@ -39,7 +39,7 @@
     "summaryTable": {
       "citizenship": "Citizenship(s):Canada",
       "taxResidency": "Tax Resident of Canada",
-      "shareControl": "Registered owner of 30% of shares, 10% of votes",
+      "shareControl": "Registered owner: More than 75% of shares; More than 75% of votes",
       "directorControl": "Direct control of the majority of directors"
     }
   }

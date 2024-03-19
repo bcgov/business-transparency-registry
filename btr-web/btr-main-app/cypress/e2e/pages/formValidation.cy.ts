@@ -60,7 +60,7 @@ describe('pages -> Form Validation', () => {
 
     // If one of the control types is selected, the percentage of shares and votes should be required
     // To remove the error,
-    // 1) enter percent of shares or percent of votes
+    // 1) select percent of shares or percent of votes
     // 2) uncheck the control type
     cy.get('[name="registeredOwner"]').check()
     cy.get('[data-cy=new-si-done-btn]').click()
@@ -69,7 +69,7 @@ describe('pages -> Form Validation', () => {
     cy.contains(i18n.errors.validation.controlPercentage.empty).should('not.exist')
     cy.get('[name="registeredOwner"]').check()
     cy.get('[data-cy=new-si-done-btn]').click()
-    cy.get('[name="percentOfShares"]').type('30').blur()
+    cy.get('[data-cy=testPercentOfShares]').click().find('li').eq(0).click()
     cy.contains(i18n.errors.validation.controlPercentage.empty).should('not.exist')
 
     // if the in-concert control is selected, the percentage of shares and votes is required, and the
@@ -88,10 +88,10 @@ describe('pages -> Form Validation', () => {
     // if either the percent of shares or the percent of votes is >= 25%, the control type is required
     cy.get('[data-cy=new-si-cancel-btn]').click()
     cy.get('[data-cy=add-new-btn]').click()
-    cy.get('[name="percentOfShares"]').type('10').blur()
+    cy.get('[data-cy=testPercentOfShares]').click().find('li').eq(3).click()
     cy.get('[data-cy=new-si-done-btn]').click()
     cy.contains(i18n.errors.validation.controlOfDirectors.required).should('not.exist')
-    cy.get('[name="percentOfShares"]').clear().type('30').blur()
+    cy.get('[data-cy=testPercentOfShares]').click().find('li').eq(2).click()
     cy.get('[data-cy=new-si-done-btn]').click()
     cy.contains(i18n.errors.validation.controlOfDirectors.required).should('exist')
     cy.get('[name="registeredOwner"]').check()

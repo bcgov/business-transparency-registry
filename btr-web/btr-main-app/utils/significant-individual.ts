@@ -44,8 +44,8 @@ export function getEmptySI (startDate: string) {
     },
     externalInfluence: ExternalInfluenceE.NO_EXTERNAL_INFLUENCE,
     missingInfoReason: '',
-    percentOfShares: '',
-    percentOfVotes: '',
+    percentOfShares: PercentageRangeE.NO_SELECTION,
+    percentOfVotes: PercentageRangeE.NO_SELECTION,
     startDate: startDate || '',
     action: FilingActionE.ADD
   }

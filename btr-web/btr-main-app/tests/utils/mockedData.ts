@@ -1,4 +1,5 @@
 import { FilingActionE } from '~/enums/filing-action-e'
+import { PercentageRangeE } from '~/enums/percentage-range-e'
 
 export const SI_EXAMPLE_DATE = '2001-01-01'
 
@@ -44,8 +45,8 @@ export const testSI: SignificantIndividualI = {
   },
   externalInfluence: ExternalInfluenceE.CAN_INFLUENCE,
   missingInfoReason: '',
-  percentOfShares: '75',
-  percentOfVotes: '25',
+  percentOfShares: PercentageRangeE.MORE_THAN_50_TO_75,
+  percentOfVotes: PercentageRangeE.AT_LEAST_25_TO_50,
   startDate: SI_EXAMPLE_DATE,
   action: FilingActionE.ADD
 }
