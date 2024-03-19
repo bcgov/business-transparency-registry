@@ -121,6 +121,7 @@ const _getPercentageRange = (interest: BodsInterestI, range: PercentageRangeE, s
       interest.share.minimum = 0
       interest.share.maximum = 25
       interest.share.exclusiveMinimum = false
+      interest.share.exclusiveMaximum = true
       break
     case PercentageRangeE.AT_LEAST_25_TO_50:
       // [25, 50]

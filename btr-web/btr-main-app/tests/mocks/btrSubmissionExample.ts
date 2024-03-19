@@ -185,7 +185,7 @@ export const btrSubmissionExampleMock = {
             directOrIndirect: 'indirect',
             share: {
               exclusiveMaximum: false,
-              exclusiveMinimum: true,
+              exclusiveMinimum: false,
               maximum: 50,
               minimum: 25
             },
