@@ -35,7 +35,7 @@
 <script setup lang="ts">
 import type { FormError } from '#ui/types'
 
-const { t } = useI18n()
+const t = useNuxtApp().$i18n.t
 const emit = defineEmits<{
   'update:citizenships': [value: Array<BtrCountryI>]
   'update:canadianCitizenship': [value: string | null]

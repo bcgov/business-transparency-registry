@@ -38,7 +38,7 @@
 </template>
 
 <script setup lang="ts">
-const { t } = useI18n()
+const t = useNuxtApp().$i18n.t
 
 const items: InfoTableItemI = [
   { label: t('labels.fullName'), info: 'Wallaby Wobbles' },

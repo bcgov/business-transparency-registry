@@ -78,7 +78,7 @@ const prop = defineProps({
 })
 
 const IN_CONCERT_CONTROL = 'inConcertControl'
-const { t } = useI18n()
+const t = useNuxtApp().$i18n.t
 const types = [
   { value: 'registeredOwner', label: t('texts.sharesAndVotes.registeredOwner') },
   { value: 'beneficialOwner', label: t('texts.sharesAndVotes.beneficialOwner') },

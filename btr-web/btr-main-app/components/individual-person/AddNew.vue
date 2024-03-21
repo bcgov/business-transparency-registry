@@ -297,7 +297,7 @@
 import { z, ZodError, ZodIssue } from 'zod'
 import type { FormError } from '#ui/types'
 
-const { t } = useI18n()
+const t = useNuxtApp().$i18n.t
 
 const emits = defineEmits<{
   add: [value: SignificantIndividualI],

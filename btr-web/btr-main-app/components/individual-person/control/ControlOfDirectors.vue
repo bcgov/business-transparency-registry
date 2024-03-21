@@ -59,7 +59,7 @@ const prop = defineProps({
   }
 })
 
-const { t } = useI18n()
+const t = useNuxtApp().$i18n.t
 const types = [
   { value: 'directControl', label: t('texts.controlOfDirectors.directControl') },
   { value: 'indirectControl', label: t('texts.controlOfDirectors.indirectControl') },

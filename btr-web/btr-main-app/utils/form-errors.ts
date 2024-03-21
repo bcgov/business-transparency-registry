@@ -7,7 +7,7 @@ export function getMissingSharesAndVotesError () {
 }
 
 export function getMissingControlOfSharesError () {
-  const { t } = useI18n()
+  const t = useNuxtApp().$i18n.t
   return {
     message: t('errors.validation.sharesAndVotes.required'),
     path: ['controlOfShares']
@@ -15,7 +15,7 @@ export function getMissingControlOfSharesError () {
 }
 
 export function getMissingControlOfDirectorsError () {
-  const { t } = useI18n()
+  const t = useNuxtApp().$i18n.t
   return {
     message: t('errors.validation.controlOfDirectors.required'),
     path: ['controlOfDirectors']
@@ -23,7 +23,7 @@ export function getMissingControlOfDirectorsError () {
 }
 
 export function getMissingBirthDateError () {
-  const { t } = useI18n()
+  const t = useNuxtApp().$i18n.t
   return {
     message: t('errors.validation.birthDate.required'),
     path: ['birthDate']
@@ -31,7 +31,7 @@ export function getMissingBirthDateError () {
 }
 
 export function getMissingCitizenshipError () {
-  const { t } = useI18n()
+  const t = useNuxtApp().$i18n.t
   return {
     message: t('errors.validation.citizenship.required'),
     path: ['citizenshipCA']
@@ -39,7 +39,7 @@ export function getMissingCitizenshipError () {
 }
 
 export function getMissingOtherCountryError () {
-  const { t } = useI18n()
+  const t = useNuxtApp().$i18n.t
   return {
     message: t('errors.validation.citizenship.otherCountry'),
     path: ['citizenshipsExCA']
@@ -47,7 +47,7 @@ export function getMissingOtherCountryError () {
 }
 
 export function getMissingTaxNumberInfoError () {
-  const { t } = useI18n()
+  const t = useNuxtApp().$i18n.t
   return {
     message: t('errors.validation.taxNumber.required'),
     path: ['hasTaxNumber']
@@ -55,7 +55,7 @@ export function getMissingTaxNumberInfoError () {
 }
 
 export function getMissingTaxResidencyError () {
-  const { t } = useI18n()
+  const t = useNuxtApp().$i18n.t
   return {
     message: t('errors.validation.taxResidency.required'),
     path: ['taxResidency']
@@ -63,7 +63,7 @@ export function getMissingTaxResidencyError () {
 }
 
 export function getNoMissingInfoReasonError () {
-  const { t } = useI18n()
+  const t = useNuxtApp().$i18n.t
   return {
     message: t('errors.validation.missingInfoReason.required'),
     path: ['missingInfoReason']
