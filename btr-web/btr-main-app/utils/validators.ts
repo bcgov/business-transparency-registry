@@ -1,7 +1,7 @@
 import { z } from 'zod'
 
 export function getEmailValidator () {
-  const { t } = useI18n()
+  const t = useNuxtApp().$i18n.t
   return z.string()
     .min(1, t('errors.validation.email.empty'))
     .max(254, 'errors.validation.email.maxLengthExceeded')
@@ -21,7 +21,7 @@ export function getFolioValidator () {
 }
 
 export function getFullNameValidator () {
-  const { t } = useI18n()
+  const t = useNuxtApp().$i18n.t
   return z.preprocess(normalizeName as (arg: unknown) => unknown, z.string()
     .min(1, t('errors.validation.fullName.empty'))
     .max(150, t('errors.validation.fullName.maxLengthExceeded'))
@@ -29,14 +29,14 @@ export function getFullNameValidator () {
 }
 
 export function getPreferredNameValidator () {
-  const { t } = useI18n()
+  const t = useNuxtApp().$i18n.t
   return z.preprocess(normalizeName as (arg: unknown) => unknown, z.string()
     .max(150, t('errors.validation.preferredName.maxLengthExceeded'))
     .refine(validatePreferredName, t('errors.validation.preferredName.specialCharacter')))
 }
 
 export function getTaxNumberValidator () {
-  const { t } = useI18n()
+  const t = useNuxtApp().$i18n.t
   return z.union([
     z.undefined(),
     z.string()
@@ -47,28 +47,28 @@ export function getTaxNumberValidator () {
 }
 
 export function getAddressCountryValidator () {
-  const { t } = useI18n()
+  const t = useNuxtApp().$i18n.t
   return z.object({ name: z.string(), alpha_2: z.string() }).refine(
     (val: BtrCountryI) => { return val.name !== '' }, t('errors.validation.address.country')
   )
 }
 
 export function getAddressLine1Validator () {
-  const { t } = useI18n()
+  const t = useNuxtApp().$i18n.t
   return z.string().min(1, t('errors.validation.address.line1'))
 }
 
 export function getAddressCityValidator () {
-  const { t } = useI18n()
+  const t = useNuxtApp().$i18n.t
   return z.string().min(1, t('errors.validation.address.city'))
 }
 
 export function getAddressRegionValidator () {
-  const { t } = useI18n()
+  const t = useNuxtApp().$i18n.t
   return z.string().min(1, t('errors.validation.address.region'))
 }
 
 export function getAddressPostalCodeValidator () {
-  const { t } = useI18n()
+  const t = useNuxtApp().$i18n.t
   return z.string().min(1, t('errors.validation.address.postalCode'))
 }

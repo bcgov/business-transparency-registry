@@ -182,7 +182,7 @@ const props = defineProps({
 
 const editingIndex = ref(-1)
 
-const { t } = useI18n()
+const t = useNuxtApp().$i18n.t
 const headers = [
   t('labels.name'), t('labels.address'), t('labels.details'), t('labels.significanceDates'), t('labels.control')
 ]

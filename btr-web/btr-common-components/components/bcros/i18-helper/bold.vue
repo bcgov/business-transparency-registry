@@ -8,7 +8,7 @@ const props = defineProps({
   translationPath: { type: String, required: true }
 })
 
-const { t } = useI18n()
+const t = useNuxtApp().$i18n.t
 
 const text = t(props.translationPath as string, {
   boldStart: '{b}',

@@ -103,7 +103,7 @@ const maxNameLength = 150
 const citizenshipType = ref('')
 const citizenships2 = ref([])
 
-const { t } = useI18n()
+const t = useNuxtApp().$i18n.t
 const schema = z.object({
   fullName: z.preprocess(normalizeName,
     z.string()

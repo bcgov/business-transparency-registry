@@ -70,7 +70,7 @@ import { storeToRefs } from 'pinia'
 const props = defineProps<{ personMode?: boolean }>()
 
 const config = useRuntimeConfig()
-const { t } = useI18n()
+const t = useNuxtApp().$i18n.t
 const {
   goToAccountInfo,
   goToBcrosHome,

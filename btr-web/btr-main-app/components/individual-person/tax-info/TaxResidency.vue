@@ -37,7 +37,7 @@ const emit = defineEmits<{(e: 'update:modelValue', value: boolean): void}>()
 
 const selectedValue = ref(props.modelValue)
 
-const { t } = useI18n()
+const t = useNuxtApp().$i18n.t
 const options = [
   { value: true, label: t('labels.isTaxResident') },
   { value: false, label: t('labels.notTaxResident') }
