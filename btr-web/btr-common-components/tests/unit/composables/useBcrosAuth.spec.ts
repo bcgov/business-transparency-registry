@@ -18,7 +18,7 @@ describe('useBcrosAuth Tests', () => {
   const testTokenId = '12322frwr'
   // axios mock
   vi.mock('axios', () => { return { default: { ...axiosDefaultMock } } })
-  
+
   beforeEach(() => {
     setActivePinia(createPinia())
     keycloak = useBcrosKeycloak()
@@ -31,20 +31,17 @@ describe('useBcrosAuth Tests', () => {
       keycloak.kc.authenticated = true
       return true
     })
-  
+
     account = useBcrosAccount()
     account.setAccountInfo()
     // for some reason these don't initialize properly
     account.user = computed(() => keycloak.kcUser)
     account.userFirstName = ref(account.user.firstName)
     account.userLastName = ref(account.user.lastName)
-    console.log('account', account)
-    console.log('account.userFirstName ', account.userFirstName)
-    console.log('account.userLastName ', account.userLastName)
   })
-  
+
   afterEach(() => vi.clearAllMocks())
-  
+
   it('auth setup flow works as expected', async () => {
     // verify setup
     expect(keycloak.kcUser).toEqual({})
@@ -56,8 +53,6 @@ describe('useBcrosAuth Tests', () => {
     expect(keycloak.kc.tokenParsed).toEqual(testParsedToken)
     expect(keycloak.kcUser).not.toEqual({})
     expect(account.user).toEqual(keycloak.kcUser)
-    console.log('account.user', account.user)
-    console.log('account.userAccounts', account.userAccounts)
     expect(account.userAccounts.length).toBe(2)
     expect(account.currentAccount).toEqual(testUserSettings[0])
     expect(sessionStorage.getItem(SessionStorageKeyE.KEYCLOAK_TOKEN)).toBe(testToken)

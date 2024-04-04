@@ -38,4 +38,4 @@ const axiosDefaultMock = {
   }
 }
 
-export { axiosRequestMocks, axiosDefaultMock}
+export { axiosRequestMocks, axiosDefaultMock }
