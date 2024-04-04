@@ -1,9 +1,7 @@
 import { describe, expect, it, vi } from 'vitest'
 import { setActivePinia, createPinia, storeToRefs } from 'pinia'
-// import { axiosRequestMocks, axiosDefaultMock } from '../utils/mockedAxios'
-import { axiosDefaultMock } from '../utils/mockedAxios'
-// import { testBusinessBEN, testBusinessSP, testBusinessContact } from '../utils/mockedData'
-import { testBusinessBEN, testBusinessSP } from '../utils/mockedData'
+import { axiosRequestMocks, axiosDefaultMock } from '../utils/mockedAxios'
+import { testBusinessBEN, testBusinessSP, testBusinessContact } from '../utils/mockedData'
 import { useBcrosBusiness } from '@/stores/business'
 
 describe('Business Store Tests', () => {
@@ -58,37 +56,37 @@ describe('Business Store Tests', () => {
   //     expect(businessDetails.legalName).toBe(testBusinessBEN.business.legalName)
   //   }
   // })
-  //
-  // it('loads corresponding business data into the store when load business is called', async () => {
-  //   await business.loadBusiness(testBusinessBEN.business.identifier)
-  //   expect(currentBusiness.value).toEqual(testBusinessBEN.business)
-  //   expect(currentBusinessIdentifier.value).toEqual(testBusinessBEN.business.identifier)
-  //   expect(currentBusinessName.value).toEqual(testBusinessBEN.business.legalName)
-  // })
-  //
-  // it('does not load corresponding business data if it is already cached when load business is called', async () => {
-  //   currentBusiness.value = testBusinessBEN.business
-  //   expect(axiosRequestMocks.get).not.toHaveBeenCalled()
-  //   await business.loadBusiness(testBusinessBEN.business.identifier)
-  //   expect(axiosRequestMocks.get).not.toHaveBeenCalled()
-  // })
-  //
-  // it('loads corresponding business data if a different business is cached when load business is called',
-  // async () => {
-  //   currentBusiness.value = testBusinessSP
-  //   expect(axiosRequestMocks.get).not.toHaveBeenCalled()
-  //   await business.loadBusiness(testBusinessBEN.business.identifier)
-  //   expect(axiosRequestMocks.get).toHaveBeenCalledOnce()
-  //   expect(currentBusiness.value).toEqual(testBusinessBEN.business)
-  // })
-  //
-  // it('loads corresponding business data if business is cached when load business is called with force', async () => {
-  //   currentBusiness.value = testBusinessBEN
-  //   expect(axiosRequestMocks.get).not.toHaveBeenCalled()
-  //   await business.loadBusiness(testBusinessBEN.business.identifier, true)
-  //   expect(axiosRequestMocks.get).toHaveBeenCalledOnce()
-  // })
-  //
+  
+  it('loads corresponding business data into the store when load business is called', async () => {
+    await business.loadBusiness(testBusinessBEN.business.identifier)
+    expect(currentBusiness.value).toEqual(testBusinessBEN.business)
+    expect(currentBusinessIdentifier.value).toEqual(testBusinessBEN.business.identifier)
+    expect(currentBusinessName.value).toEqual(testBusinessBEN.business.legalName)
+  })
+  
+  it('does not load corresponding business data if it is already cached when load business is called', async () => {
+    currentBusiness.value = testBusinessBEN.business
+    expect(axiosRequestMocks.get).not.toHaveBeenCalled()
+    await business.loadBusiness(testBusinessBEN.business.identifier)
+    expect(axiosRequestMocks.get).not.toHaveBeenCalled()
+  })
+  
+  it('loads corresponding business data if a different business is cached when load business is called',
+  async () => {
+    currentBusiness.value = testBusinessSP
+    expect(axiosRequestMocks.get).not.toHaveBeenCalled()
+    await business.loadBusiness(testBusinessBEN.business.identifier)
+    expect(axiosRequestMocks.get).toHaveBeenCalledOnce()
+    expect(currentBusiness.value).toEqual(testBusinessBEN.business)
+  })
+  
+  it('loads corresponding business data if business is cached when load business is called with force', async () => {
+    currentBusiness.value = testBusinessBEN
+    expect(axiosRequestMocks.get).not.toHaveBeenCalled()
+    await business.loadBusiness(testBusinessBEN.business.identifier, true)
+    expect(axiosRequestMocks.get).toHaveBeenCalledOnce()
+  })
+  
   // it('loads corresponding contact data into the store with expected caching rules', async () => {
   //   const expectedContact: ContactBusinessI = {
   //     businessIdentifier: testBusinessContact.businessIdentifier,
