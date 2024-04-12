@@ -9,7 +9,7 @@
       data-cy="isUnableToObtainOrConfirmInformationCheckbox"
       @change="isUnableToObtainOrConfirmInformationCheckboxChange"
     />
-    <div v-if="isUnableToObtainOrConfirmInformation" >
+    <div v-if="isUnableToObtainOrConfirmInformation">
       <p class="py-3">
         {{ $t('labels.unableToObtainOrConfirmInformation.description') }}
       </p>

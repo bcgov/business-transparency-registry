@@ -148,8 +148,8 @@
         <div class="flex-col w-full">
           <BcrosInputsEmailField
             id="individual-person-email"
-            name="profile.email"
             v-model="significantIndividual.profile.email"
+            name="profile.email"
             :placeholder="$t('labels.emailAddress')"
             :variant="emailInvalid ? 'error' : 'bcGov'"
             data-cy="testEmail"
@@ -169,7 +169,7 @@
             :label="$t('labels.lastKnownAddress')"
             :errors="addressErrors"
           />
-          <div class="flex-col py-5"></div>
+          <div class="flex-col py-5" />
           <p class="font-bold py-3">
             {{ $t('labels.birthdate') }}
           </p>
@@ -178,7 +178,7 @@
             name="profile.birthDate"
             class="mt-3"
             :initial-date="significantIndividual.profile.birthDate
-            ? dateStringToDate(significantIndividual.profile.birthDate) : undefined"
+              ? dateStringToDate(significantIndividual.profile.birthDate) : undefined"
             :max-date="new Date()"
             :placeholder="$t('placeholders.dateSelect.birthdate')"
             :variant="birthDateErrors.length > 0 ? 'error' : 'bcGov'"
@@ -238,8 +238,8 @@
             </p>
             <IndividualPersonTaxInfoTaxResidency
               id="addNewPersonTaxResidency"
-              name="profile.isTaxResident"
               v-model="significantIndividual.profile.isTaxResident"
+              name="profile.isTaxResident"
               :errors="taxResidencyErrors"
               data-cy="testTaxResidency"
             />
@@ -561,7 +561,6 @@ watch(() => missingInfo.value, (val: boolean) => {
     missingInfoReasonErrors.value = []
   }
 })
-
 
 const formSchema = z.object({
   profile: z.object({

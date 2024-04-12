@@ -1,8 +1,8 @@
 <template>
   <div>
-<!--    <p class="font-bold py-3">-->
-<!--      {{ $t('labels.other') }}-->
-<!--    </p>-->
+    <!--    <p class="font-bold py-3">-->
+    <!--      {{ $t('labels.other') }}-->
+    <!--    </p>-->
     <p>
       {{ $t('texts.otherReasons.description') }}
     </p>
