@@ -1,75 +1,52 @@
 <template>
-  <div data-cy="addIndividualPerson">
-    <!-- NB: we may be adding this back in later -->
-    <!-- <div v-if="!isEditing">
-      <p>
-        {{ $t('texts.addIndividualPerson') }}
-      </p>
-    </div> -->
+  <div data-cy="addIndividualPerson" class="w-full">
     <UForm
       ref="profileFormBase"
       :schema="formSchema"
-      :state="significantIndividual.profile"
+      :state="significantIndividual"
       @change="addBtrPayFees"
     >
-      <div class="flex-col">
-        <BcrosInputsNameField
-          id="individual-person-full-name"
-          v-model="significantIndividual.profile.fullName"
-          name="fullName"
-          :label="$t('labels.fullName')"
-          :variant="fullNameInvalid ? 'error' : 'bcGov'"
-          data-cy="testFullName"
-        />
-      </div>
-      <div class="flex-col mt-10">
-        <BcrosInputsNameField
-          id="individual-person-preferred-name"
-          v-model="significantIndividual.profile.preferredName"
-          name="preferredName"
-          :label="$t('labels.preferredName')"
-          :variant="preferredNameInvalid ? 'error' : 'bcGov'"
-          data-cy="testPreferredName"
-        />
-      </div>
-      <div class="flex-col mt-10">
-        <BcrosInputsEmailField
-          id="individual-person-email"
-          v-model="significantIndividual.profile.email"
-          :label="$t('labels.emailAddress')"
-          :variant="emailInvalid ? 'error' : 'bcGov'"
-          data-cy="testEmail"
-        />
-      </div>
-    </UForm>
-    <!-- <div class="text-blue-700 py-5 align-middle">
-      <a
-        id="add-person-manually-toggle"
-        href=""
-        data-cy="showAddIndividualPersonManually"
-        class="p-1 underline"
-        @click.prevent="showAddInfoManually=!showAddInfoManually"
+      <!--  section: your information  -->
+      <!--      <IndividualPersonAddNewSection-->
+      <!--        :show-section-has-errors="sectionErrors?.yourInformation?.length > 0"-->
+      <!--        :section-title="$t('sectionHeadings.yourInformation')"-->
+      <!--      >-->
+      <!--        <div class="flex-col py-5">-->
+      <!--        </div>-->
+      <!--      </IndividualPersonAddNewSection>-->
+
+      <!--  section: individuals full name  -->
+      <IndividualPersonAddNewSection
+        :show-section-has-errors="sectionErrors?.individualsFullName?.length > 0"
+        :section-title="$t('sectionHeadings.individualsFullName')"
       >
-        <UIcon v-if="showAddInfoManually" name="i-mdi-close" />
-        {{ showAddInfoManuallyText }}
-      </a>
-    </div> -->
-    <!-- NB: we may be adding the toggle back in later -->
-    <template v-if="showAddInfoManually">
-      <!-- <div class="flex-col mt-5 py-5">
-        <p class="font-bold py-3">
-          {{ $t('labels.beneficialOwnershipAssessment') }}
-        </p>
-        <p>
-          {{ $t('texts.beneficialOwnershipAssessmentText1') }}
-        </p>
-      </div> -->
-      <UForm
-        ref="ownerFormBase"
-        :schema="formSchema"
-        :state="significantIndividual"
+        <div class="flex-col w-full">
+          <BcrosInputsNameField
+            id="individual-person-full-name"
+            v-model="significantIndividual.profile.fullName"
+            name="profile.fullName"
+            :label="$t('labels.fullName')"
+            :variant="fullNameInvalid ? 'error' : 'bcGov'"
+            data-cy="testFullName"
+          />
+          <BcrosInputsNameField
+            id="individual-person-preferred-name"
+            v-model="significantIndividual.profile.preferredName"
+            name="profile.preferredName"
+            :label="$t('labels.preferredName')"
+            :variant="preferredNameInvalid ? 'error' : 'bcGov'"
+            data-cy="testPreferredName"
+            cl
+          />
+        </div>
+      </IndividualPersonAddNewSection>
+
+      <!--  section: type of interest or control  -->
+      <IndividualPersonAddNewSection
+        :show-section-has-errors="sectionErrors?.typeOfInterestOrControl?.length > 0"
+        :section-title="$t('sectionHeadings.typeOfInterestOrControl')"
       >
-        <div class="flex-col pt-5">
+        <div class="flex-col pt-5 w-full">
           <p class="font-bold py-3">
             {{ $t('labels.sharesAndVotes') }}
           </p>
@@ -94,90 +71,150 @@
             percentage-type="votes"
             data-cy="testPercentOfVotes"
           />
+          <IndividualPersonControlTypeOfControl
+            id="typeOfControl"
+            v-model="significantIndividual.controlType.sharesVotes"
+            name="typeOfControl"
+            data-cy="testTypeOfControl"
+            :errors="controlOfSharesErrors"
+          />
         </div>
-      </UForm>
-      <div class="flex-col py-5">
-        <IndividualPersonControlTypeOfControl
-          id="typeOfControl"
-          v-model="significantIndividual.controlType.sharesVotes"
-          name="typeOfControl"
-          data-cy="testTypeOfControl"
-          :errors="controlOfSharesErrors"
-        />
-      </div>
-      <div class="flex-col py-5">
-        <p class="font-bold py-3">
-          {{ $t('labels.controlOfDirectors') }}
-        </p>
-        <p>
-          {{ $t('texts.controlOfDirectors.text.part1') }}
-          <span class="font-bold">{{ $t('texts.controlOfDirectors.text.part2') }}</span>
-          {{ $t('texts.controlOfDirectors.text.part3') }}
-        </p>
-        <IndividualPersonControlOfDirectors
-          id="controlOfDirectors"
-          v-model="significantIndividual.controlType.directors"
-          name="controlOfDirectors"
-          data-cy="testControlOfDirectors"
-          :errors="controlOfDirectorsErrors"
-        />
-        <p>
-          <span class="font-bold">{{ $t('texts.note') }}</span>
-          {{ $t('texts.controlOfDirectors.note') }}
-        </p>
-      </div>
-      <div class="flex-col py-5">
+      </IndividualPersonAddNewSection>
+
+      <!--  section: jointly or in concert  -->
+      <!--      <IndividualPersonAddNewSection-->
+      <!--        :show-section-has-errors="sectionErrors?.interestOrRightsJointlyOrInConcert?.length > 0"-->
+      <!--        :section-title="$t('sectionHeadings.interestOrRightsJointlyOrInConcert')"-->
+      <!--      >-->
+      <!--        <div class="flex-col py-5">-->
+      <!--        </div>-->
+      <!--      </IndividualPersonAddNewSection>-->
+
+      <!--  section: control of majority of directors  -->
+      <IndividualPersonAddNewSection
+        :show-section-has-errors="sectionErrors?.controlOfMajorityOfDirectors?.length > 0"
+        :section-title="$t('sectionHeadings.controlOfMajorityOfDirectors')"
+      >
+        <div class="w-full flex flex-col">
+          <p class="font-bold py-3">
+            {{ $t('labels.controlOfDirectors') }}
+          </p>
+          <p>
+            {{ $t('texts.controlOfDirectors.text.part1') }}
+            <span class="font-bold">{{ $t('texts.controlOfDirectors.text.part2') }}</span>
+            {{ $t('texts.controlOfDirectors.text.part3') }}
+          </p>
+          <IndividualPersonControlOfDirectors
+            id="controlOfDirectors"
+            v-model="significantIndividual.controlType.directors"
+            name="controlOfDirectors"
+            data-cy="testControlOfDirectors"
+            :errors="controlOfDirectorsErrors"
+          />
+          <p>
+            <span class="font-bold">{{ $t('texts.note') }}</span>
+            {{ $t('texts.controlOfDirectors.note') }}
+          </p>
+        </div>
+      </IndividualPersonAddNewSection>
+
+      <!--  section: other reasons  -->
+      <IndividualPersonAddNewSection
+        :show-section-has-errors="sectionErrors?.otherReasons?.length > 0"
+        :section-title="$t('sectionHeadings.otherReasons')"
+      >
         <IndividualPersonControlOtherReasons
           id="otherReasons"
           v-model="significantIndividual.controlType.other"
           name="otherReasons"
           data-cy="otherReasons"
         />
-      </div>
-      <div class="flex-col py-5">
-        <p class="font-bold py-3">
-          {{ $t('labels.birthdate') }}
-        </p>
-        <BcrosInputsDateSelect
-          id="addNewPersonBirthdate"
-          class="mt-3"
-          :initial-date="significantIndividual.profile.birthDate
-            ? dateStringToDate(significantIndividual.profile.birthDate) : undefined"
-          :max-date="new Date()"
-          :placeholder="$t('placeholders.dateSelect.birthdate')"
-          :variant="birthDateErrors.length > 0 ? 'error' : 'bcGov'"
-          :errors="birthDateErrors"
-          @selection="significantIndividual.profile.birthDate = dateToString($event, 'YYYY-MM-DD')"
-        />
-      </div>
-      <div class="flex-col py-5">
-        <BcrosInputsAddress
-          id="addNewPersonLastKnownAddress"
-          v-model="significantIndividual.profile.address"
-          :label="$t('labels.lastKnownAddress')"
-          :errors="addressErrors"
-        />
-      </div>
-      <div class="flex-col py-5">
-        <p class="font-bold py-3">
-          {{ $t('labels.citizenshipPermanentResidency') }}
-        </p>
-        <p>
-          {{ $t('texts.citizenshipPermanentResidency') }}
-        </p>
-        <BcrosInputsCountriesOfCitizenship
-          id="countriesOfCitizenship"
-          v-model:canadianCitizenship="significantIndividual.profile.citizenshipCA"
-          v-model:citizenships="significantIndividual.profile.citizenshipsExCA"
-          :errors="citizenshipErrors"
-        />
-      </div>
-      <UForm
-        ref="profileFormExtended"
-        :schema="formSchema"
-        :state="significantIndividual.profile"
+      </IndividualPersonAddNewSection>
+
+      <!--  section: effective dates -->
+      <!--      <IndividualPersonAddNewSection-->
+      <!--        :show-section-has-errors="sectionErrors?.effectiveDates?.length > 0"-->
+      <!--        :section-title="$t('sectionHeadings.effectiveDates')"-->
+      <!--      >-->
+      <!--        <div class="flex-col py-5">-->
+      <!--        </div>-->
+      <!--      </IndividualPersonAddNewSection>-->
+
+      <!--  section: email address  -->
+      <IndividualPersonAddNewSection
+        :show-section-has-errors="sectionErrors?.emailAddress?.length > 0"
+        :section-title="$t('sectionHeadings.emailAddress')"
       >
-        <div>
+        <div class="flex-col w-full">
+          <BcrosInputsEmailField
+            id="individual-person-email"
+            name="profile.email"
+            v-model="significantIndividual.profile.email"
+            :placeholder="$t('labels.emailAddress')"
+            :variant="emailInvalid ? 'error' : 'bcGov'"
+            data-cy="testEmail"
+          />
+        </div>
+      </IndividualPersonAddNewSection>
+
+      <!--  section: individual details  -->
+      <IndividualPersonAddNewSection
+        :show-section-has-errors="sectionErrors?.individualDetails?.length > 0"
+        :section-title="$t('sectionHeadings.individualDetails')"
+      >
+        <div class="flex-col w-full">
+          <BcrosInputsAddress
+            id="addNewPersonLastKnownAddress"
+            v-model="significantIndividual.profile.address"
+            :label="$t('labels.lastKnownAddress')"
+            :errors="addressErrors"
+          />
+          <div class="flex-col py-5"></div>
+          <p class="font-bold py-3">
+            {{ $t('labels.birthdate') }}
+          </p>
+          <BcrosInputsDateSelect
+            id="addNewPersonBirthdate"
+            name="profile.birthDate"
+            class="mt-3"
+            :initial-date="significantIndividual.profile.birthDate
+            ? dateStringToDate(significantIndividual.profile.birthDate) : undefined"
+            :max-date="new Date()"
+            :placeholder="$t('placeholders.dateSelect.birthdate')"
+            :variant="birthDateErrors.length > 0 ? 'error' : 'bcGov'"
+            :errors="birthDateErrors"
+            @selection="significantIndividual.profile.birthDate = dateToString($event, 'YYYY-MM-DD')"
+          />
+        </div>
+      </IndividualPersonAddNewSection>
+
+      <!--  section: citizenship or PR  -->
+      <IndividualPersonAddNewSection
+        :show-section-has-errors="sectionErrors?.citizenshipOrPR?.length > 0"
+        :section-title="$t('sectionHeadings.citizenshipOrPR')"
+      >
+        <div class="flex-col py-5 w-full">
+          <p class="font-bold py-3">
+            {{ $t('labels.citizenshipPermanentResidency') }}
+          </p>
+          <p>
+            {{ $t('texts.citizenshipPermanentResidency') }}
+          </p>
+          <BcrosInputsCountriesOfCitizenship
+            id="countriesOfCitizenship"
+            v-model:canadianCitizenship="significantIndividual.profile.citizenshipCA"
+            v-model:citizenships="significantIndividual.profile.citizenshipsExCA"
+            :errors="citizenshipErrors"
+          />
+        </div>
+      </IndividualPersonAddNewSection>
+
+      <!--  section: tax details  -->
+      <IndividualPersonAddNewSection
+        :show-section-has-errors="sectionErrors?.taxDetails?.length > 0"
+        :section-title="$t('sectionHeadings.taxDetails')"
+      >
+        <div class="w-full flex flex-col">
           <p class="font-bold py-3">
             {{ $t('labels.taxNumber') }}
           </p>
@@ -186,79 +223,46 @@
           </p>
           <IndividualPersonTaxInfoTaxNumber
             id="addNewPersonTaxNumber"
-            v-model="taxInfoModel"
-            name="taxNumber"
+            v-model:hasTaxNumber="significantIndividual.profile.hasTaxNumber"
+            v-model:taxNumber="significantIndividual.profile.taxNumber"
             :variant="taxNumebrInvalid || taxNumberErrors.length > 0 ? 'error' : 'bcGov'"
             :errors="taxNumberErrors"
             data-cy="testTaxNumber"
           />
+          <div>
+            <p class="font-bold py-3">
+              {{ $t('labels.taxResidency') }}
+            </p>
+            <p>
+              {{ $t('texts.taxResidency') }}
+            </p>
+            <IndividualPersonTaxInfoTaxResidency
+              id="addNewPersonTaxResidency"
+              name="profile.isTaxResident"
+              v-model="significantIndividual.profile.isTaxResident"
+              :errors="taxResidencyErrors"
+              data-cy="testTaxResidency"
+            />
+          </div>
         </div>
-      </UForm>
-      <div>
-        <p class="font-bold py-3">
-          {{ $t('labels.taxResidency') }}
-        </p>
-        <p>
-          {{ $t('texts.taxResidency') }}
-        </p>
-        <IndividualPersonTaxInfoTaxResidency
-          id="addNewPersonTaxResidency"
-          v-model="significantIndividual.profile.isTaxResident"
-          :errors="taxResidencyErrors"
-          data-cy="testTaxResidency"
-        />
-      </div>
-      <div data-cy="significant-individual-external-influence">
-        <p class="font-bold py-3">
-          {{ $t('labels.externalInfluence.title') }}
-        </p>
-        <p>
-          <BcrosI18HelperBold translation-path="texts.externalInfluence.text" />
-        </p>
-        <div class="flex items-top mb-2 py-1">
-          <URadio
-            id="radio-no-influence"
-            v-model="significantIndividual.externalInfluence"
-            :value="ExternalInfluenceE.NO_EXTERNAL_INFLUENCE"
-            data-cy="external-influence-radio-no-influence"
-            class="pt-1"
+      </IndividualPersonAddNewSection>
+
+      <!--  section: unable to obtain or confirm  -->
+      <IndividualPersonAddNewSection
+        :show-section-has-errors="sectionErrors?.unableToObtainOrConfirmInformation?.length > 0"
+        :section-title="$t('sectionHeadings.unableToObtainOrConfirmInformation')"
+      >
+        <div class="w-full">
+          <IndividualPersonControlUnableToObtainOrConfirmInformation
+            v-model="significantIndividual.missingInfoReason"
+            :missing-info="missingInfo"
+            :errors="missingInfoReasonErrors"
+            @update:missing-info="missingInfo = $event"
           />
-          <label for="radio-no-influence" class="ml-5">
-            <BcrosI18HelperBold translation-path="labels.externalInfluence.noExternalInfluence" />
-          </label>
         </div>
-        <div class="flex items-top mb-2 py-1">
-          <URadio
-            id="radio-can-be-influenced"
-            v-model="significantIndividual.externalInfluence"
-            :value="ExternalInfluenceE.CAN_BE_INFLUENCED"
-            data-cy="external-influence-radio-can-be-influenced"
-            class="pt-1"
-          />
-          <label for="radio-can-be-influenced" class="ml-5">
-            <BcrosI18HelperBold translation-path="labels.externalInfluence.canBeInfluenced" />
-          </label>
-        </div>
-        <div class="flex items-top mb-2 py-1">
-          <URadio
-            id="radio-can-influence"
-            v-model="significantIndividual.externalInfluence"
-            :value="ExternalInfluenceE.CAN_INFLUENCE"
-            data-cy="external-influence-radio-can-influence"
-            class="pt-1"
-          />
-          <label for="radio-can-influence" class="ml-5">
-            <BcrosI18HelperBold translation-path="labels.externalInfluence.canInfluence" />
-          </label>
-        </div>
-      </div>
-      <IndividualPersonControlUnableToObtainOrConfirmInformation
-        v-model="significantIndividual.missingInfoReason"
-        :missing-info="missingInfo"
-        :errors="missingInfoReasonErrors"
-        @update:missing-info="missingInfo = $event"
-      />
-    </template>
+      </IndividualPersonAddNewSection>
+    </UForm>
+
     <div class="grid mt-10 w-full">
       <div class="flex justify-between">
         <UButton
@@ -296,6 +300,8 @@
 <script setup lang="ts">
 import { z, ZodError, ZodIssue } from 'zod'
 import type { FormError } from '#ui/types'
+import { SignificantIndividualAddNewErrorsI } from '~/interfaces/significant-individual/add-new-errors-i'
+import { SignificantIndividualI } from '~/interfaces/significant-individual-i'
 
 const t = useNuxtApp().$i18n.t
 
@@ -307,6 +313,7 @@ const emits = defineEmits<{
 }>()
 
 const props = defineProps<{
+  sectionErrors?: SignificantIndividualAddNewErrorsI,
   index?: number,
   setSignificantIndividual?: SignificantIndividualI,
   startDate?: string
@@ -314,9 +321,6 @@ const props = defineProps<{
 const defaultSI = getEmptySI(props.startDate || '')
 // NOTE: not setting this as modelValue because it is a nested object so mutating it gets complicated
 const significantIndividual: Ref<SignificantIndividualI> = ref(props.setSignificantIndividual || defaultSI)
-if (!significantIndividual.value.externalInfluence) {
-  significantIndividual.value.externalInfluence = ExternalInfluenceE.NO_EXTERNAL_INFLUENCE
-}
 
 const isEditing = computed(() => significantIndividual.value.action === FilingActionE.EDIT)
 
@@ -334,18 +338,8 @@ function updateSignificantIndividual () {
   emits('update', { index: props.index, updatedSI: significantIndividual.value })
 }
 
-// NB: we may be adding the toggle functionality back in later
-const showAddInfoManually = ref(true)
-// const showAddInfoManuallyText = computed(() => {
-//   if (showAddInfoManually.value) {
-//     return t('buttons.addIndividualPerson.cancel')
-//   }
-//   return t('buttons.addIndividualPerson.add')
-// })
-
 const profileFormBase = ref()
 const profileFormExtended = ref()
-const ownerFormBase = ref()
 
 const fullNameInvalid = ref(false)
 const preferredNameInvalid = ref(false)
@@ -382,15 +376,22 @@ function handleDoneButtonClick () {
 
 function validateForm () {
   const data: FormInputI = {
-    fullName: significantIndividual.value.profile.fullName,
-    preferredName: significantIndividual.value.profile.preferredName,
-    email: significantIndividual.value.profile.email,
+    profile: {
+      fullName: significantIndividual.value.profile.fullName,
+      preferredName: significantIndividual.value.profile.preferredName,
+
+      email: significantIndividual.value.profile.email,
+
+      birthDate: significantIndividual.value.profile.birthDate,
+
+      hasTaxNumber: significantIndividual.value.profile.hasTaxNumber,
+      taxNumber: significantIndividual.value.profile.taxNumber
+    },
     percentOfShares: significantIndividual.value.percentOfShares,
     percentOfVotes: significantIndividual.value.percentOfVotes,
     controlOfShares: significantIndividual.value.controlType.sharesVotes,
     otherReasons: significantIndividual.value.controlType.other,
     controlOfDirectors: significantIndividual.value.controlType.directors,
-    birthDate: significantIndividual.value.profile.birthDate,
     country: {
       name: significantIndividual.value.profile.address.country.name,
       alpha_2: significantIndividual.value.profile.address.country.alpha_2
@@ -403,8 +404,7 @@ function validateForm () {
     locationDescription: significantIndividual.value.profile.address.locationDescription,
     citizenshipCA: significantIndividual.value.profile.citizenshipCA,
     citizenshipsExCA: significantIndividual.value.profile.citizenshipsExCA,
-    hasTaxNumber: significantIndividual.value.profile.hasTaxNumber,
-    taxNumber: significantIndividual.value.profile.taxNumber,
+
     taxResidency: significantIndividual.value.profile.isTaxResident,
     missingInfo: missingInfo.value,
     missingInfoReason: significantIndividual.value.missingInfoReason
@@ -414,13 +414,10 @@ function validateForm () {
 }
 
 watch(() => profileFormBase.value?.errors, (val: { path: string }[]) => {
-  fullNameInvalid.value = val.filter(val => val.path === 'fullName').length > 0
-  preferredNameInvalid.value = val.filter(val => val.path === 'preferredName').length > 0
-  emailInvalid.value = val.filter(val => val.path === 'email').length > 0
-})
-
-watch(() => profileFormExtended.value?.errors, (val: { path: string }[]) => {
-  taxNumebrInvalid.value = val.filter(val => val.path === 'taxNumber').length > 0
+  fullNameInvalid.value = val.filter(val => val.path === 'profile.fullName').length > 0
+  preferredNameInvalid.value = val.filter(val => val.path === 'profile.preferredName').length > 0
+  emailInvalid.value = val.filter(val => val.path === 'profile.email').length > 0
+  taxNumebrInvalid.value = val.filter(val => val.path === 'profile.taxNumber').length > 0
 })
 
 watch(() => validationResult.value, (val: ZodError) => {
@@ -435,7 +432,6 @@ watch(() => validationResult.value, (val: ZodError) => {
       })
     })
     profileFormBase.value.setErrors(errors)
-    profileFormExtended.value.setErrors(errors)
     addressErrors.value = errors
     percentOfSharesErrors.value = errors.filter((error: FormError) => error.path === 'percentOfShares')
     percenOfVotesErrors.value = errors.filter((error: FormError) => error.path === 'percentOfVotes')
@@ -445,7 +441,7 @@ watch(() => validationResult.value, (val: ZodError) => {
     citizenshipErrors.value = errors.filter(
       (error: FormError) => (error.path === 'citizenshipCA' || error.path === 'citizenshipsExCA')
     )
-    taxNumberErrors.value = errors.filter((error: FormError) => error.path === 'hasTaxNumber')
+    taxNumberErrors.value = errors.filter((error: FormError) => error.path === 'profile.hasTaxNumber')
     taxResidencyErrors.value = errors.filter((error: FormError) => error.path === 'taxResidency')
     missingInfoReasonErrors.value = errors.filter((error: FormError) => error.path === 'missingInfoReason')
   }
@@ -566,24 +562,19 @@ watch(() => missingInfo.value, (val: boolean) => {
   }
 })
 
-// tax number input
-const taxInfoModel = computed({
-  get () {
-    return {
-      hasTaxNumber: significantIndividual.value.profile.hasTaxNumber,
-      taxNumber: significantIndividual.value.profile.taxNumber
-    }
-  },
-  set (value) {
-    significantIndividual.value.profile.hasTaxNumber = value.hasTaxNumber
-    significantIndividual.value.profile.taxNumber = value.taxNumber
-  }
-})
 
 const formSchema = z.object({
-  fullName: getFullNameValidator(),
-  preferredName: getPreferredNameValidator(),
-  email: getEmailValidator(),
+  profile: z.object({
+    fullName: getFullNameValidator(),
+    preferredName: getPreferredNameValidator(),
+
+    email: getEmailValidator(),
+
+    birthDate: z.union([z.string(), z.null()]),
+
+    hasTaxNumber: z.boolean().optional(),
+    taxNumber: getTaxNumberValidator()
+  }),
   percentOfShares: z.nativeEnum(PercentageRangeE),
   percentOfVotes: z.nativeEnum(PercentageRangeE),
   controlOfShares: z.object({
@@ -599,7 +590,6 @@ const formSchema = z.object({
     significantInfluence: z.boolean(),
     inConcertControl: z.boolean()
   }),
-  birthDate: z.union([z.string(), z.null()]),
   country: getAddressCountryValidator(),
   line1: getAddressLine1Validator(),
   line2: z.string().optional(),
@@ -609,8 +599,6 @@ const formSchema = z.object({
   locationDescription: z.string().optional(),
   citizenshipCA: z.union([z.nativeEnum(CitizenshipTypeE), z.literal('')]),
   citizenshipsExCA: z.array(z.object({ name: z.string(), alpha_2: z.string() })),
-  hasTaxNumber: z.boolean().optional(),
-  taxNumber: getTaxNumberValidator(),
   taxResidency: z.boolean().optional(),
   missingInfo: z.boolean().optional(),
   missingInfoReason: z.string().optional()

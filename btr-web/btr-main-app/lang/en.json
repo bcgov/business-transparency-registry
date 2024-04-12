@@ -212,6 +212,18 @@
   },
   "sectionHeadings": {
     "profileDetails": "Your Details",
-    "reviewConfirm": "Review and Confirm"
+    "reviewConfirm": "Review and Confirm",
+    "yourInformation": "Indicate if this is your information",
+    "individualsFullName": "Individual's Full Name",
+    "typeOfInterestOrControl": "Type of Interest or Control",
+    "interestOrRightsJointlyOrInConcert": "Interests or Rights exercised in concert or held jointly",
+    "controlOfMajorityOfDirectors": "Control of Majority of Directors",
+    "otherReasons": "Other reasons",
+    "effectiveDates": "Effective Date(s)",
+    "emailAddress": "Email Address",
+    "individualDetails": "Individual Details",
+    "citizenshipOrPR": "Citizenship / Permanent Residency",
+    "taxDetails": "Tax Details",
+    "unableToObtainOrConfirmInformation": "Unable to Obtain or Confirm Information"
   }
 }

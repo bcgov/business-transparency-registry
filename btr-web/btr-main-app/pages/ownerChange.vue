@@ -34,21 +34,12 @@
       data-cy="add-new-btn"
       @click="handleAddNewButtonClick"
     />
-    <div
+    <IndividualPersonAddNew
       v-if="expandNewSI"
-      class="mt-10 p-10 pt-8 bg-white rounded flex flex-row"
-      :class="showAddIndividualError ? 'border-l-[3px] border-red-500' : ''"
-    >
-      <label class="font-bold min-w-[190px] mt-3" :class="showAddIndividualError ? 'text-red-500' : ''">
-        {{ $t('labels.addIndividual') }}
-      </label>
-      <IndividualPersonAddNew
-        class="ml-8"
-        :start-date="currentSIFiling.effectiveDate"
-        @cancel="cancelAddNewSI"
-        @add="addNewSI($event)"
-      />
-    </div>
+      :start-date="currentSIFiling.effectiveDate"
+      @cancel="cancelAddNewSI"
+      @add="addNewSI($event)"
+    />
     <IndividualPersonSummaryTable
       class="mt-10"
       :individuals="currentSIFiling.significantIndividuals || []"
