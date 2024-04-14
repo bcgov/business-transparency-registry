@@ -104,7 +104,7 @@ Cypress.Commands.add('addTestIndividuals', () => {
     cy.get('[data-cy="address-region-select"]').get('li').contains(testData.profile1.address.province[0]).click()
     cy.get('[data-cy="address-postal-code"]').type(testData.profile1.address.postalCode)
     cy.get('[data-cy="countryOfCitizenshipRadioGroup"]').get('[type="radio"][value="citizen"]').check()
-    cy.get('[name="taxNumber"]').type(testData.profile1.taxNumber)
+    cy.get('[data-cy="tax-number-input"]').type(testData.profile1.taxNumber)
     cy.get('[data-cy="testTaxResidency"]').get('[type="radio"][value="true"]').check()
     cy.get('[data-cy=new-si-done-btn]').click()
 
@@ -129,7 +129,7 @@ Cypress.Commands.add('addTestIndividuals', () => {
     cy.get('[data-cy="address-region-select"]').get('li').contains(testData.profile2.address.province[0]).click()
     cy.get('[data-cy="address-postal-code"]').type(testData.profile2.address.postalCode)
     cy.get('[data-cy="countryOfCitizenshipRadioGroup"]').get('[type="radio"][value="citizen"]').check()
-    cy.get('[name="taxNumber"]').type(testData.profile2.taxNumber)
+    cy.get('[data-cy="tax-number-input"]').type(testData.profile2.taxNumber)
     cy.get('[data-cy="testTaxResidency"]').get('[type="radio"][value="true"]').check()
     cy.get('[data-cy=new-si-done-btn]').click()
   })

@@ -6,6 +6,7 @@
       :state="significantIndividual"
       @change="addBtrPayFees"
     >
+      <button @click="profileFormBase.validate()">Validate Form</button>
       <!--  section: your information  -->
       <!--      <IndividualPersonAddNewSection-->
       <!--        :show-section-has-errors="sectionErrors?.yourInformation?.length > 0"-->
@@ -24,7 +25,7 @@
           <BcrosInputsNameField
             id="individual-person-full-name"
             v-model="significantIndividual.profile.fullName"
-            name="profile.fullName"
+            name="fullName"
             :label="$t('labels.fullName')"
             :variant="fullNameInvalid ? 'error' : 'bcGov'"
             data-cy="testFullName"
@@ -32,7 +33,7 @@
           <BcrosInputsNameField
             id="individual-person-preferred-name"
             v-model="significantIndividual.profile.preferredName"
-            name="profile.preferredName"
+            name="preferredName"
             :label="$t('labels.preferredName')"
             :variant="preferredNameInvalid ? 'error' : 'bcGov'"
             data-cy="testPreferredName"
@@ -149,9 +150,9 @@
           <BcrosInputsEmailField
             id="individual-person-email"
             v-model="significantIndividual.profile.email"
-            name="profile.email"
             :placeholder="$t('labels.emailAddress')"
             :variant="emailInvalid ? 'error' : 'bcGov'"
+            :errors="emailErrors"
             data-cy="testEmail"
           />
         </div>
@@ -175,15 +176,13 @@
           </p>
           <BcrosInputsDateSelect
             id="addNewPersonBirthdate"
-            name="profile.birthDate"
+            name="birthDate"
             class="mt-3"
-            :initial-date="significantIndividual.profile.birthDate
-              ? dateStringToDate(significantIndividual.profile.birthDate) : undefined"
+            :date-iso-string="significantIndividual.profile.birthDate"
             :max-date="new Date()"
             :placeholder="$t('placeholders.dateSelect.birthdate')"
             :variant="birthDateErrors.length > 0 ? 'error' : 'bcGov'"
             :errors="birthDateErrors"
-            @selection="significantIndividual.profile.birthDate = dateToString($event, 'YYYY-MM-DD')"
           />
         </div>
       </IndividualPersonAddNewSection>
@@ -223,6 +222,7 @@
           </p>
           <IndividualPersonTaxInfoTaxNumber
             id="addNewPersonTaxNumber"
+            name="taxNumber"
             v-model:hasTaxNumber="significantIndividual.profile.hasTaxNumber"
             v-model:taxNumber="significantIndividual.profile.taxNumber"
             :variant="taxNumebrInvalid || taxNumberErrors.length > 0 ? 'error' : 'bcGov'"
@@ -239,7 +239,7 @@
             <IndividualPersonTaxInfoTaxResidency
               id="addNewPersonTaxResidency"
               v-model="significantIndividual.profile.isTaxResident"
-              name="profile.isTaxResident"
+              name="isTaxResident"
               :errors="taxResidencyErrors"
               data-cy="testTaxResidency"
             />
@@ -339,7 +339,6 @@ function updateSignificantIndividual () {
 }
 
 const profileFormBase = ref()
-const profileFormExtended = ref()
 
 const fullNameInvalid = ref(false)
 const preferredNameInvalid = ref(false)
@@ -355,6 +354,7 @@ const percenOfVotesErrors: Ref<FormError[]> = ref([])
 const controlOfSharesErrors: Ref<FormError[]> = ref([])
 const controlOfDirectorsErrors: Ref<FormError[]> = ref([])
 const birthDateErrors: Ref<FormError[]> = ref([])
+const emailErrors: Ref<FormError[]> = ref([])
 const citizenshipErrors: Ref<FormError[]> = ref([])
 const taxNumberErrors: Ref<FormError[]> = ref([])
 const taxResidencyErrors: Ref<FormError[]> = ref([])
@@ -376,17 +376,12 @@ function handleDoneButtonClick () {
 
 function validateForm () {
   const data: FormInputI = {
-    profile: {
-      fullName: significantIndividual.value.profile.fullName,
-      preferredName: significantIndividual.value.profile.preferredName,
-
-      email: significantIndividual.value.profile.email,
-
-      birthDate: significantIndividual.value.profile.birthDate,
-
-      hasTaxNumber: significantIndividual.value.profile.hasTaxNumber,
-      taxNumber: significantIndividual.value.profile.taxNumber
-    },
+    fullName: significantIndividual.value.profile.fullName,
+    preferredName: significantIndividual.value.profile.preferredName,
+    email: significantIndividual.value.profile.email,
+    birthDate: significantIndividual.value.profile.birthDate,
+    hasTaxNumber: significantIndividual.value.profile.hasTaxNumber,
+    taxNumber: significantIndividual.value.profile.taxNumber,
     percentOfShares: significantIndividual.value.percentOfShares,
     percentOfVotes: significantIndividual.value.percentOfVotes,
     controlOfShares: significantIndividual.value.controlType.sharesVotes,
@@ -414,15 +409,21 @@ function validateForm () {
 }
 
 watch(() => profileFormBase.value?.errors, (val: { path: string }[]) => {
-  fullNameInvalid.value = val.filter(val => val.path === 'profile.fullName').length > 0
-  preferredNameInvalid.value = val.filter(val => val.path === 'profile.preferredName').length > 0
-  emailInvalid.value = val.filter(val => val.path === 'profile.email').length > 0
-  taxNumebrInvalid.value = val.filter(val => val.path === 'profile.taxNumber').length > 0
+  fullNameInvalid.value = val.filter(val => val.path === 'fullName').length > 0
+  preferredNameInvalid.value = val.filter(val => val.path === 'preferredName').length > 0
+  emailInvalid.value = val.filter(val => val.path === 'email').length > 0
+  taxNumebrInvalid.value = val.filter(val => val.path === 'taxNumber').length > 0
 })
 
 watch(() => validationResult.value, (val: ZodError) => {
   if (!val.success) {
     const errors: FormError[] = []
+    // val.error.issues.forEach((issue: ZodIssue[]) => {
+    //   errors.push({
+    //     path: issue.path.join('.'),
+    //     message: issue.message
+    //   })
+    // })
     val.error.issues.forEach((issue: ZodIssue[]) => {
       issue.path.forEach((pathName: string) => {
         errors.push({
@@ -431,6 +432,7 @@ watch(() => validationResult.value, (val: ZodError) => {
         })
       })
     })
+    console.log(errors)
     profileFormBase.value.setErrors(errors)
     addressErrors.value = errors
     percentOfSharesErrors.value = errors.filter((error: FormError) => error.path === 'percentOfShares')
@@ -438,10 +440,11 @@ watch(() => validationResult.value, (val: ZodError) => {
     controlOfSharesErrors.value = errors.filter((error: FormError) => error.path === 'controlOfShares')
     controlOfDirectorsErrors.value = errors.filter((error: FormError) => error.path === 'controlOfDirectors')
     birthDateErrors.value = errors.filter((error: FormError) => error.path === 'birthDate')
+    emailErrors.value = errors.filter((error: FormError) => error.path === 'email')
     citizenshipErrors.value = errors.filter(
       (error: FormError) => (error.path === 'citizenshipCA' || error.path === 'citizenshipsExCA')
     )
-    taxNumberErrors.value = errors.filter((error: FormError) => error.path === 'profile.hasTaxNumber')
+    taxNumberErrors.value = errors.filter((error: FormError) => error.path === 'hasTaxNumber')
     taxResidencyErrors.value = errors.filter((error: FormError) => error.path === 'taxResidency')
     missingInfoReasonErrors.value = errors.filter((error: FormError) => error.path === 'missingInfoReason')
   }
@@ -563,17 +566,12 @@ watch(() => missingInfo.value, (val: boolean) => {
 })
 
 const formSchema = z.object({
-  profile: z.object({
-    fullName: getFullNameValidator(),
-    preferredName: getPreferredNameValidator(),
-
-    email: getEmailValidator(),
-
-    birthDate: z.union([z.string(), z.null()]),
-
-    hasTaxNumber: z.boolean().optional(),
-    taxNumber: getTaxNumberValidator()
-  }),
+  fullName: getFullNameValidator(),
+  preferredName: getPreferredNameValidator(),
+  email: getEmailValidator(),
+  birthDate: z.union([z.string(), z.null()]),
+  hasTaxNumber: z.boolean().optional(),
+  taxNumber: getTaxNumberValidator(),
   percentOfShares: z.nativeEnum(PercentageRangeE),
   percentOfVotes: z.nativeEnum(PercentageRangeE),
   controlOfShares: z.object({

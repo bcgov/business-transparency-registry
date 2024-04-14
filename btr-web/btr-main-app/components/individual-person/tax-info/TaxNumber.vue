@@ -5,7 +5,6 @@
         id="taxNumberRadioButton"
         v-model="selectedButton"
         :value="HAS_TAX_NUMBER"
-        name="profile.hasTaxNumber"
         class="mt-3"
         :aria-label="$t('placeholders.taxNumber')"
         @change="handleRadioButtonChange(HAS_TAX_NUMBER)"
@@ -13,7 +12,7 @@
       <UFormGroup :name="name" class="ml-5">
         <UInput
           v-model="taxNumber"
-          name="profile.taxNumber"
+          data-cy="tax-number-input"
           type="text"
           :variant="variant"
           :placeholder="$t('placeholders.taxNumber')"
@@ -50,14 +49,15 @@ const props = defineProps({
   id: { type: String, required: true },
   name: { type: String, default: 'name' },
   errors: { type: Object as PropType<FormError[]>, required: true },
-  hasTaxNumber: { type: Boolean, default: undefined },
-  taxNumber: { type: String | null, default: undefined },
+  hasTaxNumber: { type: [Boolean, undefined], required: false, default: undefined },
+  taxNumber: { type: [String, undefined], required: false, default: undefined },
   variant: { type: String, default: 'bcGov' }
 })
 
+// eslint-disable-next-line func-call-spacing
 const emit = defineEmits<{
-  'update:hasTaxNumber': [value: boolean | undefined]
-  'update:taxNumber': [value: string | undefined]
+  (e: 'update:hasTaxNumber', value: boolean | undefined): void
+  (e: 'update:taxNumber', value: string | undefined): void
 }>()
 
 const emitUpdates = (hasTaxNumber: boolean | undefined, taxNumber: string | undefined) => {
@@ -70,7 +70,9 @@ const selectedButton = ref(
   props.hasTaxNumber === undefined ? '' : (props.hasTaxNumber ? HAS_TAX_NUMBER : NO_TAX_NUMBER)
 )
 
-const hasError = computed<Boolean>(() => props.errors.length > 0)
+const hasError = computed<Boolean>(() => {
+  return props.errors.length > 0
+})
 
 // The tax number input value
 const taxNumber = ref(props.taxNumber ? props.taxNumber : '')
@@ -103,7 +105,7 @@ const formatInput = () => {
   // const newValue = formatTaxNumber(taxNumber.value)
   const newValue = formatTaxNumber(taxNumber.value)
   taxNumber.value = newValue
-  emit('update:modelValue', { hasTaxNumber: true, taxNumber: newValue })
+  emitUpdates(true, newValue)
 }
 
 /**

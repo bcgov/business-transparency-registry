@@ -18,7 +18,7 @@
 import { PopperOptions } from '#ui/types'
 
 defineProps<{
-  text: string
+  text?: string
   popper: PopperOptions
 }>()
 

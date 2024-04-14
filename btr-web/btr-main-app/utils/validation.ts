@@ -84,7 +84,7 @@ export function validateOtherCountrySelection (formData: FormInputI): boolean {
  * @param formData the form data
  */
 export function validateTaxNumberInfo (formData: FormInputI): boolean {
-  return formData.profile.taxNumber !== undefined || formData.profile.hasTaxNumber === false
+  return formData.taxNumber !== undefined || formData.hasTaxNumber === false
 }
 
 /**

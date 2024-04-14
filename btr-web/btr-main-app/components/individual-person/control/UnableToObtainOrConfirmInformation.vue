@@ -42,6 +42,7 @@
 <script setup lang="ts">
 import { FormError } from '#ui/types'
 
+// eslint-disable-next-line func-call-spacing
 const emit = defineEmits<{
   (e: 'update:modelValue', value: string | undefined): void,
   (e: 'update:missing-info', value: boolean): void

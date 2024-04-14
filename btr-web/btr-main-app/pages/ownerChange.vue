@@ -69,7 +69,7 @@ const toggleEditingMode = () => {
 
 // FUTURE: these will be triggered/replaced for something else in 18883
 const showSignificantDateError = ref(false)
-const showAddIndividualError = ref(false)
+// const showAddIndividualError = ref(false)
 
 const significantIndividualChangeDate = (event: Date) => {
   const effectiveDate = dateToString(event, 'YYYY-MM-DD')

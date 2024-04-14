@@ -133,7 +133,7 @@ describe('pages -> Beneficial Owner Change', () => {
       cy.get('[data-cy="countryOfCitizenshipRadioGroup"]').get('[type="radio"][value="citizen"]').check()
 
       // enter tax number and select tax residency
-      cy.get('[name="taxNumber"]').type(testData.profile1.taxNumber)
+      cy.get('[data-cy="tax-number-input"]').type(testData.profile1.taxNumber)
       cy.get('[data-cy="testTaxResidency"]').get('[type="radio"][value="true"]').check()
 
       // click 'Done' button to add the individual
