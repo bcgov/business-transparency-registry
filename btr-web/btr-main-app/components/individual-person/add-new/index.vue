@@ -18,8 +18,8 @@
         ref="profileFormBase"
         :schema="formSchema"
         :state="significantIndividual.profile"
-        @change="addBtrPayFees"
         class="w-full"
+        @change="addBtrPayFees"
       >
         <div class="flex-col w-full">
           <BcrosInputsNameField
@@ -158,8 +158,8 @@
         ref="profileFormBaseEmail"
         :schema="formSchema"
         :state="significantIndividual.profile"
-        @change="addBtrPayFees"
         class="w-full"
+        @change="addBtrPayFees"
       >
         <div class="flex-col w-full">
           <BcrosInputsEmailField
@@ -246,9 +246,9 @@
           </p>
           <IndividualPersonTaxInfoTaxNumber
             id="addNewPersonTaxNumber"
-            name="taxNumber"
             v-model:hasTaxNumber="significantIndividual.profile.hasTaxNumber"
             v-model:taxNumber="significantIndividual.profile.taxNumber"
+            name="taxNumber"
             :variant="taxNumebrInvalid || taxNumberErrors.length > 0 ? 'error' : 'bcGov'"
             :errors="taxNumberErrors"
             data-cy="testTaxNumber"
@@ -455,7 +455,7 @@ watch(() => validationResult.value, (val: ZodError) => {
         })
       })
     })
-    console.log(errors)
+
     profileFormBase.value.setErrors(errors)
     profileFormBaseEmail.value.setErrors(errors)
     profileFormExtended.value.setErrors(errors)
