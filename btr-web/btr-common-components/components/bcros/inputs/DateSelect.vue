@@ -1,20 +1,18 @@
 <template>
   <div class="min-h-[84px]">
-    <UFormGroup name="birthDate">
-      <UInput
-        :ui="{ icon: { base: showDatePicker && !errorMessage ? 'text-primary-500' : iconClass } }"
-        :model-value="selectedDateDisplay"
-        icon="i-mdi-calendar"
-        :placeholder="placeholder || ''"
-        trailing
-        type="text"
-        :variant="errorMessage ? 'error' : variant || 'bcGov'"
-        data-cy="date-select"
-        @click="showDatePicker = true"
-        @keydown.enter="showDatePicker = true"
-        @update:model-value="handleManualDateEntry($event)"
-      />
-    </UFormGroup>
+    <UInput
+      :ui="{ icon: { base: showDatePicker && !errorMessage ? 'text-primary-500' : iconClass } }"
+      :model-value="selectedDateDisplay"
+      icon="i-mdi-calendar"
+      :placeholder="placeholder || ''"
+      trailing
+      type="text"
+      :variant="errorMessage ? 'error' : variant || 'bcGov'"
+      data-cy="date-select"
+      @click="showDatePicker = true"
+      @keydown.enter="showDatePicker = true"
+      @update:model-value="handleManualDateEntry($event)"
+    />
     <BcrosDatePicker
       v-if="showDatePicker"
       ref="dateSelectPickerRef"
@@ -36,17 +34,13 @@ import type { FormError } from '#ui/types'
 
 const props = defineProps<{
   initialDate?: Date,
-  dateIsoString?: string,
   maxDate?: Date,
   placeholder?: string,
   variant?: string,
   errors?: FormError[]
 }>()
 
-const emit = defineEmits<{
-  (e: 'selection', value: Date | null): void
-  (e: 'update:dateIsoString', value: string | null): void
-}>()
+const emit = defineEmits<{(e: 'selection', value: Date | null): void }>()
 
 // @ts-ignore
 const dateSelectPickerRef: MaybeElementRef = ref(null)
@@ -55,20 +49,10 @@ const showDatePicker = ref(false)
 onClickOutside(dateSelectPickerRef, () => { showDatePicker.value = false })
 
 const selectedDate: Ref<Date | null> = ref(props.initialDate || null)
-
-watch(() => props.dateIsoString, (newValue, oldValue) => {
-    if (oldValue === newValue) {
-      return
-    }
-    selectedDate.value = dateStringToDate(newValue)
-  }
-)
-
 watch(() => selectedDate.value, val => emit('selection', val))
 
 const updateDate = (val: Date | null) => {
   selectedDate.value = val
-  emit('update:dateIsoString', dateToString(selectedDate.value, 'YYYY-MM-DD'))
 }
 
 const selectedDateDisplay: ComputedRef<string> = computed(
