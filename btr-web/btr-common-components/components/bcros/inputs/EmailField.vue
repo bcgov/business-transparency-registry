@@ -17,7 +17,7 @@
 
 import type { FormError } from '#ui/types'
 
-defineEmits<{ (e: 'update:modelValue', value: string): void }>()
+defineEmits<{(e: 'update:modelValue', value: string): void }>()
 const props = defineProps({
   label: { type: [String], default: '' },
   placeholder: { type: [String], default: '' },

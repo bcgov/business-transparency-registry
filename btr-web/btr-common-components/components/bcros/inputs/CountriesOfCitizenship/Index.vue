@@ -11,9 +11,10 @@
           v-model="citizenshipType"
           :value="option.value"
         />
-        <label :for="`radio-${option.value}`"
-               class="text-base ml-5"
-               :class="hasError ? 'text-red-500' : 'text-gray-900'"
+        <label
+          :for="`radio-${option.value}`"
+          class="text-base ml-5"
+          :class="hasError ? 'text-red-500' : 'text-gray-900'"
         >
           {{ option.label }}
         </label>
