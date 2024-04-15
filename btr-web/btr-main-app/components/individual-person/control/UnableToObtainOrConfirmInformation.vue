@@ -26,7 +26,7 @@
         @keydown="isUnableToObtainOrConfirmInformationDetailsKeyDown"
         @change="emit('update:modelValue', isUnableToObtainOrConfirmInformationDetails || undefined)"
       />
-      <BcrosAlertsMessage :flavour="AlertsFlavourE.IMPORTANT">
+      <BcrosAlertsMessage :flavour="AlertsFlavourE.INFO">
         <p class="py-2">
           <strong>{{ $t('labels.unableToObtainOrConfirmInformation.alert.important') }}</strong>
           {{ $t('labels.unableToObtainOrConfirmInformation.alert.sentence1') }}

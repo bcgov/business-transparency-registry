@@ -52,6 +52,7 @@ export default <Partial<Config>>{
 
         },
         outcomes: {
+          note: '#fff7e3',
           approved: '#2E8540',
           error: '#D3272C',
           caution: '#F8661A' // caution icon or large text
@@ -134,6 +135,23 @@ export default <Partial<Config>>{
           A200: '#FFECE8',
           A400: '#FFC1B5',
           A700: '#FFAB9C'
+        },
+        yellow: {
+          // generated on http://mcg.mbitson.com/#!?mcgpalette0=%232e8540 using #F8661A as base
+          50: '#FFF7E3',
+          100: '#FEEABA',
+          200: '#FEDD8C',
+          300: '#FDCF5E',
+          400: '#FCC43C',
+          500: '#FCBA19',
+          600: '#FCB316',
+          700: '#FBAB12',
+          800: '#FBA30E',
+          900: '#FA9408',
+          A100: '#FFFFFF',
+          A200: '#FFF8EF',
+          A400: '#FFE0BC',
+          A700: '#FFD4A2'
         }
       }
     }
