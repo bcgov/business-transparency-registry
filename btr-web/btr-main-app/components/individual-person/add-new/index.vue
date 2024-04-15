@@ -10,7 +10,7 @@
     <!--      </IndividualPersonAddNewSection>-->
 
     <!--  section: individuals full name  -->
-    <IndividualPersonAddNewSection
+    <BcrosSection
       :show-section-has-errors="sectionErrors?.individualsFullName?.length > 0"
       :section-title="$t('sectionHeadings.individualsFullName')"
     >
@@ -41,10 +41,10 @@
           />
         </div>
       </UForm>
-    </IndividualPersonAddNewSection>
+    </BcrosSection>
 
     <!--  section: type of interest or control  -->
-    <IndividualPersonAddNewSection
+    <BcrosSection
       :show-section-has-errors="sectionErrors?.typeOfInterestOrControl?.length > 0"
       :section-title="$t('sectionHeadings.typeOfInterestOrControl')"
     >
@@ -88,19 +88,19 @@
           />
         </div>
       </UForm>
-    </IndividualPersonAddNewSection>
+    </BcrosSection>
 
     <!--  section: jointly or in concert  -->
-    <!--      <IndividualPersonAddNewSection-->
+    <!--      <BcrosSection-->
     <!--        :show-section-has-errors="sectionErrors?.interestOrRightsJointlyOrInConcert?.length > 0"-->
     <!--        :section-title="$t('sectionHeadings.interestOrRightsJointlyOrInConcert')"-->
     <!--      >-->
     <!--        <div class="flex-col py-5">-->
     <!--        </div>-->
-    <!--      </IndividualPersonAddNewSection>-->
+    <!--      </BcrosSection>-->
 
     <!--  section: control of majority of directors  -->
-    <IndividualPersonAddNewSection
+    <BcrosSection
       :show-section-has-errors="sectionErrors?.controlOfMajorityOfDirectors?.length > 0"
       :section-title="$t('sectionHeadings.controlOfMajorityOfDirectors')"
     >
@@ -125,10 +125,10 @@
           {{ $t('texts.controlOfDirectors.note') }}
         </p>
       </div>
-    </IndividualPersonAddNewSection>
+    </BcrosSection>
 
     <!--  section: other reasons  -->
-    <IndividualPersonAddNewSection
+    <BcrosSection
       :show-section-has-errors="sectionErrors?.otherReasons?.length > 0"
       :section-title="$t('sectionHeadings.otherReasons')"
     >
@@ -138,19 +138,19 @@
         name="otherReasons"
         data-cy="otherReasons"
       />
-    </IndividualPersonAddNewSection>
+    </BcrosSection>
 
     <!--  section: effective dates -->
-    <!--      <IndividualPersonAddNewSection-->
+    <!--      <BcrosSection-->
     <!--        :show-section-has-errors="sectionErrors?.effectiveDates?.length > 0"-->
     <!--        :section-title="$t('sectionHeadings.effectiveDates')"-->
     <!--      >-->
     <!--        <div class="flex-col py-5">-->
     <!--        </div>-->
-    <!--      </IndividualPersonAddNewSection>-->
+    <!--      </BcrosSection>-->
 
     <!--  section: email address  -->
-    <IndividualPersonAddNewSection
+    <BcrosSection
       :show-section-has-errors="sectionErrors?.emailAddress?.length > 0"
       :section-title="$t('sectionHeadings.emailAddress')"
     >
@@ -172,10 +172,10 @@
           />
         </div>
       </UForm>
-    </IndividualPersonAddNewSection>
+    </BcrosSection>
 
     <!--  section: individual details  -->
-    <IndividualPersonAddNewSection
+    <BcrosSection
       :show-section-has-errors="sectionErrors?.individualDetails?.length > 0"
       :section-title="$t('sectionHeadings.individualDetails')"
     >
@@ -203,10 +203,10 @@
           @selection="significantIndividual.profile.birthDate = dateToString($event, 'YYYY-MM-DD')"
         />
       </div>
-    </IndividualPersonAddNewSection>
+    </BcrosSection>
 
     <!--  section: citizenship or PR  -->
-    <IndividualPersonAddNewSection
+    <BcrosSection
       :show-section-has-errors="sectionErrors?.citizenshipOrPR?.length > 0"
       :section-title="$t('sectionHeadings.citizenshipOrPR')"
     >
@@ -224,10 +224,10 @@
           :errors="citizenshipErrors"
         />
       </div>
-    </IndividualPersonAddNewSection>
+    </BcrosSection>
 
     <!--  section: tax details  -->
-    <IndividualPersonAddNewSection
+    <BcrosSection
       :show-section-has-errors="sectionErrors?.taxDetails?.length > 0"
       :section-title="$t('sectionHeadings.taxDetails')"
     >
@@ -270,10 +270,10 @@
           />
         </div>
       </div>
-    </IndividualPersonAddNewSection>
+    </BcrosSection>
 
     <!--  section: unable to obtain or confirm  -->
-    <IndividualPersonAddNewSection
+    <BcrosSection
       :show-section-has-errors="sectionErrors?.unableToObtainOrConfirmInformation?.length > 0"
       :section-title="$t('sectionHeadings.unableToObtainOrConfirmInformation')"
     >
@@ -285,7 +285,7 @@
           @update:missing-info="missingInfo = $event"
         />
       </div>
-    </IndividualPersonAddNewSection>
+    </BcrosSection>
 
     <div class="grid mt-10 w-full">
       <div class="flex justify-between">
