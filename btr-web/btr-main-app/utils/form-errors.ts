@@ -50,7 +50,7 @@ export function getMissingTaxNumberInfoError () {
   const t = useNuxtApp().$i18n.t
   return {
     message: t('errors.validation.taxNumber.required'),
-    path: ['profile', 'hasTaxNumber']
+    path: ['hasTaxNumber']
   }
 }
 

@@ -324,6 +324,7 @@
 <script setup lang="ts">
 import { z, ZodError, ZodIssue } from 'zod'
 import type { FormError } from '#ui/types'
+import { SignificantIndividualAddNewSectionsE } from '~/enums/significant-individual/add-new-sections-e'
 
 const t = useNuxtApp().$i18n.t
 
@@ -336,6 +337,7 @@ const emits = defineEmits<{
 
 const props = defineProps<{
   index?: number,
+  sectionErrors?: SignificantIndividualAddNewSectionsE,
   setSignificantIndividual?: SignificantIndividualI,
   startDate?: string
 }>()
