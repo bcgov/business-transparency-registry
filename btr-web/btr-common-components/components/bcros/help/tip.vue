@@ -5,14 +5,20 @@
         name="i-mdi-help-circle-outline"
         class="m-1 text-lg"
       />
-      <p class="text-">{{ label }}</p>
+      <p class="text-">
+        {{ label }}
+      </p>
     </div>
-    <div class="m-2" v-if="isExpanded">
+    <div v-if="isExpanded" class="m-2">
       <div class="flex w-full">
-        <slot name="default">{{ text }}</slot>
+        <slot name="default">
+          {{ text }}
+        </slot>
       </div>
       <div class="m-1 text-blue-500 flex flex-row float-end">
-        <p class="cursor-pointer" @click="isExpanded = !isExpanded">Hide help</p>
+        <p class="cursor-pointer" @click="isExpanded = !isExpanded">
+          Hide help
+        </p>
       </div>
     </div>
   </div>
