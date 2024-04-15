@@ -33,6 +33,6 @@ describe('pages -> Add individual', () => {
     cy.get('[data-cy="isUnableToObtainOrConfirmInformationCheckbox"]').should('be.checked')
 
     // make sure alert is showing up
-    cy.get('[data-cy="alertsMessage:alert"]')
+    cy.get('[data-cy="alertsMessage:important"]')
   })
 })
