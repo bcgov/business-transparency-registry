@@ -12,6 +12,7 @@
       <UFormGroup :name="name" class="ml-5">
         <UInput
           v-model="taxNumber"
+          data-cy="tax-number-input"
           type="text"
           :variant="variant"
           :placeholder="$t('placeholders.taxNumber')"
@@ -40,6 +41,7 @@
 
 <script setup lang="ts">
 import type { FormError } from '#ui/types'
+
 const HAS_TAX_NUMBER = 'hasTaxNumber'
 const NO_TAX_NUMBER = 'noTaxNumber'
 
@@ -47,35 +49,39 @@ const props = defineProps({
   id: { type: String, required: true },
   name: { type: String, default: 'name' },
   errors: { type: Object as PropType<FormError[]>, required: true },
-  modelValue: {
-    type: Object,
-    default: () => ({
-      hasTaxNumber: undefined,
-      taxNumber: undefined
-    })
-  },
+  hasTaxNumber: { type: [Boolean, undefined], required: false, default: undefined },
+  taxNumber: { type: [String, undefined], required: false, default: undefined },
   variant: { type: String, default: 'bcGov' }
 })
 
+// eslint-disable-next-line func-call-spacing
 const emit = defineEmits<{
-  'update:modelValue': [value: { hasTaxNumber: boolean; taxNumber: string | undefined }]
+  (e: 'update:hasTaxNumber', value: boolean | undefined): void
+  (e: 'update:taxNumber', value: string | undefined): void
 }>()
+
+const emitUpdates = (hasTaxNumber: boolean | undefined, taxNumber: string | undefined) => {
+  emit('update:hasTaxNumber', hasTaxNumber)
+  emit('update:taxNumber', taxNumber)
+}
 
 // Indicate which radio button is selected.
 const selectedButton = ref(
-  props.modelValue.hasTaxNumber === undefined ? '' : (props.modelValue.hasTaxNumber ? HAS_TAX_NUMBER : NO_TAX_NUMBER)
+  props.hasTaxNumber === undefined ? '' : (props.hasTaxNumber ? HAS_TAX_NUMBER : NO_TAX_NUMBER)
 )
 
-const hasError = computed<Boolean>(() => props.errors.length > 0)
+const hasError = computed<Boolean>(() => {
+  return props.errors.length > 0
+})
 
 // The tax number input value
-const taxNumber = ref(props.modelValue.taxNumber ? props.modelValue.taxNumber : '')
+const taxNumber = ref(props.taxNumber ? props.taxNumber : '')
 
 watch(taxNumber, (newTaxNumber) => {
   // when the user starts typing, the radio HAS_TAX_NUMBER button should be selected
   if (newTaxNumber !== '') {
     selectedButton.value = HAS_TAX_NUMBER
-    emit('update:modelValue', { hasTaxNumber: true, taxNumber: newTaxNumber })
+    emitUpdates(true, newTaxNumber)
   }
 })
 
@@ -83,9 +89,9 @@ const handleRadioButtonChange = (value) => {
   selectedButton.value = value
   if (value === NO_TAX_NUMBER) {
     taxNumber.value = ''
-    emit('update:modelValue', { hasTaxNumber: false, taxNumber: undefined })
+    emitUpdates(false, undefined)
   } else {
-    emit('update:modelValue', { hasTaxNumber: true, taxNumber: taxNumber.value })
+    emitUpdates(true, taxNumber.value)
   }
 }
 
@@ -99,7 +105,7 @@ const formatInput = () => {
   // const newValue = formatTaxNumber(taxNumber.value)
   const newValue = formatTaxNumber(taxNumber.value)
   taxNumber.value = newValue
-  emit('update:modelValue', { hasTaxNumber: true, taxNumber: newValue })
+  emitUpdates(true, newValue)
 }
 
 /**

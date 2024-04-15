@@ -2,7 +2,7 @@
   <div
     class="grid grid-cols-12 gap-1 p-4"
     :class="flavourContainerClass"
-    :role="flavour"
+    :role="flavourRole"
     :data-cy="'alertsMessage:' + flavour"
   >
     <div class="py-3 px-0">
@@ -26,30 +26,37 @@ import { Ref } from 'vue'
 import { AlertsFlavourE } from '~/enums/alerts-e'
 
 const props = defineProps<{
-  flavour: { type: AlertsFlavourE, default: AlertsFlavourE.MESSAGE }
+  flavour: { type: string, default: AlertsFlavourE.MESSAGE }
 }>()
 
 const flavourIcon: Ref<string | null> = ref(null)
 const flavourContainerClass = ref('')
 const flavourIconClass = ref('')
+const flavourRole = ref('none')
 
 switch (props.flavour) {
   case AlertsFlavourE.ALERT:
     flavourIcon.value = 'i-mdi-alert'
     flavourIconClass.value = 'text-red-500'
     flavourContainerClass.value = 'border-2 border-red-500 bg-red-100'
+    flavourRole.value = 'alert'
     break
   case AlertsFlavourE.SUCCESS:
     flavourIcon.value = 'i-mdi-success-circle'
     flavourContainerClass.value = 'border-2 border-green-500 bg-green-100'
+    flavourRole.value = 'alert'
     break
   case AlertsFlavourE.WARNING:
-    flavourIcon.value = 'i-mdi-warning-circle'
+    flavourIcon.value = 'i-mdi-alert'
+    flavourIconClass.value = 'text-orange-500'
     flavourContainerClass.value = 'border-2 border-orange-500 bg-orange-100'
+    flavourRole.value = 'alert'
     break
   case AlertsFlavourE.INFO:
-    flavourIcon.value = 'i-mdi-warning-circle'
-    flavourContainerClass.value = 'border-2 border-solid border-blue-500 bg-blue-100'
+    flavourIcon.value = 'i-mdi-alert'
+    flavourIconClass.value = 'text-orange-500'
+    flavourContainerClass.value = 'border-2 border-yellow-500 bg-yellow-50'
+    flavourRole.value = 'note'
     break
   case AlertsFlavourE.MESSAGE:
     flavourIcon.value = null

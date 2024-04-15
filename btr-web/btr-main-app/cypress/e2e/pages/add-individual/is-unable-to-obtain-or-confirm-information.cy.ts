@@ -20,7 +20,11 @@ describe('pages -> Add individual', () => {
     cy.get('[data-cy="isUnableToObtainOrConfirmInformationCheckbox"]').should('not.be.checked')
 
     // find textarea
-    cy.get('[data-cy="isUnableToObtainOrConfirmInformationTextArea"]')
+    cy.get('[data-cy="isUnableToObtainOrConfirmInformationTextArea"]').should('not.exist')
+
+    cy.get('[data-cy="isUnableToObtainOrConfirmInformationCheckbox"]').check()
+
+    cy.get('[data-cy="isUnableToObtainOrConfirmInformationTextArea"]').should('exist')
 
     // write in text area and switch it
     cy.get('[data-cy="isUnableToObtainOrConfirmInformationTextArea"] >> textarea').type('test').blur()
@@ -29,6 +33,6 @@ describe('pages -> Add individual', () => {
     cy.get('[data-cy="isUnableToObtainOrConfirmInformationCheckbox"]').should('be.checked')
 
     // make sure alert is showing up
-    cy.get('[data-cy="alertsMessage:alert"]')
+    cy.get('[data-cy="alertsMessage:info"]')
   })
 })
