@@ -30,15 +30,16 @@
             :variant="fullNameInvalid ? 'error' : 'bcGov'"
             data-cy="testFullName"
           />
-          <BcrosInputsNameField
-            id="individual-person-preferred-name"
-            v-model="significantIndividual.profile.preferredName"
-            name="preferredName"
-            :label="$t('labels.preferredName')"
-            :variant="preferredNameInvalid ? 'error' : 'bcGov'"
-            data-cy="testPreferredName"
-            cl
-          />
+          <div class="pt-3">
+            <BcrosInputsNameField
+              id="individual-person-preferred-name"
+              v-model="significantIndividual.profile.preferredName"
+              name="preferredName"
+              :label="$t('labels.preferredName')"
+              :variant="preferredNameInvalid ? 'error' : 'bcGov'"
+              data-cy="testPreferredName"
+            />
+          </div>
         </div>
       </UForm>
     </BcrosSection>
@@ -54,7 +55,7 @@
         :state="significantIndividual"
         @change="addBtrPayFees"
       >
-        <div class="flex-col pt-5 w-full">
+        <div class="flex-col w-full">
           <p class="font-bold py-3">
             {{ $t('labels.sharesAndVotes') }}
           </p>
@@ -132,12 +133,14 @@
       :show-section-has-errors="sectionErrors?.otherReasons?.length > 0"
       :section-title="$t('sectionHeadings.otherReasons')"
     >
-      <IndividualPersonControlOtherReasons
-        id="otherReasons"
-        v-model="significantIndividual.controlType.other"
-        name="otherReasons"
-        data-cy="otherReasons"
-      />
+      <div class="pt-3 w-full">
+        <IndividualPersonControlOtherReasons
+          id="otherReasons"
+          v-model="significantIndividual.controlType.other"
+          name="otherReasons"
+          data-cy="otherReasons"
+        />
+      </div>
     </BcrosSection>
 
     <!--  section: effective dates -->
@@ -210,7 +213,7 @@
       :show-section-has-errors="sectionErrors?.citizenshipOrPR?.length > 0"
       :section-title="$t('sectionHeadings.citizenshipOrPR')"
     >
-      <div class="flex-col py-5 w-full">
+      <div class="flex-col w-full">
         <p class="font-bold py-3">
           {{ $t('labels.citizenshipPermanentResidency') }}
         </p>
