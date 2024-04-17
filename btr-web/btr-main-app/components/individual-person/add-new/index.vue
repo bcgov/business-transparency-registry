@@ -164,7 +164,7 @@
         class="w-full"
         @change="addBtrPayFees"
       >
-        <div class="flex-col w-full">
+        <div class="flex-col w-full pt-3">
           <BcrosInputsEmailField
             id="individual-person-email"
             v-model="significantIndividual.profile.email"
