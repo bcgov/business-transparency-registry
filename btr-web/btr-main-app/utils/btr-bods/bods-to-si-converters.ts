@@ -9,7 +9,6 @@ import { BodsBtrAddressI } from '~/interfaces/btr-bods/components-i'
 // import { BtrSourceDescriptionProvidedByBtrGovBC } from '~/utils/btr-bods/btr-bods-implementations'
 import { ControlOfDirectorsI } from '~/interfaces/control-of-directors-i'
 import { ControlOfSharesI } from '~/interfaces/control-of-shares-i'
-import { ExternalInfluenceE } from '~/enums/external-influence-e'
 import { PercentageRangeE } from '~/enums/percentage-range-e'
 
 const _findOwnershipOrControlStatement =
@@ -187,7 +186,6 @@ const _getSi = (
       sharesVotes: _getControlSharesVotes(oocs),
       other: _getControlOther(oocs)
     },
-    externalInfluence: person.externalInfluence || ExternalInfluenceE.NO_EXTERNAL_INFLUENCE,
     missingInfoReason: person.missingInfoReason,
     percentOfShares: shares,
     percentOfVotes: votes,

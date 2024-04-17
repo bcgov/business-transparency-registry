@@ -16,7 +16,6 @@ import {
 import { BtrBodsOwnershipOrControlI } from '~/interfaces/btr-bods/btr-bods-ownership-or-control-i'
 import { BtrBodsPersonI } from '~/interfaces/btr-bods/btr-bods-person-i'
 import { getSIsFromBtrBodsSubmission } from '~/utils/btr-bods/bods-to-si-converters'
-import { ExternalInfluenceE } from '~/enums/external-influence-e'
 
 const constructBtrApiURL = () => {
   const runtimeConfig = useRuntimeConfig()
@@ -70,7 +69,6 @@ const getPersonAndOwnershipAndControlStatements = (sif: SignificantIndividualFil
 
     const address = SiToBtrBodsConverters.getBodsAddressFromSi(si)
     const personStatement: BtrBodsPersonI = {
-      externalInfluence: si.externalInfluence || ExternalInfluenceE.NO_EXTERNAL_INFLUENCE,
       missingInfoReason: si.missingInfoReason,
       placeOfResidence: address,
       addresses: [address],

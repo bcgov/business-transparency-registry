@@ -6,7 +6,6 @@ import {
   BodsNameI,
   BodsPublicationDetailsI, BodsSourceI
 } from '~/interfaces/btr-bods/components-i'
-import { ExternalInfluenceE } from '~/enums/external-influence-e'
 
 export interface BtrBodsPersonI {
   statementID: string
@@ -33,6 +32,5 @@ export interface BtrBodsPersonI {
   hasTaxNumber: boolean
   email: string
 
-  externalInfluence: ExternalInfluenceE
   missingInfoReason: string
 }

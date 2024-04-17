@@ -1,6 +1,5 @@
 import { ProfileI } from './profile-i'
 import { FilingActionE } from '~/enums/filing-action-e'
-import { ExternalInfluenceE } from '~/enums/external-influence-e'
 
 export interface SignificantIndividualI {
   controlType: {
@@ -8,7 +7,6 @@ export interface SignificantIndividualI {
     directors: ControlOfDirectorsI
     other: string // other ways this person has SI control
   }
-  externalInfluence: ExternalInfluenceE
   missingInfoReason: string
   percentOfShares: PercentageRangeE
   percentOfVotes: PercentageRangeE
