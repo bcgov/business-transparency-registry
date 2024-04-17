@@ -110,14 +110,19 @@
       </tr>
       <tr v-if="isEditing && editingIndex === index">
         <td data-cy="summary-table-edit-form" colspan="100%">
-          <IndividualPersonAddNew
-            :index="index"
-            :set-significant-individual="copyIndividualToEdit()"
-            class="ml-8 text-base text-gray-900"
-            @cancel="closeEditingMode"
-            @update="updateSignificantIndividual($event.index, $event.updatedSI)"
-            @remove="removeSignificantIndividual(index)"
-          />
+          <div class="bg-white rounded flex flex-row">
+            <label class="font-bold text-base text-gray-900 min-w-[190px] mt-3">
+              {{ $t('labels.editIndividual') }}
+            </label>
+            <IndividualPersonAddNew
+              :index="index"
+              :set-significant-individual="copyIndividualToEdit()"
+              class="ml-8 text-base text-gray-900"
+              @cancel="closeEditingMode"
+              @update="updateSignificantIndividual($event.index, $event.updatedSI)"
+              @remove="removeSignificantIndividual(index)"
+            />
+          </div>
         </td>
       </tr>
     </template>
