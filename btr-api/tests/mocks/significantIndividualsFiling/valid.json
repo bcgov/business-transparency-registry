@@ -28,10 +28,11 @@
       "statementDate": "2023-02-28",
       "isComponent": false,
       "personType": "knownPerson",
+      "birthDate": "1980-06-13",
       "names": [
         {
           "type": "individual",
-          "fullName": "Full Name"
+          "fullName": "Full1 Name1"
         }
       ],
       "publicationDetails": {
@@ -51,6 +52,50 @@
         {
           "name": "Canada",
           "code": "CA"
+        }
+      ],
+      "source": {
+        "description": "The description",
+        "url": "https://yourwebsite.com",
+        "metadata": "Metadata",
+        "retrievedAt": "2023-02-28T23:17:17Z",
+        "asserted": "2023-02-18"
+      }
+    },
+    {
+      "statementID": "123456ab123456ab123456ab123456ab123456ab123456ab123456ab1234",
+      "statementType": "personStatement",
+      "statementDate": "2023-02-28",
+      "isComponent": false,
+      "personType": "knownPerson",
+      "birthDate": "1997-04-23",
+      "names": [
+        {
+          "type": "individual",
+          "fullName": "Full2 Name2"
+        },
+        {
+          "type": "alternative",
+          "fullName": "preffered2"
+        }
+      ],
+      "publicationDetails": {
+        "publicationDate": "2022-12-31",
+        "bodsVersion": "1.0",
+        "publisher": {
+          "uri": "http://publisher.uri",
+          "name": "Publisher Name",
+          "source": {
+            "url": "http://source.url"
+          }
+        }
+      },
+      "hasTaxNumber": true,
+      "email": "test2@test2.gov.bc.ca",
+      "nationalities": [
+        {
+          "name": "France",
+          "code": "FR"
         }
       ],
       "source": {
@@ -94,20 +139,64 @@
       },
       "interests": [
         {
-          "type": "otherInfluenceOrControl",
-          "directOrIndirect": "direct",
+          "type": "shareholding",
+          "directOrIndirect": "unknown",
           "beneficialOwnershipOrControl": true,
-          "details": "",
+          "details": "controlType.sharesOrVotes.registeredOwner",
           "share": {
-            "exact": 27
+            "maximum": 75,
+            "minimum": 50
           },
           "startDate": "2023-03-01"
         },
         {
-          "type": "shareholding",
-          "directOrIndirect": "unknown",
+          "type": "appointmentOfBoard",
+          "directOrIndirect": "direct",
           "beneficialOwnershipOrControl": true,
-          "details": "SharesThroughRightsOrExercisedInConcert",
+          "details": "",
+          "startDate": "2023-01-01"
+        }
+      ]
+    },
+    {
+      "statementID": "9876qw9876qw9876qw9876qw9876qw9876qw9876qw9876qw9876qw9876qw",
+      "statementType": "ownershipOrControlStatement",
+      "statementDate": "2023-02-28",
+      "isComponent": false,
+      "subject": {
+        "describedByEntityStatement": "bd4061d6-1a24-4356-93f3-c489b56610a2"
+      },
+      "interestedParty": {
+        "describedByPersonStatement": "123456ab123456ab123456ab123456ab123456ab123456ab123456ab1234"
+      },
+      "publicationDetails": {
+        "publicationDate": "2022-12-31",
+        "bodsVersion": "1.0",
+        "publisher": {
+          "uri": "http://publisher.uri",
+          "name": "Publisher Name",
+          "source": {
+            "url": "http://source.url"
+          }
+        }
+      },
+      "source": {
+        "description": "The description",
+        "url": "https://yourwebsite.com",
+        "metadata": "Metadata",
+        "retrievedAt": "2023-02-28T23:17:17Z",
+        "asserted": "2023-02-18"
+      },
+      "interests": [
+        {
+          "type": "votingRights",
+          "directOrIndirect": "direct",
+          "beneficialOwnershipOrControl": true,
+          "details": "controlType.sharesOrVotes.beneficialOwner",
+          "share": {
+            "maximum": 50,
+            "minimum": 25
+          },
           "startDate": "2023-03-01"
         },
         {

@@ -14,6 +14,7 @@
 """The BTR data loader script."""
 import csv
 import sys
+from random import choice
 
 import pycountry
 from faker import Faker
@@ -29,6 +30,15 @@ fake = Faker()
 
 def _get_ooc_interests(limit: int = None):
     """Return the ooc interests."""
+
+    def _get_details(interestType: str):
+        """Return a random details string based on the interest type."""
+        if interestType in ['shareholding', 'votingRights']:
+            return choice(['controlType.sharesOrVotes.registeredOwner', 'controlType.sharesOrVotes.indirectControl', 'controlType.sharesOrVotes.beneficialOwner'])
+        if interestType == 'appointmentOfBoard':
+            return choice(['controlType.directors.directControl', 'controlType.directors.indirectControl', 'controlType.directors.significantInfluence'])
+        return 'fake details'
+
     ooc_interests: dict[str, list[dict]] = {}
     with open('bods_csvs/ooc_interests.csv', encoding='utf-8') as ooc_interests_csv:
         reader = csv.DictReader(ooc_interests_csv)
@@ -38,7 +48,7 @@ def _get_ooc_interests(limit: int = None):
             ooc_interests.setdefault(row['_link_ooc_statement'], []).append({
                 'type': type,
                 'beneficialOwnershipOrControl': True,
-                'details': row['details'],
+                'details': row['details'] or _get_details(type),
                 'directOrIndirect': 'unknown',
                 'share': {
                     'exact': row['share_exact'],
@@ -240,8 +250,8 @@ def _get_filings(ooc_stmnts: list, entity_stmnts: dict, person_stmnts: dict):
 
 def load_data():
     """Load data via csv files BTR."""
-    max = 1000000
-    user = User.find_by_username('service-account-nds')
+    max = 50000
+    user = User.find_by_username('service-account-btr')
     if not user:
         current_app.logger.debug('error user not found.')
         return

@@ -38,7 +38,7 @@ import requests
 from flask import Flask
 
 from btr_api.exceptions import ExternalServiceException
-from btr_api.models import Submission, db
+from btr_api.models import Submission
 
 
 class BorService:
@@ -63,27 +63,24 @@ class BorService:
     def update_owners(self, submission: Submission, business: dict, token: str) -> requests.Response:
         """Update owners via the bor-api."""
         try:
-            # collect previous parties
-            SubmissionHistory = Submission.__history_mapper__.class_  # pylint: disable=invalid-name
-            old_parties = {}
-            old_submission = db.session.query(SubmissionHistory)\
-                .filter(SubmissionHistory.id == submission.id).order_by(SubmissionHistory.version.desc()).first()
-            if old_submission:
-                for person in old_submission.payload.get('personStatements', []):
-                    old_party_id = person['statementID']
-                    old_parties[old_party_id] = {
-                        'id': old_party_id,
-                        'effectiveDate': submission.payload['effectiveDate']
-                    }
+            # collect previous parties -- TODO: re-evaluate this when doing edit/cease epic
+            # SubmissionHistory = Submission.__history_mapper__.class_  # pylint: disable=invalid-name
+            # old_parties = {}
+            # old_submission = db.session.query(SubmissionHistory)\
+            #     .filter(SubmissionHistory.id == submission.id).order_by(SubmissionHistory.version.desc()).first()
+            # if old_submission:
+            #     for old_person in old_submission.payload.get('personStatements', []):
+            #         old_party_id = old_person['statementID']
+            #         old_parties[old_party_id] = {
+            #             'id': old_party_id,
+            #             'effectiveDate': submission.payload['effectiveDate']
+            #         }
 
             # collect current parties
             parties = {}
             for person in submission.payload.get('personStatements', []):
                 person_id = person['statementID']
                 parties[person_id] = person
-                # if same id exists in old_party_ids then remove id from old_party_ids
-                if person_id in old_parties:
-                    del old_parties[person_id]
 
             # combine ownership details and parties
             owners = []
@@ -91,12 +88,12 @@ class BorService:
                 party_id = ownership_info['interestedParty']['describedByPersonStatement']
                 ownership_info['interestedParty'] = {
                     'describedByPersonStatement': party_id,
-                    **parties[person_id]
+                    **parties[party_id]
                 }
                 owners.append(ownership_info)
 
             # make update call to bor with headers + payload
-            payload = {**business, 'owners': owners, 'ceasedOwners': list(old_parties.values())}
+            payload = {**business, 'owners': owners}
             headers = {'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json'}
             resp = requests.put(url=self.svc_url + '/internal/solr/update',
                                 json=payload,
