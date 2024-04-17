@@ -38,6 +38,9 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: 20
+
+      - name: enable corepack
+        run: corepack enable
         
       - name: Install pnpm
         run: npm install -g pnpm
