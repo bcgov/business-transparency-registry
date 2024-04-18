@@ -145,42 +145,65 @@ def test_post_plots_db_mocked(app, session, client, jwt, mocker, requests_mock):
         'details': [{'label': 'Incorporation Number: ', 'value': json_data['businessIdentifier']}]}
     assert bor_api_mock.request_history[0].json() == {
         'business': {'adminFreeze': False, 'state': 'ACTIVE'},
-        'owners': [{
-            'interestedParty': {
-                'describedByPersonStatement': 'bd4061d6-1a24-4356-93f3-c489b56610a4',
-                'email': 'test@test.gov.bc.ca',
-                'hasTaxNumber': True,
+        'owners': [
+            {
+                'interestedParty': {
+                    'describedByPersonStatement': 'bd4061d6-1a24-4356-93f3-c489b56610a4',
+                    'birthDate': '1980-06-13',
+                    'email': 'test@test.gov.bc.ca',
+                    'hasTaxNumber': True,
+                    'isComponent': False,
+                    'names': [{'fullName': 'Full1 Name1', 'type': 'individual'}],
+                    'nationalities': [{'code': 'CA', 'name': 'Canada'}],
+                    'personType': 'knownPerson',
+                    'publicationDetails': {'bodsVersion': '1.0', 'publicationDate': '2022-12-31', 'publisher': {'name': 'Publisher Name', 'source': {'url': 'http://source.url'}, 'uri': 'http://publisher.uri'}},
+                    'source': {'asserted': '2023-02-18', 'description': 'The description', 'metadata': 'Metadata', 'retrievedAt': '2023-02-28T23:17:17Z', 'url': 'https://yourwebsite.com'},
+                    'statementDate': '2023-02-28',
+                    'statementID': 'bd4061d6-1a24-4356-93f3-c489b56610a4',
+                    'statementType': 'personStatement'
+                },
+                'interests': [
+                    {'beneficialOwnershipOrControl': True, 'details': 'controlType.sharesOrVotes.registeredOwner', 'directOrIndirect': 'unknown', 'share': {'maximum': 75, 'minimum': 50}, 'startDate': '2023-03-01', 'type': 'shareholding'},
+                    {'beneficialOwnershipOrControl': True, 'details': '', 'directOrIndirect': 'direct', 'startDate': '2023-01-01', 'type': 'appointmentOfBoard'}
+                ],
                 'isComponent': False,
-                'names': [{'fullName': 'Full Name', 'type': 'individual'}],
-                'nationalities': [{'code': 'CA', 'name': 'Canada'}],
-                'personType': 'knownPerson',
-                'publicationDetails': {'bodsVersion': '1.0', 'publicationDate': '2022-12-31',
-                                       'publisher': {'name': 'Publisher Name', 'source': {'url': 'http://source.url'},
-                                                     'uri': 'http://publisher.uri'}},
-                'source': {'asserted': '2023-02-18', 'description': 'The description', 'metadata': 'Metadata',
-                           'retrievedAt': '2023-02-28T23:17:17Z', 'url': 'https://yourwebsite.com'},
+                'publicationDetails': {'bodsVersion': '1.0', 'publicationDate': '2022-12-31', 'publisher': {'name': 'Publisher Name', 'source': {'url': 'http://source.url'}, 'uri': 'http://publisher.uri'}},
+                'source': {'asserted': '2023-02-18', 'description': 'The description', 'metadata': 'Metadata', 'retrievedAt': '2023-02-28T23:17:17Z', 'url': 'https://yourwebsite.com'},
                 'statementDate': '2023-02-28',
-                'statementID': 'bd4061d6-1a24-4356-93f3-c489b56610a4',
-                'statementType': 'personStatement'
+                'statementID': 'bd4061d6-1a24-4356-93f3-c489b56610a3',
+                'statementType': 'ownershipOrControlStatement',
+                'subject': {'describedByEntityStatement': 'bd4061d6-1a24-4356-93f3-c489b56610a2'}
             },
-            'interests': [
-                {'beneficialOwnershipOrControl': True, 'details': '', 'directOrIndirect': 'direct',
-                 'share': {'exact': 27}, 'startDate': '2023-03-01', 'type': 'otherInfluenceOrControl'},
-                {'beneficialOwnershipOrControl': True, 'details': 'SharesThroughRightsOrExercisedInConcert',
-                 'directOrIndirect': 'unknown', 'startDate': '2023-03-01', 'type': 'shareholding'},
-                {'beneficialOwnershipOrControl': True, 'details': '', 'directOrIndirect': 'direct',
-                 'startDate': '2023-01-01', 'type': 'appointmentOfBoard'}],
-            'isComponent': False,
-            'publicationDetails': {'bodsVersion': '1.0', 'publicationDate': '2022-12-31',
-                                   'publisher': {'name': 'Publisher Name', 'source': {'url': 'http://source.url'},
-                                                 'uri': 'http://publisher.uri'}},
-            'source': {'asserted': '2023-02-18', 'description': 'The description', 'metadata': 'Metadata',
-                       'retrievedAt': '2023-02-28T23:17:17Z', 'url': 'https://yourwebsite.com'},
-            'statementDate': '2023-02-28',
-            'statementID': 'bd4061d6-1a24-4356-93f3-c489b56610a3',
-            'statementType': 'ownershipOrControlStatement',
-            'subject': {'describedByEntityStatement': 'bd4061d6-1a24-4356-93f3-c489b56610a2'}}],
-        'ceasedOwners': []}
+            {
+                'interestedParty': {
+                    'describedByPersonStatement': '123456ab123456ab123456ab123456ab123456ab123456ab123456ab1234',
+                    'birthDate': '1997-04-23',
+                    'email': 'test2@test2.gov.bc.ca',
+                    'hasTaxNumber': True,
+                    'isComponent': False,
+                    'names': [{'fullName': 'Full2 Name2', 'type': 'individual'}, {'fullName': 'preffered2', 'type': 'alternative'}],
+                    'nationalities': [{'code': 'FR', 'name': 'France'}],
+                    'personType': 'knownPerson',
+                    'publicationDetails': {'bodsVersion': '1.0', 'publicationDate': '2022-12-31', 'publisher': {'name': 'Publisher Name', 'source': {'url': 'http://source.url'}, 'uri': 'http://publisher.uri'}},
+                    'source': {'asserted': '2023-02-18', 'description': 'The description', 'metadata': 'Metadata', 'retrievedAt': '2023-02-28T23:17:17Z', 'url': 'https://yourwebsite.com'},
+                    'statementDate': '2023-02-28',
+                    'statementID': '123456ab123456ab123456ab123456ab123456ab123456ab123456ab1234',
+                    'statementType': 'personStatement'
+                },
+                'interests': [
+                    {'beneficialOwnershipOrControl': True, 'details': 'controlType.sharesOrVotes.beneficialOwner', 'directOrIndirect': 'direct', 'share': {'maximum': 50, 'minimum': 25}, 'startDate': '2023-03-01', 'type': 'votingRights'},
+                    {'beneficialOwnershipOrControl': True, 'details': '', 'directOrIndirect': 'direct', 'startDate': '2023-01-01', 'type': 'appointmentOfBoard'}
+                ],
+                'isComponent': False,
+                'publicationDetails': {'bodsVersion': '1.0', 'publicationDate': '2022-12-31', 'publisher': {'name': 'Publisher Name', 'source': {'url': 'http://source.url'}, 'uri': 'http://publisher.uri'}},
+                'source': {'asserted': '2023-02-18', 'description': 'The description', 'metadata': 'Metadata', 'retrievedAt': '2023-02-28T23:17:17Z', 'url': 'https://yourwebsite.com'},
+                'statementDate': '2023-02-28',
+                'statementID': '9876qw9876qw9876qw9876qw9876qw9876qw9876qw9876qw9876qw9876qw',
+                'statementType': 'ownershipOrControlStatement',
+                'subject': {'describedByEntityStatement': 'bd4061d6-1a24-4356-93f3-c489b56610a2'}
+            }
+        ]
+    }
 
 
 def test_post_plots(app, client, session, jwt, requests_mock):
