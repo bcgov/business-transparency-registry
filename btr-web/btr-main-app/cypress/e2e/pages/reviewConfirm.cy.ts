@@ -41,6 +41,7 @@ describe('pages -> Review and Confirm', () => {
 
       // fill out the form
       cy.get('#individual-person-full-name').type(testData.profile1.fullName)
+      cy.get('[data-cy=usePreferredName').check()
       cy.get('#individual-person-preferred-name').type(testData.profile1.preferredName)
       cy.get('#individual-person-email').type(testData.profile1.email)
 

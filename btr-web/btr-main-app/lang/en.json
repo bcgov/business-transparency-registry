@@ -146,6 +146,8 @@
     }
   },
   "placeholders": {
+    "fullName": "Full Name",
+    "preferredName": "Preferred Name Information",
     "dateSelect": {
       "birthdate": "Select Date",
       "significantIndividualChange": "Significant Individual Filing Effective Date"

@@ -16,7 +16,7 @@ describe('pages -> My Registries Details', () => {
     cy.get('[data-cy=myRegDetailsTable]').get('td').should('have.length', 16)
 
     const expectedData = [
-      { label: 'Full Legal Name', value: 'Wallaby Wobbles' },
+      { label: "Individual's Full Name", value: 'Wallaby Wobbles' },
       { label: 'Birthdate', value: 'September 25, 1993' },
       { label: 'Residential Address', value: '123 Fake StVictoria BC\u00A0\u00A0V2L 3T6Canada' },
       { label: 'Email Address', value: '1@1.com' },

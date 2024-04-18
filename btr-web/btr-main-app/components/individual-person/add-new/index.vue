@@ -14,34 +14,57 @@
       :show-section-has-errors="sectionErrors?.individualsFullName?.length > 0"
       :section-title="$t('sectionHeadings.individualsFullName')"
     >
-      <UForm
-        ref="profileFormBase"
-        :schema="formSchema"
-        :state="significantIndividual.profile"
-        class="w-full"
-        @change="addBtrPayFees"
-      >
-        <div class="flex-col w-full">
+      <div class="flex-col w-full">
+        <UForm
+          ref="profileFormName"
+          :schema="formSchema"
+          :state="significantIndividual.profile"
+          class="w-full"
+          @change="addBtrPayFees"
+        >
           <BcrosInputsNameField
             id="individual-person-full-name"
             v-model="significantIndividual.profile.fullName"
             name="fullName"
             :label="$t('labels.fullName')"
+            :placeholder="$t('placeholders.fullName')"
             :variant="fullNameInvalid ? 'error' : 'bcGov'"
             data-cy="testFullName"
           />
-          <div class="pt-3">
-            <BcrosInputsNameField
-              id="individual-person-preferred-name"
-              v-model="significantIndividual.profile.preferredName"
-              name="preferredName"
-              :label="$t('labels.preferredName')"
-              :variant="preferredNameInvalid ? 'error' : 'bcGov'"
-              data-cy="testPreferredName"
+        </UForm>
+        <UForm
+          ref="profileFormPreferredName"
+          :schema="formSchema"
+          :state="significantIndividual.profile"
+          class="w-full"
+          @change="addBtrPayFees"
+        >
+          <div class="pt-5">
+            <UCheckbox
+              v-model="usePreferredName"
+              :label="$t('texts.preferredName.checkbox')"
+              data-cy="usePreferredName"
+              @click="significantIndividual.profile.preferredName = ''"
             />
+            <div v-if="usePreferredName" class="pt-3 w-full">
+              <p>
+                {{ $t('texts.preferredName.note') }}
+              </p>
+              <div class="pt-5">
+                <BcrosInputsNameField
+                  id="individual-person-preferred-name"
+                  v-model="significantIndividual.profile.preferredName"
+                  name="preferredName"
+                  :placeholder="$t('placeholders.preferredName')"
+                  :variant="preferredNameInvalid ? 'error' : 'bcGov'"
+                  data-cy="testPreferredName"
+                  :help="$t('texts.preferredName.hint')"
+                />
+              </div>
+            </div>
           </div>
-        </div>
-      </UForm>
+        </UForm>
+      </div>
     </BcrosSection>
 
     <!--  section: type of interest or control  -->
@@ -158,7 +181,7 @@
       :section-title="$t('sectionHeadings.emailAddress')"
     >
       <UForm
-        ref="profileFormBaseEmail"
+        ref="profileFormEmail"
         :schema="formSchema"
         :state="significantIndividual.profile"
         class="w-full"
@@ -236,7 +259,7 @@
     >
       <div class="w-full flex flex-col">
         <UForm
-          ref="profileFormExtended"
+          ref="profileFormTax"
           :schema="formSchema"
           :state="significantIndividual.profile"
           @change="addBtrPayFees"
@@ -364,10 +387,12 @@ function updateSignificantIndividual () {
   emits('update', { index: props.index, updatedSI: significantIndividual.value })
 }
 
-const profileFormBase = ref()
-const profileFormBaseEmail = ref()
-const profileFormExtended = ref()
+const profileFormName = ref()
+const profileFormPreferredName = ref()
+const profileFormEmail = ref()
+const profileFormTax = ref()
 const ownerFormBase = ref()
+const usePreferredName = ref(significantIndividual.value.profile.preferredName !== '')
 
 const fullNameInvalid = ref(false)
 const preferredNameInvalid = ref(false)
@@ -436,16 +461,19 @@ function validateForm () {
   validationResult.value = formSchema.safeParse(data)
 }
 
-watch(() => profileFormBase.value?.errors, (val: { path: string }[]) => {
+watch(() => profileFormName.value?.errors, (val: { path: string }[]) => {
   fullNameInvalid.value = val.filter(val => val.path === 'fullName').length > 0
+})
+
+watch(() => profileFormPreferredName.value?.errors, (val: { path: string }[]) => {
   preferredNameInvalid.value = val.filter(val => val.path === 'preferredName').length > 0
 })
 
-watch(() => profileFormBaseEmail.value?.errors, (val: { path: string }[]) => {
+watch(() => profileFormEmail.value?.errors, (val: { path: string }[]) => {
   emailInvalid.value = val.filter(val => val.path === 'email').length > 0
 })
 
-watch(() => profileFormExtended.value?.errors, (val: { path: string }[]) => {
+watch(() => profileFormTax.value?.errors, (val: { path: string }[]) => {
   taxNumebrInvalid.value = val.filter(val => val.path === 'taxNumber').length > 0
 })
 
@@ -461,9 +489,10 @@ watch(() => validationResult.value, (val: ZodError) => {
       })
     })
 
-    profileFormBase.value.setErrors(errors)
-    profileFormBaseEmail.value.setErrors(errors)
-    profileFormExtended.value.setErrors(errors)
+    profileFormName.value.setErrors(errors)
+    profileFormPreferredName.value.setErrors(errors)
+    profileFormEmail.value.setErrors(errors)
+    profileFormTax.value.setErrors(errors)
     addressErrors.value = errors
     percentOfSharesErrors.value = errors.filter((error: FormError) => error.path === 'percentOfShares')
     percenOfVotesErrors.value = errors.filter((error: FormError) => error.path === 'percentOfVotes')

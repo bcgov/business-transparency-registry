@@ -86,6 +86,7 @@ Cypress.Commands.add('addTestIndividuals', () => {
     // Add the first individual
     cy.get('[data-cy=add-new-btn]').click()
     cy.get('#individual-person-full-name').type(testData.profile1.fullName)
+    cy.get('[data-cy=usePreferredName').check()
     cy.get('#individual-person-preferred-name').type(testData.profile1.preferredName)
     cy.get('#individual-person-email').type(testData.profile1.email)
     cy.get('[data-cy=testPercentOfShares]').click()
@@ -111,6 +112,7 @@ Cypress.Commands.add('addTestIndividuals', () => {
     // Add the second individual
     cy.get('[data-cy=add-new-btn]').click()
     cy.get('#individual-person-full-name').type(testData.profile2.fullName)
+    cy.get('[data-cy=usePreferredName').check()
     cy.get('#individual-person-preferred-name').type(testData.profile2.preferredName)
     cy.get('#individual-person-email').type(testData.profile2.email)
     cy.get('[data-cy=testPercentOfShares]').click()
