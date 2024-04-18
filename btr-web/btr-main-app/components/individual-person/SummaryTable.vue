@@ -108,24 +108,6 @@
           </td>
         </template>
       </tr>
-      <!-- standard class or css style without !important was not working -->
-      <tr
-        v-if="item.action != FilingActionE.REMOVE && editingIndex != index"
-        style="border-top-width: 0!important"
-        data-cy="summary-table-external-influence"
-      >
-        <td colspan="6">
-          <p v-if="item.externalInfluence === ExternalInfluenceE.CAN_BE_INFLUENCED">
-            {{ $t('labels.externalInfluence.canBeInfluenced') }}
-          </p>
-          <p v-else-if="item.externalInfluence === ExternalInfluenceE.CAN_INFLUENCE">
-            {{ $t('labels.externalInfluence.canInfluence') }}
-          </p>
-          <p v-else>
-            {{ $t('labels.externalInfluence.noExternalInfluence') }}
-          </p>
-        </td>
-      </tr>
       <tr v-if="isEditing && editingIndex === index">
         <td data-cy="summary-table-edit-form" colspan="100%">
           <div class="bg-white rounded flex flex-row">
@@ -157,7 +139,6 @@
 </template>
 
 <script setup lang="ts">
-import { ExternalInfluenceE } from '~/enums/external-influence-e'
 import { SignificantIndividualI } from '~/interfaces/significant-individual-i'
 
 const emit = defineEmits(['toggle-editing-mode'])

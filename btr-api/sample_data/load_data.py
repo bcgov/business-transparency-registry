@@ -199,8 +199,7 @@ def _get_person_stmnts(addresses: dict, names: dict, nationalities: dict, limit:
                     'placeOfResidence': person_addresses[0] if len(person_addresses) > 0 else None,
                     # NOTE: below is fake info
                     'taxResidencies': nationalities.get(row['_link'], []),
-                    'email': get_random_email(),
-                    'externalInfluence': 'NoExternalInfluence'
+                    'email': get_random_email()
                 }
                 if limit and len(person_stmnts.keys()) == limit:
                     return person_stmnts

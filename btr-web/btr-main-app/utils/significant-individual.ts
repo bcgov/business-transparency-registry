@@ -42,7 +42,6 @@ export function getEmptySI (startDate: string) {
       },
       other: ''
     },
-    externalInfluence: ExternalInfluenceE.NO_EXTERNAL_INFLUENCE,
     missingInfoReason: '',
     percentOfShares: PercentageRangeE.NO_SELECTION,
     percentOfVotes: PercentageRangeE.NO_SELECTION,

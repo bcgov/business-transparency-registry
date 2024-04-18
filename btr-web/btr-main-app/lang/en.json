@@ -8,12 +8,6 @@
     "current": "Current",
     "details": "Details",
     "directors": "Directors",
-    "externalInfluence": {
-      "noExternalInfluence": "There is {boldStart}no written agreement{boldEnd} involving influence of, or by, this individual and another individual regarding control of the business.",
-      "canInfluence": "A written agreement {boldStart}allows this individual{boldEnd} to direct or influence another individual’s decision making",
-      "canBeInfluenced": "A written agreement {boldStart}allows another individual{boldEnd} to direct or influence this individual’s decision making",
-      "title": "External Influence"
-    },
     "name": "Name",
     "other": "Other",
     "shares": "Shares",
@@ -55,9 +49,6 @@
     "edit": "Edit"
   },
   "texts": {
-    "externalInfluence": {
-      "text": "Indicate if there is a {boldStart}written agreement{boldEnd} involving influence of, or by, this individual and another individual regarding control of the business."
-    },
     "note": "Note: ",
     "addIndividualPerson": "To add a person to the transparency register of this business, enter their name and email address. A request will be sent to the person at their email address and they will have the ability to accept or decline the addition of their information to the transparency register of the business. If they accept, their information will automatically be added to the transparency register. If you don’t want to send an invitation, you can add the person’s transparency information manually.",
     "beneficialOwnershipAssessmentText1": "Individual significance is determined by the control of of shares and/or votes at general meetings, and control of the right to elect, appoint, or remove directors of the business.",

@@ -302,7 +302,6 @@ export const btrSubmissionExampleMock = {
         identifiers: [],
         isComponent: false,
         isPermanentResidentCa: false,
-        externalInfluence: 'NoExternalInfluence',
         missingInfoReason: '',
         names: [
           {
@@ -533,7 +532,6 @@ export const expectedSisOutput = [{
     },
     other: 'everything'
   },
-  externalInfluence: 'NoExternalInfluence',
   missingInfoReason: '',
   percentOfShares: 'atLeast25To50',
   percentOfVotes: 'noSelection',
@@ -581,7 +579,6 @@ export const expectedSisOutput = [{
     },
     other: 'This is something tottaly else'
   },
-  externalInfluence: 'NoExternalInfluence',
   missingInfoReason: 'It actually really is unless it is not',
   percentOfShares: 'moreThan50To75',
   percentOfVotes: 'atLeast25To50',
@@ -627,7 +624,6 @@ export const expectedSisOutput = [{
     },
     other: ''
   },
-  externalInfluence: 'NoExternalInfluence',
   missingInfoReason: undefined,
   percentOfShares: 'noSelection',
   percentOfVotes: 'noSelection',
