@@ -40,7 +40,7 @@ describe('pages -> Beneficial Owner Change', () => {
     cy.get('[data-cy=add-new-btn]').trigger('click')
     cy.get('[data-cy=addIndividualPerson]').should('exist')
     cy.get('[data-cy=testFullName]').should('exist')
-    cy.get('[data-cy=testPreferredName]').should('exist')
+    cy.get('[data-cy=usePreferredName').should('exist')
     cy.get('[data-cy=testEmail]').should('exist')
     // cy.get('[data-cy=showAddIndividualPersonManually]')
     //   .should('have.text', ' Add transparency register information manually')
@@ -49,6 +49,18 @@ describe('pages -> Beneficial Owner Change', () => {
     cy.get('[data-cy=new-si-done-btn]').should('have.text', 'Done')
     // should disable add button while add individual is expanded
     cy.get('[data-cy=add-new-btn]').should('have.attr', 'disabled')
+  })
+
+  it('click the checkbox to hide or show preferred name section', () => {
+    cy.get('[data-cy=add-new-btn]').trigger('click')
+    cy.get('[data-cy=usePreferredName').should('exist')
+    cy.get('[data-cy=testPreferredName').should('not.exist')
+    cy.get('[data-cy=usePreferredName').check()
+    cy.get('[data-cy=testPreferredName').should('exist')
+    cy.get('#individual-person-preferred-name').type('test preferred name')
+    cy.get('[data-cy=usePreferredName').uncheck()
+    cy.get('[data-cy=usePreferredName').check()
+    cy.get('#individual-person-preferred-name').should('not.have.value', 'test preferred name')
   })
 
   it('expands all parts when manual entry clicked', () => {
@@ -105,6 +117,7 @@ describe('pages -> Beneficial Owner Change', () => {
 
       // fill out the form
       cy.get('#individual-person-full-name').type(testData.profile1.fullName)
+      cy.get('[data-cy=usePreferredName').check()
       cy.get('#individual-person-preferred-name').type(testData.profile1.preferredName)
       cy.get('#individual-person-email').type(testData.profile1.email)
 

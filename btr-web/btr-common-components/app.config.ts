@@ -11,7 +11,8 @@ export default defineAppConfig({
       }
     },
     formGroup: {
-      label: { base: 'block text-base font-bold py-3 text-gray-900' }
+      label: { base: 'block text-base font-bold py-3 text-gray-900' },
+      help: 'ml-2 text-gray-700'
     },
     input: {
       base: 'bg-gray-100 hover:bg-gray-200 h-[56px] border-b-[1px] focus:border-b-2 focus:ring-0',

@@ -30,6 +30,7 @@ describe('accessibility -> Beneficial Owner Change', () => {
     // continue from previous expanded form, fill it out
     cy.fixture('individuals').then((testData) => {
       cy.get('#individual-person-full-name').type(testData.profile1.fullName)
+      cy.get('[data-cy=usePreferredName').check()
       cy.get('#individual-person-preferred-name').type(testData.profile1.preferredName)
       cy.get('#individual-person-email').type(testData.profile1.email)
       cy.get('[data-cy=testPercentOfShares]').click()

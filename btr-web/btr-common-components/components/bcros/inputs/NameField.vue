@@ -1,12 +1,15 @@
 <template>
   <UFormGroup :label="label" :name="name">
+    <template #help>
+      {{ help }}
+    </template>
     <UInput
       :id="id"
       type="text"
       v-bind="$attrs"
       :value="modelValue"
       :variant="variant"
-      :placeholder="label"
+      :placeholder="placeholder"
       @input="$emit('update:modelValue', $event.target.value)"
       @blur="normalizeInput"
     />
@@ -20,10 +23,12 @@ const emit = defineEmits<{(e: 'update:modelValue', value: string): void}>()
 
 const props = defineProps({
   label: { type: String, default: '' },
+  placeholder: { type: String, default: '' },
   id: { type: String, required: true },
   name: { type: String, default: 'name' },
   modelValue: { type: String, default: '' },
-  variant: { type: String, default: 'bcGov' }
+  variant: { type: String, default: 'bcGov' },
+  help: { type: String, default: '' }
 })
 
 const normalizeInput = () => {
