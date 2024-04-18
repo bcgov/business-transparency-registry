@@ -31,14 +31,6 @@
             :variant="fullNameInvalid ? 'error' : 'bcGov'"
             data-cy="testFullName"
           />
-        </UForm>
-        <UForm
-          ref="profileFormPreferredName"
-          :schema="formSchema"
-          :state="significantIndividual.profile"
-          class="w-full"
-          @change="addBtrPayFees"
-        >
           <div class="pt-5">
             <UCheckbox
               v-model="usePreferredName"
@@ -66,7 +58,6 @@
         </UForm>
       </div>
     </BcrosSection>
-
     <!--  section: type of interest or control  -->
     <BcrosSection
       :show-section-has-errors="sectionErrors?.typeOfInterestOrControl?.length > 0"
@@ -388,7 +379,6 @@ function updateSignificantIndividual () {
 }
 
 const profileFormName = ref()
-const profileFormPreferredName = ref()
 const profileFormEmail = ref()
 const profileFormTax = ref()
 const ownerFormBase = ref()
@@ -463,9 +453,6 @@ function validateForm () {
 
 watch(() => profileFormName.value?.errors, (val: { path: string }[]) => {
   fullNameInvalid.value = val.filter(val => val.path === 'fullName').length > 0
-})
-
-watch(() => profileFormPreferredName.value?.errors, (val: { path: string }[]) => {
   preferredNameInvalid.value = val.filter(val => val.path === 'preferredName').length > 0
 })
 
@@ -490,7 +477,6 @@ watch(() => validationResult.value, (val: ZodError) => {
     })
 
     profileFormName.value.setErrors(errors)
-    profileFormPreferredName.value.setErrors(errors)
     profileFormEmail.value.setErrors(errors)
     profileFormTax.value.setErrors(errors)
     addressErrors.value = errors
