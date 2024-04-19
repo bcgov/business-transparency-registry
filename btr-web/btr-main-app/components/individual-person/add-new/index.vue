@@ -1,13 +1,23 @@
 <template>
   <div data-cy="addIndividualPerson" class="w-full">
     <!--  section: your information  -->
-    <!--      <IndividualPersonAddNewSection-->
-    <!--        :show-section-has-errors="sectionErrors?.yourInformation?.length > 0"-->
-    <!--        :section-title="$t('sectionHeadings.yourInformation')"-->
-    <!--      >-->
-    <!--        <div class="flex-col py-5">-->
-    <!--        </div>-->
-    <!--      </IndividualPersonAddNewSection>-->
+    <BcrosSection
+      :show-section-has-errors="sectionErrors?.isYourOwnInformation?.length > 0"
+      :section-title="$t('sectionHeadings.isYourOwnInformation')"
+      data-cy="isYourOwnInformation-section"
+    >
+      <div class="flex-col w-full">
+        <p class="py-3">
+          {{ $t('texts.isYourOwnInformation') }}
+        </p>
+        <UCheckbox
+          v-model="isYourOwnInformation"
+          :label="$t('labels.isYourOwnInformation')"
+          data-cy="isYourOwnInformation-checkbox"
+          @click="setIsYourOwnInformation($event)"
+        />
+      </div>
+    </BcrosSection>
 
     <!--  section: individuals full name  -->
     <BcrosSection
@@ -30,6 +40,7 @@
             :placeholder="$t('placeholders.fullName')"
             :variant="fullNameInvalid ? 'error' : 'bcGov'"
             data-cy="testFullName"
+            :is-disabled="isYourOwnInformation"
           />
           <div class="pt-5">
             <UCheckbox
@@ -341,7 +352,7 @@
 <script setup lang="ts">
 import { z, ZodError, ZodIssue } from 'zod'
 import type { FormError } from '#ui/types'
-import { SignificantIndividualAddNewSectionsE } from '~/enums/significant-individual/add-new-sections-e'
+import { SignificantIndividualAddNewErrorsI } from '~/interfaces/significant-individual/add-new-errors-i'
 
 const t = useNuxtApp().$i18n.t
 
@@ -354,15 +365,27 @@ const emits = defineEmits<{
 
 const props = defineProps<{
   index?: number,
-  sectionErrors?: SignificantIndividualAddNewSectionsE,
+  sectionErrors?: SignificantIndividualAddNewErrorsI,
   setSignificantIndividual?: SignificantIndividualI,
   startDate?: string
 }>()
+
+const bcrosAccount = useBcrosAccount()
+
 const defaultSI = getEmptySI(props.startDate || '')
 // NOTE: not setting this as modelValue because it is a nested object so mutating it gets complicated
 const significantIndividual: Ref<SignificantIndividualI> = ref(props.setSignificantIndividual || defaultSI)
 
 const isEditing = computed(() => significantIndividual.value.action === FilingActionE.EDIT)
+
+const isYourOwnInformation = ref(false)
+const setIsYourOwnInformation = (event) => {
+  if (event.target.checked) {
+    significantIndividual.value.profile.fullName = bcrosAccount.userFullName
+  } else {
+    significantIndividual.value.profile.fullName = ''
+  }
+}
 
 watch(() => props.startDate, (val) => {
   significantIndividual.value.startDate = val

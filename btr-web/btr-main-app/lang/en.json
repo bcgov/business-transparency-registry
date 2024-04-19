@@ -1,5 +1,6 @@
 {
   "labels": {
+    "isYourOwnInformation": "I am adding my own information",
     "addIndividual": "Add an Individual",
     "editIndividual": "Edit an Individual",
     "beneficialOwnershipAssessment": "Assessment of Individual Significance",
@@ -49,6 +50,7 @@
     "edit": "Edit"
   },
   "texts": {
+    "isYourOwnInformation": "Select this option if you are a significant individual and you are entering information for yourself.",
     "note": "Note: ",
     "preferredName": {
       "checkbox": "Use a preferred name",
@@ -211,7 +213,7 @@
   "sectionHeadings": {
     "profileDetails": "Your Details",
     "reviewConfirm": "Review and Confirm",
-    "yourInformation": "Indicate if this is your information",
+    "isYourOwnInformation": "Indicate if this is your information",
     "individualsFullName": "Individual's Full Name",
     "typeOfInterestOrControl": "Type of Interest or Control",
     "interestOrRightsJointlyOrInConcert": "Interests or Rights exercised in concert or held jointly",
