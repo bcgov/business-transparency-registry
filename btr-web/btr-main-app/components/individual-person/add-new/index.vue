@@ -5,8 +5,8 @@
       :schema="formSchema"
       :state="significantIndividual"
       class="w-full"
-      @change="addBtrPayFees"
       :validate="validateFullNameForm"
+      @change="addBtrPayFees"
     >
       <!--  section: your information  -->
       <BcrosSection
@@ -506,11 +506,11 @@ const validateFullNameForm = () => {
     .safeParse(dataToValidate)
 
   if (!afterParse.success) {
-    const newErrors = afterParse.error.issues.map((err) => ({
-        // Map validation errors to { path: string, message: string }
-        message: err.message,
-        path: err.path.join('.')
-      })
+    const newErrors = afterParse.error.issues.map(err => ({
+      // Map validation errors to { path: string, message: string }
+      message: err.message,
+      path: err.path.join('.')
+    })
     )
     return newErrors
   } else {
