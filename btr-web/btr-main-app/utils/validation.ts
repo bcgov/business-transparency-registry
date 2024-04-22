@@ -1,3 +1,5 @@
+import { RefinementCtx, z } from 'zod'
+
 /**
  * Check if the percentage of shares and the percentage of votes are required.
  * If any of the Type of Control checkboxes are checked, at least one of the percentage fields is required.
@@ -109,4 +111,45 @@ export function validateMissingInfoTextarea (formData: FormInputI): boolean {
  */
 export function validateMissingInfoReason (formData: FormInputI): boolean {
   return !formData.missingInfo || (formData.missingInfoReason !== '' && formData.missingInfoReason !== undefined)
+}
+
+export function validateFullNameSuperRefine (form: any, ctx: RefinementCtx): never {
+  const t = useNuxtApp().$i18n.t
+  if (form.isYourOwnInformation) {
+    return z.NEVER
+  }
+
+  if (form.fullName) {
+    const normalizedFullName = normalizeName(form.fullName)
+    if (normalizedFullName.length < 1) {
+      ctx.addIssue({
+        path: ['fullName'],
+        code: z.ZodIssueCode.custom,
+        message: t('errors.validation.fullName.empty')
+      })
+    }
+
+    if (normalizedFullName.length > 150) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ['fullName'],
+        message: t('errors.validation.fullName.maxLengthExceeded')
+      })
+    }
+
+    if (!validateNameCharacters(normalizedFullName)) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ['fullName'],
+        message: t('errors.validation.fullName.specialCharacter')
+      })
+    }
+  } else {
+    ctx.addIssue({
+      path: ['fullName'],
+      code: z.ZodIssueCode.custom,
+      message: t('errors.validation.fullName.empty')
+    })
+  }
+  return z.NEVER
 }

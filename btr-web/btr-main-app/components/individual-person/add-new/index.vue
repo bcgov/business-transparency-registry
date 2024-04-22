@@ -1,37 +1,38 @@
 <template>
   <div data-cy="addIndividualPerson" class="w-full">
-    <!--  section: your information  -->
-    <BcrosSection
-      :show-section-has-errors="sectionErrors?.isYourOwnInformation?.length > 0"
-      :section-title="$t('sectionHeadings.isYourOwnInformation')"
-      data-cy="isYourOwnInformation-section"
+    <UForm
+      ref="profileFormName"
+      :schema="formSchema"
+      :state="significantIndividual"
+      class="w-full"
+      @change="addBtrPayFees"
+      :validate="validateFullNameForm"
     >
-      <div class="flex-col w-full">
-        <p class="py-3">
-          {{ $t('texts.isYourOwnInformation') }}
-        </p>
-        <UCheckbox
-          v-model="isYourOwnInformation"
-          :label="$t('labels.isYourOwnInformation')"
-          data-cy="isYourOwnInformation-checkbox"
-          @click="setIsYourOwnInformation($event)"
-        />
-      </div>
-    </BcrosSection>
+      <!--  section: your information  -->
+      <BcrosSection
+        :show-section-has-errors="sectionErrors?.isYourOwnInformation?.length > 0"
+        :section-title="$t('sectionHeadings.isYourOwnInformation')"
+        data-cy="isYourOwnInformation-section"
+      >
+        <div class="flex-col w-full">
+          <p class="py-3">
+            {{ $t('texts.isYourOwnInformation') }}
+          </p>
+          <UCheckbox
+            v-model="isYourOwnInformation"
+            :label="$t('labels.isYourOwnInformation')"
+            data-cy="isYourOwnInformation-checkbox"
+            @change="setIsYourOwnInformation($event)"
+          />
+        </div>
+      </BcrosSection>
 
-    <!--  section: individuals full name  -->
-    <BcrosSection
-      :show-section-has-errors="sectionErrors?.individualsFullName?.length > 0"
-      :section-title="$t('sectionHeadings.individualsFullName')"
-    >
-      <div class="flex-col w-full">
-        <UForm
-          ref="profileFormName"
-          :schema="formSchema"
-          :state="significantIndividual.profile"
-          class="w-full"
-          @change="addBtrPayFees"
-        >
+      <!--  section: individuals full name  -->
+      <BcrosSection
+        :show-section-has-errors="sectionErrors?.individualsFullName?.length > 0"
+        :section-title="$t('sectionHeadings.individualsFullName')"
+      >
+        <div class="flex-col w-full">
           <BcrosInputsNameField
             id="individual-person-full-name"
             v-model="significantIndividual.profile.fullName"
@@ -66,9 +67,10 @@
               </div>
             </div>
           </div>
-        </UForm>
-      </div>
-    </BcrosSection>
+        </div>
+      </BcrosSection>
+    </UForm>
+
     <!--  section: type of interest or control  -->
     <BcrosSection
       :show-section-has-errors="sectionErrors?.typeOfInterestOrControl?.length > 0"
@@ -353,6 +355,7 @@
 import { z, ZodError, ZodIssue } from 'zod'
 import type { FormError } from '#ui/types'
 import { SignificantIndividualAddNewErrorsI } from '~/interfaces/significant-individual/add-new-errors-i'
+import { validateFullNameSuperRefine } from '~/utils/validation'
 
 const t = useNuxtApp().$i18n.t
 
@@ -443,6 +446,7 @@ function handleDoneButtonClick () {
 
 function validateForm () {
   const data: FormInputI = {
+    isYourOwnInformation: isYourOwnInformation.value,
     fullName: significantIndividual.value.profile.fullName,
     preferredName: significantIndividual.value.profile.preferredName,
     email: significantIndividual.value.profile.email,
@@ -486,6 +490,33 @@ watch(() => profileFormEmail.value?.errors, (val: { path: string }[]) => {
 watch(() => profileFormTax.value?.errors, (val: { path: string }[]) => {
   taxNumebrInvalid.value = val.filter(val => val.path === 'taxNumber').length > 0
 })
+
+const validateFullNameForm = () => {
+  const dataToValidate = {
+    isYourOwnInformation: isYourOwnInformation.value,
+    fullName: significantIndividual.value.profile.fullName,
+    preferredName: significantIndividual.value.profile.preferredName
+  }
+  const afterParse = z
+    .object({
+      isYourOwnInformation: z.boolean(),
+      fullName: z.union([z.string(), z.undefined()]),
+      preferredName: getPreferredNameValidator()
+    }).superRefine(validateFullNameSuperRefine)
+    .safeParse(dataToValidate)
+
+  if (!afterParse.success) {
+    const newErrors = afterParse.error.issues.map((err) => ({
+        // Map validation errors to { path: string, message: string }
+        message: err.message,
+        path: err.path.join('.')
+      })
+    )
+    return newErrors
+  } else {
+    return []
+  }
+}
 
 watch(() => validationResult.value, (val: ZodError) => {
   if (!val.success) {
@@ -634,7 +665,8 @@ watch(() => missingInfo.value, (val: boolean) => {
 })
 
 const formSchema = z.object({
-  fullName: getFullNameValidator(),
+  isYourOwnInformation: z.boolean(),
+  fullName: z.union([z.undefined(), z.string()]),
   preferredName: getPreferredNameValidator(),
   email: getEmailValidator(),
   percentOfShares: z.nativeEnum(PercentageRangeE),
@@ -688,5 +720,8 @@ const formSchema = z.object({
 ).refine(
   validateMissingInfoTextarea
 ).refine(
-  validateMissingInfoReason, getNoMissingInfoReasonError())
+  validateMissingInfoReason, getNoMissingInfoReasonError()
+).superRefine(
+  validateFullNameSuperRefine
+)
 </script>
