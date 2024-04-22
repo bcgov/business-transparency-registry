@@ -43,28 +43,27 @@
             data-cy="testFullName"
             :is-disabled="isYourOwnInformation"
           />
-          <div class="pt-5">
-            <UCheckbox
-              v-model="usePreferredName"
-              :label="$t('texts.preferredName.checkbox')"
-              data-cy="usePreferredName"
-              @click="significantIndividual.profile.preferredName = ''"
-            />
-            <div v-if="usePreferredName" class="pt-3 w-full">
-              <p>
-                {{ $t('texts.preferredName.note') }}
-              </p>
-              <div class="pt-5">
-                <BcrosInputsNameField
-                  id="individual-person-preferred-name"
-                  v-model="significantIndividual.profile.preferredName"
-                  name="preferredName"
-                  :placeholder="$t('placeholders.preferredName')"
-                  :variant="preferredNameInvalid ? 'error' : 'bcGov'"
-                  data-cy="testPreferredName"
-                  :help="$t('texts.preferredName.hint')"
-                />
-              </div>
+          <div class="pt-5" />
+          <UCheckbox
+            v-model="usePreferredName"
+            :label="$t('texts.preferredName.checkbox')"
+            data-cy="usePreferredName"
+            @click="significantIndividual.profile.preferredName = ''"
+          />
+          <div v-if="usePreferredName" class="pt-3 w-full">
+            <p>
+              {{ $t('texts.preferredName.note') }}
+            </p>
+            <div class="pt-5">
+              <BcrosInputsNameField
+                id="individual-person-preferred-name"
+                v-model="significantIndividual.profile.preferredName"
+                name="preferredName"
+                :placeholder="$t('placeholders.preferredName')"
+                :variant="preferredNameInvalid ? 'error' : 'bcGov'"
+                data-cy="testPreferredName"
+                :help="$t('texts.preferredName.hint')"
+              />
             </div>
           </div>
         </div>
