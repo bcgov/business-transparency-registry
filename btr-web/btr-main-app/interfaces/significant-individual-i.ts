@@ -2,6 +2,7 @@ import { ProfileI } from './profile-i'
 import { FilingActionE } from '~/enums/filing-action-e'
 
 export interface SignificantIndividualI {
+  isYourOwnInformation: boolean,
   controlType: {
     sharesVotes: ControlOfSharesI
     directors: ControlOfDirectorsI

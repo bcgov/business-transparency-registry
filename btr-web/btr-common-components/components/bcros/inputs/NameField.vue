@@ -10,6 +10,7 @@
       :value="modelValue"
       :variant="variant"
       :placeholder="placeholder"
+      :disabled="isDisabled"
       @input="$emit('update:modelValue', $event.target.value)"
       @blur="normalizeInput"
     />
@@ -19,7 +20,7 @@
 <script setup lang="ts">
 import { normalizeName } from '~/utils/validation/form_inputs'
 
-const emit = defineEmits<{(e: 'update:modelValue', value: string): void}>()
+const emit = defineEmits<{(e: 'update:modelValue', value: string): void }>()
 
 const props = defineProps({
   label: { type: String, default: '' },
@@ -28,7 +29,8 @@ const props = defineProps({
   name: { type: String, default: 'name' },
   modelValue: { type: String, default: '' },
   variant: { type: String, default: 'bcGov' },
-  help: { type: String, default: '' }
+  help: { type: String, default: '' },
+  isDisabled: { type: Boolean, default: false }
 })
 
 const normalizeInput = () => {
