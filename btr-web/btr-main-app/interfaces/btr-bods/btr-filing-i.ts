@@ -3,9 +3,10 @@ import { BtrBodsPersonI } from '~/interfaces/btr-bods/btr-bods-person-i'
 import { BtrBodsOwnershipOrControlI } from '~/interfaces/btr-bods/btr-bods-ownership-or-control-i'
 
 export interface BtrFilingI {
-    businessIdentifier: string
-    effectiveDate: string
-    entityStatement: BtrBodsEntityI
-    personStatements: BtrBodsPersonI[]
-    ownershipOrControlStatements: BtrBodsOwnershipOrControlI[]
+  noSignificantIndividualsExist: boolean
+  businessIdentifier: string
+  effectiveDate: string
+  entityStatement: BtrBodsEntityI
+  personStatements: BtrBodsPersonI[]
+  ownershipOrControlStatements: BtrBodsOwnershipOrControlI[]
 }

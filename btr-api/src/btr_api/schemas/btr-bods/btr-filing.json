@@ -8,6 +8,9 @@
     "businessIdentifier": {
       "type": "string"
     },
+    "noSignificantIndividualsExist": {
+      "type": "boolean"
+    },
     "effectiveDate": {
       "type": "string",
       "format": "date"
@@ -35,8 +38,45 @@
   "required": [
     "businessIdentifier",
     "effectiveDate",
+    "noSignificantIndividualsExist",
     "entityStatement",
     "personStatements",
     "ownershipOrControlStatements"
+  ],
+  "oneOf": [
+    {
+      "properties": {
+        "noSignificantIndividualsExist": {
+          "const": true
+        },
+        "personStatements": {
+          "maxItems": 0
+        },
+        "ownershipOrControlStatements": {
+          "maxItems": 0
+        }
+      },
+      "required": [
+        "businessIdentifier",
+        "effectiveDate",
+        "noSignificantIndividualsExist",
+        "entityStatement",
+        "personStatements",
+        "ownershipOrControlStatements"
+      ]
+    },
+    {
+      "properties": {
+        "noSignificantIndividualsExist": {
+          "const": false
+        },
+        "personStatements": {
+          "minItems": 1
+        },
+        "ownershipOrControlStatements": {
+          "minItems": 1
+        }
+      }
+    }
   ]
 }

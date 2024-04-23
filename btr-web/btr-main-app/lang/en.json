@@ -1,5 +1,7 @@
 {
   "labels": {
+    "noSignificantIndividualsExist": "There are no current significant individuals for this business",
+    "importLegacySIList": "Import your legacy SI list",
     "isYourOwnInformation": "I am adding my own information",
     "addIndividual": "Add an Individual",
     "editIndividual": "Edit an Individual",
@@ -40,6 +42,8 @@
     "certifySection": "Certify"
   },
   "buttons": {
+    "addAnIndividual": "Add an Individual",
+    "importYourLegacySIList": "Import your legacy SI list",
     "addIndividualPerson": {
       "add": "Add transparency register information manually",
       "cancel": "Cancel transparent register information"
@@ -50,6 +54,7 @@
     "edit": "Edit"
   },
   "texts": {
+    "significantIndividuals": "List all of the individual persons who have significant control of this business. Significant control is determined by control of shares or votes at general meetings, control of directors, or other interests or rights that allow the individual to control the business.",
     "isYourOwnInformation": "Select this option if you are a significant individual and you are entering information for yourself.",
     "note": "Note: ",
     "preferredName": {
@@ -206,9 +211,19 @@
       }
     }
   },
+  "helpTitles": {
+    "significantIndividuals": "Help with significant individuals"
+  },
+  "helpTexts": {
+    "significantIndividuals": {
+      "helpPlaceholder1": "This is placeholder text. It's used as a temporary replacement for final content.",
+      "helpPlaceholder2": "Here's another example of placeholder text. It helps to visualize the layout and overall design in a mockup or prototype."
+    }
+  },
   "pageHeadings": {
     "myRegDetails": "My BC Registries Details",
-    "significantIndividualChange": "Significant Individual Change"
+    "significantIndividualChange": "Significant Individual Change",
+    "significantIndividuals": "Significant Individuals"
   },
   "sectionHeadings": {
     "profileDetails": "Your Details",
