@@ -40,26 +40,34 @@
           </ul>
         </template>
       </BcrosHelpTip>
-      <div v-if="!currentSIFiling.significantIndividuals?.length > 0" class="p-5">
+      <div v-if="!currentSIFiling.significantIndividuals?.length > 0 && !expandNewSI" class="p-5">
         <UCheckbox
           v-model="currentSIFiling.noSignificantIndividualsExist"
           name="noSignificantIndividualsExist"
           data-cy="noSignificantIndividualsExist-checkbox"
           :label="$t('labels.noSignificantIndividualsExist')"
         />
+        <template v-if="currentSIFiling.noSignificantIndividualsExist">
+          <div class="mt-5">
+            <p data-cy="noSignificantIndividualsExistExplain">
+              {{ $t('texts.noSignificantIndividualsExistExplain') }}
+            </p>
+          </div>
+        </template>
       </div>
     </div>
-    <div v-if="!currentSIFiling.noSignificantIndividualsExist" data-cy="significantIndividuals-section">
+    <div data-cy="significantIndividuals-section">
       <UButton
         class="px-4 py-3"
         color="primary"
-        :disabled="isEditing || expandNewSI"
+        :disabled="isEditing || expandNewSI || currentSIFiling.noSignificantIndividualsExist"
         icon="i-mdi-account-plus"
         :label="$t('labels.addIndividual')"
         data-cy="add-new-btn"
         @click="handleAddNewButtonClick"
       />
       <UButton
+        v-if="!currentSIFiling.noSignificantIndividualsExist"
         class="mx-5 px-4 py-3"
         color="primary"
         :disabled="true"

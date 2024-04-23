@@ -55,6 +55,7 @@
   },
   "texts": {
     "significantIndividuals": "List all of the individual persons who have significant control of this business. Significant control is determined by control of shares or votes at general meetings, control of directors, or other interests or rights that allow the individual to control the business.",
+    "noSignificantIndividualsExistExplain": "By checking this checkbox, you confirm that, as per Business Corporations Act 119.2(3), there are no individuals considered significant individuals in relation to the company. This action ensures compliance with legislation, requiring the transparency register to include a statement indicating the absence of significant individuals.",
     "isYourOwnInformation": "Select this option if you are a significant individual and you are entering information for yourself.",
     "note": "Note: ",
     "preferredName": {
