@@ -26,7 +26,7 @@
       </div>
     </div>
     <div class="my-5" data-cy="noSignificantIndividualsExist-section">
-      <h1 class="font-bold text-3xl" data-cy="noSignificantIndividualsExist">
+      <h1 class="font-bold text-3xl" data-cy="noSignificantIndividualsExist-title">
         {{ $t('pageHeadings.significantIndividuals') }}
       </h1>
       <p class="mt-5">

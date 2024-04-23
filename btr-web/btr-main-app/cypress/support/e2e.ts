@@ -9,6 +9,15 @@ Cypress.Commands.add('interceptPostsEntityApi', () => {
   })
 })
 
+Cypress.Commands.add('interceptPostsEntityApiNoSis', () => {
+  cy.fixture('plotsEntityExistingSiResponseNoSis').then((plotsEntityExistingSiResponseNoSis) => {
+    cy.intercept(
+      'GET',
+      '/plots/entity/BC0871427',
+      plotsEntityExistingSiResponseNoSis)
+  })
+})
+
 Cypress.Commands.add('interceptPostsEntityApiEmpty', () => {
   cy.intercept(
     'GET',
@@ -61,6 +70,15 @@ Cypress.Commands.add('interceptBusinessContact', () => {
         contact)
     })
   })
+})
+
+Cypress.Commands.add('visitHomePageNoFakeData', () => {
+  cy.interceptPostsEntityApiNoSis().as('existingSIs')
+  cy.interceptPayFeeApi().as('payFeeApi')
+  cy.interceptBusinessContact().as('businessContact')
+  cy.interceptBusinessSlim().as('businessApiCall')
+  cy.visit('/')
+  cy.wait(['@existingSIs', '@businessApiCall', '@payFeeApi', '@businessContact'])
 })
 
 Cypress.Commands.add('visitHomePageWithFakeData', () => {
