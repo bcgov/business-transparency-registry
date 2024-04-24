@@ -8,6 +8,7 @@ import fileSIApi from '@/services/file-significant-individual'
 /** Manages Significant */
 export const useSignificantIndividuals = defineStore('significantIndividuals', () => {
   const currentSIFiling: Ref<SignificantIndividualFilingI> = ref({
+    noSignificantIndividualsExist: false,
     significantIndividuals: []
   }) // current significant individual change filing
   const currentSavedSIs: Ref<SignificantIndividualI[]> = ref([]) // saved SIs from api for this business
@@ -26,6 +27,7 @@ export const useSignificantIndividuals = defineStore('significantIndividuals', (
 
   /** Add currentSI to the currentSIFiling. */
   function filingAddSI (significantIndividual: SignificantIndividualI) {
+    currentSIFiling.value.noSignificantIndividualsExist = false
     // put it at the end of the new individuals
     const lastNewSIIndex = currentSIFiling.value.significantIndividuals
       .findLastIndex((si: SignificantIndividualI) => si.action === FilingActionE.ADD)
@@ -58,6 +60,7 @@ export const useSignificantIndividuals = defineStore('significantIndividuals', (
     await loadSavedSIs(businessIdentifier)
     const folioNum = _getFolioNumber()
     currentSIFiling.value = {
+      noSignificantIndividualsExist: false,
       businessIdentifier,
       significantIndividuals: currentSavedSIs.value,
       effectiveDate: null,
@@ -114,7 +117,9 @@ export const useSignificantIndividuals = defineStore('significantIndividuals', (
   }
 
   function reset () {
-    currentSIFiling.value = {}
+    currentSIFiling.value = {
+      noSignificantIndividualsExist: false
+    }
     currentSavedSIs.value = []
     showErrors.value = false
     submitting.value = false

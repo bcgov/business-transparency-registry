@@ -114,6 +114,7 @@ const convertToBtrBodsForSubmit = (sif: SignificantIndividualFilingI): BtrFiling
   const { ownershipOrControlStatements, personStatements } = getPersonAndOwnershipAndControlStatements(sif)
 
   return {
+    noSignificantIndividualsExist: sif.noSignificantIndividualsExist,
     businessIdentifier: sif.businessIdentifier,
     effectiveDate: sif.effectiveDate,
     entityStatement: businessDetails,
