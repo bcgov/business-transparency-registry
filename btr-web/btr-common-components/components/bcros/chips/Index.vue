@@ -23,7 +23,7 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup lang="ts">76
 defineEmits<(e: 'chipCloseClicked') => void>()
 defineProps({
   label: { type: String, required: true },

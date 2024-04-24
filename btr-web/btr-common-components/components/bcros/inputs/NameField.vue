@@ -1,8 +1,5 @@
 <template>
-  <UFormGroup :label="label" :name="name">
-    <template #help>
-      {{ help }}
-    </template>
+  <UFormGroup :label="label" :name="name" :help="help">
     <UInput
       :id="id"
       type="text"

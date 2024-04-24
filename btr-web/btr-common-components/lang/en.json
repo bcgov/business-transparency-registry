@@ -71,10 +71,12 @@
       "pr": "Permanent resident of Canada",
       "others": "Other citizenship(s)",
       "selectAll": "Select all countries of which this person is a citizen.",
-      "placeholder": "Countries of Citizenship",
+      "placeholder": "Citizenship or permanent residency",
       "findCountry": "Find a Country",
       "select": "Select",
-      "selected": "Selected"
+      "selected": "Selected",
+      "hint":"Select all that apply",
+      "note": "Note: An individual cannot be both a citizen and permanent resident of Canada."
     },
     "findACountry": "Find a country",
     "services": {

@@ -22,6 +22,7 @@ export function getEmptySI (startDate: string) {
       birthDate: null,
       citizenshipCA: '',
       citizenshipsExCA: [],
+      citizenships: [],
       email: '',
       isTaxResident: undefined,
       hasTaxNumber: undefined,
