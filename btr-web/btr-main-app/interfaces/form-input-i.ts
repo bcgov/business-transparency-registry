@@ -16,9 +16,8 @@ export interface FormInputI {
   region: string
   postalCode: string
   locationDescription: string
-
   citizenshipCA: CitizenshipTypeE
-  citizenshipsExCA: BtrCountryI[]
+  citizenships: BtrCountryI[]
   hasTaxNumber: boolean
   taxNumber: string
   taxResidency: boolean

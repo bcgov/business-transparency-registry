@@ -31,26 +31,37 @@ const _getSiName = (btrBodsPerson: BtrBodsPersonI, nameType: BodsNameTypeE): str
 }
 
 const _getCitizenships = (btrBodsPerson: BtrBodsPersonI): {
-  citizenshipsExCA: BtrCountryI[],
-  citizenshipsCA: CitizenshipTypeE
+  citizenshipCA: CitizenshipTypeE,
+  citizenships: BtrCountryI[]
 } => {
+  let citizenshipCA: CitizenshipTypeE = CitizenshipTypeE.OTHER
+  let citizenships: BtrCountryI[] = []
+  
+  // add PR info to the array since it is not included in btrBodsPerson.nationalities
   if (btrBodsPerson.isPermanentResidentCa) {
-    return { citizenshipsCA: CitizenshipTypeE.PR, citizenshipsExCA: [] }
-  }
-
-  const citizenshipsCA = CitizenshipTypeE.OTHER // default if other found add them to array
-  const citizenships: BtrCountryI[] = []
-  for (const country of btrBodsPerson.nationalities) {
-    if (country.code === 'CA') {
-      return { citizenshipsCA: CitizenshipTypeE.CITIZEN, citizenshipsExCA: [] }
-    }
+    citizenshipCA = CitizenshipTypeE.PR
     citizenships.push({
-      name: country.name,
-      alpha_2: country.code
+      name: 'Canada (Permanent Resident)',
+      alpha_2: 'CA_PR'
     })
   }
 
-  return { citizenshipsCA, citizenshipsExCA: citizenships }
+  for (const country of btrBodsPerson.nationalities) {
+    let countryCode: string = country.code
+    let countryName: string = country.name
+
+    if (country.code === 'CA') {
+      citizenshipCA = CitizenshipTypeE.CITIZEN
+      countryName = 'Canada (Citizen)'
+    }
+
+    citizenships.push({
+      name: countryName,
+      alpha_2: countryCode
+    })
+  }
+
+  return { citizenshipCA, citizenships }
 }
 
 function _getSIAddress (btrBodsAddress: BodsBtrAddressI) {
@@ -79,7 +90,7 @@ function _getTaxNumber (btrBodsPerson: BtrBodsPersonI) {
 }
 
 const _getSiPerson = (btrBodsPerson: BtrBodsPersonI): ProfileI => {
-  const { citizenshipsCA, citizenshipsExCA } = _getCitizenships(btrBodsPerson)
+  const { citizenshipCA, citizenships } = _getCitizenships(btrBodsPerson)
 
   return {
     fullName: _getSiName(btrBodsPerson, BodsNameTypeE.INDIVIDUAL),
@@ -90,8 +101,8 @@ const _getSiPerson = (btrBodsPerson: BtrBodsPersonI): ProfileI => {
       financialAffairs: btrBodsPerson.financialAffairs
     },
     birthDate: btrBodsPerson.birthDate,
-    citizenshipCA: citizenshipsCA,
-    citizenshipsExCA,
+    citizenshipCA,
+    citizenships,
     email: btrBodsPerson.email,
     hasTaxNumber: btrBodsPerson.hasTaxNumber,
     taxNumber: _getTaxNumber(btrBodsPerson),

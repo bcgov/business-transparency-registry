@@ -428,31 +428,6 @@ const addressErrors: Ref<FormError[]> = ref([])
 
 const validationResult = ref()
 
-watch(() => significantIndividual.value.profile.citizenships, (val: BtrCountryI[]) => {
-  console.log("citizenship setter: ", val)
-
-  const result, 
-  // const isCanadianCitizen = val.filter(country => country.alpha_2 === 'CA').length > 0
-  // const isCanadianPR = val.filter(country => country.alpha_2 === 'CA_PR').length > 0
-  
-  // if (!isCanadianCitizen || !isCanadianPR) {
-  //   console.log("NO ERROR")
-  //   if (isCanadianCitizen) {
-  //     significantIndividual.value.profile.citizenshipCA = CitizenshipTypeE.CITIZEN
-  //   } else if (isCanadianPR) {
-  //     significantIndividual.value.profile.citizenshipCA = CitizenshipTypeE.PR
-  //   } else {
-  //     significantIndividual.value.profile.citizenshipCA = CitizenshipTypeE.OTHER
-  //   }
-  //   // remove citizenshipErrors for conflicting PR vs Canada
-  //   citizenshipErrors.value = citizenshipErrors.value.filter((error: FormError)  => error.path !== 'prCitizen')
-  // } else {
-  //   console.log("ERROR ")
-  //   const error: FormError = { path: 'prCitizen', message: t('errors.validation.citizenship.prCitizen') }
-  //   citizenshipErrors.value.push(error)
-  // }
-}, { deep: true })
-
 function handleDoneButtonClick () {
   validateForm()
   if (validationResult.value.success) {
@@ -486,8 +461,7 @@ function validateForm () {
     region: significantIndividual.value.profile.address.region,
     postalCode: significantIndividual.value.profile.address.postalCode,
     locationDescription: significantIndividual.value.profile.address.locationDescription,
-    // citizenshipCA: significantIndividual.value.profile.citizenshipCA,
-    // citizenshipsExCA: significantIndividual.value.profile.citizenshipsExCA,
+    citizenshipCA: significantIndividual.value.profile.citizenshipCA,
     citizenships: significantIndividual.value.profile.citizenships,
     hasTaxNumber: significantIndividual.value.profile.hasTaxNumber,
     taxNumber: significantIndividual.value.profile.taxNumber,
@@ -536,6 +510,29 @@ const validateFullNameForm = () => {
     return newErrors
   } else {
     return []
+  }
+}
+
+watch(() => significantIndividual.value.profile.citizenships, (val: BtrCountryI[]) => {
+  validateCitizenship()
+}, { deep: true })
+
+const validateCitizenship = () => {
+  const afterParse = z
+    .object({
+      citizenships: z.array(z.object({ name: z.string(), alpha_2: z.string() })).superRefine(
+        validateCitizenshipSuperRefine
+      )
+    }).safeParse({ citizenships: significantIndividual.value.profile.citizenships })
+
+  if (afterParse.success) {
+    citizenshipErrors.value = []
+  } else {
+    const newErrors: FormError[] = afterParse.error.issues.map(err => ({
+      message: err.message,
+      path: err.path.join('.')
+    }))
+    citizenshipErrors.value = newErrors
   }
 }
 
@@ -649,20 +646,6 @@ watch(() => significantIndividual.value.profile.birthDate, (val: string) => {
   }
 })
 
-// // When a type of citizenship is selected, remove the empty citizenship error
-// watch(() => significantIndividual.value.profile.citizenshipCA, (val: CitizenshipTypeE) => {
-//   if ([CitizenshipTypeE.CITIZEN, CitizenshipTypeE.PR, CitizenshipTypeE.OTHER].includes(val)) {
-//     citizenshipErrors.value = []
-//   }
-// })
-
-// // When a country is selected for other citizenships, remove the error
-// watch(() => significantIndividual.value.profile.citizenshipsExCA, (val: { name: string, alpha_2: string }[]) => {
-//   if (val.length > 0) {
-//     citizenshipErrors.value = []
-//   }
-// })
-
 // When one of the tax number radio buttons is selected, remove the empty tax number error
 watch(() => significantIndividual.value.profile.hasTaxNumber, () => {
   taxNumberErrors.value = []
@@ -713,13 +696,10 @@ const formSchema = z.object({
   region: getAddressRegionValidator(),
   postalCode: getAddressPostalCodeValidator(),
   locationDescription: z.string().optional(),
-  citizenships: z.array(z.object({ name: z.string(), alpha_2: z.string() })).refine((citizenships) => {
-    return citizenships.length !== 0}, {message: t('errors.validation.citizenship.required'), path: ['citizenships']}
-  ).refine((val) => {
-    const isCanadianCitizen = val.filter(country => country.alpha_2 === 'CA').length > 0
-    const isCanadianPR = val.filter(country => country.alpha_2 === 'CA_PR').length > 0
-    return !isCanadianCitizen || !isCanadianPR
-  }, { path: 'prCitizen', message: t('errors.validation.citizenship.prCitizen') }),
+  citizenshipCA: z.union([z.nativeEnum(CitizenshipTypeE), z.literal('')]),
+  citizenships: z.array(z.object({ name: z.string(), alpha_2: z.string() })).superRefine(
+    validateCitizenshipSuperRefine
+  ),
   hasTaxNumber: z.boolean().optional(),
   taxNumber: getTaxNumberValidator(),
   taxResidency: z.boolean().optional(),
@@ -735,15 +715,7 @@ const formSchema = z.object({
   validateOtherReasons
 ).refine(
   validateBirthDate, getMissingBirthDateError()
-)
-
-// .refine(
-//   validateCitizenship, getMissingCitizenshipError()
-// ).refine(
-//   validateOtherCountrySelection, getMissingOtherCountryError()
-// )
-
-.refine(
+).refine(
   validateTaxNumberInfo, getMissingTaxNumberInfoError()
 ).refine(
   validateTaxResidency, getMissingTaxResidencyError()

@@ -214,13 +214,11 @@ const getInterests = (si: SignificantIndividualI): BodsInterestI[] => {
 
 const getBodsNationalitiesFromSi = (si: SignificantIndividualI): BodsCountryI[] => {
   const citizenships: BodsCountryI[] = []
-  if (si.profile.citizenshipCA === CitizenshipTypeE.CITIZEN) {
-    citizenships.push({ name: 'Canada', code: 'CA' })
-  } else if (si.profile.citizenshipCA === CitizenshipTypeE.PR) {
-    // if PR do not add any citizenship
-  } else {
-    for (const btrCountry of si.profile.citizenshipsExCA) {
-      citizenships.push({ name: btrCountry.name, code: btrCountry.alpha_2 })
+  for (const btrCountry of si.profile.citizenships) {
+    if (btrCountry.alpha_2 !== 'CA_PR') {
+      const code = btrCountry.alpha_2
+      const name = code === 'CA' ? 'Canada' : btrCountry.name
+      citizenships.push({ name, code })
     }
   }
   return citizenships

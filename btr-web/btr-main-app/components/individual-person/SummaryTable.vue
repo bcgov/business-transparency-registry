@@ -18,19 +18,11 @@
         <td data-cy="summary-table-details">
           <span>{{ item.profile.birthDate }}</span><br>
           <span v-if="item.profile.taxNumber">{{ item.profile.taxNumber }}<br></span>
-          <span v-else>{{ $t('texts.noCRATaxNumber') }}<br></span>
-          <span v-if="item.profile.citizenshipCA === CitizenshipTypeE.PR">
-            {{ $t('labels.countryOfCitizenship.pr') }}<br>
-          </span>
-          <div v-else>
-            <label>{{ $t('labels.citizenships') }}:</label><br>
-            <span v-if="item.profile.citizenshipCA === CitizenshipTypeE.CITIZEN">
-              {{ $t('countries.ca') }}<br>
-            </span>
-            <span v-for="country in item.profile.citizenshipsExCA" :key="country.name">
-              {{ country.name }}<br>
-            </span>
-          </div>
+          <span v-else>{{ $t('texts.noCRATaxNumber') }}<br></span><br>
+          <label>{{ $t('labels.citizenships') }}:</label><br>
+          <span v-for="country in item.profile.citizenships" :key="country.alpha_2">
+            {{ country.name }}<br>
+          </span><br>
           <span>{{ getTaxResidentText(item.profile.isTaxResident) }}</span>
         </td>
         <td data-cy="summary-table-dates">
