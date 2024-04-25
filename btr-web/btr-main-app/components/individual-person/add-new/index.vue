@@ -117,7 +117,7 @@
       </UForm>
     </BcrosSection>
 
-     <!-- section: jointly or in concert  -->
+    <!-- section: jointly or in concert  -->
     <!--      <BcrosSection-->
     <!--        :show-section-has-errors="sectionErrors?.interestOrRightsJointlyOrInConcert?.length > 0"-->
     <!--        :section-title="$t('sectionHeadings.interestOrRightsJointlyOrInConcert')"-->
@@ -513,7 +513,7 @@ const validateFullNameForm = () => {
   }
 }
 
-watch(() => significantIndividual.value.profile.citizenships, (val: BtrCountryI[]) => {
+watch(() => significantIndividual.value.profile.citizenships, () => {
   validateCitizenship()
 }, { deep: true })
 

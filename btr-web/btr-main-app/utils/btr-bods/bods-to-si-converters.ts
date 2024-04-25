@@ -35,8 +35,8 @@ const _getCitizenships = (btrBodsPerson: BtrBodsPersonI): {
   citizenships: BtrCountryI[]
 } => {
   let citizenshipCA: CitizenshipTypeE = CitizenshipTypeE.OTHER
-  let citizenships: BtrCountryI[] = []
-  
+  const citizenships: BtrCountryI[] = []
+
   // add PR info to the array since it is not included in btrBodsPerson.nationalities
   if (btrBodsPerson.isPermanentResidentCa) {
     citizenshipCA = CitizenshipTypeE.PR
@@ -47,7 +47,7 @@ const _getCitizenships = (btrBodsPerson: BtrBodsPersonI): {
   }
 
   for (const country of btrBodsPerson.nationalities) {
-    let countryCode: string = country.code
+    const countryCode: string = country.code
     let countryName: string = country.name
 
     if (country.code === 'CA') {

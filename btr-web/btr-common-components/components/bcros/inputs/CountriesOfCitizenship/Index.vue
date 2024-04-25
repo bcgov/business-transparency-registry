@@ -16,7 +16,6 @@
 <script setup lang="ts">
 import type { FormError } from '#ui/types'
 
-const t = useNuxtApp().$i18n.t
 const emit = defineEmits<{ 'update:modelValue': [value: Array<BtrCountryI>] }>()
 const props = defineProps({
   modelValue: { type: Array<BtrCountryI>, required: true },

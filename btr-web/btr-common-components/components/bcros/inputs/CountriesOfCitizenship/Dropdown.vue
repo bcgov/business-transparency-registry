@@ -145,21 +145,21 @@ const citizenships = computed({
 const countryOptions = ref(citizenshipOptions)
 
 // To confirm: do we want to prioritize 'USA' in the selected citizenships
-const priorityOrder = ['CA', 'CA_PR', 'US'] 
+const priorityOrder = ['CA', 'CA_PR', 'US']
 
 const sortByPriority = (a: BtrCountryI, b: BtrCountryI) => {
-  const priorityA = priorityOrder.indexOf(a.alpha_2);
-  const priorityB = priorityOrder.indexOf(b.alpha_2);
+  const priorityA = priorityOrder.indexOf(a.alpha_2)
+  const priorityB = priorityOrder.indexOf(b.alpha_2)
 
   if (priorityA > -1 && priorityB > -1) {
-    return priorityA - priorityB;
+    return priorityA - priorityB
   } else if (priorityA > -1) {
-    return -1;
+    return -1
   } else if (priorityB > -1) {
-    return 1;
+    return 1
   }
 
-  return 0;
+  return 0
 }
 
 const removeCitizenship = (country: BtrCountryI) => {
