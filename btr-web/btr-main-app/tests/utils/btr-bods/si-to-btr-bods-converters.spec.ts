@@ -78,7 +78,7 @@ describe('Btr to Bods util converters Tests', () => {
 
     const input2 = { ...input }
     input2.profile.citizenshipCA = 'other'
-    input2.profile.citizenshipsExCA = [
+    input2.profile.citizenships = [
       { name: 'Antigua and Barbuda', alpha_2: 'AG' },
       { name: 'Bonaire, Sint Eustatius and Saba', alpha_2: 'BQ' }
     ]

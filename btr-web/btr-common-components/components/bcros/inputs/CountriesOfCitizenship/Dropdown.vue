@@ -26,7 +26,7 @@
         tabindex="0"
       >
         <span
-          v-if="citizenships.length === 0"
+          v-if="citizenships && citizenships.length === 0"
           class="w-full"
           :class="{
             'text-primary-500': open,
@@ -113,7 +113,7 @@
     <div v-if="hasError" class="text-sm text-red-500 pt-2">
       {{ errors[0].message }}
     </div>
-    <div v-if="!hasError && citizenships.length === 0" class="text-sm pt-2 ml-2">
+    <div v-if="!hasError && citizenships && citizenships.length === 0" class="text-sm pt-2 ml-2">
       {{ $t('labels.countryOfCitizenship.hint') }}
     </div>
   </div>
