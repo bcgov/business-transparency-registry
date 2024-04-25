@@ -185,7 +185,6 @@
       },
       "citizenship": {
         "required": "Please indicate citizenship/permanent residency",
-        "otherCountry": "Please select at least one country",
         "prCitizen": "An individual cannot be both a citizen and a permanent resident of Canada. Please remove one option."
       },
       "address": {

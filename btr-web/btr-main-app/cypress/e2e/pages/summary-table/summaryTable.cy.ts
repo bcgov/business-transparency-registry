@@ -93,7 +93,7 @@ describe('pages -> Summary Table', () => {
         .get('[data-cy="address-city"]').should('have.value', testData.profile1.address.city)
         .get('[data-cy="address-region-select"]').contains(testData.profile1.address.province[0])
         .get('[data-cy="address-postal-code"]').should('have.value', testData.profile1.address.postalCode)
-        .get('[data-cy="countryOfCitizenshipRadioGroup"]').get('[type="radio"][value="citizen"]').should('be.checked')
+        .get('[data-cy="countryOfCitizenshipDropdownButton"]').contains(testData.profile1.citizenships[0].name)
         .get('[data-cy="tax-number-input"]').should('have.value', testData.profile1.taxNumber)
         .get('[data-cy="testTaxResidency"]').get('[type="radio"][value="true"]').should('be.checked')
     })
