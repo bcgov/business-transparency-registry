@@ -24,6 +24,7 @@
         class="w-full min-h-[56px] px-[10px] text-left"
         data-cy="countryOfCitizenshipDropdownButton"
         tabindex="0"
+        @click="filterCountries('')"
       >
         <span
           v-if="citizenships && citizenships.length === 0"
@@ -64,7 +65,6 @@
           ]"
           data-cy="countryOfCitizenshipDropdownFilter"
           @change="filterCountries($event.target.value)"
-          @blur="filterCountries('')"
         />
         <ComboboxOptions
           :class="[
