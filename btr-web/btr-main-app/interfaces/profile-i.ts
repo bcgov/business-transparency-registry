@@ -6,7 +6,7 @@ export interface ProfileI {
   }
   birthDate: string // YYYY-MM-DD
   citizenshipCA: CitizenshipTypeE
-  citizenshipsExCA: BtrCountryI[]
+  citizenships: BtrCountryI[]
   email: string
   hasTaxNumber: boolean
   isTaxResident: boolean

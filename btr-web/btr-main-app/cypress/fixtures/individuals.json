@@ -14,6 +14,7 @@
     },
     "taxNumber": "107 676 942",
     "taxResidency": "true",
+    "citizenships": [{ "name": "Canada (Citizen)", "alpha_2": "CA" }],
     "summaryTable": {
       "citizenship": "Citizenship(s):Canada",
       "taxResidency": "Tax Resident of Canada",
@@ -36,6 +37,7 @@
     },
     "taxNumber": "301 166 476",
     "taxResidency": "true",
+    "citizenships": [{ "name": "Canada (Citizen)", "alpha_2": "CA" }],
     "summaryTable": {
       "citizenship": "Citizenship(s):Canada",
       "taxResidency": "Tax Resident of Canada",

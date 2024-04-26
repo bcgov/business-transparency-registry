@@ -41,7 +41,7 @@ export function getMissingCitizenshipError () {
 export function getMissingOtherCountryError () {
   const t = useNuxtApp().$i18n.t
   return {
-    message: t('errors.validation.citizenship.otherCountry'),
+    message: t('errors.validation.citizenship.required'),
     path: ['citizenshipsExCA']
   }
 }

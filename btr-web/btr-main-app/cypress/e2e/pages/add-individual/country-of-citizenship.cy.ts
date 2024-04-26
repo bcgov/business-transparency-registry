@@ -1,5 +1,11 @@
 describe('pages -> Add individual', () => {
+  let en: any
+
   beforeEach(() => {
+    cy.readFile('lang/en.json').then((json) => {
+      en = json
+    })
+
     cy.visit('/')
   })
 
@@ -7,29 +13,18 @@ describe('pages -> Add individual', () => {
     cy.get('[data-cy=add-new-btn]').trigger('click')
     // cy.get('[data-cy="showAddIndividualPersonManually"]').trigger('click')
 
-    const radioGroup = cy.get('[data-cy="countryOfCitizenshipRadioGroup"]').should('exist')
-
     const countryOfCitizenshipDropdown = cy.get('[data-cy="countryOfCitizenshipDropdown"]')
+    const dropDwnButton = cy.get('[data-cy="countryOfCitizenshipDropdownButton"]')
+    dropDwnButton.should('exist')
     countryOfCitizenshipDropdown.should('exist')
-
-    const dropDwnButton = cy.get('[data-cy="countryOfCitizenshipDropdownButton"]').should('be.disabled')
-
-    // select "other" value radio button
-    radioGroup.get('[type="radio"][value="other"]').check().should('be.checked')
-
-    // check button is not disabled anymore
-    dropDwnButton.should('not.be.disabled')
-
-    // check no dropdown options are open
-    cy.get('[data-cy="countryOfCitizenshipDropdownOption"]').should('not.exist')
 
     // open dropdown
     dropDwnButton.get('[data-cy="countryOfCitizenshipDropdownButton"]').click()
 
-    // check options are generating, 248 if not filtered
-    countryOfCitizenshipDropdown.get('[data-cy="countryOfCitizenshipDropdownOption"]').should('have.length', 248)
+    // check options are generating, 250 if not filtered (Canadian Citizen + PR + USA + 247 other countries)
+    countryOfCitizenshipDropdown.get('[data-cy="countryOfCitizenshipDropdownOption"]').should('have.length', 250)
 
-    // select first item on the list ('Afghanistan')
+    // select first item on the list ('Canada (Citizen)')
     countryOfCitizenshipDropdown
       .get('[data-cy="countryOfCitizenshipDropdownOption"]')
       .first()
@@ -66,12 +61,23 @@ describe('pages -> Add individual', () => {
     // make sure two chips are displayed
     cy.get('[data-cy="countryOfCitizenshipDropdownChip"]').should('have.length', 2)
     cy.get('[data-cy="countryOfCitizenshipDropdownChip"]').last().should('have.text', 'Croatia')
+  })
 
-    // select "citizen" value radio button
-    radioGroup.get('[type="radio"][value="citizen"]').check().should('be.checked')
+  it('test the validation rule for the citizenship dropdown', () => {
+    cy.get('[data-cy=add-new-btn]').trigger('click')
+    cy.get('[data-cy="countryOfCitizenshipDropdownButton"]').click()
 
-    // when "citizen" is selected, the dropdown list should be disabled and all selections should be cleared
-    cy.get('[data-cy="countryOfCitizenshipDropdownChip"]').should('have.length', 0)
-    cy.get('[data-cy="countryOfCitizenshipDropdownButton"]').should('be.disabled')
+    // When both Canadian citizen and PR are selected, an error is raised
+    cy.get('[data-cy="countryOfCitizenshipDropdownOption"]').eq(0).click({ force: true })
+    cy.get('[data-cy="countryOfCitizenshipDropdownOption"]').eq(1).click({ force: true })
+    cy.contains(en.errors.validation.citizenship.prCitizen).should('exist')
+
+    // unselect the PR option to remove the error
+    cy.get('[data-cy="countryOfCitizenshipDropdownOption"]').eq(1).click({ force: true })
+    cy.contains(en.errors.validation.citizenship.prCitizen).should('not.exist')
+
+    // clear the selection
+    cy.get('[data-cy="countryOfCitizenshipDropdownOption"]').eq(0).click({ force: true })
+    cy.contains(en.errors.validation.citizenship.required).should('exist')
   })
 })

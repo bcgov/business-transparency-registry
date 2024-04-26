@@ -22,7 +22,7 @@ export const testSI: SignificantIndividualI = {
     },
     birthDate: '2000-03-19',
     citizenshipCA: 'citizen',
-    citizenshipsExCA: [],
+    citizenships: [{ name: 'Canada (Citizen)', alpha_2: 'CA' }],
     email: '1@1.com',
     isTaxResident: true,
     hasTaxNumber: true,

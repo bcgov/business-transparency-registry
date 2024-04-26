@@ -67,7 +67,8 @@ describe('pages -> Review and Confirm', () => {
       cy.get('[data-cy="address-postal-code"]').type(testData.profile1.address.postalCode)
 
       // select the citizenship info
-      cy.get('[data-cy="countryOfCitizenshipRadioGroup"]').get('[type="radio"][value="citizen"]').check()
+      cy.get('[data-cy="countryOfCitizenshipDropdownButton"]').click()
+      cy.get('[data-cy="countryOfCitizenshipDropdownOption"]').eq(0).click({ force: true })
 
       // enter tax number and select tax residency
       cy.get('[data-cy="tax-number-input"]').type(testData.profile1.taxNumber)

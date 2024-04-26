@@ -48,7 +48,8 @@ describe('accessibility -> Beneficial Owner Change', () => {
       cy.get('[data-cy=address-region-select]').click()
       cy.get('[data-cy=address-region-select]').get('li').contains(testData.profile1.address.province[0]).click()
       cy.get('[data-cy=address-postal-code]').type(testData.profile1.address.postalCode)
-      cy.get('[data-cy=countryOfCitizenshipRadioGroup]').get('[type=radio][value=citizen]').check()
+      cy.get('[data-cy="countryOfCitizenshipDropdownButton"]').click()
+      cy.get('[data-cy="countryOfCitizenshipDropdownOption"]').first().click({ force: true })
       cy.get('[data-cy="tax-number-input"]').type(testData.profile1.taxNumber)
       cy.get('[data-cy=testTaxResidency]').get('[type=radio][value=true]').check()
       cy.checkA11y('[data-cy=addIndividualPerson]',
@@ -74,8 +75,6 @@ describe('accessibility -> Beneficial Owner Change', () => {
     cy.get('[data-cy=address-line1-autocomplete]').type('123')
     cy.checkA11y('[data-cy=address-street-options]')
     // countries of citizenship dropdown
-    cy.get('[data-cy=address-line1-autocomplete]').type('123')
-    cy.get('[data-cy=countryOfCitizenshipRadioGroup]').get('[type=radio][value=other]').check()
     cy.checkA11y('[data-cy=countryOfCitizenshipDropdown]')
     cy.get('[data-cy=countryOfCitizenshipDropdownButton]').click()
     cy.get('[data-cy=countryOfCitizenshipDropdownOption]').eq(0).click({ force: true })

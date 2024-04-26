@@ -2,7 +2,7 @@
   <div class="relative w-full" data-cy="countryOfCitizenshipDropdown">
     <Combobox
       v-slot="{ open }"
-      v-model="nonCaCitizenships"
+      v-model="citizenships"
       as="div"
       multiple
       :class="[
@@ -14,18 +14,20 @@
         'border-b-[1px]',
         'focus:outline-none',
         'sm:text-sm',
-        'h-[56px]',
+        'min-h-fit',
         'rounded-t-md',
-        disabled ? 'border-gray-500' : 'border-gray-700 hover:bg-gray-200']"
+        disabled ? 'border-gray-500' : 'border-gray-700 hover:bg-gray-200',
+        hasError ? 'border-b-red-500' : '']"
       :disabled="disabled"
     >
       <ComboboxButton
-        class="w-full h-full px-[10px] text-left"
+        class="w-full min-h-[56px] px-[10px] text-left"
         data-cy="countryOfCitizenshipDropdownButton"
         tabindex="0"
+        @click="filterCountries('')"
       >
         <span
-          v-if="nonCaCitizenships.length === 0"
+          v-if="citizenships && citizenships.length === 0"
           class="w-full"
           :class="{
             'text-primary-500': open,
@@ -37,7 +39,7 @@
         </span>
         <span v-else class="align-middle">
           <BcrosChips
-            v-for="country in nonCaCitizenships"
+            v-for="country in citizenships"
             :key="country.alpha_2"
             :label="country.name"
             class="float-left z-20"
@@ -82,7 +84,7 @@
           as="div"
         >
           <ComboboxOption
-            v-for="country in countriesWithoutCa"
+            v-for="country in countryOptions"
             :key="country.alpha_2"
             v-slot="{ active }"
             :value="country"
@@ -109,22 +111,29 @@
         </ComboboxOptions>
       </div>
     </Combobox>
+    <div v-if="hasError" class="text-sm text-red-500 pt-2">
+      {{ errors[0].message }}
+    </div>
+    <div v-if="!hasError && citizenships && citizenships.length === 0" class="text-sm pt-2 ml-2">
+      {{ $t('labels.countryOfCitizenship.hint') }}
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { Combobox, ComboboxInput, ComboboxButton, ComboboxOption, ComboboxOptions } from '@headlessui/vue'
-
+import type { FormError } from '#ui/types'
 import { BtrCountryI } from '~/interfaces/btr-address-i'
 
 const emit = defineEmits<{ 'update:modelValue': [value: Array<BtrCountryI>] }>()
 const props = defineProps({
   placeholder: { type: String, default: '' },
   disabled: { type: Boolean, default: false },
-  modelValue: { type: Array<BtrCountryI>, required: true }
+  modelValue: { type: Array<BtrCountryI>, required: true },
+  errors: { type: Object as PropType<FormError[]>, required: true }
 })
 
-const nonCaCitizenships = computed({
+const citizenships = computed({
   get () {
     return props.modelValue
   },
@@ -133,31 +142,30 @@ const nonCaCitizenships = computed({
   }
 })
 
-const allCountriesWithoutCa: Array<BtrCountryI> =
-        iscCountriesListSortedByName.filter(country => country.alpha_2 !== 'CA')
-const countriesWithoutCa = ref(allCountriesWithoutCa)
+const countryOptions = ref(citizenshipOptions)
 
 const removeCitizenship = (country: BtrCountryI) => {
-  const index = nonCaCitizenships.value.indexOf(country)
+  const index = citizenships.value.indexOf(country)
   if (index > -1) {
-    nonCaCitizenships.value.splice(index, 1)
+    citizenships.value.splice(index, 1)
   }
 }
 
 const filterCountries = (searchText: string) => {
   const text = searchText.toLowerCase()
   if (text) {
-    countriesWithoutCa.value =
-      allCountriesWithoutCa.filter(
+    countryOptions.value =
+      citizenshipOptions.filter(
         value => value.name.toLowerCase().includes(text)
       )
   } else {
-    countriesWithoutCa.value = allCountriesWithoutCa
+    countryOptions.value = citizenshipOptions
   }
 }
 
-const isInSelected = (country) => {
-  return nonCaCitizenships.value?.findIndex(c => c.alpha_2 === country.alpha_2) !== -1
+const isInSelected = (country: BtrCountryI) => {
+  return citizenships.value?.findIndex(c => c.alpha_2 === country.alpha_2) !== -1
 }
 
+const hasError = computed<Boolean>(() => props.errors?.length > 0)
 </script>

@@ -65,23 +65,6 @@ export function validateBirthDate (formData: FormInputI): boolean {
 }
 
 /**
- * Check if the citizenship type has been selected
- * @param formData the form data
- */
-export function validateCitizenship (formData: FormInputI): boolean {
-  return [CitizenshipTypeE.CITIZEN, CitizenshipTypeE.PR, CitizenshipTypeE.OTHER].includes(formData.citizenshipCA)
-}
-
-/**
- * Validate other citizenship selections.
- * If 'Other citizenships' is selected, at least one country must be selected.
- * @param formData the form data
- */
-export function validateOtherCountrySelection (formData: FormInputI): boolean {
-  return formData.citizenshipCA !== CitizenshipTypeE.OTHER || formData.citizenshipsExCA.length > 0
-}
-
-/**
  * Check if one of the CRA Tax Number options has been selected
  * @param formData the form data
  */
@@ -149,6 +132,33 @@ export function validateFullNameSuperRefine (form: any, ctx: RefinementCtx): nev
       path: ['fullName'],
       code: z.ZodIssueCode.custom,
       message: t('errors.validation.fullName.empty')
+    })
+  }
+  return z.NEVER
+}
+
+/**
+ * Validate the citizenship selection:
+ * Rule 1: at least one country has been selected for citizenship
+ * Rule 2: a person cannot be a Canadian citizen and permenant resident at the same time
+ * @param formData the form data
+ */
+export function validateCitizenshipSuperRefine (citizenships: BtrCountryI[], ctx: RefinementCtx): boolean {
+  const t = useNuxtApp().$i18n.t
+  if (citizenships.length === 0) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      path: ['citizenships'],
+      message: t('errors.validation.citizenship.required')
+    })
+  }
+  const isCanadianCitizen: boolean = citizenships.filter(country => country.alpha_2 === 'CA').length > 0
+  const isCanadianPR: boolean = citizenships.filter(country => country.alpha_2 === 'CA_PR').length > 0
+  if (isCanadianCitizen && isCanadianPR) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      path: ['prCitizen'],
+      message: t('errors.validation.citizenship.prCitizen')
     })
   }
   return z.NEVER

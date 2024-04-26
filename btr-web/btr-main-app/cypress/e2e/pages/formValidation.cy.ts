@@ -36,20 +36,10 @@ describe('pages -> Form Validation', () => {
     cy.get('[data-cy=new-si-done-btn]').click()
     cy.contains(i18n.errors.validation.citizenship.required).should('exist')
 
-    // Selecting "Canadian citizenship" should remove the error
-    cy.get('[data-cy="countryOfCitizenshipRadioGroup"]').get('[type="radio"][value="citizen"]').check()
-    cy.contains(i18n.errors.validation.citizenship.required).should('not.exist')
-
-    // Checking "Other" without selecting countries should trigger an error
-    cy.get('[data-cy="countryOfCitizenshipRadioGroup"]').get('[type="radio"][value="other"]').check()
-    cy.get('[data-cy=new-si-done-btn]').click()
-    cy.contains(i18n.errors.validation.citizenship.required).should('not.exist')
-    cy.contains(i18n.errors.validation.citizenship.otherCountry).should('exist')
-
-    // Select the first foreign country
+    // Selecting a country should remove the error
     cy.get('[data-cy="countryOfCitizenshipDropdownButton"]').click()
-    cy.get('[data-cy="countryOfCitizenshipDropdownOption"]').first().click({ force: true })
-    cy.contains(i18n.errors.validation.citizenship.otherCountry).should('not.exist')
+    cy.get('[data-cy="countryOfCitizenshipDropdownOption"]').eq(0).click({ force: true })
+    cy.contains(i18n.errors.validation.citizenship.required).should('not.exist')
   })
 
   it('Form validation for Control of Shares and Votes', () => {

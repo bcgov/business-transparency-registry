@@ -117,7 +117,7 @@
       </UForm>
     </BcrosSection>
 
-    <!--  section: jointly or in concert  -->
+    <!-- section: jointly or in concert  -->
     <!--      <BcrosSection-->
     <!--        :show-section-has-errors="sectionErrors?.interestOrRightsJointlyOrInConcert?.length > 0"-->
     <!--        :section-title="$t('sectionHeadings.interestOrRightsJointlyOrInConcert')"-->
@@ -240,18 +240,14 @@
       :section-title="$t('sectionHeadings.citizenshipOrPR')"
     >
       <div class="flex-col w-full">
-        <p class="font-bold py-3">
-          {{ $t('labels.citizenshipPermanentResidency') }}
-        </p>
-        <p>
-          {{ $t('texts.citizenshipPermanentResidency') }}
-        </p>
         <BcrosInputsCountriesOfCitizenship
           id="countriesOfCitizenship"
-          v-model:canadianCitizenship="significantIndividual.profile.citizenshipCA"
-          v-model:citizenships="significantIndividual.profile.citizenshipsExCA"
+          v-model="significantIndividual.profile.citizenships"
           :errors="citizenshipErrors"
         />
+        <p>
+          {{ $t('labels.countryOfCitizenship.note') }}
+        </p>
       </div>
     </BcrosSection>
 
@@ -466,7 +462,7 @@ function validateForm () {
     postalCode: significantIndividual.value.profile.address.postalCode,
     locationDescription: significantIndividual.value.profile.address.locationDescription,
     citizenshipCA: significantIndividual.value.profile.citizenshipCA,
-    citizenshipsExCA: significantIndividual.value.profile.citizenshipsExCA,
+    citizenships: significantIndividual.value.profile.citizenships,
     hasTaxNumber: significantIndividual.value.profile.hasTaxNumber,
     taxNumber: significantIndividual.value.profile.taxNumber,
     taxResidency: significantIndividual.value.profile.isTaxResident,
@@ -517,6 +513,29 @@ const validateFullNameForm = () => {
   }
 }
 
+watch(() => significantIndividual.value.profile.citizenships, () => {
+  validateCitizenship()
+}, { deep: true })
+
+const validateCitizenship = () => {
+  const afterParse = z
+    .object({
+      citizenships: z.array(z.object({ name: z.string(), alpha_2: z.string() })).superRefine(
+        validateCitizenshipSuperRefine
+      )
+    }).safeParse({ citizenships: significantIndividual.value.profile.citizenships })
+
+  if (afterParse.success) {
+    citizenshipErrors.value = []
+  } else {
+    const newErrors: FormError[] = afterParse.error.issues.map(err => ({
+      message: err.message,
+      path: err.path.join('.')
+    }))
+    citizenshipErrors.value = newErrors
+  }
+}
+
 watch(() => validationResult.value, (val: ZodError) => {
   if (!val.success) {
     const errors: FormError[] = []
@@ -540,7 +559,7 @@ watch(() => validationResult.value, (val: ZodError) => {
     birthDateErrors.value = errors.filter((error: FormError) => error.path === 'birthDate')
     emailErrors.value = errors.filter((error: FormError) => error.path === 'email')
     citizenshipErrors.value = errors.filter(
-      (error: FormError) => (error.path === 'citizenshipCA' || error.path === 'citizenshipsExCA')
+      (error: FormError) => (error.path === 'prCitizen' || error.path === 'citizenships')
     )
     taxNumberErrors.value = errors.filter((error: FormError) => error.path === 'hasTaxNumber')
     taxResidencyErrors.value = errors.filter((error: FormError) => error.path === 'taxResidency')
@@ -627,20 +646,6 @@ watch(() => significantIndividual.value.profile.birthDate, (val: string) => {
   }
 })
 
-// When a type of citizenship is selected, remove the empty citizenship error
-watch(() => significantIndividual.value.profile.citizenshipCA, (val: CitizenshipTypeE) => {
-  if ([CitizenshipTypeE.CITIZEN, CitizenshipTypeE.PR, CitizenshipTypeE.OTHER].includes(val)) {
-    citizenshipErrors.value = []
-  }
-})
-
-// When a country is selected for other citizenships, remove the error
-watch(() => significantIndividual.value.profile.citizenshipsExCA, (val: { name: string, alpha_2: string }[]) => {
-  if (val.length > 0) {
-    citizenshipErrors.value = []
-  }
-})
-
 // When one of the tax number radio buttons is selected, remove the empty tax number error
 watch(() => significantIndividual.value.profile.hasTaxNumber, () => {
   taxNumberErrors.value = []
@@ -692,7 +697,9 @@ const formSchema = z.object({
   postalCode: getAddressPostalCodeValidator(),
   locationDescription: z.string().optional(),
   citizenshipCA: z.union([z.nativeEnum(CitizenshipTypeE), z.literal('')]),
-  citizenshipsExCA: z.array(z.object({ name: z.string(), alpha_2: z.string() })),
+  citizenships: z.array(z.object({ name: z.string(), alpha_2: z.string() })).superRefine(
+    validateCitizenshipSuperRefine
+  ),
   hasTaxNumber: z.boolean().optional(),
   taxNumber: getTaxNumberValidator(),
   taxResidency: z.boolean().optional(),
@@ -708,10 +715,6 @@ const formSchema = z.object({
   validateOtherReasons
 ).refine(
   validateBirthDate, getMissingBirthDateError()
-).refine(
-  validateCitizenship, getMissingCitizenshipError()
-).refine(
-  validateOtherCountrySelection, getMissingOtherCountryError()
 ).refine(
   validateTaxNumberInfo, getMissingTaxNumberInfoError()
 ).refine(
