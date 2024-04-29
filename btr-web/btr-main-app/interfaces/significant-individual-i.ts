@@ -17,3 +17,7 @@ export interface SignificantIndividualI {
   action?: FilingActionE
   uuid?: string
 }
+
+export interface SignificantIndividualV2I {
+
+}

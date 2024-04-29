@@ -1,12 +1,12 @@
 <template>
-  <UFormGroup :name="name" :error="hasError ? errors[0].message : ''" class="flex-col py-5">
+  <UFormGroup v-slot="{ error }" :name="name" class="flex-col">
     <USelectMenu
       v-model="selected"
       :ui-menu="{ label: hasError ? 'text-red-500' : 'text-gray-700' }"
       :options="options"
       option-attribute="label"
       :placeholder="placeholder"
-      :variant="hasError ? 'error' : 'bcGov'"
+      :variant="(hasError || error) ? 'error' : 'bcGov'"
       class="min-w-[300px] w-1/3"
     />
   </UFormGroup>

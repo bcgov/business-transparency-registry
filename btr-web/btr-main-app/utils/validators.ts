@@ -48,8 +48,11 @@ export function getTaxNumberValidator () {
 
 export function getAddressCountryValidator () {
   const t = useNuxtApp().$i18n.t
-  return z.object({ name: z.string(), alpha_2: z.string() }).refine(
-    (val: BtrCountryI) => { return val.name !== '' }, t('errors.validation.address.country')
+  return z.union([
+    z.object({ name: z.string(), alpha_2: z.string() }),
+    z.null()
+  ]).refine(
+    (val: BtrCountryI | null) => { return val?.name !== '' }, t('errors.validation.address.country')
   )
 }
 

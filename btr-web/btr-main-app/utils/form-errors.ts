@@ -17,8 +17,8 @@ export function getMissingControlOfSharesError () {
 export function getMissingControlOfDirectorsError () {
   const t = useNuxtApp().$i18n.t
   return {
-    message: t('errors.validation.controlOfDirectors.required'),
-    path: ['controlOfDirectors']
+    message: t('errors.validation.controlOfDirectors.required')
+    // path: ['controlOfDirectors']
   }
 }
 

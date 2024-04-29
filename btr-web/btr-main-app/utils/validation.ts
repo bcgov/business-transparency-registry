@@ -1,4 +1,5 @@
 import { RefinementCtx, z } from 'zod'
+import { PercentageRangeE } from '~/enums/percentage-range-e'
 
 /**
  * Check if the percentage of shares and the percentage of votes are required.
@@ -43,9 +44,12 @@ export function validateControlOfShares (formData: FormInputI): boolean {
  * If the 'exercised in concert' is selected, at least one of the Type of Director Control checkboxes is required.
  * @param formData the form data
  */
-export function validateControlOfDirectors (formData: FormInputI): boolean {
-  return Object.values(formData.controlOfDirectors).slice(0, 3).some(Boolean) ||
-    !formData.controlOfDirectors.inConcertControl
+export function validateControlOfDirectors (formData: any): boolean {
+  console.log(">>>>", formData)
+  return formData.directControl ||
+    formData.indirectControl ||
+    formData.significantInfluence ||
+    !formData.inConcertControl
 }
 
 /**
@@ -60,8 +64,8 @@ export function validateOtherReasons (formData: FormInputI): boolean {
  * Check if the birth date has been entered
  * @param formData the form data
  */
-export function validateBirthDate (formData: FormInputI): boolean {
-  return formData.birthDate !== null
+export function validateBirthDate (birthDate: any): boolean {
+  return birthDate !== null
 }
 
 /**
@@ -94,6 +98,34 @@ export function validateMissingInfoTextarea (formData: FormInputI): boolean {
  */
 export function validateMissingInfoReason (formData: FormInputI): boolean {
   return !formData.missingInfo || (formData.missingInfoReason !== '' && formData.missingInfoReason !== undefined)
+}
+
+export function validateControlSelectionForSharesAndVotes (form: any, ctx: RefinementCtx): never {
+  const t = useNuxtApp().$i18n.t
+  const hasPercentage = form.percentage !== PercentageRangeE.NO_SELECTION
+  const hasInConcert: boolean = form.inConcertControl
+  const hasControlType: boolean = (form.registeredOwner || form.beneficialOwner || form.indirectControl)
+
+  if (!hasPercentage && !hasControlType && !hasInConcert) {
+    return z.NEVER
+  }
+
+  if (hasControlType && !hasPercentage) {
+    ctx.addIssue({
+      path: ['percentage'],
+      code: z.ZodIssueCode.custom,
+      message: t('errors.validation.controlPercentage.empty')
+    })
+  }
+
+  if ((hasPercentage && !hasControlType) || (hasInConcert && !hasControlType)) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      message: t('errors.validation.sharesAndVotes.required')
+    })
+  }
+
+  return z.NEVER
 }
 
 export function validateFullNameSuperRefine (form: any, ctx: RefinementCtx): never {
