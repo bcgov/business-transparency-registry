@@ -96,8 +96,8 @@ export function validateMissingInfoTextarea (formData: FormInputI): boolean {
  * If the 'Unable to Obtain or Confirm Information' checkbox is checked, the textarea cannot be empty
  * @param formData the form data
  */
-export function validateMissingInfoReason (formData: FormInputI): boolean {
-  return !formData.missingInfo || (formData.missingInfoReason !== '' && formData.missingInfoReason !== undefined)
+export function validateMissingInfoReason (formData: any): boolean {
+  return !formData.couldNotProvideSomeInfo || (formData.reason !== '')
 }
 
 export function validateControlSelectionForSharesAndVotes (form: any, ctx: RefinementCtx): never {

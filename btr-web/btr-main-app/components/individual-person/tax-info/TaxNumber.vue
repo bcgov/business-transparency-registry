@@ -1,5 +1,6 @@
 <template>
   <div class="flex flex-col py-5">
+
     <div class="flex mb-2 py-1">
       <URadio
         id="taxNumberRadioButton"
@@ -9,7 +10,7 @@
         :aria-label="$t('placeholders.taxNumber')"
         @change="handleRadioButtonChange(HAS_TAX_NUMBER)"
       />
-      <UFormGroup :name="name" class="ml-5">
+      <UFormGroup v-slot="{ error }"  :name="name" class="ml-5">
         <UInput
           v-model="taxNumber"
           data-cy="tax-number-input"
@@ -23,18 +24,17 @@
       </UFormGroup>
     </div>
     <div class="flex items-center mb-2 py-2">
-      <URadio
-        id="noTaxNumberRadioButton"
-        v-model="selectedButton"
-        :value="NO_TAX_NUMBER"
-        @change="handleRadioButtonChange(NO_TAX_NUMBER)"
-      />
-      <label for="noTaxNumberRadioButton" class="ml-5" :class="{ 'text-red-500': hasError}">
-        {{ $t('labels.noTaxNumberLabel') }}
-      </label>
-    </div>
-    <div v-if="hasError" class="text-sm text-red-500">
-      {{ errors[0].message }}
+      <UFormGroup v-slot="{ error }" :name="name">
+        <URadio
+          id="noTaxNumberRadioButton"
+          v-model="selectedButton"
+          :value="NO_TAX_NUMBER"
+          @change="handleRadioButtonChange(NO_TAX_NUMBER)"
+        />
+        <label for="noTaxNumberRadioButton" class="ml-5" :class="{ 'text-red-500': hasError}">
+          {{ $t('labels.noTaxNumberLabel') }}
+        </label>
+      </UFormGroup>
     </div>
   </div>
 </template>
@@ -46,8 +46,7 @@ const HAS_TAX_NUMBER = 'hasTaxNumber'
 const NO_TAX_NUMBER = 'noTaxNumber'
 
 const props = defineProps({
-  id: { type: String, required: true },
-  name: { type: String, default: 'name' },
+  name: { type: String, default: 'taxNumber' },
   errors: { type: Object as PropType<FormError[]>, required: true },
   hasTaxNumber: { type: [Boolean, undefined], required: false, default: undefined },
   taxNumber: { type: [String, undefined], required: false, default: undefined },
@@ -69,10 +68,6 @@ const emitUpdates = (hasTaxNumber: boolean | undefined, taxNumber: string | unde
 const selectedButton = ref(
   props.hasTaxNumber === undefined ? '' : (props.hasTaxNumber ? HAS_TAX_NUMBER : NO_TAX_NUMBER)
 )
-
-const hasError = computed<Boolean>(() => {
-  return props.errors.length > 0
-})
 
 // The tax number input value
 const taxNumber = ref(props.taxNumber ? props.taxNumber : '')

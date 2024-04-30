@@ -7,6 +7,7 @@
       class="w-full"
       @change="formChange"
     >
+<!--      todo: remove this debug errors line -->
       {{ addIndividualForm?.errors }}
       <!--      todo: deal with section errors -->
       <!--  section: your information  -->
@@ -181,6 +182,71 @@
         </div>
       </BcrosSection>
 
+      <!--  section: citizenship or PR  -->
+      <BcrosSection
+        :show-section-has-errors="sectionErrors?.citizenshipOrPR?.length > 0"
+        :section-title="$t('sectionHeadings.citizenshipOrPR')"
+      >
+        <div class="flex-col w-full">
+          <BcrosInputsCountriesOfCitizenship
+            id="countriesOfCitizenship"
+            v-model="si.citizenships"
+          />
+          <p>
+            {{ $t('labels.countryOfCitizenship.note') }}
+          </p>
+        </div>
+      </BcrosSection>
+
+      <!--  section: tax details  -->
+      <BcrosSection
+        :show-section-has-errors="sectionErrors?.taxDetails?.length > 0"
+        :section-title="$t('sectionHeadings.taxDetails')"
+      >
+        <div class="w-full flex flex-col">
+          <p class="font-bold py-3">
+            {{ $t('labels.taxNumber') }}
+          </p>
+          <p>
+            {{ $t('texts.taxNumber') }}
+          </p>
+          <IndividualPersonTaxInfoTaxNumber
+            id="addNewPersonTaxNumber"
+            v-model:hasTaxNumber="si.hasTaxNumer"
+            v-model:taxNumber="si.taxNumber"
+            name="taxNumber"
+            data-cy="testTaxNumber"
+          />
+          <div>
+            <p class="font-bold py-3">
+              {{ $t('labels.taxResidency') }}
+            </p>
+            <p>
+              {{ $t('texts.taxResidency') }}
+            </p>
+            <IndividualPersonTaxInfoTaxResidency
+              id="addNewPersonTaxResidency"
+              v-model="si.isTaxResident"
+              name="isTaxResident"
+              data-cy="testTaxResidency"
+            />
+          </div>
+        </div>
+      </BcrosSection>
+      <!--  section: unable to obtain or confirm  -->
+      <BcrosSection
+        :show-section-has-errors="sectionErrors?.unableToObtainOrConfirmInformation?.length > 0"
+        :section-title="$t('sectionHeadings.unableToObtainOrConfirmInformation')"
+      >
+        <div class="w-full">
+          <IndividualPersonControlUnableToObtainOrConfirmInformation
+            v-model="si.missingInfo.reason"
+            :missing-info="si.missingInfo.couldNotProvideSomeInfo"
+            @update:missingInfo="si.missingInfo.couldNotProvideSomeInfo = $event"
+          />
+        </div>
+      </BcrosSection>
+
 
       <div class="grid mt-10 w-full">
         <div class="flex justify-between">
@@ -221,8 +287,6 @@
 import { undefined, z, ZodError, ZodIssue } from 'zod'
 import { SignificantIndividualAddNewErrorsI } from '~/interfaces/significant-individual/add-new-errors-i'
 import {
-  validateControlOfSharesFunc,
-  validateControlOfVotesFunc,
   validateControlSelectionForSharesAndVotes,
   validateFullNameSuperRefine
 } from '~/utils/validation'
@@ -301,14 +365,26 @@ const formSchema = z.object({
   email: getEmailValidator(),
   address: z.object({
     country: getAddressCountryValidator(),
-    line1: getAddressLine1Validator(),
+    line1: z.string().min(1, t('errors.validation.address.line1')),
     line2: z.union([z.string(), z.null()]),
     city: getAddressCityValidator(),
     region: getAddressRegionValidator(),
     postalCode: getAddressPostalCodeValidator(),
     locationDescription: z.union([z.string(), z.null()])
   }),
-  birthDate: z.union([z.string(), z.null()]).refine(validateBirthDate, getMissingBirthDateError())
+  birthDate: z.union([z.string(), z.null()]).refine(validateBirthDate, getMissingBirthDateError()),
+  citizenships: z.array(z.object({ name: z.string(), alpha_2: z.string() })).superRefine(
+    validateCitizenshipSuperRefine
+  ),
+  hasTaxNumber: z.boolean(),
+  taxNumber: z.union([z.string(), z.null()]),
+  isTaxResident: z.union([z.boolean(), z.null()]),
+  missingInfo: z.object({
+    couldNotProvideSomeInfo: z.boolean(),
+    reason: z.string()
+  }).refine(
+    validateMissingInfoReason, getNoMissingInfoReasonError()
+  )
 })
 
 const setIsYourOwnInformation = (event: any) => {
@@ -361,7 +437,15 @@ const si: SiT = reactive({
     postalCode: '',
     locationDescription: null
   },
-  birthDate: null
+  birthDate: null,
+  citizenships: [],
+  hasTaxNumber: false,
+  taxNumber: null,
+  isTaxResident: null,
+  missingInfo: {
+    couldNotProvideSomeInfo: false,
+    reason: ''
+  }
 })
 
 

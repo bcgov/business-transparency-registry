@@ -1,6 +1,7 @@
 <template>
   <UFormGroup v-slot="{ error }" :label="label" :name="name + '.country'">
     <!-- country -->
+    {{ address.country }}
     <!--        :ui-menu="{ label: countryError ? 'text-red-500' : 'text-gray-700' }"-->
     <USelectMenu
       v-model="address.country"
@@ -18,8 +19,7 @@
     <!--  address line 1 -->
     <BcrosInputsAddressLine1Autocomplete
       v-model="address.line1"
-      :country-iso3166-alpha2="address?.country.alpha_2"
-      :error-version="line1Invalid"
+      :country-iso3166-alpha2="address.country?.alpha_2"
       :variant="error ? 'error' : 'bcGov'"
       data-cy="address-line1-autocomplete"
       @addr-auto-completed="addrAutoCompleted"
@@ -50,7 +50,7 @@
     <UFormGroup v-slot="{ error }" class="sm:flex-1" :name="name + '.region'">
       <!--          :ui-menu="{ placeholder: regionInvalid ? 'text-red-500' : 'text-gray-700' }"-->
       <USelectMenu
-        v-if="address.country.alpha_2==='US' || address?.country.alpha_2==='CA'"
+        v-if="address.country?.alpha_2==='US' || address?.country?.alpha_2==='CA'"
         v-model="address.region"
         :options="regions"
         :placeholder="$t('labels.state')"
@@ -94,7 +94,6 @@
 
 <script setup lang="ts">
 import { BtrAddressI } from '~/interfaces/btr-address-i'
-import { watch } from 'vue'
 
 const t = useNuxtApp().$i18n.t
 const address = defineModel({type: Object as PropType<BtrAddressI>, required: true})
@@ -113,7 +112,7 @@ const props = defineProps({
 const countries = iscCountriesListSortedByName
 // const address: Ref<BtrAddressI> = ref(props.modelValue)
 const regions = computed(() => {
-  switch (props.modelValue.country.alpha_2) {
+  switch (props.modelValue.country?.alpha_2) {
     case 'US':
       return countrySubdivisions.us
     case 'CA':

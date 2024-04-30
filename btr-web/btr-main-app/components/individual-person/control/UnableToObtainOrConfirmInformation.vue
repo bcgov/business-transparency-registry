@@ -1,5 +1,9 @@
 <template>
-  <div data-cy="isUnableToObtainOrConfirmInformation">
+  <UFormGroup
+    v-slot="{ error }"
+    :name="name"
+    data-cy="isUnableToObtainOrConfirmInformation"
+  >
     <UCheckbox
       v-model="isUnableToObtainOrConfirmInformation"
       name="isUnableToObtainOrConfirmInformation"
@@ -18,10 +22,10 @@
         style="min-height: 50px"
         :placeholder="$t('labels.unableToObtainOrConfirmInformation.textAreaPlaceholder')"
         class="py-2 w-full"
-        :variant="hasError ? 'error' : 'bcGov'"
+        :variant="error ? 'error' : 'bcGov'"
         resize
         :max-char="4000"
-        :errors="errors"
+        :errors="error"
         data-cy="isUnableToObtainOrConfirmInformationTextArea"
         @keydown="isUnableToObtainOrConfirmInformationDetailsKeyDown"
         @change="emit('update:modelValue', isUnableToObtainOrConfirmInformationDetails || undefined)"
@@ -36,7 +40,7 @@
         </p>
       </BcrosAlertsMessage>
     </div>
-  </div>
+  </UFormGroup>
 </template>
 
 <script setup lang="ts">
@@ -51,7 +55,7 @@ const emit = defineEmits<{
 const props = defineProps({
   modelValue: { type: String, default: undefined },
   missingInfo: { type: Boolean, default: false },
-  errors: { type: Object as PropType<FormError[]>, required: true }
+  name: { type: String, default: 'UnableToObtain'}
 })
 
 const isUnableToObtainOrConfirmInformation = ref(props.missingInfo)
@@ -76,5 +80,4 @@ watch(isUnableToObtainOrConfirmInformationDetails, (newValue) => {
   emit('update:modelValue', newValue)
 })
 
-const hasError = computed<Boolean>(() => props.errors.length > 0)
 </script>
