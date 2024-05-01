@@ -1,7 +1,6 @@
 <template>
   <UFormGroup v-slot="{ error }" :label="label" :name="name + '.country'">
     <!-- country -->
-    {{ address.country }}
     <!--        :ui-menu="{ label: countryError ? 'text-red-500' : 'text-gray-700' }"-->
     <USelectMenu
       v-model="address.country"
@@ -12,8 +11,8 @@
       :variant="error ? 'error' : 'bcGov'"
       option-attribute="name"
       data-cy="address-country"
-      @blur="countryBlurred = true"
     />
+<!--      @blur="countryBlurred = true"-->
   </UFormGroup>
   <UFormGroup v-slot="{ error }" class="mt-4" :name="name + '.line1'">
     <!--  address line 1 -->
@@ -96,7 +95,7 @@
 import { BtrAddressI } from '~/interfaces/btr-address-i'
 
 const t = useNuxtApp().$i18n.t
-const address = defineModel({type: Object as PropType<BtrAddressI>, required: true})
+const address = defineModel({ type: Object as PropType<BtrAddressI>, required: true })
 // const emit = defineEmits<{ 'update:modelValue': [value: BtrAddressI] }>()
 const props = defineProps({
   name: { type: String, default: 'addressInput' },

@@ -26,7 +26,6 @@ export function getMissingBirthDateError () {
   const t = useNuxtApp().$i18n.t
   return {
     message: t('errors.validation.birthDate.required'),
-    path: ['birthDate']
   }
 }
 

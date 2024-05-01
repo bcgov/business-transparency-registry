@@ -17,6 +17,7 @@
       </label>
       <div class="ml-8 flex-auto">
         <BcrosInputsDateSelect
+          name="effectiveDate"
           :initial-date="currentSIFiling.effectiveDate ? dateStringToDate(currentSIFiling.effectiveDate) : undefined"
           :max-date="new Date()"
           :placeholder="$t('placeholders.dateSelect.significantIndividualChange')"

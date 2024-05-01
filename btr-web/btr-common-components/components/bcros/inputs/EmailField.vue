@@ -1,31 +1,26 @@
 <template>
-  <UFormGroup :label="label" name="email">
+  <UFormGroup v-slot="{ error }" :label="label" :name="name">
     <UInput
       :id="id"
       type="text"
       v-bind="$attrs"
       :value="modelValue"
-      :variant="variant"
+      :variant="!!error ? 'error' : variant || 'bcGov'"
       :placeholder="placeholder"
-      :class="{ 'text-red-500': hasError}"
+      :class="{ 'text-red-500': !!error}"
       @input="$emit('update:modelValue', $event.target.value)"
     />
   </UFormGroup>
 </template>
 
 <script setup lang="ts">
-
-import type { FormError } from '#ui/types'
-
 defineEmits<{(e: 'update:modelValue', value: string): void }>()
 const props = defineProps({
   label: { type: [String], default: '' },
+  name: { type: String, default: 'email' },
   placeholder: { type: [String], default: '' },
   id: { type: String, required: true },
   modelValue: { type: String, default: '' },
-  errors: { type: Object as PropType<FormError[]>, required: true },
   variant: { type: String, default: 'bcGov' }
 })
-
-const hasError = computed(() => props.error?.length > 0)
 </script>

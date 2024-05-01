@@ -1,6 +1,238 @@
 <template>
   <div data-cy="addIndividualPerson" class="w-full">
+    <UForm
+      ref="profileFormName"
+      :schema="formSchema"
+      :state="significantIndividual"
+      class="w-full"
+      :validate="validateFullNameForm"
+      @change="addBtrPayFees"
+    >
+      <!--  section: your information  -->
+      <BcrosSection
+        :show-section-has-errors="sectionErrors?.isYourOwnInformation?.length > 0"
+        :section-title="$t('sectionHeadings.isYourOwnInformation')"
+        data-cy="isYourOwnInformation-section"
+      >
+        <div class="flex-col w-full">
+          <p class="py-3">
+            {{ $t('texts.isYourOwnInformation') }}
+          </p>
+          <UCheckbox
+            v-model="isYourOwnInformation"
+            :label="$t('labels.isYourOwnInformation')"
+            data-cy="isYourOwnInformation-checkbox"
+            @change="setIsYourOwnInformation($event)"
+          />
+        </div>
+      </BcrosSection>
 
+      <!--  section: individuals full name  -->
+      <BcrosSection
+        :show-section-has-errors="sectionErrors?.individualsFullName?.length > 0"
+        :section-title="$t('sectionHeadings.individualsFullName')"
+      >
+        <div class="flex-col w-full">
+          <BcrosInputsNameField
+            id="individual-person-full-name"
+            v-model="significantIndividual.profile.fullName"
+            name="fullName"
+            :label="$t('labels.fullName')"
+            :placeholder="$t('placeholders.fullName')"
+            :variant="fullNameInvalid ? 'error' : 'bcGov'"
+            data-cy="testFullName"
+            :is-disabled="isYourOwnInformation"
+          />
+          <div class="pt-5" />
+          <UCheckbox
+            v-model="usePreferredName"
+            :label="$t('texts.preferredName.checkbox')"
+            data-cy="usePreferredName"
+            @click="significantIndividual.profile.preferredName = ''"
+          />
+          <div v-if="usePreferredName" class="pt-3 w-full">
+            <p>
+              {{ $t('texts.preferredName.note') }}
+            </p>
+            <div class="pt-5">
+              <BcrosInputsNameField
+                id="individual-person-preferred-name"
+                v-model="significantIndividual.profile.preferredName"
+                name="preferredName"
+                :placeholder="$t('placeholders.preferredName')"
+                :variant="preferredNameInvalid ? 'error' : 'bcGov'"
+                data-cy="testPreferredName"
+                :help="$t('texts.preferredName.hint')"
+              />
+            </div>
+          </div>
+        </div>
+      </BcrosSection>
+    </UForm>
+
+    <!--  section: type of interest or control  -->
+    <BcrosSection
+      :show-section-has-errors="sectionErrors?.typeOfInterestOrControl?.length > 0"
+      :section-title="$t('sectionHeadings.typeOfInterestOrControl')"
+    >
+      <UForm
+        ref="ownerFormBase"
+        :schema="formSchema"
+        :state="significantIndividual"
+        @change="addBtrPayFees"
+      >
+        <div class="flex-col w-full">
+          <p class="font-bold py-3">
+            {{ $t('labels.sharesAndVotes') }}
+          </p>
+          <p>
+            {{ $t('texts.sharesAndVotes.controlPercentage') }}
+          </p>
+          <IndividualPersonControlPercentageDropdown
+            id="percentageOfShares"
+            v-model="significantIndividual.percentOfShares"
+            name="percentOfShares"
+            :errors="percentOfSharesErrors"
+            :placeholder="'% of shares'"
+            percentage-type="shares"
+            data-cy="testPercentOfShares"
+          />
+          <IndividualPersonControlPercentageDropdown
+            id="percentageOfVotes"
+            v-model="significantIndividual.percentOfVotes"
+            name="percentOfVotes"
+            :errors="percenOfVotesErrors"
+            :placeholder="'% of votes'"
+            percentage-type="votes"
+            data-cy="testPercentOfVotes"
+          />
+          <IndividualPersonControlTypeOfControl
+            id="typeOfControl"
+            v-model="significantIndividual.controlType.sharesVotes"
+            name="typeOfControl"
+            data-cy="testTypeOfControl"
+            :errors="controlOfSharesErrors"
+          />
+        </div>
+      </UForm>
+    </BcrosSection>
+
+    <!-- section: jointly or in concert  -->
+    <!--      <BcrosSection-->
+    <!--        :show-section-has-errors="sectionErrors?.interestOrRightsJointlyOrInConcert?.length > 0"-->
+    <!--        :section-title="$t('sectionHeadings.interestOrRightsJointlyOrInConcert')"-->
+    <!--      >-->
+    <!--        <div class="flex-col py-5">-->
+    <!--        </div>-->
+    <!--      </BcrosSection>-->
+
+    <!--  section: control of majority of directors  -->
+    <BcrosSection
+      :show-section-has-errors="sectionErrors?.controlOfMajorityOfDirectors?.length > 0"
+      :section-title="$t('sectionHeadings.controlOfMajorityOfDirectors')"
+    >
+      <div class="w-full flex flex-col">
+        <p class="font-bold py-3">
+          {{ $t('labels.controlOfDirectors') }}
+        </p>
+        <p>
+          {{ $t('texts.controlOfDirectors.text.part1') }}
+          <span class="font-bold">{{ $t('texts.controlOfDirectors.text.part2') }}</span>
+          {{ $t('texts.controlOfDirectors.text.part3') }}
+        </p>
+        <IndividualPersonControlOfDirectors
+          id="controlOfDirectors"
+          v-model="significantIndividual.controlType.directors"
+          name="controlOfDirectors"
+          data-cy="testControlOfDirectors"
+          :errors="controlOfDirectorsErrors"
+        />
+        <p>
+          <span class="font-bold">{{ $t('texts.note') }}</span>
+          {{ $t('texts.controlOfDirectors.note') }}
+        </p>
+      </div>
+    </BcrosSection>
+
+    <!--  section: other reasons  -->
+    <BcrosSection
+      :show-section-has-errors="sectionErrors?.otherReasons?.length > 0"
+      :section-title="$t('sectionHeadings.otherReasons')"
+    >
+      <div class="pt-3 w-full">
+        <IndividualPersonControlOtherReasons
+          id="otherReasons"
+          v-model="significantIndividual.controlType.other"
+          name="otherReasons"
+          data-cy="otherReasons"
+        />
+      </div>
+    </BcrosSection>
+
+    <!--  section: effective dates -->
+    <!--      <BcrosSection-->
+    <!--        :show-section-has-errors="sectionErrors?.effectiveDates?.length > 0"-->
+    <!--        :section-title="$t('sectionHeadings.effectiveDates')"-->
+    <!--      >-->
+    <!--        <div class="flex-col py-5">-->
+    <!--        </div>-->
+    <!--      </BcrosSection>-->
+
+    <!--  section: email address  -->
+    <BcrosSection
+      :show-section-has-errors="sectionErrors?.emailAddress?.length > 0"
+      :section-title="$t('sectionHeadings.emailAddress')"
+    >
+      <UForm
+        ref="profileFormEmail"
+        :schema="formSchema"
+        :state="significantIndividual.profile"
+        class="w-full"
+        @change="addBtrPayFees"
+      >
+        <div class="flex-col w-full pt-3">
+          <BcrosInputsEmailField
+            id="individual-person-email"
+            v-model="significantIndividual.profile.email"
+            :placeholder="$t('labels.emailAddress')"
+            :variant="emailInvalid ? 'error' : 'bcGov'"
+            :errors="emailErrors"
+            data-cy="testEmail"
+          />
+        </div>
+      </UForm>
+    </BcrosSection>
+
+    <!--  section: individual details  -->
+    <BcrosSection
+      :show-section-has-errors="sectionErrors?.individualDetails?.length > 0"
+      :section-title="$t('sectionHeadings.individualDetails')"
+    >
+      <div class="flex-col w-full">
+        <BcrosInputsAddress
+          id="addNewPersonLastKnownAddress"
+          v-model="significantIndividual.profile.address"
+          :label="$t('labels.lastKnownAddress')"
+          :errors="addressErrors"
+        />
+        <div class="flex-col py-5" />
+        <p class="font-bold py-3">
+          {{ $t('labels.birthdate') }}
+        </p>
+        <BcrosInputsDateSelect
+          id="addNewPersonBirthdate"
+          name="profile.birthDate"
+          class="mt-3"
+          :initial-date="significantIndividual.profile.birthDate
+            ? dateStringToDate(significantIndividual.profile.birthDate) : undefined"
+          :max-date="new Date()"
+          :placeholder="$t('placeholders.dateSelect.birthdate')"
+          :variant="birthDateErrors.length > 0 ? 'error' : 'bcGov'"
+          :errors="birthDateErrors"
+          @selection="significantIndividual.profile.birthDate = dateToString($event, 'YYYY-MM-DD')"
+        />
+      </div>
+    </BcrosSection>
 
     <!--  section: citizenship or PR  -->
     <BcrosSection

@@ -75,3 +75,9 @@ export function getAddressPostalCodeValidator () {
   const t = useNuxtApp().$i18n.t
   return z.string().min(1, t('errors.validation.address.postalCode'))
 }
+
+export function validateCitizenshipValidator () {
+  return z.array(z.object({ name: z.string(), alpha_2: z.string() })).superRefine(
+    validateCitizenshipSuperRefine
+  )
+}

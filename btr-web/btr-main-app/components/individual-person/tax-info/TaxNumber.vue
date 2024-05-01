@@ -10,12 +10,12 @@
         :aria-label="$t('placeholders.taxNumber')"
         @change="handleRadioButtonChange(HAS_TAX_NUMBER)"
       />
-      <UFormGroup v-slot="{ error }"  :name="name" class="ml-5">
+      <UFormGroup v-slot="{ error }" :name="name+'.taxNumber'" class="ml-5">
         <UInput
           v-model="taxNumber"
           data-cy="tax-number-input"
           type="text"
-          :variant="variant"
+          :variant="error ? 'error' : variant"
           :placeholder="$t('placeholders.taxNumber')"
           class="w-80"
           @blur="formatInput"
@@ -24,14 +24,15 @@
       </UFormGroup>
     </div>
     <div class="flex items-center mb-2 py-2">
-      <UFormGroup v-slot="{ error }" :name="name">
+      <UFormGroup v-slot="{ error }" :name="name + '.hasTaxNumber'">
         <URadio
           id="noTaxNumberRadioButton"
           v-model="selectedButton"
           :value="NO_TAX_NUMBER"
+          :variant="error ? 'error' : variant"
           @change="handleRadioButtonChange(NO_TAX_NUMBER)"
         />
-        <label for="noTaxNumberRadioButton" class="ml-5" :class="{ 'text-red-500': hasError}">
+        <label for="noTaxNumberRadioButton" class="ml-5" :class="{ 'text-red-500': error}">
           {{ $t('labels.noTaxNumberLabel') }}
         </label>
       </UFormGroup>
@@ -47,7 +48,6 @@ const NO_TAX_NUMBER = 'noTaxNumber'
 
 const props = defineProps({
   name: { type: String, default: 'taxNumber' },
-  errors: { type: Object as PropType<FormError[]>, required: true },
   hasTaxNumber: { type: [Boolean, undefined], required: false, default: undefined },
   taxNumber: { type: [String, undefined], required: false, default: undefined },
   variant: { type: String, default: 'bcGov' }

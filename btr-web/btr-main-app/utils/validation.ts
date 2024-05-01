@@ -65,15 +65,16 @@ export function validateOtherReasons (formData: FormInputI): boolean {
  * @param formData the form data
  */
 export function validateBirthDate (birthDate: any): boolean {
-  return birthDate !== null
+  return !!birthDate
 }
 
 /**
  * Check if one of the CRA Tax Number options has been selected
  * @param formData the form data
  */
-export function validateTaxNumberInfo (formData: FormInputI): boolean {
-  return formData.taxNumber !== undefined || formData.hasTaxNumber === false
+export function validateTaxNumberInfo (formData: any): boolean {
+  console.log("~~~~~~~~~~~~", formData)
+  return formData.hasTaxNumber === false || formData.taxNumber !== null || formData.taxNumber !== ''
 }
 
 /**
@@ -97,7 +98,7 @@ export function validateMissingInfoTextarea (formData: FormInputI): boolean {
  * @param formData the form data
  */
 export function validateMissingInfoReason (formData: any): boolean {
-  return !formData.couldNotProvideSomeInfo || (formData.reason !== '')
+  return !formData.couldNotProvideSomeInfo || formData.reason.trim() !== ''
 }
 
 export function validateControlSelectionForSharesAndVotes (form: any, ctx: RefinementCtx): never {
@@ -140,31 +141,39 @@ export function validateFullNameSuperRefine (form: any, ctx: RefinementCtx): nev
       ctx.addIssue({
         path: ['fullName'],
         code: z.ZodIssueCode.custom,
-        message: t('errors.validation.fullName.empty')
+        message: t('errors.validation.fullName.empty'),
+        fatal: true
       })
+      return z.NEVER
     }
 
     if (normalizedFullName.length > 150) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
         path: ['fullName'],
-        message: t('errors.validation.fullName.maxLengthExceeded')
+        message: t('errors.validation.fullName.maxLengthExceeded'),
+        fatal: true
       })
+      return z.NEVER
     }
 
     if (!validateNameCharacters(normalizedFullName)) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
         path: ['fullName'],
-        message: t('errors.validation.fullName.specialCharacter')
+        message: t('errors.validation.fullName.specialCharacter'),
+        fatal: true
       })
+      return z.NEVER
     }
   } else {
     ctx.addIssue({
       path: ['fullName'],
       code: z.ZodIssueCode.custom,
-      message: t('errors.validation.fullName.empty')
+      message: t('errors.validation.fullName.empty'),
+      fatal: true
     })
+    return z.NEVER
   }
   return z.NEVER
 }
@@ -180,17 +189,18 @@ export function validateCitizenshipSuperRefine (citizenships: BtrCountryI[], ctx
   if (citizenships.length === 0) {
     ctx.addIssue({
       code: z.ZodIssueCode.custom,
-      path: ['citizenships'],
-      message: t('errors.validation.citizenship.required')
+      message: t('errors.validation.citizenship.required'),
+      fatal: true
     })
+    return z.NEVER
   }
   const isCanadianCitizen: boolean = citizenships.filter(country => country.alpha_2 === 'CA').length > 0
   const isCanadianPR: boolean = citizenships.filter(country => country.alpha_2 === 'CA_PR').length > 0
   if (isCanadianCitizen && isCanadianPR) {
     ctx.addIssue({
       code: z.ZodIssueCode.custom,
-      path: ['prCitizen'],
-      message: t('errors.validation.citizenship.prCitizen')
+      message: t('errors.validation.citizenship.prCitizen'),
+      fatal: true
     })
   }
   return z.NEVER
