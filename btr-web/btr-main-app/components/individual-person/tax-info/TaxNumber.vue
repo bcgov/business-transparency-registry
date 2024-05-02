@@ -41,8 +41,6 @@
 </template>
 
 <script setup lang="ts">
-import type { FormError } from '#ui/types'
-
 const HAS_TAX_NUMBER = 'hasTaxNumber'
 const NO_TAX_NUMBER = 'noTaxNumber'
 

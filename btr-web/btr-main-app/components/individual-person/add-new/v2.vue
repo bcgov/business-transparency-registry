@@ -43,12 +43,14 @@
             :is-disabled="si.name.isYourOwnInformation"
           />
           <div class="pt-5" />
-          <UCheckbox
-            v-model="si.name.isUsePreferredName"
-            :label="$t('texts.preferredName.checkbox')"
-            data-cy="usePreferredName"
-            @click="si.name.preferredName = ''"
-          />
+          <UFormGroup name="doNothing">
+            <UCheckbox
+              v-model="si.name.isUsePreferredName"
+              :label="$t('texts.preferredName.checkbox')"
+              data-cy="usePreferredName"
+              @click="si.name.preferredName = ''"
+            />
+          </UFormGroup>
           <div v-if="si.name.isUsePreferredName" class="pt-3 w-full">
             <p>
               {{ $t('texts.preferredName.note') }}

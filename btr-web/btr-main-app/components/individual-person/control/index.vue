@@ -51,9 +51,9 @@ const model = defineModel({ required: true })
 // const inConcertControl = defineModel('inConcertControl', { required: true })
 
 // if no unique ids added on checkboxes, labels get messed up
-const registeredOwnerId =  UUIDv4()
-const beneficialOwnerId =  UUIDv4()
-const indirectControlId =  UUIDv4()
+const registeredOwnerId = UUIDv4()
+const beneficialOwnerId = UUIDv4()
+const indirectControlId = UUIDv4()
 const inConcertControlId = UUIDv4()
 
 defineProps({
