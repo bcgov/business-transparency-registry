@@ -270,12 +270,10 @@
             {{ $t('texts.taxNumber') }}
           </p>
           <IndividualPersonTaxInfoTaxNumber
-            id="addNewPersonTaxNumber"
             v-model:hasTaxNumber="significantIndividual.profile.hasTaxNumber"
             v-model:taxNumber="significantIndividual.profile.taxNumber"
             name="taxNumber"
             :variant="taxNumebrInvalid || taxNumberErrors.length > 0 ? 'error' : 'bcGov'"
-            :errors="taxNumberErrors"
             data-cy="testTaxNumber"
           />
         </UForm>

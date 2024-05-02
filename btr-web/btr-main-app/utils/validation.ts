@@ -70,19 +70,64 @@ export function validateBirthDate (birthDate: any): boolean {
 
 /**
  * Check if one of the CRA Tax Number options has been selected
- * @param formData the form data
+ * @param taxData the form data
  */
-export function validateTaxNumberInfo (formData: any): boolean {
-  console.log("~~~~~~~~~~~~", formData)
-  return formData.hasTaxNumber === false || formData.taxNumber !== null || formData.taxNumber !== ''
+export function validateTaxNumberInfo (
+  taxData: { taxNumber: string | null, hasTaxNumber: boolean | null },
+  ctx: RefinementCtx
+): never {
+  const t = useNuxtApp().$i18n.t
+  console.log("~!!!!!!!", taxData.hasTaxNumber, taxData.taxNumber)
+  if (taxData.hasTaxNumber) {
+    if (!checkSpecialCharacters(taxData.taxNumber)) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: t('errors.validation.taxNumber.specialCharacter'),
+        path: ['taxNumber'],
+        fatal: true
+      })
+      return z.NEVER
+    }
+    if (!checkTaxNumberLength(taxData.taxNumber)) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: t('errors.validation.taxNumber.invalidLength'),
+        path: ['taxNumber'],
+        fatal: true
+      })
+      return z.NEVER
+    }
+
+    if (!validateTaxNumber(taxData.taxNumber)) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: t('errors.validation.taxNumber.invalidNumber'),
+        path: ['taxNumber'],
+        fatal: true
+      })
+      return z.NEVER
+    }
+
+  } else {
+    if (taxData.hasTaxNumber !== false) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: t('errors.validation.taxNumber.required'),
+        path: ['hasTaxNumber'],
+        fatal: true
+      })
+      return z.NEVER
+    }
+  }
+  return z.NEVER
 }
 
 /**
  * Check if one of the Tax Residency options has been selected
  * @param formData the form data
  */
-export function validateTaxResidency (formData: FormInputI): boolean {
-  return formData.taxResidency !== undefined
+export function validateTaxResidency (taxResidency: unknown): boolean {
+  return taxResidency !== null && taxResidency !== undefined
 }
 
 /**
@@ -184,7 +229,7 @@ export function validateFullNameSuperRefine (form: any, ctx: RefinementCtx): nev
  * Rule 2: a person cannot be a Canadian citizen and permenant resident at the same time
  * @param formData the form data
  */
-export function validateCitizenshipSuperRefine (citizenships: BtrCountryI[], ctx: RefinementCtx): boolean {
+export function validateCitizenshipSuperRefine (citizenships: BtrCountryI[], ctx: RefinementCtx): never {
   const t = useNuxtApp().$i18n.t
   if (citizenships.length === 0) {
     ctx.addIssue({

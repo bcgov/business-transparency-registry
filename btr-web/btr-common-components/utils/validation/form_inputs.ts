@@ -1,9 +1,17 @@
 const emailLengths = (email: string): boolean => {
-  if (!email || email.length > 254) return false // eslint-disable-line curly
+  if (!email || email.length > 254) {
+    return false
+  } // eslint-disable-line curly
   const [localPart, domainPart, shouldBeUndefined] = email.split('@')
-  if (shouldBeUndefined !== undefined) return false // eslint-disable-line curly
-  if (!localPart || localPart.length > 63) return false // eslint-disable-line curly
-  if (!domainPart || domainPart.length > 252) return false // eslint-disable-line curly
+  if (shouldBeUndefined !== undefined) {
+    return false
+  } // eslint-disable-line curly
+  if (!localPart || localPart.length > 63) {
+    return false
+  } // eslint-disable-line curly
+  if (!domainPart || domainPart.length > 252) {
+    return false
+  } // eslint-disable-line curly
   return true
 }
 
@@ -62,14 +70,17 @@ export const normalizeName = (name?: string): string => {
  * @param {string} taxNumber - string representation of the tax number input
  */
 export const checkSpecialCharacters = (taxNumber: string): boolean => {
-  return /^[\d\s]*$/.test(taxNumber)
+  return taxNumber === null || /^[\d\s]*$/.test(taxNumber)
 }
 
 /**
  * Check if the tax number has 9 digits
  * @param {string} taxNumber - string representation of the tax number input
  */
-export const checkTaxNumberLength = (taxNumber: string): boolean => {
+export const checkTaxNumberLength = (taxNumber: string | null): boolean => {
+  if (taxNumber === null) {
+    return false
+  }
   const digits = taxNumber.replace(/\s+/g, '')
   return digits.length === 9
 }
@@ -78,8 +89,11 @@ export const checkTaxNumberLength = (taxNumber: string): boolean => {
  * Check if the tax number is valid
  * @param {string} taxNumber - string representation of the tax number input
  */
-export const validateTaxNumber = (taxNumber: string): boolean => {
+export const validateTaxNumber = (taxNumber: string | null): boolean => {
   // SIN Validation rule used: https://en.wikipedia.org/wiki/Social_insurance_number
+  if (taxNumber === null) {
+    return false
+  }
 
   const digits = taxNumber.replace(/\s+/g, '')
 

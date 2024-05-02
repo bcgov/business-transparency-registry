@@ -57,7 +57,7 @@ export function getMissingTaxResidencyError () {
   const t = useNuxtApp().$i18n.t
   return {
     message: t('errors.validation.taxResidency.required'),
-    path: ['taxResidency']
+    path: []
   }
 }
 

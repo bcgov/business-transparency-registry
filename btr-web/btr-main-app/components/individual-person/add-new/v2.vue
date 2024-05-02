@@ -99,7 +99,7 @@
         :show-section-has-errors="sectionErrors?.controlOfMajorityOfDirectors?.length > 0"
         :section-title="$t('sectionHeadings.controlOfMajorityOfDirectors')"
       >
-        <div class="w-full flex flex-col">
+        <UFormGroup name="containTheErrorChecks" class="w-full flex flex-col">
           <p class="font-bold py-3">
             {{ $t('labels.controlOfDirectors') }}
           </p>
@@ -118,7 +118,7 @@
             <span class="font-bold">{{ $t('texts.note') }}</span>
             {{ $t('texts.controlOfDirectors.note') }}
           </p>
-        </div>
+        </UFormGroup>
       </BcrosSection>
 
 
@@ -217,6 +217,7 @@
             v-model:hasTaxNumber="si.tax.hasTaxNumber"
             v-model:taxNumber="si.tax.taxNumber"
             name="tax"
+            variant="bcGov"
             data-cy="testTaxNumber"
           />
           <div>
@@ -227,9 +228,9 @@
               {{ $t('texts.taxResidency') }}
             </p>
             <IndividualPersonTaxInfoTaxResidency
-              id="addNewPersonTaxResidency"
-              v-model="si.tax.isTaxResident"
+              v-model="si.isTaxResident"
               name="isTaxResident"
+              variant="bcGov"
               data-cy="testTaxResidency"
             />
           </div>
@@ -402,18 +403,14 @@ const formSchema = z.object({
   birthDate: z.union([z.string(), z.null()]).refine(validateBirthDate, getMissingBirthDateError()),
   citizenships: validateCitizenshipValidator(),
   tax: z.object({
-    hasTaxNumber: z.union([z.boolean(), z.null()]),
-    taxNumber: z.union([z.string(), z.null()]),
-    isTaxResident: z.union([z.boolean(), z.null()])
-  }).refine(
-    validateTaxNumberInfo, getMissingTaxNumberInfoError()
-  ),
+    hasTaxNumber: z.union([z.null(), z.boolean()]),
+    taxNumber: z.union([z.null(), z.string()])
+  }).superRefine(validateTaxNumberInfo),
+  isTaxResident: z.union([z.null(), z.boolean()]).refine(validateTaxResidency, getMissingTaxResidencyError()),
   missingInfo: z.object({
     couldNotProvideSomeInfo: z.boolean(),
     reason: z.string()
-  }).refine(
-    validateMissingInfoReason, getNoMissingInfoReasonError()
-  )
+  }).refine(validateMissingInfoReason, getNoMissingInfoReasonError())
 })
 
 const setIsYourOwnInformation = (event: any) => {
@@ -471,8 +468,8 @@ const si: SiT = reactive({
   tax: {
     hasTaxNumber: null,
     taxNumber: null,
-    isTaxResident: null
   },
+  isTaxResident: null,
   missingInfo: {
     couldNotProvideSomeInfo: false,
     reason: ''
@@ -491,4 +488,11 @@ watch(() => si.citizenships, (newValue) => {
   addIndividualForm.value.setErrors(errors, 'citizenships')
 }, { deep: true })
 
+// // workaround for the issue that input box does not clear errors when different radio button is selected
+// watch(() => si.tax, (newValue) => {
+//   if (!newValue.hasTaxNuber) {
+//     addIndividualForm.value.clear('tax.taxNumber')
+//     addIndividualForm.value.setErrors([], 'tax.taxNumber')
+//   }
+// }, { deep: true })
 </script>

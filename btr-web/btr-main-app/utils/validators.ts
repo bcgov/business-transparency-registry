@@ -38,7 +38,7 @@ export function getPreferredNameValidator () {
 export function getTaxNumberValidator () {
   const t = useNuxtApp().$i18n.t
   return z.union([
-    z.undefined(),
+    z.null(),
     z.string()
       .refine(checkSpecialCharacters, t('errors.validation.taxNumber.specialCharacter'))
       .refine(checkTaxNumberLength, t('errors.validation.taxNumber.invalidLength'))
@@ -52,7 +52,7 @@ export function getAddressCountryValidator () {
     z.object({ name: z.string(), alpha_2: z.string() }),
     z.null()
   ]).refine(
-    (val: BtrCountryI | undefined) => { return val?.name !== '' }, t('errors.validation.address.country')
+    (val: BtrCountryI | null) => { return val?.name !== '' }, t('errors.validation.address.country')
   )
 }
 
