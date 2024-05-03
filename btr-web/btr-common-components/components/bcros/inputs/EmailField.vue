@@ -15,7 +15,7 @@
 
 <script setup lang="ts">
 defineEmits<{(e: 'update:modelValue', value: string): void }>()
-const props = defineProps({
+defineProps({
   label: { type: [String], default: '' },
   name: { type: String, default: 'email' },
   placeholder: { type: [String], default: '' },

@@ -1,6 +1,5 @@
 <template>
   <UFormGroup
-    v-slot="{ error }"
     :name="name"
     :help="help"
     class="flex flex-col py-5"
@@ -18,7 +17,7 @@ const emit = defineEmits<{ 'update:modelValue': [value: Array<BtrCountryI>] }>()
 const props = defineProps({
   modelValue: { type: Array<BtrCountryI>, required: true },
   name: { type: String, default: 'countriesOfCitizenship' },
-  help: { type: String, default: '' },
+  help: { type: String, default: '' }
 })
 
 const citizenshipsInternal = computed({

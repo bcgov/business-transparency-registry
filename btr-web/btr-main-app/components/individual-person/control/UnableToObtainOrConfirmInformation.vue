@@ -44,7 +44,6 @@
       </p>
     </BcrosAlertsMessage>
   </div>
-
 </template>
 
 <script setup lang="ts">

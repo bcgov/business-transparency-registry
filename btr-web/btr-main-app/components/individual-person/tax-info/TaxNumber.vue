@@ -1,35 +1,35 @@
 <template>
   <div class="flex flex-col py-5">
-    <UFormGroup v-slot="{ error }" :name="name + '.hasTaxNumber'">
-      <div class="flex flex-row mb-2 py-1">
-        <UFormGroup name="doNothingJustWatch">
-          <URadio
-            id="taxNumberRadioButton4"
-            v-model="hasTaxNumber"
-            class="mt-3"
-            :value="true"
-            :aria-label="$t('placeholders.taxNumber')"
-          />
-        </UFormGroup>
-        <UFormGroup
-          ref="taxNumberInputGroupRef"
-          v-slot="{ error }"
-          :name="name+'.taxNumber'"
-          class="ml-5"
-        >
-          <UInput
-            v-model="taxNumber"
-            data-cy="tax-number-input"
-            type="text"
-            :variant="error ? 'error' : variant"
-            :placeholder="$t('placeholders.taxNumber')"
-            class="w-80"
-            @focusout="formatInput"
-            @focus="hasTaxNumber = true"
-          />
-        </UFormGroup>
-      </div>
+    <div class="flex flex-row mb-2 py-1">
+      <UFormGroup name="doNothingJustWatch">
+        <URadio
+          id="taxNumberRadioButton4"
+          v-model="hasTaxNumber"
+          class="mt-3"
+          :value="true"
+          :aria-label="$t('placeholders.taxNumber')"
+        />
+      </UFormGroup>
+      <UFormGroup
+        ref="taxNumberInputGroupRef"
+        v-slot="{ error }"
+        :name="name+'.taxNumber'"
+        class="ml-5"
+      >
+        <UInput
+          v-model="taxNumber"
+          data-cy="tax-number-input"
+          type="text"
+          :variant="error ? 'error' : variant"
+          :placeholder="$t('placeholders.taxNumber')"
+          class="w-80"
+          @focusout="formatInput"
+          @focus="hasTaxNumber = true"
+        />
+      </UFormGroup>
+    </div>
 
+    <UFormGroup v-slot="{ error }" :name="name + '.hasTaxNumber'">
       <div class="flex flex-row items-center mb-2 py-2">
         <URadio
           id="noTaxNumberRadioButton"
@@ -47,17 +47,10 @@
 </template>
 
 <script setup lang="ts">
-const hasTaxNumber = defineModel('hasTaxNumber', { required: false, default: null })
-const taxNumber = defineModel('taxNumber', { required: false, default: null })
+const hasTaxNumber = defineModel('hasTaxNumber', { type: [Boolean, null], required: false, default: null })
+const taxNumber = defineModel('taxNumber', { type: [String, null], required: false, default: null })
 
-const emit = defineEmits<{
-  (e: 'clearTaxNumber', errorPath: string): void
-}>()
-
-const props = defineProps<{
-  name: String
-  variant: String
-}>()
+defineProps<{ name: String, variant: String }>()
 
 const taxNumberInputGroupRef = ref() // UFormGroup ref
 const formatInput = () => {

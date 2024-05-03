@@ -197,7 +197,7 @@
 
       <!--  section: tax details  -->
       <BcrosSection
-        :show-section-has-errors="hasErrors(['tax.'])"
+        :show-section-has-errors="hasErrors(['tax.', 'isTaxResident'])"
         :section-title="$t('sectionHeadings.taxDetails')"
       >
         <div class="w-full flex flex-col">
@@ -283,13 +283,13 @@
 
 <script setup lang="ts">
 import { z, ZodIssue } from 'zod'
+import type { FormError } from '#ui/types'
 import { SignificantIndividualAddNewErrorsI } from '~/interfaces/significant-individual/add-new-errors-i'
 import {
   validateControlSelectionForSharesAndVotes,
   validateFullNameSuperRefine
 } from '~/utils/validation'
 import { PercentageRangeE } from '~/enums/percentage-range-e'
-import type { FormError } from '#ui/types'
 
 const emits = defineEmits<{
   add: [value: SignificantIndividualI],

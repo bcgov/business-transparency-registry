@@ -116,7 +116,6 @@
 
 <script setup lang="ts">
 import { Combobox, ComboboxInput, ComboboxButton, ComboboxOption, ComboboxOptions } from '@headlessui/vue'
-import type { FormError } from '#ui/types'
 import { BtrCountryI } from '~/interfaces/btr-address-i'
 
 const emit = defineEmits<{ 'update:modelValue': [value: Array<BtrCountryI>] }>()

@@ -1,17 +1,17 @@
 const emailLengths = (email: string): boolean => {
   if (!email || email.length > 254) {
     return false
-  } // eslint-disable-line curly
+  }
   const [localPart, domainPart, shouldBeUndefined] = email.split('@')
   if (shouldBeUndefined !== undefined) {
     return false
-  } // eslint-disable-line curly
+  }
   if (!localPart || localPart.length > 63) {
     return false
-  } // eslint-disable-line curly
+  }
   if (!domainPart || domainPart.length > 252) {
     return false
-  } // eslint-disable-line curly
+  }
   return true
 }
 

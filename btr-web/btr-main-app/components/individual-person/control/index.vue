@@ -1,7 +1,7 @@
 <template>
   <!--    todo: update stuff from the ticket #20758   -->
   <!--  todo: note: depending on where the error messaging needs to be, we might need to update/add  UFromGroup -->
-  <UFormGroup v-slot="{ error }" :name="name">
+  <UFormGroup :name="name">
     <IndividualPersonControlPercentageDropdown
       id="percentageOfShares"
       v-model="model.percentage"
@@ -43,12 +43,16 @@
 import { v4 as UUIDv4 } from 'uuid'
 
 // todo: maybe add interface for this type can be part of 20758
-const model = defineModel({ required: true })
-// const percentage = defineModel('percentage', { required: true })
-// const registeredOwner = defineModel('registeredOwner', { required: true })
-// const beneficialOwner = defineModel('beneficialOwner', { required: true })
-// const indirectControl = defineModel('indirectControl', { required: true })
-// const inConcertControl = defineModel('inConcertControl', { required: true })
+const model = defineModel({
+  type: {
+    percentage: String,
+    registeredOwner: Boolean,
+    beneficialOwner: Boolean,
+    indirectControl: Boolean,
+    inConcertControl: Boolean
+  },
+  required: true
+})
 
 // if no unique ids added on checkboxes, labels get messed up
 const registeredOwnerId = UUIDv4()

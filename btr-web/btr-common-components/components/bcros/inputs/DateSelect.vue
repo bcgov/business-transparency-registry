@@ -30,7 +30,6 @@
 <script setup lang="ts">
 import { ComputedRef, Ref, computed, ref, watch } from 'vue'
 import { MaybeElementRef, onClickOutside } from '@vueuse/core'
-import type { FormError } from '#ui/types'
 
 const props = defineProps<{
   name: string

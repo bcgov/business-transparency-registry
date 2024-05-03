@@ -27,8 +27,8 @@
 </template>
 
 <script setup lang="ts">
-const isTaxResident = defineModel()
-const props = defineProps({
+const isTaxResident = defineModel({ type: Boolean })
+defineProps({
   name: { type: String, default: 'isTaxResidency' },
   label: { type: String, default: '' }
 })

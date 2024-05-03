@@ -12,7 +12,7 @@
       option-attribute="name"
       data-cy="address-country"
     />
-<!--      @blur="countryBlurred = true"-->
+    <!--      @blur="countryBlurred = true"-->
   </UFormGroup>
   <UFormGroup v-slot="{ error }" class="mt-4" :name="name + '.line1'">
     <!--  address line 1 -->
@@ -94,7 +94,6 @@
 <script setup lang="ts">
 import { BtrAddressI } from '~/interfaces/btr-address-i'
 
-const t = useNuxtApp().$i18n.t
 const address = defineModel({ type: Object as PropType<BtrAddressI>, required: true })
 // const emit = defineEmits<{ 'update:modelValue': [value: BtrAddressI] }>()
 const props = defineProps({
@@ -121,20 +120,7 @@ const regions = computed(() => {
   }
 })
 
-const clearAddressForm = () => {
-  Object.assign(
-    address.value,
-    { city: '', line1: '', line2: '', locationDescription: '', postalCode: '', region: '', country: country.value }
-  )
-}
-
 const addrAutoCompleted = (selectedAddr: BtrAddressI) => {
   Object.assign(address.value, selectedAddr)
 }
-
-// NB for country: needed due to select menu blur / form grp not picking it up
-const countryBlurred = ref(false)
-// line1
-const line1Invalid = ref(false)
-
 </script>
