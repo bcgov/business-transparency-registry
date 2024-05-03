@@ -12,27 +12,27 @@
     />
 
     <UCheckbox
-      v-model="model.registeredOwner"
       :id="registeredOwnerId"
+      v-model="model.registeredOwner"
       :label="$t('texts.sharesAndVotes.registeredOwner')"
       class="pt-5"
     />
     <UCheckbox
-      v-model="model.beneficialOwner"
       :id="beneficialOwnerId"
+      v-model="model.beneficialOwner"
       :label="$t('texts.sharesAndVotes.beneficialOwner')"
       class="pt-5"
     />
     <UCheckbox
-      v-model="model.indirectControl"
       :id="indirectControlId"
+      v-model="model.indirectControl"
       :label="$t('texts.sharesAndVotes.indirectControl')"
       class="pt-5"
     />
     <!--    todo: fix text here; add stuff from the ticket #20926   -->
     <UCheckbox
-      v-model="model.inConcertControl"
       :id="inConcertControlId"
+      v-model="model.inConcertControl"
       :label="$t('texts.sharesAndVotes.inConcertControl.part1')"
       class="pt-5"
     />

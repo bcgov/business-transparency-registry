@@ -45,7 +45,6 @@ export function validateControlOfShares (formData: FormInputI): boolean {
  * @param formData the form data
  */
 export function validateControlOfDirectors (formData: any): boolean {
-  console.log(">>>>", formData)
   return formData.directControl ||
     formData.indirectControl ||
     formData.significantInfluence ||
@@ -77,7 +76,6 @@ export function validateTaxNumberInfo (
   ctx: RefinementCtx
 ): never {
   const t = useNuxtApp().$i18n.t
-  console.log("~!!!!!!!", taxData.hasTaxNumber, taxData.taxNumber)
   if (taxData.hasTaxNumber) {
     if (!checkSpecialCharacters(taxData.taxNumber)) {
       ctx.addIssue({
@@ -107,17 +105,14 @@ export function validateTaxNumberInfo (
       })
       return z.NEVER
     }
-
-  } else {
-    if (taxData.hasTaxNumber !== false) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        message: t('errors.validation.taxNumber.required'),
-        path: ['hasTaxNumber'],
-        fatal: true
-      })
-      return z.NEVER
-    }
+  } else if (taxData.hasTaxNumber !== false) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      message: t('errors.validation.taxNumber.required'),
+      path: ['hasTaxNumber'],
+      fatal: true
+    })
+    return z.NEVER
   }
   return z.NEVER
 }
@@ -143,7 +138,7 @@ export function validateMissingInfoTextarea (formData: FormInputI): boolean {
  * @param formData the form data
  */
 export function validateMissingInfoReason (formData: any): boolean {
-  return !formData.couldNotProvideSomeInfo || formData.reason.trim() !== ''
+  return formData.reason && formData.reason.trim() !== ''
 }
 
 export function validateControlSelectionForSharesAndVotes (form: any, ctx: RefinementCtx): never {

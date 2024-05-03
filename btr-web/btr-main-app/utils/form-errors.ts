@@ -25,7 +25,7 @@ export function getMissingControlOfDirectorsError () {
 export function getMissingBirthDateError () {
   const t = useNuxtApp().$i18n.t
   return {
-    message: t('errors.validation.birthDate.required'),
+    message: t('errors.validation.birthDate.required')
   }
 }
 

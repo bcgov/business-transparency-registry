@@ -29,6 +29,7 @@
 <script setup lang="ts">
 const isTaxResident = defineModel()
 const props = defineProps({
-  name: { type: String, default: 'isTaxResidency' }
+  name: { type: String, default: 'isTaxResidency' },
+  label: { type: String, default: '' }
 })
 </script>

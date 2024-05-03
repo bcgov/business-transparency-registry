@@ -7,9 +7,6 @@
       class="w-full"
       @change="formChange"
     >
-      <!--      todo: remove this debug errors line -->
-      {{ addIndividualForm?.errors }}
-      <!--      todo: deal with section errors -->
       <!--  section: your information  -->
       <BcrosSection
         :section-title="$t('sectionHeadings.isYourOwnInformation')"
@@ -121,7 +118,6 @@
         </UFormGroup>
       </BcrosSection>
 
-
       <!--  section: other reasons  -->
       <BcrosSection
         :show-section-has-errors="hasErrors(['otherReasons'])"
@@ -152,7 +148,6 @@
           />
         </div>
       </BcrosSection>
-
 
       <!--  section: individual details  -->
       <BcrosSection
@@ -189,9 +184,9 @@
       >
         <div class="flex-col w-full">
           <BcrosInputsCountriesOfCitizenship
-            name="citizenships"
             id="countriesOfCitizenship"
             v-model="si.citizenships"
+            name="citizenships"
             :help="$t('labels.countryOfCitizenship.hint')"
           />
           <p>
@@ -243,10 +238,10 @@
       >
         <div class="w-full">
           <IndividualPersonControlUnableToObtainOrConfirmInformation
-            name="missingInfo.missingInfoReason"
-            v-model="si.missingInfo.reason"
-            :missing-info="si.missingInfo.couldNotProvideSomeInfo"
-            @update:missingInfo="si.missingInfo.couldNotProvideSomeInfo = $event"
+            v-model="si.missingInfoReason"
+            name="missingInfoReason"
+            :missing-info="si.couldNotProvideSomeInfo"
+            @update:missing-info="si.couldNotProvideSomeInfo = $event"
           />
         </div>
       </BcrosSection>
@@ -287,13 +282,14 @@
 </template>
 
 <script setup lang="ts">
-import { undefined, z } from 'zod'
+import { z, ZodIssue } from 'zod'
 import { SignificantIndividualAddNewErrorsI } from '~/interfaces/significant-individual/add-new-errors-i'
 import {
   validateControlSelectionForSharesAndVotes,
   validateFullNameSuperRefine
 } from '~/utils/validation'
 import { PercentageRangeE } from '~/enums/percentage-range-e'
+import type { FormError } from '#ui/types'
 
 const emits = defineEmits<{
   add: [value: SignificantIndividualI],
@@ -304,7 +300,7 @@ const emits = defineEmits<{
 
 const props = defineProps<{
   index?: number,
-  sectionErrors?: SignificantIndividualAddNewErrorsI,
+  sectionErrors?: SignificantIndividualAddNewErrorsI, // todo: remove this
   setSignificantIndividual?: SignificantIndividualI,
   startDate?: string
 }>()
@@ -315,12 +311,9 @@ const bcrosAccount = useBcrosAccount()
 const addIndividualForm = ref()
 const isEditing = ref(false)
 
-watch(() => addIndividualForm.value?.errors, (val: { path: string }[]) => {
-  console.log("AAAAA", val)
-})
-
 const formChange = async () => {
   await addBtrPayFees()
+  // todo: fixme
   emits('update', { index: props.index, updatedSI: si })
 }
 
@@ -345,12 +338,13 @@ function hasErrors (sectionErrorPaths: string[]): boolean {
 
 function handleDoneButtonClick () {
   isEditing.value = false
-  try {
-    addIndividualForm.value.validate()
-  } catch (e) {
-    console.log(e)
-    return false
+  const res = formSchema.safeParse(si)
+  let errors: FormError[] = []
+  if (!res.success) {
+    errors = res.error.issues.map(issue => ({ message: issue.message, path: issue.path.join('.') }))
+    console.error(errors)
   }
+  addIndividualForm.value.setErrors(errors)
   // todo: try to see if I can convert this so that input form emits SI and then ownerChange saves it
   // todo: fixme
   // validateForm()
@@ -363,7 +357,7 @@ function handleDoneButtonClick () {
   // }
 }
 
-const siControlOf = z.object({
+const SiControlOf = z.object({
   controlName: z.enum(['controlOfShares', 'controlOfVotes']),
   registeredOwner: z.boolean(),
   beneficialOwner: z.boolean(),
@@ -372,46 +366,54 @@ const siControlOf = z.object({
   percentage: z.nativeEnum(PercentageRangeE)
 }).superRefine(validateControlSelectionForSharesAndVotes)
 
-const formSchema = z.object({
-  name: z.object({
-    isYourOwnInformation: z.boolean(),
-    isUsePreferredName: z.boolean(),
-    fullName: z.string(),
-    preferredName: getPreferredNameValidator()
-  }).superRefine(
-    validateFullNameSuperRefine
-  ),
-  controlOfShares: siControlOf,
-  controlOfVotes: siControlOf,
-  controlOfDirectors: z.object({
-    directControl: z.boolean(),
-    indirectControl: z.boolean(),
-    significantInfluence: z.boolean(),
-    inConcertControl: z.boolean()
-  }).refine(validateControlOfDirectors, getMissingControlOfDirectorsError()),
-  controlOther: z.union([z.string(), z.null()]),
-  email: getEmailValidator(),
-  address: z.object({
-    country: getAddressCountryValidator(),
-    line1: z.string().min(1, t('errors.validation.address.line1')),
-    line2: z.union([z.string(), z.null()]),
-    city: getAddressCityValidator(),
-    region: getAddressRegionValidator(),
-    postalCode: getAddressPostalCodeValidator(),
-    locationDescription: z.union([z.string(), z.null()])
+const SiName = z.object({
+  isYourOwnInformation: z.boolean(),
+  isUsePreferredName: z.boolean(),
+  fullName: z.string(),
+  preferredName: getPreferredNameValidator()
+}).superRefine(
+  validateFullNameSuperRefine
+)
+//
+const formSchema = z.discriminatedUnion('couldNotProvideSomeInfo', [
+  z.object({
+    couldNotProvideSomeInfo: z.literal(true),
+    missingInfoReason: z.string().transform(s => s.trim())
+      .pipe(z.string().min(1, t('errors.validation.missingInfoReason.required'))),
+    name: SiName
   }),
-  birthDate: z.union([z.string(), z.null()]).refine(validateBirthDate, getMissingBirthDateError()),
-  citizenships: validateCitizenshipValidator(),
-  tax: z.object({
-    hasTaxNumber: z.union([z.null(), z.boolean()]),
-    taxNumber: z.union([z.null(), z.string()])
-  }).superRefine(validateTaxNumberInfo),
-  isTaxResident: z.union([z.null(), z.boolean()]).refine(validateTaxResidency, getMissingTaxResidencyError()),
-  missingInfo: z.object({
-    couldNotProvideSomeInfo: z.boolean(),
-    reason: z.string()
-  }).refine(validateMissingInfoReason, getNoMissingInfoReasonError())
-})
+  z.object({
+    couldNotProvideSomeInfo: z.literal(false),
+    missingInfoReason: z.string().optional(),
+    name: SiName,
+    controlOfShares: SiControlOf,
+    controlOfVotes: SiControlOf,
+    controlOfDirectors: z.object({
+      directControl: z.boolean(),
+      indirectControl: z.boolean(),
+      significantInfluence: z.boolean(),
+      inConcertControl: z.boolean()
+    }).refine(validateControlOfDirectors, getMissingControlOfDirectorsError()),
+    controlOther: z.union([z.string(), z.null()]),
+    email: getEmailValidator(),
+    address: z.object({
+      country: getAddressCountryValidator(),
+      line1: z.string().min(1, t('errors.validation.address.line1')),
+      line2: z.union([z.string(), z.null()]),
+      city: getAddressCityValidator(),
+      region: getAddressRegionValidator(),
+      postalCode: getAddressPostalCodeValidator(),
+      locationDescription: z.union([z.string(), z.null()])
+    }),
+    birthDate: z.union([z.string(), z.null()]).refine(validateBirthDate, getMissingBirthDateError()),
+    citizenships: validateCitizenshipValidator(),
+    tax: z.object({
+      hasTaxNumber: z.union([z.null(), z.boolean()]),
+      taxNumber: z.union([z.null(), z.string()])
+    }).superRefine(validateTaxNumberInfo),
+    isTaxResident: z.union([z.null(), z.boolean()]).refine(validateTaxResidency, getMissingTaxResidencyError())
+  })
+])
 
 const setIsYourOwnInformation = (event: any) => {
   if (event.target.checked) {
@@ -467,13 +469,11 @@ const si: SiT = reactive({
   citizenships: [],
   tax: {
     hasTaxNumber: null,
-    taxNumber: null,
+    taxNumber: null
   },
   isTaxResident: null,
-  missingInfo: {
-    couldNotProvideSomeInfo: false,
-    reason: ''
-  }
+  couldNotProvideSomeInfo: false,
+  missingInfoReason: ''
 })
 
 // needed because dropdown is not built out of NuxtUI components so it does not trigger validation automatically

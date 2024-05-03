@@ -20,7 +20,7 @@
 </template>
 
 <script setup lang="ts">
-const emit = defineEmits<{ (e: 'update:modelValue', value: string | undefined): void }>()
+const emit = defineEmits<{(e: 'update:modelValue', value: string | undefined): void }>()
 const props = defineProps({
   name: { type: String, required: false, default: 'ControlTypeOtherReason' },
   modelValue: { type: String, default: '' },
