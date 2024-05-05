@@ -7,7 +7,7 @@
       v-model="model.percentage"
       :placeholder="'% of shares'"
       percentage-type="shares"
-      data-cy="testPercentOfShares"
+      :data-cy="'test-' + name"
       class="py-5"
     />
 

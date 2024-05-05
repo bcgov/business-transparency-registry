@@ -106,7 +106,7 @@
             <label class="font-bold text-base text-gray-900 min-w-[190px] mt-3">
               {{ $t('labels.editIndividual') }}
             </label>
-            <IndividualPersonAddNew
+            <IndividualPersonAddNewV2
               :index="index"
               :set-significant-individual="copyIndividualToEdit()"
               class="ml-8 text-base text-gray-900"
@@ -252,6 +252,7 @@ function removeSignificantIndividual (index: number) {
 }
 
 function updateSignificantIndividual (index: number, updatedSI: SignificantIndividualI) {
+  console.log('|||||', index, updatedSI)
   useSignificantIndividuals().filingUpdateSI(index, updatedSI)
   closeEditingMode()
 }

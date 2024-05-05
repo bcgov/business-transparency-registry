@@ -213,6 +213,7 @@ const getInterests = (si: SignificantIndividualI): BodsInterestI[] => {
 }
 
 const getBodsNationalitiesFromSi = (si: SignificantIndividualI): BodsCountryI[] => {
+  console.log('...>>..<<...')
   const citizenships: BodsCountryI[] = []
   for (const btrCountry of si.profile.citizenships) {
     if (btrCountry.alpha_2 !== 'CA_PR') {

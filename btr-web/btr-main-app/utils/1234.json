@@ -1,0 +1,346 @@
+{
+  "effectiveDate": "2024-05-02",
+  "entityStatement": {
+    "name": "0871427 B.C. LTD.",
+    "source": {
+      "type": [
+        "officialRegister",
+        "verified"
+      ],
+      "assertedBy": [
+        {
+          "uri": "https://www.bcregistry.gov.bc.ca/",
+          "name": "BCROS - BC Registries and Online Services"
+        }
+      ],
+      "retrievedAt": "2024-05-03T22:49:15.644Z"
+    },
+    "entityType": "legalEntity",
+    "identifiers": [],
+    "isComponent": false,
+    "statementID": "007143a9-eb4c-4305-b1ea-4132b0c51501",
+    "statementDate": "2024-05-03",
+    "statementType": "entityStatement",
+    "publicationDetails": {
+      "publisher": {
+        "url": "https://www.bcregistry.gov.bc.ca/",
+        "name": "BCROS - BC Registries and Online Services"
+      },
+      "bodsVersion": "0.3",
+      "publicationDate": "2024-05-03"
+    }
+  },
+  "personStatements": [
+    {
+      "email": "test.test123@test.com",
+      "names": [
+        {
+          "type": "individual",
+          "fullName": "BCREG2 Ayisha FIFTY"
+        }
+      ],
+      "source": {
+        "type": [
+          "selfDeclaration"
+        ],
+        "assertedBy": [
+          {
+            "name": "tester33 testing"
+          }
+        ],
+        "description": "Using Gov BC - BTR - Web UI"
+      },
+      "addresses": [
+        {
+          "city": "Vancouver",
+          "region": "BC",
+          "street": "403-1265 Barclay St",
+          "country": "CA",
+          "postalCode": "V6E 1H5",
+          "countryName": "Canada",
+          "streetAdditional": "",
+          "locationDescription": ""
+        }
+      ],
+      "birthDate": "2024-04-04",
+      "personType": "knownPerson",
+      "identifiers": [],
+      "isComponent": false,
+      "statementID": "ca64df7a-1dbe-435a-8a92-fe09cf3cdae1",
+      "hasTaxNumber": false,
+      "nationalities": [],
+      "statementDate": "2024-05-02",
+      "statementType": "personStatement",
+      "taxResidencies": [
+        {
+          "code": "CA",
+          "name": "Canada"
+        }
+      ],
+      "placeOfResidence": {
+        "city": "Vancouver",
+        "region": "BC",
+        "street": "403-1265 Barclay St",
+        "country": "CA",
+        "postalCode": "V6E 1H5",
+        "countryName": "Canada",
+        "streetAdditional": "",
+        "locationDescription": ""
+      },
+      "missingInfoReason": "",
+      "publicationDetails": {
+        "publisher": {
+          "url": "https://www.bcregistry.gov.bc.ca/",
+          "name": "BCROS - BC Registries and Online Services"
+        },
+        "bodsVersion": "0.3",
+        "publicationDate": "2024-05-03"
+      },
+      "isPermanentResidentCa": false
+    },
+    {
+      "email": "test.test123@test.com",
+      "names": [
+        {
+          "type": "individual",
+          "fullName": "testera"
+        }
+      ],
+      "source": {
+        "type": [
+          "selfDeclaration"
+        ],
+        "assertedBy": [
+          {
+            "name": "tester33 testing"
+          }
+        ],
+        "description": "Using Gov BC - BTR - Web UI"
+      },
+      "addresses": [
+        {
+          "city": "Markham",
+          "region": "ON",
+          "street": "213-60 Centurian Dr",
+          "country": "CA",
+          "postalCode": "L3R 8T5",
+          "countryName": "Canada",
+          "streetAdditional": "",
+          "locationDescription": ""
+        }
+      ],
+      "birthDate": "2024-04-03",
+      "personType": "knownPerson",
+      "identifiers": [],
+      "isComponent": false,
+      "statementID": "dd050912-77ea-46f9-b3d0-db907f2eab5f",
+      "hasTaxNumber": false,
+      "nationalities": [],
+      "statementDate": "2024-05-02",
+      "statementType": "personStatement",
+      "taxResidencies": [],
+      "placeOfResidence": {
+        "city": "Markham",
+        "region": "ON",
+        "street": "213-60 Centurian Dr",
+        "country": "CA",
+        "postalCode": "L3R 8T5",
+        "countryName": "Canada",
+        "streetAdditional": "",
+        "locationDescription": ""
+      },
+      "missingInfoReason": "",
+      "publicationDetails": {
+        "publisher": {
+          "url": "https://www.bcregistry.gov.bc.ca/",
+          "name": "BCROS - BC Registries and Online Services"
+        },
+        "bodsVersion": "0.3",
+        "publicationDate": "2024-05-03"
+      },
+      "isPermanentResidentCa": false
+    },
+    {
+      "email": "email@test.com",
+      "names": [
+        {
+          "type": "individual",
+          "fullName": "tester33 testing"
+        },
+        {
+          "type": "alternative",
+          "fullName": "wam"
+        }
+      ],
+      "source": {
+        "type": [
+          "selfDeclaration"
+        ],
+        "assertedBy": [
+          {
+            "name": "tester33 testing"
+          }
+        ],
+        "description": "Using Gov BC - BTR - Web UI"
+      },
+      "addresses": [
+        {
+          "city": "Saskatoon",
+          "region": "SK",
+          "street": "123-655 Kenderdine Rd",
+          "country": "CA",
+          "postalCode": "S7N 4W9",
+          "countryName": "Canada",
+          "streetAdditional": "street additional",
+          "locationDescription": "la la la"
+        }
+      ],
+      "birthDate": "2018-02-01",
+      "personType": "knownPerson",
+      "identifiers": [
+        {
+          "id": "402 931 299",
+          "scheme": "CAN-TAXID",
+          "schemeName": "ITN"
+        }
+      ],
+      "isComponent": false,
+      "statementID": "227c6cdc-0fcc-4794-b5fa-af65cf58e5ec",
+      "hasTaxNumber": true,
+      "nationalities": [
+        {
+          "code": "CA",
+          "name": "Canada"
+        }
+      ],
+      "statementDate": "2024-02-01",
+      "statementType": "personStatement",
+      "taxResidencies": [
+        {
+          "code": "CA",
+          "name": "Canada"
+        }
+      ],
+      "placeOfResidence": {
+        "city": "Saskatoon",
+        "region": "SK",
+        "street": "123-655 Kenderdine Rd",
+        "country": "CA",
+        "postalCode": "S7N 4W9",
+        "countryName": "Canada",
+        "streetAdditional": "street additional",
+        "locationDescription": "la la la"
+      },
+      "missingInfoReason": "",
+      "publicationDetails": {
+        "publisher": {
+          "url": "https://www.bcregistry.gov.bc.ca/",
+          "name": "BCROS - BC Registries and Online Services"
+        },
+        "bodsVersion": "0.3",
+        "publicationDate": "2024-05-03"
+      },
+      "isPermanentResidentCa": false
+    }
+  ],
+  "businessIdentifier": "BC0871427",
+  "ownershipOrControlStatements": [
+    {
+      "source": {
+        "type": [
+          "selfDeclaration"
+        ],
+        "assertedBy": [
+          {
+            "name": "tester33 testing"
+          }
+        ],
+        "description": "Using Gov BC - BTR - Web UI"
+      },
+      "subject": {
+        "describedByEntityStatement": ""
+      },
+      "interests": [],
+      "isComponent": false,
+      "statementID": "a5cc987e-ae6e-4330-abe1-517cee3d0aae",
+      "statementDate": "2024-05-02",
+      "statementType": "ownershipOrControlStatement",
+      "interestedParty": {
+        "describedByPersonStatement": "ca64df7a-1dbe-435a-8a92-fe09cf3cdae1"
+      },
+      "publicationDetails": {
+        "publisher": {
+          "url": "https://www.bcregistry.gov.bc.ca/",
+          "name": "BCROS - BC Registries and Online Services"
+        },
+        "bodsVersion": "0.3",
+        "publicationDate": "2024-05-03"
+      }
+    },
+    {
+      "source": {
+        "type": [
+          "selfDeclaration"
+        ],
+        "assertedBy": [
+          {
+            "name": "tester33 testing"
+          }
+        ],
+        "description": "Using Gov BC - BTR - Web UI"
+      },
+      "subject": {
+        "describedByEntityStatement": ""
+      },
+      "interests": [],
+      "isComponent": false,
+      "statementID": "9f02adc5-370b-4bdd-919d-86ee9681082d",
+      "statementDate": "2024-05-02",
+      "statementType": "ownershipOrControlStatement",
+      "interestedParty": {
+        "describedByPersonStatement": "dd050912-77ea-46f9-b3d0-db907f2eab5f"
+      },
+      "publicationDetails": {
+        "publisher": {
+          "url": "https://www.bcregistry.gov.bc.ca/",
+          "name": "BCROS - BC Registries and Online Services"
+        },
+        "bodsVersion": "0.3",
+        "publicationDate": "2024-05-03"
+      }
+    },
+    {
+      "source": {
+        "type": [
+          "selfDeclaration"
+        ],
+        "assertedBy": [
+          {
+            "name": "tester33 testing"
+          }
+        ],
+        "description": "Using Gov BC - BTR - Web UI"
+      },
+      "subject": {
+        "describedByEntityStatement": ""
+      },
+      "interests": [],
+      "isComponent": false,
+      "statementID": "f4579a1e-60a3-438a-aa3f-00e673b9bd45",
+      "statementDate": "2024-02-01",
+      "statementType": "ownershipOrControlStatement",
+      "interestedParty": {
+        "describedByPersonStatement": "227c6cdc-0fcc-4794-b5fa-af65cf58e5ec"
+      },
+      "publicationDetails": {
+        "publisher": {
+          "url": "https://www.bcregistry.gov.bc.ca/",
+          "name": "BCROS - BC Registries and Online Services"
+        },
+        "bodsVersion": "0.3",
+        "publicationDate": "2024-05-03"
+      }
+    }
+  ],
+  "noSignificantIndividualsExist": false
+}

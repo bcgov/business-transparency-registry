@@ -1,5 +1,5 @@
 <template>
-  <UFormGroup name="isUnableToObtainOrConfirmInformationCheckBoxey">
+  <UFormGroup name="isUnableToObtainOrConfirmInformationCheckBoxey" data-cy="isUnableToObtainOrConfirmInformation">
     <UCheckbox
       v-model="isUnableToObtainOrConfirmInformation"
       name="isUnableToObtainOrConfirmInformation"
@@ -17,7 +17,6 @@
     <UFormGroup
       v-slot="{ error }"
       :name="name"
-      data-cy="isUnableToObtainOrConfirmInformation"
       class="py-5"
     >
       <BcrosInputsTextArea

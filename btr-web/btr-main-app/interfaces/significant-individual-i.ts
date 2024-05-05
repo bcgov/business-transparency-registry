@@ -1,5 +1,7 @@
 import { ProfileI } from './profile-i'
 import { FilingActionE } from '~/enums/filing-action-e'
+import { ControlOfSharesI } from '~/interfaces/control-of-shares-i'
+import { ControlOfDirectorsI } from '~/interfaces/control-of-directors-i'
 
 export interface SignificantIndividualI {
   isYourOwnInformation: boolean,
@@ -16,8 +18,4 @@ export interface SignificantIndividualI {
   endDate?: string // YYYY-MM-DDT
   action?: FilingActionE
   uuid?: string
-}
-
-export interface SignificantIndividualV2I {
-
 }
