@@ -438,7 +438,7 @@ const convertSignificantIndividualIToSi = (sii: SignificantIndividualI): Signifi
     birthDate: sii.profile.birthDate,
     email: sii.profile.email,
     tax: {
-      taxNumber: !!sii.profile.taxNumber ? sii.profile.taxNumber : null,
+      taxNumber: sii.profile.taxNumber ? sii.profile.taxNumber : null,
       hasTaxNumber: !!sii.profile.taxNumber
     },
     name: {
@@ -494,7 +494,6 @@ function handleDoneButtonClick () {
     addIndividualForm.value.setErrors(errors)
   } else {
     const sii: SignificantIndividualI = convertSiToSignificantIndividualI(si)
-    console.log('.....', isEditing.value)
     if (isEditing.value) {
       updateSignificantIndividual(sii)
     } else {
@@ -565,7 +564,7 @@ const defaultInputFormSi: SignificantIndividualInputFormType = {
 const isEditing = ref(false)
 
 let sii = null
-//should we watch this ??
+// should we watch this ??
 if (props.setSignificantIndividual) {
   isEditing.value = FilingActionE.EDIT === props.setSignificantIndividual.action
   sii = convertSignificantIndividualIToSi(props.setSignificantIndividual)

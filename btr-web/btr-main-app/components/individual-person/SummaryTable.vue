@@ -252,7 +252,6 @@ function removeSignificantIndividual (index: number) {
 }
 
 function updateSignificantIndividual (index: number, updatedSI: SignificantIndividualI) {
-  console.log('|||||', index, updatedSI)
   useSignificantIndividuals().filingUpdateSI(index, updatedSI)
   closeEditingMode()
 }
