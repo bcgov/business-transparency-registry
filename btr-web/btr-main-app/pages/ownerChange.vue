@@ -77,7 +77,7 @@
         variant="outline"
         data-cy="import-legacy-si-list-btn"
       />
-      <IndividualPersonAddNewV2
+      <IndividualPersonAddNew
         v-if="expandNewSI"
         :start-date="currentSIFiling.effectiveDate"
         @cancel="cancelAddNewSI"
