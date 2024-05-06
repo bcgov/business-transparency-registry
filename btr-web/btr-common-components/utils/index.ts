@@ -3,11 +3,6 @@ export {
   checkSpecialCharacters, checkTaxNumberLength, validateTaxNumber, validateFolioNumberCharacters
 } from './validation/form_inputs'
 
-export {
-  getAddressCountryValidator, getAddressLine1Validator, getAddressCityValidator,
-  getAddressRegionValidator, getAddressPostalCodeValidator
-} from './validation/validators'
-
 // canada post retrieve api
 export type { CanadaPostRetrieveItemI, CanadaPostApiRetrieveParamsI } from './canadaPostAddressApi/retrieve-v2.11'
 export { retrieveAddress } from './canadaPostAddressApi/retrieve-v2.11'

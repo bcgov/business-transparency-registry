@@ -35,47 +35,6 @@ export function getPreferredNameValidator () {
     .refine(validatePreferredName, t('errors.validation.preferredName.specialCharacter')))
 }
 
-export function getTaxNumberValidator () {
-  const t = useNuxtApp().$i18n.t
-  return z.union([
-    z.null(),
-    z.string()
-      .refine(checkSpecialCharacters, t('errors.validation.taxNumber.specialCharacter'))
-      .refine(checkTaxNumberLength, t('errors.validation.taxNumber.invalidLength'))
-      .refine(validateTaxNumber, t('errors.validation.taxNumber.invalidNumber'))
-  ])
-}
-
-export function getAddressCountryValidator () {
-  const t = useNuxtApp().$i18n.t
-  return z.union([
-    z.object({ name: z.string(), alpha_2: z.string() }),
-    z.null()
-  ]).refine(
-    (val: BtrCountryI | null) => { return val?.name !== '' }, t('errors.validation.address.country')
-  )
-}
-
-export function getAddressLine1Validator () {
-  const t = useNuxtApp().$i18n.t
-  return z.string().min(1, t('errors.validation.address.line1'))
-}
-
-export function getAddressCityValidator () {
-  const t = useNuxtApp().$i18n.t
-  return z.string().min(1, t('errors.validation.address.city'))
-}
-
-export function getAddressRegionValidator () {
-  const t = useNuxtApp().$i18n.t
-  return z.string().min(1, t('errors.validation.address.region'))
-}
-
-export function getAddressPostalCodeValidator () {
-  const t = useNuxtApp().$i18n.t
-  return z.string().min(1, t('errors.validation.address.postalCode'))
-}
-
 export function validateCitizenshipValidator () {
   return z.array(z.object({ name: z.string(), alpha_2: z.string() })).superRefine(
     validateCitizenshipSuperRefine

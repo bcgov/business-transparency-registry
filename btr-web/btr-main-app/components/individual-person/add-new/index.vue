@@ -70,7 +70,7 @@
 
       <!--  section: type of interest or control  -->
       <BcrosSection
-        :show-section-has-errors="sectionErrors?.typeOfInterestOrControl?.length > 0"
+        :show-section-has-errors="false"
         :section-title="$t('sectionHeadings.typeOfInterestOrControl')"
       >
         <div class="flex-col w-full">
@@ -95,7 +95,7 @@
 
       <!--  section: control of majority of directors  -->
       <BcrosSection
-        :show-section-has-errors="sectionErrors?.controlOfMajorityOfDirectors?.length > 0"
+        :show-section-has-errors="false"
         :section-title="$t('sectionHeadings.controlOfMajorityOfDirectors')"
       >
         <UFormGroup name="containTheErrorChecks" class="w-full flex flex-col">
@@ -242,8 +242,8 @@
           <IndividualPersonControlUnableToObtainOrConfirmInformation
             v-model="si.missingInfoReason"
             name="missingInfoReason"
-            :missing-info="si.couldNotProvideSomeInfo"
-            @update:missing-info="si.couldNotProvideSomeInfo = $event"
+            :missing-info="si.couldNotProvideMissingInfo"
+            @update:missing-info="si.couldNotProvideMissingInfo = $event"
           />
         </div>
       </BcrosSection>
@@ -284,23 +284,33 @@
 </template>
 
 <script setup lang="ts">
-import { z, ZodIssue } from 'zod'
+import { z } from 'zod'
 import type { FormError } from '#ui/types'
-import { PercentageRangeE } from '~/enums/percentage-range-e'
+import { BtrCountryI } from '../../../../btr-common-components/interfaces/btr-address-i'
 import { validateControlSelectionForSharesAndVotes, validateFullNameSuperRefine } from '~/utils/validation'
 import { SignificantIndividualI } from '~/interfaces/significant-individual-i'
 import { FilingActionE } from '~/enums/filing-action-e'
+import {
+  AddressSchema,
+  ControlOfDirectorsSchema,
+  SiControlOfSchema,
+  SiNameSchema,
+  SiSchema, SiSchemaType,
+  TaxSchema
+} from '~/utils/si-schema/definitions'
+import { convertSchemaToSi, convertSiToSchema } from '~/utils/si-schema/converters'
+import { defaultInputFormSi } from '~/utils/si-schema/defaults'
+import { CustomSiSchemaErrorMap } from '~/utils/si-schema/errorMessagesMap'
 
 const emits = defineEmits<{
   add: [value: SignificantIndividualI],
   cancel: [],
-  update: [value: { index: number | undefined, updatedSI: any }], // todo: fix this any
+  update: [value: { index: number | undefined, updatedSI: SignificantIndividualI }],
   remove: []
 }>()
 
 const props = defineProps<{
   index?: number,
-  sectionErrors?: SignificantIndividualAddNewErrorsI, // todo: remove this
   setSignificantIndividual?: SignificantIndividualI,
   startDate?: string
 }>()
@@ -308,155 +318,44 @@ const props = defineProps<{
 const t = useNuxtApp().$i18n.t
 const bcrosAccount = useBcrosAccount()
 
-const SiControlOf = z.object({
-  controlName: z.enum(['controlOfShares', 'controlOfVotes']),
-  registeredOwner: z.boolean(),
-  beneficialOwner: z.boolean(),
-  indirectControl: z.boolean(),
-  inConcertControl: z.boolean(),
-  percentage: z.nativeEnum(PercentageRangeE)
-}).superRefine(validateControlSelectionForSharesAndVotes)
+const isEditing = ref(false)
 
-const SiName = z.object({
-  isYourOwnInformation: z.boolean(),
-  isUsePreferredName: z.boolean(),
-  fullName: z.string(),
-  preferredName: getPreferredNameValidator()
-}).superRefine(
-  validateFullNameSuperRefine
-)
+// extend existing schema with
+const SiControlOfExtended = SiControlOfSchema.superRefine(validateControlSelectionForSharesAndVotes)
+const SiNameExtended = SiNameSchema
+  .extend({ preferredName: getPreferredNameValidator() })
+  .superRefine(validateFullNameSuperRefine)
 
-const AllSignificantIndividualFields = z.object({
-  couldNotProvideSomeInfo: z.literal(false),
-  missingInfoReason: z.string().optional(),
-  name: SiName,
-  controlOfShares: SiControlOf,
-  controlOfVotes: SiControlOf,
-  controlOfDirectors: z.object({
-    directControl: z.boolean(),
-    indirectControl: z.boolean(),
-    significantInfluence: z.boolean(),
-    inConcertControl: z.boolean()
-  }).refine(validateControlOfDirectors, getMissingControlOfDirectorsError()),
-  controlOther: z.union([z.string(), z.null()]),
-  email: getEmailValidator(),
-  address: z.object({
-    country: getAddressCountryValidator(),
-    line1: z.string().min(1, t('errors.validation.address.line1')),
-    line2: z.union([z.string(), z.null()]),
-    city: getAddressCityValidator(),
-    region: getAddressRegionValidator(),
-    postalCode: getAddressPostalCodeValidator(),
-    locationDescription: z.union([z.string(), z.null()])
-  }),
-  birthDate: z.union([z.string(), z.null()]).refine(validateBirthDate, getMissingBirthDateError()),
-  citizenships: validateCitizenshipValidator(),
-  tax: z.object({
-    hasTaxNumber: z.union([z.null(), z.boolean()]),
-    taxNumber: z.union([z.null(), z.string()])
-  }).superRefine(validateTaxNumberInfo),
-  isTaxResident: z.union([z.null(), z.boolean()]).refine(validateTaxResidency, getMissingTaxResidencyError())
+const AddressSchemaExtended = AddressSchema.extend({
+  country: z.union([z.null(), z.object({ name: z.string(), alpha_2: z.string() })])
+    .refine((val: BtrCountryI | null) => { return val?.name !== '' }, t('errors.validation.address.country'))
 })
 
-const formSchema = z.discriminatedUnion('couldNotProvideSomeInfo', [
+const SiSchemaExtended = SiSchema.extend({
+  couldNotProvideMissingInfo: z.literal(false),
+  controlOfShares: SiControlOfExtended,
+  controlOfVotes: SiControlOfExtended,
+  controlOfDirectors: ControlOfDirectorsSchema.refine(validateControlOfDirectors, getMissingControlOfDirectorsError()),
+  email: getEmailValidator(),
+  address: AddressSchemaExtended,
+  tax: TaxSchema.superRefine(validateTaxNumberInfo)
+})
+
+z.setErrorMap(CustomSiSchemaErrorMap)
+
+const formSchema = z.discriminatedUnion('couldNotProvideMissingInfo', [
   z.object({
-    couldNotProvideSomeInfo: z.literal(true),
-    missingInfoReason: z.string().transform(s => s.trim())
-      .pipe(z.string().min(1, t('errors.validation.missingInfoReason.required'))),
-    name: SiName
+    couldNotProvideMissingInfo: z.literal(true),
+    missingInfoReason: z.string().transform(s => s.trim()).pipe(z.string().min(1)),
+    name: SiNameExtended
   }),
-  AllSignificantIndividualFields
+  SiSchemaExtended
 ])
 
-type SignificantIndividualInputFormType = z.infer<typeof AllSignificantIndividualFields>
-const convertSiToSignificantIndividualI = (si: SignificantIndividualInputFormType): SignificantIndividualI => {
-  return {
-    isYourOwnInformation: si.name?.isYourOwnInformation,
-    profile: {
-      fullName: si.name?.fullName,
-      preferredName: si.name?.preferredName,
-      citizenshipCA: [],
-      citizenships: si.citizenships,
-      email: si.email,
-      address: si.address,
-      birthDate: si.birthDate,
-      hasTaxNumber: si.tax?.hasTaxNumber,
-      taxNumber: si.tax?.taxNumber,
-      isTaxResident: si.isTaxResident
-    },
-    startDate: props.startDate || '',
-    endDate: undefined,
-    action: isEditing.value ? FilingActionE.EDIT : FilingActionE.ADD,
-    missingInfoReason: si.missingInfoReason,
-    controlType: {
-      other: si.controlOther,
-      sharesVotes: {
-        registeredOwner: si.controlOfShares?.registeredOwner,
-        beneficialOwner: si.controlOfShares?.beneficialOwner,
-        indirectControl: si.controlOfShares?.indirectControl,
-        inConcertControl: si.controlOfShares?.inConcertControl
-      },
-      directors: {
-        directControl: si.controlOfDirectors?.directControl,
-        indirectControl: si.controlOfDirectors?.indirectControl,
-        significantInfluence: si.controlOfDirectors?.significantInfluence,
-        inConcertControl: si.controlOfDirectors?.inConcertControl
-      }
-    },
-    percentOfShares: si.controlOfShares.percentage,
-    percentOfVotes: si.controlOfVotes.percentage
-  }
-}
-
-const convertSignificantIndividualIToSi = (sii: SignificantIndividualI): SignificantIndividualInputFormType => {
-  return {
-    address: sii.profile.address,
-    controlOfDirectors: {
-      inConcertControl: sii.controlType.directors.inConcertControl,
-      directControl: sii.controlType.directors.directControl,
-      significantInfluence: sii.controlType.directors.significantInfluence,
-      indirectControl: sii.controlType.directors.indirectControl
-    },
-    controlOfShares: {
-      controlName: 'controlOfShares',
-      percentage: sii.percentOfShares,
-      inConcertControl: sii.controlType.sharesVotes.inConcertControl,
-      indirectControl: sii.controlType.sharesVotes.inConcertControl,
-      registeredOwner: sii.controlType.sharesVotes.inConcertControl,
-      beneficialOwner: sii.controlType.sharesVotes.inConcertControl
-    },
-    controlOfVotes: {
-      controlName: 'controlOfVotes',
-      percentage: sii.percentOfVotes,
-      inConcertControl: sii.controlType.sharesVotes.inConcertControl,
-      indirectControl: sii.controlType.sharesVotes.inConcertControl,
-      registeredOwner: sii.controlType.sharesVotes.inConcertControl,
-      beneficialOwner: sii.controlType.sharesVotes.inConcertControl
-    },
-    controlOther: sii.controlType.other,
-    citizenships: sii.profile.citizenships,
-    missingInfoReason: sii.missingInfoReason,
-    couldNotProvideSomeInfo: sii.missingInfoReason ? !!sii.missingInfoReason.trim() : false,
-    birthDate: sii.profile.birthDate,
-    email: sii.profile.email,
-    tax: {
-      taxNumber: sii.profile.taxNumber ? sii.profile.taxNumber : null,
-      hasTaxNumber: !!sii.profile.taxNumber
-    },
-    name: {
-      preferredName: sii.profile.preferredName,
-      fullName: sii.profile.fullName,
-      isYourOwnInformation: !!sii.isYourOwnInformation,
-      isUsePreferredName: !!(sii.profile?.preferredName?.trim())
-    },
-    isTaxResident: sii.profile.isTaxResident
-  }
-}
 const addIndividualForm = ref()
 
 const formChange = async () => {
   await addBtrPayFees()
-  // emits('update', { index: props.index, updatedSI: si })
 }
 
 function hasErrors (sectionErrorPaths: string[]): boolean {
@@ -478,14 +377,6 @@ function hasErrors (sectionErrorPaths: string[]): boolean {
   return false
 }
 
-const addSignificantIndividual = (sii: SignificantIndividualI) => {
-  emits('add', sii)
-}
-
-const updateSignificantIndividual = (sii: SignificantIndividualI) => {
-  emits('update', { index: props.index, updatedSI: sii })
-}
-
 function handleDoneButtonClick () {
   const res = formSchema.safeParse(si)
   let errors: FormError[] = []
@@ -495,11 +386,11 @@ function handleDoneButtonClick () {
     console.error(errors)
     addIndividualForm.value.setErrors(errors)
   } else {
-    const sii: SignificantIndividualI = convertSiToSignificantIndividualI(si)
+    const sii: SignificantIndividualI = convertSchemaToSi(si, props.startDate || '', isEditing.value)
     if (isEditing.value) {
-      updateSignificantIndividual(sii)
+      emits('update', { index: props.index, updatedSI: sii })
     } else {
-      addSignificantIndividual(sii)
+      emits('add', sii)
     }
   }
 }
@@ -512,75 +403,21 @@ const setIsYourOwnInformation = (event: any) => {
   }
 }
 
-const defaultInputFormSi: SignificantIndividualInputFormType = {
-  name: {
-    isYourOwnInformation: false,
-    isUsePreferredName: false,
-    fullName: '',
-    preferredName: ''
-  },
-  controlOfShares: {
-    controlName: 'controlOfShares',
-    registeredOwner: false,
-    beneficialOwner: false,
-    indirectControl: false,
-    inConcertControl: false,
-    percentage: PercentageRangeE.NO_SELECTION
-  },
-  controlOfVotes: {
-    controlName: 'controlOfVotes',
-    registeredOwner: false,
-    beneficialOwner: false,
-    indirectControl: false,
-    inConcertControl: false,
-    percentage: PercentageRangeE.NO_SELECTION
-  },
-  controlOfDirectors: {
-    directControl: false,
-    indirectControl: false,
-    significantInfluence: false,
-    inConcertControl: false
-  },
-  controlOther: '',
-  email: '',
-  address: {
-    country: null,
-    line1: '',
-    line2: null,
-    city: '',
-    region: '',
-    postalCode: '',
-    locationDescription: null
-  },
-  birthDate: null,
-  citizenships: [],
-  tax: {
-    hasTaxNumber: null,
-    taxNumber: null
-  },
-  isTaxResident: null,
-  couldNotProvideSomeInfo: false,
-  missingInfoReason: ''
-}
-
-const isEditing = ref(false)
-
 let sii = null
-// should we watch this ??
 if (props.setSignificantIndividual) {
   isEditing.value = FilingActionE.EDIT === props.setSignificantIndividual.action
-  sii = convertSignificantIndividualIToSi(props.setSignificantIndividual)
+  sii = convertSiToSchema(props.setSignificantIndividual)
 }
 
-const si: SignificantIndividualInputFormType = reactive(sii || defaultInputFormSi)
+const si: SiSchemaType = reactive(sii || defaultInputFormSi)
 
 // needed because dropdown is not built out of NuxtUI components so it does not trigger validation automatically
 watch(() => si.citizenships, (newValue) => {
   const val = validateCitizenshipValidator().safeParse(newValue)
-  let errors: { path: string, message: any }[] = []
+  let errors: { path: string, message: string }[] = []
   if (!val.success) {
     errors = val.error.issues.map(
-      (issue: ZodIssue[]) => ({ message: issue.message, path: 'citizenships' })
+      (issue: z.ZodIssue) => ({ message: issue.message, path: 'citizenships' })
     )
   }
   addIndividualForm.value.setErrors(errors, 'citizenships')

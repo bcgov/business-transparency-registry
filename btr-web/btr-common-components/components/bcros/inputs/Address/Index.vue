@@ -1,7 +1,6 @@
 <template>
   <UFormGroup v-slot="{ error }" :label="label" :name="name + '.country'">
     <!-- country -->
-    <!--        :ui-menu="{ label: countryError ? 'text-red-500' : 'text-gray-700' }"-->
     <USelectMenu
       v-model="address.country"
       by="alpha_2"
@@ -12,7 +11,6 @@
       option-attribute="name"
       data-cy="address-country"
     />
-    <!--      @blur="countryBlurred = true"-->
   </UFormGroup>
   <UFormGroup v-slot="{ error }" class="mt-4" :name="name + '.line1'">
     <!--  address line 1 -->
@@ -103,10 +101,6 @@ const props = defineProps({
   modelValue: { type: Object as PropType<BtrAddressI>, required: true }
 })
 
-// const country: Ref<BtrCountryI | undefined> = ref(undefined)
-// watch(() => country.value, (newCountry: BtrCountryI, _: BtrCountryI) => {
-//   address.value.country = newCountry
-// })
 const countries = iscCountriesListSortedByName
 // const address: Ref<BtrAddressI> = ref(props.modelValue)
 const regions = computed(() => {
