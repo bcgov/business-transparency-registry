@@ -21,7 +21,7 @@ export const CustomSiSchemaErrorMap: z.ZodErrorMap = (issue: z.ZodIssueOptionalM
   // isTaxResident custom errors
   if (issue.code === z.ZodIssueCode.invalid_type &&
     errPath === 'isTaxResident' &&
-    issue.received === 'null'
+    issue.received === 'undefined'
   ) {
     return { message: t('errors.validation.taxResidency.required') }
   }

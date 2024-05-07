@@ -339,7 +339,8 @@ const SiSchemaExtended = SiSchema.extend({
   controlOfDirectors: ControlOfDirectorsSchema.refine(validateControlOfDirectors, getMissingControlOfDirectorsError()),
   email: getEmailValidator(),
   address: AddressSchemaExtended,
-  tax: TaxSchema.superRefine(validateTaxNumberInfo)
+  tax: TaxSchema.superRefine(validateTaxNumberInfo),
+  isTaxResident: z.boolean()
 })
 
 z.setErrorMap(CustomSiSchemaErrorMap)
