@@ -74,6 +74,18 @@
       }
     },
     "noCRATaxNumber": "No CRA Tax Number",
+    "control": {
+      "percentageSelectorOptions": {
+        "lessThan25": "Less than 25%",
+        "atLeast25To50": "25% to 50%",
+        "moreThan50To75": "Over 50% to 75%",
+        "moreThan75": "Over 75%"
+      },
+      "controlOfShares": "Indicate the {boldStart}type(s) of control{boldEnd} of the shares this individual has:",
+      "controlOfVotes": "Indicate the {boldStart}type(s) of control{boldEnd} of the votes this individual has:",
+      "shares": "If applicable, enter the {boldStart}percentage of shares{boldEnd} issued by the company that the individual controls",
+      "votes": "If applicable, enter the {boldStart}percentage of votes{boldEnd} issued by the company that the individual controls"
+    },
     "sharesAndVotes": {
       "controlPercentage": "Enter the percentage of shares issued for the business and/or shares entitled to votes at general meetings this individual owns or ultimately controls (or can exercise ultimate effective control over).",
       "percentageRange": {
@@ -213,7 +225,10 @@
     }
   },
   "helpTitles": {
-    "significantIndividuals": "Help with significant individuals"
+    "significantIndividuals": "Help with significant individuals",
+    "sharesAndVotes": "More help with shares & votes",
+    "typesOfControl": "More help with types of control",
+    "inConcertControl": "More help with acting jointly or in concert"
   },
   "helpTexts": {
     "significantIndividuals": {
@@ -231,6 +246,8 @@
     "reviewConfirm": "Review and Confirm",
     "isYourOwnInformation": "Indicate if this is your information",
     "individualsFullName": "Individual's Full Name",
+    "controlOfShares": "Control of Shares",
+    "controlOfVotes": "Control of Votes",
     "typeOfInterestOrControl": "Type of Interest or Control",
     "interestOrRightsJointlyOrInConcert": "Interests or Rights exercised in concert or held jointly",
     "controlOfMajorityOfDirectors": "Control of Majority of Directors",
