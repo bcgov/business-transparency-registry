@@ -3,7 +3,7 @@
     <UForm
       ref="addIndividualForm"
       :schema="formSchema"
-      :state="si"
+      :state="inputFormSi"
       class="w-full"
       @change="formChange"
     >
@@ -18,7 +18,7 @@
           </p>
           <UFormGroup name="workaroundForTriggeringValidationOnEntireForm">
             <UCheckbox
-              v-model="si.name.isYourOwnInformation"
+              v-model="inputFormSi.name.isYourOwnInformation"
               :label="$t('labels.isYourOwnInformation')"
               data-cy="isYourOwnInformation-checkbox"
               @change="setIsYourOwnInformation($event)"
@@ -34,30 +34,30 @@
         <div class="flex-col w-full">
           <BcrosInputsNameField
             id="individual-person-full-name"
-            v-model="si.name.fullName"
+            v-model="inputFormSi.name.fullName"
             name="name.fullName"
             :label="$t('labels.fullName')"
             :placeholder="$t('placeholders.fullName')"
             data-cy="testFullName"
-            :is-disabled="si.name.isYourOwnInformation"
+            :is-disabled="inputFormSi.name.isYourOwnInformation"
           />
           <div class="pt-5" />
           <UFormGroup name="doNothing">
             <UCheckbox
-              v-model="si.name.isUsePreferredName"
+              v-model="inputFormSi.name.isUsePreferredName"
               :label="$t('texts.preferredName.checkbox')"
               data-cy="usePreferredName"
-              @click="si.name.preferredName = ''"
+              @click="inputFormSi.name.preferredName = ''"
             />
           </UFormGroup>
-          <div v-if="si.name.isUsePreferredName" class="pt-3 w-full">
+          <div v-if="inputFormSi.name.isUsePreferredName" class="pt-3 w-full">
             <p>
               {{ $t('texts.preferredName.note') }}
             </p>
             <div class="pt-5">
               <BcrosInputsNameField
                 id="individual-person-preferred-name"
-                v-model="si.name.preferredName"
+                v-model="inputFormSi.name.preferredName"
                 name="name.preferredName"
                 :placeholder="$t('placeholders.preferredName')"
                 data-cy="testPreferredName"
@@ -81,11 +81,11 @@
             {{ $t('texts.sharesAndVotes.controlPercentage') }}
           </p>
           <IndividualPersonControl
-            v-model="si.controlOfShares"
+            v-model="inputFormSi.controlOfShares"
             :name="'controlOfShares'"
           />
           <IndividualPersonControl
-            v-model="si.controlOfVotes"
+            v-model="inputFormSi.controlOfVotes"
             :name="'controlOfVotes'"
           />
           <!--          todo: add section control of majority of directors-->
@@ -109,7 +109,7 @@
           </p>
           <IndividualPersonControlOfDirectors
             id="controlOfDirectors"
-            v-model="si.controlOfDirectors"
+            v-model="inputFormSi.controlOfDirectors"
             name="controlOfDirectors"
             data-cy="testControlOfDirectors"
           />
@@ -128,7 +128,7 @@
         <div class="pt-3 w-full">
           <IndividualPersonControlOtherReasons
             id="otherReasons"
-            v-model="si.controlOther"
+            v-model="inputFormSi.controlOther"
             name="otherReasons"
             data-cy="otherReasons"
           />
@@ -143,7 +143,7 @@
         <div class="flex-col w-full pt-3">
           <BcrosInputsEmailField
             id="individual-person-email"
-            v-model="si.email"
+            v-model="inputFormSi.email"
             name="email"
             :placeholder="$t('labels.emailAddress')"
             data-cy="testEmail"
@@ -159,7 +159,7 @@
         <div class="flex-col w-full">
           <BcrosInputsAddress
             id="addNewPersonLastKnownAddress"
-            v-model="si.address"
+            v-model="inputFormSi.address"
             :label="$t('labels.lastKnownAddress')"
             name="address"
           />
@@ -171,10 +171,10 @@
             id="addNewPersonBirthdate"
             name="birthDate"
             class="mt-3"
-            :initial-date="!!si.birthDate ? dateStringToDate(si.birthDate) : null"
+            :initial-date="!!inputFormSi.birthDate ? dateStringToDate(inputFormSi.birthDate) : null"
             :max-date="new Date()"
             :placeholder="$t('placeholders.dateSelect.birthdate')"
-            @selection="si.birthDate = dateToString($event, 'YYYY-MM-DD')"
+            @selection="inputFormSi.birthDate = dateToString($event, 'YYYY-MM-DD')"
           />
         </div>
       </BcrosSection>
@@ -187,7 +187,7 @@
         <div class="flex-col w-full">
           <BcrosInputsCountriesOfCitizenship
             id="countriesOfCitizenship"
-            v-model="si.citizenships"
+            v-model="inputFormSi.citizenships"
             name="citizenships"
             :help="$t('labels.countryOfCitizenship.hint')"
           />
@@ -211,8 +211,8 @@
           </p>
           <IndividualPersonTaxInfoTaxNumber
             id="addNewPersonTaxNumber"
-            v-model:hasTaxNumber="si.tax.hasTaxNumber"
-            v-model:taxNumber="si.tax.taxNumber"
+            v-model:hasTaxNumber="inputFormSi.tax.hasTaxNumber"
+            v-model:taxNumber="inputFormSi.tax.taxNumber"
             name="tax"
             variant="bcGov"
             data-cy="testTaxNumber"
@@ -225,7 +225,7 @@
               {{ $t('texts.taxResidency') }}
             </p>
             <IndividualPersonTaxInfoTaxResidency
-              v-model="si.isTaxResident"
+              v-model="inputFormSi.isTaxResident"
               name="isTaxResident"
               variant="bcGov"
               data-cy="testTaxResidency"
@@ -240,10 +240,10 @@
       >
         <div class="w-full">
           <IndividualPersonControlUnableToObtainOrConfirmInformation
-            v-model="si.missingInfoReason"
+            v-model="inputFormSi.missingInfoReason"
             name="missingInfoReason"
-            :missing-info="si.couldNotProvideMissingInfo"
-            @update:missing-info="si.couldNotProvideMissingInfo = $event"
+            :missing-info="inputFormSi.couldNotProvideMissingInfo"
+            @update:missing-info="inputFormSi.couldNotProvideMissingInfo = $event"
           />
         </div>
       </BcrosSection>
@@ -299,7 +299,7 @@ import {
   TaxSchema
 } from '~/utils/si-schema/definitions'
 import { convertSchemaToSi, convertSiToSchema } from '~/utils/si-schema/converters'
-import { defaultInputFormSi } from '~/utils/si-schema/defaults'
+import { getDefaultInputFormSi } from '~/utils/si-schema/defaults'
 import { CustomSiSchemaErrorMap } from '~/utils/si-schema/errorMessagesMap'
 
 const emits = defineEmits<{
@@ -333,6 +333,7 @@ const AddressSchemaExtended = AddressSchema.extend({
 
 const SiSchemaExtended = SiSchema.extend({
   couldNotProvideMissingInfo: z.literal(false),
+  name: SiNameExtended,
   controlOfShares: SiControlOfExtended,
   controlOfVotes: SiControlOfExtended,
   controlOfDirectors: ControlOfDirectorsSchema.refine(validateControlOfDirectors, getMissingControlOfDirectorsError()),
@@ -378,7 +379,7 @@ function hasErrors (sectionErrorPaths: string[]): boolean {
 }
 
 function handleDoneButtonClick () {
-  const res = formSchema.safeParse(si)
+  const res = formSchema.safeParse(inputFormSi)
   let errors: FormError[] = []
   addIndividualForm.value.clear()
   if (!res.success) {
@@ -386,7 +387,7 @@ function handleDoneButtonClick () {
     console.error(errors)
     addIndividualForm.value.setErrors(errors)
   } else {
-    const sii: SignificantIndividualI = convertSchemaToSi(si, props.startDate || '', isEditing.value)
+    const sii: SignificantIndividualI = convertSchemaToSi(inputFormSi, props.startDate || '', isEditing.value)
     if (isEditing.value) {
       emits('update', { index: props.index, updatedSI: sii })
     } else {
@@ -397,22 +398,22 @@ function handleDoneButtonClick () {
 
 const setIsYourOwnInformation = (event: any) => {
   if (event.target.checked) {
-    si.name.fullName = bcrosAccount.userFullName
+    inputFormSi.name.fullName = bcrosAccount.userFullName
   } else {
-    si.name.fullName = ''
+    inputFormSi.name.fullName = ''
   }
 }
 
-let sii = null
+const inputFormSi: SiSchemaType = reactive(getDefaultInputFormSi())
+
 if (props.setSignificantIndividual) {
   isEditing.value = FilingActionE.EDIT === props.setSignificantIndividual.action
-  sii = convertSiToSchema(props.setSignificantIndividual)
+  const propsSi = convertSiToSchema(props.setSignificantIndividual)
+  Object.assign(inputFormSi, propsSi)
 }
 
-const si: SiSchemaType = reactive(sii || defaultInputFormSi)
-
 // needed because dropdown is not built out of NuxtUI components so it does not trigger validation automatically
-watch(() => si.citizenships, (newValue) => {
+watch(() => inputFormSi.citizenships, (newValue) => {
   const val = validateCitizenshipValidator().safeParse(newValue)
   let errors: { path: string, message: string }[] = []
   if (!val.success) {

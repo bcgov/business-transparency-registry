@@ -2,13 +2,15 @@ import { z } from 'zod'
 import { PercentageRangeE } from '~/enums/percentage-range-e'
 
 export const SiControlOfSchema = z.object({
-  controlName: z.enum(['controlOfShares', 'controlOfVotes']),
+  controlName: z.enum(['controlOfShares', 'controlOfVotes', 'directors']),
   registeredOwner: z.boolean(),
   beneficialOwner: z.boolean(),
   indirectControl: z.boolean(),
   inConcertControl: z.boolean(),
-  percentage: z.nativeEnum(PercentageRangeE)
+  percentage: z.nativeEnum(PercentageRangeE).optional()
 })
+
+export type SiControlOfSchemaType = z.infer<typeof SiControlOfSchema>
 
 export const ControlOfDirectorsSchema = z.object({
   directControl: z.boolean(),
@@ -57,7 +59,7 @@ export const SiSchema = z.object({
   birthDate: z.string().min(1),
   citizenships: validateCitizenshipValidator(),
   tax: TaxSchema,
-  isTaxResident: z.boolean()
+  isTaxResident: z.boolean().optional()
 })
 
 export type SiSchemaType = z.infer<typeof SiSchema>

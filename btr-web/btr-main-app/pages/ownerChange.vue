@@ -83,6 +83,7 @@
         @cancel="cancelAddNewSI"
         @add="addNewSI($event)"
       />
+<!--        :set-significant-individual="getEmptySI(currentSIFiling.effectiveDate || '')"-->
       <IndividualPersonSummaryTable
         class="mt-10"
         :individuals="currentSIFiling.significantIndividuals || []"
@@ -97,6 +98,7 @@
 
 <script setup lang="ts">
 import { storeToRefs } from 'pinia'
+import { getEmptySI } from '~/utils/significant-individual'
 
 const significantIndividuals = useSignificantIndividuals()
 const { currentSIFiling } = storeToRefs(significantIndividuals)
