@@ -1,5 +1,5 @@
-import { FilingSchemaBase } from '~/interfaces/significant-individual-filing-i'
 import { z } from 'zod'
+import { FilingSchemaBase } from '~/interfaces/significant-individual-filing-i'
 import { getFolioValidator } from '~/utils/validators'
 
 /** Go to the review/confirm page for the current filing
@@ -40,7 +40,7 @@ export async function siChangeSubmit () {
   const significantIndividuals = useSignificantIndividuals()
   const result = FilingSchema.safeParse(significantIndividuals.currentSIFiling)
   if (!result.success) {
-    // eslint-disable-next-line Unexpected console statement
+    // eslint-disable-next-line no-console
     console.log('<> remove this line when validation errors are displayed on page', result.error.issues)
     significantIndividuals.showErrors = true
   } else {

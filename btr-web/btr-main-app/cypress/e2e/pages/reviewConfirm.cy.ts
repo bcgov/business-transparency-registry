@@ -8,7 +8,7 @@ describe('pages -> Review and Confirm', () => {
     cy.interceptBusinessSlim().as('businessApiCall')
   })
 
-  it.skip('verify pay fee widget is visible and base state is available', () => {
+  it('verify pay fee widget is visible and base state is available', () => {
     cy.visit('/BC0871427/beneficial-owner-change/review-confirm')
     cy.wait(['@businessApiCall', '@payFeeApi', '@businessContact'])
 
@@ -25,7 +25,7 @@ describe('pages -> Review and Confirm', () => {
     cy.get('[data-cy="pay-fees-widget-total"]').contains('-')
   })
 
-  it.skip('integration test for adding an individual and reviewing the summary', () => {
+  it('integration test for adding an individual and reviewing the summary', () => {
     cy.fixture('individuals').then((testData) => {
       cy.interceptPostsEntityApi().as('existingSIs')
       cy.visit('/')
@@ -113,64 +113,61 @@ describe('pages -> Review and Confirm', () => {
   })
 
   it('verify that you cannot submit without individuals when no checkbox selected', () => {
-    cy.fixture('individuals').then((testData) => {
-      cy.interceptPostsEntityApiNoSis().as('noExistingSIs')
-      cy.visit('/', {
-        onBeforeLoad (win) {
-          cy.stub(win.console, 'log').as('consoleLog')
-        }
-      })
-      cy.wait(['@noExistingSIs', '@businessApiCall', '@payFeeApi', '@businessContact'])
-      // select the date of today
-      cy.get('[data-cy=date-select]').click().then(() => {
-        cy.get('.bcros-date-picker__calendar__day.dp__today').parent().click()
-      })
-
-      // click 'Review and Confirm' button to review the summary'
-      cy.get('[data-cy="button-control-right-button"]').click()
-
-      // verify the url changes to /review-confirm
-      cy.url().should('include', '/review-confirm')
-
-      // go back to review and file now, FUTURE: check certify / folio
-      // cy.get('[data-cy=button-control-right-button]').eq(0).should('have.text', 'Review and Confirm')
-      // cy.get('[data-cy=button-control-right-button]').eq(0).click()
-      // cy.url().should('include', '/beneficial-owner-change/review-confirm')
-      cy.get('[data-cy=button-control-right-button]').eq(1).should('have.text', 'File Now (no fee)')
-      // validate certify is not checked yet
-      cy.get('[data-cy="certify-section-checkbox"]').should('not.be.checked')
-      cy.get('[data-cy=button-control-right-button]').eq(1).click()
-      // Certify was not checked so nothing should happen
-      cy.url().should('include', '/beneficial-owner-change/review-confirm')
-      // Check certify and file
-      cy.get('[data-cy="certify-section-checkbox"]').click()
-      cy.get('[data-cy="certify-section-checkbox"]').should('be.checked')
-      cy.get('[data-cy=button-control-right-button]').eq(1).click()
-
-      // verify console error shows issues, did not get redirected
-      cy.get('@consoleLog')
-        .should('be.calledWith', '<> remove this line when validation errors are displayed on page')
-      cy.url().should('include', '/beneficial-owner-change/review-confirm')
-
-      // click 'back' to go back to non review page
-      cy.get('[data-cy=button-control-right-button]').eq(0).should('have.text', 'Back')
-      cy.get('[data-cy=button-control-right-button]').eq(0).click()
-
-      cy.get('[data-cy="noSignificantIndividualsExist-checkbox"]').click()
-
-      // click 'Review and Confirm' button to go back to review the summary
-      cy.get('[data-cy="button-control-right-button"]').click()
-
-      // reselect the certify checkbox
-      cy.get('[data-cy="certify-section-checkbox"]').click()
-
-      // click file now
-      cy.get('[data-cy=button-control-right-button]').eq(1).click()
-
-      // check redirect to change
-      cy.url().should('not.include', '/review-confirm')
-      cy.url().should('include', '/beneficial-owner-change')
-
+    cy.interceptPostsEntityApiNoSis().as('noExistingSIs')
+    cy.visit('/', {
+      onBeforeLoad (win) {
+        cy.stub(win.console, 'log').as('consoleLog')
+      }
     })
+    cy.wait(['@noExistingSIs', '@businessApiCall', '@payFeeApi', '@businessContact'])
+    // select the date of today
+    cy.get('[data-cy=date-select]').click().then(() => {
+      cy.get('.bcros-date-picker__calendar__day.dp__today').parent().click()
+    })
+
+    // click 'Review and Confirm' button to review the summary'
+    cy.get('[data-cy="button-control-right-button"]').click()
+
+    // verify the url changes to /review-confirm
+    cy.url().should('include', '/review-confirm')
+
+    // go back to review and file now, FUTURE: check certify / folio
+    // cy.get('[data-cy=button-control-right-button]').eq(0).should('have.text', 'Review and Confirm')
+    // cy.get('[data-cy=button-control-right-button]').eq(0).click()
+    // cy.url().should('include', '/beneficial-owner-change/review-confirm')
+    cy.get('[data-cy=button-control-right-button]').eq(1).should('have.text', 'File Now (no fee)')
+    // validate certify is not checked yet
+    cy.get('[data-cy="certify-section-checkbox"]').should('not.be.checked')
+    cy.get('[data-cy=button-control-right-button]').eq(1).click()
+    // Certify was not checked so nothing should happen
+    cy.url().should('include', '/beneficial-owner-change/review-confirm')
+    // Check certify and file
+    cy.get('[data-cy="certify-section-checkbox"]').click()
+    cy.get('[data-cy="certify-section-checkbox"]').should('be.checked')
+    cy.get('[data-cy=button-control-right-button]').eq(1).click()
+
+    // verify console error shows issues, did not get redirected
+    cy.get('@consoleLog')
+      .should('be.calledWith', '<> remove this line when validation errors are displayed on page')
+    cy.url().should('include', '/beneficial-owner-change/review-confirm')
+
+    // click 'back' to go back to non review page
+    cy.get('[data-cy=button-control-right-button]').eq(0).should('have.text', 'Back')
+    cy.get('[data-cy=button-control-right-button]').eq(0).click()
+
+    cy.get('[data-cy="noSignificantIndividualsExist-checkbox"]').click()
+
+    // click 'Review and Confirm' button to go back to review the summary
+    cy.get('[data-cy="button-control-right-button"]').click()
+
+    // reselect the certify checkbox
+    cy.get('[data-cy="certify-section-checkbox"]').click()
+
+    // click file now
+    cy.get('[data-cy=button-control-right-button]').eq(1).click()
+
+    // check redirect to change
+    cy.url().should('not.include', '/review-confirm')
+    cy.url().should('include', '/beneficial-owner-change')
   })
 })
