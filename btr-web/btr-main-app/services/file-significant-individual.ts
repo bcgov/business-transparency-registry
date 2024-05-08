@@ -124,8 +124,15 @@ const convertToBtrBodsForSubmit = (sif: SignificantIndividualFilingI): BtrFiling
 }
 
 const submitSignificantIndividualFiling = async (sif: SignificantIndividualFilingI) => {
-  // sif = convertPercentsToNumber(sif)
-  const submitData = convertToBtrBodsForSubmit(sif)
+  const submitSif: SignificantIndividualFilingI = {
+    certified: sif.certified,
+    noSignificantIndividualsExist: sif.noSignificantIndividualsExist,
+    businessIdentifier: sif.businessIdentifier,
+    significantIndividuals: sif.significantIndividuals.filter(si => si.action !== 'remove'),
+    effectiveDate: sif.effectiveDate,
+    folioNumber: sif.folioNumber
+  }
+  const submitData = convertToBtrBodsForSubmit(submitSif)
 
   const url = constructBtrApiURL() + '/plots'
   const { data, error } = await useFetchBcros<IdAsNumberI>(url,

@@ -26,7 +26,7 @@ export async function siChangeSubmit () {
     [
       FilingSchemaBase.extend({
         noSignificantIndividualsExist: z.literal(true),
-        significantIndividuals: z.object({}).array().max(0),
+        significantIndividuals: z.object({}).array(),
         folioNumber: getFolioValidator()
       }),
       FilingSchemaBase.extend({

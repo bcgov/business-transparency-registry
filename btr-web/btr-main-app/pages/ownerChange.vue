@@ -41,7 +41,7 @@
           </ul>
         </template>
       </BcrosHelpTip>
-      <div v-if="!currentSIFiling.significantIndividuals?.length > 0 && !expandNewSI" class="p-5">
+      <div v-if="showNoSignificantIndividuals" class="p-5">
         <UCheckbox
           v-model="currentSIFiling.noSignificantIndividualsExist"
           name="noSignificantIndividualsExist"
@@ -102,6 +102,10 @@ const significantIndividuals = useSignificantIndividuals()
 const { currentSIFiling } = storeToRefs(significantIndividuals)
 
 const expandNewSI = ref(false)
+const showNoSignificantIndividuals = computed(
+  (): boolean =>
+    !(currentSIFiling.value.significantIndividuals?.filter(si => si.action !== 'remove').length > 0) &&
+    !expandNewSI.value)
 
 const isEditing = ref(false)
 
