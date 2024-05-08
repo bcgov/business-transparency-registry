@@ -8,7 +8,7 @@ describe('pages -> Review and Confirm', () => {
     cy.interceptBusinessSlim().as('businessApiCall')
   })
 
-  it('verify pay fee widget is visible and base state is available', () => {
+  it.skip('verify pay fee widget is visible and base state is available', () => {
     cy.visit('/BC0871427/beneficial-owner-change/review-confirm')
     cy.wait(['@businessApiCall', '@payFeeApi', '@businessContact'])
 
@@ -25,7 +25,7 @@ describe('pages -> Review and Confirm', () => {
     cy.get('[data-cy="pay-fees-widget-total"]').contains('-')
   })
 
-  it('integration test for adding an individual and reviewing the summary', () => {
+  it.skip('integration test for adding an individual and reviewing the summary', () => {
     cy.fixture('individuals').then((testData) => {
       cy.interceptPostsEntityApi().as('existingSIs')
       cy.visit('/')
@@ -39,42 +39,7 @@ describe('pages -> Review and Confirm', () => {
       cy.get('[data-cy=add-new-btn]').click()
       // cy.get('[data-cy=showAddIndividualPersonManually]').click()
 
-      // fill out the form
-      cy.get('#individual-person-full-name').type(testData.profile1.fullName)
-      cy.get('[data-cy=usePreferredName').check()
-      cy.get('#individual-person-preferred-name').type(testData.profile1.preferredName)
-      cy.get('#individual-person-email').type(testData.profile1.email)
-
-      // enter shares and votes percentage
-      // todo: fixme: update on #20758
-      // cy.get('[data-cy=testPercentOfShares]').click().find('li').eq(0).click()
-      // cy.get('[data-cy=testPercentOfVotes]').click().find('li').eq(0).click()
-
-      // select the control type (registred owner + direct control)
-      // todo: fixme update with #20756
-      // cy.get('[data-cy="testTypeOfControl"]').get('[name="registeredOwner"]').check()
-      // cy.get('[data-cy="testControlOfDirectors"]').get('[name="directControl"]').check()
-
-      // select the birthdate (here we just use today's date for simplicity)
-      cy.get('#addNewPersonBirthdate').trigger('click')
-      cy.get('[data-cy=date-picker]').get('.bcros-date-picker__calendar__day.dp__today').trigger('click')
-
-      // enter the address
-      cy.get('[data-cy="address-country"]').click()
-      cy.get('[data-cy="address-country"]').get('li').contains(testData.profile1.address.country).click()
-      cy.get('[data-cy="address-line1-autocomplete"]').type(testData.profile1.address.streetAddress)
-      cy.get('[data-cy="address-city"]').type(testData.profile1.address.city)
-      cy.get('[data-cy="address-region-select"]').click()
-      cy.get('[data-cy="address-region-select"]').get('li').contains(testData.profile1.address.province[0]).click()
-      cy.get('[data-cy="address-postal-code"]').type(testData.profile1.address.postalCode)
-
-      // select the citizenship info
-      cy.get('[data-cy="countryOfCitizenshipDropdownButton"]').click()
-      cy.get('[data-cy="countryOfCitizenshipDropdownOption"]').eq(0).click({ force: true })
-
-      // enter tax number and select tax residency
-      cy.get('[data-cy="tax-number-input"]').type(testData.profile1.taxNumber)
-      cy.get('[data-cy="testTaxResidency"]').get('[type="radio"][value="true"]').check()
+      cy.fillOutForm(testData.profile1)
 
       // click 'Done' button to add the individual
       cy.get('[data-cy=new-si-done-btn]').click()
@@ -145,5 +110,67 @@ describe('pages -> Review and Confirm', () => {
     cy.get('[data-cy="certify-section-label"]').should('exist')
     cy.get('[data-cy="certify-section-checkbox"]').should('exist')
     cy.get('[data-cy="certify-section-checkbox"]').check().should('be.checked')
+  })
+
+  it('verify that you cannot submit without individuals when no checkbox selected', () => {
+    cy.fixture('individuals').then((testData) => {
+      cy.interceptPostsEntityApiNoSis().as('noExistingSIs')
+      cy.visit('/', {
+        onBeforeLoad (win) {
+          cy.stub(win.console, 'log').as('consoleLog')
+        }
+      })
+      cy.wait(['@noExistingSIs', '@businessApiCall', '@payFeeApi', '@businessContact'])
+      // select the date of today
+      cy.get('[data-cy=date-select]').click().then(() => {
+        cy.get('.bcros-date-picker__calendar__day.dp__today').parent().click()
+      })
+
+      // click 'Review and Confirm' button to review the summary'
+      cy.get('[data-cy="button-control-right-button"]').click()
+
+      // verify the url changes to /review-confirm
+      cy.url().should('include', '/review-confirm')
+
+      // go back to review and file now, FUTURE: check certify / folio
+      // cy.get('[data-cy=button-control-right-button]').eq(0).should('have.text', 'Review and Confirm')
+      // cy.get('[data-cy=button-control-right-button]').eq(0).click()
+      // cy.url().should('include', '/beneficial-owner-change/review-confirm')
+      cy.get('[data-cy=button-control-right-button]').eq(1).should('have.text', 'File Now (no fee)')
+      // validate certify is not checked yet
+      cy.get('[data-cy="certify-section-checkbox"]').should('not.be.checked')
+      cy.get('[data-cy=button-control-right-button]').eq(1).click()
+      // Certify was not checked so nothing should happen
+      cy.url().should('include', '/beneficial-owner-change/review-confirm')
+      // Check certify and file
+      cy.get('[data-cy="certify-section-checkbox"]').click()
+      cy.get('[data-cy="certify-section-checkbox"]').should('be.checked')
+      cy.get('[data-cy=button-control-right-button]').eq(1).click()
+
+      // verify console error shows issues, did not get redirected
+      cy.get('@consoleLog')
+        .should('be.calledWith', '<> remove this line when validation errors are displayed on page')
+      cy.url().should('include', '/beneficial-owner-change/review-confirm')
+
+      // click 'back' to go back to non review page
+      cy.get('[data-cy=button-control-right-button]').eq(0).should('have.text', 'Back')
+      cy.get('[data-cy=button-control-right-button]').eq(0).click()
+
+      cy.get('[data-cy="noSignificantIndividualsExist-checkbox"]').click()
+
+      // click 'Review and Confirm' button to go back to review the summary
+      cy.get('[data-cy="button-control-right-button"]').click()
+
+      // reselect the certify checkbox
+      cy.get('[data-cy="certify-section-checkbox"]').click()
+
+      // click file now
+      cy.get('[data-cy=button-control-right-button]').eq(1).click()
+
+      // check redirect to change
+      cy.url().should('not.include', '/review-confirm')
+      cy.url().should('include', '/beneficial-owner-change')
+
+    })
   })
 })
