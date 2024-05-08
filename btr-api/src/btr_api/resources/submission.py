@@ -141,7 +141,8 @@ def create_register():
             # NOTE: this will be moved out of this api once lear filings are linked
             # update record in BOR (search)
             token = btr_auth.get_bearer_token()
-            entity_addresses: dict[str, dict[str, dict]] = btr_entity.get_entity_info(jwt, f'{identifier}/addresses').json()
+            entity_addresses: dict[str, dict[str, dict]] = \
+                btr_entity.get_entity_info(jwt, f'{identifier}/addresses').json()
             entity['business']['addresses'] = [entity_addresses.get('registeredOffice', {}).get('deliveryAddress')]
             btr_bor.update_owners(submission, entity, token)
 
