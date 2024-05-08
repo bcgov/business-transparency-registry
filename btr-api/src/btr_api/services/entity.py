@@ -55,14 +55,20 @@ class EntityService:
         self.svc_url = app.config.get('LEGAL_SVC_URL')
         self.timeout = app.config.get('LEGAL_SVC_TIMEOUT', 20)
 
-    def get_entity(self, user_jwt: JwtManager, identifier: str) -> requests.Response:
-        """get the entity info for the given business identifier."""
+    def get_entity_info(self, user_jwt: JwtManager, path: str) -> requests.Response:
+        """Get the entity info for the given path.
+
+        Args:
+            user_jwt: JwtManager containing the user jwt information from the request
+            path: the desired suffix for the legal-api endpoint (i.e. BC1234567, BC1234567/addresses, etc.)
+        """
         try:
             # make api call
             token = user_jwt.get_token_auth_header()
 
             headers = {'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json'}
-            resp = requests.get(url=self.svc_url + '/businesses/' + identifier,
+            self.app.logger.debug('Getting legal-api data for: %s', path)
+            resp = requests.get(url=self.svc_url + '/businesses/' + path,
                                 headers=headers,
                                 timeout=self.timeout)
 

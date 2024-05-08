@@ -53,7 +53,7 @@ def test_init_app(app):
 
 
 def test_get_entity(app, jwt, mocker, requests_mock):
-    """Assure the get_entity function works as expected in btr_entity."""
+    """Assure the get_entity_info function works as expected in btr_entity."""
     def mock_get_token():
         return 'token'
     mocker.patch.object(jwt, 'get_token_auth_header', mock_get_token)
@@ -62,7 +62,7 @@ def test_get_entity(app, jwt, mocker, requests_mock):
     legal_api_mock = requests_mock.get(f"{app.config.get('LEGAL_SVC_URL')}/businesses/{identifier}", json=mocked_response)
     
     btr_entity.init_app(app)
-    resp = btr_entity.get_entity(jwt, identifier)
+    resp = btr_entity.get_entity_info(jwt, identifier)
 
     assert legal_api_mock.called == True
     assert resp.json() == mocked_response
