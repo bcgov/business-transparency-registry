@@ -15,6 +15,9 @@ from btr_api.services import SubmissionService
 from tests.unit import nested_session
 from tests.unit.utils import create_header
 
+mocked_entity_response = {"business": {"adminFreeze": False, "state": "ACTIVE"}}
+mocked_entity_address_response = {"registeredOffice": {"deliveryAddress": {"addressCity": "Vancouver", "addressCountry": "Canada"}}}
+
 
 @pytest.mark.parametrize(
     'test_name, submission_type, payload',
@@ -116,13 +119,16 @@ def test_post_plots_db_mocked(app, session, client, jwt, mocker, requests_mock):
     ) as file:
         json_data = json.load(file)
 
-        mocked_entity_response = {"business": {"adminFreeze": False, "state": "ACTIVE"}}
         identifier = json_data['businessIdentifier']
         requests_mock.get(f"{app.config.get('AUTH_SVC_URL')}/entities/{identifier}/authorizations",
                           json={"orgMembership": "COORDINATOR", 'roles': ['edit', 'view']})
-        legal_api_mock = requests_mock.get(
+        legal_api_entity_mock = requests_mock.get(
             f"{app.config.get('LEGAL_SVC_URL')}/businesses/{identifier}",
             json=mocked_entity_response
+        )
+        legal_api_entity_addresses_mock = requests_mock.get(
+            f"{app.config.get('LEGAL_SVC_URL')}/businesses/{identifier}/addresses",
+            json=mocked_entity_address_response
         )
 
         rv = client.post('/plots',
@@ -135,16 +141,21 @@ def test_post_plots_db_mocked(app, session, client, jwt, mocker, requests_mock):
 
     mock_user_save.assert_called_once()
     mock_submission_save.assert_called()
-    assert legal_api_mock.called == True
+    assert legal_api_entity_mock.called == True
     assert pay_api_mock.called == True
     assert auth_mock.called == True
+    assert legal_api_entity_addresses_mock.called == True
     assert bor_api_mock.called == True
     assert pay_api_mock.request_history[0].json() == {
         'filingInfo': {'filingTypes': [{'filingTypeCode': 'REGSIGIN'}]},
         'businessInfo': {'corpType': 'BTR', 'businessIdentifier': json_data['businessIdentifier']},
         'details': [{'label': 'Incorporation Number: ', 'value': json_data['businessIdentifier']}]}
     assert bor_api_mock.request_history[0].json() == {
-        'business': {'adminFreeze': False, 'state': 'ACTIVE'},
+        'business': {
+            'addresses': [mocked_entity_address_response['registeredOffice']['deliveryAddress']],
+            'adminFreeze': False,
+            'state': 'ACTIVE'
+        },
         'owners': [
             {
                 'interestedParty': {
@@ -221,13 +232,16 @@ def test_post_plots(app, client, session, jwt, requests_mock):
     ) as file:
         json_data = json.load(file)
 
-        mocked_entity_response = {"business": {"adminFreeze": False, "state": "ACTIVE"}}
         identifier = json_data['businessIdentifier']
         requests_mock.get(f"{app.config.get('AUTH_SVC_URL')}/entities/{identifier}/authorizations",
                           json={"orgMembership": "COORDINATOR", 'roles': ['edit', 'view']})
-        legal_api_mock = requests_mock.get(
+        legal_api_entity_mock = requests_mock.get(
             f"{app.config.get('LEGAL_SVC_URL')}/businesses/{identifier}",
             json=mocked_entity_response
+        )
+        legal_api_entity_addresses_mock = requests_mock.get(
+            f"{app.config.get('LEGAL_SVC_URL')}/businesses/{identifier}/addresses",
+            json=mocked_entity_address_response
         )
 
         with nested_session(session):
@@ -244,8 +258,9 @@ def test_post_plots(app, client, session, jwt, requests_mock):
             assert rv.status_code == HTTPStatus.CREATED
             submission_id = rv.json.get('id')
             assert submission_id
-            assert legal_api_mock.called == True
+            assert legal_api_entity_mock.called == True
             assert pay_api_mock.called == True
+            assert legal_api_entity_addresses_mock.called == True
             assert bor_api_mock.called == True
             # check submission details
             created_submission = SubmissionModel.find_by_id(submission_id)
@@ -273,13 +288,16 @@ def test_post_plots_pay_error(app, client, session, jwt, requests_mock):
     ) as file:
         json_data = json.load(file)
 
-        mocked_entity_response = {"business": {"adminFreeze": False, "state": "ACTIVE"}}
         identifier = json_data['businessIdentifier']
         requests_mock.get(f"{app.config.get('AUTH_SVC_URL')}/entities/{identifier}/authorizations",
                           json={"orgMembership": "COORDINATOR", 'roles': ['edit', 'view']})
-        legal_api_mock = requests_mock.get(
+        legal_api_entity_mock = requests_mock.get(
             f"{app.config.get('LEGAL_SVC_URL')}/businesses/{identifier}",
             json=mocked_entity_response
+        )
+        legal_api_entity_addresses_mock = requests_mock.get(
+            f"{app.config.get('LEGAL_SVC_URL')}/businesses/{identifier}/addresses",
+            json=mocked_entity_address_response
         )
 
         with nested_session(session):
@@ -293,9 +311,10 @@ def test_post_plots_pay_error(app, client, session, jwt, requests_mock):
             assert rv.status_code == HTTPStatus.CREATED
             submission_id = rv.json.get('id')
             assert submission_id
-            assert legal_api_mock.called == True
+            assert legal_api_entity_mock.called == True
             assert pay_api_mock.called == True
             assert auth_mock.called == True
+            assert legal_api_entity_addresses_mock.called == True
             assert bor_api_mock.called == True
             # check submission details
             created_submission = SubmissionModel.find_by_id(submission_id)
@@ -317,13 +336,16 @@ def test_post_plots_auth_error(app, client, session, jwt, requests_mock):
     ) as file:
         json_data = json.load(file)
 
-        mocked_entity_response = {"business": {"adminFreeze": False, "state": "ACTIVE"}}
         identifier = json_data['businessIdentifier']
         requests_mock.get(f"{app.config.get('AUTH_SVC_URL')}/entities/{identifier}/authorizations",
                           json={"orgMembership": "COORDINATOR", 'roles': ['edit', 'view']})
-        legal_api_mock = requests_mock.get(
+        legal_api_entity_mock = requests_mock.get(
             f"{app.config.get('LEGAL_SVC_URL')}/businesses/{identifier}",
             json=mocked_entity_response
+        )
+        legal_api_entity_addresses_mock = requests_mock.get(
+            f"{app.config.get('LEGAL_SVC_URL')}/businesses/{identifier}/addresses",
+            json=mocked_entity_address_response
         )
 
         with nested_session(session):
@@ -337,9 +359,10 @@ def test_post_plots_auth_error(app, client, session, jwt, requests_mock):
             assert rv.status_code == HTTPStatus.CREATED
             submission_id = rv.json.get('id')
             assert submission_id
-            assert legal_api_mock.called == True
+            assert legal_api_entity_mock.called == True
             assert pay_api_mock.called == True
             assert auth_mock.called == True
+            assert legal_api_entity_addresses_mock.called == False
             assert bor_api_mock.called == False
             # check submission details
             created_submission = SubmissionModel.find_by_id(submission_id)
@@ -360,13 +383,16 @@ def test_post_plots_bor_error(app, client, session, jwt, requests_mock):
     ) as file:
         json_data = json.load(file)
 
-        mocked_entity_response = {"business": {"adminFreeze": False, "state": "ACTIVE"}}
         identifier = json_data['businessIdentifier']
         requests_mock.get(f"{app.config.get('AUTH_SVC_URL')}/entities/{identifier}/authorizations",
                           json={"orgMembership": "COORDINATOR", 'roles': ['edit', 'view']})
-        legal_api_mock = requests_mock.get(
+        legal_api_entity_mock = requests_mock.get(
             f"{app.config.get('LEGAL_SVC_URL')}/businesses/{identifier}",
             json=mocked_entity_response
+        )
+        legal_api_entity_addresses_mock = requests_mock.get(
+            f"{app.config.get('LEGAL_SVC_URL')}/businesses/{identifier}/addresses",
+            json=mocked_entity_address_response
         )
 
         with nested_session(session):
@@ -380,9 +406,10 @@ def test_post_plots_bor_error(app, client, session, jwt, requests_mock):
             assert rv.status_code == HTTPStatus.CREATED
             submission_id = rv.json.get('id')
             assert submission_id
-            assert legal_api_mock.called == True
+            assert legal_api_entity_mock.called == True
             assert pay_api_mock.called == True
             assert auth_mock.called == True
+            assert legal_api_entity_addresses_mock.called == True
             assert bor_api_mock.called == True
             # check submission details
             created_submission = SubmissionModel.find_by_id(submission_id)
@@ -414,9 +441,13 @@ def test_post_plots_invalid_entity(app, client, session, jwt, requests_mock, tes
         identifier = json_data['businessIdentifier']
         requests_mock.get(f"{app.config.get('AUTH_SVC_URL')}/entities/{identifier}/authorizations",
                           json={"orgMembership": "COORDINATOR", 'roles': ['edit', 'view']})
-        legal_api_mock = requests_mock.get(
+        legal_api_entity_mock = requests_mock.get(
             f"{app.config.get('LEGAL_SVC_URL')}/businesses/{identifier}",
             json=mocked_entity_response
+        )
+        legal_api_entity_addresses_mock = requests_mock.get(
+            f"{app.config.get('LEGAL_SVC_URL')}/businesses/{identifier}/addresses",
+            json=mocked_entity_address_response
         )
 
         with nested_session(session):
@@ -429,9 +460,10 @@ def test_post_plots_invalid_entity(app, client, session, jwt, requests_mock, tes
                                                       'Account-Id': 1}))
             assert rv.status_code == expected_response
             assert rv.json.get('details') == errors
-            assert legal_api_mock.called == True
+            assert legal_api_entity_mock.called == True
             assert pay_api_mock.called == False
             assert auth_mock.called == False
+            assert legal_api_entity_addresses_mock.called == False
             assert bor_api_mock.called == False
 
 
