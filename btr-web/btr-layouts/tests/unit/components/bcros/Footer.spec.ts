@@ -13,9 +13,10 @@ describe('Tests for Footer.vue', () => {
   test('footer nav links rendered', async () => {
     const wrapper = await mountSuspended(BcrosFooter, { props: { appVersion: '1' } })
 
-    const expectedTexts = ['Home', 'Disclaimer', 'Privacy', 'Accessibility', 'Copyright']
+    const expectedTexts = ['Home', 'Release Notes', 'Disclaimer', 'Privacy', 'Accessibility', 'Copyright']
     const expectedHrefs = [
       '/',
+      'https://www.release-notes.bcregistry.gov.bc.ca',
       'https://www2.gov.bc.ca/gov/content/home/disclaimer',
       'https://www2.gov.bc.ca/gov/content/home/privacy',
       'https://www2.gov.bc.ca/gov/content/home/accessibility',
