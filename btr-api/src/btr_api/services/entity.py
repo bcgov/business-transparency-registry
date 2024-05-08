@@ -57,7 +57,7 @@ class EntityService:
 
     def get_entity_info(self, user_jwt: JwtManager, path: str) -> requests.Response:
         """Get the entity info for the given path.
-        
+
         Args:
             user_jwt: JwtManager containing the user jwt information from the request
             path: the desired suffix for the legal-api endpoint (i.e. BC1234567, BC1234567/addresses, etc.)
