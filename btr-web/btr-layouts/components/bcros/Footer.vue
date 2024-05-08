@@ -42,6 +42,7 @@ defineProps<{appVersion: string}>()
 
 const links = [
   { text: 'Home', href: '/', newTab: false },
+  { text: 'Release Notes', href: 'https://www.release-notes.bcregistry.gov.bc.ca', newTab: true },
   { text: 'Disclaimer', href: 'https://www2.gov.bc.ca/gov/content/home/disclaimer', newTab: true },
   { text: 'Privacy', href: 'https://www2.gov.bc.ca/gov/content/home/privacy', newTab: true },
   { text: 'Accessibility', href: 'https://www2.gov.bc.ca/gov/content/home/accessibility', newTab: true },
