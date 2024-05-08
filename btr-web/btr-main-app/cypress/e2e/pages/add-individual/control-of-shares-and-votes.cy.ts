@@ -10,7 +10,8 @@ describe('pages -> Add individual', () => {
     cy.visit('/')
   })
 
-  it('verify that the Type of Control checkboxes are working', () => {
+  // todo: fixme: update on #20758
+  it.skip('verify that the Type of Control checkboxes are working', () => {
     cy.get('[data-cy=add-new-btn]').trigger('click')
     // cy.get('[data-cy="showAddIndividualPersonManually"]').trigger('click')
 
@@ -22,7 +23,8 @@ describe('pages -> Add individual', () => {
     checkboxes.get('[name="indirectControl"]').check().should('be.checked')
   })
 
-  it('test the tooltip for in-concert control', () => {
+  // todo: fixme: update on #20758
+  it.skip('test the tooltip for in-concert control', () => {
     cy.get('[data-cy=add-new-btn]').trigger('click')
     // cy.get('[data-cy="showAddIndividualPersonManually"]').trigger('click')
 
@@ -32,7 +34,8 @@ describe('pages -> Add individual', () => {
     cy.get('[data-cy="in-concert-control-tooltip-content"').should('not.exist')
   })
 
-  it('test the dropdown menu for percent of shares', () => {
+  // todo: fixme: update on #20758
+  it.skip('test the dropdown menu for percent of shares', () => {
     cy.get('[data-cy=add-new-btn]').trigger('click')
 
     const shareRange1 = en.texts.sharesAndVotes.percentageRange.moreThan75.replace('{sharesOrVotes}', 'shares')

@@ -111,26 +111,18 @@
         </ComboboxOptions>
       </div>
     </Combobox>
-    <div v-if="hasError" class="text-sm text-red-500 pt-2">
-      {{ errors[0].message }}
-    </div>
-    <div v-if="!hasError && citizenships && citizenships.length === 0" class="text-sm pt-2 ml-2">
-      {{ $t('labels.countryOfCitizenship.hint') }}
-    </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { Combobox, ComboboxInput, ComboboxButton, ComboboxOption, ComboboxOptions } from '@headlessui/vue'
-import type { FormError } from '#ui/types'
 import { BtrCountryI } from '~/interfaces/btr-address-i'
 
 const emit = defineEmits<{ 'update:modelValue': [value: Array<BtrCountryI>] }>()
 const props = defineProps({
   placeholder: { type: String, default: '' },
   disabled: { type: Boolean, default: false },
-  modelValue: { type: Array<BtrCountryI>, required: true },
-  errors: { type: Object as PropType<FormError[]>, required: true }
+  modelValue: { type: Array<BtrCountryI>, required: true }
 })
 
 const citizenships = computed({

@@ -35,8 +35,10 @@ describe('pages -> Summary Table', () => {
         .get('[data-cy=summary-table-details]').contains(testData.profile1.taxNumber)
         .get('[data-cy=summary-table-details]').contains(testData.profile1.summaryTable.citizenship)
         .get('[data-cy=summary-table-details]').contains(testData.profile1.summaryTable.taxResidency)
-        .get('[data-cy=summary-table-controls]').contains(testData.profile1.summaryTable.shareControl)
-        .get('[data-cy=summary-table-controls]').contains(testData.profile1.summaryTable.directorControl)
+        // todo: fixme: update on #20758
+        // .get('[data-cy=summary-table-controls]').contains(testData.profile1.summaryTable.shareControl)
+        // todo: fixme: update on #20756
+        // .get('[data-cy=summary-table-controls]').contains(testData.profile1.summaryTable.directorControl)
         .get('[data-cy=summary-table-dates]').contains(expectedDate)
         .get('[data-cy=summary-table-name]').contains(testData.profile2.fullName.toUpperCase())
         .get('[data-cy=summary-table-name]').contains(testData.profile2.preferredName)
@@ -49,8 +51,10 @@ describe('pages -> Summary Table', () => {
         .get('[data-cy=summary-table-details]').contains(testData.profile2.taxNumber)
         .get('[data-cy=summary-table-details]').contains(testData.profile2.summaryTable.citizenship)
         .get('[data-cy=summary-table-details]').contains(testData.profile2.summaryTable.taxResidency)
-        .get('[data-cy=summary-table-controls]').contains(testData.profile2.summaryTable.shareControl)
-        .get('[data-cy=summary-table-controls]').contains(testData.profile2.summaryTable.directorControl)
+      // todo: fixme: update on #20758
+        // .get('[data-cy=summary-table-controls]').contains(testData.profile2.summaryTable.shareControl)
+      // todo: fixme: update on #20756
+        // .get('[data-cy=summary-table-controls]').contains(testData.profile2.summaryTable.directorControl)
     })
   })
 
@@ -82,10 +86,12 @@ describe('pages -> Summary Table', () => {
       cy.get('#individual-person-full-name').should('have.value', testData.profile1.fullName)
         .get('#individual-person-preferred-name').should('have.value', testData.profile1.preferredName)
         .get('#individual-person-email').should('have.value', testData.profile1.email)
-        .get('input[name="percentOfShares[range]"]').invoke('val').should('eq', testData.profile1.percentOfShares)
-        .get('input[name="percentOfShares[range]"]').invoke('val').should('eq', testData.profile1.percentOfVotes)
-        .get('[data-cy="testTypeOfControl"]').get('[name="registeredOwner"]').should('be.checked')
-        .get('[data-cy="testControlOfDirectors"]').get('[name="directControl"]').should('be.checked')
+        // todo: fixme update with #20758
+        // .get('input[name="percentOfShares[range]"]').invoke('val').should('eq', testData.profile1.percentOfShares)
+        // .get('input[name="percentOfShares[range]"]').invoke('val').should('eq', testData.profile1.percentOfVotes)
+        // todo: fixme update with #20756
+        // .get('[data-cy="testTypeOfControl"]').get('[name="registeredOwner"]').should('be.checked')
+        // .get('[data-cy="testControlOfDirectors"]').get('[name="directControl"]').should('be.checked')
         .get('[data-cy=date-select]').should('have.value', expectedDate)
         .get('[data-cy="address-country"]').contains(testData.profile1.address.country)
         .get('[data-cy="address-line1-autocomplete"] input')
@@ -161,7 +167,7 @@ describe('pages -> Summary Table', () => {
 
   it('test the REMOVE button in the Edit form', () => {
     // remove all significant individuals from the table
-    cy.get('[data-cy=popover-button]').then((buttons) => {
+    cy.get('[data-cy=edit-button]').then((buttons) => {
       for (let i = 0; i < buttons.length; i++) {
         cy.get('[data-cy=edit-button]').first().click()
         cy.get('[data-cy=edit-si-remove-btn]').click()

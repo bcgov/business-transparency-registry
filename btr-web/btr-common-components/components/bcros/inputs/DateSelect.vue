@@ -1,13 +1,16 @@
 <template>
-  <div class="min-h-[84px]">
+  <UFormGroup
+    v-slot="{ error }"
+    :name="name"
+  >
     <UInput
-      :ui="{ icon: { base: showDatePicker && !errorMessage ? 'text-primary-500' : iconClass } }"
+      :ui="{ icon: { base: showDatePicker && !error ? 'text-primary-500' : iconClass } }"
       :model-value="selectedDateDisplay"
       icon="i-mdi-calendar"
       :placeholder="placeholder || ''"
       trailing
       type="text"
-      :variant="errorMessage ? 'error' : variant || 'bcGov'"
+      :variant="!!error ? 'error' : variant || 'bcGov'"
       data-cy="date-select"
       @click="showDatePicker = true"
       @keydown.enter="showDatePicker = true"
@@ -21,23 +24,19 @@
       :set-max-date="maxDate"
       @selected-date="updateDate($event); showDatePicker = false"
     />
-    <div class="mt-2 text-sm text-red-500">
-      {{ errorMessage }}
-    </div>
-  </div>
+  </UFormGroup>
 </template>
 
 <script setup lang="ts">
 import { ComputedRef, Ref, computed, ref, watch } from 'vue'
 import { MaybeElementRef, onClickOutside } from '@vueuse/core'
-import type { FormError } from '#ui/types'
 
 const props = defineProps<{
+  name: string
   initialDate?: Date,
   maxDate?: Date,
   placeholder?: string,
-  variant?: string,
-  errors?: FormError[]
+  variant?: string
 }>()
 
 const emit = defineEmits<{(e: 'selection', value: Date | null): void }>()
@@ -68,13 +67,6 @@ const handleManualDateEntry = (input: string) => {
     showDatePicker.value = false
   }
 }
-
-const errorMessage = computed(() => {
-  if (props.errors !== undefined && props.errors.length > 0) {
-    return props.errors[0].message
-  }
-  return ''
-})
 
 // colouring
 const iconClass = computed(() => {

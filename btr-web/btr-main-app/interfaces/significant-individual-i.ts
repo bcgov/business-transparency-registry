@@ -1,8 +1,11 @@
 import { ProfileI } from './profile-i'
 import { FilingActionE } from '~/enums/filing-action-e'
+import { ControlOfSharesI } from '~/interfaces/control-of-shares-i'
+import { ControlOfDirectorsI } from '~/interfaces/control-of-directors-i'
+import { PercentageRangeE } from '~/enums/percentage-range-e'
 
 export interface SignificantIndividualI {
-  isYourOwnInformation: boolean,
+  isYourOwnInformation: boolean | undefined,
   controlType: {
     sharesVotes: ControlOfSharesI
     directors: ControlOfDirectorsI

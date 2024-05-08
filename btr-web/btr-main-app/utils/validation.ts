@@ -1,4 +1,5 @@
 import { RefinementCtx, z } from 'zod'
+import { PercentageRangeE } from '~/enums/percentage-range-e'
 
 /**
  * Check if the percentage of shares and the percentage of votes are required.
@@ -43,9 +44,11 @@ export function validateControlOfShares (formData: FormInputI): boolean {
  * If the 'exercised in concert' is selected, at least one of the Type of Director Control checkboxes is required.
  * @param formData the form data
  */
-export function validateControlOfDirectors (formData: FormInputI): boolean {
-  return Object.values(formData.controlOfDirectors).slice(0, 3).some(Boolean) ||
-    !formData.controlOfDirectors.inConcertControl
+export function validateControlOfDirectors (formData: any): boolean {
+  return formData.directControl ||
+    formData.indirectControl ||
+    formData.significantInfluence ||
+    !formData.inConcertControl
 }
 
 /**
@@ -60,24 +63,66 @@ export function validateOtherReasons (formData: FormInputI): boolean {
  * Check if the birth date has been entered
  * @param formData the form data
  */
-export function validateBirthDate (formData: FormInputI): boolean {
-  return formData.birthDate !== null
+export function validateBirthDate (birthDate: any): boolean {
+  return !!birthDate
 }
 
 /**
  * Check if one of the CRA Tax Number options has been selected
- * @param formData the form data
+ * @param taxData the form data
  */
-export function validateTaxNumberInfo (formData: FormInputI): boolean {
-  return formData.taxNumber !== undefined || formData.hasTaxNumber === false
+export function validateTaxNumberInfo (
+  taxData: { taxNumber: string | null, hasTaxNumber: boolean | null },
+  ctx: RefinementCtx
+): never {
+  const t = useNuxtApp().$i18n.t
+  if (taxData.hasTaxNumber) {
+    if (!checkSpecialCharacters(taxData.taxNumber)) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: t('errors.validation.taxNumber.specialCharacter'),
+        path: ['taxNumber'],
+        fatal: true
+      })
+      return z.NEVER
+    }
+    if (!checkTaxNumberLength(taxData.taxNumber)) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: t('errors.validation.taxNumber.invalidLength'),
+        path: ['taxNumber'],
+        fatal: true
+      })
+      return z.NEVER
+    }
+
+    if (!validateTaxNumber(taxData.taxNumber)) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: t('errors.validation.taxNumber.invalidNumber'),
+        path: ['taxNumber'],
+        fatal: true
+      })
+      return z.NEVER
+    }
+  } else if (taxData.hasTaxNumber !== false) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      message: t('errors.validation.taxNumber.required'),
+      path: ['hasTaxNumber'],
+      fatal: true
+    })
+    return z.NEVER
+  }
+  return z.NEVER
 }
 
 /**
  * Check if one of the Tax Residency options has been selected
  * @param formData the form data
  */
-export function validateTaxResidency (formData: FormInputI): boolean {
-  return formData.taxResidency !== undefined
+export function validateTaxResidency (taxResidency: unknown): boolean {
+  return taxResidency !== null && taxResidency !== undefined
 }
 
 /**
@@ -92,8 +137,36 @@ export function validateMissingInfoTextarea (formData: FormInputI): boolean {
  * If the 'Unable to Obtain or Confirm Information' checkbox is checked, the textarea cannot be empty
  * @param formData the form data
  */
-export function validateMissingInfoReason (formData: FormInputI): boolean {
-  return !formData.missingInfo || (formData.missingInfoReason !== '' && formData.missingInfoReason !== undefined)
+export function validateMissingInfoReason (formData: any): boolean {
+  return formData.reason && formData.reason.trim() !== ''
+}
+
+export function validateControlSelectionForSharesAndVotes (form: any, ctx: RefinementCtx): never {
+  const t = useNuxtApp().$i18n.t
+  const hasPercentage = form.percentage !== PercentageRangeE.NO_SELECTION
+  const hasInConcert: boolean = form.inConcertControl
+  const hasControlType: boolean = (form.registeredOwner || form.beneficialOwner || form.indirectControl)
+
+  if (!hasPercentage && !hasControlType && !hasInConcert) {
+    return z.NEVER
+  }
+
+  if (hasControlType && !hasPercentage) {
+    ctx.addIssue({
+      path: ['percentage'],
+      code: z.ZodIssueCode.custom,
+      message: t('errors.validation.controlPercentage.empty')
+    })
+  }
+
+  if ((hasPercentage && !hasControlType) || (hasInConcert && !hasControlType)) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      message: t('errors.validation.sharesAndVotes.required')
+    })
+  }
+
+  return z.NEVER
 }
 
 export function validateFullNameSuperRefine (form: any, ctx: RefinementCtx): never {
@@ -108,31 +181,39 @@ export function validateFullNameSuperRefine (form: any, ctx: RefinementCtx): nev
       ctx.addIssue({
         path: ['fullName'],
         code: z.ZodIssueCode.custom,
-        message: t('errors.validation.fullName.empty')
+        message: t('errors.validation.fullName.empty'),
+        fatal: true
       })
+      return z.NEVER
     }
 
     if (normalizedFullName.length > 150) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
         path: ['fullName'],
-        message: t('errors.validation.fullName.maxLengthExceeded')
+        message: t('errors.validation.fullName.maxLengthExceeded'),
+        fatal: true
       })
+      return z.NEVER
     }
 
     if (!validateNameCharacters(normalizedFullName)) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
         path: ['fullName'],
-        message: t('errors.validation.fullName.specialCharacter')
+        message: t('errors.validation.fullName.specialCharacter'),
+        fatal: true
       })
+      return z.NEVER
     }
   } else {
     ctx.addIssue({
       path: ['fullName'],
       code: z.ZodIssueCode.custom,
-      message: t('errors.validation.fullName.empty')
+      message: t('errors.validation.fullName.empty'),
+      fatal: true
     })
+    return z.NEVER
   }
   return z.NEVER
 }
@@ -143,22 +224,23 @@ export function validateFullNameSuperRefine (form: any, ctx: RefinementCtx): nev
  * Rule 2: a person cannot be a Canadian citizen and permenant resident at the same time
  * @param formData the form data
  */
-export function validateCitizenshipSuperRefine (citizenships: BtrCountryI[], ctx: RefinementCtx): boolean {
+export function validateCitizenshipSuperRefine (citizenships: BtrCountryI[], ctx: RefinementCtx): never {
   const t = useNuxtApp().$i18n.t
   if (citizenships.length === 0) {
     ctx.addIssue({
       code: z.ZodIssueCode.custom,
-      path: ['citizenships'],
-      message: t('errors.validation.citizenship.required')
+      message: t('errors.validation.citizenship.required'),
+      fatal: true
     })
+    return z.NEVER
   }
   const isCanadianCitizen: boolean = citizenships.filter(country => country.alpha_2 === 'CA').length > 0
   const isCanadianPR: boolean = citizenships.filter(country => country.alpha_2 === 'CA_PR').length > 0
   if (isCanadianCitizen && isCanadianPR) {
     ctx.addIssue({
       code: z.ZodIssueCode.custom,
-      path: ['prCitizen'],
-      message: t('errors.validation.citizenship.prCitizen')
+      message: t('errors.validation.citizenship.prCitizen'),
+      fatal: true
     })
   }
   return z.NEVER

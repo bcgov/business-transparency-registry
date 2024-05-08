@@ -1,17 +1,16 @@
 <template>
   <div :id="id" class="flex flex-col py-5">
-    <div v-for="type in types" :key="type.value">
-      <UCheckbox
-        v-model="controlOfDirectors[type.value]"
-        :name="type.value"
-        :label="type.label"
-        :ui="errorTextColor"
-        class="py-2"
-      />
-    </div>
-    <div v-if="hasError" class="py-2 text-sm text-red-500">
-      {{ errors[0].message }}
-    </div>
+    <UFormGroup v-slot="{ error }" :name="name">
+      <div v-for="type in types" :key="type.value">
+        <UCheckbox
+          v-model="controlOfDirectors[type.value]"
+          :name="type.value"
+          :label="type.label"
+          :variant="error ? 'error' : 'bcGov'"
+          class="py-2"
+        />
+      </div>
+    </UFormGroup>
     <UCheckbox
       v-model="controlOfDirectors.inConcertControl"
       name="inConcertControl"
@@ -43,11 +42,9 @@
 </template>
 
 <script setup lang="ts">
-import type { FormError } from '#ui/types'
-
 const prop = defineProps({
   id: { type: String, required: true },
-  errors: { type: Object as PropType<FormError[]>, required: true },
+  name: { type: String, required: false, default: 'ControlOfDirectorsControlGroup' },
   modelValue: {
     type: Object as PropType<ControlOfDirectorsI>,
     default: () => ({
@@ -67,7 +64,4 @@ const types = [
 ]
 
 const controlOfDirectors: Ref<ControlOfDirectorsI> = ref(prop.modelValue)
-const hasError = computed<Boolean>(() => prop.errors.length > 0)
-const errorTextColor = computed(() => (hasError.value ? { label: 'text-red-500' } : {}))
-
 </script>

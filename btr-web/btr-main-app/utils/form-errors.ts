@@ -17,16 +17,15 @@ export function getMissingControlOfSharesError () {
 export function getMissingControlOfDirectorsError () {
   const t = useNuxtApp().$i18n.t
   return {
-    message: t('errors.validation.controlOfDirectors.required'),
-    path: ['controlOfDirectors']
+    message: t('errors.validation.controlOfDirectors.required')
+    // path: ['controlOfDirectors']
   }
 }
 
 export function getMissingBirthDateError () {
   const t = useNuxtApp().$i18n.t
   return {
-    message: t('errors.validation.birthDate.required'),
-    path: ['birthDate']
+    message: t('errors.validation.birthDate.required')
   }
 }
 
@@ -58,7 +57,7 @@ export function getMissingTaxResidencyError () {
   const t = useNuxtApp().$i18n.t
   return {
     message: t('errors.validation.taxResidency.required'),
-    path: ['taxResidency']
+    path: []
   }
 }
 

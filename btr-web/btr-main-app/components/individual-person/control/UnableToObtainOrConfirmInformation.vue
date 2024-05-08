@@ -1,5 +1,5 @@
 <template>
-  <div data-cy="isUnableToObtainOrConfirmInformation">
+  <UFormGroup name="isUnableToObtainOrConfirmInformationCheckBoxey" data-cy="isUnableToObtainOrConfirmInformation">
     <UCheckbox
       v-model="isUnableToObtainOrConfirmInformation"
       name="isUnableToObtainOrConfirmInformation"
@@ -9,39 +9,43 @@
       data-cy="isUnableToObtainOrConfirmInformationCheckbox"
       @change="isUnableToObtainOrConfirmInformationCheckboxChange"
     />
-    <div v-if="isUnableToObtainOrConfirmInformation">
-      <p class="py-3">
-        {{ $t('labels.unableToObtainOrConfirmInformation.description') }}
-      </p>
+  </UFormGroup>
+  <div v-if="isUnableToObtainOrConfirmInformation">
+    <p class="py-3">
+      {{ $t('labels.unableToObtainOrConfirmInformation.description') }}
+    </p>
+    <UFormGroup
+      v-slot="{ error }"
+      :name="name"
+      class="py-5"
+    >
       <BcrosInputsTextArea
         v-model="isUnableToObtainOrConfirmInformationDetails"
         style="min-height: 50px"
         :placeholder="$t('labels.unableToObtainOrConfirmInformation.textAreaPlaceholder')"
-        class="py-2 w-full"
-        :variant="hasError ? 'error' : 'bcGov'"
+        class="w-full"
+        :variant="error ? 'error' : 'bcGov'"
         resize
         :max-char="4000"
-        :errors="errors"
+        :errors="error"
         data-cy="isUnableToObtainOrConfirmInformationTextArea"
         @keydown="isUnableToObtainOrConfirmInformationDetailsKeyDown"
         @change="emit('update:modelValue', isUnableToObtainOrConfirmInformationDetails || undefined)"
       />
-      <BcrosAlertsMessage :flavour="AlertsFlavourE.INFO">
-        <p class="py-2">
-          <strong>{{ $t('labels.unableToObtainOrConfirmInformation.alert.important') }}</strong>
-          {{ $t('labels.unableToObtainOrConfirmInformation.alert.sentence1') }}
-        </p>
-        <p class="py-2">
-          {{ $t('labels.unableToObtainOrConfirmInformation.alert.sentence2') }}
-        </p>
-      </BcrosAlertsMessage>
-    </div>
+    </UFormGroup>
+    <BcrosAlertsMessage :flavour="AlertsFlavourE.INFO">
+      <p class="py-2">
+        <strong>{{ $t('labels.unableToObtainOrConfirmInformation.alert.important') }}</strong>
+        {{ $t('labels.unableToObtainOrConfirmInformation.alert.sentence1') }}
+      </p>
+      <p class="py-2">
+        {{ $t('labels.unableToObtainOrConfirmInformation.alert.sentence2') }}
+      </p>
+    </BcrosAlertsMessage>
   </div>
 </template>
 
 <script setup lang="ts">
-import { FormError } from '#ui/types'
-
 // eslint-disable-next-line func-call-spacing
 const emit = defineEmits<{
   (e: 'update:modelValue', value: string | undefined): void,
@@ -51,7 +55,7 @@ const emit = defineEmits<{
 const props = defineProps({
   modelValue: { type: String, default: undefined },
   missingInfo: { type: Boolean, default: false },
-  errors: { type: Object as PropType<FormError[]>, required: true }
+  name: { type: String, default: 'UnableToObtain' }
 })
 
 const isUnableToObtainOrConfirmInformation = ref(props.missingInfo)
@@ -76,5 +80,4 @@ watch(isUnableToObtainOrConfirmInformationDetails, (newValue) => {
   emit('update:modelValue', newValue)
 })
 
-const hasError = computed<Boolean>(() => props.errors.length > 0)
 </script>

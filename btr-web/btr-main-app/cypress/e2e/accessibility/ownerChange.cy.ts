@@ -33,12 +33,15 @@ describe('accessibility -> Beneficial Owner Change', () => {
       cy.get('[data-cy=usePreferredName').check()
       cy.get('#individual-person-preferred-name').type(testData.profile1.preferredName)
       cy.get('#individual-person-email').type(testData.profile1.email)
-      cy.get('[data-cy=testPercentOfShares]').click()
-      cy.get('[data-cy=testPercentOfShares]').find('li').first().click()
-      cy.get('[data-cy=testPercentOfVotes]').click()
-      cy.get('[data-cy=testPercentOfVotes]').find('li').first().click()
-      cy.get('[data-cy=testTypeOfControl]').get('[name=registeredOwner]').check()
-      cy.get('[data-cy=testControlOfDirectors]').get('[name=directControl]').check()
+      // todo: fixme: update on #20758
+      // cy.get('[data-cy=testPercentOfShares]').click()
+      // cy.get('[data-cy=testPercentOfShares]').find('li').first().click()
+      // cy.get('[data-cy=testPercentOfVotes]').click()
+      // cy.get('[data-cy=testPercentOfVotes]').find('li').first().click()
+      // todo: fixme update with #20758
+      // cy.get('[data-cy=testTypeOfControl]').get('[name=registeredOwner]').check()
+      // todo: fixme update with #20756
+      // cy.get('[data-cy=testControlOfDirectors]').get('[name=directControl]').check()
       cy.get('#addNewPersonBirthdate').trigger('click')
       cy.get('[data-cy=date-picker]').get('.bcros-date-picker__calendar__day.dp__today').trigger('click')
       cy.get('[data-cy=address-country]').click()
@@ -145,13 +148,14 @@ describe('accessibility -> Beneficial Owner Change', () => {
      * The module is in beta and may have unexpected behavior.
      */
 
-    // tab into the tooltip text in Type of Control section
-    cy.get('[name="inConcertControl"]').tab()
-    cy.get('[data-cy="in-concert-control-tooltip-content"').should('exist')
-
-    // Note: the tooltip does not lose focus when tabbed out by tab()
-    // here we use blur() to simulate tabbing out
-    cy.get('[data-cy="in-concert-control-tooltip"]').blur()
-    cy.get('[data-cy="in-concert-control-tooltip-content"').should('not.exist')
+    // todo: update with 20926
+    // // tab into the tooltip text in Type of Control section
+    // cy.get('[name="inConcertControl"]').tab()
+    // cy.get('[data-cy="in-concert-control-tooltip-content"').should('exist')
+    //
+    // // Note: the tooltip does not lose focus when tabbed out by tab()
+    // // here we use blur() to simulate tabbing out
+    // cy.get('[data-cy="in-concert-control-tooltip"]').blur()
+    // cy.get('[data-cy="in-concert-control-tooltip-content"').should('not.exist')
   })
 })

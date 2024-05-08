@@ -1,16 +1,14 @@
 <template>
   <div data-cy="addIndividualPerson" class="w-full">
     <UForm
-      ref="profileFormName"
+      ref="addIndividualForm"
       :schema="formSchema"
-      :state="significantIndividual"
+      :state="inputFormSi"
       class="w-full"
-      :validate="validateFullNameForm"
-      @change="addBtrPayFees"
+      @change="formChange"
     >
       <!--  section: your information  -->
       <BcrosSection
-        :show-section-has-errors="sectionErrors?.isYourOwnInformation?.length > 0"
         :section-title="$t('sectionHeadings.isYourOwnInformation')"
         data-cy="isYourOwnInformation-section"
       >
@@ -18,49 +16,50 @@
           <p class="py-3">
             {{ $t('texts.isYourOwnInformation') }}
           </p>
-          <UCheckbox
-            v-model="isYourOwnInformation"
-            :label="$t('labels.isYourOwnInformation')"
-            data-cy="isYourOwnInformation-checkbox"
-            @change="setIsYourOwnInformation($event)"
-          />
+          <UFormGroup name="workaroundForTriggeringValidationOnEntireForm">
+            <UCheckbox
+              v-model="inputFormSi.name.isYourOwnInformation"
+              :label="$t('labels.isYourOwnInformation')"
+              data-cy="isYourOwnInformation-checkbox"
+              @change="setIsYourOwnInformation($event)"
+            />
+          </UFormGroup>
         </div>
       </BcrosSection>
-
       <!--  section: individuals full name  -->
       <BcrosSection
-        :show-section-has-errors="sectionErrors?.individualsFullName?.length > 0"
+        :show-section-has-errors="hasErrors(['name.'])"
         :section-title="$t('sectionHeadings.individualsFullName')"
       >
         <div class="flex-col w-full">
           <BcrosInputsNameField
             id="individual-person-full-name"
-            v-model="significantIndividual.profile.fullName"
-            name="fullName"
+            v-model="inputFormSi.name.fullName"
+            name="name.fullName"
             :label="$t('labels.fullName')"
             :placeholder="$t('placeholders.fullName')"
-            :variant="fullNameInvalid ? 'error' : 'bcGov'"
             data-cy="testFullName"
-            :is-disabled="isYourOwnInformation"
+            :is-disabled="inputFormSi.name.isYourOwnInformation"
           />
           <div class="pt-5" />
-          <UCheckbox
-            v-model="usePreferredName"
-            :label="$t('texts.preferredName.checkbox')"
-            data-cy="usePreferredName"
-            @click="significantIndividual.profile.preferredName = ''"
-          />
-          <div v-if="usePreferredName" class="pt-3 w-full">
+          <UFormGroup name="doNothing">
+            <UCheckbox
+              v-model="inputFormSi.name.isUsePreferredName"
+              :label="$t('texts.preferredName.checkbox')"
+              data-cy="usePreferredName"
+              @click="inputFormSi.name.preferredName = ''"
+            />
+          </UFormGroup>
+          <div v-if="inputFormSi.name.isUsePreferredName" class="pt-3 w-full">
             <p>
               {{ $t('texts.preferredName.note') }}
             </p>
             <div class="pt-5">
               <BcrosInputsNameField
                 id="individual-person-preferred-name"
-                v-model="significantIndividual.profile.preferredName"
-                name="preferredName"
+                v-model="inputFormSi.name.preferredName"
+                name="name.preferredName"
                 :placeholder="$t('placeholders.preferredName')"
-                :variant="preferredNameInvalid ? 'error' : 'bcGov'"
                 data-cy="testPreferredName"
                 :help="$t('texts.preferredName.hint')"
               />
@@ -68,18 +67,11 @@
           </div>
         </div>
       </BcrosSection>
-    </UForm>
 
-    <!--  section: type of interest or control  -->
-    <BcrosSection
-      :show-section-has-errors="sectionErrors?.typeOfInterestOrControl?.length > 0"
-      :section-title="$t('sectionHeadings.typeOfInterestOrControl')"
-    >
-      <UForm
-        ref="ownerFormBase"
-        :schema="formSchema"
-        :state="significantIndividual"
-        @change="addBtrPayFees"
+      <!--  section: type of interest or control  -->
+      <BcrosSection
+        :show-section-has-errors="false"
+        :section-title="$t('sectionHeadings.typeOfInterestOrControl')"
       >
         <div class="flex-col w-full">
           <p class="font-bold py-3">
@@ -88,181 +80,129 @@
           <p>
             {{ $t('texts.sharesAndVotes.controlPercentage') }}
           </p>
-          <IndividualPersonControlPercentageDropdown
-            id="percentageOfShares"
-            v-model="significantIndividual.percentOfShares"
-            name="percentOfShares"
-            :errors="percentOfSharesErrors"
-            :placeholder="'% of shares'"
-            percentage-type="shares"
-            data-cy="testPercentOfShares"
+          <IndividualPersonControl
+            v-model="inputFormSi.controlOfShares"
+            :name="'controlOfShares'"
           />
-          <IndividualPersonControlPercentageDropdown
-            id="percentageOfVotes"
-            v-model="significantIndividual.percentOfVotes"
-            name="percentOfVotes"
-            :errors="percenOfVotesErrors"
-            :placeholder="'% of votes'"
-            percentage-type="votes"
-            data-cy="testPercentOfVotes"
+          <IndividualPersonControl
+            v-model="inputFormSi.controlOfVotes"
+            :name="'controlOfVotes'"
           />
-          <IndividualPersonControlTypeOfControl
-            id="typeOfControl"
-            v-model="significantIndividual.controlType.sharesVotes"
-            name="typeOfControl"
-            data-cy="testTypeOfControl"
-            :errors="controlOfSharesErrors"
+          <!--          todo: add section control of majority of directors-->
+          <!--          todo: add others section -->
+        </div>
+      </BcrosSection>
+
+      <!--  section: control of majority of directors  -->
+      <BcrosSection
+        :show-section-has-errors="false"
+        :section-title="$t('sectionHeadings.controlOfMajorityOfDirectors')"
+      >
+        <UFormGroup name="containTheErrorChecks" class="w-full flex flex-col">
+          <p class="font-bold py-3">
+            {{ $t('labels.controlOfDirectors') }}
+          </p>
+          <p>
+            {{ $t('texts.controlOfDirectors.text.part1') }}
+            <span class="font-bold">{{ $t('texts.controlOfDirectors.text.part2') }}</span>
+            {{ $t('texts.controlOfDirectors.text.part3') }}
+          </p>
+          <IndividualPersonControlOfDirectors
+            id="controlOfDirectors"
+            v-model="inputFormSi.controlOfDirectors"
+            name="controlOfDirectors"
+            data-cy="testControlOfDirectors"
+          />
+          <p>
+            <span class="font-bold">{{ $t('texts.note') }}</span>
+            {{ $t('texts.controlOfDirectors.note') }}
+          </p>
+        </UFormGroup>
+      </BcrosSection>
+
+      <!--  section: other reasons  -->
+      <BcrosSection
+        :show-section-has-errors="hasErrors(['otherReasons'])"
+        :section-title="$t('sectionHeadings.otherReasons')"
+      >
+        <div class="pt-3 w-full">
+          <IndividualPersonControlOtherReasons
+            id="otherReasons"
+            v-model="inputFormSi.controlOther"
+            name="otherReasons"
+            data-cy="otherReasons"
           />
         </div>
-      </UForm>
-    </BcrosSection>
+      </BcrosSection>
 
-    <!-- section: jointly or in concert  -->
-    <!--      <BcrosSection-->
-    <!--        :show-section-has-errors="sectionErrors?.interestOrRightsJointlyOrInConcert?.length > 0"-->
-    <!--        :section-title="$t('sectionHeadings.interestOrRightsJointlyOrInConcert')"-->
-    <!--      >-->
-    <!--        <div class="flex-col py-5">-->
-    <!--        </div>-->
-    <!--      </BcrosSection>-->
-
-    <!--  section: control of majority of directors  -->
-    <BcrosSection
-      :show-section-has-errors="sectionErrors?.controlOfMajorityOfDirectors?.length > 0"
-      :section-title="$t('sectionHeadings.controlOfMajorityOfDirectors')"
-    >
-      <div class="w-full flex flex-col">
-        <p class="font-bold py-3">
-          {{ $t('labels.controlOfDirectors') }}
-        </p>
-        <p>
-          {{ $t('texts.controlOfDirectors.text.part1') }}
-          <span class="font-bold">{{ $t('texts.controlOfDirectors.text.part2') }}</span>
-          {{ $t('texts.controlOfDirectors.text.part3') }}
-        </p>
-        <IndividualPersonControlOfDirectors
-          id="controlOfDirectors"
-          v-model="significantIndividual.controlType.directors"
-          name="controlOfDirectors"
-          data-cy="testControlOfDirectors"
-          :errors="controlOfDirectorsErrors"
-        />
-        <p>
-          <span class="font-bold">{{ $t('texts.note') }}</span>
-          {{ $t('texts.controlOfDirectors.note') }}
-        </p>
-      </div>
-    </BcrosSection>
-
-    <!--  section: other reasons  -->
-    <BcrosSection
-      :show-section-has-errors="sectionErrors?.otherReasons?.length > 0"
-      :section-title="$t('sectionHeadings.otherReasons')"
-    >
-      <div class="pt-3 w-full">
-        <IndividualPersonControlOtherReasons
-          id="otherReasons"
-          v-model="significantIndividual.controlType.other"
-          name="otherReasons"
-          data-cy="otherReasons"
-        />
-      </div>
-    </BcrosSection>
-
-    <!--  section: effective dates -->
-    <!--      <BcrosSection-->
-    <!--        :show-section-has-errors="sectionErrors?.effectiveDates?.length > 0"-->
-    <!--        :section-title="$t('sectionHeadings.effectiveDates')"-->
-    <!--      >-->
-    <!--        <div class="flex-col py-5">-->
-    <!--        </div>-->
-    <!--      </BcrosSection>-->
-
-    <!--  section: email address  -->
-    <BcrosSection
-      :show-section-has-errors="sectionErrors?.emailAddress?.length > 0"
-      :section-title="$t('sectionHeadings.emailAddress')"
-    >
-      <UForm
-        ref="profileFormEmail"
-        :schema="formSchema"
-        :state="significantIndividual.profile"
-        class="w-full"
-        @change="addBtrPayFees"
+      <!--  section: email address  -->
+      <BcrosSection
+        :show-section-has-errors="hasErrors(['email'])"
+        :section-title="$t('sectionHeadings.emailAddress')"
       >
         <div class="flex-col w-full pt-3">
           <BcrosInputsEmailField
             id="individual-person-email"
-            v-model="significantIndividual.profile.email"
+            v-model="inputFormSi.email"
+            name="email"
             :placeholder="$t('labels.emailAddress')"
-            :variant="emailInvalid ? 'error' : 'bcGov'"
-            :errors="emailErrors"
             data-cy="testEmail"
           />
         </div>
-      </UForm>
-    </BcrosSection>
+      </BcrosSection>
 
-    <!--  section: individual details  -->
-    <BcrosSection
-      :show-section-has-errors="sectionErrors?.individualDetails?.length > 0"
-      :section-title="$t('sectionHeadings.individualDetails')"
-    >
-      <div class="flex-col w-full">
-        <BcrosInputsAddress
-          id="addNewPersonLastKnownAddress"
-          v-model="significantIndividual.profile.address"
-          :label="$t('labels.lastKnownAddress')"
-          :errors="addressErrors"
-        />
-        <div class="flex-col py-5" />
-        <p class="font-bold py-3">
-          {{ $t('labels.birthdate') }}
-        </p>
-        <BcrosInputsDateSelect
-          id="addNewPersonBirthdate"
-          name="profile.birthDate"
-          class="mt-3"
-          :initial-date="significantIndividual.profile.birthDate
-            ? dateStringToDate(significantIndividual.profile.birthDate) : undefined"
-          :max-date="new Date()"
-          :placeholder="$t('placeholders.dateSelect.birthdate')"
-          :variant="birthDateErrors.length > 0 ? 'error' : 'bcGov'"
-          :errors="birthDateErrors"
-          @selection="significantIndividual.profile.birthDate = dateToString($event, 'YYYY-MM-DD')"
-        />
-      </div>
-    </BcrosSection>
+      <!--  section: individual details  -->
+      <BcrosSection
+        :show-section-has-errors="hasErrors(['birthDate', 'address.'])"
+        :section-title="$t('sectionHeadings.individualDetails')"
+      >
+        <div class="flex-col w-full">
+          <BcrosInputsAddress
+            id="addNewPersonLastKnownAddress"
+            v-model="inputFormSi.address"
+            :label="$t('labels.lastKnownAddress')"
+            name="address"
+          />
+          <div class="flex-col py-5" />
+          <p class="font-bold py-3">
+            {{ $t('labels.birthdate') }}
+          </p>
+          <BcrosInputsDateSelect
+            id="addNewPersonBirthdate"
+            name="birthDate"
+            class="mt-3"
+            :initial-date="!!inputFormSi.birthDate ? dateStringToDate(inputFormSi.birthDate) : null"
+            :max-date="new Date()"
+            :placeholder="$t('placeholders.dateSelect.birthdate')"
+            @selection="inputFormSi.birthDate = dateToString($event, 'YYYY-MM-DD')"
+          />
+        </div>
+      </BcrosSection>
 
-    <!--  section: citizenship or PR  -->
-    <BcrosSection
-      :show-section-has-errors="sectionErrors?.citizenshipOrPR?.length > 0"
-      :section-title="$t('sectionHeadings.citizenshipOrPR')"
-    >
-      <div class="flex-col w-full">
-        <BcrosInputsCountriesOfCitizenship
-          id="countriesOfCitizenship"
-          v-model="significantIndividual.profile.citizenships"
-          :errors="citizenshipErrors"
-        />
-        <p>
-          {{ $t('labels.countryOfCitizenship.note') }}
-        </p>
-      </div>
-    </BcrosSection>
+      <!--  section: citizenship or PR  -->
+      <BcrosSection
+        :show-section-has-errors="hasErrors(['citizenships'])"
+        :section-title="$t('sectionHeadings.citizenshipOrPR')"
+      >
+        <div class="flex-col w-full">
+          <BcrosInputsCountriesOfCitizenship
+            id="countriesOfCitizenship"
+            v-model="inputFormSi.citizenships"
+            name="citizenships"
+            :help="$t('labels.countryOfCitizenship.hint')"
+          />
+          <p>
+            {{ $t('labels.countryOfCitizenship.note') }}
+          </p>
+        </div>
+      </BcrosSection>
 
-    <!--  section: tax details  -->
-    <BcrosSection
-      :show-section-has-errors="sectionErrors?.taxDetails?.length > 0"
-      :section-title="$t('sectionHeadings.taxDetails')"
-    >
-      <div class="w-full flex flex-col">
-        <UForm
-          ref="profileFormTax"
-          :schema="formSchema"
-          :state="significantIndividual.profile"
-          @change="addBtrPayFees"
-        >
+      <!--  section: tax details  -->
+      <BcrosSection
+        :show-section-has-errors="hasErrors(['tax.', 'isTaxResident'])"
+        :section-title="$t('sectionHeadings.taxDetails')"
+      >
+        <div class="w-full flex flex-col">
           <p class="font-bold py-3">
             {{ $t('labels.taxNumber') }}
           </p>
@@ -271,46 +211,43 @@
           </p>
           <IndividualPersonTaxInfoTaxNumber
             id="addNewPersonTaxNumber"
-            v-model:hasTaxNumber="significantIndividual.profile.hasTaxNumber"
-            v-model:taxNumber="significantIndividual.profile.taxNumber"
-            name="taxNumber"
-            :variant="taxNumebrInvalid || taxNumberErrors.length > 0 ? 'error' : 'bcGov'"
-            :errors="taxNumberErrors"
+            v-model:hasTaxNumber="inputFormSi.tax.hasTaxNumber"
+            v-model:taxNumber="inputFormSi.tax.taxNumber"
+            name="tax"
+            variant="bcGov"
             data-cy="testTaxNumber"
           />
-        </UForm>
-        <div>
-          <p class="font-bold py-3">
-            {{ $t('labels.taxResidency') }}
-          </p>
-          <p>
-            {{ $t('texts.taxResidency') }}
-          </p>
-          <IndividualPersonTaxInfoTaxResidency
-            id="addNewPersonTaxResidency"
-            v-model="significantIndividual.profile.isTaxResident"
-            name="isTaxResident"
-            :errors="taxResidencyErrors"
-            data-cy="testTaxResidency"
+          <div>
+            <p class="font-bold py-3">
+              {{ $t('labels.taxResidency') }}
+            </p>
+            <p>
+              {{ $t('texts.taxResidency') }}
+            </p>
+            <IndividualPersonTaxInfoTaxResidency
+              v-model="inputFormSi.isTaxResident"
+              name="isTaxResident"
+              variant="bcGov"
+              data-cy="testTaxResidency"
+            />
+          </div>
+        </div>
+      </BcrosSection>
+      <!--  section: unable to obtain or confirm  -->
+      <BcrosSection
+        :show-section-has-errors="hasErrors(['missingInfo'])"
+        :section-title="$t('sectionHeadings.unableToObtainOrConfirmInformation')"
+      >
+        <div class="w-full">
+          <IndividualPersonControlUnableToObtainOrConfirmInformation
+            v-model="inputFormSi.missingInfoReason"
+            name="missingInfoReason"
+            :missing-info="inputFormSi.couldNotProvideMissingInfo"
+            @update:missing-info="inputFormSi.couldNotProvideMissingInfo = $event"
           />
         </div>
-      </div>
-    </BcrosSection>
-
-    <!--  section: unable to obtain or confirm  -->
-    <BcrosSection
-      :show-section-has-errors="sectionErrors?.unableToObtainOrConfirmInformation?.length > 0"
-      :section-title="$t('sectionHeadings.unableToObtainOrConfirmInformation')"
-    >
-      <div class="w-full">
-        <IndividualPersonControlUnableToObtainOrConfirmInformation
-          v-model="significantIndividual.missingInfoReason"
-          :missing-info="missingInfo"
-          :errors="missingInfoReasonErrors"
-          @update:missing-info="missingInfo = $event"
-        />
-      </div>
-    </BcrosSection>
+      </BcrosSection>
+    </UForm>
 
     <div class="grid mt-10 w-full">
       <div class="flex justify-between">
@@ -347,12 +284,23 @@
 </template>
 
 <script setup lang="ts">
-import { z, ZodError, ZodIssue } from 'zod'
+import { z } from 'zod'
 import type { FormError } from '#ui/types'
-import { SignificantIndividualAddNewErrorsI } from '~/interfaces/significant-individual/add-new-errors-i'
-import { validateFullNameSuperRefine } from '~/utils/validation'
-
-const t = useNuxtApp().$i18n.t
+import { BtrCountryI } from '../../../../btr-common-components/interfaces/btr-address-i'
+import { validateControlSelectionForSharesAndVotes, validateFullNameSuperRefine } from '~/utils/validation'
+import { SignificantIndividualI } from '~/interfaces/significant-individual-i'
+import { FilingActionE } from '~/enums/filing-action-e'
+import {
+  AddressSchema,
+  ControlOfDirectorsSchema,
+  SiControlOfSchema,
+  SiNameSchema,
+  SiSchema, SiSchemaType,
+  TaxSchema
+} from '~/utils/si-schema/definitions'
+import { convertSchemaToSi, convertSiToSchema } from '~/utils/si-schema/converters'
+import { getDefaultInputFormSi } from '~/utils/si-schema/defaults'
+import { CustomSiSchemaErrorMap } from '~/utils/si-schema/errorMessagesMap'
 
 const emits = defineEmits<{
   add: [value: SignificantIndividualI],
@@ -363,367 +311,117 @@ const emits = defineEmits<{
 
 const props = defineProps<{
   index?: number,
-  sectionErrors?: SignificantIndividualAddNewErrorsI,
   setSignificantIndividual?: SignificantIndividualI,
   startDate?: string
 }>()
 
+const t = useNuxtApp().$i18n.t
 const bcrosAccount = useBcrosAccount()
 
-const defaultSI = getEmptySI(props.startDate || '')
-// NOTE: not setting this as modelValue because it is a nested object so mutating it gets complicated
-const significantIndividual: Ref<SignificantIndividualI> = ref(props.setSignificantIndividual || defaultSI)
+const isEditing = ref(false)
 
-const isEditing = computed(() => significantIndividual.value.action === FilingActionE.EDIT)
+// extend existing schema with
+const SiControlOfExtended = SiControlOfSchema.superRefine(validateControlSelectionForSharesAndVotes)
+const SiNameExtended = SiNameSchema
+  .extend({ preferredName: getPreferredNameValidator() })
+  .superRefine(validateFullNameSuperRefine)
 
-const isYourOwnInformation = ref(false)
-const setIsYourOwnInformation = (event) => {
-  if (event.target.checked) {
-    significantIndividual.value.profile.fullName = bcrosAccount.userFullName
-  } else {
-    significantIndividual.value.profile.fullName = ''
-  }
-}
-
-watch(() => props.startDate, (val) => {
-  significantIndividual.value.startDate = val
+const AddressSchemaExtended = AddressSchema.extend({
+  country: z.union([z.null(), z.object({ name: z.string(), alpha_2: z.string() })])
+    .refine((val: BtrCountryI | null) => { return val?.name !== '' }, t('errors.validation.address.country'))
 })
 
-function addSignificantIndividual () {
-  // FUTURE: validate form / scroll to 1st error
-  // emit significantIndividual so it gets added to the filing
-  emits('add', significantIndividual.value)
+const SiSchemaExtended = SiSchema.extend({
+  couldNotProvideMissingInfo: z.literal(false),
+  name: SiNameExtended,
+  controlOfShares: SiControlOfExtended,
+  controlOfVotes: SiControlOfExtended,
+  controlOfDirectors: ControlOfDirectorsSchema.refine(validateControlOfDirectors, getMissingControlOfDirectorsError()),
+  email: getEmailValidator(),
+  address: AddressSchemaExtended,
+  tax: TaxSchema.superRefine(validateTaxNumberInfo),
+  isTaxResident: z.boolean()
+})
+
+z.setErrorMap(CustomSiSchemaErrorMap)
+
+const formSchema = z.discriminatedUnion('couldNotProvideMissingInfo', [
+  z.object({
+    couldNotProvideMissingInfo: z.literal(true),
+    missingInfoReason: z.string().transform(s => s.trim()).pipe(z.string().min(1)),
+    name: SiNameExtended
+  }),
+  SiSchemaExtended
+])
+
+const addIndividualForm = ref()
+
+const formChange = async () => {
+  await addBtrPayFees()
 }
 
-function updateSignificantIndividual () {
-  emits('update', { index: props.index, updatedSI: significantIndividual.value })
+function hasErrors (sectionErrorPaths: string[]): boolean {
+  if (!addIndividualForm.value?.errors) {
+    return false
+  }
+  for (const errorPath of sectionErrorPaths) {
+    const errors = addIndividualForm.value.errors
+    if (!errors || errors.length === 0) {
+      return false
+    }
+
+    const hasErrors = errors.filter(errObj => errObj.path.includes(errorPath)).length > 0
+    if (hasErrors) {
+      return true
+    }
+  }
+
+  return false
 }
-
-const profileFormName = ref()
-const profileFormEmail = ref()
-const profileFormTax = ref()
-const ownerFormBase = ref()
-const usePreferredName = ref(significantIndividual.value.profile.preferredName !== '')
-
-const fullNameInvalid = ref(false)
-const preferredNameInvalid = ref(false)
-const emailInvalid = ref(false)
-const taxNumebrInvalid = ref(false)
-const missingInfo = ref(
-  significantIndividual.value.missingInfoReason !== undefined && significantIndividual.value.missingInfoReason !== ''
-)
-
-const percentOfSharesErrors: Ref<FormError[]> = ref([])
-const percenOfVotesErrors: Ref<FormError[]> = ref([])
-
-const controlOfSharesErrors: Ref<FormError[]> = ref([])
-const controlOfDirectorsErrors: Ref<FormError[]> = ref([])
-const birthDateErrors: Ref<FormError[]> = ref([])
-const emailErrors: Ref<FormError[]> = ref([])
-const citizenshipErrors: Ref<FormError[]> = ref([])
-const taxNumberErrors: Ref<FormError[]> = ref([])
-const taxResidencyErrors: Ref<FormError[]> = ref([])
-const missingInfoReasonErrors: Ref<FormError[]> = ref([])
-const addressErrors: Ref<FormError[]> = ref([])
-
-const validationResult = ref()
 
 function handleDoneButtonClick () {
-  validateForm()
-  if (validationResult.value.success) {
+  const res = formSchema.safeParse(inputFormSi)
+  let errors: FormError[] = []
+  addIndividualForm.value.clear()
+  if (!res.success) {
+    errors = res.error.issues.map(issue => ({ message: issue.message, path: issue.path.join('.') }))
+    console.error(errors)
+    addIndividualForm.value.setErrors(errors)
+  } else {
+    const sii: SignificantIndividualI = convertSchemaToSi(inputFormSi, props.startDate || '', isEditing.value)
     if (isEditing.value) {
-      updateSignificantIndividual()
+      emits('update', { index: props.index, updatedSI: sii })
     } else {
-      addSignificantIndividual()
+      emits('add', sii)
     }
   }
 }
 
-function validateForm () {
-  const data: FormInputI = {
-    isYourOwnInformation: isYourOwnInformation.value,
-    fullName: significantIndividual.value.profile.fullName,
-    preferredName: significantIndividual.value.profile.preferredName,
-    email: significantIndividual.value.profile.email,
-    percentOfShares: significantIndividual.value.percentOfShares,
-    percentOfVotes: significantIndividual.value.percentOfVotes,
-    controlOfShares: significantIndividual.value.controlType.sharesVotes,
-    otherReasons: significantIndividual.value.controlType.other,
-    controlOfDirectors: significantIndividual.value.controlType.directors,
-    birthDate: significantIndividual.value.profile.birthDate,
-    country: {
-      name: significantIndividual.value.profile.address.country.name,
-      alpha_2: significantIndividual.value.profile.address.country.alpha_2
-    },
-    line1: significantIndividual.value.profile.address.line1,
-    line2: significantIndividual.value.profile.address.line2,
-    city: significantIndividual.value.profile.address.city,
-    region: significantIndividual.value.profile.address.region,
-    postalCode: significantIndividual.value.profile.address.postalCode,
-    locationDescription: significantIndividual.value.profile.address.locationDescription,
-    citizenshipCA: significantIndividual.value.profile.citizenshipCA,
-    citizenships: significantIndividual.value.profile.citizenships,
-    hasTaxNumber: significantIndividual.value.profile.hasTaxNumber,
-    taxNumber: significantIndividual.value.profile.taxNumber,
-    taxResidency: significantIndividual.value.profile.isTaxResident,
-    missingInfo: missingInfo.value,
-    missingInfoReason: significantIndividual.value.missingInfoReason
-  }
-
-  validationResult.value = formSchema.safeParse(data)
-}
-
-watch(() => profileFormName.value?.errors, (val: { path: string }[]) => {
-  fullNameInvalid.value = val.filter(val => val.path === 'fullName').length > 0
-  preferredNameInvalid.value = val.filter(val => val.path === 'preferredName').length > 0
-})
-
-watch(() => profileFormEmail.value?.errors, (val: { path: string }[]) => {
-  emailInvalid.value = val.filter(val => val.path === 'email').length > 0
-})
-
-watch(() => profileFormTax.value?.errors, (val: { path: string }[]) => {
-  taxNumebrInvalid.value = val.filter(val => val.path === 'taxNumber').length > 0
-})
-
-const validateFullNameForm = () => {
-  const dataToValidate = {
-    isYourOwnInformation: isYourOwnInformation.value,
-    fullName: significantIndividual.value.profile.fullName,
-    preferredName: significantIndividual.value.profile.preferredName
-  }
-  const afterParse = z
-    .object({
-      isYourOwnInformation: z.boolean(),
-      fullName: z.union([z.string(), z.undefined()]),
-      preferredName: getPreferredNameValidator()
-    }).superRefine(validateFullNameSuperRefine)
-    .safeParse(dataToValidate)
-
-  if (!afterParse.success) {
-    const newErrors = afterParse.error.issues.map(err => ({
-      // Map validation errors to { path: string, message: string }
-      message: err.message,
-      path: err.path.join('.')
-    })
-    )
-    return newErrors
+const setIsYourOwnInformation = (event: any) => {
+  if (event.target.checked) {
+    inputFormSi.name.fullName = bcrosAccount.userFullName
   } else {
-    return []
+    inputFormSi.name.fullName = ''
   }
 }
 
-watch(() => significantIndividual.value.profile.citizenships, () => {
-  validateCitizenship()
-}, { deep: true })
+const inputFormSi: SiSchemaType = reactive(getDefaultInputFormSi())
 
-const validateCitizenship = () => {
-  const afterParse = z
-    .object({
-      citizenships: z.array(z.object({ name: z.string(), alpha_2: z.string() })).superRefine(
-        validateCitizenshipSuperRefine
-      )
-    }).safeParse({ citizenships: significantIndividual.value.profile.citizenships })
-
-  if (afterParse.success) {
-    citizenshipErrors.value = []
-  } else {
-    const newErrors: FormError[] = afterParse.error.issues.map(err => ({
-      message: err.message,
-      path: err.path.join('.')
-    }))
-    citizenshipErrors.value = newErrors
-  }
+if (props.setSignificantIndividual) {
+  isEditing.value = FilingActionE.EDIT === props.setSignificantIndividual.action
+  const propsSi = convertSiToSchema(props.setSignificantIndividual)
+  Object.assign(inputFormSi, propsSi)
 }
 
-watch(() => validationResult.value, (val: ZodError) => {
+// needed because dropdown is not built out of NuxtUI components so it does not trigger validation automatically
+watch(() => inputFormSi.citizenships, (newValue) => {
+  const val = validateCitizenshipValidator().safeParse(newValue)
+  let errors: { path: string, message: string }[] = []
   if (!val.success) {
-    const errors: FormError[] = []
-    val.error.issues.forEach((issue: ZodIssue[]) => {
-      issue.path.forEach((pathName: string) => {
-        errors.push({
-          path: pathName,
-          message: issue.message
-        })
-      })
-    })
-
-    profileFormName.value.setErrors(errors)
-    profileFormEmail.value.setErrors(errors)
-    profileFormTax.value.setErrors(errors)
-    addressErrors.value = errors
-    percentOfSharesErrors.value = errors.filter((error: FormError) => error.path === 'percentOfShares')
-    percenOfVotesErrors.value = errors.filter((error: FormError) => error.path === 'percentOfVotes')
-    controlOfSharesErrors.value = errors.filter((error: FormError) => error.path === 'controlOfShares')
-    controlOfDirectorsErrors.value = errors.filter((error: FormError) => error.path === 'controlOfDirectors')
-    birthDateErrors.value = errors.filter((error: FormError) => error.path === 'birthDate')
-    emailErrors.value = errors.filter((error: FormError) => error.path === 'email')
-    citizenshipErrors.value = errors.filter(
-      (error: FormError) => (error.path === 'prCitizen' || error.path === 'citizenships')
+    errors = val.error.issues.map(
+      (issue: z.ZodIssue) => ({ message: issue.message, path: 'citizenships' })
     )
-    taxNumberErrors.value = errors.filter((error: FormError) => error.path === 'hasTaxNumber')
-    taxResidencyErrors.value = errors.filter((error: FormError) => error.path === 'taxResidency')
-    missingInfoReasonErrors.value = errors.filter((error: FormError) => error.path === 'missingInfoReason')
   }
-})
-
-// When the percentOfShares and percentOfVotes are changed, re-assess the confition and remove errors if necessary
-watch(
-  [() => significantIndividual.value.percentOfShares, () => significantIndividual.value.percentOfVotes],
-  (values: PercentageRangeE[]) => {
-    // If the percenOfShares and percentOfVotes are not empty, remove the empty value errors
-    if (values[0] !== PercentageRangeE.NO_SELECTION || values[1] !== PercentageRangeE.NO_SELECTION) {
-      removeEmptyPercentageErrors()
-    }
-
-    // If the percentOfShares and percentOfVotes are < 25%, and the "in-concert control" checkbox is not checked,
-    // the type of control error should be remove as this field is now optional
-    if (values[0] === PercentageRangeE.LESS_THAN_25 && values[1] === PercentageRangeE.LESS_THAN_25 &&
-      !significantIndividual.value.controlType.sharesVotes.inConcertControl) {
-      controlOfSharesErrors.value = []
-    }
-  }
-)
-
-// When the control type checkboxes are changed, re-assess the condition and remove errors if necessary
-watch(
-  [() => significantIndividual.value.controlType.sharesVotes.registeredOwner,
-    () => significantIndividual.value.controlType.sharesVotes.beneficialOwner,
-    () => significantIndividual.value.controlType.sharesVotes.indirectControl,
-    () => significantIndividual.value.controlType.sharesVotes.inConcertControl
-  ],
-  (values: boolean[]) => {
-    // if any of the control type is selected, remove the type of control error
-    if (values[0] || values[1] || values[2]) {
-      controlOfSharesErrors.value = []
-    }
-
-    // When the "in-concert control" checkbox is unchecked
-    if (!values[3]) {
-      const shares: PercentageRangeE = significantIndividual.value.percentOfShares
-      const votes: PercentageRangeE = significantIndividual.value.percentOfVotes
-      // if the percentOfShares and percentOfVotes are < 25%, remove the type of control error
-      if (
-        (shares === PercentageRangeE.NO_SELECTION || shares === PercentageRangeE.LESS_THAN_25) &&
-        (votes === PercentageRangeE.NO_SELECTION || votes === PercentageRangeE.LESS_THAN_25)
-      ) {
-        controlOfSharesErrors.value = []
-      }
-
-      // if no control type is selected, remove the errors for missing percentage of shares and votes
-      if (!values[0] && !values[1] && !values[2]) {
-        removeEmptyPercentageErrors()
-      }
-    }
-  }
-)
-
-function removeEmptyPercentageErrors () {
-  percentOfSharesErrors.value = []
-  percenOfVotesErrors.value = []
-}
-
-// When the type of director control checkboxes are changed, re-assess the condition and remove errors if necessary
-watch(
-  [() => significantIndividual.value.controlType.directors.directControl,
-    () => significantIndividual.value.controlType.directors.indirectControl,
-    () => significantIndividual.value.controlType.directors.significantInfluence,
-    () => significantIndividual.value.controlType.directors.inConcertControl
-  ],
-  (values: boolean[]) => {
-    // if any of the control type is selected, or if the "in-concert control" checkbox is unchecked
-    // remove the type of control error
-    if (values[0] || values[1] || values[2] || !values[3]) {
-      controlOfDirectorsErrors.value = []
-    }
-  }
-)
-
-// When the birth date is entered, remove the empty birth date error
-watch(() => significantIndividual.value.profile.birthDate, (val: string) => {
-  if (val !== '') {
-    birthDateErrors.value = []
-  }
-})
-
-// When one of the tax number radio buttons is selected, remove the empty tax number error
-watch(() => significantIndividual.value.profile.hasTaxNumber, () => {
-  taxNumberErrors.value = []
-})
-
-// When one of the tax residency radio buttons is selected, remove the empty tax residency error
-watch(() => significantIndividual.value.profile.isTaxResident, () => {
-  taxResidencyErrors.value = []
-})
-
-watch(() => significantIndividual.value.missingInfoReason, (val: string) => {
-  if (val !== '') {
-    missingInfoReasonErrors.value = []
-  }
-})
-
-watch(() => missingInfo.value, (val: boolean) => {
-  if (!val) {
-    missingInfoReasonErrors.value = []
-  }
-})
-
-const formSchema = z.object({
-  isYourOwnInformation: z.boolean(),
-  fullName: z.union([z.undefined(), z.string()]),
-  preferredName: getPreferredNameValidator(),
-  email: getEmailValidator(),
-  percentOfShares: z.nativeEnum(PercentageRangeE),
-  percentOfVotes: z.nativeEnum(PercentageRangeE),
-  controlOfShares: z.object({
-    registeredOwner: z.boolean(),
-    beneficialOwner: z.boolean(),
-    indirectControl: z.boolean(),
-    inConcertControl: z.boolean()
-  }),
-  otherReasons: z.string().optional(),
-  controlOfDirectors: z.object({
-    directControl: z.boolean(),
-    indirectControl: z.boolean(),
-    significantInfluence: z.boolean(),
-    inConcertControl: z.boolean()
-  }),
-  birthDate: z.union([z.string(), z.null()]),
-  country: getAddressCountryValidator(),
-  line1: getAddressLine1Validator(),
-  line2: z.string().optional(),
-  city: getAddressCityValidator(),
-  region: getAddressRegionValidator(),
-  postalCode: getAddressPostalCodeValidator(),
-  locationDescription: z.string().optional(),
-  citizenshipCA: z.union([z.nativeEnum(CitizenshipTypeE), z.literal('')]),
-  citizenships: z.array(z.object({ name: z.string(), alpha_2: z.string() })).superRefine(
-    validateCitizenshipSuperRefine
-  ),
-  hasTaxNumber: z.boolean().optional(),
-  taxNumber: getTaxNumberValidator(),
-  taxResidency: z.boolean().optional(),
-  missingInfo: z.boolean().optional(),
-  missingInfoReason: z.string().optional()
-}).refine(
-  validateSharesAndVotes, getMissingSharesAndVotesError()
-).refine(
-  validateControlOfShares, getMissingControlOfSharesError()
-).refine(
-  validateControlOfDirectors, getMissingControlOfDirectorsError()
-).refine(
-  validateOtherReasons
-).refine(
-  validateBirthDate, getMissingBirthDateError()
-).refine(
-  validateTaxNumberInfo, getMissingTaxNumberInfoError()
-).refine(
-  validateTaxResidency, getMissingTaxResidencyError()
-).refine(
-  validateMissingInfoTextarea
-).refine(
-  validateMissingInfoReason, getNoMissingInfoReasonError()
-).superRefine(
-  validateFullNameSuperRefine
-)
+  addIndividualForm.value.setErrors(errors, 'citizenships')
+}, { deep: true })
 </script>

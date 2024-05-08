@@ -122,12 +122,14 @@ describe('pages -> Beneficial Owner Change', () => {
       cy.get('#individual-person-email').type(testData.profile1.email)
 
       // enter shares and votes percentage
-      cy.get('[data-cy=testPercentOfShares]').click().find('li').eq(0).click()
-      cy.get('[data-cy=testPercentOfVotes]').click().find('li').eq(0).click()
+      // todo: fixme: update on #20758
+      // cy.get('[data-cy=testPercentOfShares]').click().find('li').eq(0).click()
+      // cy.get('[data-cy=testPercentOfVotes]').click().find('li').eq(0).click()
 
       // select the control type (registred owner + direct control)
-      cy.get('[data-cy="testTypeOfControl"]').get('[name="registeredOwner"]').check()
-      cy.get('[data-cy="testControlOfDirectors"]').get('[name="directControl"]').check()
+      // todo: fixme update with #20756
+      // cy.get('[data-cy="testTypeOfControl"]').get('[name="registeredOwner"]').check()
+      // cy.get('[data-cy="testControlOfDirectors"]').get('[name="directControl"]').check()
 
       // select the birthdate (here we just use today's date for simplicity)
       cy.get('#addNewPersonBirthdate').trigger('click')

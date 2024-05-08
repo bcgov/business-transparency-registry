@@ -1,3 +1,5 @@
+import { BtrAddressI } from '../../btr-common-components/interfaces/btr-address-i'
+
 export interface ProfileI {
   address: BtrAddressI
   competency: {

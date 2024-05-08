@@ -26,8 +26,8 @@
 
 <script setup lang="ts">
 defineProps<{
-  text: { type: String, required: false, default: '' }
-  title: { type: String, required: false, default: '' }
+  text: { type: string, required: false, default: '' }
+  title: { type: string, required: false, default: '' }
 }>()
 const isExpanded = ref(false)
 

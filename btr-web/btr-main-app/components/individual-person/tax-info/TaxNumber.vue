@@ -1,118 +1,70 @@
 <template>
   <div class="flex flex-col py-5">
-    <div class="flex mb-2 py-1">
-      <URadio
-        id="taxNumberRadioButton"
-        v-model="selectedButton"
-        :value="HAS_TAX_NUMBER"
-        class="mt-3"
-        :aria-label="$t('placeholders.taxNumber')"
-        @change="handleRadioButtonChange(HAS_TAX_NUMBER)"
-      />
-      <UFormGroup :name="name" class="ml-5">
+    <div class="flex flex-row mb-2 py-1">
+      <UFormGroup name="doNothingJustWatch">
+        <URadio
+          id="taxNumberRadioButton4"
+          v-model="hasTaxNumber"
+          class="mt-3"
+          :value="true"
+          :aria-label="$t('placeholders.taxNumber')"
+        />
+      </UFormGroup>
+      <UFormGroup
+        ref="taxNumberInputGroupRef"
+        v-slot="{ error }"
+        :name="name+'.taxNumber'"
+        class="ml-5"
+      >
         <UInput
           v-model="taxNumber"
           data-cy="tax-number-input"
           type="text"
-          :variant="variant"
+          :variant="error ? 'error' : variant"
           :placeholder="$t('placeholders.taxNumber')"
           class="w-80"
-          @blur="formatInput"
-          @focus="handleInputFocus"
+          @focusout="formatInput"
+          @focus="hasTaxNumber = true"
         />
       </UFormGroup>
     </div>
-    <div class="flex items-center mb-2 py-2">
-      <URadio
-        id="noTaxNumberRadioButton"
-        v-model="selectedButton"
-        :value="NO_TAX_NUMBER"
-        @change="handleRadioButtonChange(NO_TAX_NUMBER)"
-      />
-      <label for="noTaxNumberRadioButton" class="ml-5" :class="{ 'text-red-500': hasError}">
-        {{ $t('labels.noTaxNumberLabel') }}
-      </label>
-    </div>
-    <div v-if="hasError" class="text-sm text-red-500">
-      {{ errors[0].message }}
-    </div>
+
+    <UFormGroup v-slot="{ error }" :name="name + '.hasTaxNumber'">
+      <div class="flex flex-row items-center mb-2 py-2">
+        <URadio
+          id="noTaxNumberRadioButton"
+          v-model="hasTaxNumber"
+          :value="false"
+          :variant="error ? 'error' : variant"
+          @change="taxNumber = null"
+        />
+        <label for="noTaxNumberRadioButton" class="ml-5" :class="{ 'text-red-500': error}">
+          {{ $t('labels.noTaxNumberLabel') }}
+        </label>
+      </div>
+    </UFormGroup>
   </div>
 </template>
 
 <script setup lang="ts">
-import type { FormError } from '#ui/types'
+const hasTaxNumber = defineModel('hasTaxNumber', { type: [Boolean, null], required: false, default: null })
+const taxNumber = defineModel('taxNumber', { type: [String, null], required: false, default: null })
 
-const HAS_TAX_NUMBER = 'hasTaxNumber'
-const NO_TAX_NUMBER = 'noTaxNumber'
+defineProps<{ name: String, variant: String }>()
 
-const props = defineProps({
-  id: { type: String, required: true },
-  name: { type: String, default: 'name' },
-  errors: { type: Object as PropType<FormError[]>, required: true },
-  hasTaxNumber: { type: [Boolean, undefined], required: false, default: undefined },
-  taxNumber: { type: [String, undefined], required: false, default: undefined },
-  variant: { type: String, default: 'bcGov' }
-})
-
-// eslint-disable-next-line func-call-spacing
-const emit = defineEmits<{
-  (e: 'update:hasTaxNumber', value: boolean | undefined): void
-  (e: 'update:taxNumber', value: string | undefined): void
-}>()
-
-const emitUpdates = (hasTaxNumber: boolean | undefined, taxNumber: string | undefined) => {
-  emit('update:hasTaxNumber', hasTaxNumber)
-  emit('update:taxNumber', taxNumber)
-}
-
-// Indicate which radio button is selected.
-const selectedButton = ref(
-  props.hasTaxNumber === undefined ? '' : (props.hasTaxNumber ? HAS_TAX_NUMBER : NO_TAX_NUMBER)
-)
-
-const hasError = computed<Boolean>(() => {
-  return props.errors.length > 0
-})
-
-// The tax number input value
-const taxNumber = ref(props.taxNumber ? props.taxNumber : '')
-
-watch(taxNumber, (newTaxNumber) => {
-  // when the user starts typing, the radio HAS_TAX_NUMBER button should be selected
-  if (newTaxNumber !== '') {
-    selectedButton.value = HAS_TAX_NUMBER
-    emitUpdates(true, newTaxNumber)
-  }
-})
-
-const handleRadioButtonChange = (value) => {
-  selectedButton.value = value
-  if (value === NO_TAX_NUMBER) {
-    taxNumber.value = ''
-    emitUpdates(false, undefined)
-  } else {
-    emitUpdates(true, taxNumber.value)
-  }
-}
-
-const handleInputFocus = () => {
-  if (selectedButton.value !== HAS_TAX_NUMBER) {
-    selectedButton.value = HAS_TAX_NUMBER
-  }
-}
-
+const taxNumberInputGroupRef = ref() // UFormGroup ref
 const formatInput = () => {
-  // const newValue = formatTaxNumber(taxNumber.value)
-  const newValue = formatTaxNumber(taxNumber.value)
-  taxNumber.value = newValue
-  emitUpdates(true, newValue)
+  taxNumber.value = formatTaxNumber(taxNumber.value)
 }
 
 /**
  * Format the tax number to "xxx xxx xxx"
  * @param {string} taxNumber - string representation of the tax number input
  */
-const formatTaxNumber = (taxNumber: string): string => {
+const formatTaxNumber = (taxNumber: string | null): string | null => {
+  if (taxNumber === null) {
+    return null
+  }
   // if the tax number cannot pass the above validation checks, it will not be formatted
   if (!checkSpecialCharacters(taxNumber) || !checkTaxNumberLength(taxNumber) || !validateTaxNumber(taxNumber)) {
     return taxNumber
