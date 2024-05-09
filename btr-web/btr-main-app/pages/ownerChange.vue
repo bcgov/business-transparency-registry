@@ -33,7 +33,10 @@
       <p class="mt-5">
         {{ $t('texts.significantIndividuals') }}
       </p>
-      <BcrosHelpTip :title="$t('helpTitles.significantIndividuals')">
+      <BcrosHelpTip
+        :title="$t('helpTitles.significantIndividuals.closed')"
+        :title-expanded="$t('helpTitles.significantIndividuals.expanded')"
+      >
         <template #default>
           <ul class="mx-3">
             <li>{{ $t('helpTexts.significantIndividuals.helpPlaceholder1') }}</li>

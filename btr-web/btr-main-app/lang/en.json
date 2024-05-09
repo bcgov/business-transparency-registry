@@ -225,7 +225,10 @@
     }
   },
   "helpTitles": {
-    "significantIndividuals": "Help with significant individuals",
+    "significantIndividuals": {
+      "closed": "More help with significant individuals",
+      "expanded": "Less help with significant individuals"
+    },
     "sharesAndVotes": {
       "closed": "More help with shares & votes",
       "expanded": "Less help with shares & votes"
