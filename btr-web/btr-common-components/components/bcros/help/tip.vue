@@ -6,7 +6,7 @@
         class="my-1 text-2xl font-bold"
       />
       <p class="px-1.5">
-        {{ title }}
+        {{ (isExpanded && titleExpanded) ? titleExpanded : title }}
       </p>
     </div>
     <div v-if="isExpanded" class="my-2 py-2">
@@ -15,20 +15,16 @@
           {{ text }}
         </slot>
       </div>
-      <div class="my-1 text-blue-500 flex flex-row float-end">
-        <p class="cursor-pointer" @click="isExpanded = !isExpanded">
-          Hide help
-        </p>
-      </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-defineProps<{
-  text: { type: string, required: false, default: '' }
-  title: { type: string, required: false, default: '' }
-}>()
+defineProps({
+  text: { type: String, required: false, default: '' },
+  title: { type: String, required: false, default: '' },
+  titleExpanded: { type: String, required: false, default: '' }
+})
 const isExpanded = ref(false)
 
 </script>

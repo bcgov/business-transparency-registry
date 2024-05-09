@@ -3,7 +3,7 @@
     <div
       v-for="(option, index) in options"
       :key="index"
-      class="w-1/4 h-16 flex items-center justify-center"
+      class="w-1/4 h-16 flex items-center justify-center cursor-pointer"
       :class="index === selected ? 'bg-blue-500 text-white' : 'bg-gray-100 text-gray-700'"
       tabindex="0"
       @click="selectOption(index)"

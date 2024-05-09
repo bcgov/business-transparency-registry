@@ -11,7 +11,10 @@
       v-model="model.percentage"
       :data-cy="'test-' + name"
     />
-    <BcrosHelpTip :title="$t('helpTitles.sharesAndVotes')">
+    <BcrosHelpTip
+      :title="$t('helpTitles.sharesAndVotes.closed')"
+      :title-expanded="$t('helpTitles.sharesAndVotes.expanded')"
+    >
       <slot name="sharesAndVotesHelp" />
     </BcrosHelpTip>
 
@@ -36,7 +39,10 @@
       :label="$t('texts.sharesAndVotes.indirectControl')"
       class="pl-5 py-5"
     />
-    <BcrosHelpTip :title="$t('helpTitles.typesOfControl')">
+    <BcrosHelpTip
+      :title="$t('helpTitles.typesOfControl.closed')"
+      :title-expanded="$t('helpTitles.typesOfControl.expanded')"
+    >
       <slot name="typesOfControlHelp" />
     </BcrosHelpTip>
 
@@ -47,7 +53,10 @@
       :label="$t('texts.sharesAndVotes.inConcertControl.part1')"
       class="pt-5"
     />
-    <BcrosHelpTip :title="$t('helpTitles.inConcertControl')">
+    <BcrosHelpTip
+      :title="$t('helpTitles.inConcertControl.closed')"
+      :title-expanded="$t('helpTitles.inConcertControl.expanded')"
+    >
       <slot name="inConcertControlHelp" />
     </BcrosHelpTip>
   </UFormGroup>

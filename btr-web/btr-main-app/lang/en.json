@@ -226,9 +226,18 @@
   },
   "helpTitles": {
     "significantIndividuals": "Help with significant individuals",
-    "sharesAndVotes": "More help with shares & votes",
-    "typesOfControl": "More help with types of control",
-    "inConcertControl": "More help with acting jointly or in concert"
+    "sharesAndVotes": {
+      "closed": "More help with shares & votes",
+      "expanded": "Less help with shares & votes"
+    },
+    "typesOfControl": {
+      "closed": "More help with types of control",
+      "expanded": "Less help with types of control"
+    },
+    "inConcertControl": {
+      "closed": "More help with acting jointly or in concert",
+      "expanded": "Less help with acting jointly or in concert"
+    }
   },
   "helpTexts": {
     "significantIndividuals": {
