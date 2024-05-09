@@ -1,4 +1,6 @@
 import { z } from 'zod'
+import { FilingSchemaBase } from '~/interfaces/significant-individual-filing-i'
+import { getFolioValidator } from '~/utils/validators'
 
 /** Go to the review/confirm page for the current filing
  * - assumes there is a currentSIFiling
@@ -19,16 +21,27 @@ export function reviewConfirm () {
 }
 
 export async function siChangeSubmit () {
+  const FilingSchema = z.discriminatedUnion(
+    'noSignificantIndividualsExist',
+    [
+      FilingSchemaBase.extend({
+        noSignificantIndividualsExist: z.literal(true),
+        significantIndividuals: z.object({}).array(),
+        folioNumber: getFolioValidator()
+      }),
+      FilingSchemaBase.extend({
+        noSignificantIndividualsExist: z.literal(false),
+        significantIndividuals: z.object({}).array().nonempty(),
+        folioNumber: getFolioValidator()
+      })
+    ]
+  )
+
   const significantIndividuals = useSignificantIndividuals()
-  const filingSchema = z.object({
-    businessIdentifier: z.string(),
-    significantIndividuals: z.object({}).array().min(1),
-    certified: z.boolean().refine(val => val),
-    effectiveDate: z.string(),
-    folioNumber: getFolioValidator()
-  })
-  const isValid = filingSchema.safeParse(significantIndividuals.currentSIFiling)
-  if (!isValid.success) {
+  const result = FilingSchema.safeParse(significantIndividuals.currentSIFiling)
+  if (!result.success) {
+    // eslint-disable-next-line no-console
+    console.log('<> remove this line when validation errors are displayed on page', result.error.issues)
     significantIndividuals.showErrors = true
   } else {
     await significantIndividuals.filingSubmit()

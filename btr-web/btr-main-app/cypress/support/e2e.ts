@@ -1,4 +1,5 @@
 import 'cypress-axe'
+import './ownerChangeFormHelper'
 
 Cypress.Commands.add('interceptPostsEntityApi', () => {
   cy.fixture('plotsEntityExistingSiResponse').then((plotsEntityExistingSiResponse) => {
