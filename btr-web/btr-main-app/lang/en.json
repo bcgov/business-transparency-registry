@@ -84,7 +84,19 @@
       "controlOfShares": "Indicate the {boldStart}type(s) of control{boldEnd} of the shares this individual has:",
       "controlOfVotes": "Indicate the {boldStart}type(s) of control{boldEnd} of the votes this individual has:",
       "shares": "If applicable, enter the {boldStart}percentage of shares{boldEnd} issued by the company that the individual controls",
-      "votes": "If applicable, enter the {boldStart}percentage of votes{boldEnd} issued by the company that the individual controls"
+      "votes": "If applicable, enter the {boldStart}percentage of votes{boldEnd} issued by the company that the individual controls",
+      "actingJointlyOrInConcert": {
+        "checkbox": "This individual has interests or rights held jointly and/or exercised in concert",
+        "text": "Please indicate if the individual has significant control over the company jointly, or in concert with another individual. If this applies, provide the name of the other individual(s) below, and include them as a significant individual on the transparency register.",
+        "jointly": "Jointly",
+        "inConcert": "In concert",
+        "alert": {
+          "important": "Important: ",
+          "jointlyAlert": "Once all of your SIs are entered in, you are required to list all individuals who are working jointly in the table below.",
+          "inConcertAlert": "Once all of your SIs are entered in, you are required to list all individuals who are working in concert in the table below.",
+          "combined": "Once all of your SIs are entered in, you are required to list all individuals who are working jointly/in concert in the table below."
+        }
+      }
     },
     "sharesAndVotes": {
       "controlPercentage": "Enter the percentage of shares issued for the business and/or shares entitled to votes at general meetings this individual owns or ultimately controls (or can exercise ultimate effective control over).",

@@ -45,20 +45,15 @@
     >
       <slot name="typesOfControlHelp" />
     </BcrosHelpTip>
-
-    <!--    todo: fix text here; add stuff from the ticket #20926   -->
-    <UCheckbox
-      :id="inConcertControlId"
-      v-model="model.inConcertControl"
-      :label="$t('texts.sharesAndVotes.inConcertControl.part1')"
-      class="pt-5"
-    />
-    <BcrosHelpTip
-      :title="$t('helpTitles.inConcertControl.closed')"
-      :title-expanded="$t('helpTitles.inConcertControl.expanded')"
+    <IndividualPersonControlJointlyOrInConcertControl
+      v-model:actingJointly="model.actingJointly"
+      v-model:inConcertControl="model.inConcertControl"
+      name="jointlyOrInConcertControlShares"
     >
-      <slot name="inConcertControlHelp" />
-    </BcrosHelpTip>
+      <template #inConcertControlHelp>
+        <span>{{ $t('helpTexts.significantIndividuals.helpPlaceholder1') }}</span>
+      </template>
+    </IndividualPersonControlJointlyOrInConcertControl>
   </UFormGroup>
 </template>
 
@@ -84,7 +79,6 @@ if (model.value.controlName === ControlE.SHARES) {
 const registeredOwnerId = UUIDv4()
 const beneficialOwnerId = UUIDv4()
 const indirectControlId = UUIDv4()
-const inConcertControlId = UUIDv4()
 
 defineProps({
   name: { type: String, default: 'name' }

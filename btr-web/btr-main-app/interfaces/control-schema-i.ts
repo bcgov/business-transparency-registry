@@ -4,5 +4,6 @@ export interface ControlSchemaI {
   beneficialOwner: boolean
   indirectControl: boolean
   inConcertControl: boolean
+  actingJointly: boolean
   percentage: PercentageRangeE
 }
