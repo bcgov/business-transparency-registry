@@ -45,55 +45,15 @@
     >
       <slot name="typesOfControlHelp" />
     </BcrosHelpTip>
-
-    <!--    todo: fix text here; add stuff from the ticket #20926   -->
-    <UCheckbox
-      :id="actingJointlyOrInConcertId"
-      v-model="actingJointlyOrInConcert"
-      :label="$t('texts.control.actingJointlyOrInConcert.checkbox')"
-      class="pt-5"
-    />
-    <div v-if="actingJointlyOrInConcert">
-      <p class="pt-3">
-        {{ $t('texts.control.actingJointlyOrInConcert.text') }}
-      </p>
-      <UCheckbox
-        :id="actingJointlyId"
-        v-model="model.actingJointly"
-        :label="$t('texts.control.actingJointlyOrInConcert.jointly')"
-        class="pl-5 pt-5"
-      />
-      <UCheckbox
-        :id="inConcertControlId"
-        v-model="model.inConcertControl"
-        :label="$t('texts.control.actingJointlyOrInConcert.inConcert')"
-        class="pl-5 pt-5"
-      />
-      <BcrosAlertsMessage
-        v-if="model.actingJointly || model.inConcertControl"
-        class="mt-5"
-        :flavour="AlertsFlavourE.INFO"
-      >
-        <p class="py-2">
-          <strong>{{ $t('texts.control.actingJointlyOrInConcert.alert.important') }}</strong>
-          <span v-if="model.actingJointly && model.inConcertControl">
-            {{ $t('texts.control.actingJointlyOrInConcert.alert.combined') }}
-          </span>
-          <span v-else-if="model.actingJointly">
-            {{ $t('texts.control.actingJointlyOrInConcert.alert.jointlyAlert') }}
-          </span>
-          <span v-else>
-            {{ $t('texts.control.actingJointlyOrInConcert.alert.inConcertAlert') }}
-          </span>
-        </p>
-      </BcrosAlertsMessage>
-    </div>
-    <BcrosHelpTip
-      :title="$t('helpTitles.inConcertControl.closed')"
-      :title-expanded="$t('helpTitles.inConcertControl.expanded')"
+    <IndividualPersonControlJointlyOrInConcertControl
+      v-model:actingJointly="model.actingJointly"
+      v-model:inConcertControl="model.inConcertControl"
+      name="jointlyOrInConcertControlShares"
     >
-      <slot name="inConcertControlHelp" />
-    </BcrosHelpTip>
+      <template #inConcertControlHelp>
+        <span>{{ $t('helpTexts.significantIndividuals.helpPlaceholder1') }}</span>
+      </template>
+    </IndividualPersonControlJointlyOrInConcertControl>
   </UFormGroup>
 </template>
 
@@ -103,14 +63,6 @@ import { v4 as UUIDv4 } from 'uuid'
 const model = defineModel({
   type: Object as PropType<ControlSchemaI>,
   required: true
-})
-
-const actingJointlyOrInConcert = ref(model.value.inConcertControl || model.value.actingJointly)
-watch(actingJointlyOrInConcert, (value) => {
-  if (!value) {
-    model.value.inConcertControl = false
-    model.value.actingJointly = false
-  }
 })
 
 let percentageText = ''
@@ -127,9 +79,6 @@ if (model.value.controlName === ControlE.SHARES) {
 const registeredOwnerId = UUIDv4()
 const beneficialOwnerId = UUIDv4()
 const indirectControlId = UUIDv4()
-const actingJointlyOrInConcertId = UUIDv4()
-const inConcertControlId = UUIDv4()
-const actingJointlyId = UUIDv4()
 
 defineProps({
   name: { type: String, default: 'name' }
