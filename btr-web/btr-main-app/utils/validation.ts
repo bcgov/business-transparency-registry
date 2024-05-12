@@ -162,6 +162,7 @@ export function validateControlSelectionForSharesAndVotes (form: any, ctx: Refin
   if ((hasPercentage && !hasControlType) || (hasInConcert && !hasControlType)) {
     ctx.addIssue({
       code: z.ZodIssueCode.custom,
+      path: ['controlType'],
       message: t('errors.validation.sharesAndVotes.required')
     })
   }

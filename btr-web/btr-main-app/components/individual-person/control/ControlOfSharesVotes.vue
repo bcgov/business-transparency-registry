@@ -1,49 +1,74 @@
 <template>
-  <!--    todo: update stuff from the ticket #20758   -->
-  <!--  todo: note: depending on where the error messaging needs to be, we might need to update/add  UFromGroup -->
-  <UFormGroup :name="name">
-    <p class="py-3">
+  <div class="flex flex-col w-full">
+    <p class="pb-6">
       <BcrosI18HelperBold :translation-path="percentageText" />
     </p>
+    <UFormGroup :name="name + '.percentage'">
+      <IndividualPersonControlPercentageSelector
+        :id="name + 'Percentage'"
+        v-model="model.percentage"
+        :data-cy="'test-' + name"
+        class="pb-6"
+        :name="name + '.percentage'"
+      />
+    </UFormGroup>
 
-    <IndividualPersonControlPercentageSelector
-      :id="name + 'Percentage'"
-      v-model="model.percentage"
-      :data-cy="'test-' + name"
-    />
     <BcrosHelpTip
       :title="$t('helpTitles.sharesAndVotes.closed')"
       :title-expanded="$t('helpTitles.sharesAndVotes.expanded')"
     >
-      <slot name="sharesAndVotesHelp" />
+      <slot name="sharesAndVotesHelp">
+        <div class="flex flex-col gap-2">
+          <p>{{ $t('helpTexts.controlOfSharesVotes.sharesAndVotes.p1') }}</p>
+          <p>{{ $t('helpTexts.controlOfSharesVotes.sharesAndVotes.p2') }}</p>
+          <p>{{ $t('helpTexts.controlOfSharesVotes.sharesAndVotes.p3') }}</p>
+        </div>
+      </slot>
     </BcrosHelpTip>
 
     <p class="py-3">
       <BcrosI18HelperBold :translation-path="controlText" />
     </p>
-    <UCheckbox
-      :id="registeredOwnerId"
-      v-model="model.registeredOwner"
-      :label="$t('texts.sharesAndVotes.registeredOwner')"
-      class="pl-5 pt-2"
-    />
-    <UCheckbox
-      :id="beneficialOwnerId"
-      v-model="model.beneficialOwner"
-      :label="$t('texts.sharesAndVotes.beneficialOwner')"
-      class="pl-5 pt-5"
-    />
-    <UCheckbox
-      :id="indirectControlId"
-      v-model="model.indirectControl"
-      :label="$t('texts.sharesAndVotes.indirectControl')"
-      class="pl-5 py-5"
-    />
+    <UFormGroup
+      v-slot="{ error }"
+      :name="name + '.controlType'"
+      data-cy="testTypeOfControl"
+    >
+      <UCheckbox
+        :id="registeredOwnerId"
+        v-model="model.registeredOwner"
+        :label="$t('texts.sharesAndVotes.registeredOwner')"
+        class="pl-5 pt-2"
+        :class="{ 'text-red-500': !!error }"
+        :variant="error ? 'error' : 'bcGov'"
+        :data-cy="name + '.registeredOwner'"
+      />
+      <UCheckbox
+        :id="beneficialOwnerId"
+        v-model="model.beneficialOwner"
+        :label="$t('texts.sharesAndVotes.beneficialOwner')"
+        class="pl-5 pt-5"
+        :variant="error ? 'error' : 'bcGov'"
+        :data-cy="name + '.beneficialOwner'"
+      />
+      <UCheckbox
+        :id="indirectControlId"
+        v-model="model.indirectControl"
+        :label="$t('texts.sharesAndVotes.indirectControl')"
+        class="pl-5 py-5"
+        :variant="error ? 'error' : 'bcGov'"
+        :data-cy="name + '.indirectControl'"
+      />
+    </UFormGroup>
     <BcrosHelpTip
       :title="$t('helpTitles.typesOfControl.closed')"
       :title-expanded="$t('helpTitles.typesOfControl.expanded')"
     >
-      <slot name="typesOfControlHelp" />
+      <slot name="typesOfControlHelp">
+        <div class="flex flex-col gap-2">
+          <p>{{ $t('helpTexts.controlOfSharesVotes.typesOfControl.p1') }}</p>
+        </div>
+      </slot>
     </BcrosHelpTip>
     <IndividualPersonControlJointlyOrInConcertControl
       v-model:actingJointly="model.actingJointly"
@@ -54,7 +79,7 @@
         <span>{{ $t('helpTexts.significantIndividuals.helpPlaceholder1') }}</span>
       </template>
     </IndividualPersonControlJointlyOrInConcertControl>
-  </UFormGroup>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -63,6 +88,10 @@ import { v4 as UUIDv4 } from 'uuid'
 const model = defineModel({
   type: Object as PropType<ControlSchemaI>,
   required: true
+})
+
+defineProps({
+  name: { type: String, default: 'name' }
 })
 
 let percentageText = ''
@@ -79,8 +108,5 @@ if (model.value.controlName === ControlE.SHARES) {
 const registeredOwnerId = UUIDv4()
 const beneficialOwnerId = UUIDv4()
 const indirectControlId = UUIDv4()
-
-defineProps({
-  name: { type: String, default: 'name' }
-})
+const inConcertControlId = UUIDv4()
 </script>

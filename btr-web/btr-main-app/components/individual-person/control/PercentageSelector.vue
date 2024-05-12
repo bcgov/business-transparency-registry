@@ -8,6 +8,7 @@
       tabindex="0"
       @click="selectOption(index)"
       @keydown.enter="selectOption(index)"
+      :data-cy="name + '.' + index"
     >
       {{ option.label }}
     </div>
@@ -16,7 +17,8 @@
 
 <script setup lang="ts">
 const t = useNuxtApp().$i18n.t
-const emit = defineEmits<{(e: 'update:modelValue', value: PercentageRangeE): void }>()
+const emit = defineEmits<(e: 'update:modelValue', value: string) => void>()
+defineProps({ name: { type: String, default: '' } })
 
 const options = [
   {
@@ -37,7 +39,7 @@ const options = [
   }
 ]
 const selected = ref(-1)
-const selectOption = (index) => {
+const selectOption = (index: number) => {
   selected.value = index
   emit('update:modelValue', options[index].range)
 }

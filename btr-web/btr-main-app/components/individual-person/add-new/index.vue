@@ -13,7 +13,7 @@
         data-cy="isYourOwnInformation-section"
       >
         <div class="flex-col w-full">
-          <p class="py-3">
+          <p class="pb-5">
             {{ $t('texts.isYourOwnInformation') }}
           </p>
           <UFormGroup name="workaroundForTriggeringValidationOnEntireForm">
@@ -26,6 +26,9 @@
           </UFormGroup>
         </div>
       </BcrosSection>
+
+      <BcrosSectionDivider />
+
       <!--  section: individuals full name  -->
       <BcrosSection
         :show-section-has-errors="hasErrors(['name.'])"
@@ -68,29 +71,34 @@
         </div>
       </BcrosSection>
 
+      <BcrosSectionDivider />
+
+      <!--  section-header: type of interest or control -->
+      <BcrosSection>
+        <template #header-content>
+          <div class="flex flex-col w-full bg-white px-8">
+            <div class="flex flex-row w-full pt-2.5">
+              <UIcon name="i-mdi-help-circle-outline" />
+              <span class="font-bold min-w-[190px]">123</span>
+            </div>
+            <div class="border-b-[1px] border-solid border-blue-500" />
+          </div>
+        </template>
+      </BcrosSection>
+
       <!--  section: type of interest or control  -->
       <BcrosSection
         :show-section-has-errors="false"
-        :section-title="$t('sectionHeadings.typeOfInterestOrControl')"
+        :section-title="$t('sectionHeadings.controlOfShares')"
       >
-        <div class="flex-col w-full">
-          <p class="font-bold py-3">
-            {{ $t('labels.sharesAndVotes') }}
-          </p>
-          <p>
-            {{ $t('texts.sharesAndVotes.controlPercentage') }}
-          </p>
-          <IndividualPersonControl
-            v-model="inputFormSi.controlOfShares"
-            :name="'controlOfShares'"
-          />
-          <IndividualPersonControl
-            v-model="inputFormSi.controlOfVotes"
-            :name="'controlOfVotes'"
-          />
-          <!--          todo: add section control of majority of directors-->
-          <!--          todo: add others section -->
-        </div>
+        <IndividualPersonControlOfSharesVotes name="controlOfShares" v-model="inputFormSi.controlOfShares" />
+      </BcrosSection>
+
+      <BcrosSection
+        :show-section-has-errors="false"
+        :section-title="$t('sectionHeadings.controlOfVotes')"
+      >
+        <IndividualPersonControlOfSharesVotes name="controlOfVotes" v-model="inputFormSi.controlOfVotes" />
       </BcrosSection>
 
       <!--  section: control of majority of directors  -->
@@ -99,7 +107,7 @@
         :section-title="$t('sectionHeadings.controlOfMajorityOfDirectors')"
       >
         <UFormGroup name="containTheErrorChecks" class="w-full flex flex-col">
-          <p class="font-bold py-3">
+          <p class="font-bold pb-5">
             {{ $t('labels.controlOfDirectors') }}
           </p>
           <p>
@@ -135,12 +143,14 @@
         </div>
       </BcrosSection>
 
+      <BcrosSectionDivider />
+
       <!--  section: email address  -->
       <BcrosSection
         :show-section-has-errors="hasErrors(['email'])"
         :section-title="$t('sectionHeadings.emailAddress')"
       >
-        <div class="flex-col w-full pt-3">
+        <div class="flex-col w-full">
           <BcrosInputsEmailField
             id="individual-person-email"
             v-model="inputFormSi.email"
@@ -163,8 +173,9 @@
             :label="$t('labels.lastKnownAddress')"
             name="address"
           />
+          <!--          todo: replace this with divider ?-->
           <div class="flex-col py-5" />
-          <p class="font-bold py-3">
+          <p class="font-bold pb-5">
             {{ $t('labels.birthdate') }}
           </p>
           <BcrosInputsDateSelect
@@ -203,7 +214,7 @@
         :section-title="$t('sectionHeadings.taxDetails')"
       >
         <div class="w-full flex flex-col">
-          <p class="font-bold py-3">
+          <p class="font-bold pb-5">
             {{ $t('labels.taxNumber') }}
           </p>
           <p>
@@ -218,7 +229,7 @@
             data-cy="testTaxNumber"
           />
           <div>
-            <p class="font-bold py-3">
+            <p class="font-bold pb-5">
               {{ $t('labels.taxResidency') }}
             </p>
             <p>
