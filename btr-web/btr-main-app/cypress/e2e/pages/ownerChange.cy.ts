@@ -70,7 +70,7 @@ describe('pages -> Beneficial Owner Change', () => {
     // cy.get('[data-cy=showAddIndividualPersonManually]')
     //   .should('have.text', ' Cancel transparent register information')
 
-    // todo: introduce langague files for this, and verify it works for correct fields
+    // todo: introduce language files for this, and verify it works for correct fields
     // cy.get('[data-cy=addIndividualPerson]').should('contain.text', 'Assesment of Individual Significance')
     cy.get('[data-cy=addIndividualPerson]').should('contain.text', 'Control of Shares')
     cy.get('[data-cy=addIndividualPerson]').should('contain.text', 'Control of Votes')
