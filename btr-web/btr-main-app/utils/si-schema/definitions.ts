@@ -6,20 +6,19 @@ export const SiControlOfSchema = z.object({
   registeredOwner: z.boolean(),
   beneficialOwner: z.boolean(),
   indirectControl: z.boolean(),
-  inConcertControl: z.boolean(),
-  actingJointly: z.boolean(),
+  inConcertControl: z.boolean().optional(),
+  actingJointly: z.boolean().optional(),
   percentage: z.nativeEnum(PercentageRangeE).optional()
 })
 
 export type SiControlOfSchemaType = z.infer<typeof SiControlOfSchema>
-export interface SiControlOfSchemaI extends SiControlOfSchemaType {}
 
 export const ControlOfDirectorsSchema = z.object({
   directControl: z.boolean(),
   indirectControl: z.boolean(),
   significantInfluence: z.boolean(),
-  inConcertControl: z.boolean(),
-  actingJointly: z.boolean()
+  inConcertControl: z.boolean().optional(),
+  actingJointly: z.boolean().optional()
 })
 
 export const SiNameSchema = z.object({

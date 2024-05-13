@@ -2,30 +2,30 @@
   <UFormGroup
     :name="name"
     :help="help"
-    class="flex flex-col py-5"
+    class="flex flex-col"
     data-cy="countryOfCitizenship"
   >
     <BcrosInputsCountriesOfCitizenshipDropdown
-      v-model="citizenshipsInternal"
+      v-model="model"
       class="text-gray-900"
     />
   </UFormGroup>
 </template>
 
 <script setup lang="ts">
-const emit = defineEmits<{ 'update:modelValue': [value: Array<BtrCountryI>] }>()
+import { type UseEventBusReturn } from '@vueuse/core'
+
+const formBus = inject<UseEventBusReturn<any, string> | undefined>('form-events', undefined)
+
+const model = defineModel({ type: Array<BtrCountryI>, required: true })
 const props = defineProps({
-  modelValue: { type: Array<BtrCountryI>, required: true },
   name: { type: String, default: 'countriesOfCitizenship' },
   help: { type: String, default: '' }
 })
-
-const citizenshipsInternal = computed({
-  get () {
-    return props.modelValue
-  },
-  set (selectedCitizenships) {
-    emit('update:modelValue', selectedCitizenships)
+watch(model, () => {
+  if (formBus) {
+    formBus.emit({ type: 'blur', path: props.name })
+    formBus.emit({ type: 'change', path: props.name })
   }
-})
+}, { deep: true })
 </script>

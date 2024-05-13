@@ -4,9 +4,16 @@ import { mountSuspended } from '@nuxt/test-utils/runtime'
 import { mockedI18n } from '../../utils/mockedi18n'
 
 import {
-  IndividualPersonAddNew, BcrosInputsDateSelect, BcrosInputsAddress, IndividualPersonTaxInfoTaxNumber,
-  IndividualPersonTaxInfoTaxResidency, IndividualPersonControlPercentageDropdown,
-  IndividualPersonControlTypeOfControl, IndividualPersonControlOfDirectors, IndividualPersonControlOtherReasons
+  IndividualPersonAddNew,
+  BcrosInputsDateSelect,
+  BcrosInputsAddress,
+  IndividualPersonTaxInfoTaxNumber,
+  IndividualPersonTaxInfoTaxResidency,
+  IndividualPersonControlPercentageDropdown,
+  IndividualPersonControlTypeOfControl,
+  IndividualPersonControlOfDirectors,
+  IndividualPersonControlOtherReasons,
+  IndividualPersonControlOfSharesVotes
 } from '#components'
 
 describe('AddIndividualPerson tests', () => {
@@ -54,12 +61,10 @@ describe('AddIndividualPerson tests', () => {
     expect(wrapper.find('[data-cy="address-location-description"]').exists()).toBe(true)
   })
 
-  // todo: fixme: update on #20758
-  it.skip('renders the control of shares and votes', () => {
+  it('renders the control of shares and votes', () => {
     // await wrapper.find('#add-person-manually-toggle').trigger('click')
     // await flushPromises()
-    expect(wrapper.findComponent(IndividualPersonControlPercentageDropdown).exists()).toBe(true)
-    expect(wrapper.findComponent(IndividualPersonControlTypeOfControl).exists()).toBe(true)
+    expect(wrapper.findComponent(IndividualPersonControlOfSharesVotes).exists()).toBe(true)
   })
 
   it('renders the control of majority of directors', () => {

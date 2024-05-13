@@ -5,6 +5,7 @@
       v-model="actingJointlyOrInConcert"
       :label="$t('texts.control.actingJointlyOrInConcert.checkbox')"
       class="pt-5"
+      :data-cy="name + '.hasJointlyOrInConcert'"
     />
     <div v-if="actingJointlyOrInConcert">
       <p class="pt-3">
@@ -15,12 +16,14 @@
         v-model="actingJointly"
         :label="$t('texts.control.actingJointlyOrInConcert.jointly')"
         class="pl-5 pt-5"
+        :data-cy="name + '.actingJointly'"
       />
       <UCheckbox
         :id="inConcertControlId"
         v-model="inConcertControl"
         :label="$t('texts.control.actingJointlyOrInConcert.inConcert')"
         class="pl-5 pt-5"
+        :data-cy="name + '.inConcertControl'"
       />
       <BcrosAlertsMessage
         v-if="actingJointly || inConcertControl"

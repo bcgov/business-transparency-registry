@@ -27,12 +27,12 @@ describe('accessibility -> Review and Confirm', () => {
       cy.get('[data-cy=usePreferredName').check()
       cy.get('#individual-person-preferred-name').type(testData.profile1.preferredName)
       cy.get('#individual-person-email').type(testData.profile1.email)
-      // todo: fixme update with #20758
-      // cy.get('[data-cy=testPercentOfShares]').click()
-      // cy.get('[data-cy=testPercentOfShares]').find('li').first().click()
-      // cy.get('[data-cy=testPercentOfVotes]').click()
-      // cy.get('[data-cy=testPercentOfVotes]').find('li').first().click()
-      // cy.get('[data-cy=testTypeOfControl]').get('[name=registeredOwner]').check()
+      cy.get('[data-cy="controlOfShares.percentage.0"]').click()
+      cy.get('[data-cy="controlOfShares.beneficialOwner"]').check()
+      cy.get('[data-cy="controlOfShares.registeredOwner"]').check()
+      cy.get('[data-cy="controlOfVotes.percentage.0"]').click()
+      cy.get('[data-cy="controlOfVotes.beneficialOwner"]').check()
+      cy.get('[data-cy="controlOfVotes.registeredOwner"]').check()
       // todo: fixme update with #20756
       // cy.get('[data-cy=testControlOfDirectors]').get('[name=directControl]').check()
       cy.get('#addNewPersonBirthdate').trigger('click')

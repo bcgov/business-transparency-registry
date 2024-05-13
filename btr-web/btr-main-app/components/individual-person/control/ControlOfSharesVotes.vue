@@ -3,7 +3,7 @@
     <p class="pb-6">
       <BcrosI18HelperBold :translation-path="percentageText" />
     </p>
-    <UFormGroup :name="name + '.percentage'">
+    <UFormGroup :name="percentageName">
       <IndividualPersonControlPercentageSelector
         :id="name + 'Percentage'"
         v-model="model.percentage"
@@ -31,7 +31,7 @@
     </p>
     <UFormGroup
       v-slot="{ error }"
-      :name="name + '.controlType'"
+      :name="controlTypeName"
       data-cy="testTypeOfControl"
     >
       <UCheckbox
@@ -73,7 +73,7 @@
     <IndividualPersonControlJointlyOrInConcertControl
       v-model:actingJointly="model.actingJointly"
       v-model:inConcertControl="model.inConcertControl"
-      name="jointlyOrInConcertControlShares"
+      :name="name + '.jointlyOrInConcert'"
     >
       <template #inConcertControlHelp>
         <span>{{ $t('helpTexts.significantIndividuals.helpPlaceholder1') }}</span>
@@ -84,15 +84,28 @@
 
 <script setup lang="ts">
 import { v4 as UUIDv4 } from 'uuid'
-// todo: maybe add interface for this type can be part of 20758
+import { type UseEventBusReturn } from '@vueuse/core'
+
+const formBus = inject<UseEventBusReturn<any, string> | undefined>('form-events', undefined)
+
 const model = defineModel({
   type: Object as PropType<ControlSchemaI>,
   required: true
 })
 
-defineProps({
+const props = defineProps({
   name: { type: String, default: 'name' }
 })
+
+const percentageName = props.name + '.percentage'
+const controlTypeName = props.name + '.controlType'
+
+watch(() => model.value, (val) => {
+  if (formBus) {
+    formBus.emit({ type: 'blur', path: [controlTypeName, percentageName] })
+    formBus.emit({ type: 'change', path:  [controlTypeName, percentageName]  })
+  }
+}, { deep: true })
 
 let percentageText = ''
 let controlText = ''
@@ -108,5 +121,4 @@ if (model.value.controlName === ControlE.SHARES) {
 const registeredOwnerId = UUIDv4()
 const beneficialOwnerId = UUIDv4()
 const indirectControlId = UUIDv4()
-const inConcertControlId = UUIDv4()
 </script>

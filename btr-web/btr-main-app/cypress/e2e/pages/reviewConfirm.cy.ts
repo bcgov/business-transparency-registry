@@ -71,7 +71,7 @@ describe('pages -> Review and Confirm', () => {
 
       summaryTable.get('[data-cy=summary-table-dates]').contains(expectedDate)
 
-      // todo: fixme: update on #20758
+      // todo: fixme: update on #TBD with new summary table
       // summaryTable.get('[data-cy=summary-table-controls]').contains(testData.profile1.summaryTable.shareControl)
       // todo: fixme: update on #20756
       // summaryTable.get('[data-cy=summary-table-controls]').contains(testData.profile1.summaryTable.directorControl)

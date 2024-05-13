@@ -36,5 +36,5 @@ const props = defineProps({
   headerText: { type: String, required: false, default: undefined }
 })
 const showHeader = computed(() => !!slots['header-content'] || !!props.headerIconName || !!props.headerText)
-const showContent = computed(() => !!props.sectionTitle || !!slots['default'] || !!slots['section-title'])
+const showContent = computed(() => !!props.sectionTitle || !!slots.default || !!slots['section-title'])
 </script>

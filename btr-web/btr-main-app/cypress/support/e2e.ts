@@ -108,7 +108,7 @@ Cypress.Commands.add('addTestIndividuals', () => {
     cy.get('[data-cy=usePreferredName').check()
     cy.get('#individual-person-preferred-name').type(testData.profile1.preferredName)
     cy.get('#individual-person-email').type(testData.profile1.email)
-    // todo: fixme: update on #20758
+    // todo: fixme: update on #TBD with new summary table
     // cy.get('[data-cy=testPercentOfShares]').click()
     // cy.get('[data-cy=testPercentOfShares]').find('li').first().click()
     // cy.get('[data-cy=testPercentOfVotes]').click()

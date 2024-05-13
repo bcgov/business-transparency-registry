@@ -73,14 +73,14 @@
 
       <BcrosSectionDivider />
 
-      <!--  section-header: type of interest or control -->
+      <!--  section-header: type of interest or control of shares/votes-->
       <BcrosSection
         :header-text="$t('sectionHeaders.controlOf')"
         header-icon-name="i-mdi-plus-circle-multiple-outline"
       >
       </BcrosSection>
 
-      <!--  section: type of interest or control  -->
+      <!--  section: type of interest or control of shares -->
       <BcrosSection
         :show-section-has-errors="false"
         :section-title="$t('sectionTitles.controlOfShares')"
@@ -88,6 +88,7 @@
         <IndividualPersonControlOfSharesVotes name="controlOfShares" v-model="inputFormSi.controlOfShares" />
       </BcrosSection>
 
+      <!--  section: type of interest or control of votes -->
       <BcrosSection
         :show-section-has-errors="false"
         :section-title="$t('sectionTitles.controlOfVotes')"
@@ -163,21 +164,23 @@
 
       <!--  section: individual details  -->
       <BcrosSection
-        :show-section-has-errors="hasErrors(['birthDate', 'address.'])"
-        :section-title="$t('sectionTitles.individualDetails')"
+        :show-section-has-errors="hasErrors(['address.'])"
+        :section-title="$t('labels.lastKnownAddress')"
       >
         <div class="flex-col w-full">
           <BcrosInputsAddress
             id="addNewPersonLastKnownAddress"
             v-model="inputFormSi.address"
-            :label="$t('labels.lastKnownAddress')"
             name="address"
           />
-          <!--          todo: replace this with divider ?-->
-          <div class="flex-col py-5" />
-          <p class="font-bold pb-5">
-            {{ $t('labels.birthdate') }}
-          </p>
+        </div>
+      </BcrosSection>
+      <BcrosSection
+        :show-section-has-errors="hasErrors(['birthDate'])"
+        :section-title="$t('labels.birthdate')"
+      >
+        <!--          todo: replace this with divider ?-->
+        <div class="flex-col w-full">
           <BcrosInputsDateSelect
             id="addNewPersonBirthdate"
             name="birthDate"
@@ -423,16 +426,4 @@ if (props.setSignificantIndividual) {
   const propsSi = convertSiToSchema(props.setSignificantIndividual)
   Object.assign(inputFormSi, propsSi)
 }
-
-// needed because dropdown is not built out of NuxtUI components so it does not trigger validation automatically
-watch(() => inputFormSi.citizenships, (newValue) => {
-  const val = validateCitizenshipValidator().safeParse(newValue)
-  let errors: { path: string, message: string }[] = []
-  if (!val.success) {
-    errors = val.error.issues.map(
-      (issue: z.ZodIssue) => ({ message: issue.message, path: 'citizenships' })
-    )
-  }
-  addIndividualForm.value.setErrors(errors, 'citizenships')
-}, { deep: true })
 </script>

@@ -43,8 +43,7 @@ describe('pages -> Form Validation', () => {
     cy.contains(i18n.errors.validation.citizenship.required).should('not.exist')
   })
 
-  // todo: fix test with #20758
-  it.skip('Form validation for Control of Shares and Votes', () => {
+  it('Form validation for Control of Shares ', () => {
     cy.get('[data-cy=add-new-btn]').click()
     cy.get('[data-cy=new-si-done-btn]').click()
     cy.contains(i18n.errors.validation.controlPercentage.empty).should('not.exist')
@@ -61,34 +60,83 @@ describe('pages -> Form Validation', () => {
     cy.contains(i18n.errors.validation.controlPercentage.empty).should('not.exist')
     cy.get('[data-cy="controlOfShares.registeredOwner"]').check()
     cy.get('[data-cy=new-si-done-btn]').click()
-    cy.get('[data-cy="controlOfVotes.percentage.0"]').click()
+    cy.get('[data-cy="controlOfShares.percentage.1"]').click()
     cy.contains(i18n.errors.validation.controlPercentage.empty).should('not.exist')
 
     // if the in-concert control is selected, the percentage of shares and votes is required, and the
     // control type is required
-    // todo: fixme: update on #20758
-    // cy.get('[data-cy=new-si-cancel-btn]').click()
-    // cy.get('[data-cy=add-new-btn]').click()
-    // cy.get('[name="inConcertControl"]').check()
-    // cy.get('[data-cy=new-si-done-btn]').click()
-    // cy.contains(i18n.errors.validation.controlPercentage.empty).should('exist')
-    // cy.contains(i18n.errors.validation.controlOfDirectors.required).should('exist')
-    // // unchecking the in-concert control should remove the errors
-    // cy.get('[name="inConcertControl"]').uncheck()
-    // cy.contains(i18n.errors.validation.controlPercentage.empty).should('not.exist')
-    // cy.contains(i18n.errors.validation.controlOfDirectors.required).should('not.exist')
+    cy.get('[data-cy=new-si-cancel-btn]').click()
+    cy.get('[data-cy=add-new-btn]').click()
+    cy.get('[data-cy="controlOfShares.jointlyOrInConcert.hasJointlyOrInConcert"]').check()
+    cy.get('[data-cy="controlOfShares.jointlyOrInConcert.actingJointly"]').check()
+    cy.get('[data-cy=new-si-done-btn]').click()
+    cy.contains(i18n.errors.validation.controlPercentage.empty).should('exist')
+    cy.contains(i18n.errors.validation.sharesAndVotes.required).should('exist')
+    // unchecking the in-concert control should remove the errors
+    cy.get('[data-cy="controlOfShares.jointlyOrInConcert.actingJointly"]').uncheck()
+    cy.get('[data-cy="controlOfShares.jointlyOrInConcert.hasJointlyOrInConcert"]').uncheck()
+    cy.contains(i18n.errors.validation.controlPercentage.empty).should('not.exist')
+    cy.contains(i18n.errors.validation.sharesAndVotes.required).should('not.exist')
 
-    // if either the percent of shares or the percent of votes is >= 25%, the control type is required
-    // todo: fixme: update on #20758
-    // cy.get('[data-cy=new-si-cancel-btn]').click()
-    // cy.get('[data-cy=add-new-btn]').click()
-    // cy.get('[data-cy=testPercentOfShares]').click().find('li').eq(3).click()
-    // cy.get('[data-cy=new-si-done-btn]').click()
-    // cy.contains(i18n.errors.validation.controlOfDirectors.required).should('not.exist')
-    // cy.get('[data-cy=testPercentOfShares]').click().find('li').eq(2).click()
-    // cy.get('[data-cy=new-si-done-btn]').click()
-    // cy.contains(i18n.errors.validation.controlOfDirectors.required).should('exist')
-    // cy.get('[name="registeredOwner"]').check()
-    // cy.contains(i18n.errors.validation.controlOfDirectors.required).should('not.exist')
+    // if the percent of shares is selected the control type is required
+    cy.get('[data-cy=new-si-cancel-btn]').click()
+    cy.get('[data-cy=add-new-btn]').click()
+    cy.get('[data-cy="controlOfShares.beneficialOwner"]').check()
+    cy.get('[data-cy=new-si-done-btn]').click()
+    cy.contains(i18n.errors.validation.sharesAndVotes.required).should('not.exist')
+    cy.get('[data-cy="controlOfShares.beneficialOwner"]').uncheck()
+    cy.get('[data-cy="controlOfShares.percentage.1"]').click()
+    cy.get('[data-cy=new-si-done-btn]').click()
+    cy.contains(i18n.errors.validation.sharesAndVotes.required).should('exist')
+    cy.get('[data-cy="controlOfShares.registeredOwner"]').check()
+    cy.contains(i18n.errors.validation.sharesAndVotes.required).should('not.exist')
+  })
+  it('Form validation for Control of Votes ', () => {
+    cy.get('[data-cy=add-new-btn]').click()
+    cy.get('[data-cy=new-si-done-btn]').click()
+    cy.contains(i18n.errors.validation.controlPercentage.empty).should('not.exist')
+    cy.contains(i18n.errors.validation.sharesAndVotes.required).should('not.exist')
+
+    // If one of the control types is selected, the percentage of shares and votes should be required
+    // To remove the error,
+    // 1) select percent of shares or percent of votes
+    // 2) uncheck the control type
+    cy.get('[data-cy="controlOfVotes.registeredOwner"]').check()
+    cy.get('[data-cy=new-si-done-btn]').click()
+    cy.contains(i18n.errors.validation.controlPercentage.empty).should('exist')
+    cy.get('[data-cy="controlOfVotes.registeredOwner"]').uncheck()
+    cy.contains(i18n.errors.validation.controlPercentage.empty).should('not.exist')
+    cy.get('[data-cy="controlOfVotes.registeredOwner"]').check()
+    cy.get('[data-cy=new-si-done-btn]').click()
+    cy.get('[data-cy="controlOfVotes.percentage.1"]').click()
+    cy.contains(i18n.errors.validation.controlPercentage.empty).should('not.exist')
+
+    // if the in-concert control is selected, the percentage of shares and votes is required, and the
+    // control type is required
+    cy.get('[data-cy=new-si-cancel-btn]').click()
+    cy.get('[data-cy=add-new-btn]').click()
+    cy.get('[data-cy="controlOfVotes.jointlyOrInConcert.hasJointlyOrInConcert"]').check()
+    cy.get('[data-cy="controlOfVotes.jointlyOrInConcert.actingJointly"]').check()
+    cy.get('[data-cy=new-si-done-btn]').click()
+    cy.contains(i18n.errors.validation.controlPercentage.empty).should('exist')
+    cy.contains(i18n.errors.validation.sharesAndVotes.required).should('exist')
+    // unchecking the in-concert control should remove the errors
+    cy.get('[data-cy="controlOfVotes.jointlyOrInConcert.actingJointly"]').uncheck()
+    cy.get('[data-cy="controlOfVotes.jointlyOrInConcert.hasJointlyOrInConcert"]').uncheck()
+    cy.contains(i18n.errors.validation.controlPercentage.empty).should('not.exist')
+    cy.contains(i18n.errors.validation.sharesAndVotes.required).should('not.exist')
+
+    // if the percent of shares is selected the control type is required
+    cy.get('[data-cy=new-si-cancel-btn]').click()
+    cy.get('[data-cy=add-new-btn]').click()
+    cy.get('[data-cy="controlOfVotes.beneficialOwner"]').check()
+    cy.get('[data-cy=new-si-done-btn]').click()
+    cy.contains(i18n.errors.validation.sharesAndVotes.required).should('not.exist')
+    cy.get('[data-cy="controlOfVotes.beneficialOwner"]').uncheck()
+    cy.get('[data-cy="controlOfVotes.percentage.1"]').click()
+    cy.get('[data-cy=new-si-done-btn]').click()
+    cy.contains(i18n.errors.validation.sharesAndVotes.required).should('exist')
+    cy.get('[data-cy="controlOfVotes.registeredOwner"]').check()
+    cy.contains(i18n.errors.validation.sharesAndVotes.required).should('not.exist')
   })
 })

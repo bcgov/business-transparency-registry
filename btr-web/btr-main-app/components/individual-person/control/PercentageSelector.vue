@@ -16,9 +16,13 @@
 </template>
 
 <script setup lang="ts">
+import { type UseEventBusReturn } from '@vueuse/core'
+
+const formBus = inject<UseEventBusReturn<any, string> | undefined>('form-events', undefined)
+
 const t = useNuxtApp().$i18n.t
 const model = defineModel({ type: String })
-defineProps({ name: { type: String, default: '' } })
+const props = defineProps({ name: { type: String, required: true } })
 
 const options = [
   {
@@ -39,9 +43,16 @@ const options = [
   }
 ]
 const selected = ref(-1)
+if (model.value) {
+  selected.value = options.findIndex((option) => option.range === model.value)
+}
+
 const selectOption = (index: number) => {
   selected.value = index
   model.value = options[index].range
-
+  if (formBus) {
+    formBus.emit({ type: 'blur', path: props.name })
+    formBus.emit({ type: 'change', path: props.name })
+  }
 }
 </script>

@@ -39,11 +39,10 @@
 
 <script setup lang="ts">
 import { v4 as UUIDv4 } from 'uuid'
-import { SiControlOfSchemaI } from '~/utils/si-schema/definitions'
+import { SiControlOfSchemaType } from '~/utils/si-schema/definitions'
 
-// todo: maybe add interface for this type can be part of 20758
 const model = defineModel({
-  type: SiControlOfSchemaI,
+  type: Object as PropType<SiControlOfSchemaType>,
   required: true
 })
 

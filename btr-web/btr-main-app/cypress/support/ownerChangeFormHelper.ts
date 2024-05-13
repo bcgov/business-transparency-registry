@@ -6,9 +6,12 @@ Cypress.Commands.add('fillOutForm', (siDataToEnter) => {
   cy.get('#individual-person-email').type(siDataToEnter.email)
 
   // enter shares and votes percentage
-  // todo: fixme: update on #20758
-  // cy.get('[data-cy=testPercentOfShares]').click().find('li').eq(0).click()
-  // cy.get('[data-cy=testPercentOfVotes]').click().find('li').eq(0).click()
+  cy.get('[data-cy="controlOfShares.percentage.2"]').click()
+  cy.get('[data-cy="controlOfShares.beneficialOwner"]').check()
+  cy.get('[data-cy="controlOfShares.registeredOwner"]').check()
+  cy.get('[data-cy="controlOfVotes.percentage.3"]').click()
+  cy.get('[data-cy="controlOfVotes.beneficialOwner"]').check()
+  cy.get('[data-cy="controlOfVotes.registeredOwner"]').check()
 
   // select the control type (registred owner + direct control)
   // todo: fixme update with #20756
@@ -35,5 +38,4 @@ Cypress.Commands.add('fillOutForm', (siDataToEnter) => {
   // enter tax number and select tax residency
   cy.get('[data-cy="tax-number-input"]').type(siDataToEnter.taxNumber)
   cy.get('[data-cy="testTaxResidency"]').get('[type="radio"][value="true"]').check()
-}
-)
+})
