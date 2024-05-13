@@ -10,7 +10,7 @@
       <div class="bg-blue-50 flex p-5 rounded-t-[5px]">
         <UIcon class="text-blue-400 text-2xl" name="i-mdi-account-details" />
         <h3 class="font-bold ml-2" data-cy="myRegDetailsSectionHeader">
-          {{ $t('sectionHeadings.profileDetails') }}
+          {{ $t('sectionTitles.profileDetails') }}
         </h3>
       </div>
       <div class="bg-white rounded-b-[5px] pl-2 pb-5">

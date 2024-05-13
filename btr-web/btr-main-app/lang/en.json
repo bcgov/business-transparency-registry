@@ -275,7 +275,7 @@
     "significantIndividualChange": "Significant Individual Change",
     "significantIndividuals": "Significant Individuals"
   },
-  "sectionHeadings": {
+  "sectionTitles": {
     "profileDetails": "Your Details",
     "reviewConfirm": "Review and Confirm",
     "isYourOwnInformation": "Indicate if this is your information",
@@ -292,5 +292,9 @@
     "citizenshipOrPR": "Citizenship / Permanent Residency",
     "taxDetails": "Tax Details",
     "unableToObtainOrConfirmInformation": "Unable to Obtain or Confirm Information"
+  },
+  "sectionHeaders": {
+    "controlOf": "Control",
+    "individualsDetails": "Individual’s Details"
   }
 }

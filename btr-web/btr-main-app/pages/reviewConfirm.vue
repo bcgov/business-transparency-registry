@@ -4,7 +4,7 @@
       {{ $t('pageHeadings.significantIndividualChange') }}
     </h1>
     <h2 class="font-bold text-lg mt-5" data-cy="review-confirm-section-heading">
-      {{ $t('sectionHeadings.reviewConfirm') }}
+      {{ $t('sectionTitles.reviewConfirm') }}
     </h2>
     <p class="mt-5" data-cy="page-info-text">
       {{ $t('texts.reviewConfirm') }}

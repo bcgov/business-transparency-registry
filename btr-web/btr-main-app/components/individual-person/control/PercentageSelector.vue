@@ -17,7 +17,7 @@
 
 <script setup lang="ts">
 const t = useNuxtApp().$i18n.t
-const emit = defineEmits<(e: 'update:modelValue', value: string) => void>()
+const model = defineModel({ type: String })
 defineProps({ name: { type: String, default: '' } })
 
 const options = [
@@ -41,6 +41,7 @@ const options = [
 const selected = ref(-1)
 const selectOption = (index: number) => {
   selected.value = index
-  emit('update:modelValue', options[index].range)
+  model.value = options[index].range
+
 }
 </script>

@@ -9,7 +9,7 @@
     >
       <!--  section: your information  -->
       <BcrosSection
-        :section-title="$t('sectionHeadings.isYourOwnInformation')"
+        :section-title="$t('sectionTitles.isYourOwnInformation')"
         data-cy="isYourOwnInformation-section"
       >
         <div class="flex-col w-full">
@@ -32,7 +32,7 @@
       <!--  section: individuals full name  -->
       <BcrosSection
         :show-section-has-errors="hasErrors(['name.'])"
-        :section-title="$t('sectionHeadings.individualsFullName')"
+        :section-title="$t('sectionTitles.individualsFullName')"
       >
         <div class="flex-col w-full">
           <BcrosInputsNameField
@@ -74,29 +74,23 @@
       <BcrosSectionDivider />
 
       <!--  section-header: type of interest or control -->
-      <BcrosSection>
-        <template #header-content>
-          <div class="flex flex-col w-full bg-white px-8">
-            <div class="flex flex-row w-full pt-2.5">
-              <UIcon name="i-mdi-help-circle-outline" />
-              <span class="font-bold min-w-[190px]">123</span>
-            </div>
-            <div class="border-b-[1px] border-solid border-blue-500" />
-          </div>
-        </template>
+      <BcrosSection
+        :header-text="$t('sectionHeaders.controlOf')"
+        header-icon-name="i-mdi-plus-circle-multiple-outline"
+      >
       </BcrosSection>
 
       <!--  section: type of interest or control  -->
       <BcrosSection
         :show-section-has-errors="false"
-        :section-title="$t('sectionHeadings.controlOfShares')"
+        :section-title="$t('sectionTitles.controlOfShares')"
       >
         <IndividualPersonControlOfSharesVotes name="controlOfShares" v-model="inputFormSi.controlOfShares" />
       </BcrosSection>
 
       <BcrosSection
         :show-section-has-errors="false"
-        :section-title="$t('sectionHeadings.controlOfVotes')"
+        :section-title="$t('sectionTitles.controlOfVotes')"
       >
         <IndividualPersonControlOfSharesVotes name="controlOfVotes" v-model="inputFormSi.controlOfVotes" />
       </BcrosSection>
@@ -104,7 +98,7 @@
       <!--  section: control of majority of directors  -->
       <BcrosSection
         :show-section-has-errors="false"
-        :section-title="$t('sectionHeadings.controlOfMajorityOfDirectors')"
+        :section-title="$t('sectionTitles.controlOfMajorityOfDirectors')"
       >
         <UFormGroup name="containTheErrorChecks" class="w-full flex flex-col">
           <p class="font-bold pb-5">
@@ -131,7 +125,7 @@
       <!--  section: other reasons  -->
       <BcrosSection
         :show-section-has-errors="hasErrors(['otherReasons'])"
-        :section-title="$t('sectionHeadings.otherReasons')"
+        :section-title="$t('sectionTitles.otherReasons')"
       >
         <div class="pt-3 w-full">
           <IndividualPersonControlOtherReasons
@@ -145,10 +139,16 @@
 
       <BcrosSectionDivider />
 
+      <!--  section-header: type of interest or control -->
+      <BcrosSection
+        :header-text="$t('sectionHeaders.individualsDetails')"
+        header-icon-name="i-mdi-user-circle"
+      >
+      </BcrosSection>
       <!--  section: email address  -->
       <BcrosSection
         :show-section-has-errors="hasErrors(['email'])"
-        :section-title="$t('sectionHeadings.emailAddress')"
+        :section-title="$t('sectionTitles.emailAddress')"
       >
         <div class="flex-col w-full">
           <BcrosInputsEmailField
@@ -164,7 +164,7 @@
       <!--  section: individual details  -->
       <BcrosSection
         :show-section-has-errors="hasErrors(['birthDate', 'address.'])"
-        :section-title="$t('sectionHeadings.individualDetails')"
+        :section-title="$t('sectionTitles.individualDetails')"
       >
         <div class="flex-col w-full">
           <BcrosInputsAddress
@@ -193,7 +193,7 @@
       <!--  section: citizenship or PR  -->
       <BcrosSection
         :show-section-has-errors="hasErrors(['citizenships'])"
-        :section-title="$t('sectionHeadings.citizenshipOrPR')"
+        :section-title="$t('sectionTitles.citizenshipOrPR')"
       >
         <div class="flex-col w-full">
           <BcrosInputsCountriesOfCitizenship
@@ -211,7 +211,7 @@
       <!--  section: tax details  -->
       <BcrosSection
         :show-section-has-errors="hasErrors(['tax.', 'isTaxResident'])"
-        :section-title="$t('sectionHeadings.taxDetails')"
+        :section-title="$t('sectionTitles.taxDetails')"
       >
         <div class="w-full flex flex-col">
           <p class="font-bold pb-5">
@@ -247,7 +247,7 @@
       <!--  section: unable to obtain or confirm  -->
       <BcrosSection
         :show-section-has-errors="hasErrors(['missingInfo'])"
-        :section-title="$t('sectionHeadings.unableToObtainOrConfirmInformation')"
+        :section-title="$t('sectionTitles.unableToObtainOrConfirmInformation')"
       >
         <div class="w-full">
           <IndividualPersonControlUnableToObtainOrConfirmInformation

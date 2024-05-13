@@ -15,6 +15,7 @@ export function getDefaultInputFormSi (): SiSchemaType {
       beneficialOwner: false,
       indirectControl: false,
       inConcertControl: false,
+      actingJointly: false,
       percentage: PercentageRangeE.NO_SELECTION
     },
     controlOfVotes: {
@@ -23,13 +24,15 @@ export function getDefaultInputFormSi (): SiSchemaType {
       beneficialOwner: false,
       indirectControl: false,
       inConcertControl: false,
+      actingJointly: false,
       percentage: PercentageRangeE.NO_SELECTION
     },
     controlOfDirectors: {
       directControl: false,
       indirectControl: false,
       significantInfluence: false,
-      inConcertControl: false
+      inConcertControl: false,
+      actingJointly: false
     },
     controlOther: undefined,
     email: '',

@@ -54,16 +54,15 @@ describe('pages -> Form Validation', () => {
     // To remove the error,
     // 1) select percent of shares or percent of votes
     // 2) uncheck the control type
-    cy.get('[name="registeredOwner"]').check()
+    cy.get('[data-cy="controlOfShares.registeredOwner"]').check()
     cy.get('[data-cy=new-si-done-btn]').click()
     cy.contains(i18n.errors.validation.controlPercentage.empty).should('exist')
-    cy.get('[name="registeredOwner"]').uncheck()
+    cy.get('[data-cy="controlOfShares.registeredOwner"]').uncheck()
     cy.contains(i18n.errors.validation.controlPercentage.empty).should('not.exist')
-    cy.get('[name="registeredOwner"]').check()
+    cy.get('[data-cy="controlOfShares.registeredOwner"]').check()
     cy.get('[data-cy=new-si-done-btn]').click()
-    // todo: fixme: update on #20758
-    // cy.get('[data-cy=testPercentOfShares]').click().find('li').eq(0).click()
-    // cy.contains(i18n.errors.validation.controlPercentage.empty).should('not.exist')
+    cy.get('[data-cy="controlOfVotes.percentage.0"]').click()
+    cy.contains(i18n.errors.validation.controlPercentage.empty).should('not.exist')
 
     // if the in-concert control is selected, the percentage of shares and votes is required, and the
     // control type is required

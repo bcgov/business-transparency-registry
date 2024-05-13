@@ -2,7 +2,7 @@ import { z } from 'zod'
 import { PercentageRangeE } from '~/enums/percentage-range-e'
 
 export const SiControlOfSchema = z.object({
-  controlName: z.enum(['controlOfShares', 'controlOfVotes', 'directors']),
+  controlName: z.enum(['controlOfShares', 'controlOfVotes']),
   registeredOwner: z.boolean(),
   beneficialOwner: z.boolean(),
   indirectControl: z.boolean(),
@@ -54,7 +54,8 @@ export const SiSchema = z.object({
     directControl: z.boolean(),
     indirectControl: z.boolean(),
     significantInfluence: z.boolean(),
-    inConcertControl: z.boolean()
+    inConcertControl: z.boolean(),
+    actingJointly: z.boolean()
   }),
   controlOther: z.string().optional(),
   email: z.string(),
