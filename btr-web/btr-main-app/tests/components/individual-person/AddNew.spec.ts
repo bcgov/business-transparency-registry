@@ -9,8 +9,6 @@ import {
   BcrosInputsAddress,
   IndividualPersonTaxInfoTaxNumber,
   IndividualPersonTaxInfoTaxResidency,
-  IndividualPersonControlPercentageDropdown,
-  IndividualPersonControlTypeOfControl,
   IndividualPersonControlOfDirectors,
   IndividualPersonControlOtherReasons,
   IndividualPersonControlOfSharesVotes

@@ -77,15 +77,14 @@
       <BcrosSection
         :header-text="$t('sectionHeaders.controlOf')"
         header-icon-name="i-mdi-plus-circle-multiple-outline"
-      >
-      </BcrosSection>
+      />
 
       <!--  section: type of interest or control of shares -->
       <BcrosSection
         :show-section-has-errors="false"
         :section-title="$t('sectionTitles.controlOfShares')"
       >
-        <IndividualPersonControlOfSharesVotes name="controlOfShares" v-model="inputFormSi.controlOfShares" />
+        <IndividualPersonControlOfSharesVotes v-model="inputFormSi.controlOfShares" name="controlOfShares" />
       </BcrosSection>
 
       <!--  section: type of interest or control of votes -->
@@ -93,7 +92,7 @@
         :show-section-has-errors="false"
         :section-title="$t('sectionTitles.controlOfVotes')"
       >
-        <IndividualPersonControlOfSharesVotes name="controlOfVotes" v-model="inputFormSi.controlOfVotes" />
+        <IndividualPersonControlOfSharesVotes v-model="inputFormSi.controlOfVotes" name="controlOfVotes" />
       </BcrosSection>
 
       <!--  section: control of majority of directors  -->
@@ -144,8 +143,7 @@
       <BcrosSection
         :header-text="$t('sectionHeaders.individualsDetails')"
         header-icon-name="i-mdi-user-circle"
-      >
-      </BcrosSection>
+      />
       <!--  section: email address  -->
       <BcrosSection
         :show-section-has-errors="hasErrors(['email'])"

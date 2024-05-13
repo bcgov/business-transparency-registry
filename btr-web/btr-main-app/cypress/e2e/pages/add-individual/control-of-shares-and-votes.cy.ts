@@ -1,5 +1,3 @@
-import index from '@nuxt/test-utils/dist/vitest-environment.mjs'
-
 describe('pages -> Add individual', () => {
   beforeEach(() => {
     cy.visit('/')
@@ -17,11 +15,10 @@ describe('pages -> Add individual', () => {
     cy.get('[data-cy="controlOfVotes.registeredOwner"]').check().should('be.checked')
     cy.get('[data-cy="controlOfVotes.beneficialOwner"]').check().should('be.checked')
     cy.get('[data-cy="controlOfVotes.indirectControl"]').check().should('be.checked')
-
   })
 
   const verifyBgColorsControlOfVotes = (index: number) => {
-    const nonSelected = [0, 1, 2, 3].filter((num) => num !== index)
+    const nonSelected = [0, 1, 2, 3].filter(num => num !== index)
     cy.get(`[data-cy="controlOfVotes.percentage.${index}"]`)
       .should('have.css', 'background-color')
       .and('eq', 'rgb(22, 105, 187)')
@@ -44,6 +41,5 @@ describe('pages -> Add individual', () => {
     verifyBgColorsControlOfVotes(2)
     cy.get('[data-cy="controlOfVotes.percentage.3"]').click()
     verifyBgColorsControlOfVotes(3)
-
   })
 })

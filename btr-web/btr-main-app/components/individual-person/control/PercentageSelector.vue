@@ -6,9 +6,9 @@
       class="w-1/4 h-16 flex items-center justify-center cursor-pointer"
       :class="index === selected ? 'bg-blue-500 text-white' : 'bg-gray-100 text-gray-700'"
       tabindex="0"
+      :data-cy="name + '.' + index"
       @click="selectOption(index)"
       @keydown.enter="selectOption(index)"
-      :data-cy="name + '.' + index"
     >
       {{ option.label }}
     </div>
@@ -44,7 +44,7 @@ const options = [
 ]
 const selected = ref(-1)
 if (model.value) {
-  selected.value = options.findIndex((option) => option.range === model.value)
+  selected.value = options.findIndex(option => option.range === model.value)
 }
 
 const selectOption = (index: number) => {

@@ -147,7 +147,6 @@ export function validateControlSelectionForSharesAndVotes (form: any, ctx: Refin
   const hasInConcertOrJointly: boolean = form.inConcertControl || form.actingJointly
   const hasControlType: boolean = (form.registeredOwner || form.beneficialOwner || form.indirectControl)
 
-  console.log('validate control of', form )
   if (!hasPercentage && !hasControlType && !hasInConcertOrJointly) {
     return z.NEVER
   }
