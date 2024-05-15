@@ -15,6 +15,7 @@
         <span class="h-full w-full">
           <UIcon
             name="i-mdi-close font-bold align-middle"
+            data-cy="close-icon"
             @click.stop.prevent="$emit('chipCloseClicked')"
           />
         </span>

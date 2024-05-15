@@ -4,6 +4,7 @@
       v-slot="{ open }"
       v-model="citizenships"
       as="div"
+      :by="compareItems"
       multiple
       :class="[
         'w-full',
@@ -135,6 +136,12 @@ const citizenships = computed({
 })
 
 const countryOptions = ref(citizenshipOptions)
+
+// the comparison function can be passed in as a prop
+// when we make this component a general-purpose dropdown in future tickets
+const compareItems = (a: BtrCountryI, b: BtrCountryI) => {
+  return a.alpha_2 === b.alpha_2
+}
 
 const removeCitizenship = (country: BtrCountryI) => {
   const index = citizenships.value.indexOf(country)
