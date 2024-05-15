@@ -1,6 +1,4 @@
 <template>
-  <!--    todo: update stuff from the ticket #20758   -->
-  <!--  todo: note: depending on where the error messaging needs to be, we might need to update/add  UFromGroup -->
   <UFormGroup :name="name">
     <IndividualPersonControlPercentageDropdown
       id="percentageOfShares"
@@ -41,16 +39,10 @@
 
 <script setup lang="ts">
 import { v4 as UUIDv4 } from 'uuid'
+import { SiControlOfSchemaType } from '~/utils/si-schema/definitions'
 
-// todo: maybe add interface for this type can be part of 20758
 const model = defineModel({
-  type: {
-    percentage: String,
-    registeredOwner: Boolean,
-    beneficialOwner: Boolean,
-    indirectControl: Boolean,
-    inConcertControl: Boolean
-  },
+  type: Object as PropType<SiControlOfSchemaType>,
   required: true
 })
 

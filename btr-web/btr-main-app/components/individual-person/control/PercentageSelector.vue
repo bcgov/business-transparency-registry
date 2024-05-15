@@ -6,6 +6,7 @@
       class="w-1/4 h-16 flex items-center justify-center cursor-pointer"
       :class="index === selected ? 'bg-blue-500 text-white' : 'bg-gray-100 text-gray-700'"
       tabindex="0"
+      :data-cy="name + '.' + index"
       @click="selectOption(index)"
       @keydown.enter="selectOption(index)"
     >
@@ -15,8 +16,13 @@
 </template>
 
 <script setup lang="ts">
+import { type UseEventBusReturn } from '@vueuse/core'
+
+const formBus = inject<UseEventBusReturn<any, string> | undefined>('form-events', undefined)
+
 const t = useNuxtApp().$i18n.t
-const emit = defineEmits<{(e: 'update:modelValue', value: PercentageRangeE): void }>()
+const model = defineModel({ type: String })
+const props = defineProps({ name: { type: String, required: true } })
 
 const options = [
   {
@@ -37,8 +43,16 @@ const options = [
   }
 ]
 const selected = ref(-1)
-const selectOption = (index) => {
+if (model.value) {
+  selected.value = options.findIndex(option => option.range === model.value)
+}
+
+const selectOption = (index: number) => {
   selected.value = index
-  emit('update:modelValue', options[index].range)
+  model.value = options[index].range
+  if (formBus) {
+    formBus.emit({ type: 'blur', path: props.name })
+    formBus.emit({ type: 'change', path: props.name })
+  }
 }
 </script>

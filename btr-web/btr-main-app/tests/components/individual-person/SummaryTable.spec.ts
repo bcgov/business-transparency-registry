@@ -34,7 +34,7 @@ describe('AddIndividualPersonSummaryTable tests', () => {
     expect(wrapper.find('[data-cy=summary-table-address]').exists()).toBe(false)
     expect(wrapper.find('[data-cy=summary-table-details]').exists()).toBe(false)
     expect(wrapper.find('[data-cy=summary-table-dates]').exists()).toBe(false)
-    // todo: fixme: update on #20758
+    // todo: fixme: update on #TBD with new summary table
     // expect(wrapper.find('[data-cy=summary-table-controls]').exists()).toBe(false)
     expect(wrapper.find('[data-cy=summary-table-buttons]').exists()).toBe(false)
   })
@@ -45,7 +45,7 @@ describe('AddIndividualPersonSummaryTable tests', () => {
     expect(wrapper.find('[data-cy=summary-table-address]').exists()).toBe(true)
     expect(wrapper.find('[data-cy=summary-table-details]').exists()).toBe(true)
     expect(wrapper.find('[data-cy=summary-table-dates]').exists()).toBe(true)
-    // todo: fixme: update on #20758
+    // todo: fixme: update on #TBD with new summary table
     // expect(wrapper.find('[data-cy=summary-table-controls]').exists()).toBe(true)
     expect(wrapper.find('[data-cy=summary-table-buttons]').exists()).toBe(true)
   })
@@ -74,7 +74,7 @@ describe('AddIndividualPersonSummaryTable tests', () => {
     expect(details.text()).toContain('Citizenship(s):Canada')
     expect(details.text()).toContain('Tax Resident of Canada')
   })
-  // todo: fixme: update on #20758 && 20756
+  // todo: fixme: update on #TBD with new summary table && 20756
   it.skip('displays the Controls column as expected', async () => {
     // only shares
     si.controlType.sharesVotes.registeredOwner = true
@@ -89,7 +89,7 @@ describe('AddIndividualPersonSummaryTable tests', () => {
     si.controlType.directors.inConcertControl = false
     si.controlType.other = ''
     await wrapper.setProps({ individuals: [si] })
-    // todo: fixme: update on #20758
+    // todo: fixme: update on #TBD with new summary table
     // let controls = wrapper.find('[data-cy=summary-table-controls]')
     // expect(controls.text()).toContain('Shares')
     // expect(controls.text()).toContain('Registered owner, Beneficial owner, and Indirect control')

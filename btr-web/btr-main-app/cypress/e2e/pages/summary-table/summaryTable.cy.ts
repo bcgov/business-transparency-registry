@@ -35,7 +35,7 @@ describe('pages -> Summary Table', () => {
         .get('[data-cy=summary-table-details]').contains(testData.profile1.taxNumber)
         .get('[data-cy=summary-table-details]').contains(testData.profile1.summaryTable.citizenship)
         .get('[data-cy=summary-table-details]').contains(testData.profile1.summaryTable.taxResidency)
-        // todo: fixme: update on #20758
+        // todo: fixme: update on #TBD with new summary table
         // .get('[data-cy=summary-table-controls]').contains(testData.profile1.summaryTable.shareControl)
         // todo: fixme: update on #20756
         // .get('[data-cy=summary-table-controls]').contains(testData.profile1.summaryTable.directorControl)
@@ -51,7 +51,7 @@ describe('pages -> Summary Table', () => {
         .get('[data-cy=summary-table-details]').contains(testData.profile2.taxNumber)
         .get('[data-cy=summary-table-details]').contains(testData.profile2.summaryTable.citizenship)
         .get('[data-cy=summary-table-details]').contains(testData.profile2.summaryTable.taxResidency)
-      // todo: fixme: update on #20758
+      // todo: fixme: update on #TBD with new summary table
         // .get('[data-cy=summary-table-controls]').contains(testData.profile2.summaryTable.shareControl)
       // todo: fixme: update on #20756
         // .get('[data-cy=summary-table-controls]').contains(testData.profile2.summaryTable.directorControl)
@@ -86,7 +86,7 @@ describe('pages -> Summary Table', () => {
       cy.get('#individual-person-full-name').should('have.value', testData.profile1.fullName)
         .get('#individual-person-preferred-name').should('have.value', testData.profile1.preferredName)
         .get('#individual-person-email').should('have.value', testData.profile1.email)
-        // todo: fixme update with #20758
+        // todo: fixme update with #TBD
         // .get('input[name="percentOfShares[range]"]').invoke('val').should('eq', testData.profile1.percentOfShares)
         // .get('input[name="percentOfShares[range]"]').invoke('val').should('eq', testData.profile1.percentOfVotes)
         // todo: fixme update with #20756

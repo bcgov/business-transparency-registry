@@ -144,10 +144,10 @@ export function validateMissingInfoReason (formData: any): boolean {
 export function validateControlSelectionForSharesAndVotes (form: any, ctx: RefinementCtx): never {
   const t = useNuxtApp().$i18n.t
   const hasPercentage = form.percentage !== PercentageRangeE.NO_SELECTION
-  const hasInConcert: boolean = form.inConcertControl
+  const hasInConcertOrJointly: boolean = form.inConcertControl || form.actingJointly
   const hasControlType: boolean = (form.registeredOwner || form.beneficialOwner || form.indirectControl)
 
-  if (!hasPercentage && !hasControlType && !hasInConcert) {
+  if (!hasPercentage && !hasControlType && !hasInConcertOrJointly) {
     return z.NEVER
   }
 
@@ -159,13 +159,29 @@ export function validateControlSelectionForSharesAndVotes (form: any, ctx: Refin
     })
   }
 
-  if ((hasPercentage && !hasControlType) || (hasInConcert && !hasControlType)) {
+  if (hasPercentage && !hasControlType) {
     ctx.addIssue({
       code: z.ZodIssueCode.custom,
+      path: ['controlType'],
       message: t('errors.validation.sharesAndVotes.required')
     })
   }
 
+  if (hasInConcertOrJointly && !hasControlType) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      path: ['controlType'],
+      message: t('errors.validation.sharesAndVotes.required')
+    })
+  }
+
+  if (hasInConcertOrJointly && !hasPercentage) {
+    ctx.addIssue({
+      path: ['percentage'],
+      code: z.ZodIssueCode.custom,
+      message: t('errors.validation.controlPercentage.empty')
+    })
+  }
   return z.NEVER
 }
 

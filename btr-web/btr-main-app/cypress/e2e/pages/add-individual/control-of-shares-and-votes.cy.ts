@@ -1,50 +1,45 @@
 describe('pages -> Add individual', () => {
-  let en: any
-
   beforeEach(() => {
-    // load the English version of the language file
-    cy.readFile('lang/en.json').then((json) => {
-      en = json
-    })
-
     cy.visit('/')
   })
 
-  // todo: fixme: update on #20758
-  it.skip('verify that the Type of Control checkboxes are working', () => {
+  it('verify that the Type of Control checkboxes are working', () => {
     cy.get('[data-cy=add-new-btn]').trigger('click')
-    // cy.get('[data-cy="showAddIndividualPersonManually"]').trigger('click')
 
-    const checkboxes = cy.get('[data-cy="testTypeOfControl"]').should('exist')
+    cy.get('[name="controlOfShares.controlType"]').get('input[type="checkbox"]').check()
+    cy.get('[data-cy="controlOfShares.registeredOwner"]').check().should('be.checked')
+    cy.get('[data-cy="controlOfShares.beneficialOwner"]').check().should('be.checked')
+    cy.get('[data-cy="controlOfShares.indirectControl"]').check().should('be.checked')
 
-    checkboxes.get('[name="inConcertControl"]').check().should('be.checked')
-    checkboxes.get('[name="registeredOwner"]').check().should('be.checked')
-    checkboxes.get('[name="beneficialOwner"]').check().should('be.checked')
-    checkboxes.get('[name="indirectControl"]').check().should('be.checked')
+    cy.get('[name="controlOfVotes.controlType"]').get('input[type="checkbox"]').check()
+    cy.get('[data-cy="controlOfVotes.registeredOwner"]').check().should('be.checked')
+    cy.get('[data-cy="controlOfVotes.beneficialOwner"]').check().should('be.checked')
+    cy.get('[data-cy="controlOfVotes.indirectControl"]').check().should('be.checked')
   })
 
-  // todo: fixme: update on #20758
-  it.skip('test the tooltip for in-concert control', () => {
+  const verifyBgColorsControlOfVotes = (index: number) => {
+    const nonSelected = [0, 1, 2, 3].filter(num => num !== index)
+    cy.get(`[data-cy="controlOfVotes.percentage.${index}"]`)
+      .should('have.css', 'background-color')
+      .and('eq', 'rgb(22, 105, 187)')
+    nonSelected.forEach((num) => {
+      cy.get(`[data-cy="controlOfVotes.percentage.${num}"]`)
+        .should('have.css', 'background-color')
+        .and('eq', 'rgb(241, 243, 245)')
+    })
+  }
+
+  it('test the dropdown menu for percent of shares', () => {
     cy.get('[data-cy=add-new-btn]').trigger('click')
-    // cy.get('[data-cy="showAddIndividualPersonManually"]').trigger('click')
 
-    cy.get('[data-cy="in-concert-control-tooltip"]').trigger('mouseenter')
-    cy.get('[data-cy="in-concert-control-tooltip-content"').should('exist')
-    cy.get('[data-cy="in-concert-control-tooltip"]').trigger('mouseleave')
-    cy.get('[data-cy="in-concert-control-tooltip-content"').should('not.exist')
-  })
-
-  // todo: fixme: update on #20758
-  it.skip('test the dropdown menu for percent of shares', () => {
-    cy.get('[data-cy=add-new-btn]').trigger('click')
-
-    const shareRange1 = en.texts.sharesAndVotes.percentageRange.moreThan75.replace('{sharesOrVotes}', 'shares')
-    const shareRange2 = en.texts.sharesAndVotes.percentageRange.atLeast25To50.replace('{sharesOrVotes}', 'shares')
-    cy.get('[data-cy=testPercentOfShares]').click().find('li').eq(0).click()
-    cy.get('input[name="percentOfShares[label]"]').invoke('val').should('eq', shareRange1)
-    cy.get('input[name="percentOfShares[label]"]').invoke('val').should('not.eq', shareRange2)
-    cy.get('[data-cy=testPercentOfShares]').click().find('li').eq(2).click()
-    cy.get('input[name="percentOfShares[label]"]').invoke('val').should('eq', shareRange2)
-    cy.get('input[name="percentOfShares[label]"]').invoke('val').should('not.eq', shareRange1)
+    // it works same for shares as it is same component
+    cy.get('[data-cy="controlOfVotes.percentage.0"]').click()
+    verifyBgColorsControlOfVotes(0)
+    cy.get('[data-cy="controlOfVotes.percentage.1"]').click()
+    verifyBgColorsControlOfVotes(1)
+    cy.get('[data-cy="controlOfVotes.percentage.2"]').click()
+    verifyBgColorsControlOfVotes(2)
+    cy.get('[data-cy="controlOfVotes.percentage.3"]').click()
+    verifyBgColorsControlOfVotes(3)
   })
 })

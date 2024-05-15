@@ -9,11 +9,11 @@
     >
       <!--  section: your information  -->
       <BcrosSection
-        :section-title="$t('sectionHeadings.isYourOwnInformation')"
+        :section-title="$t('sectionTitles.isYourOwnInformation')"
         data-cy="isYourOwnInformation-section"
       >
         <div class="flex-col w-full">
-          <p class="py-3">
+          <p class="pb-5">
             {{ $t('texts.isYourOwnInformation') }}
           </p>
           <UFormGroup name="workaroundForTriggeringValidationOnEntireForm">
@@ -26,10 +26,13 @@
           </UFormGroup>
         </div>
       </BcrosSection>
+
+      <BcrosSectionDivider />
+
       <!--  section: individuals full name  -->
       <BcrosSection
         :show-section-has-errors="hasErrors(['name.'])"
-        :section-title="$t('sectionHeadings.individualsFullName')"
+        :section-title="$t('sectionTitles.individualsFullName')"
       >
         <div class="flex-col w-full">
           <BcrosInputsNameField
@@ -68,38 +71,37 @@
         </div>
       </BcrosSection>
 
-      <!--  section: type of interest or control  -->
+      <BcrosSectionDivider />
+
+      <!--  section-header: type of interest or control of shares/votes-->
+      <BcrosSection
+        :header-text="$t('sectionHeaders.controlOf')"
+        header-icon-name="i-mdi-plus-circle-multiple-outline"
+      />
+
+      <!--  section: type of interest or control of shares -->
       <BcrosSection
         :show-section-has-errors="false"
-        :section-title="$t('sectionHeadings.typeOfInterestOrControl')"
+        :section-title="$t('sectionTitles.controlOfShares')"
       >
-        <div class="flex-col w-full">
-          <p class="font-bold py-3">
-            {{ $t('labels.sharesAndVotes') }}
-          </p>
-          <p>
-            {{ $t('texts.sharesAndVotes.controlPercentage') }}
-          </p>
-          <IndividualPersonControl
-            v-model="inputFormSi.controlOfShares"
-            :name="'controlOfShares'"
-          />
-          <IndividualPersonControl
-            v-model="inputFormSi.controlOfVotes"
-            :name="'controlOfVotes'"
-          />
-          <!--          todo: add section control of majority of directors-->
-          <!--          todo: add others section -->
-        </div>
+        <IndividualPersonControlOfSharesVotes v-model="inputFormSi.controlOfShares" name="controlOfShares" />
+      </BcrosSection>
+
+      <!--  section: type of interest or control of votes -->
+      <BcrosSection
+        :show-section-has-errors="false"
+        :section-title="$t('sectionTitles.controlOfVotes')"
+      >
+        <IndividualPersonControlOfSharesVotes v-model="inputFormSi.controlOfVotes" name="controlOfVotes" />
       </BcrosSection>
 
       <!--  section: control of majority of directors  -->
       <BcrosSection
         :show-section-has-errors="false"
-        :section-title="$t('sectionHeadings.controlOfMajorityOfDirectors')"
+        :section-title="$t('sectionTitles.controlOfMajorityOfDirectors')"
       >
         <UFormGroup name="containTheErrorChecks" class="w-full flex flex-col">
-          <p class="font-bold py-3">
+          <p class="font-bold pb-5">
             {{ $t('labels.controlOfDirectors') }}
           </p>
           <p>
@@ -123,7 +125,7 @@
       <!--  section: other reasons  -->
       <BcrosSection
         :show-section-has-errors="hasErrors(['otherReasons'])"
-        :section-title="$t('sectionHeadings.otherReasons')"
+        :section-title="$t('sectionTitles.otherReasons')"
       >
         <div class="pt-3 w-full">
           <IndividualPersonControlOtherReasons
@@ -135,12 +137,19 @@
         </div>
       </BcrosSection>
 
+      <BcrosSectionDivider />
+
+      <!--  section-header: type of interest or control -->
+      <BcrosSection
+        :header-text="$t('sectionHeaders.individualsDetails')"
+        header-icon-name="i-mdi-user-circle"
+      />
       <!--  section: email address  -->
       <BcrosSection
         :show-section-has-errors="hasErrors(['email'])"
-        :section-title="$t('sectionHeadings.emailAddress')"
+        :section-title="$t('sectionTitles.emailAddress')"
       >
-        <div class="flex-col w-full pt-3">
+        <div class="flex-col w-full">
           <BcrosInputsEmailField
             id="individual-person-email"
             v-model="inputFormSi.email"
@@ -153,20 +162,23 @@
 
       <!--  section: individual details  -->
       <BcrosSection
-        :show-section-has-errors="hasErrors(['birthDate', 'address.'])"
-        :section-title="$t('sectionHeadings.individualDetails')"
+        :show-section-has-errors="hasErrors(['address.'])"
+        :section-title="$t('labels.lastKnownAddress')"
       >
         <div class="flex-col w-full">
           <BcrosInputsAddress
             id="addNewPersonLastKnownAddress"
             v-model="inputFormSi.address"
-            :label="$t('labels.lastKnownAddress')"
             name="address"
           />
-          <div class="flex-col py-5" />
-          <p class="font-bold py-3">
-            {{ $t('labels.birthdate') }}
-          </p>
+        </div>
+      </BcrosSection>
+      <BcrosSection
+        :show-section-has-errors="hasErrors(['birthDate'])"
+        :section-title="$t('labels.birthdate')"
+      >
+        <!--          todo: replace this with divider ?-->
+        <div class="flex-col w-full">
           <BcrosInputsDateSelect
             id="addNewPersonBirthdate"
             name="birthDate"
@@ -182,7 +194,7 @@
       <!--  section: citizenship or PR  -->
       <BcrosSection
         :show-section-has-errors="hasErrors(['citizenships'])"
-        :section-title="$t('sectionHeadings.citizenshipOrPR')"
+        :section-title="$t('sectionTitles.citizenshipOrPR')"
       >
         <div class="flex-col w-full">
           <BcrosInputsCountriesOfCitizenship
@@ -200,10 +212,10 @@
       <!--  section: tax details  -->
       <BcrosSection
         :show-section-has-errors="hasErrors(['tax.', 'isTaxResident'])"
-        :section-title="$t('sectionHeadings.taxDetails')"
+        :section-title="$t('sectionTitles.taxDetails')"
       >
         <div class="w-full flex flex-col">
-          <p class="font-bold py-3">
+          <p class="font-bold pb-5">
             {{ $t('labels.taxNumber') }}
           </p>
           <p>
@@ -218,7 +230,7 @@
             data-cy="testTaxNumber"
           />
           <div>
-            <p class="font-bold py-3">
+            <p class="font-bold pb-5">
               {{ $t('labels.taxResidency') }}
             </p>
             <p>
@@ -236,7 +248,7 @@
       <!--  section: unable to obtain or confirm  -->
       <BcrosSection
         :show-section-has-errors="hasErrors(['missingInfo'])"
-        :section-title="$t('sectionHeadings.unableToObtainOrConfirmInformation')"
+        :section-title="$t('sectionTitles.unableToObtainOrConfirmInformation')"
       >
         <div class="w-full">
           <IndividualPersonControlUnableToObtainOrConfirmInformation
@@ -412,16 +424,4 @@ if (props.setSignificantIndividual) {
   const propsSi = convertSiToSchema(props.setSignificantIndividual)
   Object.assign(inputFormSi, propsSi)
 }
-
-// needed because dropdown is not built out of NuxtUI components so it does not trigger validation automatically
-watch(() => inputFormSi.citizenships, (newValue) => {
-  const val = validateCitizenshipValidator().safeParse(newValue)
-  let errors: { path: string, message: string }[] = []
-  if (!val.success) {
-    errors = val.error.issues.map(
-      (issue: z.ZodIssue) => ({ message: issue.message, path: 'citizenships' })
-    )
-  }
-  addIndividualForm.value.setErrors(errors, 'citizenships')
-}, { deep: true })
 </script>

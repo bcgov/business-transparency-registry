@@ -255,6 +255,16 @@
     }
   },
   "helpTexts": {
+    "controlOfSharesVotes": {
+      "sharesAndVotes": {
+        "p1": "A significant individual must be listed in the transparency register of the company if the individual has an interest or rights or any combination of them in a significant number of shares. ",
+        "p2": "A significant number of shares is 25% or more of the issued shares of the company, or 25% or more of the voting rights of the company. Voting rights are attached to shares and the rights associated with those shares are set out in the articles of the company. While typically one share equals one vote, there may be different classes of shares that may hold special rights that afford the person who owns the shares to more than one vote.",
+        "p3": "If you are unsure of how to make this determination, it is recommended you seek advice from a legal professional."
+      },
+      "typesOfControl": {
+        "p1": "Vestibulum id ligula porta felis euismod semper. Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Sed posuere consectetur est at lobortis."
+      }
+    },
     "significantIndividuals": {
       "helpPlaceholder1": "This is placeholder text. It's used as a temporary replacement for final content.",
       "helpPlaceholder2": "Here's another example of placeholder text. It helps to visualize the layout and overall design in a mockup or prototype."
@@ -265,7 +275,7 @@
     "significantIndividualChange": "Significant Individual Change",
     "significantIndividuals": "Significant Individuals"
   },
-  "sectionHeadings": {
+  "sectionTitles": {
     "profileDetails": "Your Details",
     "reviewConfirm": "Review and Confirm",
     "isYourOwnInformation": "Indicate if this is your information",
@@ -282,5 +292,9 @@
     "citizenshipOrPR": "Citizenship / Permanent Residency",
     "taxDetails": "Tax Details",
     "unableToObtainOrConfirmInformation": "Unable to Obtain or Confirm Information"
+  },
+  "sectionHeaders": {
+    "controlOf": "Control",
+    "individualsDetails": "Individual’s Details"
   }
 }

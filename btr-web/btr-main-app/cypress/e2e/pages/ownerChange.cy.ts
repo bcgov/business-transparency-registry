@@ -70,8 +70,10 @@ describe('pages -> Beneficial Owner Change', () => {
     // cy.get('[data-cy=showAddIndividualPersonManually]')
     //   .should('have.text', ' Cancel transparent register information')
 
+    // todo: introduce langague files for this, and verify it works for correct fields
     // cy.get('[data-cy=addIndividualPerson]').should('contain.text', 'Assesment of Individual Significance')
-    cy.get('[data-cy=addIndividualPerson]').should('contain.text', 'Control of Shares and Votes')
+    cy.get('[data-cy=addIndividualPerson]').should('contain.text', 'Control of Shares')
+    cy.get('[data-cy=addIndividualPerson]').should('contain.text', 'Control of Votes')
     cy.get('[data-cy=addIndividualPerson]').should('contain.text', 'Control of Majority of Directors')
     cy.get('[data-cy=addIndividualPerson]').should('contain.text', 'Birthdate')
     cy.get('[data-cy=addIndividualPerson]').should('contain.text', 'Last Known Address')
@@ -115,42 +117,7 @@ describe('pages -> Beneficial Owner Change', () => {
       cy.get('[data-cy=add-new-btn]').click()
       // cy.get('[data-cy=showAddIndividualPersonManually]').click()
 
-      // fill out the form
-      cy.get('#individual-person-full-name').type(testData.profile1.fullName)
-      cy.get('[data-cy=usePreferredName').check()
-      cy.get('#individual-person-preferred-name').type(testData.profile1.preferredName)
-      cy.get('#individual-person-email').type(testData.profile1.email)
-
-      // enter shares and votes percentage
-      // todo: fixme: update on #20758
-      // cy.get('[data-cy=testPercentOfShares]').click().find('li').eq(0).click()
-      // cy.get('[data-cy=testPercentOfVotes]').click().find('li').eq(0).click()
-
-      // select the control type (registred owner + direct control)
-      // todo: fixme update with #20756
-      // cy.get('[data-cy="testTypeOfControl"]').get('[name="registeredOwner"]').check()
-      // cy.get('[data-cy="testControlOfDirectors"]').get('[name="directControl"]').check()
-
-      // select the birthdate (here we just use today's date for simplicity)
-      cy.get('#addNewPersonBirthdate').trigger('click')
-      cy.get('[data-cy=date-picker]').get('.bcros-date-picker__calendar__day.dp__today').trigger('click')
-
-      // enter the address
-      cy.get('[data-cy="address-country"]').click()
-      cy.get('[data-cy="address-country"]').get('li').contains(testData.profile1.address.country).click()
-      cy.get('[data-cy="address-line1-autocomplete"]').type(testData.profile1.address.streetAddress)
-      cy.get('[data-cy="address-city"]').type(testData.profile1.address.city)
-      cy.get('[data-cy="address-region-select"]').click()
-      cy.get('[data-cy="address-region-select"]').get('li').contains(testData.profile1.address.province[0]).click()
-      cy.get('[data-cy="address-postal-code"]').type(testData.profile1.address.postalCode)
-
-      // select the citizenship info
-      cy.get('[data-cy="countryOfCitizenshipDropdownButton"]').click()
-      cy.get('[data-cy="countryOfCitizenshipDropdownOption"]').eq(0).click({ force: true })
-
-      // enter tax number and select tax residency
-      cy.get('[data-cy="tax-number-input"]').type(testData.profile1.taxNumber)
-      cy.get('[data-cy="testTaxResidency"]').get('[type="radio"][value="true"]').check()
+      cy.fillOutForm(testData.profile1)
 
       // click 'Done' button to add the individual
       cy.get('[data-cy=new-si-done-btn]').click()
