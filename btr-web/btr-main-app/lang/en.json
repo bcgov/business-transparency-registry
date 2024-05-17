@@ -85,6 +85,7 @@
       "controlOfVotes": "Indicate the {boldStart}type(s) of control{boldEnd} of the votes this individual has:",
       "shares": "If applicable, enter the {boldStart}percentage of shares{boldEnd} issued by the company that the individual controls",
       "votes": "If applicable, enter the {boldStart}percentage of votes{boldEnd} issued by the company that the individual controls",
+      "lessThan25Note": "You are only considered a significant individual {boldStart}IF{boldEnd} you {boldStart}control 25% or more individually{boldEnd} or if you are controlling less than 25%, you need to be operating jointly or in concert with other parties.",
       "actingJointlyOrInConcert": {
         "checkbox": "This individual has interests or rights held jointly and/or exercised in concert",
         "text": "Please indicate if the individual has significant control over the company jointly, or in concert with another individual. If this applies, provide the name of the other individual(s) below, and include them as a significant individual on the transparency register.",
