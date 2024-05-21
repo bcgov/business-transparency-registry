@@ -1,8 +1,8 @@
+import { v4 as UUIDv4 } from 'uuid'
+import { todayIsoDateString } from '../../../btr-common-components/utils/date'
 import { AddressSchemaType, SiSchemaType } from '~/utils/si-schema/definitions'
 import { PercentageRangeE } from '~/enums/percentage-range-e'
-import { v4 as UUIDv4 } from 'uuid'
 import { SignificantIndividualFilingI } from '~/interfaces/significant-individual-filing-i'
-import { todayIsoString } from '../../../btr-common-components/utils/date'
 
 export function getEmptyAddress (): AddressSchemaType {
   return {
@@ -64,7 +64,7 @@ export function getDefaultInputFormSi (): SiSchemaType {
     missingInfoReason: '',
 
     // replace when on 20760
-    startDate: todayIsoString(),
+    startDate: todayIsoDateString(),
     endDate: '',
 
     uuid: UUIDv4(),
@@ -74,7 +74,7 @@ export function getDefaultInputFormSi (): SiSchemaType {
 
 export function getEmptySiFiling (): SignificantIndividualFilingI {
   return {
-    effectiveDate: todayIsoString(),
+    effectiveDate: todayIsoDateString(),
     noSignificantIndividualsExist: false,
     significantIndividuals: [],
     businessIdentifier: '',

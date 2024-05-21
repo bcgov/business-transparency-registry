@@ -179,8 +179,8 @@ const _getSi = (
     },
     name: {
       fullName: _getSiName(person, BodsNameTypeE.INDIVIDUAL),
-      preferredName: preferredName,
-      isYourOwnInformation: false, //todo: fixme ?? how do we want to set this
+      preferredName,
+      isYourOwnInformation: false, // todo: fixme ?? how do we want to set this
       isUsePreferredName: !!(preferredName.trim())
     },
     isTaxResident: !!(person.taxResidencies.find(country => country.code === 'CA')),

@@ -32,4 +32,4 @@ export function datetimeStringToDateString (datetimeString: string) {
   return (date) ? moment(date).local().format('YYYY-MM-DD') : ''
 }
 
-export const todayIsoString = () => dateToString(new Date(), 'YYYY-MM-DD')
+export const todayIsoDateString = () => dateToString(new Date(), 'YYYY-MM-DD')

@@ -1,5 +1,6 @@
 import { v4 as UUIDv4 } from 'uuid'
 
+import { FetchError } from 'ofetch'
 import { SignificantIndividualFilingI } from '~/interfaces/significant-individual-filing-i'
 import { IdAsNumberI } from '~/interfaces/common-ids-i'
 import { BtrBodsEntityI } from '~/interfaces/btr-bods/btr-bods-entity-i'
@@ -15,7 +16,6 @@ import { BtrBodsOwnershipOrControlI } from '~/interfaces/btr-bods/btr-bods-owner
 import { BtrBodsPersonI } from '~/interfaces/btr-bods/btr-bods-person-i'
 import { SiSchemaType } from '~/utils/si-schema/definitions'
 import { getSIsFromBtrBodsSubmission } from '~/utils/btr-bods/bods-to-si-schema-converters'
-import { FetchError } from 'ofetch'
 import { FilingActionE } from '#imports'
 import SiSchemaToBtrBodsConverters from '~/utils/btr-bods/si-schema-to-btr-bods-converters'
 
@@ -64,44 +64,41 @@ const getPersonAndOwnershipAndControlStatements = (sif: SignificantIndividualFil
     personStatements: []
   }
 
-  const today = new Date()
-  const isoDateString = today.toISOString().substring(0, 10)
-
-  for (const si of sif.significantIndividuals) {
+  for (const siSchema of sif.significantIndividuals) {
     const source = BtrBodsSources.SELF_DECLARATION
-    source.assertedBy = [{ name: si.name.fullName }]
+    source.assertedBy = [{ name: siSchema.name.fullName }]
     source.description = BtrSourceDescriptionProvidedByBtrGovBC
-    const todayIso = (new Date()).toISOString()
-    const address = SiSchemaToBtrBodsConverters.getBodsAddressFromSi(si)
+    const address = SiSchemaToBtrBodsConverters.getBodsAddressFromSi(siSchema)
     const personStatement: BtrBodsPersonI = {
-      missingInfoReason: si.missingInfoReason,
+      missingInfoReason: siSchema.missingInfoReason,
       placeOfResidence: address,
       addresses: [address],
-      birthDate: si.birthDate,
-      email: si.email,
-      hasTaxNumber: !!si.tax.hasTaxNumber,
-      identifiers: SiSchemaToBtrBodsConverters.getBodsIdentifiersFromSi(si),
+      birthDate: siSchema.birthDate,
+      email: siSchema.email,
+      hasTaxNumber: !!siSchema.tax.hasTaxNumber,
+      identifiers: SiSchemaToBtrBodsConverters.getBodsIdentifiersFromSi(siSchema),
       isComponent: false,
-      names: SiSchemaToBtrBodsConverters.getBodsNamesFromSi(si),
-      nationalities: SiSchemaToBtrBodsConverters.getBodsNationalitiesFromSi(si),
-      isPermanentResidentCa: si.citizenships.findIndex(country => country.alpha_2 === 'CA_PR') !== -1,
-      personType: SiSchemaToBtrBodsConverters.getPersonType(si),
+      names: SiSchemaToBtrBodsConverters.getBodsNamesFromSi(siSchema),
+      nationalities: SiSchemaToBtrBodsConverters.getBodsNationalitiesFromSi(siSchema),
+      isPermanentResidentCa: siSchema.citizenships.findIndex(country => country.alpha_2 === 'CA_PR') !== -1,
+      personType: SiSchemaToBtrBodsConverters.getPersonType(siSchema),
       publicationDetails: BtrBodsBcrosPublicationDetails(),
       source,
-      statementDate: isoDateString,
+      statementDate: todayIsoString(),
       statementType: BodsStatementTypeE.PERSON_STATEMENT,
-      taxResidencies: SiSchemaToBtrBodsConverters.getTaxResidenciesFromSi(si),
-      statementID: si.uuid || UUIDv4()
+      taxResidencies: SiSchemaToBtrBodsConverters.getTaxResidenciesFromSi(siSchema),
+      statementID: UUIDv4(), // todo: fixme we should update schema only if there are changes to the schema itself....
+      uuid: siSchema.uuid
     }
 
     const oocs: BtrBodsOwnershipOrControlI = {
       statementID: UUIDv4(),
       interestedParty: { describedByPersonStatement: personStatement.statementID },
-      interests: SiSchemaToBtrBodsConverters.getInterests(si),
+      interests: SiSchemaToBtrBodsConverters.getInterests(siSchema),
       isComponent: false,
       publicationDetails: BtrBodsBcrosPublicationDetails(),
       source,
-      statementDate: isoDateString,
+      statementDate: todayIsoString(),
       statementType: BodsStatementTypeE.OWNERSHIP_OR_CONTROL_STATEMENT,
       subject: { describedByEntityStatement: '' }
     }
@@ -114,7 +111,7 @@ const getPersonAndOwnershipAndControlStatements = (sif: SignificantIndividualFil
 }
 
 const convertToBtrBodsForSubmit = (sif: SignificantIndividualFilingI): BtrFilingI => {
-  //todo: fixme: with new changes
+  // todo: fixme: with new changes
   const businessDetails = getCurrentBusinessAsBtrBodsEntityI()
 
   const { ownershipOrControlStatements, personStatements } = getPersonAndOwnershipAndControlStatements(sif)

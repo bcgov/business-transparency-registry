@@ -34,8 +34,7 @@
           }}
         </td>
         <td data-cy="summary-table-controls">
-          <div v-if="item.controlOfShares.percentage !== PercentageRangeE.NO_SELECTION"
-          >
+          <div v-if="item.controlOfShares.percentage !== PercentageRangeE.NO_SELECTION">
             <span class="font-bold italic">
               {{ $t('labels.shares') }}
             </span>
@@ -44,8 +43,7 @@
               {{ $t('texts.sharesAndVotes.summary.inConcert') }}
             </p>
           </div>
-          <div v-if="item.controlOfVotes.percentage !== PercentageRangeE.NO_SELECTION"
-          >
+          <div v-if="item.controlOfVotes.percentage !== PercentageRangeE.NO_SELECTION">
             <span class="font-bold italic">
               {{ $t('labels.votes') }}
             </span>
@@ -245,7 +243,6 @@ function getVotesControlText (si: SiSchemaType) {
 
   return ''
 }
-
 
 function getDirectorsControlText (controlOfDirectors: SiControlOfDirectorsSchemaType) {
   const field = getControlTextField([

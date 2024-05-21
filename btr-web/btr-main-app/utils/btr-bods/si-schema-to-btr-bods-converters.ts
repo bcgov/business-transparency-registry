@@ -123,51 +123,52 @@ const _createInterest = (
   startDate: string,
   endDate?: string
 ): BodsInterestI => {
-  if ('' === startDate?.trim()) {
+  if (startDate?.trim() === '') {
     startDate = (new Date()).toISOString().substring(0, 10)
   }
   return {
     directOrIndirect,
     details,
-    startDate: startDate,
-    endDate: endDate ? endDate : undefined
+    startDate,
+    endDate: endDate || undefined
   }
 }
 
-const _updateInterestWithPercentRange = (interest: BodsInterestI, range: PercentageRangeE, sharesAndVotes: BodsInterestTypeE) => {
-  // the default range is (min, max]
-  interest.share = {
-    exclusiveMinimum: true,
-    exclusiveMaximum: false
-  }
-  interest.type = sharesAndVotes
+const _updateInterestWithPercentRange =
+  (interest: BodsInterestI, range: PercentageRangeE, sharesAndVotes: BodsInterestTypeE) => {
+    // the default range is (min, max]
+    interest.share = {
+      exclusiveMinimum: true,
+      exclusiveMaximum: false
+    }
+    interest.type = sharesAndVotes
 
-  switch (range) {
-    case PercentageRangeE.LESS_THAN_25:
-      // [0, 25)
-      interest.share.minimum = 0
-      interest.share.maximum = 25
-      interest.share.exclusiveMinimum = false
-      interest.share.exclusiveMaximum = true
-      break
-    case PercentageRangeE.AT_LEAST_25_TO_50:
-      // [25, 50]
-      interest.share.minimum = 25
-      interest.share.maximum = 50
-      interest.share.exclusiveMinimum = false
-      break
-    case PercentageRangeE.MORE_THAN_50_TO_75:
-      // (50, 75]
-      interest.share.minimum = 50
-      interest.share.maximum = 75
-      break
-    case PercentageRangeE.MORE_THAN_75:
-      // (75, 100]
-      interest.share.minimum = 75
-      interest.share.maximum = 100
-      break
+    switch (range) {
+      case PercentageRangeE.LESS_THAN_25:
+        // [0, 25)
+        interest.share.minimum = 0
+        interest.share.maximum = 25
+        interest.share.exclusiveMinimum = false
+        interest.share.exclusiveMaximum = true
+        break
+      case PercentageRangeE.AT_LEAST_25_TO_50:
+        // [25, 50]
+        interest.share.minimum = 25
+        interest.share.maximum = 50
+        interest.share.exclusiveMinimum = false
+        break
+      case PercentageRangeE.MORE_THAN_50_TO_75:
+        // (50, 75]
+        interest.share.minimum = 50
+        interest.share.maximum = 75
+        break
+      case PercentageRangeE.MORE_THAN_75:
+        // (75, 100]
+        interest.share.minimum = 75
+        interest.share.maximum = 100
+        break
+    }
   }
-}
 
 const _getInterestsOfSharesOrVotes =
   (controlOf: SiControlOfSchemaType, startDate: string, endDate?: string): BodsInterestI[] => {
@@ -247,7 +248,6 @@ const getInterests = (si: SiSchemaType) => {
   // todo: update to loop through array we convert to having multiple start/end dates
   if (si.controlOfShares.percentage !== PercentageRangeE.NO_SELECTION) {
     const newInterests = _getInterestsOfSharesOrVotes(si.controlOfShares, si.startDate, si.endDate)
-    console.log(newInterests)
     interests = interests.concat(newInterests)
   }
 
@@ -301,7 +301,7 @@ export default {
   getBodsNamesFromSi,
   getBodsIdentifiersFromSi,
   getBodsNationalitiesFromSi,
-  getInterests: getInterests,
+  getInterests,
   getTaxResidenciesFromSi,
   getPersonType
 }

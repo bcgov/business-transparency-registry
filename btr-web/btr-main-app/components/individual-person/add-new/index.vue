@@ -350,7 +350,8 @@ const SiSchemaExtended = SiSchema.extend({
   name: SiNameExtended,
   controlOfShares: SiControlOfExtended,
   controlOfVotes: SiControlOfExtended,
-  controlOfDirectors: SiControlOfDirectorsSchema.refine(validateControlOfDirectors, getMissingControlOfDirectorsError()),
+  controlOfDirectors:
+    SiControlOfDirectorsSchema.refine(validateControlOfDirectors, getMissingControlOfDirectorsError()),
   email: getEmailValidator(),
   address: AddressSchemaExtended,
   tax: TaxSchema.superRefine(validateTaxNumberInfo),
@@ -401,13 +402,10 @@ function handleDoneButtonClick () {
     errors = res.error.issues.map(issue => ({ message: issue.message, path: issue.path.join('.') }))
     console.error(errors)
     addIndividualForm.value.setErrors(errors)
+  } else if (isEditing.value) {
+    emits('update', { index: props.index, updatedSI: inputFormSi })
   } else {
-    // const sii: SignificantIndividualI = convertSchemaToSi(inputFormSi, props.startDate || '', isEditing.value)
-    if (isEditing.value) {
-      emits('update', { index: props.index, updatedSI: inputFormSi })
-    } else {
-      emits('add', inputFormSi)
-    }
+    emits('add', inputFormSi)
   }
 }
 

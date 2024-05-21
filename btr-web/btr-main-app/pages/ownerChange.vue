@@ -92,20 +92,6 @@ const toggleEditingMode = () => {
   isEditing.value = !isEditing.value
 }
 
-// FUTURE: these will be triggered/replaced for something else in 18883
-const showSignificantDateError = ref(false)
-
-const significantIndividualChangeDate = (event: Date) => {
-  const effectiveDate = dateToString(event, 'YYYY-MM-DD')
-  currentSIFiling.value.effectiveDate = effectiveDate
-  for (const si of currentSIFiling.value.significantIndividuals) {
-    if (si.action === FilingActionE.ADD) {
-      si.startDate = effectiveDate
-    }
-  }
-  addBtrPayFees()
-}
-
 function handleAddNewButtonClick () {
   expandNewSI.value = true
   isAddingNewSI.value = true
