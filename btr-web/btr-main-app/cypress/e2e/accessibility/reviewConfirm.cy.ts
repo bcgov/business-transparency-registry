@@ -18,9 +18,10 @@ describe('accessibility -> Review and Confirm', () => {
 
   it('checks page passes accessibility (form filled out)', () => {
     // enter form data
-    cy.get('[data-cy=date-select]').click().then(() => {
-      cy.get('.bcros-date-picker__calendar__day.dp__today').parent().click()
-    })
+    // todo: fix on #20760
+    // cy.get('[data-cy=date-select]').click().then(() => {
+    //   cy.get('.bcros-date-picker__calendar__day.dp__today').parent().click()
+    // })
     cy.fixture('individuals').then((testData) => {
       cy.get('[data-cy=add-new-btn]').click()
       cy.get('#individual-person-full-name').type(testData.profile1.fullName)

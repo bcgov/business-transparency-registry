@@ -74,6 +74,7 @@
 
 <script setup lang="ts">
 import { storeToRefs } from 'pinia'
+import { SiSchemaType } from '~/utils/si-schema/definitions'
 
 const significantIndividuals = useSignificantIndividuals()
 const { currentSIFiling } = storeToRefs(significantIndividuals)
@@ -97,7 +98,7 @@ function handleAddNewButtonClick () {
   isAddingNewSI.value = true
 }
 
-function addNewSI (si: SignificantIndividualI) {
+function addNewSI (si: SiSchemaType) {
   significantIndividuals.filingAddSI(si)
   expandNewSI.value = false
   isAddingNewSI.value = false

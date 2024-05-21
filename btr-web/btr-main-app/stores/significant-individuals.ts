@@ -20,7 +20,9 @@ export const useSignificantIndividuals = defineStore('significantIndividuals', (
   function filingAddSI (significantIndividual: SiSchemaType) {
     currentSIFiling.value.noSignificantIndividualsExist = false
     // put it at the end of the new individuals
-    currentSIFiling.value.significantIndividuals.push(significantIndividual)
+    const lastNewSIIndex = currentSIFiling.value.significantIndividuals
+      .findLastIndex(si => si.ui.action === FilingActionE.ADD)
+    currentSIFiling.value.significantIndividuals.splice(lastNewSIIndex + 1, 0, significantIndividual)
   }
 
   const _getFolioNumber = (): string => {

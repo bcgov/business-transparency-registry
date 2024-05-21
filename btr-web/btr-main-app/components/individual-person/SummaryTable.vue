@@ -171,7 +171,7 @@ const headers = [
 ]
 
 const isEmptyState = computed(() => {
-  return props.individuals.every(individual => individual.action === FilingActionE.REMOVE)
+  return props.individuals.filter(individual => individual.ui.action !== FilingActionE.REMOVE).length === 0
 })
 
 function getTaxResidentText (isTaxResident: boolean) {

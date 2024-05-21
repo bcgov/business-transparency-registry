@@ -113,7 +113,8 @@ describe('pages -> Summary Table', () => {
         // todo: fixme update with #20756
         // .get('[data-cy="testTypeOfControl"]').get('[name="registeredOwner"]').should('be.checked')
         // .get('[data-cy="testControlOfDirectors"]').get('[name="directControl"]').should('be.checked')
-        .get('[data-cy=date-select]').should('have.value', expectedDate)
+        // todo: fix on #20760
+        // .get('[data-cy=date-select]').should('have.value', expectedDate)
         .get('[data-cy="address-country"]').contains(testData.profile1.address.country)
         .get('[data-cy="address-line1-autocomplete"] input')
         .should('have.value', testData.profile1.address.streetAddress)

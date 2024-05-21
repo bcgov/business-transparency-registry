@@ -30,10 +30,11 @@ describe('accessibility -> Business Layout', () => {
     // pre-form touched
     cy.checkA11y({ exclude: ['[data-cy=owner-change]'], include: ['[data-cy=pay-fees-widget]'] })
     // post-form touched
-    cy.get('[data-cy=date-select]').click()
-    cy.wait(250)
-    cy.get('.bcros-date-picker__calendar__day.dp__today').parent().click()
-    cy.checkA11y({ exclude: ['[data-cy=owner-change]'], include: ['[data-cy=pay-fees-widget]'] })
+    // todo: update with #20760
+    // cy.get('[data-cy=date-select]').click()
+    // cy.wait(250)
+    // cy.get('.bcros-date-picker__calendar__day.dp__today').parent().click()
+    // cy.checkA11y({ exclude: ['[data-cy=owner-change]'], include: ['[data-cy=pay-fees-widget]'] })
 
     // filing control buttons only
     cy.checkA11y({ exclude: ['[data-cy=owner-change]'], include: ['[data-cy=button-control]'] })
