@@ -1,8 +1,8 @@
 import { expect, describe, test } from 'vitest'
-import { VueWrapper, mount } from '@vue/test-utils'
+import { VueWrapper } from '@vue/test-utils'
+import { mountSuspended } from '@nuxt/test-utils/runtime'
 import { mockedI18n } from '../utils/mockedi18n'
 import ownerChange from '~/pages/ownerChange.vue'
-import { mountSuspended } from '@nuxt/test-utils/runtime'
 
 describe('Tests for owner change page', () => {
   let wrapper: VueWrapper<any>
@@ -13,7 +13,6 @@ describe('Tests for owner change page', () => {
   afterEach(() => { wrapper.unmount() })
 
   test('header and footer initialized', () => {
-    console.log(wrapper.html())
     expect(wrapper.find('[data-cy="significantIndividuals-heading"]').exists()).toBe(true)
     expect(wrapper.find('[data-cy="page-info-text"]').exists()).toBe(true)
     expect(wrapper.find('[data-cy=add-new-btn]').exists()).toBe(true)

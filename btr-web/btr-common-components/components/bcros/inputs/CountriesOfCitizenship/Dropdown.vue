@@ -6,7 +6,6 @@
       as="div"
       :by="compareItems"
       multiple
-      by="alpha_2"
       :class="[
         'w-full',
         'cursor-default',

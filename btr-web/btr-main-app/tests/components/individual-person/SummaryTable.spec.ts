@@ -1,9 +1,9 @@
 import { expect, describe, it } from 'vitest'
-import { VueWrapper, flushPromises, mount } from '@vue/test-utils'
+import { VueWrapper, flushPromises } from '@vue/test-utils'
+import { mountSuspended } from '@nuxt/test-utils/runtime'
 import { mockedI18n } from '../../utils/mockedi18n'
 import { testSI } from '../../utils/mockedData'
 import { IndividualPersonSummaryTable } from '#components'
-import { mountSuspended } from '@nuxt/test-utils/runtime'
 
 describe('AddIndividualPersonSummaryTable tests', () => {
   let wrapper: VueWrapper<any>

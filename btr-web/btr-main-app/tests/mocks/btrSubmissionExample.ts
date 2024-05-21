@@ -556,7 +556,7 @@ export const expectedSisOutput: SiSchemaType[] = [
     },
     controlOfVotes: {
       actingJointly: false,
-      controlName: "controlOfVotes",
+      controlName: 'controlOfVotes',
       registeredOwner: false,
       beneficialOwner: false,
       indirectControl: false,
@@ -613,7 +613,7 @@ export const expectedSisOutput: SiSchemaType[] = [
       registeredOwner: true
     },
     controlOfVotes: {
-      controlName: "controlOfVotes",
+      controlName: 'controlOfVotes',
       registeredOwner: true,
       beneficialOwner: false,
       indirectControl: true,
@@ -656,7 +656,7 @@ export const expectedSisOutput: SiSchemaType[] = [
       registeredOwner: false
     },
     controlOfVotes: {
-      controlName: "controlOfVotes",
+      controlName: 'controlOfVotes',
       registeredOwner: false,
       beneficialOwner: false,
       indirectControl: false,
@@ -686,14 +686,14 @@ export const expectedSisOutput: SiSchemaType[] = [
       postalCode: 'V6E 1H5',
       region: 'BC'
     },
-    birthDate: "",
+    birthDate: '',
     citizenships:
       [{ name: 'Canada (Citizen)', alpha_2: 'CA' }],
     email: 'hrvoje.fekete@gmail.com',
     isTaxResident: true,
     // startDate: '2024-01-30',
     startDate: '', // todo: fixme fix this expectaction when we add multiple dates
-    endDate: "",
+    endDate: '',
     uuid: undefined,
     ui: {}
   }

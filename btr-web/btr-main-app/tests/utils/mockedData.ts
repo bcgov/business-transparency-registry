@@ -29,7 +29,7 @@ export const testSI: SiSchemaType = {
   },
   isTaxResident: true,
   controlOfShares: {
-    controlName: "controlOfShares",
+    controlName: 'controlOfShares',
     percentage: PercentageRangeE.MORE_THAN_50_TO_75,
     actingJointly: undefined,
     registeredOwner: true,
@@ -38,7 +38,7 @@ export const testSI: SiSchemaType = {
     inConcertControl: false
   },
   controlOfVotes: {
-    controlName: "controlOfVotes",
+    controlName: 'controlOfVotes',
     percentage: PercentageRangeE.AT_LEAST_25_TO_50,
 
     registeredOwner: true,

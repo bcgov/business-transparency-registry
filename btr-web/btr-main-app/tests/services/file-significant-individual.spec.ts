@@ -10,8 +10,8 @@ describe('File significant individuals service Tests', () => {
     const mockDate = new Date(2024, 0, 26)
     vi.setSystemTime(mockDate)
     const testExpectedOutput = expectedOutput
-    testExpectedOutput.personStatements[0].statementDate= todayIsoDateString()
-    testExpectedOutput.ownershipOrControlStatements[0].statementDate= todayIsoDateString()
+    testExpectedOutput.personStatements[0].statementDate = todayIsoDateString()
+    testExpectedOutput.ownershipOrControlStatements[0].statementDate = todayIsoDateString()
     const result = FilingService.getPersonAndOwnershipAndControlStatements(
       {
         businessIdentifier: 'BC123123',

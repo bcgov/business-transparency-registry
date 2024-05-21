@@ -1,6 +1,7 @@
 import { v4 as UUIDv4 } from 'uuid'
 
 import { FetchError } from 'ofetch'
+import SiSchemaToBtrBodsConverters from '../utils/btr-bods/si-schema-to-btr-bods-converters'
 import { SignificantIndividualFilingI } from '~/interfaces/significant-individual-filing-i'
 import { IdAsNumberI } from '~/interfaces/common-ids-i'
 import { BtrBodsEntityI } from '~/interfaces/btr-bods/btr-bods-entity-i'
@@ -17,7 +18,6 @@ import { BtrBodsPersonI } from '~/interfaces/btr-bods/btr-bods-person-i'
 import { SiSchemaType } from '~/utils/si-schema/definitions'
 import { getSIsFromBtrBodsSubmission } from '~/utils/btr-bods/bods-to-si-schema-converters'
 import { FilingActionE } from '#imports'
-import SiSchemaToBtrBodsConverters from '../utils/btr-bods/si-schema-to-btr-bods-converters'
 
 const constructBtrApiURL = () => {
   const runtimeConfig = useRuntimeConfig()

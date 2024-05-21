@@ -98,8 +98,8 @@ describe('pages -> Summary Table', () => {
 
   it('the edit form contains all information in the profile', () => {
     cy.fixture('individuals').then((testData) => {
-      const today = new Date()
-      const expectedDate = dateToString(today, 'YYYY-MM-DD')
+      // const today = new Date()
+      // const expectedDate = dateToString(today, 'YYYY-MM-DD')
       cy.addTestIndividuals()
 
       cy.get('[data-cy=edit-button]').first().click()
