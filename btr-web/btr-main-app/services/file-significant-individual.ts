@@ -91,7 +91,7 @@ const getPersonAndOwnershipAndControlStatements = (sif: SignificantIndividualFil
       statementDate: isoDateString,
       statementType: BodsStatementTypeE.PERSON_STATEMENT,
       taxResidencies: SiSchemaToBtrBodsConverters.getTaxResidenciesFromSi(si),
-      statementID: si.ui.uuid || UUIDv4()
+      statementID: si.uuid || UUIDv4()
     }
 
     const oocs: BtrBodsOwnershipOrControlI = {

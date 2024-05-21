@@ -1,31 +1,5 @@
 <template>
   <div data-cy="owner-change">
-    <!-- todo: remove with ticket 20760 when date gets its own section -->
-    <h1 class="font-bold text-3xl" data-cy="page-header">
-      {{ $t('pageHeadings.significantIndividualChange') }}
-    </h1>
-    <p class="mt-5" data-cy="page-info-text">
-      {{ $t('texts.significantIndividualChange') }}
-    </p>
-    <div
-      class="mt-10 p-10 pb-3 bg-white rounded flex"
-      :class="showSignificantDateError ? 'border-l-[3px] border-red-500' : ''"
-      data-cy="effective-date-select"
-    >
-      <label class="text-lg w-[190px]" :class="showSignificantDateError ? 'text-red-500' : ''">
-        {{ $t('labels.significantIndividualChangeDate') }}
-      </label>
-      <div class="ml-8 flex-auto">
-        <BcrosInputsDateSelect
-          name="effectiveDate"
-          :initial-date="currentSIFiling.effectiveDate ? dateStringToDate(currentSIFiling.effectiveDate) : undefined"
-          :max-date="new Date()"
-          :placeholder="$t('placeholders.dateSelect.significantIndividualChange')"
-          :variant="showSignificantDateError ? 'error' : 'bcGov'"
-          @selection="significantIndividualChangeDate($event)"
-        />
-      </div>
-    </div>
     <div class="my-5" data-cy="noSignificantIndividualsExist-section">
       <h1 class="font-bold text-3xl" data-cy="noSignificantIndividualsExist-title">
         {{ $t('pageHeadings.significantIndividuals') }}

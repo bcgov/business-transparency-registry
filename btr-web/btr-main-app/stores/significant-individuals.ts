@@ -6,6 +6,7 @@ import fileSIApi from '@/services/file-significant-individual'
 import { SignificantIndividualFilingI } from '~/interfaces/significant-individual-filing-i'
 import { SiSchemaType } from '~/utils/si-schema/definitions'
 import { getEmptySiFiling } from '~/utils/si-schema/defaults'
+import { dateToString } from '../../btr-common-components/utils/date'
 
 /** Manages Significant */
 export const useSignificantIndividuals = defineStore('significantIndividuals', () => {
@@ -51,7 +52,7 @@ export const useSignificantIndividuals = defineStore('significantIndividuals', (
       noSignificantIndividualsExist: false,
       businessIdentifier,
       significantIndividuals: currentSavedSIs.value,
-      effectiveDate: '',
+      effectiveDate: dateToString(new Date(), 'YYYY-MM-DD'),
       certified: false,
       folioNumber: folioNum
     }
