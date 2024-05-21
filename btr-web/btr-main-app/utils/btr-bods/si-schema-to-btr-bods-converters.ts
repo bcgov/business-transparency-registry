@@ -68,6 +68,7 @@ const _getDirectorsInterests =
         _createInterest(
           BodsInterestDirectOrIndirectE.DIRECT,
           ControlOfDirectorsDetailsE.DIRECT_CONTROL,
+          BodsInterestTypeE.APPOINTMENT_OF_BOARD,
           startDate,
           endDate
         )
@@ -78,6 +79,7 @@ const _getDirectorsInterests =
         _createInterest(
           BodsInterestDirectOrIndirectE.INDIRECT,
           ControlOfDirectorsDetailsE.INDIRECT_CONTROL,
+          BodsInterestTypeE.APPOINTMENT_OF_BOARD,
           startDate,
           endDate
         )
@@ -88,6 +90,7 @@ const _getDirectorsInterests =
         _createInterest(
           BodsInterestDirectOrIndirectE.INDIRECT,
           ControlOfDirectorsDetailsE.SIGNIFICANT_INFLUENCE,
+          BodsInterestTypeE.APPOINTMENT_OF_BOARD,
           startDate,
           endDate
         )
@@ -98,6 +101,7 @@ const _getDirectorsInterests =
         _createInterest(
           BodsInterestDirectOrIndirectE.UNKNOWN,
           ControlOfDirectorsDetailsE.IN_CONCERT_CONTROL,
+          BodsInterestTypeE.APPOINTMENT_OF_BOARD,
           startDate,
           endDate
         )
@@ -108,6 +112,7 @@ const _getDirectorsInterests =
         _createInterest(
           BodsInterestDirectOrIndirectE.UNKNOWN,
           ControlOfDirectorsDetailsE.ACTING_JOINTLY,
+          BodsInterestTypeE.APPOINTMENT_OF_BOARD,
           startDate,
           endDate
         )
@@ -120,6 +125,7 @@ const _getDirectorsInterests =
 const _createInterest = (
   directOrIndirect: BodsInterestDirectOrIndirectE,
   details: string,
+  type: BodsInterestTypeE,
   startDate: string,
   endDate?: string
 ): BodsInterestI => {
@@ -129,19 +135,19 @@ const _createInterest = (
   return {
     directOrIndirect,
     details,
+    type,
     startDate,
     endDate: endDate || undefined
   }
 }
 
 const _updateInterestWithPercentRange =
-  (interest: BodsInterestI, range: PercentageRangeE, sharesAndVotes: BodsInterestTypeE) => {
+  (interest: BodsInterestI, range: PercentageRangeE) => {
     // the default range is (min, max]
     interest.share = {
       exclusiveMinimum: true,
       exclusiveMaximum: false
     }
-    interest.type = sharesAndVotes
 
     switch (range) {
       case PercentageRangeE.LESS_THAN_25:
@@ -188,10 +194,11 @@ const _getInterestsOfSharesOrVotes =
       const interest = _createInterest(
         BodsInterestDirectOrIndirectE.INDIRECT,
         controlOfDetails.INDIRECT_CONTROL,
+        bodsInterestType,
         startDate,
         endDate
       )
-      _updateInterestWithPercentRange(interest, controlOf.percentage!, bodsInterestType)
+      _updateInterestWithPercentRange(interest, controlOf.percentage!)
       interests.push(interest)
     }
     if (controlOf.beneficialOwner) {
@@ -199,10 +206,11 @@ const _getInterestsOfSharesOrVotes =
         _createInterest(
           BodsInterestDirectOrIndirectE.DIRECT,
           controlOfDetails.BENEFICIAL_OWNER,
+          bodsInterestType,
           startDate,
           endDate
         )
-      _updateInterestWithPercentRange(interest, controlOf.percentage!, bodsInterestType)
+      _updateInterestWithPercentRange(interest, controlOf.percentage!)
       interests.push(interest)
     }
     if (controlOf.registeredOwner) {
@@ -210,10 +218,11 @@ const _getInterestsOfSharesOrVotes =
         _createInterest(
           BodsInterestDirectOrIndirectE.DIRECT,
           controlOfDetails.REGISTERED_OWNER,
+          bodsInterestType,
           startDate,
           endDate
         )
-      _updateInterestWithPercentRange(interest, controlOf.percentage!, bodsInterestType)
+      _updateInterestWithPercentRange(interest, controlOf.percentage!)
       interests.push(interest)
     }
     if (controlOf.actingJointly) {
@@ -221,10 +230,11 @@ const _getInterestsOfSharesOrVotes =
         _createInterest(
           BodsInterestDirectOrIndirectE.UNKNOWN,
           controlOfDetails.ACTING_JOINTLY,
+          bodsInterestType,
           startDate,
           endDate
         )
-      _updateInterestWithPercentRange(interest, controlOf.percentage!, bodsInterestType)
+      _updateInterestWithPercentRange(interest, controlOf.percentage!)
       interests.push(interest)
     }
     if (controlOf.inConcertControl) {
@@ -232,10 +242,11 @@ const _getInterestsOfSharesOrVotes =
         _createInterest(
           BodsInterestDirectOrIndirectE.UNKNOWN,
           controlOfDetails.IN_CONCERT_CONTROL,
+          bodsInterestType,
           startDate,
           endDate
         )
-      _updateInterestWithPercentRange(interest, controlOf.percentage!, bodsInterestType)
+      _updateInterestWithPercentRange(interest, controlOf.percentage!)
       interests.push(interest)
     }
 

@@ -1,10 +1,10 @@
 <template>
   <div data-cy="owner-change">
     <div class="my-5" data-cy="noSignificantIndividualsExist-section">
-      <h1 class="font-bold text-3xl" data-cy="noSignificantIndividualsExist-title">
+      <h1 class="font-bold text-3xl" data-cy="significantIndividuals-heading">
         {{ $t('pageHeadings.significantIndividuals') }}
       </h1>
-      <p class="mt-5">
+      <p class="mt-5" data-cy="page-info-text">
         {{ $t('texts.significantIndividuals') }}
       </p>
       <BcrosHelpTip

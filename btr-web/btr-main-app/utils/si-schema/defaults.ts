@@ -68,7 +68,9 @@ export function getDefaultInputFormSi (): SiSchemaType {
     endDate: '',
 
     uuid: UUIDv4(),
-    ui: {}
+    ui: {
+      action: FilingActionE.ADD
+    }
   }
 }
 

@@ -17,7 +17,7 @@ import { BtrBodsPersonI } from '~/interfaces/btr-bods/btr-bods-person-i'
 import { SiSchemaType } from '~/utils/si-schema/definitions'
 import { getSIsFromBtrBodsSubmission } from '~/utils/btr-bods/bods-to-si-schema-converters'
 import { FilingActionE } from '#imports'
-import SiSchemaToBtrBodsConverters from '~/utils/btr-bods/si-schema-to-btr-bods-converters'
+import SiSchemaToBtrBodsConverters from '../utils/btr-bods/si-schema-to-btr-bods-converters'
 
 const constructBtrApiURL = () => {
   const runtimeConfig = useRuntimeConfig()
@@ -84,7 +84,7 @@ const getPersonAndOwnershipAndControlStatements = (sif: SignificantIndividualFil
       personType: SiSchemaToBtrBodsConverters.getPersonType(siSchema),
       publicationDetails: BtrBodsBcrosPublicationDetails(),
       source,
-      statementDate: todayIsoString(),
+      statementDate: todayIsoDateString(),
       statementType: BodsStatementTypeE.PERSON_STATEMENT,
       taxResidencies: SiSchemaToBtrBodsConverters.getTaxResidenciesFromSi(siSchema),
       statementID: UUIDv4(), // todo: fixme we should update schema only if there are changes to the schema itself....
@@ -98,7 +98,7 @@ const getPersonAndOwnershipAndControlStatements = (sif: SignificantIndividualFil
       isComponent: false,
       publicationDetails: BtrBodsBcrosPublicationDetails(),
       source,
-      statementDate: todayIsoString(),
+      statementDate: todayIsoDateString(),
       statementType: BodsStatementTypeE.OWNERSHIP_OR_CONTROL_STATEMENT,
       subject: { describedByEntityStatement: '' }
     }

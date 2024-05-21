@@ -1,3 +1,5 @@
+import { SiSchemaType } from '~/utils/si-schema/definitions'
+
 export const btrSubmissionExampleMock = {
   business_identifier: 'BC0871427',
   effective_date: '2024-01-04',
@@ -66,7 +68,7 @@ export const btrSubmissionExampleMock = {
             type: 'appointmentOfBoard'
           },
           {
-            details: 'controlType.sharesOrVotes.registeredOwner',
+            details: 'controlType.shares.registeredOwner',
             directOrIndirect: 'direct',
             share: {
               exclusiveMaximum: false,
@@ -78,7 +80,7 @@ export const btrSubmissionExampleMock = {
             type: 'shareholding'
           },
           {
-            details: 'controlType.sharesOrVotes.indirectControl',
+            details: 'controlType.shares.indirectControl',
             directOrIndirect: 'indirect',
             share: {
               exclusiveMaximum: false,
@@ -90,7 +92,7 @@ export const btrSubmissionExampleMock = {
             type: 'shareholding'
           },
           {
-            details: 'controlType.sharesOrVotes.inConcertControl',
+            details: 'controlType.shares.inConcertControl',
             directOrIndirect: 'indirect',
             share: {
               exclusiveMaximum: false,
@@ -102,7 +104,7 @@ export const btrSubmissionExampleMock = {
             type: 'shareholding'
           },
           {
-            details: 'controlType.sharesOrVotes.beneficialOwner',
+            details: 'controlType.shares.beneficialOwner',
             directOrIndirect: 'indirect',
             share: {
               exclusiveMaximum: false,
@@ -157,7 +159,7 @@ export const btrSubmissionExampleMock = {
             type: 'appointmentOfBoard'
           },
           {
-            details: 'controlType.sharesOrVotes.registeredOwner',
+            details: 'controlType.shares.registeredOwner',
             directOrIndirect: 'direct',
             share: {
               exclusiveMaximum: false,
@@ -169,7 +171,7 @@ export const btrSubmissionExampleMock = {
             type: 'votingRights'
           },
           {
-            details: 'controlType.sharesOrVotes.registeredOwner',
+            details: 'controlType.votes.registeredOwner',
             directOrIndirect: 'direct',
             share: {
               exclusiveMaximum: false,
@@ -181,7 +183,7 @@ export const btrSubmissionExampleMock = {
             type: 'shareholding'
           },
           {
-            details: 'controlType.sharesOrVotes.indirectControl',
+            details: 'controlType.shares.indirectControl',
             directOrIndirect: 'indirect',
             share: {
               exclusiveMaximum: false,
@@ -193,7 +195,7 @@ export const btrSubmissionExampleMock = {
             type: 'votingRights'
           },
           {
-            details: 'controlType.sharesOrVotes.indirectControl',
+            details: 'controlType.votes.indirectControl',
             directOrIndirect: 'indirect',
             share: {
               exclusiveMaximum: false,
@@ -516,28 +518,17 @@ export const btrSubmissionExampleMock = {
   type: 'other'
 }
 
-export const expectedSisOutput = [{
-  controlType: {
-    directors: {
-      directControl: true,
-      inConcertControl: true,
-      indirectControl: true,
-      significantInfluence: true
+export const expectedSisOutput: SiSchemaType[] = [
+  {
+    controlOther: 'everything',
+    couldNotProvideMissingInfo: false,
+    missingInfoReason: '',
+    name: {
+      isYourOwnInformation: false,
+      isUsePreferredName: true,
+      fullName: 'Hrvoje Feketele',
+      preferredName: 'baba jaga'
     },
-    sharesVotes: {
-      beneficialOwner: true,
-      inConcertControl: true,
-      indirectControl: true,
-      registeredOwner: true
-    },
-    other: 'everything'
-  },
-  missingInfoReason: '',
-  percentOfShares: 'atLeast25To50',
-  percentOfVotes: 'noSelection',
-  profile: {
-    fullName: 'Hrvoje Feketele',
-    preferredName: 'baba jaga',
     address: {
       city: 'Beamsville',
       country: { alpha_2: 'CA', name: 'Canada' },
@@ -547,44 +538,55 @@ export const expectedSisOutput = [{
       postalCode: 'L0R 1B0',
       region: 'ON'
     },
-    competency: {
-      decisionMaking: undefined,
-      financialAffairs: undefined
+    controlOfDirectors: {
+      actingJointly: false,
+      directControl: true,
+      inConcertControl: true,
+      indirectControl: true,
+      significantInfluence: true
+    },
+    controlOfShares: {
+      controlName: 'controlOfShares',
+      percentage: PercentageRangeE.AT_LEAST_25_TO_50,
+      beneficialOwner: true,
+      inConcertControl: true,
+      indirectControl: true,
+      registeredOwner: true,
+      actingJointly: false
+    },
+    controlOfVotes: {
+      actingJointly: false,
+      controlName: "controlOfVotes",
+      registeredOwner: false,
+      beneficialOwner: false,
+      indirectControl: false,
+      inConcertControl: false,
+      percentage: PercentageRangeE.NO_SELECTION
     },
     birthDate: '1901-01-01',
-    citizenshipCA: 'other',
     citizenships: [{ name: 'Argentina', alpha_2: 'AR' },
       { name: 'British Indian Ocean Territory', alpha_2: 'IO' },
       { name: 'Cocos (Keeling) Islands', alpha_2: 'CC' }],
     email: 'hrvoje.fekete+1@gmail.com',
-    hasTaxNumber: false,
-    taxNumber: undefined,
-    isTaxResident: false
-  },
-  startDate: '2024-01-30',
-  uuid: 'b0882814-34e2-42e9-b065-a550d94c9df1'
-}, {
-  controlType: {
-    directors: {
-      directControl: false,
-      inConcertControl: true,
-      indirectControl: false,
-      significantInfluence: false
+    tax: {
+      hasTaxNumber: false,
+      taxNumber: undefined
     },
-    sharesVotes: {
-      beneficialOwner: false,
-      inConcertControl: false,
-      indirectControl: true,
-      registeredOwner: true
-    },
-    other: 'This is something tottaly else'
+    isTaxResident: false,
+    // startDate: '2024-01-30',
+    startDate: '', // todo: fixme fix this expectaction when we add multiple dates
+    endDate: '',
+    uuid: undefined,
+    ui: {}
   },
-  missingInfoReason: 'It actually really is unless it is not',
-  percentOfShares: 'moreThan50To75',
-  percentOfVotes: 'atLeast25To50',
-  profile: {
-    fullName: 'Hrvoje Fekete',
-    preferredName: 'Johnny',
+  {
+    missingInfoReason: 'It actually really is unless it is not',
+    name: {
+      isUsePreferredName: true,
+      isYourOwnInformation: false,
+      fullName: 'Hrvoje Fekete',
+      preferredName: 'Johnny'
+    },
     address: {
       city: 'Scarborough',
       country: { alpha_2: 'CA', name: 'Canada' },
@@ -594,43 +596,87 @@ export const expectedSisOutput = [{
       postalCode: 'M1L 1C5',
       region: 'ON'
     },
-    competency: {
-      decisionMaking: undefined,
-      financialAffairs: undefined
+    controlOfDirectors: {
+      actingJointly: false,
+      directControl: false,
+      inConcertControl: true,
+      indirectControl: false,
+      significantInfluence: false
     },
+    controlOfShares: {
+      controlName: 'controlOfShares',
+      percentage: PercentageRangeE.MORE_THAN_50_TO_75,
+      beneficialOwner: false,
+      inConcertControl: false,
+      indirectControl: true,
+      actingJointly: false,
+      registeredOwner: true
+    },
+    controlOfVotes: {
+      controlName: "controlOfVotes",
+      registeredOwner: true,
+      beneficialOwner: false,
+      indirectControl: true,
+      inConcertControl: false,
+      actingJointly: false,
+      percentage: PercentageRangeE.AT_LEAST_25_TO_50
+    },
+    controlOther: 'This is something tottaly else',
     birthDate: '1991-01-24',
-    citizenshipCA: 'permanentResident',
-    citizenships: [{ alpha_2: 'CA_PR', name: 'Canada (Permanent Resident)' }],
+    citizenships:
+      [{ alpha_2: 'CA_PR', name: 'Canada (Permanent Resident)' }],
     email: 'hrvoje.fekete@gmail.com',
-    hasTaxNumber: true,
-    taxNumber: '046 454 286',
-    isTaxResident: true
+    couldNotProvideMissingInfo: true,
+    tax: {
+      taxNumber: '046 454 286',
+      hasTaxNumber: true
+    },
+    isTaxResident: true,
+    // startDate: '2024-01-30',
+    startDate: '', // todo: fixme fix this expectaction when we add multiple dates
+    endDate: '',
+    uuid: undefined,
+    ui: {}
   },
-  startDate: '2024-01-30',
-  uuid: 'b04ce8de-cd95-4fa2-991d-3a06fe34deb0'
-}, {
-  controlType: {
-    directors: {
+  {
+    controlOfDirectors: {
+      actingJointly: false,
       directControl: true,
       inConcertControl: false,
       indirectControl: true,
       significantInfluence: false
     },
-    sharesVotes: {
+    controlOfShares: {
+      controlName: 'controlOfShares',
+      percentage: PercentageRangeE.NO_SELECTION,
       beneficialOwner: false,
       inConcertControl: false,
       indirectControl: false,
+      actingJointly: false,
       registeredOwner: false
     },
-    other: ''
-  },
-  missingInfoReason: undefined,
-  percentOfShares: 'noSelection',
-  percentOfVotes: 'noSelection',
-  profile: {
-    fullName: 'Hrvoje Fekete',
-    preferredName: '',
-    taxNumber: undefined,
+    controlOfVotes: {
+      controlName: "controlOfVotes",
+      registeredOwner: false,
+      beneficialOwner: false,
+      indirectControl: false,
+      actingJointly: false,
+      inConcertControl: false,
+      percentage: PercentageRangeE.NO_SELECTION
+    },
+    controlOther: '',
+    couldNotProvideMissingInfo: false,
+    missingInfoReason: undefined,
+    name: {
+      isUsePreferredName: false,
+      isYourOwnInformation: false,
+      fullName: 'Hrvoje Fekete',
+      preferredName: ''
+    },
+    tax: {
+      hasTaxNumber: false,
+      taxNumber: undefined
+    },
     address: {
       city: 'Vancouver',
       country: { alpha_2: 'CA', name: 'Canada' },
@@ -640,17 +686,15 @@ export const expectedSisOutput = [{
       postalCode: 'V6E 1H5',
       region: 'BC'
     },
-    competency: {
-      decisionMaking: undefined,
-      financialAffairs: undefined
-    },
-    birthDate: undefined,
-    citizenshipCA: 'citizen',
-    citizenships: [{ name: 'Canada (Citizen)', alpha_2: 'CA' }],
+    birthDate: "",
+    citizenships:
+      [{ name: 'Canada (Citizen)', alpha_2: 'CA' }],
     email: 'hrvoje.fekete@gmail.com',
-    hasTaxNumber: false,
-    isTaxResident: true
-  },
-  startDate: '2024-01-30',
-  uuid: '0a9d4f95-ca72-42b4-8906-05d889e4bb52'
-}]
+    isTaxResident: true,
+    // startDate: '2024-01-30',
+    startDate: '', // todo: fixme fix this expectaction when we add multiple dates
+    endDate: "",
+    uuid: undefined,
+    ui: {}
+  }
+]
