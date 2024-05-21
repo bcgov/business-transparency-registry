@@ -72,12 +72,12 @@ export function validateBirthDate (birthDate: any): boolean {
  * @param taxData the form data
  */
 export function validateTaxNumberInfo (
-  taxData: { taxNumber: string | null, hasTaxNumber: boolean | null },
+  taxData: { taxNumber?: string, hasTaxNumber?: boolean },
   ctx: RefinementCtx
 ): never {
   const t = useNuxtApp().$i18n.t
-  if (taxData.hasTaxNumber) {
-    if (!checkSpecialCharacters(taxData.taxNumber)) {
+  if (taxData.hasTaxNumber && taxData.taxNumber) {
+    if (!checkSpecialCharacters(taxData.taxNumber!)) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
         message: t('errors.validation.taxNumber.specialCharacter'),
@@ -86,7 +86,8 @@ export function validateTaxNumberInfo (
       })
       return z.NEVER
     }
-    if (!checkTaxNumberLength(taxData.taxNumber)) {
+
+    if (!checkTaxNumberLength(taxData.taxNumber!)) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
         message: t('errors.validation.taxNumber.invalidLength'),
@@ -96,7 +97,7 @@ export function validateTaxNumberInfo (
       return z.NEVER
     }
 
-    if (!validateTaxNumber(taxData.taxNumber)) {
+    if (!validateTaxNumber(taxData.taxNumber!)) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
         message: t('errors.validation.taxNumber.invalidNumber'),

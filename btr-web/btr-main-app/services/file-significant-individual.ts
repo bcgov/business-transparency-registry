@@ -1,7 +1,5 @@
 import { v4 as UUIDv4 } from 'uuid'
 
-import SiToBtrBodsConverters from '~/utils/btr-bods/si-to-btr-bods-converters'
-
 import { SignificantIndividualFilingI } from '~/interfaces/significant-individual-filing-i'
 import { IdAsNumberI } from '~/interfaces/common-ids-i'
 import { BtrBodsEntityI } from '~/interfaces/btr-bods/btr-bods-entity-i'
@@ -15,7 +13,11 @@ import {
 } from '~/utils/btr-bods/btr-bods-implementations'
 import { BtrBodsOwnershipOrControlI } from '~/interfaces/btr-bods/btr-bods-ownership-or-control-i'
 import { BtrBodsPersonI } from '~/interfaces/btr-bods/btr-bods-person-i'
-import { getSIsFromBtrBodsSubmission } from '~/utils/btr-bods/bods-to-si-converters'
+import { SiSchemaType } from '~/utils/si-schema/definitions'
+import { getSIsFromBtrBodsSubmission } from '~/utils/btr-bods/bods-to-si-schema-converters'
+import { FetchError } from 'ofetch'
+import { FilingActionE } from '#imports'
+import SiSchemaToBtrBodsConverters from '~/utils/btr-bods/si-schema-to-btr-bods-converters'
 
 const constructBtrApiURL = () => {
   const runtimeConfig = useRuntimeConfig()
@@ -62,41 +64,44 @@ const getPersonAndOwnershipAndControlStatements = (sif: SignificantIndividualFil
     personStatements: []
   }
 
+  const today = new Date()
+  const isoDateString = today.toISOString().substring(0, 10)
+
   for (const si of sif.significantIndividuals) {
     const source = BtrBodsSources.SELF_DECLARATION
-    source.assertedBy = [{ name: si.profile.fullName }]
+    source.assertedBy = [{ name: si.name.fullName }]
     source.description = BtrSourceDescriptionProvidedByBtrGovBC
-
-    const address = SiToBtrBodsConverters.getBodsAddressFromSi(si)
+    const todayIso = (new Date()).toISOString()
+    const address = SiSchemaToBtrBodsConverters.getBodsAddressFromSi(si)
     const personStatement: BtrBodsPersonI = {
       missingInfoReason: si.missingInfoReason,
       placeOfResidence: address,
       addresses: [address],
-      birthDate: si.profile.birthDate,
-      email: si.profile.email,
-      hasTaxNumber: si.profile.hasTaxNumber,
-      identifiers: SiToBtrBodsConverters.getBodsIdentifiersFromSi(si),
+      birthDate: si.birthDate,
+      email: si.email,
+      hasTaxNumber: !!si.tax.hasTaxNumber,
+      identifiers: SiSchemaToBtrBodsConverters.getBodsIdentifiersFromSi(si),
       isComponent: false,
-      names: SiToBtrBodsConverters.getBodsNamesFromSi(si),
-      nationalities: SiToBtrBodsConverters.getBodsNationalitiesFromSi(si),
-      isPermanentResidentCa: si.profile.citizenshipCA === CitizenshipTypeE.PR,
-      personType: SiToBtrBodsConverters.getPersonType(si),
+      names: SiSchemaToBtrBodsConverters.getBodsNamesFromSi(si),
+      nationalities: SiSchemaToBtrBodsConverters.getBodsNationalitiesFromSi(si),
+      isPermanentResidentCa: si.citizenships.findIndex(country => country.alpha_2 === 'CA_PR') !== -1,
+      personType: SiSchemaToBtrBodsConverters.getPersonType(si),
       publicationDetails: BtrBodsBcrosPublicationDetails(),
       source,
-      statementDate: si.startDate,
+      statementDate: isoDateString,
       statementType: BodsStatementTypeE.PERSON_STATEMENT,
-      taxResidencies: SiToBtrBodsConverters.getTaxResidenciesFromSi(si),
-      statementID: si.uuid || UUIDv4()
+      taxResidencies: SiSchemaToBtrBodsConverters.getTaxResidenciesFromSi(si),
+      statementID: si.ui.uuid || UUIDv4()
     }
 
     const oocs: BtrBodsOwnershipOrControlI = {
       statementID: UUIDv4(),
       interestedParty: { describedByPersonStatement: personStatement.statementID },
-      interests: SiToBtrBodsConverters.getInterests(si),
+      interests: SiSchemaToBtrBodsConverters.getInterests(si),
       isComponent: false,
       publicationDetails: BtrBodsBcrosPublicationDetails(),
       source,
-      statementDate: si.startDate,
+      statementDate: isoDateString,
       statementType: BodsStatementTypeE.OWNERSHIP_OR_CONTROL_STATEMENT,
       subject: { describedByEntityStatement: '' }
     }
@@ -109,6 +114,7 @@ const getPersonAndOwnershipAndControlStatements = (sif: SignificantIndividualFil
 }
 
 const convertToBtrBodsForSubmit = (sif: SignificantIndividualFilingI): BtrFilingI => {
+  //todo: fixme: with new changes
   const businessDetails = getCurrentBusinessAsBtrBodsEntityI()
 
   const { ownershipOrControlStatements, personStatements } = getPersonAndOwnershipAndControlStatements(sif)
@@ -128,7 +134,7 @@ const submitSignificantIndividualFiling = async (sif: SignificantIndividualFilin
     certified: sif.certified,
     noSignificantIndividualsExist: sif.noSignificantIndividualsExist,
     businessIdentifier: sif.businessIdentifier,
-    significantIndividuals: sif.significantIndividuals.filter(si => si.action !== 'remove'),
+    significantIndividuals: sif.significantIndividuals.filter(si => si.ui.action !== FilingActionE.REMOVE),
     effectiveDate: sif.effectiveDate,
     folioNumber: sif.folioNumber
   }
@@ -145,17 +151,18 @@ const submitSignificantIndividualFiling = async (sif: SignificantIndividualFilin
   return { data: data.value, error: error.value }
 }
 
-const getCurrentOwners = async (businessIdentifier: string) => { // @ts-ignore
-  const url = `${constructBtrApiURL()}/plots/entity/${businessIdentifier}`
-  const { data, error } =
-    await useFetchBcros<{ payload: BtrFilingI }>(url)
+const getCurrentOwners =
+  async (businessIdentifier: string): Promise<{ data: SiSchemaType[] | null, error: FetchError<any> | null }> => {
+    const url = `${constructBtrApiURL()}/plots/entity/${businessIdentifier}`
+    const { data, error } =
+      await useFetchBcros<{ payload: BtrFilingI }>(url)
 
-  if (data.value?.payload) {
-    return { data: getSIsFromBtrBodsSubmission(data.value.payload), error: error.value }
+    if (data.value?.payload) {
+      return { data: getSIsFromBtrBodsSubmission(data.value.payload), error: error.value }
+    }
+
+    return { data: null, error: error.value }
   }
-
-  return { data: data.value, error: error.value }
-}
 
 export default {
   getPersonAndOwnershipAndControlStatements,

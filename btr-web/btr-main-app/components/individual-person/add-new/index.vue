@@ -299,31 +299,32 @@
 import { z } from 'zod'
 import type { FormError } from '#ui/types'
 import { BtrCountryI } from '../../../../btr-common-components/interfaces/btr-address-i'
-import { validateControlSelectionForSharesAndVotes, validateFullNameSuperRefine } from '~/utils/validation'
-import { SignificantIndividualI } from '~/interfaces/significant-individual-i'
-import { FilingActionE } from '~/enums/filing-action-e'
+import {
+  validateControlSelectionForSharesAndVotes,
+  validateFullNameSuperRefine,
+  validateTaxNumberInfo
+} from '~/utils/validation'
 import {
   AddressSchema,
-  ControlOfDirectorsSchema,
+  SiControlOfDirectorsSchema, CountrySchema,
   SiControlOfSchema,
   SiNameSchema,
   SiSchema, SiSchemaType,
   TaxSchema
 } from '~/utils/si-schema/definitions'
-import { convertSchemaToSi, convertSiToSchema } from '~/utils/si-schema/converters'
 import { getDefaultInputFormSi } from '~/utils/si-schema/defaults'
 import { CustomSiSchemaErrorMap } from '~/utils/si-schema/errorMessagesMap'
 
 const emits = defineEmits<{
-  add: [value: SignificantIndividualI],
+  add: [value: SiSchemaType],
   cancel: [],
-  update: [value: { index: number | undefined, updatedSI: SignificantIndividualI }],
+  update: [value: { index: number | undefined, updatedSI: SiSchemaType }],
   remove: []
 }>()
 
 const props = defineProps<{
   index?: number,
-  setSignificantIndividual?: SignificantIndividualI,
+  setSignificantIndividual?: SiSchemaType,
   startDate?: string
 }>()
 
@@ -339,8 +340,9 @@ const SiNameExtended = SiNameSchema
   .superRefine(validateFullNameSuperRefine)
 
 const AddressSchemaExtended = AddressSchema.extend({
-  country: z.union([z.null(), z.object({ name: z.string(), alpha_2: z.string() })])
-    .refine((val: BtrCountryI | null) => { return val?.name !== '' }, t('errors.validation.address.country'))
+  country: CountrySchema
+    .optional()
+    .refine((val: BtrCountryI | undefined) => { return val?.name !== '' }, t('errors.validation.address.country'))
 })
 
 const SiSchemaExtended = SiSchema.extend({
@@ -348,7 +350,7 @@ const SiSchemaExtended = SiSchema.extend({
   name: SiNameExtended,
   controlOfShares: SiControlOfExtended,
   controlOfVotes: SiControlOfExtended,
-  controlOfDirectors: ControlOfDirectorsSchema.refine(validateControlOfDirectors, getMissingControlOfDirectorsError()),
+  controlOfDirectors: SiControlOfDirectorsSchema.refine(validateControlOfDirectors, getMissingControlOfDirectorsError()),
   email: getEmailValidator(),
   address: AddressSchemaExtended,
   tax: TaxSchema.superRefine(validateTaxNumberInfo),
@@ -400,11 +402,11 @@ function handleDoneButtonClick () {
     console.error(errors)
     addIndividualForm.value.setErrors(errors)
   } else {
-    const sii: SignificantIndividualI = convertSchemaToSi(inputFormSi, props.startDate || '', isEditing.value)
+    // const sii: SignificantIndividualI = convertSchemaToSi(inputFormSi, props.startDate || '', isEditing.value)
     if (isEditing.value) {
-      emits('update', { index: props.index, updatedSI: sii })
+      emits('update', { index: props.index, updatedSI: inputFormSi })
     } else {
-      emits('add', sii)
+      emits('add', inputFormSi)
     }
   }
 }
@@ -420,8 +422,7 @@ const setIsYourOwnInformation = (event: any) => {
 const inputFormSi: SiSchemaType = reactive(getDefaultInputFormSi())
 
 if (props.setSignificantIndividual) {
-  isEditing.value = FilingActionE.EDIT === props.setSignificantIndividual.action
-  const propsSi = convertSiToSchema(props.setSignificantIndividual)
-  Object.assign(inputFormSi, propsSi)
+  isEditing.value = (props.index !== undefined)
+  Object.assign(inputFormSi, props.setSignificantIndividual)
 }
 </script>

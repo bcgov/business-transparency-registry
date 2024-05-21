@@ -1,5 +1,20 @@
-import { SiSchemaType } from '~/utils/si-schema/definitions'
+import { AddressSchemaType, SiSchemaType } from '~/utils/si-schema/definitions'
 import { PercentageRangeE } from '~/enums/percentage-range-e'
+import { v4 as UUIDv4 } from 'uuid'
+import { SignificantIndividualFilingI } from '~/interfaces/significant-individual-filing-i'
+
+export function getEmptyAddress (): AddressSchemaType {
+  return {
+    country: undefined,
+    line1: '',
+    line2: undefined,
+    city: '',
+    region: '',
+    postalCode: '',
+    locationDescription: undefined
+
+  }
+}
 
 export function getDefaultInputFormSi (): SiSchemaType {
   return {
@@ -36,23 +51,33 @@ export function getDefaultInputFormSi (): SiSchemaType {
     },
     controlOther: undefined,
     email: '',
-    address: {
-      country: null,
-      line1: '',
-      line2: undefined,
-      city: '',
-      region: '',
-      postalCode: '',
-      locationDescription: undefined
-    },
+    address: getEmptyAddress(),
     birthDate: '',
     citizenships: [],
     tax: {
-      hasTaxNumber: null,
-      taxNumber: null
+      hasTaxNumber: undefined,
+      taxNumber: undefined
     },
     isTaxResident: undefined,
     couldNotProvideMissingInfo: false,
-    missingInfoReason: ''
+    missingInfoReason: '',
+
+    // replace when on 20760
+    startDate: '',
+    endDate: '',
+
+    uuid: UUIDv4(),
+    ui: {}
+  }
+}
+
+export function getEmptySiFiling (): SignificantIndividualFilingI {
+  return {
+    effectiveDate: '',
+    noSignificantIndividualsExist: false,
+    significantIndividuals: [],
+    businessIdentifier: '',
+    certified: false,
+    folioNumber: undefined
   }
 }

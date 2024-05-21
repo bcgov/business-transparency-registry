@@ -49,7 +49,7 @@ export enum BodsInterestTypeE {
   RIGHT_TO_PROFIT_OR_INCOME_FROM_ASSETS = 'rightToProfitOrIncomeFromAssets'
 }
 
-export enum BodsInterestDirectOrIndirectTypeI {
+export enum BodsInterestDirectOrIndirectE {
   DIRECT = 'direct',
   INDIRECT = 'indirect',
   UNKNOWN = 'unknown'
@@ -75,4 +75,28 @@ export enum BodsUnspecifiedPersonDetailsTypeE {
   INTERESTED_PARTY_EXEMPT_FROM_DISCLOSURE = 'interestedPartyExemptFromDisclosure',
   UNKNOWN = 'unknown',
   INFORMATION_UNKNOWN_TO_PUBLISHER = 'informationUnknownToPublisher'
+}
+
+export enum ControlOfDirectorsDetailsE {
+  DIRECT_CONTROL = 'controlType.directors.directControl',
+  INDIRECT_CONTROL = 'controlType.directors.indirectControl',
+  SIGNIFICANT_INFLUENCE = 'controlType.directors.significantInfluence',
+  IN_CONCERT_CONTROL = 'controlType.directors.inConcertControl',
+  ACTING_JOINTLY = 'controlType.directors.actingJointly',
+}
+
+export enum ControlOfSharesDetailsE {
+  BENEFICIAL_OWNER = 'controlType.shares.beneficialOwner',
+  INDIRECT_CONTROL = 'controlType.shares.indirectControl',
+  REGISTERED_OWNER = 'controlType.shares.registeredOwner',
+  ACTING_JOINTLY = 'controlType.shares.actingJointly',
+  IN_CONCERT_CONTROL = 'controlType.shares.inConcertControl'
+}
+
+export enum ControlOfVotesDetailsE {
+  BENEFICIAL_OWNER = 'controlType.votes.beneficialOwner',
+  INDIRECT_CONTROL = 'controlType.votes.indirectControl',
+  REGISTERED_OWNER = 'controlType.votes.registeredOwner',
+  ACTING_JOINTLY = 'controlType.votes.actingJointly',
+  IN_CONCERT_CONTROL = 'controlType.votes.inConcertControl'
 }

@@ -69,16 +69,16 @@ export const normalizeName = (name?: string): string => {
  * Check a tax number to ensure that it only consists of digits and whitespace.
  * @param {string} taxNumber - string representation of the tax number input
  */
-export const checkSpecialCharacters = (taxNumber: string): boolean => {
-  return taxNumber === null || /^[\d\s]*$/.test(taxNumber)
+export const checkSpecialCharacters = (taxNumber: string | undefined): boolean => {
+  return taxNumber === undefined || /^[\d\s]*$/.test(taxNumber)
 }
 
 /**
  * Check if the tax number has 9 digits
  * @param {string} taxNumber - string representation of the tax number input
  */
-export const checkTaxNumberLength = (taxNumber: string | null): boolean => {
-  if (taxNumber === null) {
+export const checkTaxNumberLength = (taxNumber: string | undefined): boolean => {
+  if (taxNumber === undefined) {
     return false
   }
   const digits = taxNumber.replace(/\s+/g, '')
@@ -89,9 +89,9 @@ export const checkTaxNumberLength = (taxNumber: string | null): boolean => {
  * Check if the tax number is valid
  * @param {string} taxNumber - string representation of the tax number input
  */
-export const validateTaxNumber = (taxNumber: string | null): boolean => {
+export const validateTaxNumber = (taxNumber: string | undefined): boolean => {
   // SIN Validation rule used: https://en.wikipedia.org/wiki/Social_insurance_number
-  if (taxNumber === null) {
+  if (taxNumber === undefined) {
     return false
   }
 

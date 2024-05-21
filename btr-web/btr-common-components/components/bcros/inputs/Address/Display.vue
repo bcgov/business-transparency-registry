@@ -10,5 +10,6 @@
 </template>
 
 <script setup lang="ts">
-defineProps<{ modelValue: BtrAddressI }>()
+import { BtrAddressI } from '~/interfaces/btr-address-i'
+defineModel({ type: Object as PropType<BtrAddressI>, required: true })
 </script>
