@@ -13,6 +13,11 @@
       />
     </UFormGroup>
 
+    <p v-if="model.percentage === PercentageRangeE.LESS_THAN_25" class="pb-3">
+      <span class="font-bold">{{ $t('texts.note') }}</span>
+      <BcrosI18HelperBold translation-path="texts.control.lessThan25Note" />
+    </p>
+
     <BcrosHelpTip
       :title="$t('helpTitles.sharesAndVotes.closed')"
       :title-expanded="$t('helpTitles.sharesAndVotes.expanded')"
