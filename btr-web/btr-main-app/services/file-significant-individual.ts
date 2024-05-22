@@ -111,7 +111,6 @@ const getPersonAndOwnershipAndControlStatements = (sif: SignificantIndividualFil
 }
 
 const convertToBtrBodsForSubmit = (sif: SignificantIndividualFilingI): BtrFilingI => {
-  // todo: fixme: with new changes
   const businessDetails = getCurrentBusinessAsBtrBodsEntityI()
 
   const { ownershipOrControlStatements, personStatements } = getPersonAndOwnershipAndControlStatements(sif)

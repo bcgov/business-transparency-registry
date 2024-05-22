@@ -2,44 +2,6 @@ import { RefinementCtx, z } from 'zod'
 import { PercentageRangeE } from '~/enums/percentage-range-e'
 
 /**
- * Check if the percentage of shares and the percentage of votes are required.
- * If any of the Type of Control checkboxes are checked, at least one of the percentage fields is required.
- * @param formData the form data
- */
-export function validateSharesAndVotes (formData: FormInputI): boolean {
-  const controlOfShares = formData.controlOfShares
-
-  return !Object.values(controlOfShares).some(Boolean) || (
-    formData.percentOfShares !== PercentageRangeE.NO_SELECTION ||
-    formData.percentOfVotes !== PercentageRangeE.NO_SELECTION
-  )
-}
-
-/**
- * Validate the Type of Control checkboxes. Return false when type of control is required but no selections are made.
- * Case 1: If the percentage of shares or votes is >= 25%, at least one of the Type of Control checkboxes is required.
- * Case 2: If the 'exercised in concert'is selected, at least one of the Type of Control checkboxes is required.
- * @param formData the form data
- */
-export function validateControlOfShares (formData: FormInputI): boolean {
-  const typeOfControlSelected: boolean = Object.values(formData.controlOfShares).slice(0, 3).some(Boolean)
-  const inConcertControlSelected: boolean = formData.controlOfShares.inConcertControl
-  const percentagesOver25: PercentageRangeE[] = [
-    PercentageRangeE.AT_LEAST_25_TO_50, PercentageRangeE.MORE_THAN_50_TO_75, PercentageRangeE.MORE_THAN_75
-  ]
-
-  if (
-    percentagesOver25.includes(formData.percentOfShares) ||
-    percentagesOver25.includes(formData.percentOfVotes) ||
-    inConcertControlSelected
-  ) {
-    return typeOfControlSelected
-  } else {
-    return true
-  }
-}
-
-/**
  * Validate the Type of Director Control checkboxes.
  * If the 'exercised in concert' is selected, at least one of the Type of Director Control checkboxes is required.
  * @param formData the form data
@@ -52,22 +14,6 @@ export function validateControlOfDirectors (formData: any): boolean {
 }
 
 /**
- * Check if the text in the 'Other Reasons' textarea is less than or equal to 1000 characters
- * @param formData the form data
- */
-export function validateOtherReasons (formData: FormInputI): boolean {
-  return formData.otherReasons === undefined || formData.otherReasons.length <= 1000
-}
-
-/**
- * Check if the birth date has been entered
- * @param formData the form data
- */
-export function validateBirthDate (birthDate: any): boolean {
-  return !!birthDate
-}
-
-/**
  * Check if one of the CRA Tax Number options has been selected
  * @param taxData the form data
  */
@@ -77,7 +23,7 @@ export function validateTaxNumberInfo (
 ): never {
   const t = useNuxtApp().$i18n.t
   if (taxData.hasTaxNumber && taxData.taxNumber) {
-    if (!checkSpecialCharacters(taxData.taxNumber!)) {
+    if (!checkSpecialCharacters(taxData.taxNumber)) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
         message: t('errors.validation.taxNumber.specialCharacter'),
