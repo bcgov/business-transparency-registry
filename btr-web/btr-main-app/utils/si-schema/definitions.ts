@@ -13,13 +13,15 @@ export const SiControlOfSchema = z.object({
 
 export type SiControlOfSchemaType = z.infer<typeof SiControlOfSchema>
 
-export const ControlOfDirectorsSchema = z.object({
+export const SiControlOfDirectorsSchema = z.object({
   directControl: z.boolean(),
   indirectControl: z.boolean(),
   significantInfluence: z.boolean(),
   inConcertControl: z.boolean().optional(),
   actingJointly: z.boolean().optional()
 })
+
+export type SiControlOfDirectorsSchemaType = z.infer<typeof SiControlOfDirectorsSchema>
 
 export const SiNameSchema = z.object({
   isYourOwnInformation: z.boolean(),
@@ -29,12 +31,15 @@ export const SiNameSchema = z.object({
 })
 
 export const TaxSchema = z.object({
-  hasTaxNumber: z.union([z.null(), z.boolean()]),
-  taxNumber: z.union([z.null(), z.string()])
+  hasTaxNumber: z.boolean().optional(),
+  taxNumber: z.string().optional()
 })
 
+export const CountrySchema = z.object({ name: z.string(), alpha_2: z.string() })
+export type CountrySchemaType = z.infer<typeof CountrySchema>
+
 export const AddressSchema = z.object({
-  country: z.union([z.null(), z.object({ name: z.string(), alpha_2: z.string() })]),
+  country: CountrySchema.optional(),
   line1: z.string().min(1),
   line2: z.string().optional(),
   city: z.string().min(1),
@@ -42,6 +47,7 @@ export const AddressSchema = z.object({
   postalCode: z.string().min(1),
   locationDescription: z.string().optional()
 })
+export type AddressSchemaType = z.infer<typeof AddressSchema>
 
 export const SiSchema = z.object({
   couldNotProvideMissingInfo: z.boolean(),
@@ -49,20 +55,24 @@ export const SiSchema = z.object({
   name: SiNameSchema,
   controlOfShares: SiControlOfSchema,
   controlOfVotes: SiControlOfSchema,
-  controlOfDirectors: z.object({
-    directControl: z.boolean(),
-    indirectControl: z.boolean(),
-    significantInfluence: z.boolean(),
-    inConcertControl: z.boolean(),
-    actingJointly: z.boolean()
-  }),
+  controlOfDirectors: SiControlOfDirectorsSchema,
   controlOther: z.string().optional(),
   email: z.string(),
   address: AddressSchema,
   birthDate: z.string().min(1),
   citizenships: validateCitizenshipValidator(),
   tax: TaxSchema,
-  isTaxResident: z.boolean().optional()
+  isTaxResident: z.boolean().optional(),
+
+  startDate: z.string(),
+  endDate: z.string(),
+
+  uuid: z.string().min(1),
+
+  // UI helper values
+  ui: z.object({
+    action: z.nativeEnum(FilingActionE).optional()
+  })
 })
 
 export type SiSchemaType = z.infer<typeof SiSchema>

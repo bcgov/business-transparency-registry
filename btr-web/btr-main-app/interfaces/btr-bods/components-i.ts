@@ -1,5 +1,5 @@
 import {
-  BodsInterestDirectOrIndirectTypeI,
+  BodsInterestDirectOrIndirectE,
   BodsInterestTypeE,
   BodsNameTypeE,
   BodsSourceTypeE
@@ -48,7 +48,7 @@ export interface BodsNameI {
 
 export interface BodsInterestI {
   type?: BodsInterestTypeE
-  directOrIndirect?: BodsInterestDirectOrIndirectTypeI
+  directOrIndirect?: BodsInterestDirectOrIndirectE
   beneficialOwnershipOrControl?: boolean
   details?: string
   share?: {

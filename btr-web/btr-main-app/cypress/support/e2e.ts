@@ -97,12 +97,7 @@ Cypress.Commands.add('visitHomePageWithFakeDataAndAxeInject', () => {
 })
 
 Cypress.Commands.add('addTestIndividuals', () => {
-  cy.get('[data-cy=date-select]').click().then(() => {
-    cy.get('.bcros-date-picker__calendar__day.dp__today').parent().click()
-  })
-
   cy.fixture('individuals').then((testData) => {
-    // Add the first individual
     cy.get('[data-cy=add-new-btn]').click()
     cy.get('#individual-person-full-name').type(testData.profile1.fullName)
     cy.get('[data-cy=usePreferredName').check()
@@ -127,6 +122,7 @@ Cypress.Commands.add('addTestIndividuals', () => {
     cy.get('[data-cy="address-postal-code"]').type(testData.profile1.address.postalCode)
     cy.get('[data-cy="countryOfCitizenshipDropdownButton"]').click()
     cy.get('[data-cy="countryOfCitizenshipDropdownOption"]').eq(0).click({ force: true })
+    cy.get('[data-cy="countryOfCitizenshipDropdownFilter"]').eq(0).blur()
     cy.get('[data-cy="tax-number-input"]').type(testData.profile1.taxNumber)
     cy.get('[data-cy="testTaxResidency"]').get('[type="radio"][value="true"]').check()
     cy.get('[data-cy=new-si-done-btn]').click()
@@ -156,6 +152,7 @@ Cypress.Commands.add('addTestIndividuals', () => {
     cy.get('[data-cy="address-postal-code"]').type(testData.profile2.address.postalCode)
     cy.get('[data-cy="countryOfCitizenshipDropdownButton"]').click()
     cy.get('[data-cy="countryOfCitizenshipDropdownOption"]').eq(0).click({ force: true })
+    cy.get('[data-cy="countryOfCitizenshipDropdownFilter"]').blur()
     cy.get('[data-cy="tax-number-input"]').type(testData.profile2.taxNumber)
     cy.get('[data-cy="testTaxResidency"]').get('[type="radio"][value="true"]').check()
     cy.get('[data-cy=new-si-done-btn]').click()

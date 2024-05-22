@@ -1,5 +1,21 @@
-import { SiSchemaType } from '~/utils/si-schema/definitions'
+import { v4 as UUIDv4 } from 'uuid'
+import { todayIsoDateString } from '../../../btr-common-components/utils/date'
+import { AddressSchemaType, SiSchemaType } from '~/utils/si-schema/definitions'
 import { PercentageRangeE } from '~/enums/percentage-range-e'
+import { SignificantIndividualFilingI } from '~/interfaces/significant-individual-filing-i'
+
+export function getEmptyAddress (): AddressSchemaType {
+  return {
+    country: undefined,
+    line1: '',
+    line2: undefined,
+    city: '',
+    region: '',
+    postalCode: '',
+    locationDescription: undefined
+
+  }
+}
 
 export function getDefaultInputFormSi (): SiSchemaType {
   return {
@@ -36,23 +52,35 @@ export function getDefaultInputFormSi (): SiSchemaType {
     },
     controlOther: undefined,
     email: '',
-    address: {
-      country: null,
-      line1: '',
-      line2: undefined,
-      city: '',
-      region: '',
-      postalCode: '',
-      locationDescription: undefined
-    },
+    address: getEmptyAddress(),
     birthDate: '',
     citizenships: [],
     tax: {
-      hasTaxNumber: null,
-      taxNumber: null
+      hasTaxNumber: undefined,
+      taxNumber: undefined
     },
     isTaxResident: undefined,
     couldNotProvideMissingInfo: false,
-    missingInfoReason: ''
+    missingInfoReason: '',
+
+    // replace when on 20760
+    startDate: todayIsoDateString(),
+    endDate: '',
+
+    uuid: UUIDv4(),
+    ui: {
+      action: FilingActionE.ADD
+    }
+  }
+}
+
+export function getEmptySiFiling (): SignificantIndividualFilingI {
+  return {
+    effectiveDate: todayIsoDateString(),
+    noSignificantIndividualsExist: false,
+    significantIndividuals: [],
+    businessIdentifier: '',
+    certified: false,
+    folioNumber: undefined
   }
 }

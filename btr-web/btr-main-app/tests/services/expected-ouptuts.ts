@@ -9,6 +9,32 @@ export const OwnershipOrControlStatements = {
       },
       interests: [
         {
+          directOrIndirect: 'direct',
+          details: 'controlType.shares.registeredOwner',
+          startDate: SI_EXAMPLE_DATE,
+          endDate: undefined,
+          share: {
+            exclusiveMaximum: false,
+            exclusiveMinimum: true,
+            maximum: 75,
+            minimum: 50
+          },
+          type: 'shareholding'
+        },
+        {
+          directOrIndirect: 'direct',
+          details: 'controlType.votes.registeredOwner',
+          startDate: SI_EXAMPLE_DATE,
+          endDate: undefined,
+          share: {
+            exclusiveMaximum: false,
+            exclusiveMinimum: false,
+            maximum: 50,
+            minimum: 25
+          },
+          type: 'votingRights'
+        },
+        {
           type: 'appointmentOfBoard',
           directOrIndirect: 'direct',
           details: 'controlType.directors.directControl',
@@ -21,32 +47,6 @@ export const OwnershipOrControlStatements = {
           details: 'controlType.directors.indirectControl',
           startDate: SI_EXAMPLE_DATE,
           endDate: undefined
-        },
-        {
-          directOrIndirect: 'direct',
-          details: 'controlType.sharesOrVotes.registeredOwner',
-          startDate: SI_EXAMPLE_DATE,
-          endDate: undefined,
-          share: {
-            exclusiveMaximum: false,
-            exclusiveMinimum: false,
-            maximum: 50,
-            minimum: 25
-          },
-          type: 'votingRights'
-        },
-        {
-          directOrIndirect: 'direct',
-          details: 'controlType.sharesOrVotes.registeredOwner',
-          startDate: SI_EXAMPLE_DATE,
-          endDate: undefined,
-          share: {
-            exclusiveMaximum: false,
-            exclusiveMinimum: true,
-            maximum: 75,
-            minimum: 50
-          },
-          type: 'shareholding'
         }
       ],
       isComponent: false,
@@ -123,5 +123,6 @@ export const OwnershipOrControlStatements = {
       taxResidencies: [{ name: 'Canada', code: 'CA' }],
       statementID: 'db102217-429c-439e-9075-13c4e84fbb4d'
     }
-  ]
+  ],
+  uuid: undefined
 }

@@ -1,36 +1,10 @@
 <template>
   <div data-cy="owner-change">
-    <!-- todo: remove with ticket 20760 when date gets its own section -->
-    <h1 class="font-bold text-3xl" data-cy="page-header">
-      {{ $t('pageHeadings.significantIndividualChange') }}
-    </h1>
-    <p class="mt-5" data-cy="page-info-text">
-      {{ $t('texts.significantIndividualChange') }}
-    </p>
-    <div
-      class="mt-10 p-10 pb-3 bg-white rounded flex"
-      :class="showSignificantDateError ? 'border-l-[3px] border-red-500' : ''"
-      data-cy="effective-date-select"
-    >
-      <label class="text-lg w-[190px]" :class="showSignificantDateError ? 'text-red-500' : ''">
-        {{ $t('labels.significantIndividualChangeDate') }}
-      </label>
-      <div class="ml-8 flex-auto">
-        <BcrosInputsDateSelect
-          name="effectiveDate"
-          :initial-date="currentSIFiling.effectiveDate ? dateStringToDate(currentSIFiling.effectiveDate) : undefined"
-          :max-date="new Date()"
-          :placeholder="$t('placeholders.dateSelect.significantIndividualChange')"
-          :variant="showSignificantDateError ? 'error' : 'bcGov'"
-          @selection="significantIndividualChangeDate($event)"
-        />
-      </div>
-    </div>
     <div class="my-5" data-cy="noSignificantIndividualsExist-section">
-      <h1 class="font-bold text-3xl" data-cy="noSignificantIndividualsExist-title">
+      <h1 class="font-bold text-3xl" data-cy="significantIndividuals-heading">
         {{ $t('pageHeadings.significantIndividuals') }}
       </h1>
-      <p class="mt-5">
+      <p class="mt-5" data-cy="page-info-text">
         {{ $t('texts.significantIndividuals') }}
       </p>
       <BcrosHelpTip
@@ -100,6 +74,7 @@
 
 <script setup lang="ts">
 import { storeToRefs } from 'pinia'
+import { SiSchemaType } from '~/utils/si-schema/definitions'
 
 const significantIndividuals = useSignificantIndividuals()
 const { currentSIFiling } = storeToRefs(significantIndividuals)
@@ -118,26 +93,12 @@ const toggleEditingMode = () => {
   isEditing.value = !isEditing.value
 }
 
-// FUTURE: these will be triggered/replaced for something else in 18883
-const showSignificantDateError = ref(false)
-
-const significantIndividualChangeDate = (event: Date) => {
-  const effectiveDate = dateToString(event, 'YYYY-MM-DD')
-  currentSIFiling.value.effectiveDate = effectiveDate
-  for (const si of currentSIFiling.value.significantIndividuals) {
-    if (si.action === FilingActionE.ADD) {
-      si.startDate = effectiveDate
-    }
-  }
-  addBtrPayFees()
-}
-
 function handleAddNewButtonClick () {
   expandNewSI.value = true
   isAddingNewSI.value = true
 }
 
-function addNewSI (si: SignificantIndividualI) {
+function addNewSI (si: SiSchemaType) {
   significantIndividuals.filingAddSI(si)
   expandNewSI.value = false
   isAddingNewSI.value = false

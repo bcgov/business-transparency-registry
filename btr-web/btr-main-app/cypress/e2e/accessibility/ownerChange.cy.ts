@@ -7,7 +7,7 @@ describe('accessibility -> Beneficial Owner Change', () => {
 
   it('checks page passes accessibility', () => {
     // For now, this is an example of passing checks
-    cy.checkA11y('[data-cy=page-header]')
+    cy.checkA11y('[data-cy="significantIndividuals-heading"]')
     cy.checkA11y('[data-cy=page-info-text]')
     cy.checkA11y('[data-cy=add-new-btn]')
 
@@ -128,7 +128,8 @@ describe('accessibility -> Beneficial Owner Change', () => {
     cy.checkA11y('[data-cy=individualsSummaryTable]')
   })
 
-  it('Verifies the date selector passes AA', () => {
+  // todo: fix on #20760
+  it.skip('Verifies the date selector passes AA', () => {
     cy.checkA11y('[data-cy=effective-date-select]')
     // Open date picker
     cy.get('[data-cy=date-select]').click()

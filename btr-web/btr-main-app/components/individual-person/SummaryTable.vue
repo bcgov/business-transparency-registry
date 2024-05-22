@@ -6,24 +6,24 @@
     :empty-state="$t('texts.tables.emptyTexts.individualsSummaryTable')"
   >
     <template #table-row="{ item, index }">
-      <tr v-if="item.action != FilingActionE.REMOVE && editingIndex != index">
+      <tr v-if="item.ui.action != FilingActionE.REMOVE && editingIndex != index">
         <td data-cy="summary-table-name">
-          <span class="font-bold">{{ item.profile.fullName.toUpperCase() }}</span><br>
-          <span v-if="item.profile.preferredName">{{ item.profile.preferredName }}<br></span>
-          <span>{{ item.profile.email }}</span>
+          <span class="font-bold">{{ item.name.fullName.toUpperCase() }}</span><br>
+          <span v-if="item.name.preferredName">{{ item.name.preferredName }}<br></span>
+          <span>{{ item.email }}</span>
         </td>
         <td data-cy="summary-table-address">
-          <BcrosInputsAddressDisplay :model-value="item.profile.address" />
+          <BcrosInputsAddressDisplay :model-value="item.address" />
         </td>
         <td data-cy="summary-table-details">
-          <span>{{ item.profile.birthDate }}</span><br>
-          <span v-if="item.profile.taxNumber">{{ item.profile.taxNumber }}<br></span>
+          <span>{{ item.birthDate }}</span><br>
+          <span v-if="item.tax.taxNumber">{{ item.tax.taxNumber }}<br></span>
           <span v-else>{{ $t('texts.noCRATaxNumber') }}<br></span><br>
           <label>{{ $t('labels.citizenships') }}:</label><br>
-          <span v-for="country in item.profile.citizenships" :key="country.alpha_2">
+          <span v-for="country in item.citizenships" :key="country.alpha_2">
             {{ country.name }}<br>
           </span><br>
-          <span>{{ getTaxResidentText(item.profile.isTaxResident) }}</span>
+          <span>{{ getTaxResidentText(item.name.isTaxResident) }}</span>
         </td>
         <td data-cy="summary-table-dates">
           {{
@@ -34,29 +34,38 @@
           }}
         </td>
         <td data-cy="summary-table-controls">
-          <div v-if="Object.values(item.controlType.sharesVotes).includes(true)">
+          <div v-if="item.controlOfShares.percentage !== PercentageRangeE.NO_SELECTION">
             <span class="font-bold italic">
               {{ $t('labels.shares') }}
             </span>
             <p>{{ getSharesControlText(item) }}</p>
-            <p v-if="item.controlType.sharesVotes.inConcertControl">
+            <p v-if="item.controlOfShares.inConcertControl">
               {{ $t('texts.sharesAndVotes.summary.inConcert') }}
             </p>
           </div>
-          <div v-if="Object.values(item.controlType.directors).includes(true)" class="mt-3">
+          <div v-if="item.controlOfVotes.percentage !== PercentageRangeE.NO_SELECTION">
+            <span class="font-bold italic">
+              {{ $t('labels.votes') }}
+            </span>
+            <p>{{ getVotesControlText(item) }}</p>
+            <p v-if="item.controlOfVotes.inConcertControl">
+              {{ $t('texts.sharesAndVotes.summary.inConcert') }}
+            </p>
+          </div>
+          <div v-if="Object.values(item.controlOfDirectors).includes(true)" class="mt-3">
             <span class="font-bold italic">
               {{ $t('labels.directors') }}
             </span>
-            <p>{{ getDirectorsControlText(item.controlType.directors) }}</p>
-            <p v-if="item.controlType.directors.inConcertControl">
+            <p>{{ getDirectorsControlText(item.controlOfDirectors) }}</p>
+            <p v-if="item.controlOfDirectors.inConcertControl">
               {{ $t('texts.controlOfDirectors.summary.inConcert') }}
             </p>
           </div>
-          <div v-if="item.controlType.other" class="mt-3">
+          <div v-if="item.controlOther" class="mt-3">
             <span class="font-bold italic">
               {{ $t('labels.other') }}
             </span>
-            <p>{{ item.controlType.other }}</p>
+            <p>{{ item.controlOther }}</p>
           </div>
         </td>
         <template v-if="edit">
@@ -131,12 +140,13 @@
 </template>
 
 <script setup lang="ts">
-import { SignificantIndividualI } from '~/interfaces/significant-individual-i'
+import { SiControlOfDirectorsSchemaType, SiSchemaType } from '~/utils/si-schema/definitions'
+import { PercentageRangeE } from '~/enums/percentage-range-e'
 
 const emit = defineEmits(['toggle-editing-mode'])
 const props = defineProps({
   individuals: {
-    type: Array as PropType<SignificantIndividualI[]>,
+    type: Array as PropType<SiSchemaType[]>,
     required: true
   },
   edit: {
@@ -161,7 +171,7 @@ const headers = [
 ]
 
 const isEmptyState = computed(() => {
-  return props.individuals.every(individual => individual.action === FilingActionE.REMOVE)
+  return props.individuals.filter(individual => individual.ui.action !== FilingActionE.REMOVE).length === 0
 })
 
 function getTaxResidentText (isTaxResident: boolean) {
@@ -176,11 +186,11 @@ function getControlTextField (items: { value: boolean, field: string }[]) {
   return activeLabels.join('') || ''
 }
 
-function getSharesControlText (significantIndividual: SignificantIndividualI) {
+function getSharesControlText (si: SiSchemaType) {
   const field = getControlTextField([
-    { value: significantIndividual.controlType.sharesVotes.registeredOwner, field: 'registered' },
-    { value: significantIndividual.controlType.sharesVotes.beneficialOwner, field: 'beneficial' },
-    { value: significantIndividual.controlType.sharesVotes.indirectControl, field: 'indirect' }
+    { value: si.controlOfShares.registeredOwner || si.controlOfVotes.registeredOwner, field: 'registered' },
+    { value: si.controlOfShares.beneficialOwner || si.controlOfVotes.beneficialOwner, field: 'beneficial' },
+    { value: si.controlOfShares.indirectControl || si.controlOfVotes.indirectControl, field: 'indirect' }
   ])
 
   const shareRanges: Map<PercentageRangeE, string> = new Map([
@@ -193,6 +203,25 @@ function getSharesControlText (significantIndividual: SignificantIndividualI) {
     [PercentageRangeE.NO_SELECTION, '']
   ])
 
+  let shares: string = ''
+  if (si.controlOfShares.percentage) {
+    shares = shareRanges.get(si.controlOfShares.percentage) || ''
+  }
+
+  if (field) {
+    return t(
+      `texts.sharesAndVotes.summary.${field}`, { sharesAndVotes: shares })
+  }
+  return ''
+}
+
+function getVotesControlText (si: SiSchemaType) {
+  const field = getControlTextField([
+    { value: si.controlOfVotes.registeredOwner, field: 'registered' },
+    { value: si.controlOfVotes.beneficialOwner, field: 'beneficial' },
+    { value: si.controlOfVotes.indirectControl, field: 'indirect' }
+  ])
+
   const voteRanges: Map<PercentageRangeE, string> = new Map([
     [PercentageRangeE.MORE_THAN_75, t('texts.sharesAndVotes.percentageRange.moreThan75', { sharesOrVotes: 'votes' })],
     [PercentageRangeE.MORE_THAN_50_TO_75, t('texts.sharesAndVotes.percentageRange.moreThan50To75',
@@ -203,24 +232,23 @@ function getSharesControlText (significantIndividual: SignificantIndividualI) {
     [PercentageRangeE.NO_SELECTION, '']
   ])
 
-  let sharesAndVotes: string = shareRanges.get(significantIndividual.percentOfShares) || ''
-  if (sharesAndVotes !== '') {
-    sharesAndVotes += '; '
+  let votes: string = ''
+  if (si.controlOfVotes.percentage) {
+    votes += voteRanges.get(si.controlOfVotes.percentage)
   }
-  sharesAndVotes += voteRanges.get(significantIndividual.percentOfVotes)
-
   if (field) {
     return t(
-      `texts.sharesAndVotes.summary.${field}`, { sharesAndVotes })
+      `texts.sharesAndVotes.summary.${field}`, { sharesAndVotes: votes })
   }
+
   return ''
 }
 
-function getDirectorsControlText (directorsConstrol: ControlOfDirectorsI) {
+function getDirectorsControlText (controlOfDirectors: SiControlOfDirectorsSchemaType) {
   const field = getControlTextField([
-    { value: directorsConstrol.directControl, field: 'direct' },
-    { value: directorsConstrol.indirectControl, field: 'indirect' },
-    { value: directorsConstrol.significantInfluence, field: 'significantinfluence' }
+    { value: controlOfDirectors.directControl, field: 'direct' },
+    { value: controlOfDirectors.indirectControl, field: 'indirect' },
+    { value: controlOfDirectors.significantInfluence, field: 'significantinfluence' }
   ])
   if (field) {
     return t(`texts.controlOfDirectors.summary.${field}`)
@@ -251,8 +279,10 @@ function removeSignificantIndividual (index: number) {
   closeEditingMode()
 }
 
-function updateSignificantIndividual (index: number, updatedSI: SignificantIndividualI) {
-  useSignificantIndividuals().filingUpdateSI(index, updatedSI)
+function updateSignificantIndividual (index: number | undefined, updatedSI: SiSchemaType) {
+  if (index !== undefined) {
+    useSignificantIndividuals().filingUpdateSI(index, updatedSI)
+  }
   closeEditingMode()
 }
 </script>

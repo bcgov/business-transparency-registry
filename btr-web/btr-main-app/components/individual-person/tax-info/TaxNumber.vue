@@ -36,7 +36,7 @@
           v-model="hasTaxNumber"
           :value="false"
           :variant="error ? 'error' : variant"
-          @change="taxNumber = null"
+          @change="taxNumber = undefined"
         />
         <label for="noTaxNumberRadioButton" class="ml-5" :class="{ 'text-red-500': error}">
           {{ $t('labels.noTaxNumberLabel') }}
@@ -47,8 +47,8 @@
 </template>
 
 <script setup lang="ts">
-const hasTaxNumber = defineModel('hasTaxNumber', { type: [Boolean, null], required: false, default: null })
-const taxNumber = defineModel('taxNumber', { type: [String, null], required: false, default: null })
+const hasTaxNumber = defineModel('hasTaxNumber', { type: Boolean, required: false, default: undefined })
+const taxNumber = defineModel('taxNumber', { type: String, required: false, default: undefined })
 
 defineProps<{ name: String, variant: String }>()
 

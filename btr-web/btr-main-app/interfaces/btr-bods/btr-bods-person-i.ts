@@ -32,5 +32,7 @@ export interface BtrBodsPersonI {
   hasTaxNumber: boolean
   email: string
 
-  missingInfoReason: string
+  missingInfoReason?: string
+
+  uuid: string
 }

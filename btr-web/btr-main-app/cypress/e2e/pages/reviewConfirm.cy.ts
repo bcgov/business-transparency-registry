@@ -30,10 +30,6 @@ describe('pages -> Review and Confirm', () => {
       cy.interceptPostsEntityApi().as('existingSIs')
       cy.visit('/')
       cy.wait(['@existingSIs', '@businessApiCall', '@payFeeApi', '@businessContact'])
-      // select the date of today
-      cy.get('[data-cy=date-select]').click().then(() => {
-        cy.get('.bcros-date-picker__calendar__day.dp__today').parent().click()
-      })
 
       // click 'Add an Individual' button and expand the form
       cy.get('[data-cy=add-new-btn]').click()
@@ -120,10 +116,6 @@ describe('pages -> Review and Confirm', () => {
       }
     })
     cy.wait(['@noExistingSIs', '@businessApiCall', '@payFeeApi', '@businessContact'])
-    // select the date of today
-    cy.get('[data-cy=date-select]').click().then(() => {
-      cy.get('.bcros-date-picker__calendar__day.dp__today').parent().click()
-    })
 
     // click 'Review and Confirm' button to review the summary'
     cy.get('[data-cy="button-control-right-button"]').click()

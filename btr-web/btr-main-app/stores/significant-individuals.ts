@@ -2,35 +2,26 @@ import { defineStore } from 'pinia'
 import { StatusCodes } from 'http-status-codes'
 import { Ref } from 'vue'
 import { ErrorI } from '../../btr-common-components/interfaces/error-i'
-import { SignificantIndividualI } from '~/interfaces/significant-individual-i'
+import { dateToString } from '../../btr-common-components/utils/date'
 import fileSIApi from '@/services/file-significant-individual'
+import { SignificantIndividualFilingI } from '~/interfaces/significant-individual-filing-i'
+import { SiSchemaType } from '~/utils/si-schema/definitions'
+import { getEmptySiFiling } from '~/utils/si-schema/defaults'
 
 /** Manages Significant */
 export const useSignificantIndividuals = defineStore('significantIndividuals', () => {
-  const currentSIFiling: Ref<SignificantIndividualFilingI> = ref({
-    noSignificantIndividualsExist: false,
-    significantIndividuals: []
-  }) // current significant individual change filing
-  const currentSavedSIs: Ref<SignificantIndividualI[]> = ref([]) // saved SIs from api for this business
+  const currentSIFiling: Ref<SignificantIndividualFilingI> = ref(getEmptySiFiling()) // current significant individual change filing
+  const currentSavedSIs: Ref<SiSchemaType[]> = ref([]) // saved SIs from api for this business
   const showErrors = ref(false) // show submit error validations
   const submitting = ref(false)
   const errors: Ref<ErrorI[]> = ref([])
 
-  watch(() => currentSIFiling.value?.effectiveDate, (val) => {
-    // set the start date for all newly added SIs
-    for (const i in currentSIFiling.value?.significantIndividuals) {
-      if (currentSIFiling.value.significantIndividuals[i].action === FilingActionE.ADD) {
-        currentSIFiling.value.significantIndividuals[i].startDate = val
-      }
-    }
-  })
-
   /** Add currentSI to the currentSIFiling. */
-  function filingAddSI (significantIndividual: SignificantIndividualI) {
+  function filingAddSI (significantIndividual: SiSchemaType) {
     currentSIFiling.value.noSignificantIndividualsExist = false
     // put it at the end of the new individuals
     const lastNewSIIndex = currentSIFiling.value.significantIndividuals
-      .findLastIndex((si: SignificantIndividualI) => si.action === FilingActionE.ADD)
+      .findLastIndex(si => si.ui.action === FilingActionE.ADD)
     currentSIFiling.value.significantIndividuals.splice(lastNewSIIndex + 1, 0, significantIndividual)
   }
 
@@ -43,16 +34,16 @@ export const useSignificantIndividuals = defineStore('significantIndividuals', (
   }
 
   /** Update the significant individual at the given index */
-  function filingUpdateSI (index: number, significantIndividual: SignificantIndividualI) {
-    if (!significantIndividual.action) {
-      significantIndividual.action = FilingActionE.EDIT
+  function filingUpdateSI (index: number, significantIndividual: SiSchemaType) {
+    if (!significantIndividual.ui.action) {
+      significantIndividual.ui.action = FilingActionE.EDIT
     }
     currentSIFiling.value.significantIndividuals.splice(index, 1, significantIndividual)
   }
 
   /** Mark the significant individual at the given index as removed so it will not be displayed in the table */
   function filingRemoveSI (index: number) {
-    currentSIFiling.value.significantIndividuals[index].action = FilingActionE.REMOVE
+    currentSIFiling.value.significantIndividuals[index].ui.action = FilingActionE.REMOVE
   }
 
   /** Initialize a new significant individual filing */
@@ -63,7 +54,7 @@ export const useSignificantIndividuals = defineStore('significantIndividuals', (
       noSignificantIndividualsExist: false,
       businessIdentifier,
       significantIndividuals: currentSavedSIs.value,
-      effectiveDate: null,
+      effectiveDate: dateToString(new Date(), 'YYYY-MM-DD'),
       certified: false,
       folioNumber: folioNum
     }
@@ -92,7 +83,7 @@ export const useSignificantIndividuals = defineStore('significantIndividuals', (
   }
 
   /** Get the current significant individuals for the business */
-  async function getSIs (businessIdentifier: string) {
+  async function getSIs (businessIdentifier: string): Promise<SiSchemaType[] | null> {
     const { data, error } = await fileSIApi.getCurrentOwners(businessIdentifier)
     if (error) {
       if (error.statusCode !== StatusCodes.NOT_FOUND) {
@@ -117,9 +108,7 @@ export const useSignificantIndividuals = defineStore('significantIndividuals', (
   }
 
   function reset () {
-    currentSIFiling.value = {
-      noSignificantIndividualsExist: false
-    }
+    currentSIFiling.value = getEmptySiFiling()
     currentSavedSIs.value = []
     showErrors.value = false
     submitting.value = false

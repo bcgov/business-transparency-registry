@@ -1,5 +1,6 @@
 import { expect, describe, it } from 'vitest'
-import { VueWrapper, flushPromises, mount } from '@vue/test-utils'
+import { VueWrapper, flushPromises } from '@vue/test-utils'
+import { mountSuspended } from '@nuxt/test-utils/runtime'
 import { mockedI18n } from '../../utils/mockedi18n'
 import { testSI } from '../../utils/mockedData'
 import { IndividualPersonSummaryTable } from '#components'
@@ -9,7 +10,7 @@ describe('AddIndividualPersonSummaryTable tests', () => {
   const si = { ...testSI }
 
   beforeEach(async () => {
-    wrapper = mount(IndividualPersonSummaryTable, {
+    wrapper = await mountSuspended(IndividualPersonSummaryTable, {
       props: { individuals: [], edit: true },
       global: { plugins: [mockedI18n] }
     })
@@ -50,44 +51,48 @@ describe('AddIndividualPersonSummaryTable tests', () => {
     expect(wrapper.find('[data-cy=summary-table-buttons]').exists()).toBe(true)
   })
   it('displays the Name column as expected', async () => {
-    si.profile.fullName = 'full name'
-    si.profile.preferredName = 'preferred name'
-    si.profile.email = 'test@email.com'
+    si.name.fullName = 'full name'
+    si.name.preferredName = 'preferred name'
+    si.email = 'test@email.com'
     await wrapper.setProps({ individuals: [si] })
-    expect(wrapper.find('[data-cy=summary-table-name]').text()).toContain(si.profile.fullName.toUpperCase())
-    expect(wrapper.find('[data-cy=summary-table-name]').text()).toContain(si.profile.preferredName)
-    expect(wrapper.find('[data-cy=summary-table-name]').text()).toContain(si.profile.email)
+    expect(wrapper.find('[data-cy=summary-table-name]').text()).toContain(si.name.fullName.toUpperCase())
+    expect(wrapper.find('[data-cy=summary-table-name]').text()).toContain(si.name.preferredName)
+    expect(wrapper.find('[data-cy=summary-table-name]').text()).toContain(si.email)
   })
   it('displays the Address column as expected', async () => {
     await wrapper.setProps({ individuals: [si] })
-    expect(wrapper.find('[data-cy=summary-table-address]').text()).toContain(si.profile.address.line1)
-    expect(wrapper.find('[data-cy=summary-table-address]').text()).toContain(si.profile.address.city)
-    expect(wrapper.find('[data-cy=summary-table-address]').text()).toContain(si.profile.address.region)
-    expect(wrapper.find('[data-cy=summary-table-address]').text()).toContain(si.profile.address.postalCode)
-    expect(wrapper.find('[data-cy=summary-table-address]').text()).toContain(si.profile.address.country.name)
+    expect(wrapper.find('[data-cy=summary-table-address]').text()).toContain(si.address.line1)
+    expect(wrapper.find('[data-cy=summary-table-address]').text()).toContain(si.address.city)
+    expect(wrapper.find('[data-cy=summary-table-address]').text()).toContain(si.address.region)
+    expect(wrapper.find('[data-cy=summary-table-address]').text()).toContain(si.address.postalCode)
+    expect(wrapper.find('[data-cy=summary-table-address]').text()).toContain(si.address.country.name)
   })
   it('displays the Details column as expected', async () => {
     await wrapper.setProps({ individuals: [si] })
     const details = wrapper.find('[data-cy=summary-table-details]')
-    expect(details.text()).toContain(si.profile.birthDate)
-    expect(details.text()).toContain(si.profile.taxNumber)
+    expect(details.text()).toContain(si.birthDate)
+    expect(details.text()).toContain(si.tax.taxNumber)
     expect(details.text()).toContain('Citizenship(s):Canada')
     expect(details.text()).toContain('Tax Resident of Canada')
   })
   // todo: fixme: update on #TBD with new summary table && 20756
   it.skip('displays the Controls column as expected', async () => {
     // only shares
-    si.controlType.sharesVotes.registeredOwner = true
-    si.controlType.sharesVotes.beneficialOwner = true
-    si.controlType.sharesVotes.indirectControl = true
-    si.controlType.sharesVotes.inConcertControl = true
-    si.percentOfShares = 'atLeast25To50'
-    si.percentOfVotes = 'moreThan50To75'
-    si.controlType.directors.directControl = false
-    si.controlType.directors.indirectControl = false
-    si.controlType.directors.significantInfluence = false
-    si.controlType.directors.inConcertControl = false
-    si.controlType.other = ''
+    si.controlOfVotes.registeredOwner = true
+    si.controlOfVotes.beneficialOwner = true
+    si.controlOfVotes.indirectControl = true
+    si.controlOfVotes.inConcertControl = true
+    si.controlOfVotes.percentage = PercentageRangeE.AT_LEAST_25_TO_50
+    si.controlOfShares.registeredOwner = true
+    si.controlOfShares.beneficialOwner = true
+    si.controlOfShares.indirectControl = true
+    si.controlOfShares.inConcertControl = true
+    si.controlOfShares.percentage = PercentageRangeE.MORE_THAN_50_TO_75
+    si.controlOfDirectors.directControl = false
+    si.controlOfDirectors.indirectControl = false
+    si.controlOfDirectors.significantInfluence = false
+    si.controlOfDirectors.inConcertControl = false
+    si.controlOther = ''
     await wrapper.setProps({ individuals: [si] })
     // todo: fixme: update on #TBD with new summary table
     // let controls = wrapper.find('[data-cy=summary-table-controls]')
