@@ -90,11 +90,12 @@
 <script setup lang="ts">
 import { v4 as UUIDv4 } from 'uuid'
 import { type UseEventBusReturn } from '@vueuse/core'
+import { SiControlOfSchemaType } from '~/utils/si-schema/definitions'
 
 const formBus = inject<UseEventBusReturn<any, string> | undefined>('form-events', undefined)
 
 const model = defineModel({
-  type: Object as PropType<ControlSchemaI>,
+  type: Object as PropType<SiControlOfSchemaType>,
   required: true
 })
 
