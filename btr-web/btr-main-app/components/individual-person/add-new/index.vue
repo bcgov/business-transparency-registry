@@ -11,6 +11,8 @@
       <BcrosSection
         :section-title="$t('sectionTitles.isYourOwnInformation')"
         data-cy="isYourOwnInformation-section"
+        rounded-bot
+        rounded-top
       >
         <div class="flex-col w-full">
           <p class="pb-5">
@@ -33,6 +35,8 @@
       <BcrosSection
         :show-section-has-errors="hasErrors(['name.'])"
         :section-title="$t('sectionTitles.individualsFullName')"
+        rounded-bot
+        rounded-top
       >
         <div class="flex-col w-full">
           <BcrosInputsNameField
@@ -75,8 +79,10 @@
 
       <!--  section-header: type of interest or control of shares/votes-->
       <BcrosSection
-        :header-text="$t('sectionHeaders.controlOf')"
         header-icon-name="i-mdi-plus-circle-multiple-outline"
+        :header-title="$t('sectionHeaders.controlOf')"
+        :header-text="$t('sectionIntroText.controlOf')"
+        rounded-top
       />
 
       <!--  section: type of interest or control of shares -->
@@ -126,8 +132,9 @@
       <BcrosSection
         :show-section-has-errors="hasErrors(['otherReasons'])"
         :section-title="$t('sectionTitles.otherReasons')"
+        rounded-bot
       >
-        <div class="pt-3 w-full">
+        <div class="w-full">
           <IndividualPersonControlOtherReasons
             id="otherReasons"
             v-model="inputFormSi.controlOther"
@@ -141,8 +148,10 @@
 
       <!--  section-header: type of interest or control -->
       <BcrosSection
-        :header-text="$t('sectionHeaders.individualsDetails')"
         header-icon-name="i-mdi-user-circle"
+        :header-title="$t('sectionHeaders.individualsDetails')"
+        :header-text="$t('sectionIntroText.individualsDetails')"
+        rounded-top
       />
       <!--  section: email address  -->
       <BcrosSection
@@ -213,6 +222,7 @@
       <BcrosSection
         :show-section-has-errors="hasErrors(['tax.', 'isTaxResident'])"
         :section-title="$t('sectionTitles.taxDetails')"
+        rounded-bot
       >
         <div class="w-full flex flex-col">
           <p class="font-bold pb-5">
@@ -245,10 +255,15 @@
           </div>
         </div>
       </BcrosSection>
+
+      <BcrosSectionDivider />
+
       <!--  section: unable to obtain or confirm  -->
       <BcrosSection
         :show-section-has-errors="hasErrors(['missingInfo'])"
         :section-title="$t('sectionTitles.unableToObtainOrConfirmInformation')"
+        rounded-top
+        rounded-bot
       >
         <div class="w-full">
           <IndividualPersonControlUnableToObtainOrConfirmInformation
@@ -261,10 +276,10 @@
       </BcrosSection>
     </UForm>
 
-    <div class="grid mt-10 w-full">
+    <div class="grid mt-6 w-full">
       <div class="flex justify-between">
         <UButton
-          class="px-10 py-4 mr-5"
+          class="px-10 py-3 mr-5"
           :label="t('buttons.remove')"
           color="red"
           variant="outline"
@@ -274,7 +289,7 @@
         />
         <div class="flex">
           <UButton
-            class="px-10 py-4"
+            class="px-10 py-3"
             :label="t('buttons.cancel')"
             color="primary"
             variant="outline"
@@ -282,7 +297,7 @@
             @click="$emit('cancel')"
           />
           <UButton
-            class="ml-5 px-10 py-4"
+            class="ml-5 px-10 py-3"
             :label="t('buttons.done')"
             color="primary"
             variant="solid"

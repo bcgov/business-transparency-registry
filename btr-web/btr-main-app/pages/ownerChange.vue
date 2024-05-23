@@ -54,14 +54,15 @@
         variant="outline"
         data-cy="import-legacy-si-list-btn"
       />
+      <div class="w-full h-12" data-cy="spacer" />
       <IndividualPersonAddNew
         v-if="expandNewSI"
         :start-date="currentSIFiling.effectiveDate"
         @cancel="cancelAddNewSI"
         @add="addNewSI($event)"
       />
+      <div v-if="expandNewSI" class="w-full h-12" data-cy="spacer" />
       <IndividualPersonSummaryTable
-        class="mt-10"
         :individuals="currentSIFiling.significantIndividuals || []"
         :edit="true"
         :is-editing="isEditing"

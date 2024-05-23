@@ -298,5 +298,9 @@
   "sectionHeaders": {
     "controlOf": "Control",
     "individualsDetails": "Individual’s Details"
+  },
+  "sectionIntroText": {
+    "controlOf": "Indicate the control this individual has over the company. You must indicate at least one form of control.",
+    "individualsDetails": "Enter as much information about this individual as you can reasonably obtain. If you cannot obtain some information, enter the steps and efforts you took to try and obtain the information at the bottom of this form."
   }
 }
