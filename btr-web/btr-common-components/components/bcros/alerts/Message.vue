@@ -25,9 +25,14 @@
 import { Ref } from 'vue'
 import { AlertsFlavourE } from '~/enums/alerts-e'
 
-const props = defineProps<{
-  flavour: { type: string, default: AlertsFlavourE.MESSAGE }
-}>()
+const props = withDefaults(
+  defineProps<{
+    flavour: AlertsFlavourE
+  }>(),
+  {
+    flavour: AlertsFlavourE.MESSAGE
+  }
+)
 
 const flavourIcon: Ref<string | null> = ref(null)
 const flavourContainerClass = ref('')
@@ -60,7 +65,7 @@ switch (props.flavour) {
     break
   case AlertsFlavourE.MESSAGE:
     flavourIcon.value = null
-    flavourContainerClass.value = 'border-2 border-solid border-black'
+    flavourContainerClass.value = 'border-0'
     break
 }
 

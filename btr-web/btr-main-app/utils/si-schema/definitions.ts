@@ -63,6 +63,7 @@ export const SiSchema = z.object({
   citizenships: validateCitizenshipValidator(),
   tax: TaxSchema,
   isTaxResident: z.boolean().optional(),
+  determinationOfIncapacity: z.boolean(),
 
   startDate: z.string(),
   endDate: z.string(),

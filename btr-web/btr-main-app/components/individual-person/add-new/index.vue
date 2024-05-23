@@ -222,7 +222,6 @@
       <BcrosSection
         :show-section-has-errors="hasErrors(['tax.', 'isTaxResident'])"
         :section-title="$t('sectionTitles.taxDetails')"
-        rounded-bot
       >
         <div class="w-full flex flex-col">
           <p class="font-bold pb-5">
@@ -254,6 +253,17 @@
             />
           </div>
         </div>
+      </BcrosSection>
+
+      <BcrosSection
+        :show-section-has-errors="hasErrors(['determinationOfIncapacity'])"
+        :section-title="$t('sectionTitles.determinationOfIncapacity')"
+        rounded-bot
+      >
+        <DeterminationOfIncapacity
+          v-model="inputFormSi.determinationOfIncapacity"
+          name="determinationOfIncapacity"
+        />
       </BcrosSection>
 
       <BcrosSectionDivider />
@@ -329,6 +339,7 @@ import {
 } from '~/utils/si-schema/definitions'
 import { getDefaultInputFormSi } from '~/utils/si-schema/defaults'
 import { CustomSiSchemaErrorMap } from '~/utils/si-schema/errorMessagesMap'
+import DeterminationOfIncapacity from '~/components/individual-person/DeterminationOfIncapacity.vue'
 
 const emits = defineEmits<{
   add: [value: SiSchemaType],
