@@ -191,7 +191,6 @@
           <BcrosInputsDateSelect
             id="addNewPersonBirthdate"
             name="birthDate"
-            class="mt-3"
             :initial-date="!!inputFormSi.birthDate ? dateStringToDate(inputFormSi.birthDate) : null"
             :max-date="new Date()"
             :placeholder="$t('placeholders.dateSelect.birthdate')"
@@ -220,7 +219,7 @@
 
       <!--  section: tax details  -->
       <BcrosSection
-        :show-section-has-errors="hasErrors(['tax.', 'isTaxResident'])"
+        :show-section-has-errors="hasErrors(['tax.'])"
         :section-title="$t('sectionTitles.taxDetails')"
       >
         <div class="w-full flex flex-col">
@@ -238,22 +237,24 @@
             variant="bcGov"
             data-cy="testTaxNumber"
           />
-          <div>
-            <p class="font-bold pb-5">
-              {{ $t('labels.taxResidency') }}
-            </p>
-            <p>
-              {{ $t('texts.taxResidency') }}
-            </p>
-            <IndividualPersonTaxInfoTaxResidency
-              v-model="inputFormSi.isTaxResident"
-              name="isTaxResident"
-              variant="bcGov"
-              data-cy="testTaxResidency"
-            />
-          </div>
         </div>
       </BcrosSection>
+      <bcrosSection
+        :show-section-has-errors="hasErrors(['isTaxResident'])"
+        :section-title="$t('labels.taxResidency')"
+      >
+        <div class="flex flex-col w-full">
+          <p>
+            {{ $t('texts.taxResidency') }}
+          </p>
+          <IndividualPersonTaxInfoTaxResidency
+            v-model="inputFormSi.isTaxResident"
+            name="isTaxResident"
+            variant="bcGov"
+            data-cy="testTaxResidency"
+          />
+        </div>
+      </bcrosSection>
 
       <BcrosSection
         :show-section-has-errors="hasErrors(['determinationOfIncapacity'])"
