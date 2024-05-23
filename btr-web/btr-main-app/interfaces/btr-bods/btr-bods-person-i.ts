@@ -29,6 +29,8 @@ export interface BtrBodsPersonI {
   publicationDetails: BodsPublicationDetailsI
   source: BodsSourceI
 
+  determinationOfIncapacity: boolean
+
   hasTaxNumber: boolean
   email: string
 
