@@ -79,7 +79,14 @@ export const SiSchema = z.object({
   // UI helper values
   ui: z.object({
     action: z.nativeEnum(FilingActionE).optional()
-  })
+  }),
+
+  sharesInConcert: z.array(z.string()),
+  sharesActingJointly: z.array(z.string()),
+  votesInConcert: z.array(z.string()),
+  votesActingJointly: z.array(z.string()),
+  directorsInConcert: z.array(z.string()),
+  directorsActingJointly: z.array(z.string())
 })
 
 export type SiSchemaType = z.infer<typeof SiSchema>

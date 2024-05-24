@@ -231,11 +231,17 @@
         :section-title="$t('sectionTitles.citizenshipOrPR')"
       >
         <div class="flex-col w-full">
-          <BcrosInputsCountriesOfCitizenship
+          <BcrosInputsCombobox
             id="countriesOfCitizenship"
             v-model="inputFormSi.citizenships"
             name="citizenships"
             :help="$t('labels.countryOfCitizenship.hint')"
+            :label-function="(c) => c.name"
+            :items="citizenshipOptions"
+            :search-placeholder="$t('labels.countryOfCitizenship.findCountry')"
+            :label-placeholder="$t('labels.countryOfCitizenship.placeholder')"
+            key-attribute="alpha_2"
+            :search-attributes="['name', 'alpha_2']"
           />
           <p>
             {{ $t('labels.countryOfCitizenship.note') }}

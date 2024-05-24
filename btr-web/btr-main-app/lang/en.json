@@ -314,7 +314,40 @@
   "alerts": {
     "determinationOfIncapacity": {
       "omitted": "{boldStart}Important:{boldEnd} This individual’s information will be omitted from, or obscured in, publicly accessible information.",
-      "proof": "{boldStart}Attention:{boldEnd} The Registrar may request proof of the determination of incapacity. The company must retain proof of the determination of incapacity made by a court, health authority designate or prescribed individual as long as this individual is incapable of managing their own affairs."
+      "proof":"{boldStart}Attention:{boldEnd} The Registrar may request proof of the determination of incapacity. The company must retain proof of the determination of incapacity made by a court, health authority designate or prescribed individual as long as this individual is incapable of managing their own affairs."
+    }
+  },
+  "controlTableHeader": {
+    "name": "Name",
+    "controlType": "Control Type",
+    "individualConnection": "Individual Connection"
+  },
+  "controlTableBody": {
+    "name": {
+      "preferredName": "Preferred Name",
+      "birthYear": "Birth year"
+    },
+    "controlType": {
+      "shares": "Shares",
+      "votes": "Votes",
+      "jointly": "Jointly",
+      "inConcert": "In concert"
+    },
+    "individualConnection": {
+      "placeholder": {
+        "jointly": "Choose individual(s) acting jointly",
+        "inConcert": "Choose individual(s) acting in concert",
+        "searchInput": "Find a person"
+      },
+      "floatingLabel": {
+        "jointly": "Individual(s) acting jointly",
+        "inConcert": "Individual(s) acting in concert"
+      }
+    },
+    "empty": "No data for this table (placeholder text)",
+    "alert": {
+      "important": "Important: ",
+      "message": "You have only entered 1 individual who is acting jointly and or in concert. You need {boldStart}at least 2 individuals{boldEnd} who are listed as acting jointly and or in concert in order to complete your submission."
     }
   }
 }

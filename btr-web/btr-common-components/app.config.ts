@@ -7,7 +7,8 @@ export default defineAppConfig({
       variant: {
         solid: 'hover:bg-opacity-[.92] hover:bg-{color}-500',
         editButton: 'text-primary border-0 border-r-2 border-gray focus-visible:ring-2 focus-visible:ring-primary',
-        removeButton: 'text-primary border-0 focus-visible:ring-2 focus-visible:ring-primary'
+        removeButton: 'text-primary border-0 focus-visible:ring-2 focus-visible:ring-primary',
+        combobox: 'bg-gray-100 hover:bg-gray-200 border-b-[1px] rounded-none rounded-t-md'
       }
     },
     formGroup: {
@@ -37,16 +38,20 @@ export default defineAppConfig({
     selectMenu: {
       label: 'text-gray-700',
       rounded: 'rounded-none',
+      input: 'bg-gray-100 text-gray-700 placeholder-primary h-10 -mt-2 border-b-[1px] border-b-primary',
+      popper: { offsetDistance: '0', placement: 'bottom-start', locked: true },
       option: {
         rounded: 'rounded-none',
         active: 'text-primary-500',
-        selected: 'text-primary-500 bg-gray-100',
+        selected: 'text-primary-500 bg-gray-100 pe-0',
+        container: 'w-full',
         icon: {
           active: 'text-primary-500'
         },
         selectedIcon: {
           base: 'text-primary-500'
-        }
+        },
+        empty: 'text-gray-700'
       }
     },
     textarea: {

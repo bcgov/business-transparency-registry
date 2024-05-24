@@ -68,6 +68,16 @@
       {{ citizenships2 }}
       <br>
       <br>
+      <BcrosInputsCombobox
+        v-model="citizenships"
+        name="testCombobox"
+        :label-function="(c) => c.name"
+        :items="citizenshipOptions"
+        :search-placeholder="$t('labels.countryOfCitizenship.findCountry')"
+        :label-placeholder="$t('labels.countryOfCitizenship.placeholder')"
+        key-attribute="alpha_2"
+        :search-attributes="['name', 'alpha_2']"
+      />
       <UButton id="exampleSubmitButton" type="submit" data-cy="submit-button">
         Submit
       </UButton>

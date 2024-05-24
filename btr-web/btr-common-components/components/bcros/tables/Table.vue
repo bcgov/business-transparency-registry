@@ -7,12 +7,15 @@
             v-for="(header, index) in headers"
             :key="index"
             class="text-left rtl:text-right text-sm font-semibold text-gray-900 px-3 py-3.5"
+            :class="header.customStyle ? header.customStyle : ''"
+            :style="`width: ${header.width}`"
           >
-            {{ header }}
+            {{ header.content }}
           </th>
         </tr>
       </thead>
       <tbody class="divide-y divide-gray-200">
+        <slot name="warning" />
         <slot v-for="(item, index) in items" :item="item" :index="index" name="table-row" />
         <slot :items="items" name="empty-state">
           <tr v-if="!items.length">
