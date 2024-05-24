@@ -60,6 +60,7 @@ export function getDefaultInputFormSi (): SiSchemaType {
       taxNumber: undefined
     },
     isTaxResident: undefined,
+    determinationOfIncapacity: false,
     couldNotProvideMissingInfo: false,
     missingInfoReason: '',
 

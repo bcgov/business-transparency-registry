@@ -184,6 +184,7 @@ const _getSi = (
       isUsePreferredName: !!(preferredName.trim())
     },
     isTaxResident: !!(person.taxResidencies.find(country => country.code === 'CA')),
+    determinationOfIncapacity: person.determinationOfIncapacity,
     endDate: '',
     startDate: '',
 

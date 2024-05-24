@@ -286,6 +286,7 @@ export const btrSubmissionExampleMock = {
     ],
     personStatements: [
       {
+        determinationOfIncapacity: false,
         addresses: [
           {
             city: 'Beamsville',
@@ -365,6 +366,7 @@ export const btrSubmissionExampleMock = {
         taxResidencies: []
       },
       {
+        determinationOfIncapacity: false,
         addresses: [
           {
             city: 'Scarborough',
@@ -442,6 +444,7 @@ export const btrSubmissionExampleMock = {
         ]
       },
       {
+        determinationOfIncapacity: false,
         addresses: [
           {
             city: 'Vancouver',
@@ -522,6 +525,7 @@ export const expectedSisOutput: SiSchemaType[] = [
   {
     controlOther: 'everything',
     couldNotProvideMissingInfo: false,
+    determinationOfIncapacity: false,
     missingInfoReason: '',
     name: {
       isYourOwnInformation: false,
@@ -627,6 +631,7 @@ export const expectedSisOutput: SiSchemaType[] = [
       [{ alpha_2: 'CA_PR', name: 'Canada (Permanent Resident)' }],
     email: 'hrvoje.fekete@gmail.com',
     couldNotProvideMissingInfo: true,
+    determinationOfIncapacity: false,
     tax: {
       taxNumber: '046 454 286',
       hasTaxNumber: true
@@ -666,6 +671,7 @@ export const expectedSisOutput: SiSchemaType[] = [
     },
     controlOther: '',
     couldNotProvideMissingInfo: false,
+    determinationOfIncapacity: false,
     missingInfoReason: undefined,
     name: {
       isUsePreferredName: false,
