@@ -1,5 +1,6 @@
 {
   "labels": {
+    "addEndDate": "Add end date",
     "determinationOfIncapacity": "This individual is incapable of managing their own affairs",
     "noSignificantIndividualsExist": "There are no current significant individuals for this business",
     "importLegacySIList": "Import your legacy SI list",
@@ -190,7 +191,9 @@
     "preferredName": "Preferred Name Information",
     "dateSelect": {
       "birthdate": "Select Date",
-      "significantIndividualChange": "Significant Individual Filing Effective Date"
+      "significantIndividualChange": "Significant Individual Filing Effective Date",
+      "startDate": "Start date",
+      "endDate": "End date"
     },
     "taxNumber": "CRA Tax Number (SIN, ITN, or TTN)"
   },
@@ -295,20 +298,22 @@
     "citizenshipOrPR": "Citizenship / Permanent Residency",
     "taxDetails": "Tax Details",
     "unableToObtainOrConfirmInformation": "Unable to Obtain or Confirm Information",
-    "determinationOfIncapacity": "Determination of Incapacity"
+    "determinationOfIncapacity": "Determination of Incapacity",
   },
   "sectionHeaders": {
     "controlOf": "Control",
-    "individualsDetails": "Individual’s Details"
+    "individualsDetails": "Individual’s Details",
+    "effectiveDates": "Effective Dates"
   },
   "sectionIntroText": {
+    "effectiveDates": "Indicate the date this individual started having significant control in the business. If the individual ceased having control at some point, enter an end date for that period of control.",
     "controlOf": "Indicate the control this individual has over the company. You must indicate at least one form of control.",
     "individualsDetails": "Enter as much information about this individual as you can reasonably obtain. If you cannot obtain some information, enter the steps and efforts you took to try and obtain the information at the bottom of this form."
   },
- "alerts": {
-   "determinationOfIncapacity": {
-     "omitted": "{boldStart}Important:{boldEnd} This individual’s information will be omitted from, or obscured in, publicly accessible information.",
-     "proof":"{boldStart}Attention:{boldEnd} The Registrar may request proof of the determination of incapacity. The company must retain proof of the determination of incapacity made by a court, health authority designate or prescribed individual as long as this individual is incapable of managing their own affairs."
-   }
- }
+  "alerts": {
+    "determinationOfIncapacity": {
+      "omitted": "{boldStart}Important:{boldEnd} This individual’s information will be omitted from, or obscured in, publicly accessible information.",
+      "proof": "{boldStart}Attention:{boldEnd} The Registrar may request proof of the determination of incapacity. The company must retain proof of the determination of incapacity made by a court, health authority designate or prescribed individual as long as this individual is incapable of managing their own affairs."
+    }
+  }
 }

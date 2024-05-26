@@ -4,18 +4,35 @@
     :name="name"
   >
     <UInput
-      :ui="{ icon: { base: showDatePicker && !error ? 'text-primary-500' : iconClass } }"
+      :ui="{ icon: { base: showDatePicker && !error ? 'text-primary-500' : iconClass, trailing: { pointer: '' } } }"
       :model-value="selectedDateDisplay"
-      icon="i-mdi-calendar"
       :placeholder="placeholder || ''"
-      trailing
       type="text"
       :variant="!!error ? 'error' : variant || 'bcGov'"
       data-cy="date-select"
       @click="showDatePicker = true"
       @keydown.enter="showDatePicker = true"
       @update:model-value="handleManualDateEntry($event)"
-    />
+    >
+      <template #trailing>
+        <UButton
+          v-if="removable"
+          color="gray"
+          variant="link"
+          icon="i-mdi-close"
+          :padded="false"
+          @click="$emit('remove-control')"
+        />
+        <UButton
+          variant="link"
+          icon="i-mdi-calendar"
+          class=""
+          @click="showDatePicker = true"
+          :padded="false"
+        />
+      </template>
+    </UInput>
+
     <BcrosDatePicker
       v-if="showDatePicker"
       ref="dateSelectPickerRef"
@@ -37,9 +54,13 @@ const props = defineProps<{
   maxDate?: Date,
   placeholder?: string,
   variant?: string
+  removable?: boolean
 }>()
 
-const emit = defineEmits<{(e: 'selection', value: Date | null): void }>()
+const emit = defineEmits<{
+  (e: 'selection', value: Date | null): void,
+  (e: 'remove-control', value: void): void
+}>()
 
 // @ts-ignore
 const dateSelectPickerRef: MaybeElementRef = ref(null)
