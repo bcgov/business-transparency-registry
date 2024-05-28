@@ -22,6 +22,19 @@ export const OwnershipOrControlStatements = {
           type: 'shareholding'
         },
         {
+          directOrIndirect: 'unknown',
+          details: 'controlType.shares.inConcertControl',
+          startDate: SI_EXAMPLE_DATE,
+          endDate: undefined,
+          share: {
+            exclusiveMaximum: false,
+            exclusiveMinimum: true,
+            maximum: 75,
+            minimum: 50
+          },
+          type: 'shareholding'
+        },
+        {
           directOrIndirect: 'direct',
           details: 'controlType.votes.registeredOwner',
           startDate: SI_EXAMPLE_DATE,
@@ -121,8 +134,9 @@ export const OwnershipOrControlStatements = {
       statementDate: SI_EXAMPLE_DATE,
       statementType: 'personStatement',
       taxResidencies: [{ name: 'Canada', code: 'CA' }],
-      statementID: 'db102217-429c-439e-9075-13c4e84fbb4d'
+      statementID: 'db102217-429c-439e-9075-13c4e84fbb4d',
+      determinationOfIncapacity: undefined,
+      uuid: '001'
     }
-  ],
-  uuid: undefined
+  ]
 }

@@ -16,7 +16,11 @@
       :by="keyAttribute"
       :search-attributes="searchAttributes"
     >
-      <UButton class="w-full min-h-[56px] h-fit flex items-center relative" variant="combobox">
+      <UButton
+        class="w-full min-h-[56px] h-fit flex items-center relative"
+        variant="combobox"
+        :data-cy="name + `ComboboxButton`"
+      >
         <span
           v-if="model && model.length === 0"
           class="w-full text-gray-700 text-left"
@@ -32,7 +36,7 @@
               :label="labelFunction(item)"
               class="float-left z-20"
               :has-close="true"
-              data-cy="countryOfCitizenshipDropdownChip"
+              :data-cy="name + `ComboboxChip`"
               @chipCloseClicked="removeItem(item)"
             />
           </div>
@@ -47,11 +51,11 @@
           <span>{{ labelFunction(item) }}</span>
           <span v-if="isInSelected(item)" class="float-right">
             <UIcon name="i-mdi-check" />
-            {{ $t('labels.countryOfCitizenship.selected') }}
+            {{ $t('labels.combobox.selected') }}
           </span>
           <span v-else class="float-right">
             <UIcon name="i-mdi-add" />
-            {{ $t('labels.countryOfCitizenship.select') }}
+            {{ $t('labels.combobox.select') }}
           </span>
         </div>
       </template>

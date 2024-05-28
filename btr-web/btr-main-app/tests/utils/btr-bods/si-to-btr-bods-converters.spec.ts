@@ -43,6 +43,14 @@ describe('Btr to Bods util converters Tests', () => {
           endDate: undefined
         },
         {
+          type: BodsInterestTypeE.SHAREHOLDING,
+          share: { maximum: 75, minimum: 50, exclusiveMaximum: false, exclusiveMinimum: true },
+          directOrIndirect: 'unknown',
+          details: 'controlType.shares.inConcertControl',
+          startDate: SI_EXAMPLE_DATE,
+          endDate: undefined
+        },
+        {
           type: BodsInterestTypeE.VOTING_RIGHTS,
           share: { maximum: 50, minimum: 25, exclusiveMaximum: false, exclusiveMinimum: false },
           directOrIndirect: 'direct',
