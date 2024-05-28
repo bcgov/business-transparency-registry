@@ -27,8 +27,8 @@
           variant="link"
           icon="i-mdi-calendar"
           class=""
-          @click="showDatePicker = true"
           :padded="false"
+          @click="showDatePicker = true"
         />
       </template>
     </UInput>
@@ -57,10 +57,12 @@ const props = defineProps<{
   removable?: boolean
 }>()
 
+/* eslint-disable func-call-spacing */
 const emit = defineEmits<{
   (e: 'selection', value: Date | null): void,
   (e: 'remove-control', value: void): void
 }>()
+/* eslint-enable */
 
 // @ts-ignore
 const dateSelectPickerRef: MaybeElementRef = ref(null)

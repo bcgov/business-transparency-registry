@@ -1,7 +1,7 @@
 <template>
   <div class="w-full flex flex-row items-center gap-4">
     <div class="grow grid grid-cols-2 items-center gap-4 relative ">
-      <div class="absolute inset-0 bg-black bg-opacity-25 z-50 rounded" v-if="highlightRow"></div>
+      <div v-if="highlightRow" class="absolute inset-0 bg-black bg-opacity-25 z-50 rounded" />
       <div class="flex-grow">
         <BcrosInputsDateSelect
           :name="name + '.startDate'"
@@ -13,8 +13,8 @@
       </div>
       <div class="flex-grow">
         <BcrosInputsDateSelect
-          :class="{'bg-blue-500': highlightRow}"
           v-if="isEndDateVisible"
+          :class="{'bg-blue-500': highlightRow}"
           :name="name + '.endDate'"
           :initial-date="dateStringToDate(dates.endDate || '') || undefined"
           :min-date="dates.startDate"
@@ -51,10 +51,18 @@ import { dateToString } from '../../../../btr-common-components/utils/date'
 import { StartEndDateGroupSchemaType } from '~/utils/si-schema/definitions'
 
 const dates = defineModel<StartEndDateGroupSchemaType>('startEndDates', { required: true })
-const isEndDateVisible = defineModel('isEndDateVisible')
+const isEndDateVisible = defineModel<boolean>('isEndDateVisible')
 
+/* eslint-disable func-call-spacing */
 const emit = defineEmits<{
-  (e: 'remove-dates', value: void): void
+  (e: 'remove-dates', value: void): void,
+  (e: 'update:startEndDates', value: Array<StartEndDateGroupSchemaType>): void
+}>()
+/* eslint-enable */
+
+defineProps<{
+  name: string,
+  removableEndDate: boolean
 }>()
 
 const selectStartDate = (date: Date | null) => {
@@ -63,7 +71,7 @@ const selectStartDate = (date: Date | null) => {
 }
 
 const selectEndDate = (date: Date | null) => {
-  dates.value.endDate = dateToString(date,  'YYYY-MM-DD') || undefined
+  dates.value.endDate = dateToString(date, 'YYYY-MM-DD') || undefined
   emit('update:startEndDates', dates.value)
 }
 
@@ -76,10 +84,6 @@ const showEndDate = (isVisible: boolean) => {
 
 const highlightRow = ref(false)
 
-const props = defineProps<{
-  name: string,
-  removableEndDate: boolean
-}>()
 </script>
 
 <style lang="scss" scoped>

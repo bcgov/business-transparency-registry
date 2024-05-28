@@ -6,13 +6,13 @@
       <StartEndGroup
         v-for="(dg, index) in displayList"
         :key="dg.uuid"
+        v-model:is-end-date-visible="dg.isEndDateVisible"
         :name="name + '.dg.' + dg.uuid"
         :removable-end-date="index === lastElementIndex"
         :start-end-dates="dg"
-        @update:start-end-dates="updateStartEndDates(dg.uuid, $event)"
-        v-model:is-end-date-visible="dg.isEndDateVisible"
-        @remove-dates="removeDates(dg.uuid)"
         class="mb-4"
+        @update:start-end-dates="updateStartEndDates(dg.uuid, $event)"
+        @remove-dates="removeDates(dg.uuid)"
       />
     </div>
 
@@ -33,9 +33,11 @@ import { v4 as UUIDv4 } from 'uuid'
 import StartEndGroup from '~/components/individual-person/effective-dates/startEndGroup.vue'
 import { StartEndDateGroupSchemaType } from '~/utils/si-schema/definitions'
 
+/* eslint-disable func-call-spacing */
 const emit = defineEmits<{
-  (e: 'dates-updated', value: Array<StartEndDateGroupSchemaType>): void,
+  (e: 'dates-updated', value: Array<StartEndDateGroupSchemaType>): void
 }>()
+/* eslint-enable */
 
 const props = withDefaults(
   defineProps<{
@@ -48,7 +50,7 @@ const props = withDefaults(
 )
 
 const displayList = ref(
-  props.initialDateGroups.map(dg => {
+  props.initialDateGroups.map((dg) => {
     return {
       startDate: dg.startDate,
       endDate: dg.endDate,
@@ -66,19 +68,22 @@ const showAddNewButton = computed(() =>
 )
 
 const notifyParent = () => {
-  const updatedList = displayList.value.map(dg => {
-    if (!!dg.startDate || !!dg.endDate) {
-      return {
-        startDate: dg.startDate,
-        endDate: dg.endDate
-      }
-    }
-  })
+  const updatedList =
+    displayList.value
+      .filter(
+        dg => !!dg.startDate || !!dg.endDate
+      )
+      .map((dg) => {
+        return {
+          startDate: dg.startDate,
+          endDate: dg.endDate
+        }
+      })
   emit('dates-updated', updatedList)
 }
 
 const updateStartEndDates = (uuid, updatedStartEndDates) => {
-  const elem = displayList.value.find(d => uuid == d.uuid)
+  const elem = displayList.value.find(d => uuid === d.uuid)
   Object.assign(elem, updatedStartEndDates)
   notifyParent()
 }
