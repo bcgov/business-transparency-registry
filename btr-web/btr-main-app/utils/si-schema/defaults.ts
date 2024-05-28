@@ -68,7 +68,7 @@ export function getDefaultInputFormSi (): SiSchemaType {
     startDate: todayIsoDateString(),
     endDate: '',
 
-    effectiveDates: [{ startDate: '2023-01-05', endDate: '2023-12-31' }],
+    effectiveDates: [{ startDate: undefined, endDate: undefined }],
 
     uuid: UUIDv4(),
     ui: {

@@ -9,6 +9,7 @@
           :max-date="new Date()"
           :placeholder="$t('placeholders.dateSelect.startDate')"
           @selection="selectStartDate($event)"
+          data-cy="start-date-select"
         />
       </div>
       <div class="flex-grow">
@@ -23,6 +24,7 @@
           :placeholder="$t('placeholders.dateSelect.endDate')"
           @remove-control="showEndDate(false)"
           @selection="selectEndDate($event)"
+          data-cy="end-date-select"
         />
         <UButton
           v-else
@@ -30,6 +32,7 @@
           variant="ghost"
           :label="$t('labels.addEndDate')"
           @click="showEndDate(true)"
+          data-cy="show-end-date-button"
         />
       </div>
     </div>

@@ -2,7 +2,7 @@
   <UFormGroup
     :name="name"
   >
-    <div class="w-full flex flex-col">
+    <div class="w-full flex flex-col" data-cy="effective-date-section">
       <StartEndGroup
         v-for="(dg, index) in displayList"
         :key="dg.uuid"
@@ -13,6 +13,7 @@
         class="mb-4"
         @update:start-end-dates="updateStartEndDates(dg.uuid, $event)"
         @remove-dates="removeDates(dg.uuid)"
+        :data-cy="'effective-date-group-' + dg.uuid"
       />
     </div>
 
@@ -24,6 +25,7 @@
       padded
       class="mt-4 py-3 px-7"
       @click="addNewGroup"
+      data-cy="add-new-group-button"
     />
   </UFormGroup>
 </template>
