@@ -1,33 +1,35 @@
 <template>
-  <div class="w-full flex flex-row items-center gap-4 relative">
-    <div class="absolute inset-0 bg-black bg-opacity-25 z-50 rounded" v-if="highlightRow"></div>
-    <div class="grow grid grid-cols-2 items-center gap-4">
+  <div class="w-full flex flex-row items-center gap-4">
+    <div class="grow grid grid-cols-2 items-center gap-4 relative ">
+      <div class="absolute inset-0 bg-black bg-opacity-25 z-50 rounded" v-if="highlightRow"></div>
       <div class="flex-grow">
         <BcrosInputsDateSelect
           :name="name + '.startDate'"
-          :initial-date="dateStringToDate(startDate || '') || undefined"
+          :initial-date="dateStringToDate(dates.startDate || '') || undefined"
           :max-date="new Date()"
           :placeholder="$t('placeholders.dateSelect.startDate')"
+          @selection="selectStartDate($event)"
         />
       </div>
       <div class="flex-grow">
         <BcrosInputsDateSelect
           :class="{'bg-blue-500': highlightRow}"
-          v-if="isShow2ndDate"
+          v-if="isEndDateVisible"
           :name="name + '.endDate'"
-          :initial-date="dateStringToDate(endDate || '') || undefined"
-          :min-date="startDate"
+          :initial-date="dateStringToDate(dates.endDate || '') || undefined"
+          :min-date="dates.startDate"
           :max-date="new Date()"
-          :removable="isLast"
+          :removable="removableEndDate"
           :placeholder="$t('placeholders.dateSelect.endDate')"
-          @remove-control="removeEndDate"
+          @remove-control="showEndDate(false)"
+          @selection="selectEndDate($event)"
         />
         <UButton
           v-else
           icon="i-mdi-plus-box-outline"
           variant="ghost"
           :label="$t('labels.addEndDate')"
-          @click="show2ndDate()"
+          @click="showEndDate(true)"
         />
       </div>
     </div>
@@ -45,26 +47,38 @@
 </template>
 
 <script setup lang="ts">
-const startDate = defineModel<string | undefined>('startDate')
-const endDate = defineModel<string | undefined>('endDate')
+import { dateToString } from '../../../../btr-common-components/utils/date'
+import { StartEndDateGroupSchemaType } from '~/utils/si-schema/definitions'
 
-defineEmits<{ (e: 'remove-dates', value: void): void }>()
+const dates = defineModel<StartEndDateGroupSchemaType>('startEndDates', { required: true })
+const isEndDateVisible = defineModel('isEndDateVisible')
 
-const isAdd2ndDate = ref(false)
+const emit = defineEmits<{
+  (e: 'remove-dates', value: void): void
+}>()
 
-const show2ndDate = () => { isAdd2ndDate.value = true}
-const removeEndDate = () => {
-  isAdd2ndDate.value = false;
-  endDate.value = undefined
+const selectStartDate = (date: Date | null) => {
+  dates.value.startDate = dateToString(date, 'YYYY-MM-DD') || undefined
+  emit('update:startEndDates', dates.value)
 }
 
-const isShow2ndDate = computed(() => isAdd2ndDate.value || !!endDate.value)
+const selectEndDate = (date: Date | null) => {
+  dates.value.endDate = dateToString(date,  'YYYY-MM-DD') || undefined
+  emit('update:startEndDates', dates.value)
+}
+
+const showEndDate = (isVisible: boolean) => {
+  if (!isVisible) {
+    dates.value.endDate = ''
+  }
+  isEndDateVisible.value = isVisible
+}
 
 const highlightRow = ref(false)
 
-defineProps<{
+const props = defineProps<{
   name: string,
-  isLast: boolean
+  removableEndDate: boolean
 }>()
 </script>
 

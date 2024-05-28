@@ -148,29 +148,30 @@
 
       <!--  section-header: effective dates -->
       <BcrosSection
-        header-icon-name="i-mdi-user-circle"
+        header-icon-name="i-mdi-calendar"
         :header-title="$t('sectionHeaders.effectiveDates')"
         :header-text="$t('sectionIntroText.effectiveDates')"
         rounded-top
       />
 
-      <!--  section-header: effective dates -->
+      <!--  section: effective dates -->
       <BcrosSection
-        :show-section-has-errors="hasErrors(['otherReasons'])"
-        :section-title="$t('sectionTitles.otherReasons')"
+        :show-section-has-errors="hasErrors(['effectiveDates'])"
+        :section-title="$t('sectionTitles.effectiveDates')"
         rounded-bot
       >
         <div class="w-full">
           <IndividualPersonEffectiveDates
-            id="otherReasons"
-            v-model="inputFormSi.controlOther"
-            name="otherReasons"
-            data-cy="otherReasons"
+            :initial-date-groups="inputFormSi.effectiveDates"
+            name="effectiveDates"
+            data-cy="effectiveDates"
+            @dates-updated="inputFormSi.effectiveDates = $event"
           />
         </div>
       </BcrosSection>
 
       <BcrosSectionDivider />
+
       <!--  section-header: type of interest or control -->
       <BcrosSection
         header-icon-name="i-mdi-user-circle"

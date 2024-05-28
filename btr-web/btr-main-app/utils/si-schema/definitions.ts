@@ -1,6 +1,13 @@
 import { z } from 'zod'
 import { PercentageRangeE } from '~/enums/percentage-range-e'
 
+const StartEndDateGroup = z.object({
+  startDate: z.string().min(1),
+  endDate: z.string().optional()
+})
+
+export type StartEndDateGroupSchemaType = z.infer<typeof StartEndDateGroup>
+
 export const SiControlOfSchema = z.object({
   controlName: z.enum(['controlOfShares', 'controlOfVotes']),
   registeredOwner: z.boolean(),
@@ -67,6 +74,8 @@ export const SiSchema = z.object({
 
   startDate: z.string(),
   endDate: z.string(),
+
+  effectiveDates: z.array(StartEndDateGroup),
 
   uuid: z.string().min(1),
 

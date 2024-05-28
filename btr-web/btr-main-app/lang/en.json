@@ -54,7 +54,8 @@
     "cancel": "Cancel",
     "done": "Done",
     "remove": "Remove",
-    "edit": "Edit"
+    "edit": "Edit",
+    "addAnotherEffectiveDate": "Add another effective date"
   },
   "texts": {
     "significantIndividuals": "List all of the individual persons who have significant control of this business. Significant control is determined by control of shares or votes at general meetings, control of directors, or other interests or rights that allow the individual to control the business.",
@@ -298,7 +299,7 @@
     "citizenshipOrPR": "Citizenship / Permanent Residency",
     "taxDetails": "Tax Details",
     "unableToObtainOrConfirmInformation": "Unable to Obtain or Confirm Information",
-    "determinationOfIncapacity": "Determination of Incapacity",
+    "determinationOfIncapacity": "Determination of Incapacity"
   },
   "sectionHeaders": {
     "controlOf": "Control",
