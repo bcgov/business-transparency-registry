@@ -7,7 +7,7 @@ import { PercentageRangeE } from '~/enums/percentage-range-e'
 import {
   AddressSchemaType,
   CountrySchemaType,
-  SiSchemaType
+  SiSchemaType, StartEndDateGroupSchemaType
 } from '~/utils/si-schema/definitions'
 import { getEmptyAddress } from '~/utils/si-schema/defaults'
 
@@ -136,6 +136,22 @@ function _getControlOther (oocs: BtrBodsOwnershipOrControlI) {
   return other?.details || ''
 }
 
+function _getEffectiveDates (oocs: BtrBodsOwnershipOrControlI) {
+  const effectiveDates: StartEndDateGroupSchemaType[] = []
+  for (const interest of oocs.interests) {
+    const hasDates =
+      effectiveDates.filter(dg => dg.startDate === (interest.startDate || '') && dg.endDate === interest.endDate)
+    // if there is no effective date group with same start and end dates then add new group
+    if (hasDates.length === 0) {
+      effectiveDates.push({
+        startDate: interest.startDate || '',
+        endDate: interest.endDate
+      })
+    }
+  }
+  return effectiveDates
+}
+
 const _getSi = (
   person: BtrBodsPersonI, oocs: BtrBodsOwnershipOrControlI, businessIdentifier: string
 ): SiSchemaType => {
@@ -185,8 +201,8 @@ const _getSi = (
     },
     isTaxResident: !!(person.taxResidencies.find(country => country.code === 'CA')),
     determinationOfIncapacity: person.determinationOfIncapacity,
-    endDate: '',
-    startDate: '',
+
+    effectiveDates: _getEffectiveDates(oocs),
 
     uuid: person.uuid,
 

@@ -72,10 +72,7 @@ export const SiSchema = z.object({
   isTaxResident: z.boolean().optional(),
   determinationOfIncapacity: z.boolean(),
 
-  startDate: z.string(),
-  endDate: z.string(),
-
-  effectiveDates: z.array(StartEndDateGroup),
+  effectiveDates: z.array(StartEndDateGroup).min(1),
 
   uuid: z.string().min(1),
 
