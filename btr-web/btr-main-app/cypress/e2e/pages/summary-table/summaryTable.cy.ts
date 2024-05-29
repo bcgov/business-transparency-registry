@@ -52,9 +52,9 @@ describe('pages -> Summary Table', () => {
         .get('[data-cy=summary-table-details]').contains(testData.profile2.summaryTable.citizenship)
         .get('[data-cy=summary-table-details]').contains(testData.profile2.summaryTable.taxResidency)
       // todo: fixme: update on #TBD with new summary table
-        // .get('[data-cy=summary-table-controls]').contains(testData.profile2.summaryTable.shareControl)
+      // .get('[data-cy=summary-table-controls]').contains(testData.profile2.summaryTable.shareControl)
       // todo: fixme: update on #20756
-        // .get('[data-cy=summary-table-controls]').contains(testData.profile2.summaryTable.directorControl)
+      // .get('[data-cy=summary-table-controls]').contains(testData.profile2.summaryTable.directorControl)
     })
   })
 
@@ -97,29 +97,33 @@ describe('pages -> Summary Table', () => {
   })
 
   it('the edit form contains all information in the profile', () => {
+    const today = new Date()
+    const expectedDate = dateToString(today, 'YYYY-MM-DD')
+
     cy.fixture('individuals').then((testData) => {
       cy.addTestIndividuals()
 
       cy.get('[data-cy=edit-button]').first().click()
 
       cy.get('#individual-person-full-name').should('have.value', testData.profile1.fullName)
-        .get('#individual-person-preferred-name').should('have.value', testData.profile1.preferredName)
-        .get('#individual-person-email').should('have.value', testData.profile1.email)
-        // todo: fixme update with #TBD
-        // .get('input[name="percentOfShares[range]"]').invoke('val').should('eq', testData.profile1.percentOfShares)
-        // .get('input[name="percentOfShares[range]"]').invoke('val').should('eq', testData.profile1.percentOfVotes)
-        // todo: fixme update with #20756
-        // .get('[data-cy="testTypeOfControl"]').get('[name="registeredOwner"]').should('be.checked')
-        // .get('[data-cy="testControlOfDirectors"]').get('[name="directControl"]').should('be.checked')
-        // todo: fix on #20760
-        // .get('[data-cy=date-select]').should('have.value', expectedDate)
-        .get('[data-cy="address-country"]').contains(testData.profile1.address.country)
-        .get('[data-cy="address-line1-autocomplete"] input')
+      cy.get('#individual-person-preferred-name').should('have.value', testData.profile1.preferredName)
+      cy.get('#individual-person-email').should('have.value', testData.profile1.email)
+      // todo: fixme update with #TBD
+      // .get('input[name="percentOfShares[range]"]').invoke('val').should('eq', testData.profile1.percentOfShares)
+      // .get('input[name="percentOfShares[range]"]').invoke('val').should('eq', testData.profile1.percentOfVotes)
+      // todo: fixme update with #20756
+      // .get('[data-cy="testTypeOfControl"]').get('[name="registeredOwner"]').should('be.checked')
+      // .get('[data-cy="testControlOfDirectors"]').get('[name="directControl"]').should('be.checked')
+      // todo: fix on #TBD (summary table ticket)
+      // .get('[data-cy=date-select]').should('have.value', expectedDate)
+      cy.get('[data-cy="start-date-select"]').find('input').should('have.value', expectedDate)
+      cy.get('[data-cy="address-country"]').contains(testData.profile1.address.country)
+      cy.get('[data-cy="address-line1-autocomplete"] input')
         .should('have.value', testData.profile1.address.streetAddress)
-        .get('[data-cy="address-city"]').should('have.value', testData.profile1.address.city)
-        .get('[data-cy="address-region-select"]').contains(testData.profile1.address.province[0])
-        .get('[data-cy="address-postal-code"]').should('have.value', testData.profile1.address.postalCode)
-        .get('[data-cy="countryOfCitizenshipDropdownButton"]').contains(testData.profile1.citizenships[0].name)
+      cy.get('[data-cy="address-city"]').should('have.value', testData.profile1.address.city)
+      cy.get('[data-cy="address-region-select"]').contains(testData.profile1.address.province[0])
+      cy.get('[data-cy="address-postal-code"]').should('have.value', testData.profile1.address.postalCode)
+      cy.get('[data-cy="countryOfCitizenshipDropdownButton"]').contains(testData.profile1.citizenships[0].name)
     })
   })
 

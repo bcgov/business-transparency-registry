@@ -15,19 +15,17 @@
       @update:model-value="handleManualDateEntry($event)"
     >
       <template #trailing>
-        <UButton
+        <UIcon
           v-if="removable"
-          color="gray"
-          variant="link"
-          icon="i-mdi-close"
+          name="i-mdi-close"
           :padded="false"
+          class="text-gray-600 text-xl cursor-pointer"
           @click="$emit('remove-control')"
         />
-        <UButton
-          variant="link"
-          icon="i-mdi-calendar"
-          class=""
+        <UIcon
+          name="i-mdi-calendar"
           :padded="false"
+          class="text-blue-500 text-xl cursor-pointer"
           @click="showDatePicker = true"
         />
       </template>

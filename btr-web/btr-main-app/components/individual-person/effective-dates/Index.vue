@@ -11,9 +11,9 @@
         :removable-end-date="index === lastElementIndex"
         :start-end-dates="dg"
         class="mb-4"
+        :data-cy="'effective-date-group-' + dg.uuid"
         @update:start-end-dates="updateStartEndDates(dg.uuid, $event)"
         @remove-dates="removeDates(dg.uuid)"
-        :data-cy="'effective-date-group-' + dg.uuid"
       />
     </div>
 
@@ -24,8 +24,8 @@
       :label="$t('buttons.addAnotherEffectiveDate')"
       padded
       class="mt-4 py-3 px-7"
-      @click="addNewGroup"
       data-cy="add-new-group-button"
+      @click="addNewGroup"
     />
   </UFormGroup>
 </template>

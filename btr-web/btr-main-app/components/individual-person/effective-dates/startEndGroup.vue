@@ -1,15 +1,15 @@
 <template>
   <div class="w-full flex flex-row items-center gap-4">
     <div class="grow grid grid-cols-2 items-center gap-4 relative ">
-      <div v-if="highlightRow" class="absolute inset-0 bg-black bg-opacity-25 z-50 rounded" />
+      <div v-if="highlightRow" class="absolute inset-0 bg-bcGovColor-activeBlue/[0.2] z-50 rounded" />
       <div class="flex-grow">
         <BcrosInputsDateSelect
           :name="name + '.startDate'"
           :initial-date="dateStringToDate(dates.startDate || '') || undefined"
           :max-date="new Date()"
           :placeholder="$t('placeholders.dateSelect.startDate')"
-          @selection="selectStartDate($event)"
           data-cy="start-date-select"
+          @selection="selectStartDate($event)"
         />
       </div>
       <div class="flex-grow">
@@ -22,25 +22,24 @@
           :max-date="new Date()"
           :removable="removableEndDate"
           :placeholder="$t('placeholders.dateSelect.endDate')"
+          data-cy="end-date-select"
           @remove-control="showEndDate(false)"
           @selection="selectEndDate($event)"
-          data-cy="end-date-select"
         />
         <UButton
           v-else
           icon="i-mdi-plus-box-outline"
           variant="ghost"
           :label="$t('labels.addEndDate')"
-          @click="showEndDate(true)"
           data-cy="show-end-date-button"
+          @click="showEndDate(true)"
         />
       </div>
     </div>
     <div class="grow-0 z-100">
-      <UButton
-        class="text-2xl text-bcGovColor-lightGray"
-        icon="i-mdi-delete"
-        variant="ghost"
+      <UIcon
+        class="text-2xl text-bcGovColor-lightGray cursor-pointer hover:"
+        name="i-mdi-delete"
         @mouseover="highlightRow=true"
         @mouseleave="highlightRow=false"
         @click.stop.prevent="$emit('remove-dates')"
