@@ -206,7 +206,13 @@ const _getSi = (
 
     uuid: person.uuid,
 
-    ui: {}
+    ui: {},
+    sharesInConcert: person.sharesInConcert ? person.sharesInConcert : [],
+    sharesActingJointly: person.sharesActingJointly ? person.sharesActingJointly : [],
+    votesInConcert: person.votesInConcert ? person.votesInConcert : [],
+    votesActingJointly: person.votesActingJointly ? person.votesActingJointly : [],
+    directorsInConcert: person.directorsInConcert ? person.directorsInConcert : [],
+    directorsActingJointly: person.directorsActingJointly ? person.directorsActingJointly : []
   }
 }
 

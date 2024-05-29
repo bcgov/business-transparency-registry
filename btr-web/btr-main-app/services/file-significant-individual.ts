@@ -91,7 +91,14 @@ const getPersonAndOwnershipAndControlStatements = (sif: SignificantIndividualFil
       determinationOfIncapacity: siSchema.determinationOfIncapacity,
 
       statementID: UUIDv4(), // todo: fixme we should update schema only if there are changes to the schema itself....
-      uuid: siSchema.uuid
+      uuid: siSchema.uuid,
+
+      sharesInConcert: siSchema.sharesInConcert,
+      sharesActingJointly: siSchema.sharesActingJointly,
+      votesInConcert: siSchema.votesInConcert,
+      votesActingJointly: siSchema.votesActingJointly,
+      directorsInConcert: siSchema.directorsInConcert,
+      directorsActingJointly: siSchema.directorsActingJointly
     }
 
     const oocs: BtrBodsOwnershipOrControlI = {

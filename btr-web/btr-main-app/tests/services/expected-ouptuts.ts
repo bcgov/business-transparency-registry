@@ -136,7 +136,13 @@ export const OwnershipOrControlStatements = {
       taxResidencies: [{ name: 'Canada', code: 'CA' }],
       statementID: 'db102217-429c-439e-9075-13c4e84fbb4d',
       determinationOfIncapacity: undefined,
-      uuid: '001'
+      uuid: '001',
+      sharesInConcert: ['002'],
+      sharesActingJointly: [],
+      votesInConcert: [],
+      votesActingJointly: [],
+      directorsInConcert: [],
+      directorsActingJointly: []
     }
   ]
 }

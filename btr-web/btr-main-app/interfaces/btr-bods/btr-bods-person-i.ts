@@ -37,4 +37,11 @@ export interface BtrBodsPersonI {
   missingInfoReason?: string
 
   uuid: string
+
+  sharesInConcert?: string[],
+  sharesActingJointly?: string[],
+  votesInConcert?: string[],
+  votesActingJointly?: string[],
+  directorsInConcert?: string[],
+  directorsActingJointly?: string[]
 }
