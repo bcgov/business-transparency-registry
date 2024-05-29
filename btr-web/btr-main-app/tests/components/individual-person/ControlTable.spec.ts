@@ -5,7 +5,7 @@ import { mockedI18n } from '../../utils/mockedi18n'
 import { testSI, testSI2 } from '../../utils/mockedData'
 import { IndividualPersonControlTable } from '#components'
 
-describe('AddIndividualPersonSummaryTable tests', () => {
+describe('AddIndividualControlTable tests', () => {
   let wrapper: VueWrapper<any>
   const si1 = { ...testSI }
   const si2 = { ...testSI2 }
@@ -52,7 +52,7 @@ describe('AddIndividualPersonSummaryTable tests', () => {
     await wrapper.setProps({ individuals: [si1, si2], numberOfRows: 1 })
     expect(wrapper.find('[data-cy=individualsControlTable]').exists()).toBe(true)
     expect(wrapper.find('tbody').findAll('tr').length).toBe(2) // a row for si2 and another row for warning
-    expect(wrapper.find('tbody').findAll('tr').at(0)?.html()).toContain('alertsMessage:alert')
+    expect(wrapper.find('[data-cy="alertsMessage:alert"]').exists()).toBe(true)
   })
 
   // Note: The other two columns (control type and individual connection) are rendered dynamically and will be tested

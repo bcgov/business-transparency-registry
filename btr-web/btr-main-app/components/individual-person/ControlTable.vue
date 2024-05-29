@@ -34,7 +34,7 @@
         <td data-cy="control-table-individual-connection" colspan="2">
           <IndividualPersonIndividualConnection
             v-model="model[index]"
-            :name="'individualConnection' + 'ShareInConcert' + index"
+            :name="'individualConnection' + index"
             :significant-individuals="model"
             class="pt-0 pl-2"
             :control-type-width="String(controlTypeWidthPercentage)"

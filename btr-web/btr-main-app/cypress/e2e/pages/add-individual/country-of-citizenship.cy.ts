@@ -21,7 +21,7 @@ describe('pages -> Add individual', () => {
     // check options are generating, 250 if not filtered (Canadian Citizen + PR + USA + 247 other countries)
     cy.get('[id^="headlessui-combobox-options"]').find('li').should('have.length', 250)
 
-    // select first item on the list ('Canada (Citizen)') and make sure a chip is displayed
+    // select first item on the list ('Canada (Citizen)') and ensure a chip is displayed
     cy.get('[id^="headlessui-combobox-options"]').find('li').first().click({ force: true })
     cy.get('[data-cy="citizenshipsComboboxChip"]').should('have.length', 1)
 

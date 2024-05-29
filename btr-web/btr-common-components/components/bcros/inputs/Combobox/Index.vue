@@ -94,6 +94,7 @@ const removeItem = (item: any) => {
   const index = model.value.indexOf(item)
   if (index > -1) {
     model.value.splice(index, 1)
+    model.value = [...model.value]
   }
 }
 </script>

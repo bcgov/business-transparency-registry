@@ -8,7 +8,7 @@
       </div>
       <BcrosInputsCombobox
         v-model="individualsWithSharesActingJointly"
-        :name="name"
+        :name="name + '.shares.jointly'"
         :label-function="(si) => si.name"
         :items="activeIndividuals"
         :search-placeholder="$t('controlTableBody.individualConnection.placeholder.searchInput')"
@@ -28,7 +28,7 @@
       </div>
       <BcrosInputsCombobox
         v-model="individualsWithSharesInConcert"
-        :name="name"
+        :name="name + '.shares.inConcert'"
         :label-function="(si) => si.name"
         :items="activeIndividuals"
         :search-placeholder="$t('controlTableBody.individualConnection.placeholder.searchInput')"
@@ -48,7 +48,7 @@
       </div>
       <BcrosInputsCombobox
         v-model="individualsWithVotesActingJointly"
-        :name="name"
+        :name="name + '.votes.jointly'"
         :label-function="(si) => si.name"
         :items="activeIndividuals"
         :search-placeholder="$t('controlTableBody.individualConnection.placeholder.searchInput')"
@@ -68,7 +68,7 @@
       </div>
       <BcrosInputsCombobox
         v-model="individualsWithVotesInConcert"
-        :name="name"
+        :name="name + '.votes.inConcert'"
         :label-function="(si) => si.name"
         :items="activeIndividuals"
         :search-placeholder="$t('controlTableBody.individualConnection.placeholder.searchInput')"
