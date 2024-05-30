@@ -395,7 +395,8 @@ const SiNameExtended = SiNameSchema
 const AddressSchemaExtended = AddressSchema.extend({
   country: CountrySchema
     .optional()
-    .refine((val: BtrCountryI | undefined) => { return val?.name !== '' }, t('errors.validation.address.country'))
+    .refine((val: BtrCountryI | undefined) => {
+      return val && val.name !== '' }, t('errors.validation.address.country'))
 })
 
 const SiSchemaExtended = SiSchema.extend({

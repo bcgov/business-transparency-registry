@@ -20,6 +20,8 @@
       :variant="error ? 'error' : 'bcGov'"
       data-cy="address-line1-autocomplete"
       @addr-auto-completed="addrAutoCompleted"
+      @blur="line1BlurEvent"
+      @change="line1ChangeEvent"
     />
   </UFormGroup>
   <UFormGroup v-slot="{ error }" class="mt-4" :name="name + '.line2'">
@@ -91,15 +93,29 @@
 
 <script setup lang="ts">
 import { BtrAddressI } from '~/interfaces/btr-address-i'
+import { type UseEventBusReturn } from '@vueuse/core'
+
+const formBus = inject<UseEventBusReturn<any, string> | undefined>('form-events', undefined)
 
 const address = defineModel({ type: Object as PropType<BtrAddressI>, required: true })
-// const emit = defineEmits<{ 'update:modelValue': [value: BtrAddressI] }>()
+
 const props = defineProps({
   name: { type: String, default: 'addressInput' },
   label: { type: String, default: '' },
   id: { type: String, required: true },
   modelValue: { type: Object as PropType<BtrAddressI>, required: true }
 })
+
+const line1BlurEvent = () => {
+  if (formBus) {
+    formBus.emit({ type: 'blur', path: props.name + '.line1' })
+  }
+}
+const line1ChangeEvent = () => {
+  if (formBus) {
+    formBus.emit({ type: 'change', path: props.name + '.line1' })
+  }
+}
 
 const countries = iscCountriesListSortedByName
 // const address: Ref<BtrAddressI> = ref(props.modelValue)
