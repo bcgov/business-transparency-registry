@@ -212,12 +212,11 @@
         :show-section-has-errors="hasErrors(['birthDate'])"
         :section-title="$t('labels.birthdate')"
       >
-        <!--          todo: replace this with divider ?-->
         <div class="flex-col w-full">
           <BcrosInputsDateSelect
             id="addNewPersonBirthdate"
             name="birthDate"
-            :initial-date="!!inputFormSi.birthDate ? dateStringToDate(inputFormSi.birthDate) : null"
+            :initial-date="!!inputFormSi.birthDate ? dateStringToDate(inputFormSi.birthDate) || undefined : undefined"
             :max-date="new Date()"
             :placeholder="$t('placeholders.dateSelect.birthdate')"
             @selection="inputFormSi.birthDate = dateToString($event, 'YYYY-MM-DD')"
