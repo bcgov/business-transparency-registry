@@ -14,6 +14,7 @@ describe('File significant individuals service Tests', () => {
     testExpectedOutput.ownershipOrControlStatements[0].statementDate = todayIsoDateString()
     const result = FilingService.getPersonAndOwnershipAndControlStatements(
       {
+        noSignificantIndividualsExist: false,
         businessIdentifier: 'BC123123',
         certified: false,
         effectiveDate: '2020-02-20',
