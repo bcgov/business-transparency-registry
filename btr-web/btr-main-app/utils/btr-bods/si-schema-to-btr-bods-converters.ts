@@ -256,25 +256,29 @@ const _getInterestsOfSharesOrVotes =
 const getInterests = (si: SiSchemaType) => {
   let interests: BodsInterestI[] = []
 
-  // todo: update to loop through array we convert to having multiple start/end dates
-  if (si.controlOfShares.percentage !== PercentageRangeE.NO_SELECTION) {
-    const newInterests = _getInterestsOfSharesOrVotes(si.controlOfShares, si.startDate, si.endDate)
-    interests = interests.concat(newInterests)
-  }
+  for (const dateGroup of si.effectiveDates) {
+    const startDate = dateGroup.startDate
+    const endDate = dateGroup.endDate
 
-  if (si.controlOfVotes.percentage !== PercentageRangeE.NO_SELECTION) {
-    const newInterests = _getInterestsOfSharesOrVotes(si.controlOfVotes, si.startDate, si.endDate)
-    interests = interests.concat(newInterests)
-  }
+    if (si.controlOfShares.percentage !== PercentageRangeE.NO_SELECTION) {
+      const newInterests = _getInterestsOfSharesOrVotes(si.controlOfShares, startDate, endDate)
+      interests = interests.concat(newInterests)
+    }
 
-  if (si.controlOfDirectors.indirectControl ||
-    si.controlOfDirectors.inConcertControl ||
-    si.controlOfDirectors.directControl ||
-    si.controlOfDirectors.actingJointly ||
-    si.controlOfDirectors.significantInfluence
-  ) {
-    const newInterests = _getDirectorsInterests(si.controlOfDirectors, si.startDate, si.endDate)
-    interests = interests.concat(newInterests)
+    if (si.controlOfVotes.percentage !== PercentageRangeE.NO_SELECTION) {
+      const newInterests = _getInterestsOfSharesOrVotes(si.controlOfVotes, startDate, endDate)
+      interests = interests.concat(newInterests)
+    }
+
+    if (si.controlOfDirectors.indirectControl ||
+      si.controlOfDirectors.inConcertControl ||
+      si.controlOfDirectors.directControl ||
+      si.controlOfDirectors.actingJointly ||
+      si.controlOfDirectors.significantInfluence
+    ) {
+      const newInterests = _getDirectorsInterests(si.controlOfDirectors, startDate, endDate)
+      interests = interests.concat(newInterests)
+    }
   }
 
   if (si.controlOther) {

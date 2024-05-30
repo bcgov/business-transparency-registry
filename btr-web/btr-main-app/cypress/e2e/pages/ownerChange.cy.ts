@@ -1,5 +1,4 @@
 import moment from 'moment'
-import { dateToString } from '../../../../btr-common-components/utils/date'
 
 describe('pages -> Beneficial Owner Change', () => {
   beforeEach(() => {
@@ -13,19 +12,16 @@ describe('pages -> Beneficial Owner Change', () => {
 
   it('rendered expected information', () => {
     cy.get('[data-cy="significantIndividuals-heading"]').should('have.text', 'Significant Individuals')
-    // todo: fix on #20760
-    // cy.get('[data-cy=page-info-text]').should('contain.text', 'Select the date of your significant')
-    // cy.get('[data-cy=effective-date-select]').should('have.text', 'Significant Individual Filing Effective Date')
     cy.get('[data-cy=add-new-btn]').should('have.text', 'Add an Individual')
     cy.get('[data-cy=addIndividualPerson]').should('not.exist')
     cy.get('[data-cy="individualsSummaryTable"]').should('exist')
   })
 
-  // todo: fix on #20760
-  it.skip('allows selection of the effective date', () => {
-    cy.get('[data-cy=date-select]').should('exist')
+  it('allows selection of the effective date', () => {
+    cy.get('[data-cy=add-new-btn]').trigger('click')
+    cy.get('[data-cy="start-date-select"]').should('exist')
     cy.get('[data-cy=date-picker]').should('not.exist')
-    cy.get('[data-cy=date-select]').trigger('click')
+    cy.get('[data-cy="start-date-select"]').trigger('click')
     cy.get('[data-cy=date-picker]').should('exist')
     cy.get('[data-cy=date-picker]').get('.bcros-date-picker__calendar__day').should('exist')
     cy.get('[data-cy=date-picker]').get('.bcros-date-picker__calendar__day').eq(0).trigger('click')
@@ -35,7 +31,7 @@ describe('pages -> Beneficial Owner Change', () => {
     const monty = today.getMonth()
     const day = 1
     const expectedDate = moment(new Date(year, monty, day)).format('YYYY-MM-DD')
-    cy.get('[data-cy=date-select]').should('have.value', expectedDate)
+    cy.get('[data-cy="start-date-select"]').find('input').should('have.value', expectedDate)
   })
 
   it('expands add individual component when add individual button is clicked', () => {
@@ -98,35 +94,6 @@ describe('pages -> Beneficial Owner Change', () => {
     cy.get('[data-cy=button-control-right-button]').eq(0).should('have.text', 'Review and Confirm')
     cy.get('[data-cy=button-control-right-button]').eq(0).click()
     cy.url().should('include', '/review-confirm')
-  })
-
-  // todo: fix on #20760
-  it.skip('on update Significant Individual Filing Effective Date ' +
-    'verifies that only newly added items have their date changed ', () => {
-    // select the date of today
-    cy.get('[data-cy=date-select]')
-      .click()
-      .then(() => {
-        cy.get('.bcros-date-picker__calendar__day.dp__today').parent().click()
-      })
-
-    const today = new Date()
-    const expectedDate = dateToString(today, 'YYYY-MM-DD')
-    // ensure no dates in summary table have todays date
-    cy.get('td:contains("' + expectedDate + '")').should('have.length', 0)
-
-    cy.fixture('individuals').then((testData) => {
-      // click 'Add an Individual' button and expand the form
-      cy.get('[data-cy=add-new-btn]').click()
-      // cy.get('[data-cy=showAddIndividualPersonManually]').click()
-
-      cy.fillOutForm(testData.profile1)
-
-      // click 'Done' button to add the individual
-      cy.get('[data-cy=new-si-done-btn]').click()
-    })
-    // verify only new entry has date set for today. All other elements should have different dates.
-    cy.get('[data-cy="summary-table-dates"]:contains("' + expectedDate + '")').should('have.length', 1)
   })
 })
 

@@ -18,10 +18,6 @@ describe('accessibility -> Review and Confirm', () => {
 
   it('checks page passes accessibility (form filled out)', () => {
     // enter form data
-    // todo: fix on #20760
-    // cy.get('[data-cy=date-select]').click().then(() => {
-    //   cy.get('.bcros-date-picker__calendar__day.dp__today').parent().click()
-    // })
     cy.fixture('individuals').then((testData) => {
       cy.get('[data-cy=add-new-btn]').click()
       cy.get('#individual-person-full-name').type(testData.profile1.fullName)
@@ -34,6 +30,9 @@ describe('accessibility -> Review and Confirm', () => {
       cy.get('[data-cy="controlOfVotes.percentage.0"]').click()
       cy.get('[data-cy="controlOfVotes.beneficialOwner"]').check()
       cy.get('[data-cy="controlOfVotes.registeredOwner"]').check()
+      cy.get('[data-cy="start-date-select"]').click().then(() => {
+        cy.get('.bcros-date-picker__calendar__day.dp__today').parent().click()
+      })
       // todo: fixme update with #20756
       // cy.get('[data-cy=testControlOfDirectors]').get('[name=directControl]').check()
       cy.get('#addNewPersonBirthdate').trigger('click')

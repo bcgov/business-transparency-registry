@@ -577,9 +577,16 @@ export const expectedSisOutput: SiSchemaType[] = [
       taxNumber: undefined
     },
     isTaxResident: false,
-    // startDate: '2024-01-30',
-    startDate: '', // todo: fixme fix this expectaction when we add multiple dates
-    endDate: '',
+    effectiveDates: [
+      {
+        endDate: undefined,
+        startDate: '2024-01-04'
+      },
+      {
+        endDate: undefined,
+        startDate: ''
+      }
+    ],
     uuid: undefined,
     ui: {}
   },
@@ -637,9 +644,16 @@ export const expectedSisOutput: SiSchemaType[] = [
       hasTaxNumber: true
     },
     isTaxResident: true,
-    // startDate: '2024-01-30',
-    startDate: '', // todo: fixme fix this expectaction when we add multiple dates
-    endDate: '',
+    effectiveDates: [
+      {
+        endDate: undefined,
+        startDate: '2024-01-05'
+      },
+      {
+        endDate: undefined,
+        startDate: ''
+      }
+    ],
     uuid: undefined,
     ui: {}
   },
@@ -697,9 +711,12 @@ export const expectedSisOutput: SiSchemaType[] = [
       [{ name: 'Canada (Citizen)', alpha_2: 'CA' }],
     email: 'hrvoje.fekete@gmail.com',
     isTaxResident: true,
-    // startDate: '2024-01-30',
-    startDate: '', // todo: fixme fix this expectaction when we add multiple dates
-    endDate: '',
+    effectiveDates: [
+      {
+        endDate: undefined,
+        startDate: '2024-01-05'
+      }
+    ],
     uuid: undefined,
     ui: {}
   }

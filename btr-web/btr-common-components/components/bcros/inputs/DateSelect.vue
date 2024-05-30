@@ -4,18 +4,33 @@
     :name="name"
   >
     <UInput
-      :ui="{ icon: { base: showDatePicker && !error ? 'text-primary-500' : iconClass } }"
+      :ui="{ icon: { base: showDatePicker && !error ? 'text-primary-500' : iconClass, trailing: { pointer: '' } } }"
       :model-value="selectedDateDisplay"
-      icon="i-mdi-calendar"
       :placeholder="placeholder || ''"
-      trailing
       type="text"
       :variant="!!error ? 'error' : variant || 'bcGov'"
       data-cy="date-select"
       @click="showDatePicker = true"
       @keydown.enter="showDatePicker = true"
       @update:model-value="handleManualDateEntry($event)"
-    />
+    >
+      <template #trailing>
+        <UIcon
+          v-if="removable"
+          name="i-mdi-close"
+          :padded="false"
+          class="text-gray-600 text-xl cursor-pointer"
+          @click="$emit('remove-control')"
+        />
+        <UIcon
+          name="i-mdi-calendar"
+          :padded="false"
+          class="text-blue-500 text-xl cursor-pointer"
+          @click="showDatePicker = true"
+        />
+      </template>
+    </UInput>
+
     <BcrosDatePicker
       v-if="showDatePicker"
       ref="dateSelectPickerRef"
@@ -37,9 +52,15 @@ const props = defineProps<{
   maxDate?: Date,
   placeholder?: string,
   variant?: string
+  removable?: boolean
 }>()
 
-const emit = defineEmits<{(e: 'selection', value: Date | null): void }>()
+/* eslint-disable func-call-spacing */
+const emit = defineEmits<{
+  (e: 'selection', value: Date | null): void,
+  (e: 'remove-control', value: void): void
+}>()
+/* eslint-enable */
 
 // @ts-ignore
 const dateSelectPickerRef: MaybeElementRef = ref(null)

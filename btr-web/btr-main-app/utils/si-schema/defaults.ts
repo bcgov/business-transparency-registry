@@ -68,6 +68,8 @@ export function getDefaultInputFormSi (): SiSchemaType {
     startDate: todayIsoDateString(),
     endDate: '',
 
+    effectiveDates: [{ startDate: undefined, endDate: undefined }],
+
     uuid: UUIDv4(),
     ui: {
       action: FilingActionE.ADD

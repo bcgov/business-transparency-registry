@@ -54,9 +54,11 @@ export const testSI: SiSchemaType = {
   },
   controlOther: '',
   missingInfoReason: '',
-  startDate: SI_EXAMPLE_DATE,
+  effectiveDates: [{
+    startDate: SI_EXAMPLE_DATE,
+    endDate: ''
+  }],
   couldNotProvideMissingInfo: false,
-  endDate: '',
   uuid: undefined,
   ui: {
     action: FilingActionE.ADD

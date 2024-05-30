@@ -146,6 +146,32 @@
 
       <BcrosSectionDivider />
 
+      <!--  section-header: effective dates -->
+      <BcrosSection
+        header-icon-name="i-mdi-calendar"
+        :header-title="$t('sectionHeaders.effectiveDates')"
+        :header-text="$t('sectionIntroText.effectiveDates')"
+        rounded-top
+      />
+
+      <!--  section: effective dates -->
+      <BcrosSection
+        :show-section-has-errors="hasErrors(['effectiveDates'])"
+        :section-title="$t('sectionTitles.effectiveDates')"
+        rounded-bot
+      >
+        <div class="w-full">
+          <IndividualPersonEffectiveDates
+            :initial-date-groups="inputFormSi.effectiveDates"
+            name="effectiveDates"
+            data-cy="effectiveDates"
+            @dates-updated="inputFormSi.effectiveDates = $event"
+          />
+        </div>
+      </BcrosSection>
+
+      <BcrosSectionDivider />
+
       <!--  section-header: type of interest or control -->
       <BcrosSection
         header-icon-name="i-mdi-user-circle"

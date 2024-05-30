@@ -111,6 +111,9 @@ Cypress.Commands.add('addTestIndividuals', () => {
     // todo: fixme: update on #20756
     // cy.get('[data-cy="testTypeOfControl"]').get('[name="registeredOwner"]').check()
     // cy.get('[data-cy="testControlOfDirectors"]').get('[name="directControl"]').check()
+    cy.get('[data-cy="start-date-select"]').click().then(() => {
+      cy.get('.bcros-date-picker__calendar__day.dp__today').parent().click()
+    })
     cy.get('#addNewPersonBirthdate').trigger('click')
     cy.get('[data-cy=date-picker]').get('.bcros-date-picker__calendar__day.dp__today').trigger('click')
     cy.get('[data-cy="address-country"]').click()
@@ -141,6 +144,9 @@ Cypress.Commands.add('addTestIndividuals', () => {
     // todo: fixme: update on #20756
     // cy.get('[data-cy="testTypeOfControl"]').get('[name="registeredOwner"]').check()
     // cy.get('[data-cy="testControlOfDirectors"]').get('[name="directControl"]').check()
+    cy.get('[data-cy="start-date-select"]').click().then(() => {
+      cy.get('.bcros-date-picker__calendar__day.dp__today').parent().click()
+    })
     cy.get('#addNewPersonBirthdate').trigger('click')
     cy.get('[data-cy=date-picker]').get('.bcros-date-picker__calendar__day.dp__today').trigger('click')
     cy.get('[data-cy="address-country"]').click()
