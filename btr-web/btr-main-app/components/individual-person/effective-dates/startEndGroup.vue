@@ -6,7 +6,7 @@
         <BcrosInputsDateSelect
           :name="name + '.startDate'"
           :initial-date="dateStringToDate(dates.startDate || '') || undefined"
-          :max-date="new Date()"
+          :max-date="dates.endDate ? dateStringToDate(dates.endDate) || new Date() : new Date()"
           :placeholder="$t('placeholders.dateSelect.startDate')"
           data-cy="start-date-select"
           @selection="selectStartDate($event)"
