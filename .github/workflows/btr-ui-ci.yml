@@ -129,6 +129,7 @@ jobs:
       - name: Cypress run
         uses: cypress-io/github-action@v6
         with:
+          browser: chrome
           working-directory: btr-web/${{ matrix.project }}
           build: pnpm run build:local
           start: pnpm start
