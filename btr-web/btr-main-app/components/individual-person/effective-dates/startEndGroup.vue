@@ -6,7 +6,7 @@
         <BcrosInputsDateSelect
           :name="name + '.startDate'"
           :initial-date="dateStringToDate(dates.startDate || '') || undefined"
-          :max-date="new Date()"
+          :max-date="dates.endDate ? dateStringToDate(dates.endDate) || new Date() : new Date()"
           :placeholder="$t('placeholders.dateSelect.startDate')"
           data-cy="start-date-select"
           @selection="selectStartDate($event)"
@@ -17,8 +17,8 @@
           v-if="isEndDateVisible"
           :class="{'bg-blue-500': highlightRow}"
           :name="name + '.endDate'"
-          :initial-date="dateStringToDate(dates.endDate || '') || undefined"
-          :min-date="dates.startDate"
+          :initial-date="dates.endDate ? dateStringToDate(dates.endDate) as Date: undefined"
+          :min-date="dates.startDate ? dateStringToDate(dates.startDate) as Date: undefined"
           :max-date="new Date()"
           :removable="removableEndDate"
           :placeholder="$t('placeholders.dateSelect.endDate')"
@@ -58,7 +58,7 @@ const isEndDateVisible = defineModel<boolean>('isEndDateVisible')
 /* eslint-disable func-call-spacing */
 const emit = defineEmits<{
   (e: 'remove-dates', value: void): void,
-  (e: 'update:startEndDates', value: Array<StartEndDateGroupSchemaType>): void
+  (e: 'update:startEndDates', value: StartEndDateGroupSchemaType): void
 }>()
 /* eslint-enable */
 
@@ -67,13 +67,13 @@ defineProps<{
   removableEndDate: boolean
 }>()
 
-const selectStartDate = (date: Date | null) => {
-  dates.value.startDate = dateToString(date, 'YYYY-MM-DD') || undefined
+const selectStartDate = (date: Date) => {
+  dates.value.startDate = dateToString(date, 'YYYY-MM-DD')
   emit('update:startEndDates', dates.value)
 }
 
-const selectEndDate = (date: Date | null) => {
-  dates.value.endDate = dateToString(date, 'YYYY-MM-DD') || undefined
+const selectEndDate = (date: Date) => {
+  dates.value.endDate = dateToString(date, 'YYYY-MM-DD')
   emit('update:startEndDates', dates.value)
 }
 

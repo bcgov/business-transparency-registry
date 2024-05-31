@@ -36,6 +36,7 @@
       ref="dateSelectPickerRef"
       class="absolute z-20"
       :default-selected-date="selectedDate"
+      :set-min-date="minDate"
       :set-max-date="maxDate"
       @selected-date="updateDate($event); showDatePicker = false"
     />
@@ -49,6 +50,7 @@ import { MaybeElementRef, onClickOutside } from '@vueuse/core'
 const props = defineProps<{
   name: string
   initialDate?: Date,
+  minDate?: Date,
   maxDate?: Date,
   placeholder?: string,
   variant?: string
