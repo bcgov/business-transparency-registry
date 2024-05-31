@@ -1,5 +1,5 @@
 describe('Layout -> ButtonControl', () => {
-  it.skip('shows button control in the business layout for SI change', () => {
+  it('shows button control in the business layout for SI change', () => {
     cy.visitHomePageWithFakeData()
     cy.get('#bcros-button-control').should('exist')
     cy.get('[data-cy=button-control-left-button]').should('have.length', 3)
