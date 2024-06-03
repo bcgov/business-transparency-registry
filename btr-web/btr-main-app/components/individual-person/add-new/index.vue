@@ -261,6 +261,7 @@
             name="tax"
             variant="bcGov"
             data-cy="testTaxNumber"
+            @clear-errors="clearErrors($event)"
           />
         </div>
       </BcrosSection>
@@ -395,7 +396,8 @@ const AddressSchemaExtended = AddressSchema.extend({
   country: CountrySchema
     .optional()
     .refine((val: BtrCountryI | undefined) => {
-      return val && val.name !== '' }, t('errors.validation.address.country'))
+      return val && val.name !== ''
+    }, t('errors.validation.address.country'))
 })
 
 const SiSchemaExtended = SiSchema.extend({
@@ -445,6 +447,10 @@ function hasErrors (sectionErrorPaths: string[]): boolean {
   }
 
   return false
+}
+
+const clearErrors = (errorPath: string) => {
+  addIndividualForm.value.clear(errorPath)
 }
 
 function handleDoneButtonClick () {
