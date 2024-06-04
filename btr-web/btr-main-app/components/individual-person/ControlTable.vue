@@ -2,7 +2,7 @@
   <BcrosTablesTable
     data-cy="individualsControlTable"
     :headers="headers"
-    :items="model"
+    :items="currentSIFiling.significantIndividuals"
   >
     <template #warning>
       <tr v-if="numberOfRows === 1">
@@ -33,9 +33,8 @@
         </td>
         <td data-cy="control-table-individual-connection" colspan="2">
           <IndividualPersonIndividualConnection
-            v-model="model[index]"
+            v-model="currentSIFiling.significantIndividuals[index]"
             :name="'individualConnection' + index"
-            :significant-individuals="model"
             class="pt-0 pl-2"
             :control-type-width="String(controlTypeWidthPercentage)"
             :individual-connection-width="String(100-controlTypeWidthPercentage)"
@@ -56,12 +55,10 @@
 </template>
 
 <script setup lang="ts">
-import { SiSchemaType } from '~/utils/si-schema/definitions'
+import { storeToRefs } from 'pinia'
 
-const model = defineModel({
-  type: Array as PropType<SiSchemaType[]>,
-  required: true
-})
+const significantIndividuals = useSignificantIndividuals()
+const { currentSIFiling } = storeToRefs(significantIndividuals)
 
 defineProps({
   numberOfRows: { type: Number, required: true }

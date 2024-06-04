@@ -71,7 +71,6 @@
       />
       <IndividualPersonControlTable
         v-if="numOfIndividualsWithSharedControl > 0"
-        v-model="currentSIFiling.significantIndividuals"
         :number-of-rows="numOfIndividualsWithSharedControl"
         class="mt-10"
       />

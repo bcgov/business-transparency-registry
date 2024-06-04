@@ -19,7 +19,8 @@ export const OwnershipOrControlStatements = {
             maximum: 75,
             minimum: 50
           },
-          type: 'shareholding'
+          type: 'shareholding',
+          connectedIndividuals: undefined
         },
         {
           directOrIndirect: 'unknown',
@@ -32,7 +33,8 @@ export const OwnershipOrControlStatements = {
             maximum: 75,
             minimum: 50
           },
-          type: 'shareholding'
+          type: 'shareholding',
+          connectedIndividuals: [{ uuid: '002' }]
         },
         {
           directOrIndirect: 'direct',
@@ -45,21 +47,24 @@ export const OwnershipOrControlStatements = {
             maximum: 50,
             minimum: 25
           },
-          type: 'votingRights'
+          type: 'votingRights',
+          connectedIndividuals: undefined
         },
         {
           type: 'appointmentOfBoard',
           directOrIndirect: 'direct',
           details: 'controlType.directors.directControl',
           startDate: SI_EXAMPLE_DATE,
-          endDate: undefined
+          endDate: undefined,
+          connectedIndividuals: undefined
         },
         {
           type: 'appointmentOfBoard',
           directOrIndirect: 'indirect',
           details: 'controlType.directors.indirectControl',
           startDate: SI_EXAMPLE_DATE,
-          endDate: undefined
+          endDate: undefined,
+          connectedIndividuals: undefined
         }
       ],
       isComponent: false,
@@ -136,13 +141,7 @@ export const OwnershipOrControlStatements = {
       taxResidencies: [{ name: 'Canada', code: 'CA' }],
       statementID: 'db102217-429c-439e-9075-13c4e84fbb4d',
       determinationOfIncapacity: undefined,
-      uuid: '001',
-      sharesInConcert: ['002'],
-      sharesActingJointly: [],
-      votesInConcert: [],
-      votesActingJointly: [],
-      directorsInConcert: [],
-      directorsActingJointly: []
+      uuid: '001'
     }
   ]
 }

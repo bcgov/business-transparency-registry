@@ -89,6 +89,7 @@
       "controlOfVotes": "Indicate the {boldStart}type(s) of control{boldEnd} of the votes this individual has:",
       "shares": "If applicable, enter the {boldStart}percentage of shares{boldEnd} issued by the company that the individual controls",
       "votes": "If applicable, enter the {boldStart}percentage of votes{boldEnd} issued by the company that the individual controls",
+      "controlOfDirectors": "If this individual has control of {boldStart}the right to elect, appoint, or remove a majority of the company's directors,{boldEnd} indicate the {boldStart}type(s) of control{boldEnd} of the right this individual has:",
       "lessThan25Note": "You are only considered a significant individual {boldStart}IF{boldEnd} you {boldStart}control 25% or more individually{boldEnd} or if you are controlling less than 25%, you need to be operating jointly or in concert with other parties.",
       "actingJointlyOrInConcert": {
         "checkbox": "This individual has interests or rights held jointly and/or exercised in concert",
@@ -103,6 +104,8 @@
         }
       }
     },
+
+
     "sharesAndVotes": {
       "controlPercentage": "Enter the percentage of shares issued for the business and/or shares entitled to votes at general meetings this individual owns or ultimately controls (or can exercise ultimate effective control over).",
       "percentageRange": {
@@ -135,6 +138,10 @@
         "inConcert": "25% or more of shares or votes exercised in concert"
       }
     },
+
+
+
+
     "controlOfDirectors": {
       "text": {
         "part1": "If this individual has control of the right to ",
@@ -161,6 +168,9 @@
         "inConcert": "Control of directors exercised in concert"
       }
     },
+
+
+
     "otherReasons": {
       "description": "Enter any other reason(s) this individual is a significant individual.",
       "textAreaPlaceholder": "Other reasons for individual significance"
@@ -256,6 +266,10 @@
       "closed": "More help with types of control",
       "expanded": "Less help with types of control"
     },
+    "controlOfDirectors": {
+      "closed": "More help with types of control of directors",
+      "expanded": "Less help with types of control of directors"
+    },
     "inConcertControl": {
       "closed": "More help with acting jointly or in concert",
       "expanded": "Less help with acting jointly or in concert"
@@ -271,6 +285,9 @@
       "typesOfControl": {
         "p1": "Vestibulum id ligula porta felis euismod semper. Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Sed posuere consectetur est at lobortis."
       }
+    },
+    "controlOfDirectors": {
+      "p1": "Vestibulum id ligula porta felis euismod semper. Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Sed posuere consectetur est at lobortis."
     },
     "significantIndividuals": {
       "helpPlaceholder1": "This is placeholder text. It's used as a temporary replacement for final content.",
@@ -330,6 +347,7 @@
     "controlType": {
       "shares": "Shares",
       "votes": "Votes",
+      "director": "Control of Directors",
       "jointly": "Jointly",
       "inConcert": "In concert"
     },

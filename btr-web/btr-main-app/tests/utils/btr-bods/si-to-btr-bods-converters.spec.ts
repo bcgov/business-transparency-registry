@@ -40,7 +40,8 @@ describe('Btr to Bods util converters Tests', () => {
           directOrIndirect: 'direct',
           details: 'controlType.shares.registeredOwner',
           startDate: SI_EXAMPLE_DATE,
-          endDate: undefined
+          endDate: undefined,
+          connectedIndividuals: undefined
         },
         {
           type: BodsInterestTypeE.SHAREHOLDING,
@@ -48,7 +49,8 @@ describe('Btr to Bods util converters Tests', () => {
           directOrIndirect: 'unknown',
           details: 'controlType.shares.inConcertControl',
           startDate: SI_EXAMPLE_DATE,
-          endDate: undefined
+          endDate: undefined,
+          connectedIndividuals: [{ uuid: '002' }]
         },
         {
           type: BodsInterestTypeE.VOTING_RIGHTS,
@@ -56,21 +58,24 @@ describe('Btr to Bods util converters Tests', () => {
           directOrIndirect: 'direct',
           details: 'controlType.votes.registeredOwner',
           startDate: SI_EXAMPLE_DATE,
-          endDate: undefined
+          endDate: undefined,
+          connectedIndividuals: undefined
         },
         {
           type: BodsInterestTypeE.APPOINTMENT_OF_BOARD,
           directOrIndirect: 'direct',
           details: 'controlType.directors.directControl',
           startDate: SI_EXAMPLE_DATE,
-          endDate: undefined
+          endDate: undefined,
+          connectedIndividuals: undefined
         },
         {
           type: BodsInterestTypeE.APPOINTMENT_OF_BOARD,
           directOrIndirect: 'indirect',
           details: 'controlType.directors.indirectControl',
           startDate: SI_EXAMPLE_DATE,
-          endDate: undefined
+          endDate: undefined,
+          connectedIndividuals: undefined
         }
       ]
     const result = siSchemaToBtrBodsConverters.getInterests(input)

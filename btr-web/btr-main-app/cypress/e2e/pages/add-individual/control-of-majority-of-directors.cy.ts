@@ -7,23 +7,22 @@ describe('pages -> Add individual', () => {
     cy.get('[data-cy=add-new-btn]').trigger('click')
     // cy.get('[data-cy="showAddIndividualPersonManually"]').trigger('click')
 
-    const checkboxes = cy.get('[data-cy="testControlOfDirectors"]').should('exist')
+    cy.get('[data-cy="testControlOfDirectors"]').should('exist')
 
-    checkboxes.get('[name="directControl"]').check().should('be.checked')
-    checkboxes.get('[name="indirectControl"]').check().should('be.checked')
-    checkboxes.get('[name="significantInfluence"]').check().should('be.checked')
-    checkboxes.get('[name="inConcertControl"]').check().should('be.checked')
+    cy.get('[data-cy="controlOfDirectors.directControl"]').check().should('be.checked')
+    cy.get('[data-cy="controlOfDirectors.indirectControl"]').check().should('be.checked')
+    cy.get('[data-cy="controlOfDirectors.significantInfluence"]').check().should('be.checked')
+    cy.get('[data-cy="controlOfDirectors.jointlyOrInConcert.hasJointlyOrInConcert"]').check().should('be.checked')
   })
 
-  it('test the tooltip', () => {
+  it('ensure the error message is displayed when inConcert or joint control is selected ', () => {
     cy.get('[data-cy=add-new-btn]').trigger('click')
-    // cy.get('[data-cy="showAddIndividualPersonManually"]').trigger('click')
 
-    const checkboxes = cy.get('[data-cy="testControlOfDirectors"]').should('exist')
-
-    checkboxes.get('[data-cy="control-of-directors-tooltip"]').trigger('mouseenter')
-    cy.get('[data-cy="control-of-directors-tooltip-content"').should('exist')
-    checkboxes.get('[data-cy="control-of-directors-tooltip"]').trigger('mouseleave')
-    cy.get('[data-cy="control-of-directors-tooltip-content"').should('not.exist')
+    const message = 'Please indicate at least one type of control'
+    cy.get('[data-cy="controlOfDirectors.jointlyOrInConcert.hasJointlyOrInConcert"]').check()
+    cy.get('[data-cy="controlOfDirectors.jointlyOrInConcert.actingJointly"]').check()
+    cy.get('[data-cy="testControlOfDirectors"]').should('contain.text', message)
+    cy.get('[data-cy="controlOfDirectors.directControl"]').check()
+    cy.get('[data-cy="testControlOfDirectors"]').should('not.contain.text', message)
   })
 })

@@ -81,21 +81,61 @@
     </div>
 
     <!-- control of directors acting jointly -->
+    <div v-if="model.controlOfDirectors.actingJointly" class="flex w-full">
+      <div class="flex flex-col text-right pr-4" :style="`width: ${controlTypeWidth}%`">
+        <span>{{ $t('controlTableBody.controlType.director') }}</span>
+        <span class="italic text-sm">{{ $t('controlTableBody.controlType.jointly') }}</span>
+      </div>
+      <BcrosInputsCombobox
+        v-model="individualsWithDirectorControlActingJointly"
+        :name="name + '.director.jointly'"
+        :label-function="(si) => si.name"
+        :items="activeIndividuals"
+        :search-placeholder="$t('controlTableBody.individualConnection.placeholder.searchInput')"
+        :label-placeholder="$t('controlTableBody.individualConnection.placeholder.jointly')"
+        :floating-label="$t(`controlTableBody.individualConnection.floatingLabel.jointly`)"
+        key-attribute="uuid"
+        :search-attributes="['name']"
+        :style="`width: ${individualConnectionWidth}%`"
+      />
+    </div>
+
     <!-- control of directors in concert -->
+    <div v-if="model.controlOfDirectors.inConcertControl" class="flex w-full">
+      <div class="flex flex-col text-right pr-4" :style="`width: ${controlTypeWidth}%`">
+        <span>{{ $t('controlTableBody.controlType.director') }}</span>
+        <span class="italic text-sm">{{ $t('controlTableBody.controlType.inConcert') }}</span>
+      </div>
+      <BcrosInputsCombobox
+        v-model="individualsWithDirectorControlInConcert"
+        :name="name + '.director.inConcert'"
+        :label-function="(si) => si.name"
+        :items="activeIndividuals"
+        :search-placeholder="$t('controlTableBody.individualConnection.placeholder.searchInput')"
+        :label-placeholder="$t('controlTableBody.individualConnection.placeholder.inConcert')"
+        :floating-label="$t(`controlTableBody.individualConnection.floatingLabel.inConcert`)"
+        key-attribute="uuid"
+        :search-attributes="['name']"
+        :style="`width: ${individualConnectionWidth}%`"
+      />
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
+import { storeToRefs } from 'pinia'
 import { SiSchemaType } from '~/utils/si-schema/definitions'
+
+const significantIndividuals = useSignificantIndividuals()
+const { currentSIFiling } = storeToRefs(significantIndividuals)
 
 const model = defineModel({
   type: Object as PropType<SiSchemaType>,
   required: true
 })
 
-const props = defineProps({
+defineProps({
   name: { type: String, default: 'name' },
-  significantIndividuals: { type: Array as PropType<SiSchemaType[]>, required: true },
   controlTypeWidth: { type: String, required: true },
   individualConnectionWidth: { type: String, required: true }
 })
@@ -103,7 +143,7 @@ const props = defineProps({
 // Use SiSchemaType[] to create dropdown menu options with the names and UUIDs of all significant individuals that
 // are active (i.e. not marked as removed), excluding the current SI (model)
 const activeIndividuals = computed(() => {
-  return props.significantIndividuals.filter((si) => {
+  return currentSIFiling.value.significantIndividuals.filter((si) => {
     return si.uuid !== model.value.uuid && si.ui.action !== FilingActionE.REMOVE
   }).map((si) => {
     return { name: si.name.fullName.toUpperCase(), uuid: si.uuid }
@@ -113,64 +153,96 @@ const activeIndividuals = computed(() => {
 // selected inviduals that have shares acting jointly with the current SI
 const individualsWithSharesActingJointly = computed({
   get () {
-    return props.significantIndividuals.filter((si) => {
+    return currentSIFiling.value.significantIndividuals.filter((si) => {
       return si.ui.action !== FilingActionE.REMOVE && model.value.sharesActingJointly.find(
-        (value) => { return value === si.uuid })
+        (value) => { return value.uuid === si.uuid })
     }).map((si) => {
       return { name: si.name.fullName.toUpperCase(), uuid: si.uuid }
     })
   },
 
   set (selectedIndividuals) {
-    model.value.sharesActingJointly = selectedIndividuals.map((individual) => { return individual.uuid })
+    model.value.sharesActingJointly = selectedIndividuals.map((individual) => { return { uuid: individual.uuid } })
   }
 })
 
 // selected inviduals that have shares in concert with the current SI
 const individualsWithSharesInConcert = computed({
   get () {
-    return props.significantIndividuals.filter((si) => {
+    return currentSIFiling.value.significantIndividuals.filter((si) => {
       return si.ui.action !== FilingActionE.REMOVE && model.value.sharesInConcert.find(
-        (value) => { return value === si.uuid })
+        (value) => { return value.uuid === si.uuid })
     }).map((si) => {
       return { name: si.name.fullName.toUpperCase(), uuid: si.uuid }
     })
   },
 
   set (selectedIndividuals) {
-    model.value.sharesInConcert = selectedIndividuals.map((individual) => { return individual.uuid })
+    model.value.sharesInConcert = selectedIndividuals.map((individual) => { return { uuid: individual.uuid } })
   }
 })
 
 // selected inviduals that have votes acting jointly with the current SI
 const individualsWithVotesActingJointly = computed({
   get () {
-    return props.significantIndividuals.filter((si) => {
+    return currentSIFiling.value.significantIndividuals.filter((si) => {
       return si.ui.action !== FilingActionE.REMOVE && model.value.votesActingJointly.find(
-        (value) => { return value === si.uuid })
+        (value) => { return value.uuid === si.uuid })
     }).map((si) => {
       return { name: si.name.fullName.toUpperCase(), uuid: si.uuid }
     })
   },
 
   set (selectedIndividuals) {
-    model.value.votesActingJointly = selectedIndividuals.map((individual) => { return individual.uuid })
+    model.value.votesActingJointly = selectedIndividuals.map((individual) => { return { uuid: individual.uuid } })
   }
 })
 
 // selected inviduals that have votes in concert with the current SI
 const individualsWithVotesInConcert = computed({
   get () {
-    return props.significantIndividuals.filter((si) => {
+    return currentSIFiling.value.significantIndividuals.filter((si) => {
       return si.ui.action !== FilingActionE.REMOVE && model.value.votesInConcert.find(
-        (value) => { return value === si.uuid })
+        (value) => { return value.uuid === si.uuid })
     }).map((si) => {
       return { name: si.name.fullName.toUpperCase(), uuid: si.uuid }
     })
   },
 
   set (selectedIndividuals) {
-    model.value.votesInConcert = selectedIndividuals.map((individual) => { return individual.uuid })
+    model.value.votesInConcert = selectedIndividuals.map((individual) => { return { uuid: individual.uuid } })
+  }
+})
+
+// selected inviduals that have control of directors acting jointly with the current SI
+const individualsWithDirectorControlActingJointly = computed({
+  get () {
+    return currentSIFiling.value.significantIndividuals.filter((si) => {
+      return si.ui.action !== FilingActionE.REMOVE && model.value.directorsActingJointly.find(
+        (value) => { return value.uuid === si.uuid })
+    }).map((si) => {
+      return { name: si.name.fullName.toUpperCase(), uuid: si.uuid }
+    })
+  },
+
+  set (selectedIndividuals) {
+    model.value.directorsActingJointly = selectedIndividuals.map((individual) => { return { uuid: individual.uuid } })
+  }
+})
+
+// selected inviduals that have control of directors in concert with the current SI
+const individualsWithDirectorControlInConcert = computed({
+  get () {
+    return currentSIFiling.value.significantIndividuals.filter((si) => {
+      return si.ui.action !== FilingActionE.REMOVE && model.value.directorsInConcert.find(
+        (value) => { return value.uuid === si.uuid })
+    }).map((si) => {
+      return { name: si.name.fullName.toUpperCase(), uuid: si.uuid }
+    })
+  },
+
+  set (selectedIndividuals) {
+    model.value.directorsInConcert = selectedIndividuals.map((individual) => { return { uuid: individual.uuid } })
   }
 })
 </script>
