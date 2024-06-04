@@ -15,13 +15,13 @@
 </template>
 
 <script setup lang="ts">
-import { normalizeName } from '~/utils/validation/form_inputs'
 import { type UseEventBusReturn } from '@vueuse/core'
+import { normalizeName } from '~/utils/validation/form_inputs'
 
 const formBus = inject<UseEventBusReturn<any, string> | undefined>('form-events', undefined)
 
 const model = defineModel({ type: String, default: '' })
-const emit = defineEmits()
+const emit = defineEmits<{(e: 'update:modelValue', value: string): void}>()
 
 const props = defineProps({
   label: { type: String, default: '' },

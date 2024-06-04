@@ -93,8 +93,8 @@
 </template>
 
 <script setup lang="ts">
-import { BtrAddressI } from '~/interfaces/btr-address-i'
 import { type UseEventBusReturn } from '@vueuse/core'
+import { BtrAddressI } from '~/interfaces/btr-address-i'
 
 const formBus = inject<UseEventBusReturn<any, string> | undefined>('form-events', undefined)
 
