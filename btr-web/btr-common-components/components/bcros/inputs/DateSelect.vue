@@ -78,10 +78,8 @@ watch(() => selectedDate.value, val => emit('selection', val))
 
 const updateDate = (val: Date | null) => {
   selectedDate.value = val
-  if (formBus) {
-    formBus.emit({ type: 'blur', path: props.name })
-    formBus.emit({ type: 'change', path: props.name })
-  }
+  formBus?.emit({ type: 'blur', path: props.name })
+  formBus?.emit({ type: 'change', path: props.name })
 }
 
 const selectedDateDisplay: ComputedRef<string> = computed(

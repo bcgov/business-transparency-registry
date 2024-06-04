@@ -107,10 +107,8 @@ const percentageName = props.name + '.percentage'
 const controlTypeName = props.name + '.controlType'
 
 watch(() => model.value, () => {
-  if (formBus) {
-    formBus.emit({ type: 'blur', path: [controlTypeName, percentageName] })
-    formBus.emit({ type: 'change', path: [controlTypeName, percentageName] })
-  }
+  formBus?.emit({ type: 'blur', path: [controlTypeName, percentageName] })
+  formBus?.emit({ type: 'change', path: [controlTypeName, percentageName] })
 }, { deep: true })
 
 let percentageText = ''

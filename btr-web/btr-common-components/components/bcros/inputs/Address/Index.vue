@@ -108,14 +108,10 @@ const props = defineProps({
 })
 
 const line1BlurEvent = () => {
-  if (formBus) {
-    formBus.emit({ type: 'blur', path: props.name + '.line1' })
-  }
+  formBus?.emit({ type: 'blur', path: props.name + '.line1' })
 }
 const line1ChangeEvent = () => {
-  if (formBus) {
-    formBus.emit({ type: 'change', path: props.name + '.line1' })
-  }
+  formBus?.emit({ type: 'change', path: props.name + '.line1' })
 }
 
 const countries = iscCountriesListSortedByName

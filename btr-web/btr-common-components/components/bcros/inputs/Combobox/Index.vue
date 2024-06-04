@@ -1,5 +1,6 @@
 <template>
   <UFormGroup
+    v-slot="{ error }"
     :name="name"
     :help="help"
     class="flex flex-col min-h-fit"
@@ -23,7 +24,8 @@
       >
         <span
           v-if="model && model.length === 0"
-          class="w-full text-gray-700 text-left"
+          class="w-full text-left"
+          :class="`text-${ !!error ? 'red-500' : 'gray-700' }`"
         >
           {{ labelPlaceholder }}
         </span>
@@ -81,10 +83,8 @@ const props = defineProps({
   searchAttributes: { type: Array<String>, required: true }
 })
 watch(model, () => {
-  if (formBus) {
-    formBus.emit({ type: 'blur', path: props.name })
-    formBus.emit({ type: 'change', path: props.name })
-  }
+  formBus?.emit({ type: 'blur', path: props.name })
+  formBus?.emit({ type: 'change', path: props.name })
 }, { deep: true })
 
 const isInSelected = (item: any) => {
