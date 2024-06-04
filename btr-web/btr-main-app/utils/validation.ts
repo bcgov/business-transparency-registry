@@ -22,16 +22,7 @@ export function validateTaxNumberInfo (
   ctx: RefinementCtx
 ): never {
   const t = useNuxtApp().$i18n.t
-  if (taxData.hasTaxNumber) { // && taxData.taxNumber) {
-    if (!taxData.taxNumber) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        message: t('errors.validation.taxNumber.invalidLength'),
-        path: ['taxNumber']
-      })
-      return z.NEVER
-    }
-
+  if (taxData.hasTaxNumber && taxData.taxNumber) {
     if (!checkSpecialCharacters(taxData.taxNumber)) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
