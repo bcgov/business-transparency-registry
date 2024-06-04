@@ -69,6 +69,11 @@
         :editing-disabled="isAddingNewSI"
         @toggle-editing-mode="toggleEditingMode"
       />
+      <IndividualPersonControlTable
+        v-if="numOfIndividualsWithSharedControl > 0"
+        :number-of-rows="numOfIndividualsWithSharedControl"
+        class="mt-10"
+      />
     </div>
   </div>
 </template>
@@ -83,8 +88,14 @@ const { currentSIFiling } = storeToRefs(significantIndividuals)
 const expandNewSI = ref(false)
 const showNoSignificantIndividuals = computed(
   (): boolean =>
-    !(currentSIFiling.value.significantIndividuals?.filter(si => si.action !== 'remove').length > 0) &&
+    !(currentSIFiling.value.significantIndividuals?.filter(si => si.action !== FilingActionE.REMOVE).length > 0) &&
     !expandNewSI.value)
+
+const numOfIndividualsWithSharedControl = computed(() => {
+  return currentSIFiling.value.significantIndividuals?.filter(
+    si => si.ui.action !== FilingActionE.REMOVE && hasSharedControl(si)
+  ).length
+})
 
 const isEditing = ref(false)
 

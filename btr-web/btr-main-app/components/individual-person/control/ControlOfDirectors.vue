@@ -1,67 +1,85 @@
 <template>
-  <div :id="id" class="flex flex-col py-5">
-    <UFormGroup v-slot="{ error }" :name="name">
-      <div v-for="type in types" :key="type.value">
-        <UCheckbox
-          v-model="controlOfDirectors[type.value]"
-          :name="type.value"
-          :label="type.label"
-          :variant="error ? 'error' : 'bcGov'"
-          class="py-2"
-        />
-      </div>
-    </UFormGroup>
-    <UCheckbox
-      v-model="controlOfDirectors.inConcertControl"
-      name="inConcertControl"
-      class="py-2 mt-5"
+  <div class="flex flex-col w-full">
+    <p class="pb-6">
+      <BcrosI18HelperBold translation-path="texts.control.controlOfDirectors" />
+    </p>
+    <UFormGroup
+      v-slot="{ error }"
+      :name="name"
+      data-cy="testControlOfDirectors"
     >
-      <template #label>
-        {{ $t('texts.controlOfDirectors.inConcertControl.text') }}
-        <BcrosTooltip
-          class="underline underline-offset-4 decoration-dotted"
-          :popper="{
-            placement: 'top',
-            arrow: true
-          }"
-          data-cy="control-of-directors-tooltip"
-        >
-          <template #tooltip-text>
-            <span
-              class="whitespace-normal place-content: center"
-              data-cy="control-of-directors-tooltip-content"
-            >
-              {{ $t('texts.controlOfDirectors.inConcertControl.tooltipContent') }}
-            </span>
-          </template>
-          {{ $t('texts.controlOfDirectors.inConcertControl.tooltip') }}
-        </BcrosTooltip>
+      <UCheckbox
+        :id="directControlId"
+        v-model="model.directControl"
+        :label="$t('texts.controlOfDirectors.directControl')"
+        class="pl-5 pt-2"
+        :class="{ 'text-red-500': !!error }"
+        :variant="error ? 'error' : 'bcGov'"
+        :data-cy="name + '.directControl'"
+      />
+      <UCheckbox
+        :id="indirectControlId"
+        v-model="model.indirectControl"
+        :label="$t('texts.controlOfDirectors.indirectControl')"
+        class="pl-5 pt-5"
+        :variant="error ? 'error' : 'bcGov'"
+        :data-cy="name + '.indirectControl'"
+      />
+      <UCheckbox
+        :id="significantInfluenceId"
+        v-model="model.significantInfluence"
+        :label="$t('texts.controlOfDirectors.significantInfluence')"
+        class="pl-5 py-5"
+        :variant="error ? 'error' : 'bcGov'"
+        :data-cy="name + '.significantInfluence'"
+      />
+    </UFormGroup>
+    <BcrosHelpTip
+      :title="$t('helpTitles.controlOfDirectors.closed')"
+      :title-expanded="$t('helpTitles.controlOfDirectors.expanded')"
+    >
+      <slot name="typesOfControlHelp">
+        <div class="flex flex-col gap-2">
+          <p>{{ $t('helpTexts.controlOfDirectors.p1') }}</p>
+        </div>
+      </slot>
+    </BcrosHelpTip>
+    <IndividualPersonControlJointlyOrInConcertControl
+      v-model:actingJointly="model.actingJointly"
+      v-model:inConcertControl="model.inConcertControl"
+      :name="name + '.jointlyOrInConcert'"
+    >
+      <template #inConcertControlHelp>
+        <span>{{ $t('helpTexts.significantIndividuals.helpPlaceholder1') }}</span>
       </template>
-    </UCheckbox>
+    </IndividualPersonControlJointlyOrInConcertControl>
   </div>
 </template>
 
 <script setup lang="ts">
-const prop = defineProps({
-  id: { type: String, required: true },
-  name: { type: String, required: false, default: 'ControlOfDirectorsControlGroup' },
-  modelValue: {
-    type: Object as PropType<ControlOfDirectorsI>,
-    default: () => ({
-      directControl: false,
-      indirectControl: false,
-      significantInfluence: false,
-      inConcertControl: false
-    })
-  }
+import { v4 as UUIDv4 } from 'uuid'
+import { type UseEventBusReturn } from '@vueuse/core'
+import { SiControlOfDirectorsSchemaType } from '~/utils/si-schema/definitions'
+
+const formBus = inject<UseEventBusReturn<any, string> | undefined>('form-events', undefined)
+
+const model = defineModel({
+  type: Object as PropType<SiControlOfDirectorsSchemaType>,
+  required: true
 })
 
-const t = useNuxtApp().$i18n.t
-const types = [
-  { value: 'directControl', label: t('texts.controlOfDirectors.directControl') },
-  { value: 'indirectControl', label: t('texts.controlOfDirectors.indirectControl') },
-  { value: 'significantInfluence', label: t('texts.controlOfDirectors.significantInfluence') }
-]
+const props = defineProps({
+  name: { type: String, default: 'name' }
+})
 
-const controlOfDirectors: Ref<ControlOfDirectorsI> = ref(prop.modelValue)
+watch(() => model.value, () => {
+  if (formBus) {
+    formBus.emit({ type: 'blur', path: [props.name] })
+    formBus.emit({ type: 'change', path: [props.name] })
+  }
+}, { deep: true })
+
+const directControlId = UUIDv4()
+const indirectControlId = UUIDv4()
+const significantInfluenceId = UUIDv4()
 </script>

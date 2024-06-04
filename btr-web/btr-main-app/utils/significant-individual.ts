@@ -1,52 +1,11 @@
-/** Get a new significant individual with all default fields
- * @param startDate expected iso date string (YYYY-MM-DD)
+import { SiSchemaType } from '~/utils/si-schema/definitions'
+
+/** Check if a significant individual has control of shares, votes, or directors that are
+ * held jointly and/or exercised in concert
+ * @param si significant individual schema
  */
-export function getEmptySI (startDate: string) {
-  return {
-    profile: {
-      fullName: '',
-      preferredName: '',
-      address: {
-        city: '',
-        country: { name: '', alpha_2: '' },
-        line1: '',
-        postalCode: '',
-        region: '',
-        line2: '',
-        locationDescription: ''
-      },
-      competency: {
-        decisionMaking: false,
-        financialAffairs: false
-      },
-      birthDate: null,
-      citizenshipCA: '',
-      citizenshipsExCA: [],
-      citizenships: [],
-      email: '',
-      isTaxResident: undefined,
-      hasTaxNumber: undefined,
-      taxNumber: undefined
-    },
-    controlType: {
-      sharesVotes: {
-        registeredOwner: false,
-        beneficialOwner: false,
-        indirectControl: false,
-        inConcertControl: false
-      },
-      directors: {
-        directControl: false,
-        indirectControl: false,
-        significantInfluence: false,
-        inConcertControl: false
-      },
-      other: ''
-    },
-    missingInfoReason: '',
-    percentOfShares: PercentageRangeE.NO_SELECTION,
-    percentOfVotes: PercentageRangeE.NO_SELECTION,
-    startDate: startDate || '',
-    action: FilingActionE.ADD
-  }
+export const hasSharedControl = (si: SiSchemaType) => {
+  return si.controlOfShares.actingJointly || si.controlOfShares.inConcertControl ||
+    si.controlOfVotes.actingJointly || si.controlOfVotes.inConcertControl ||
+    si.controlOfDirectors.actingJointly || si.controlOfDirectors.inConcertControl
 }

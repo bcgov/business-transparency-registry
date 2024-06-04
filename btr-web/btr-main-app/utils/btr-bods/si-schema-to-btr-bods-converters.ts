@@ -9,7 +9,9 @@ import {
   BodsPersonTypeE, ControlOfSharesDetailsE, ControlOfVotesDetailsE
 } from '~/enums/btr-bods-e'
 import { PercentageRangeE } from '~/enums/percentage-range-e'
-import { SiControlOfDirectorsSchemaType, SiControlOfSchemaType, SiSchemaType } from '~/utils/si-schema/definitions'
+import {
+  SiControlOfDirectorsSchemaType, SiControlOfSchemaType, ConnectedInvidualSchemaType, SiSchemaType
+} from '~/utils/si-schema/definitions'
 
 const getBodsAddressFromSi = (si: SiSchemaType): BodsBtrAddressI => {
   return {
@@ -59,75 +61,83 @@ const getPersonType = (_si: SiSchemaType): BodsPersonTypeE => {
   return BodsPersonTypeE.KNOWN_PERSON
 }
 
-const _getDirectorsInterests =
-  (controlOfDirectors: SiControlOfDirectorsSchemaType, startDate: string, endDate?: string) => {
-    const interests: BodsInterestI[] = []
+const _getDirectorsInterests = (
+  controlOfDirectors: SiControlOfDirectorsSchemaType,
+  individualsWithInConcertInterest: ConnectedInvidualSchemaType[],
+  individualsWithJointInterest: ConnectedInvidualSchemaType[],
+  startDate: string,
+  endDate?: string
+) => {
+  const interests: BodsInterestI[] = []
 
-    if (controlOfDirectors.directControl) {
-      const interest =
-        _createInterest(
-          BodsInterestDirectOrIndirectE.DIRECT,
-          ControlOfDirectorsDetailsE.DIRECT_CONTROL,
-          BodsInterestTypeE.APPOINTMENT_OF_BOARD,
-          startDate,
-          endDate
-        )
-      interests.push(interest)
-    }
-    if (controlOfDirectors.indirectControl) {
-      const interest =
-        _createInterest(
-          BodsInterestDirectOrIndirectE.INDIRECT,
-          ControlOfDirectorsDetailsE.INDIRECT_CONTROL,
-          BodsInterestTypeE.APPOINTMENT_OF_BOARD,
-          startDate,
-          endDate
-        )
-      interests.push(interest)
-    }
-    if (controlOfDirectors.significantInfluence) {
-      const interest =
-        _createInterest(
-          BodsInterestDirectOrIndirectE.INDIRECT,
-          ControlOfDirectorsDetailsE.SIGNIFICANT_INFLUENCE,
-          BodsInterestTypeE.APPOINTMENT_OF_BOARD,
-          startDate,
-          endDate
-        )
-      interests.push(interest)
-    }
-    if (controlOfDirectors.inConcertControl) {
-      const interest =
-        _createInterest(
-          BodsInterestDirectOrIndirectE.UNKNOWN,
-          ControlOfDirectorsDetailsE.IN_CONCERT_CONTROL,
-          BodsInterestTypeE.APPOINTMENT_OF_BOARD,
-          startDate,
-          endDate
-        )
-      interests.push(interest)
-    }
-    if (controlOfDirectors.actingJointly) {
-      const interest =
-        _createInterest(
-          BodsInterestDirectOrIndirectE.UNKNOWN,
-          ControlOfDirectorsDetailsE.ACTING_JOINTLY,
-          BodsInterestTypeE.APPOINTMENT_OF_BOARD,
-          startDate,
-          endDate
-        )
-      interests.push(interest)
-    }
-
-    return interests
+  if (controlOfDirectors.directControl) {
+    const interest =
+      _createInterest(
+        BodsInterestDirectOrIndirectE.DIRECT,
+        ControlOfDirectorsDetailsE.DIRECT_CONTROL,
+        BodsInterestTypeE.APPOINTMENT_OF_BOARD,
+        startDate,
+        endDate
+      )
+    interests.push(interest)
   }
+  if (controlOfDirectors.indirectControl) {
+    const interest =
+      _createInterest(
+        BodsInterestDirectOrIndirectE.INDIRECT,
+        ControlOfDirectorsDetailsE.INDIRECT_CONTROL,
+        BodsInterestTypeE.APPOINTMENT_OF_BOARD,
+        startDate,
+        endDate
+      )
+    interests.push(interest)
+  }
+  if (controlOfDirectors.significantInfluence) {
+    const interest =
+      _createInterest(
+        BodsInterestDirectOrIndirectE.INDIRECT,
+        ControlOfDirectorsDetailsE.SIGNIFICANT_INFLUENCE,
+        BodsInterestTypeE.APPOINTMENT_OF_BOARD,
+        startDate,
+        endDate
+      )
+    interests.push(interest)
+  }
+  if (controlOfDirectors.inConcertControl) {
+    const interest =
+      _createInterest(
+        BodsInterestDirectOrIndirectE.UNKNOWN,
+        ControlOfDirectorsDetailsE.IN_CONCERT_CONTROL,
+        BodsInterestTypeE.APPOINTMENT_OF_BOARD,
+        startDate,
+        endDate,
+        individualsWithInConcertInterest
+      )
+    interests.push(interest)
+  }
+  if (controlOfDirectors.actingJointly) {
+    const interest =
+      _createInterest(
+        BodsInterestDirectOrIndirectE.UNKNOWN,
+        ControlOfDirectorsDetailsE.ACTING_JOINTLY,
+        BodsInterestTypeE.APPOINTMENT_OF_BOARD,
+        startDate,
+        endDate,
+        individualsWithJointInterest
+      )
+    interests.push(interest)
+  }
+
+  return interests
+}
 
 const _createInterest = (
   directOrIndirect: BodsInterestDirectOrIndirectE,
   details: string,
   type: BodsInterestTypeE,
   startDate: string,
-  endDate?: string
+  endDate?: string,
+  connectedIndividuals?: ConnectedInvidualSchemaType[]
 ): BodsInterestI => {
   if (startDate?.trim() === '') {
     startDate = (new Date()).toISOString().substring(0, 10)
@@ -137,7 +147,8 @@ const _createInterest = (
     details,
     type,
     startDate,
-    endDate: endDate || undefined
+    endDate: endDate || undefined,
+    connectedIndividuals: connectedIndividuals || undefined
   }
 }
 
@@ -176,82 +187,89 @@ const _updateInterestWithPercentRange =
     }
   }
 
-const _getInterestsOfSharesOrVotes =
-  (controlOf: SiControlOfSchemaType, startDate: string, endDate?: string): BodsInterestI[] => {
-    const interests: BodsInterestI[] = []
-    let controlOfDetails: typeof ControlOfSharesDetailsE | typeof ControlOfVotesDetailsE = ControlOfVotesDetailsE
-    let bodsInterestType: BodsInterestTypeE = BodsInterestTypeE.UNKNOWN_INTEREST
+const _getInterestsOfSharesOrVotes = (
+  controlOf: SiControlOfSchemaType,
+  individualsWithInConcertInterest: ConnectedInvidualSchemaType[],
+  individualsWithJointInterest: ConnectedInvidualSchemaType[],
+  startDate: string,
+  endDate?: string
+): BodsInterestI[] => {
+  const interests: BodsInterestI[] = []
+  let controlOfDetails: typeof ControlOfSharesDetailsE | typeof ControlOfVotesDetailsE = ControlOfVotesDetailsE
+  let bodsInterestType: BodsInterestTypeE = BodsInterestTypeE.UNKNOWN_INTEREST
 
-    if (controlOf.controlName === 'controlOfShares') {
-      controlOfDetails = ControlOfSharesDetailsE
-      bodsInterestType = BodsInterestTypeE.SHAREHOLDING
-    } else if (controlOf.controlName === 'controlOfVotes') {
-      controlOfDetails = ControlOfVotesDetailsE
-      bodsInterestType = BodsInterestTypeE.VOTING_RIGHTS
-    }
+  if (controlOf.controlName === 'controlOfShares') {
+    controlOfDetails = ControlOfSharesDetailsE
+    bodsInterestType = BodsInterestTypeE.SHAREHOLDING
+  } else if (controlOf.controlName === 'controlOfVotes') {
+    controlOfDetails = ControlOfVotesDetailsE
+    bodsInterestType = BodsInterestTypeE.VOTING_RIGHTS
+  }
 
-    if (controlOf.indirectControl) {
-      const interest = _createInterest(
-        BodsInterestDirectOrIndirectE.INDIRECT,
-        controlOfDetails.INDIRECT_CONTROL,
+  if (controlOf.indirectControl) {
+    const interest = _createInterest(
+      BodsInterestDirectOrIndirectE.INDIRECT,
+      controlOfDetails.INDIRECT_CONTROL,
+      bodsInterestType,
+      startDate,
+      endDate
+    )
+    _updateInterestWithPercentRange(interest, controlOf.percentage!)
+    interests.push(interest)
+  }
+  if (controlOf.beneficialOwner) {
+    const interest =
+      _createInterest(
+        BodsInterestDirectOrIndirectE.DIRECT,
+        controlOfDetails.BENEFICIAL_OWNER,
         bodsInterestType,
         startDate,
         endDate
       )
-      _updateInterestWithPercentRange(interest, controlOf.percentage!)
-      interests.push(interest)
-    }
-    if (controlOf.beneficialOwner) {
-      const interest =
-        _createInterest(
-          BodsInterestDirectOrIndirectE.DIRECT,
-          controlOfDetails.BENEFICIAL_OWNER,
-          bodsInterestType,
-          startDate,
-          endDate
-        )
-      _updateInterestWithPercentRange(interest, controlOf.percentage!)
-      interests.push(interest)
-    }
-    if (controlOf.registeredOwner) {
-      const interest =
-        _createInterest(
-          BodsInterestDirectOrIndirectE.DIRECT,
-          controlOfDetails.REGISTERED_OWNER,
-          bodsInterestType,
-          startDate,
-          endDate
-        )
-      _updateInterestWithPercentRange(interest, controlOf.percentage!)
-      interests.push(interest)
-    }
-    if (controlOf.actingJointly) {
-      const interest =
-        _createInterest(
-          BodsInterestDirectOrIndirectE.UNKNOWN,
-          controlOfDetails.ACTING_JOINTLY,
-          bodsInterestType,
-          startDate,
-          endDate
-        )
-      _updateInterestWithPercentRange(interest, controlOf.percentage!)
-      interests.push(interest)
-    }
-    if (controlOf.inConcertControl) {
-      const interest =
-        _createInterest(
-          BodsInterestDirectOrIndirectE.UNKNOWN,
-          controlOfDetails.IN_CONCERT_CONTROL,
-          bodsInterestType,
-          startDate,
-          endDate
-        )
-      _updateInterestWithPercentRange(interest, controlOf.percentage!)
-      interests.push(interest)
-    }
-
-    return interests
+    _updateInterestWithPercentRange(interest, controlOf.percentage!)
+    interests.push(interest)
   }
+  if (controlOf.registeredOwner) {
+    const interest =
+      _createInterest(
+        BodsInterestDirectOrIndirectE.DIRECT,
+        controlOfDetails.REGISTERED_OWNER,
+        bodsInterestType,
+        startDate,
+        endDate
+      )
+    _updateInterestWithPercentRange(interest, controlOf.percentage!)
+    interests.push(interest)
+  }
+  if (controlOf.actingJointly) {
+    const interest =
+      _createInterest(
+        BodsInterestDirectOrIndirectE.UNKNOWN,
+        controlOfDetails.ACTING_JOINTLY,
+        bodsInterestType,
+        startDate,
+        endDate,
+        individualsWithJointInterest
+      )
+    _updateInterestWithPercentRange(interest, controlOf.percentage!)
+    interests.push(interest)
+  }
+  if (controlOf.inConcertControl) {
+    const interest =
+      _createInterest(
+        BodsInterestDirectOrIndirectE.UNKNOWN,
+        controlOfDetails.IN_CONCERT_CONTROL,
+        bodsInterestType,
+        startDate,
+        endDate,
+        individualsWithInConcertInterest
+      )
+    _updateInterestWithPercentRange(interest, controlOf.percentage!)
+    interests.push(interest)
+  }
+
+  return interests
+}
 
 const getInterests = (si: SiSchemaType) => {
   let interests: BodsInterestI[] = []
@@ -261,12 +279,14 @@ const getInterests = (si: SiSchemaType) => {
     const endDate = dateGroup.endDate
 
     if (si.controlOfShares.percentage !== PercentageRangeE.NO_SELECTION) {
-      const newInterests = _getInterestsOfSharesOrVotes(si.controlOfShares, startDate, endDate)
+      const newInterests = _getInterestsOfSharesOrVotes(
+        si.controlOfShares, si.sharesInConcert, si.sharesActingJointly, startDate, endDate)
       interests = interests.concat(newInterests)
     }
 
     if (si.controlOfVotes.percentage !== PercentageRangeE.NO_SELECTION) {
-      const newInterests = _getInterestsOfSharesOrVotes(si.controlOfVotes, startDate, endDate)
+      const newInterests = _getInterestsOfSharesOrVotes(
+        si.controlOfVotes, si.votesInConcert, si.votesActingJointly, startDate, endDate)
       interests = interests.concat(newInterests)
     }
 
@@ -276,7 +296,8 @@ const getInterests = (si: SiSchemaType) => {
       si.controlOfDirectors.actingJointly ||
       si.controlOfDirectors.significantInfluence
     ) {
-      const newInterests = _getDirectorsInterests(si.controlOfDirectors, startDate, endDate)
+      const newInterests = _getDirectorsInterests(
+        si.controlOfDirectors, si.directorsInConcert, si.directorsActingJointly, startDate, endDate)
       interests = interests.concat(newInterests)
     }
   }

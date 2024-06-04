@@ -1,817 +1,840 @@
 {
-  "noSignificantIndividualsExist": false,
-  "business_identifier": "BC0871427",
-  "effective_date": "2024-02-07",
-  "id": 23,
-  "payload": {
-    "businessIdentifier": "BC0871427",
-    "effectiveDate": "2024-02-07",
-    "entityStatement": {
-      "entityType": "legalEntity",
-      "identifiers": [],
-      "isComponent": false,
-      "name": "0871427 B.C. LTD.",
-      "publicationDetails": {
-        "bodsVersion": "0.3",
-        "publicationDate": "2024-02-07",
-        "publisher": {
-          "name": "BCROS - BC Registries and Online Services",
-          "url": "https://www.bcregistry.gov.bc.ca/"
-        }
-      },
-      "source": {
-        "assertedBy": [
-          {
-            "name": "BCROS - BC Registries and Online Services",
-            "uri": "https://www.bcregistry.gov.bc.ca/"
-          }
+    "business_identifier": "BC0871427",
+    "effective_date": "2024-06-03",
+    "id": 528523,
+    "payload": {
+        "businessIdentifier": "BC0871427",
+        "effectiveDate": "2024-06-03",
+        "entityStatement": {
+            "entityType": "legalEntity",
+            "identifiers": [],
+            "isComponent": false,
+            "name": "0871427 B.C. LTD.",
+            "publicationDetails": {
+                "bodsVersion": "0.3",
+                "publicationDate": "2024-06-03",
+                "publisher": {
+                    "name": "BCROS - BC Registries and Online Services",
+                    "url": "https://www.bcregistry.gov.bc.ca/"
+                }
+            },
+            "source": {
+                "assertedBy": [
+                    {
+                        "name": "BCROS - BC Registries and Online Services",
+                        "uri": "https://www.bcregistry.gov.bc.ca/"
+                    }
+                ],
+                "retrievedAt": "2024-06-03T18:38:17.470Z",
+                "type": [
+                    "officialRegister",
+                    "verified"
+                ]
+            },
+            "statementDate": "2024-06-03",
+            "statementID": "8ea8523e-03c8-4392-b5e8-d40acbae956c",
+            "statementType": "entityStatement"
+        },
+        "noSignificantIndividualsExist": false,
+        "ownershipOrControlStatements": [
+            {
+                "interestedParty": {
+                    "describedByPersonStatement": "8ec13019-246f-4d9f-8834-1670c4e8a194"
+                },
+                "interests": [
+                    {
+                        "details": "controlType.shares.registeredOwner",
+                        "directOrIndirect": "direct",
+                        "share": {
+                            "exclusiveMaximum": false,
+                            "exclusiveMinimum": false,
+                            "maximum": 50,
+                            "minimum": 25
+                        },
+                        "startDate": "2024-05-30",
+                        "type": "shareholding"
+                    },
+                    {
+                        "details": "controlType.votes.indirectControl",
+                        "directOrIndirect": "indirect",
+                        "share": {
+                            "exclusiveMaximum": false,
+                            "exclusiveMinimum": false,
+                            "maximum": 50,
+                            "minimum": 25
+                        },
+                        "startDate": "2024-05-30",
+                        "type": "votingRights"
+                    },
+                    {
+                        "details": "controlType.votes.beneficialOwner",
+                        "directOrIndirect": "direct",
+                        "share": {
+                            "exclusiveMaximum": false,
+                            "exclusiveMinimum": false,
+                            "maximum": 50,
+                            "minimum": 25
+                        },
+                        "startDate": "2024-05-30",
+                        "type": "votingRights"
+                    }
+                ],
+                "isComponent": false,
+                "publicationDetails": {
+                    "bodsVersion": "0.3",
+                    "publicationDate": "2024-06-03",
+                    "publisher": {
+                        "name": "BCROS - BC Registries and Online Services",
+                        "url": "https://www.bcregistry.gov.bc.ca/"
+                    }
+                },
+                "source": {
+                    "assertedBy": [
+                        {
+                            "name": "tester testing"
+                        }
+                    ],
+                    "description": "Using Gov BC - BTR - Web UI",
+                    "type": [
+                        "selfDeclaration"
+                    ]
+                },
+                "statementDate": "2024-06-03",
+                "statementID": "a165b104-0b2f-4cbd-9f45-874fb13e0059",
+                "statementType": "ownershipOrControlStatement",
+                "subject": {
+                    "describedByEntityStatement": ""
+                }
+            },
+            {
+                "interestedParty": {
+                    "describedByPersonStatement": "fecbd913-637d-4a2c-8665-2eef40220f47"
+                },
+                "interests": [
+                    {
+                        "details": "controlType.shares.beneficialOwner",
+                        "directOrIndirect": "direct",
+                        "share": {
+                            "exclusiveMaximum": false,
+                            "exclusiveMinimum": true,
+                            "maximum": 75,
+                            "minimum": 50
+                        },
+                        "startDate": "2024-05-30",
+                        "type": "shareholding"
+                    },
+                    {
+                        "details": "controlType.shares.registeredOwner",
+                        "directOrIndirect": "direct",
+                        "share": {
+                            "exclusiveMaximum": false,
+                            "exclusiveMinimum": true,
+                            "maximum": 75,
+                            "minimum": 50
+                        },
+                        "startDate": "2024-05-30",
+                        "type": "shareholding"
+                    },
+                    {
+                        "details": "controlType.votes.beneficialOwner",
+                        "directOrIndirect": "direct",
+                        "share": {
+                            "exclusiveMaximum": false,
+                            "exclusiveMinimum": false,
+                            "maximum": 50,
+                            "minimum": 25
+                        },
+                        "startDate": "2024-05-30",
+                        "type": "votingRights"
+                    },
+                    {
+                        "details": "controlType.votes.registeredOwner",
+                        "directOrIndirect": "direct",
+                        "share": {
+                            "exclusiveMaximum": false,
+                            "exclusiveMinimum": false,
+                            "maximum": 50,
+                            "minimum": 25
+                        },
+                        "startDate": "2024-05-30",
+                        "type": "votingRights"
+                    }
+                ],
+                "isComponent": false,
+                "publicationDetails": {
+                    "bodsVersion": "0.3",
+                    "publicationDate": "2024-06-03",
+                    "publisher": {
+                        "name": "BCROS - BC Registries and Online Services",
+                        "url": "https://www.bcregistry.gov.bc.ca/"
+                    }
+                },
+                "source": {
+                    "assertedBy": [
+                        {
+                            "name": "tester testing"
+                        }
+                    ],
+                    "description": "Using Gov BC - BTR - Web UI",
+                    "type": [
+                        "selfDeclaration"
+                    ]
+                },
+                "statementDate": "2024-06-03",
+                "statementID": "14605708-54a0-4e16-9cb9-dccf6c3ef89e",
+                "statementType": "ownershipOrControlStatement",
+                "subject": {
+                    "describedByEntityStatement": ""
+                }
+            },
+            {
+                "interestedParty": {
+                    "describedByPersonStatement": "c1984418-3d06-453d-ab6f-9be313018d8d"
+                },
+                "interests": [
+                    {
+                        "details": "controlType.shares.beneficialOwner",
+                        "directOrIndirect": "direct",
+                        "share": {
+                            "exclusiveMaximum": false,
+                            "exclusiveMinimum": true,
+                            "maximum": 100,
+                            "minimum": 75
+                        },
+                        "startDate": "2024-05-30",
+                        "type": "shareholding"
+                    },
+                    {
+                        "details": "controlType.votes.beneficialOwner",
+                        "directOrIndirect": "direct",
+                        "share": {
+                            "exclusiveMaximum": false,
+                            "exclusiveMinimum": false,
+                            "maximum": 50,
+                            "minimum": 25
+                        },
+                        "startDate": "2024-05-30",
+                        "type": "votingRights"
+                    },
+                    {
+                        "details": "controlType.votes.registeredOwner",
+                        "directOrIndirect": "direct",
+                        "share": {
+                            "exclusiveMaximum": false,
+                            "exclusiveMinimum": false,
+                            "maximum": 50,
+                            "minimum": 25
+                        },
+                        "startDate": "2024-05-30",
+                        "type": "votingRights"
+                    },
+                    {
+                        "details": "controlType.directors.directControl",
+                        "directOrIndirect": "direct",
+                        "startDate": "2024-05-30",
+                        "type": "appointmentOfBoard"
+                    }
+                ],
+                "isComponent": false,
+                "publicationDetails": {
+                    "bodsVersion": "0.3",
+                    "publicationDate": "2024-06-03",
+                    "publisher": {
+                        "name": "BCROS - BC Registries and Online Services",
+                        "url": "https://www.bcregistry.gov.bc.ca/"
+                    }
+                },
+                "source": {
+                    "assertedBy": [
+                        {
+                            "name": "tester testing"
+                        }
+                    ],
+                    "description": "Using Gov BC - BTR - Web UI",
+                    "type": [
+                        "selfDeclaration"
+                    ]
+                },
+                "statementDate": "2024-06-03",
+                "statementID": "9013edf4-c041-41d3-9da7-9a51dfe44151",
+                "statementType": "ownershipOrControlStatement",
+                "subject": {
+                    "describedByEntityStatement": ""
+                }
+            },
+            {
+                "interestedParty": {
+                    "describedByPersonStatement": "7e054303-90c4-411b-ab72-2d29bca5c2d8"
+                },
+                "interests": [
+                    {
+                        "details": "controlType.shares.registeredOwner",
+                        "directOrIndirect": "direct",
+                        "share": {
+                            "exclusiveMaximum": false,
+                            "exclusiveMinimum": true,
+                            "maximum": 75,
+                            "minimum": 50
+                        },
+                        "startDate": "2024-05-30",
+                        "type": "shareholding"
+                    },
+                    {
+                        "details": "controlType.votes.beneficialOwner",
+                        "directOrIndirect": "direct",
+                        "share": {
+                            "exclusiveMaximum": false,
+                            "exclusiveMinimum": false,
+                            "maximum": 50,
+                            "minimum": 25
+                        },
+                        "startDate": "2024-05-30",
+                        "type": "votingRights"
+                    },
+                    {
+                        "details": "controlType.votes.registeredOwner",
+                        "directOrIndirect": "direct",
+                        "share": {
+                            "exclusiveMaximum": false,
+                            "exclusiveMinimum": false,
+                            "maximum": 50,
+                            "minimum": 25
+                        },
+                        "startDate": "2024-05-30",
+                        "type": "votingRights"
+                    },
+                    {
+                        "details": "controlType.directors.directControl",
+                        "directOrIndirect": "direct",
+                        "startDate": "2024-05-30",
+                        "type": "appointmentOfBoard"
+                    },
+                    {
+                        "details": "controlType.shares.registeredOwner",
+                        "directOrIndirect": "direct",
+                        "share": {
+                            "exclusiveMaximum": false,
+                            "exclusiveMinimum": true,
+                            "maximum": 75,
+                            "minimum": 50
+                        },
+                        "startDate": "2024-06-03",
+                        "type": "shareholding"
+                    },
+                    {
+                        "details": "controlType.votes.beneficialOwner",
+                        "directOrIndirect": "direct",
+                        "share": {
+                            "exclusiveMaximum": false,
+                            "exclusiveMinimum": false,
+                            "maximum": 50,
+                            "minimum": 25
+                        },
+                        "startDate": "2024-06-03",
+                        "type": "votingRights"
+                    },
+                    {
+                        "details": "controlType.votes.registeredOwner",
+                        "directOrIndirect": "direct",
+                        "share": {
+                            "exclusiveMaximum": false,
+                            "exclusiveMinimum": false,
+                            "maximum": 50,
+                            "minimum": 25
+                        },
+                        "startDate": "2024-06-03",
+                        "type": "votingRights"
+                    },
+                    {
+                        "details": "controlType.directors.directControl",
+                        "directOrIndirect": "direct",
+                        "startDate": "2024-06-03",
+                        "type": "appointmentOfBoard"
+                    },
+                    {
+                        "details": "bla bla",
+                        "type": "otherInfluenceOrControl"
+                    }
+                ],
+                "isComponent": false,
+                "publicationDetails": {
+                    "bodsVersion": "0.3",
+                    "publicationDate": "2024-06-03",
+                    "publisher": {
+                        "name": "BCROS - BC Registries and Online Services",
+                        "url": "https://www.bcregistry.gov.bc.ca/"
+                    }
+                },
+                "source": {
+                    "assertedBy": [
+                        {
+                            "name": "tester testing"
+                        }
+                    ],
+                    "description": "Using Gov BC - BTR - Web UI",
+                    "type": [
+                        "selfDeclaration"
+                    ]
+                },
+                "statementDate": "2024-06-03",
+                "statementID": "2b991bf4-a4ff-48a3-96a4-0e96e10f0e7e",
+                "statementType": "ownershipOrControlStatement",
+                "subject": {
+                    "describedByEntityStatement": ""
+                }
+            },
+            {
+                "interestedParty": {
+                    "describedByPersonStatement": "d56b45cd-67f2-491f-9d1a-e94e8e322ed6"
+                },
+                "interests": [
+                    {
+                        "details": "controlType.votes.registeredOwner",
+                        "directOrIndirect": "direct",
+                        "share": {
+                            "exclusiveMaximum": false,
+                            "exclusiveMinimum": true,
+                            "maximum": 75,
+                            "minimum": 50
+                        },
+                        "startDate": "2024-05-30",
+                        "type": "votingRights"
+                    },
+                    {
+                        "details": "controlType.directors.directControl",
+                        "directOrIndirect": "direct",
+                        "startDate": "2024-05-30",
+                        "type": "appointmentOfBoard"
+                    }
+                ],
+                "isComponent": false,
+                "publicationDetails": {
+                    "bodsVersion": "0.3",
+                    "publicationDate": "2024-06-03",
+                    "publisher": {
+                        "name": "BCROS - BC Registries and Online Services",
+                        "url": "https://www.bcregistry.gov.bc.ca/"
+                    }
+                },
+                "source": {
+                    "assertedBy": [
+                        {
+                            "name": "tester testing"
+                        }
+                    ],
+                    "description": "Using Gov BC - BTR - Web UI",
+                    "type": [
+                        "selfDeclaration"
+                    ]
+                },
+                "statementDate": "2024-06-03",
+                "statementID": "674fc378-5f8c-4cd6-a27c-1e926e942868",
+                "statementType": "ownershipOrControlStatement",
+                "subject": {
+                    "describedByEntityStatement": ""
+                }
+            }
         ],
-        "retrievedAt": "2024-02-07T23:59:05.252Z",
-        "type": [
-          "officialRegister",
-          "verified"
+        "personStatements": [
+            {
+                "addresses": [
+                    {
+                        "city": "North Saanich",
+                        "country": "CA",
+                        "countryName": "Canada",
+                        "locationDescription": "",
+                        "postalCode": "V8L 5V4",
+                        "region": "BC",
+                        "street": "123-1640 Electra Blvd",
+                        "streetAdditional": ""
+                    }
+                ],
+                "birthDate": "2024-01-01",
+                "determinationOfIncapacity": false,
+                "email": "1@1.com",
+                "hasTaxNumber": false,
+                "identifiers": [],
+                "isComponent": false,
+                "isPermanentResidentCa": false,
+                "missingInfoReason": "",
+                "names": [
+                    {
+                        "fullName": "Jane Doe",
+                        "type": "individual"
+                    }
+                ],
+                "nationalities": [
+                    {
+                        "code": "CA",
+                        "name": "Canada"
+                    }
+                ],
+                "personType": "knownPerson",
+                "placeOfResidence": {
+                    "city": "North Saanich",
+                    "country": "CA",
+                    "countryName": "Canada",
+                    "locationDescription": "",
+                    "postalCode": "V8L 5V4",
+                    "region": "BC",
+                    "street": "123-1640 Electra Blvd",
+                    "streetAdditional": ""
+                },
+                "publicationDetails": {
+                    "bodsVersion": "0.3",
+                    "publicationDate": "2024-06-03",
+                    "publisher": {
+                        "name": "BCROS - BC Registries and Online Services",
+                        "url": "https://www.bcregistry.gov.bc.ca/"
+                    }
+                },
+                "source": {
+                    "assertedBy": [
+                        {
+                            "name": "tester testing"
+                        }
+                    ],
+                    "description": "Using Gov BC - BTR - Web UI",
+                    "type": [
+                        "selfDeclaration"
+                    ]
+                },
+                "statementDate": "2024-06-03",
+                "statementID": "8ec13019-246f-4d9f-8834-1670c4e8a194",
+                "statementType": "personStatement",
+                "taxResidencies": [
+                    {
+                        "code": "CA",
+                        "name": "Canada"
+                    }
+                ],
+                "uuid": "96bf0fec-0114-40b4-9752-05e5a4fae6a3"
+            },
+            {
+                "addresses": [
+                    {
+                        "city": "Pierrefonds",
+                        "country": "CA",
+                        "countryName": "Canada",
+                        "locationDescription": "",
+                        "postalCode": "H9H 4T1",
+                        "region": "QC",
+                        "street": "8-16310 De Pierrefonds Blvd",
+                        "streetAdditional": ""
+                    }
+                ],
+                "birthDate": "1982-05-04",
+                "determinationOfIncapacity": false,
+                "email": "test_email@email.com",
+                "hasTaxNumber": false,
+                "identifiers": [],
+                "isComponent": false,
+                "isPermanentResidentCa": false,
+                "missingInfoReason": "",
+                "names": [
+                    {
+                        "fullName": "John Smith",
+                        "type": "individual"
+                    }
+                ],
+                "nationalities": [
+                    {
+                        "code": "CA",
+                        "name": "Canada"
+                    },
+                    {
+                        "code": "US",
+                        "name": "United States"
+                    }
+                ],
+                "personType": "knownPerson",
+                "placeOfResidence": {
+                    "city": "Pierrefonds",
+                    "country": "CA",
+                    "countryName": "Canada",
+                    "locationDescription": "",
+                    "postalCode": "H9H 4T1",
+                    "region": "QC",
+                    "street": "8-16310 De Pierrefonds Blvd",
+                    "streetAdditional": ""
+                },
+                "publicationDetails": {
+                    "bodsVersion": "0.3",
+                    "publicationDate": "2024-06-03",
+                    "publisher": {
+                        "name": "BCROS - BC Registries and Online Services",
+                        "url": "https://www.bcregistry.gov.bc.ca/"
+                    }
+                },
+                "source": {
+                    "assertedBy": [
+                        {
+                            "name": "tester testing"
+                        }
+                    ],
+                    "description": "Using Gov BC - BTR - Web UI",
+                    "type": [
+                        "selfDeclaration"
+                    ]
+                },
+                "statementDate": "2024-06-03",
+                "statementID": "fecbd913-637d-4a2c-8665-2eef40220f47",
+                "statementType": "personStatement",
+                "taxResidencies": [],
+                "uuid": "e9519ffc-204b-4a59-a587-8b4cb9cf0361"
+            },
+            {
+                "addresses": [
+                    {
+                        "city": "Sudbury",
+                        "country": "CA",
+                        "countryName": "Canada",
+                        "locationDescription": "",
+                        "postalCode": "P3A 5W8",
+                        "region": "ON",
+                        "street": "S-900 Lasalle Blvd",
+                        "streetAdditional": ""
+                    }
+                ],
+                "birthDate": "1998-06-01",
+                "determinationOfIncapacity": false,
+                "email": "mas.stone@email.com",
+                "hasTaxNumber": true,
+                "identifiers": [
+                    {
+                        "id": "273 691 139",
+                        "scheme": "CAN-TAXID",
+                        "schemeName": "ITN"
+                    }
+                ],
+                "isComponent": false,
+                "isPermanentResidentCa": false,
+                "missingInfoReason": "",
+                "names": [
+                    {
+                        "fullName": "Max Stone",
+                        "type": "individual"
+                    }
+                ],
+                "nationalities": [
+                    {
+                        "code": "CA",
+                        "name": "Canada"
+                    },
+                    {
+                        "code": "AT",
+                        "name": "Austria"
+                    },
+                    {
+                        "code": "AU",
+                        "name": "Australia"
+                    },
+                    {
+                        "code": "AW",
+                        "name": "Aruba"
+                    }
+                ],
+                "personType": "knownPerson",
+                "placeOfResidence": {
+                    "city": "Sudbury",
+                    "country": "CA",
+                    "countryName": "Canada",
+                    "locationDescription": "",
+                    "postalCode": "P3A 5W8",
+                    "region": "ON",
+                    "street": "S-900 Lasalle Blvd",
+                    "streetAdditional": ""
+                },
+                "publicationDetails": {
+                    "bodsVersion": "0.3",
+                    "publicationDate": "2024-06-03",
+                    "publisher": {
+                        "name": "BCROS - BC Registries and Online Services",
+                        "url": "https://www.bcregistry.gov.bc.ca/"
+                    }
+                },
+                "source": {
+                    "assertedBy": [
+                        {
+                            "name": "tester testing"
+                        }
+                    ],
+                    "description": "Using Gov BC - BTR - Web UI",
+                    "type": [
+                        "selfDeclaration"
+                    ]
+                },
+                "statementDate": "2024-06-03",
+                "statementID": "c1984418-3d06-453d-ab6f-9be313018d8d",
+                "statementType": "personStatement",
+                "taxResidencies": [
+                    {
+                        "code": "CA",
+                        "name": "Canada"
+                    }
+                ],
+                "uuid": "8aa6577b-6635-45f7-a094-96e7b777fbdb"
+            },
+            {
+                "addresses": [
+                    {
+                        "city": "Ottawa",
+                        "country": "CA",
+                        "countryName": "Canada",
+                        "locationDescription": "",
+                        "postalCode": "K1Z 8M2",
+                        "region": "ON",
+                        "street": "1234-200 Clearview Ave",
+                        "streetAdditional": ""
+                    }
+                ],
+                "birthDate": "2024-05-01",
+                "determinationOfIncapacity": false,
+                "email": "1@m.com",
+                "hasTaxNumber": false,
+                "identifiers": [],
+                "isComponent": false,
+                "isPermanentResidentCa": false,
+                "missingInfoReason": "",
+                "names": [
+                    {
+                        "fullName": "Kial Jinnah",
+                        "type": "individual"
+                    },
+                    {
+                        "fullName": "waffles",
+                        "type": "alternative"
+                    }
+                ],
+                "nationalities": [
+                    {
+                        "code": "CA",
+                        "name": "Canada"
+                    }
+                ],
+                "personType": "knownPerson",
+                "placeOfResidence": {
+                    "city": "Ottawa",
+                    "country": "CA",
+                    "countryName": "Canada",
+                    "locationDescription": "",
+                    "postalCode": "K1Z 8M2",
+                    "region": "ON",
+                    "street": "1234-200 Clearview Ave",
+                    "streetAdditional": ""
+                },
+                "publicationDetails": {
+                    "bodsVersion": "0.3",
+                    "publicationDate": "2024-06-03",
+                    "publisher": {
+                        "name": "BCROS - BC Registries and Online Services",
+                        "url": "https://www.bcregistry.gov.bc.ca/"
+                    }
+                },
+                "source": {
+                    "assertedBy": [
+                        {
+                            "name": "tester testing"
+                        }
+                    ],
+                    "description": "Using Gov BC - BTR - Web UI",
+                    "type": [
+                        "selfDeclaration"
+                    ]
+                },
+                "statementDate": "2024-06-03",
+                "statementID": "7e054303-90c4-411b-ab72-2d29bca5c2d8",
+                "statementType": "personStatement",
+                "taxResidencies": [],
+                "uuid": "25f54e9f-5e78-4495-a42e-39d61156571c"
+            },
+            {
+                "addresses": [
+                    {
+                        "city": "Saskatoon",
+                        "country": "CA",
+                        "countryName": "Canada",
+                        "locationDescription": "la la la",
+                        "postalCode": "S7N 4W9",
+                        "region": "SK",
+                        "street": "123-655 Kenderdine Rd",
+                        "streetAdditional": "street additional"
+                    }
+                ],
+                "birthDate": "2018-02-01",
+                "determinationOfIncapacity": false,
+                "email": "email@test.com",
+                "hasTaxNumber": true,
+                "identifiers": [
+                    {
+                        "id": "402 931 299",
+                        "scheme": "CAN-TAXID",
+                        "schemeName": "ITN"
+                    }
+                ],
+                "isComponent": false,
+                "isPermanentResidentCa": false,
+                "missingInfoReason": "",
+                "names": [
+                    {
+                        "fullName": "tester testing",
+                        "type": "individual"
+                    },
+                    {
+                        "fullName": "wam",
+                        "type": "alternative"
+                    }
+                ],
+                "nationalities": [
+                    {
+                        "code": "CA",
+                        "name": "Canada"
+                    }
+                ],
+                "personType": "knownPerson",
+                "placeOfResidence": {
+                    "city": "Saskatoon",
+                    "country": "CA",
+                    "countryName": "Canada",
+                    "locationDescription": "la la la",
+                    "postalCode": "S7N 4W9",
+                    "region": "SK",
+                    "street": "123-655 Kenderdine Rd",
+                    "streetAdditional": "street additional"
+                },
+                "publicationDetails": {
+                    "bodsVersion": "0.3",
+                    "publicationDate": "2024-06-03",
+                    "publisher": {
+                        "name": "BCROS - BC Registries and Online Services",
+                        "url": "https://www.bcregistry.gov.bc.ca/"
+                    }
+                },
+                "source": {
+                    "assertedBy": [
+                        {
+                            "name": "tester testing"
+                        }
+                    ],
+                    "description": "Using Gov BC - BTR - Web UI",
+                    "type": [
+                        "selfDeclaration"
+                    ]
+                },
+                "statementDate": "2024-06-03",
+                "statementID": "d56b45cd-67f2-491f-9d1a-e94e8e322ed6",
+                "statementType": "personStatement",
+                "taxResidencies": [
+                    {
+                        "code": "CA",
+                        "name": "Canada"
+                    }
+                ],
+                "uuid": "d5e942a3-2b03-43fe-a0d8-a4414de2ec11"
+            }
         ]
-      },
-      "statementDate": "2024-02-07",
-      "statementID": "c8155116-7a37-40fb-b7ac-aceed0bcc293",
-      "statementType": "entityStatement"
     },
-    "ownershipOrControlStatements": [
-      {
-        "interestedParty": {
-          "describedByPersonStatement": "abc8c714-4f4e-46ae-99f3-48740bf9ea27"
-        },
-        "interests": [
-          {
-            "details": "controlType.sharesOrVotes.indirectControl",
-            "directOrIndirect": "indirect",
-            "share": {
-              "exclusiveMaximum": false,
-              "maximum": 33
-            },
-            "startDate": "2023-11-01",
-            "type": "votingRights"
-          },
-          {
-            "details": "controlType.sharesOrVotes.indirectControl",
-            "directOrIndirect": "indirect",
-            "share": {
-              "exclusiveMaximum": false,
-              "maximum": 1
-            },
-            "startDate": "2023-11-01",
-            "type": "shareholding"
-          }
-        ],
-        "isComponent": false,
-        "publicationDetails": {
-          "bodsVersion": "0.3",
-          "publicationDate": "2024-02-07",
-          "publisher": {
-            "name": "BCROS - BC Registries and Online Services",
-            "url": "https://www.bcregistry.gov.bc.ca/"
-          }
-        },
-        "source": {
-          "assertedBy": [
-            {
-              "name": "Hrvoje Fekete"
-            }
-          ],
-          "description": "Using Gov BC - BTR - Web UI",
-          "type": [
-            "selfDeclaration"
-          ]
-        },
-        "statementDate": "2023-11-01",
-        "statementID": "6ed4abaa-0c72-4f64-bdcb-71b6b2decbd7",
-        "statementType": "ownershipOrControlStatement",
-        "subject": {
-          "describedByEntityStatement": ""
-        }
-      },
-      {
-        "interestedParty": {
-          "describedByPersonStatement": "d9ba4763-0708-4dda-92e2-013d100fdb10"
-        },
-        "interests": [
-          {
-            "details": "controlType.sharesOrVotes.registeredOwner",
-            "directOrIndirect": "direct",
-            "share": {
-              "exclusiveMaximum": false,
-              "maximum": 33
-            },
-            "startDate": "2024-02-03",
-            "type": "shareholding"
-          }
-        ],
-        "isComponent": false,
-        "publicationDetails": {
-          "bodsVersion": "0.3",
-          "publicationDate": "2024-02-07",
-          "publisher": {
-            "name": "BCROS - BC Registries and Online Services",
-            "url": "https://www.bcregistry.gov.bc.ca/"
-          }
-        },
-        "source": {
-          "assertedBy": [
-            {
-              "name": "Hrvoje Fekete"
-            }
-          ],
-          "description": "Using Gov BC - BTR - Web UI",
-          "type": [
-            "selfDeclaration"
-          ]
-        },
-        "statementDate": "2024-02-03",
-        "statementID": "48a73dc9-93f5-4cdf-adeb-d051f01415ea",
-        "statementType": "ownershipOrControlStatement",
-        "subject": {
-          "describedByEntityStatement": ""
-        }
-      },
-      {
-        "interestedParty": {
-          "describedByPersonStatement": "d7035fcb-2d8b-4658-9ea8-1410b8d1f95e"
-        },
-        "interests": [
-          {
-            "details": "controlType.directors.directControl",
-            "directOrIndirect": "direct",
-            "startDate": "2024-02-05",
-            "type": "appointmentOfBoard"
-          },
-          {
-            "details": "controlType.directors.inConcertControl",
-            "directOrIndirect": "indirect",
-            "startDate": "2024-02-05",
-            "type": "appointmentOfBoard"
-          },
-          {
-            "details": "controlType.directors.indirectControl",
-            "directOrIndirect": "indirect",
-            "startDate": "2024-02-05",
-            "type": "appointmentOfBoard"
-          },
-          {
-            "details": "controlType.directors.significantInfluence",
-            "directOrIndirect": "unknown",
-            "startDate": "2024-02-05",
-            "type": "appointmentOfBoard"
-          },
-          {
-            "details": "controlType.sharesOrVotes.registeredOwner",
-            "directOrIndirect": "direct",
-            "share": {
-              "exclusiveMaximum": false,
-              "maximum": 1
-            },
-            "startDate": "2024-02-05",
-            "type": "votingRights"
-          },
-          {
-            "details": "controlType.sharesOrVotes.registeredOwner",
-            "directOrIndirect": "direct",
-            "share": {
-              "exclusiveMaximum": false,
-              "maximum": 99
-            },
-            "startDate": "2024-02-05",
-            "type": "shareholding"
-          },
-          {
-            "details": "controlType.sharesOrVotes.indirectControl",
-            "directOrIndirect": "indirect",
-            "share": {
-              "exclusiveMaximum": false,
-              "maximum": 1
-            },
-            "startDate": "2024-02-05",
-            "type": "votingRights"
-          },
-          {
-            "details": "controlType.sharesOrVotes.indirectControl",
-            "directOrIndirect": "indirect",
-            "share": {
-              "exclusiveMaximum": false,
-              "maximum": 99
-            },
-            "startDate": "2024-02-05",
-            "type": "shareholding"
-          },
-          {
-            "details": "controlType.sharesOrVotes.inConcertControl",
-            "directOrIndirect": "indirect",
-            "share": {
-              "exclusiveMaximum": false,
-              "maximum": 1
-            },
-            "startDate": "2024-02-05",
-            "type": "votingRights"
-          },
-          {
-            "details": "controlType.sharesOrVotes.inConcertControl",
-            "directOrIndirect": "indirect",
-            "share": {
-              "exclusiveMaximum": false,
-              "maximum": 99
-            },
-            "startDate": "2024-02-05",
-            "type": "shareholding"
-          },
-          {
-            "details": "controlType.sharesOrVotes.beneficialOwner",
-            "directOrIndirect": "indirect",
-            "share": {
-              "exclusiveMaximum": false,
-              "maximum": 1
-            },
-            "startDate": "2024-02-05",
-            "type": "votingRights"
-          },
-          {
-            "details": "controlType.sharesOrVotes.beneficialOwner",
-            "directOrIndirect": "indirect",
-            "share": {
-              "exclusiveMaximum": false,
-              "maximum": 99
-            },
-            "startDate": "2024-02-05",
-            "type": "shareholding"
-          },
-          {
-            "details": "everything",
-            "type": "otherInfluenceOrControl"
-          }
-        ],
-        "isComponent": false,
-        "publicationDetails": {
-          "bodsVersion": "0.3",
-          "publicationDate": "2024-02-07",
-          "publisher": {
-            "name": "BCROS - BC Registries and Online Services",
-            "url": "https://www.bcregistry.gov.bc.ca/"
-          }
-        },
-        "source": {
-          "assertedBy": [
-            {
-              "name": "Hrvoje Fekete"
-            }
-          ],
-          "description": "Using Gov BC - BTR - Web UI",
-          "type": [
-            "selfDeclaration"
-          ]
-        },
-        "statementDate": "2024-02-05",
-        "statementID": "293d2c8b-f56b-4855-9d01-4f6355e9fa94",
-        "statementType": "ownershipOrControlStatement",
-        "subject": {
-          "describedByEntityStatement": ""
-        }
-      },
-      {
-        "interestedParty": {
-          "describedByPersonStatement": "dc4fbe9c-daae-46bc-a388-3812ece80078"
-        },
-        "interests": [
-          {
-            "details": "controlType.directors.inConcertControl",
-            "directOrIndirect": "indirect",
-            "startDate": "2024-02-05",
-            "type": "appointmentOfBoard"
-          },
-          {
-            "details": "controlType.sharesOrVotes.registeredOwner",
-            "directOrIndirect": "direct",
-            "share": {
-              "exclusiveMaximum": false,
-              "maximum": 77
-            },
-            "startDate": "2024-02-05",
-            "type": "votingRights"
-          },
-          {
-            "details": "controlType.sharesOrVotes.registeredOwner",
-            "directOrIndirect": "direct",
-            "share": {
-              "exclusiveMaximum": false,
-              "maximum": 34
-            },
-            "startDate": "2024-02-05",
-            "type": "shareholding"
-          },
-          {
-            "details": "controlType.sharesOrVotes.indirectControl",
-            "directOrIndirect": "indirect",
-            "share": {
-              "exclusiveMaximum": false,
-              "maximum": 77
-            },
-            "startDate": "2024-02-05",
-            "type": "votingRights"
-          },
-          {
-            "details": "controlType.sharesOrVotes.indirectControl",
-            "directOrIndirect": "indirect",
-            "share": {
-              "exclusiveMaximum": false,
-              "maximum": 34
-            },
-            "startDate": "2024-02-05",
-            "type": "shareholding"
-          },
-          {
-            "details": "This is something tottaly else",
-            "type": "otherInfluenceOrControl"
-          }
-        ],
-        "isComponent": false,
-        "publicationDetails": {
-          "bodsVersion": "0.3",
-          "publicationDate": "2024-02-07",
-          "publisher": {
-            "name": "BCROS - BC Registries and Online Services",
-            "url": "https://www.bcregistry.gov.bc.ca/"
-          }
-        },
-        "source": {
-          "assertedBy": [
-            {
-              "name": "Hrvoje Fekete"
-            }
-          ],
-          "description": "Using Gov BC - BTR - Web UI",
-          "type": [
-            "selfDeclaration"
-          ]
-        },
-        "statementDate": "2024-02-05",
-        "statementID": "21796fa0-5703-40eb-8670-22be81a50a60",
-        "statementType": "ownershipOrControlStatement",
-        "subject": {
-          "describedByEntityStatement": ""
-        }
-      },
-      {
-        "interestedParty": {
-          "describedByPersonStatement": "76ad571f-1bc3-4d17-9047-10c5342f2212"
-        },
-        "interests": [
-          {
-            "details": "controlType.directors.directControl",
-            "directOrIndirect": "direct",
-            "startDate": "2024-02-05",
-            "type": "appointmentOfBoard"
-          },
-          {
-            "details": "controlType.directors.indirectControl",
-            "directOrIndirect": "indirect",
-            "startDate": "2024-02-05",
-            "type": "appointmentOfBoard"
-          },
-          {
-            "details": "controlType.sharesOrVotes.registeredOwner",
-            "directOrIndirect": "direct",
-            "share": {
-              "exclusiveMaximum": false,
-              "maximum": 1
-            },
-            "startDate": "2024-02-05",
-            "type": "votingRights"
-          },
-          {
-            "details": "controlType.sharesOrVotes.registeredOwner",
-            "directOrIndirect": "direct",
-            "share": {
-              "exclusiveMaximum": false,
-              "maximum": 99
-            },
-            "startDate": "2024-02-05",
-            "type": "shareholding"
-          }
-        ],
-        "isComponent": false,
-        "publicationDetails": {
-          "bodsVersion": "0.3",
-          "publicationDate": "2024-02-07",
-          "publisher": {
-            "name": "BCROS - BC Registries and Online Services",
-            "url": "https://www.bcregistry.gov.bc.ca/"
-          }
-        },
-        "source": {
-          "assertedBy": [
-            {
-              "name": "Hrvoje Fekete"
-            }
-          ],
-          "description": "Using Gov BC - BTR - Web UI",
-          "type": [
-            "selfDeclaration"
-          ]
-        },
-        "statementDate": "2024-02-05",
-        "statementID": "5b54b361-b145-47c8-bc4c-63f7342496a4",
-        "statementType": "ownershipOrControlStatement",
-        "subject": {
-          "describedByEntityStatement": ""
-        }
-      }
-    ],
-    "personStatements": [
-      {
-        "addresses": [
-          {
-            "city": "Vancouver",
-            "country": {
-              "alpha_2": "CA",
-              "name": "Canada"
-            },
-            "line1": "403-1265 Barclay St",
-            "line2": "",
-            "locationDescription": "",
-            "postalCode": "V6E 1H5",
-            "region": "BC"
-          }
-        ],
-        "birthDate": "1967-02-08",
-        "email": "must.be.fake@test.com",
-        "hasTaxNumber": false,
-        "identifiers": [],
-        "isComponent": false,
-        "isPermanentResidentCa": true,
-        "missingInfoReason": "",
-        "names": [
-          {
-            "fullName": "Test Testera",
-            "type": "individual"
-          }
-        ],
-        "nationalities": [],
-        "personType": "knownPerson",
-        "placeOfResidence": {
-          "city": "Vancouver",
-          "country": {
-            "alpha_2": "CA",
-            "name": "Canada"
-          },
-          "line1": "403-1265 Barclay St",
-          "line2": "",
-          "locationDescription": "",
-          "postalCode": "V6E 1H5",
-          "region": "BC"
-        },
-        "publicationDetails": {
-          "bodsVersion": "0.3",
-          "publicationDate": "2024-02-07",
-          "publisher": {
-            "name": "BCROS - BC Registries and Online Services",
-            "url": "https://www.bcregistry.gov.bc.ca/"
-          }
-        },
-        "source": {
-          "assertedBy": [
-            {
-              "name": "Hrvoje Fekete"
-            }
-          ],
-          "description": "Using Gov BC - BTR - Web UI",
-          "type": [
-            "selfDeclaration"
-          ]
-        },
-        "statementDate": "2023-11-01",
-        "statementID": "abc8c714-4f4e-46ae-99f3-48740bf9ea27",
-        "statementType": "personStatement",
-        "taxResidencies": []
-      },
-      {
-        "addresses": [
-          {
-            "city": "Vancouver",
-            "country": {
-              "alpha_2": "CA",
-              "name": "Canada"
-            },
-            "line1": "403-1265 Barclay St",
-            "line2": "",
-            "locationDescription": "",
-            "postalCode": "V6E 1H5",
-            "region": "BC"
-          }
-        ],
-        "birthDate": "2000-02-23",
-        "email": "testko@test.com",
-        "hasTaxNumber": false,
-        "identifiers": [],
-        "isComponent": false,
-        "isPermanentResidentCa": false,
-        "missingInfoReason": "",
-        "names": [
-          {
-            "fullName": "Ratko Zvrko",
-            "type": "individual"
-          },
-          {
-            "fullName": "Runny",
-            "type": "alternative"
-          }
-        ],
-        "nationalities": [
-          {
-            "code": "CA",
-            "name": "Canada"
-          }
-        ],
-        "personType": "knownPerson",
-        "placeOfResidence": {
-          "city": "Vancouver",
-          "country": {
-            "alpha_2": "CA",
-            "name": "Canada"
-          },
-          "line1": "403-1265 Barclay St",
-          "line2": "",
-          "locationDescription": "",
-          "postalCode": "V6E 1H5",
-          "region": "BC"
-        },
-        "publicationDetails": {
-          "bodsVersion": "0.3",
-          "publicationDate": "2024-02-07",
-          "publisher": {
-            "name": "BCROS - BC Registries and Online Services",
-            "url": "https://www.bcregistry.gov.bc.ca/"
-          }
-        },
-        "source": {
-          "assertedBy": [
-            {
-              "name": "Random Internet Person"
-            }
-          ],
-          "description": "Using Gov BC - BTR - Web UI",
-          "type": [
-            "selfDeclaration"
-          ]
-        },
-        "statementDate": "2024-02-03",
-        "statementID": "d9ba4763-0708-4dda-92e2-013d100fdb10",
-        "statementType": "personStatement",
-        "taxResidencies": [
-          {
-            "code": "CA",
-            "name": "Canada"
-          }
-        ]
-      },
-      {
-        "addresses": [
-          {
-            "city": "Beamsville",
-            "country": {
-              "alpha_2": "CA",
-              "name": "Canada"
-            },
-            "line1": "4520 Ontario",
-            "line2": "This is optional test",
-            "locationDescription": "This is optional extra description test",
-            "postalCode": "L0R 1B0",
-            "region": "ON"
-          }
-        ],
-        "birthDate": "1901-01-01",
-        "email": "new+testko@test.com",
-        "hasTaxNumber": false,
-        "identifiers": [],
-        "isComponent": false,
-        "isPermanentResidentCa": false,
-        "missingInfoReason": "",
-        "names": [
-          {
-            "fullName": "Herman Hesse",
-            "type": "individual"
-          },
-          {
-            "fullName": "Demian",
-            "type": "alternative"
-          }
-        ],
-        "nationalities": [
-          {
-            "code": "AR",
-            "name": "Argentina"
-          },
-          {
-            "code": "IO",
-            "name": "British Indian Ocean Territory"
-          },
-          {
-            "code": "CC",
-            "name": "Cocos (Keeling) Islands"
-          }
-        ],
-        "personType": "knownPerson",
-        "placeOfResidence": {
-          "city": "Beamsville",
-          "country": {
-            "alpha_2": "CA",
-            "name": "Canada"
-          },
-          "line1": "4520 Ontario",
-          "line2": "This is optional test",
-          "locationDescription": "This is optional extra description test",
-          "postalCode": "L0R 1B0",
-          "region": "ON"
-        },
-        "publicationDetails": {
-          "bodsVersion": "0.3",
-          "publicationDate": "2024-02-07",
-          "publisher": {
-            "name": "BCROS - BC Registries and Online Services",
-            "url": "https://www.bcregistry.gov.bc.ca/"
-          }
-        },
-        "source": {
-          "assertedBy": [
-            {
-              "name": "Random Internet Person"
-            }
-          ],
-          "description": "Using Gov BC - BTR - Web UI",
-          "type": [
-            "selfDeclaration"
-          ]
-        },
-        "statementDate": "2024-02-05",
-        "statementID": "d7035fcb-2d8b-4658-9ea8-1410b8d1f95e",
-        "statementType": "personStatement",
-        "taxResidencies": []
-      },
-      {
-        "addresses": [
-          {
-            "city": "Scarborough",
-            "country": {
-              "alpha_2": "CA",
-              "name": "Canada"
-            },
-            "line1": "F-3331 Danforth Ave",
-            "line2": "",
-            "locationDescription": "",
-            "postalCode": "M1L 1C5",
-            "region": "ON"
-          }
-        ],
-        "birthDate": "1991-01-24",
-        "email": "another@test.com",
-        "hasTaxNumber": true,
-        "identifiers": [
-          {
-            "id": "046 454 286",
-            "scheme": "CAN-TAXID",
-            "schemeName": "ITN"
-          }
-        ],
-        "isComponent": false,
-        "isPermanentResidentCa": true,
-        "missingInfoReason": "It actually really is unless it is not",
-        "names": [
-          {
-            "fullName": "Mine Name Last",
-            "type": "individual"
-          },
-          {
-            "fullName": "Nicky",
-            "type": "alternative"
-          }
-        ],
-        "nationalities": [],
-        "personType": "knownPerson",
-        "placeOfResidence": {
-          "city": "Scarborough",
-          "country": {
-            "alpha_2": "CA",
-            "name": "Canada"
-          },
-          "line1": "F-3331 Danforth Ave",
-          "line2": "",
-          "locationDescription": "",
-          "postalCode": "M1L 1C5",
-          "region": "ON"
-        },
-        "publicationDetails": {
-          "bodsVersion": "0.3",
-          "publicationDate": "2024-02-07",
-          "publisher": {
-            "name": "BCROS - BC Registries and Online Services",
-            "url": "https://www.bcregistry.gov.bc.ca/"
-          }
-        },
-        "source": {
-          "assertedBy": [
-            {
-              "name": "Random Internet Person"
-            }
-          ],
-          "description": "Using Gov BC - BTR - Web UI",
-          "type": [
-            "selfDeclaration"
-          ]
-        },
-        "statementDate": "2024-02-05",
-        "statementID": "dc4fbe9c-daae-46bc-a388-3812ece80078",
-        "statementType": "personStatement",
-        "taxResidencies": [
-          {
-            "code": "CA",
-            "name": "Canada"
-          }
-        ]
-      },
-      {
-        "addresses": [
-          {
-            "city": "Vancouver",
-            "country": {
-              "alpha_2": "CA",
-              "name": "Canada"
-            },
-            "line1": "403-1265 Barclay St",
-            "line2": "",
-            "locationDescription": "",
-            "postalCode": "V6E 1H5",
-            "region": "BC"
-          }
-        ],
-        "birthDate": "1976-02-03",
-        "email": "not.first@test.com",
-        "hasTaxNumber": false,
-        "identifiers": [],
-        "isComponent": false,
-        "isPermanentResidentCa": false,
-        "names": [
-          {
-            "fullName": "Totally Individual Name",
-            "type": "individual"
-          }
-        ],
-        "nationalities": [
-          {
-            "code": "CA",
-            "name": "Canada"
-          }
-        ],
-        "personType": "knownPerson",
-        "placeOfResidence": {
-          "city": "Vancouver",
-          "country": {
-            "alpha_2": "CA",
-            "name": "Canada"
-          },
-          "line1": "403-1265 Barclay St",
-          "line2": "",
-          "locationDescription": "",
-          "postalCode": "V6E 1H5",
-          "region": "BC"
-        },
-        "publicationDetails": {
-          "bodsVersion": "0.3",
-          "publicationDate": "2024-02-07",
-          "publisher": {
-            "name": "BCROS - BC Registries and Online Services",
-            "url": "https://www.bcregistry.gov.bc.ca/"
-          }
-        },
-        "source": {
-          "assertedBy": [
-            {
-              "name": "Random Internet Person"
-            }
-          ],
-          "description": "Using Gov BC - BTR - Web UI",
-          "type": [
-            "selfDeclaration"
-          ]
-        },
-        "statementDate": "2024-02-05",
-        "statementID": "76ad571f-1bc3-4d17-9047-10c5342f2212",
-        "statementType": "personStatement",
-        "taxResidencies": [
-          {
-            "code": "CA",
-            "name": "Canada"
-          }
-        ]
-      }
-    ]
-  },
-  "submitted_datetime": "2024-02-07T15:59:06.210790-08:00",
-  "submitter_id": 1,
-  "type": "other"
+    "submitted_datetime": "2024-03-08T04:55:12.241603+00:00",
+    "submitter_id": 3,
+    "type": "other"
 }

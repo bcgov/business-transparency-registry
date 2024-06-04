@@ -3,14 +3,14 @@ import { PercentageRangeE } from '~/enums/percentage-range-e'
 
 /**
  * Validate the Type of Director Control checkboxes.
- * If the 'exercised in concert' is selected, at least one of the Type of Director Control checkboxes is required.
+ * If the in-concert or joint control is selected, at least one of the Type of Director Control checkboxes is required.
  * @param formData the form data
  */
 export function validateControlOfDirectors (formData: any): boolean {
   return formData.directControl ||
     formData.indirectControl ||
     formData.significantInfluence ||
-    !formData.inConcertControl
+    (!formData.inConcertControl && !formData.actingJointly)
 }
 
 /**

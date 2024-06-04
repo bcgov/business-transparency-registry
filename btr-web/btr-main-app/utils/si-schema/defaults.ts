@@ -73,7 +73,13 @@ export function getDefaultInputFormSi (): SiSchemaType {
     uuid: UUIDv4(),
     ui: {
       action: FilingActionE.ADD
-    }
+    },
+    sharesInConcert: [],
+    sharesActingJointly: [],
+    votesInConcert: [],
+    votesActingJointly: [],
+    directorsInConcert: [],
+    directorsActingJointly: []
   }
 }
 

@@ -54,20 +54,18 @@
           + addr.region
       }}
       <br>
-      <br>
-      <BcrosInputsCountriesOfCitizenshipDropdown v-model="citizenships" />
       {{ citizenships }}
       <br>
-      <br>
-      <BcrosInputsCountriesOfCitizenship
-        v-model:canadianCitizenship="citizenshipType"
-        v-model:citizenships="citizenships2"
+      <BcrosInputsCombobox
+        v-model="citizenships"
+        name="testCombobox"
+        :label-function="(c) => c.name"
+        :items="citizenshipOptions"
+        :search-placeholder="$t('labels.countryOfCitizenship.findCountry')"
+        :label-placeholder="$t('labels.countryOfCitizenship.placeholder')"
+        key-attribute="alpha_2"
+        :search-attributes="['name', 'alpha_2']"
       />
-      {{ citizenshipType }}
-      <br>
-      {{ citizenships2 }}
-      <br>
-      <br>
       <UButton id="exampleSubmitButton" type="submit" data-cy="submit-button">
         Submit
       </UButton>
@@ -99,9 +97,6 @@ import { validateEmailRfc5322Regex } from '~/utils/validation/form_inputs'
 
 const minNameLength = 1
 const maxNameLength = 150
-
-const citizenshipType = ref('')
-const citizenships2 = ref([])
 
 const t = useNuxtApp().$i18n.t
 const schema = z.object({

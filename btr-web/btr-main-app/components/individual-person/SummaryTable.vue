@@ -167,7 +167,11 @@ const editingIndex = ref(-1)
 
 const t = useNuxtApp().$i18n.t
 const headers = [
-  t('labels.name'), t('labels.address'), t('labels.details'), t('labels.significanceDates'), t('labels.control')
+  { content: t('labels.name'), width: '20%' },
+  { content: t('labels.address'), width: '20%' },
+  { content: t('labels.details'), width: '20%' },
+  { content: t('labels.significanceDates'), width: '20%' },
+  { content: t('labels.control'), width: '20%' }
 ]
 
 const isEmptyState = computed(() => {

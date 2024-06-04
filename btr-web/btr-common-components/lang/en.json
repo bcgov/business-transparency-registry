@@ -49,6 +49,10 @@
       "save": "Save",
       "saveExit": "Save and Resume Later"
     },
+    "combobox": {
+      "select": "Select",
+      "selected": "Selected"
+    },
     "birthdate": "Birthdate",
     "competency": "Competency",
     "citizenship": "Citizenship",
@@ -73,8 +77,6 @@
       "selectAll": "Select all countries of which this person is a citizen.",
       "placeholder": "Citizenship or permanent residency",
       "findCountry": "Find a Country",
-      "select": "Select",
-      "selected": "Selected",
       "hint":"Select all that apply",
       "note": "Note: An individual cannot be both a citizen and permanent resident of Canada."
     },

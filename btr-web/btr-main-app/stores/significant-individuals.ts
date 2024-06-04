@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import { StatusCodes } from 'http-status-codes'
 import { Ref } from 'vue'
+import { v4 as UUIDv4 } from 'uuid'
 import { ErrorI } from '../../btr-common-components/interfaces/error-i'
 import { dateToString } from '../../btr-common-components/utils/date'
 import fileSIApi from '@/services/file-significant-individual'
@@ -97,6 +98,18 @@ export const useSignificantIndividuals = defineStore('significantIndividuals', (
       }
       return null
     }
+
+    // generate missing values for new fields
+    data?.forEach((si) => {
+      if (!si.uuid) { si.uuid = UUIDv4() }
+      if (!si.sharesInConcert) { si.sharesInConcert = [] }
+      if (!si.sharesActingJointly) { si.sharesActingJointly = [] }
+      if (!si.votesInConcert) { si.votesInConcert = [] }
+      if (!si.votesActingJointly) { si.votesActingJointly = [] }
+      if (!si.directorsInConcert) { si.directorsInConcert = [] }
+      if (!si.directorsActingJointly) { si.directorsActingJointly = [] }
+    })
+
     return data
   }
 
