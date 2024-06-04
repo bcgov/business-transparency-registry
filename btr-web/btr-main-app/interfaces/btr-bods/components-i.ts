@@ -10,6 +10,10 @@ export interface BodsAgentI {
   uri?: string
 }
 
+export interface BodsConnectedIndividualI {
+  uuid: string
+}
+
 export interface BodsSourceI {
   type?: BodsSourceTypeE[]
   description?: string
@@ -60,6 +64,7 @@ export interface BodsInterestI {
   }
   startDate?: string
   endDate?: string
+  connectedIndividuals?: BodsConnectedIndividualI[]
 }
 
 export interface BodsCountryI {

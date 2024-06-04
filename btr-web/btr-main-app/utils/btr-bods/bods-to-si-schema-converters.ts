@@ -2,12 +2,12 @@ import { BodsInterestTypeE, BodsNameTypeE, ControlOfSharesDetailsE } from '~/enu
 import { BtrFilingI } from '~/interfaces/btr-bods/btr-filing-i'
 import { BtrBodsOwnershipOrControlI } from '~/interfaces/btr-bods/btr-bods-ownership-or-control-i'
 import { BtrBodsPersonI } from '~/interfaces/btr-bods/btr-bods-person-i'
-import { BodsBtrAddressI } from '~/interfaces/btr-bods/components-i'
+import { BodsBtrAddressI, BodsInterestI } from '~/interfaces/btr-bods/components-i'
 import { PercentageRangeE } from '~/enums/percentage-range-e'
 import {
   AddressSchemaType,
   CountrySchemaType,
-  SiSchemaType, StartEndDateGroupSchemaType
+  SiSchemaType, StartEndDateGroupSchemaType, ConnectedInvidualSchemaType
 } from '~/utils/si-schema/definitions'
 import { getEmptyAddress } from '~/utils/si-schema/defaults'
 
@@ -131,6 +131,11 @@ const isControlType = (oocs: BtrBodsOwnershipOrControlI, details: string): boole
   return oocs.interests.findIndex(interest => interest.details === details) !== -1
 }
 
+const getConnectedIndividuals = (oocs: BtrBodsOwnershipOrControlI, details: string): ConnectedInvidualSchemaType[] => {
+  const interest: BodsInterestI | undefined = oocs.interests.find(interest => interest.details === details)
+  return (interest && interest.connectedIndividuals) ? interest.connectedIndividuals : []
+}
+
 function _getControlOther (oocs: BtrBodsOwnershipOrControlI) {
   const other = oocs.interests.find(interest => interest.type === BodsInterestTypeE.OTHER_INFLUENCE_OR_CONTROL)
   return other?.details || ''
@@ -207,12 +212,13 @@ const _getSi = (
     uuid: person.uuid,
 
     ui: {},
-    sharesInConcert: person.sharesInConcert ? person.sharesInConcert : [],
-    sharesActingJointly: person.sharesActingJointly ? person.sharesActingJointly : [],
-    votesInConcert: person.votesInConcert ? person.votesInConcert : [],
-    votesActingJointly: person.votesActingJointly ? person.votesActingJointly : [],
-    directorsInConcert: person.directorsInConcert ? person.directorsInConcert : [],
-    directorsActingJointly: person.directorsActingJointly ? person.directorsActingJointly : []
+
+    sharesInConcert: getConnectedIndividuals(oocs, ControlOfSharesDetailsE.IN_CONCERT_CONTROL),
+    sharesActingJointly: getConnectedIndividuals(oocs, ControlOfSharesDetailsE.ACTING_JOINTLY),
+    votesInConcert: getConnectedIndividuals(oocs, ControlOfVotesDetailsE.IN_CONCERT_CONTROL),
+    votesActingJointly: getConnectedIndividuals(oocs, ControlOfVotesDetailsE.ACTING_JOINTLY),
+    directorsInConcert: getConnectedIndividuals(oocs, ControlOfDirectorsDetailsE.IN_CONCERT_CONTROL),
+    directorsActingJointly: getConnectedIndividuals(oocs, ControlOfDirectorsDetailsE.ACTING_JOINTLY)
   }
 }
 
