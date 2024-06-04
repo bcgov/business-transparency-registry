@@ -38,8 +38,8 @@ describe('pages -> Form Validation', () => {
     cy.contains(i18n.errors.validation.citizenship.required).should('exist')
 
     // Selecting a country should remove the error
-    cy.get('[data-cy="countryOfCitizenshipDropdownButton"]').click()
-    cy.get('[data-cy="countryOfCitizenshipDropdownOption"]').eq(0).click({ force: true })
+    cy.get('[data-cy="citizenshipsComboboxButton"]').click()
+    cy.get('[id^="headlessui-combobox-options"]').find('li').first().click({ force: true })
     cy.contains(i18n.errors.validation.citizenship.required).should('not.exist')
   })
 

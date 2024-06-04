@@ -81,19 +81,19 @@ describe('pages -> Summary Table', () => {
     // open the edit form for the first SI and ensure it has one citizenship selected,
     // remove the citizenship by clicking on the selected item in the dropdown, and the SI should have no citizenship
     cy.get('[data-cy=edit-button]').eq(0).click()
-    cy.get('[data-cy="countryOfCitizenshipDropdownChip"]').should('have.length', 1)
-    cy.get('[data-cy="countryOfCitizenshipDropdownButton"]').click()
-    cy.get('[data-cy="countryOfCitizenshipDropdownOption"]').first().click({ force: true })
-    cy.get('[data-cy="countryOfCitizenshipDropdownChip"]').should('have.length', 0)
+    cy.get('[data-cy="citizenshipsComboboxChip"]').should('have.length', 1)
+    cy.get('[data-cy="citizenshipsComboboxButton"]').click()
+    cy.get('[id^="headlessui-combobox-options"]').find('li').first().click({ force: true })
+    cy.get('[data-cy="citizenshipsComboboxChip"]').should('have.length', 0)
 
     cy.get('[data-cy=new-si-cancel-btn]').click()
 
     // open the edit form for the second SI and ensure it has one citizenship selected,
     // remove the citizenship by clicking on the selected citizenship tag, and the SI should have no citizenship
     cy.get('[data-cy=edit-button]').eq(1).click()
-    cy.get('[data-cy="countryOfCitizenshipDropdownChip"]').should('have.length', 1)
-    cy.get('[data-cy="countryOfCitizenshipDropdownChip"]').eq(0).get('[data-cy="close-icon"]').click()
-    cy.get('[data-cy="countryOfCitizenshipDropdownChip"]').should('have.length', 0)
+    cy.get('[data-cy="citizenshipsComboboxChip"]').should('have.length', 1)
+    cy.get('[data-cy="citizenshipsComboboxChip"]').eq(0).get('[data-cy="close-icon"]').click()
+    cy.get('[data-cy="citizenshipsComboboxChip"]').should('have.length', 0)
   })
 
   it('the edit form contains all information in the profile', () => {
@@ -123,7 +123,7 @@ describe('pages -> Summary Table', () => {
       cy.get('[data-cy="address-city"]').should('have.value', testData.profile1.address.city)
       cy.get('[data-cy="address-region-select"]').contains(testData.profile1.address.province[0])
       cy.get('[data-cy="address-postal-code"]').should('have.value', testData.profile1.address.postalCode)
-      cy.get('[data-cy="countryOfCitizenshipDropdownButton"]').contains(testData.profile1.citizenships[0].name)
+      cy.get('[data-cy="citizenshipsComboboxButton"]').contains(testData.profile1.citizenships[0].name)
     })
   })
 

@@ -36,8 +36,8 @@ Cypress.Commands.add('fillOutForm', (siDataToEnter) => {
   cy.get('[data-cy="address-postal-code"]').type(siDataToEnter.address.postalCode)
 
   // select the citizenship info
-  cy.get('[data-cy="countryOfCitizenshipDropdownButton"]').click()
-  cy.get('[data-cy="countryOfCitizenshipDropdownOption"]').eq(0).click({ force: true })
+  cy.get('[data-cy="citizenshipsComboboxButton"]').click()
+  cy.get('[id^="headlessui-combobox-options"]').find('li').first().click({ force: true })
 
   // enter tax number and select tax residency
   cy.get('[data-cy="tax-number-input"]').type(siDataToEnter.taxNumber)

@@ -29,7 +29,7 @@ describe('pages -> Add individual', () => {
     })
   }
 
-  it('test the dropdown menu for percent of shares', () => {
+  it('test the percentage selector', () => {
     cy.get('[data-cy=add-new-btn]').trigger('click')
 
     // it works same for shares as it is same component

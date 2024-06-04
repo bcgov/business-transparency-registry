@@ -8,6 +8,12 @@ const StartEndDateGroup = z.object({
 
 export type StartEndDateGroupSchemaType = z.infer<typeof StartEndDateGroup>
 
+const ConnectedIndividual = z.object({
+  uuid: z.string()
+})
+
+export type ConnectedInvidualSchemaType = z.infer<typeof ConnectedIndividual>
+
 export const SiControlOfSchema = z.object({
   controlName: z.enum(['controlOfShares', 'controlOfVotes']),
   registeredOwner: z.boolean(),
@@ -79,7 +85,14 @@ export const SiSchema = z.object({
   // UI helper values
   ui: z.object({
     action: z.nativeEnum(FilingActionE).optional()
-  })
+  }),
+
+  sharesInConcert: z.array(ConnectedIndividual),
+  sharesActingJointly: z.array(ConnectedIndividual),
+  votesInConcert: z.array(ConnectedIndividual),
+  votesActingJointly: z.array(ConnectedIndividual),
+  directorsInConcert: z.array(ConnectedIndividual),
+  directorsActingJointly: z.array(ConnectedIndividual)
 })
 
 export type SiSchemaType = z.infer<typeof SiSchema>

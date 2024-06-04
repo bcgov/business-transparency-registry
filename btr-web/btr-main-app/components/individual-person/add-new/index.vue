@@ -106,26 +106,7 @@
         :show-section-has-errors="false"
         :section-title="$t('sectionTitles.controlOfMajorityOfDirectors')"
       >
-        <UFormGroup name="containTheErrorChecks" class="w-full flex flex-col">
-          <p class="font-bold pb-5">
-            {{ $t('labels.controlOfDirectors') }}
-          </p>
-          <p>
-            {{ $t('texts.controlOfDirectors.text.part1') }}
-            <span class="font-bold">{{ $t('texts.controlOfDirectors.text.part2') }}</span>
-            {{ $t('texts.controlOfDirectors.text.part3') }}
-          </p>
-          <IndividualPersonControlOfDirectors
-            id="controlOfDirectors"
-            v-model="inputFormSi.controlOfDirectors"
-            name="controlOfDirectors"
-            data-cy="testControlOfDirectors"
-          />
-          <p>
-            <span class="font-bold">{{ $t('texts.note') }}</span>
-            {{ $t('texts.controlOfDirectors.note') }}
-          </p>
-        </UFormGroup>
+        <IndividualPersonControlOfDirectors v-model="inputFormSi.controlOfDirectors" name="controlOfDirectors" />
       </BcrosSection>
 
       <!--  section: other reasons  -->
@@ -231,11 +212,17 @@
         :section-title="$t('sectionTitles.citizenshipOrPR')"
       >
         <div class="flex-col w-full">
-          <BcrosInputsCountriesOfCitizenship
+          <BcrosInputsCombobox
             id="countriesOfCitizenship"
             v-model="inputFormSi.citizenships"
             name="citizenships"
             :help="$t('labels.countryOfCitizenship.hint')"
+            :label-function="(c) => c.name"
+            :items="citizenshipOptions"
+            :search-placeholder="$t('labels.countryOfCitizenship.findCountry')"
+            :label-placeholder="$t('labels.countryOfCitizenship.placeholder')"
+            key-attribute="alpha_2"
+            :search-attributes="['name', 'alpha_2']"
           />
           <p>
             {{ $t('labels.countryOfCitizenship.note') }}
@@ -476,4 +463,31 @@ if (props.setSignificantIndividual) {
   isEditing.value = (props.index !== undefined)
   Object.assign(inputFormSi, props.setSignificantIndividual)
 }
+
+watch(inputFormSi.controlOfShares, (control) => {
+  if (!control.inConcertControl) {
+    inputFormSi.sharesInConcert = []
+  }
+  if (!control.actingJointly) {
+    inputFormSi.sharesActingJointly = []
+  }
+})
+
+watch(inputFormSi.controlOfVotes, (control) => {
+  if (!control.inConcertControl) {
+    inputFormSi.votesInConcert = []
+  }
+  if (!control.actingJointly) {
+    inputFormSi.votesActingJointly = []
+  }
+})
+
+watch(inputFormSi.controlOfDirectors, (control) => {
+  if (!control.inConcertControl) {
+    inputFormSi.directorsInConcert = []
+  }
+  if (!control.actingJointly) {
+    inputFormSi.directorsActingJointly = []
+  }
+})
 </script>
