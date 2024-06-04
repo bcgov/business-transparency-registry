@@ -54,19 +54,7 @@
           + addr.region
       }}
       <br>
-      <br>
-      <BcrosInputsCountriesOfCitizenshipDropdown v-model="citizenships" />
       {{ citizenships }}
-      <br>
-      <br>
-      <BcrosInputsCountriesOfCitizenship
-        v-model:canadianCitizenship="citizenshipType"
-        v-model:citizenships="citizenships2"
-      />
-      {{ citizenshipType }}
-      <br>
-      {{ citizenships2 }}
-      <br>
       <br>
       <BcrosInputsCombobox
         v-model="citizenships"
@@ -109,9 +97,6 @@ import { validateEmailRfc5322Regex } from '~/utils/validation/form_inputs'
 
 const minNameLength = 1
 const maxNameLength = 150
-
-const citizenshipType = ref('')
-const citizenships2 = ref([])
 
 const t = useNuxtApp().$i18n.t
 const schema = z.object({
