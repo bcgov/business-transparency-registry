@@ -38,8 +38,11 @@ export default defineAppConfig({
     selectMenu: {
       label: 'text-gray-700',
       rounded: 'rounded-none',
-      input: 'bg-gray-100 text-gray-700 placeholder-primary h-10 -mt-2 border-b-[1px] border-b-primary',
+      input: 'bg-gray-100 text-gray-700 placeholder-primary h-10 -mt-2 border-b-[1.5px] border-b-primary',
       popper: { offsetDistance: '0', placement: 'bottom-start', locked: true },
+      base: 'overflow-x-hidden',
+      padding: 'p-0',
+      ring: 'ring-0',
       option: {
         rounded: 'rounded-none',
         active: 'text-primary-500',
