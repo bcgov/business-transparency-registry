@@ -50,9 +50,7 @@ if (model.value) {
 const selectOption = (index: number) => {
   selected.value = index
   model.value = options[index].range
-  if (formBus) {
-    formBus.emit({ type: 'blur', path: props.name })
-    formBus.emit({ type: 'change', path: props.name })
-  }
+  formBus?.emit({ type: 'blur', path: props.name })
+  formBus?.emit({ type: 'change', path: props.name })
 }
 </script>

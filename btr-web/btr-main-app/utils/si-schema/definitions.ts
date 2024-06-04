@@ -1,5 +1,6 @@
 import { z } from 'zod'
 import { PercentageRangeE } from '~/enums/percentage-range-e'
+import { PhoneSchema } from '../../../btr-common-components/interfaces/zod-schemas-t'
 
 const StartEndDateGroup = z.object({
   startDate: z.string().min(1),
@@ -79,6 +80,7 @@ export const SiSchema = z.object({
   tax: TaxSchema,
   isTaxResident: z.boolean().optional(),
   determinationOfIncapacity: z.boolean(),
+  phoneNumber: PhoneSchema,
 
   effectiveDates: z.array(StartEndDateGroup).min(1),
 

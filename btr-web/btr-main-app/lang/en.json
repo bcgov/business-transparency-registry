@@ -1,4 +1,7 @@
 {
+  "general": {
+    "optional": "Optional"
+  },
   "labels": {
     "addEndDate": "Add end date",
     "determinationOfIncapacity": "This individual is incapable of managing their own affairs",
@@ -210,6 +213,11 @@
     }
   },
   "placeholders": {
+    "phoneNumber": {
+      "countryCode": "Country code",
+      "individualsNumber": "Individual's Phone Number",
+      "extension": "Extension"
+    },
     "fullName": "Individual's Full Name",
     "preferredName": "Preferred Name Information",
     "dateSelect": {
