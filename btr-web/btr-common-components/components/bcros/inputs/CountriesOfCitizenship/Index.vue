@@ -1,5 +1,6 @@
 <template>
   <UFormGroup
+    v-slot="{ error }"
     :name="name"
     :help="help"
     class="flex flex-col"
@@ -8,6 +9,8 @@
     <BcrosInputsCountriesOfCitizenshipDropdown
       v-model="model"
       class="text-gray-900"
+      :class="{'text-red-500': !!error }"
+      :error-state="!!error"
     />
   </UFormGroup>
 </template>

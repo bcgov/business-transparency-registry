@@ -8,6 +8,7 @@
       :placeholder="$t('labels.country')"
       :options="countries"
       :variant="error ? 'error' : 'bcGov'"
+      :ui-menu="{ label: !!error? 'text-red-500': 'text-gray-700'}"
       option-attribute="name"
       data-cy="address-country"
     />
@@ -17,7 +18,7 @@
     <BcrosInputsAddressLine1Autocomplete
       v-model="address.line1"
       :country-iso3166-alpha2="address.country?.alpha_2"
-      :variant="error ? 'error' : 'bcGov'"
+      :error-state="!!error"
       data-cy="address-line1-autocomplete"
       @addr-auto-completed="addrAutoCompleted"
       @blur="line1BlurEvent"

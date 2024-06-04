@@ -18,7 +18,7 @@
         'min-h-fit',
         'rounded-t-md',
         disabled ? 'border-gray-500' : 'border-gray-700 hover:bg-gray-200',
-        hasError ? 'border-b-red-500' : '']"
+        errorState ? 'border-b-red-500' : '']"
       :disabled="disabled"
     >
       <ComboboxButton
@@ -31,9 +31,10 @@
           v-if="citizenships && citizenships.length === 0"
           class="w-full"
           :class="{
+            'text-red-500': errorState,
             'text-primary-500': open,
             'text-gray-700': !open && !disabled,
-            'text-gray-500': disabled
+            'text-gray-500': disabled,
           }"
         >
           {{ $t('labels.countryOfCitizenship.placeholder') }}
@@ -121,6 +122,7 @@ import { BtrCountryI } from '~/interfaces/btr-address-i'
 
 const emit = defineEmits<{ 'update:modelValue': [value: Array<BtrCountryI>] }>()
 const props = defineProps({
+  errorState: { type: Boolean, default: false },
   placeholder: { type: String, default: '' },
   disabled: { type: Boolean, default: false },
   modelValue: { type: Array<BtrCountryI>, required: true }
@@ -165,6 +167,4 @@ const filterCountries = (searchText: string) => {
 const isInSelected = (country: BtrCountryI) => {
   return citizenships.value?.findIndex(c => c.alpha_2 === country.alpha_2) !== -1
 }
-
-const hasError = computed<Boolean>(() => props.errors?.length > 0)
 </script>
