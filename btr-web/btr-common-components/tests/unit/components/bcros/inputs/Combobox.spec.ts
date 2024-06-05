@@ -19,7 +19,7 @@ it('can mount BcrosInputsCombobox component', async () => {
       labelPlaceholder: 'labelPlaceholder',
       floatingLabel: 'floatingLabel',
       keyAttribute: 'key',
-      searchArrtibutes: ['key']
+      searchAttributes: ['key']
     }
   })
 

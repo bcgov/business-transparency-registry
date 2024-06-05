@@ -24,7 +24,7 @@
           :placeholder="$t('placeholders.taxNumber')"
           class="w-80"
           @focusout="formatInput"
-          @focus="hasTaxNumber = true"
+          @focus="focusTaxNumber"
         />
       </UFormGroup>
     </div>
@@ -36,7 +36,7 @@
           v-model="hasTaxNumber"
           :value="false"
           :variant="error ? 'error' : variant"
-          @change="taxNumber = undefined"
+          @change="clearTaxNumber"
         />
         <label for="noTaxNumberRadioButton" class="ml-5" :class="{ 'text-red-500': error}">
           {{ $t('labels.noTaxNumberLabel') }}
@@ -48,22 +48,33 @@
 
 <script setup lang="ts">
 const hasTaxNumber = defineModel('hasTaxNumber', { type: Boolean, required: false, default: undefined })
-const taxNumber = defineModel('taxNumber', { type: String, required: false, default: undefined })
+const taxNumber = defineModel('taxNumber', { type: [String, undefined], required: false, default: undefined })
 
-defineProps<{ name: String, variant: String }>()
+const emit = defineEmits<(e: 'clear-errors', path: string) => void>()
+const props = defineProps<{ name: string, variant: string }>()
 
 const taxNumberInputGroupRef = ref() // UFormGroup ref
 const formatInput = () => {
   taxNumber.value = formatTaxNumber(taxNumber.value)
 }
 
+const focusTaxNumber = () => {
+  emit('clear-errors', props.name + '.hasTaxNumber')
+  hasTaxNumber.value = true
+}
+
+const clearTaxNumber = () => {
+  emit('clear-errors', props.name + '.taxNumber')
+  taxNumber.value = undefined
+}
+
 /**
  * Format the tax number to "xxx xxx xxx"
  * @param {string} taxNumber - string representation of the tax number input
  */
-const formatTaxNumber = (taxNumber: string | null): string | null => {
-  if (taxNumber === null) {
-    return null
+const formatTaxNumber = (taxNumber: string | undefined): string | undefined => {
+  if (taxNumber === undefined) {
+    return undefined
   }
   // if the tax number cannot pass the above validation checks, it will not be formatted
   if (!checkSpecialCharacters(taxNumber) || !checkTaxNumberLength(taxNumber) || !validateTaxNumber(taxNumber)) {

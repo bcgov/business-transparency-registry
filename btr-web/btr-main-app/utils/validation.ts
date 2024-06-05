@@ -27,28 +27,25 @@ export function validateTaxNumberInfo (
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
         message: t('errors.validation.taxNumber.specialCharacter'),
-        path: ['taxNumber'],
-        fatal: true
+        path: ['taxNumber']
       })
       return z.NEVER
     }
 
-    if (!checkTaxNumberLength(taxData.taxNumber!)) {
+    if (!checkTaxNumberLength(taxData.taxNumber)) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
         message: t('errors.validation.taxNumber.invalidLength'),
-        path: ['taxNumber'],
-        fatal: true
+        path: ['taxNumber']
       })
       return z.NEVER
     }
 
-    if (!validateTaxNumber(taxData.taxNumber!)) {
+    if (!validateTaxNumber(taxData.taxNumber)) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
         message: t('errors.validation.taxNumber.invalidNumber'),
-        path: ['taxNumber'],
-        fatal: true
+        path: ['taxNumber']
       })
       return z.NEVER
     }
@@ -56,9 +53,15 @@ export function validateTaxNumberInfo (
     ctx.addIssue({
       code: z.ZodIssueCode.custom,
       message: t('errors.validation.taxNumber.required'),
-      path: ['hasTaxNumber'],
-      fatal: true
+      path: ['hasTaxNumber']
     })
+    if (!taxData.taxNumber) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: t('errors.validation.taxNumber.invalidLength'),
+        path: ['taxNumber']
+      })
+    }
     return z.NEVER
   }
   return z.NEVER

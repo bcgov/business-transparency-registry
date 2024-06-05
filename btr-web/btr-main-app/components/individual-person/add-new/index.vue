@@ -193,12 +193,11 @@
         :show-section-has-errors="hasErrors(['birthDate'])"
         :section-title="$t('labels.birthdate')"
       >
-        <!--          todo: replace this with divider ?-->
         <div class="flex-col w-full">
           <BcrosInputsDateSelect
             id="addNewPersonBirthdate"
             name="birthDate"
-            :initial-date="!!inputFormSi.birthDate ? dateStringToDate(inputFormSi.birthDate) : null"
+            :initial-date="!!inputFormSi.birthDate ? dateStringToDate(inputFormSi.birthDate) || undefined : undefined"
             :max-date="new Date()"
             :placeholder="$t('placeholders.dateSelect.birthdate')"
             @selection="inputFormSi.birthDate = dateToString($event, 'YYYY-MM-DD')"
@@ -249,6 +248,7 @@
             name="tax"
             variant="bcGov"
             data-cy="testTaxNumber"
+            @clear-errors="clearErrors($event)"
           />
         </div>
       </BcrosSection>
@@ -382,7 +382,9 @@ const SiNameExtended = SiNameSchema
 const AddressSchemaExtended = AddressSchema.extend({
   country: CountrySchema
     .optional()
-    .refine((val: BtrCountryI | undefined) => { return val?.name !== '' }, t('errors.validation.address.country'))
+    .refine((val: BtrCountryI | undefined) => {
+      return val && val.name !== ''
+    }, t('errors.validation.address.country'))
 })
 
 const SiSchemaExtended = SiSchema.extend({
@@ -432,6 +434,10 @@ function hasErrors (sectionErrorPaths: string[]): boolean {
   }
 
   return false
+}
+
+const clearErrors = (errorPath: string) => {
+  addIndividualForm.value.clear(errorPath)
 }
 
 function handleDoneButtonClick () {

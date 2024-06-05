@@ -12,7 +12,7 @@
             'text-left',
             'border-b-[1px]',
             'focus:border-b-2',
-            errorVersion ? 'border-red-500' : 'border-gray-700',
+            errorState ? 'border-red-500' : 'border-gray-700',
             'focus:outline-none',
             'sm:text-sm',
             'h-[56px]',
@@ -23,7 +23,7 @@
             :placeholder="$t('labels.line1')"
             :display-value="() => line1"
             class="bg-transparent pl-2 w-full h-full focus:outline-none"
-            :class="errorVersion ? 'placeholder-red-500' : 'placeholder-gray-700'"
+            :class="errorState ? 'placeholder-red-500' : 'placeholder-gray-700'"
             data-cy="address-street"
             @keyup="doTheSearch($event.target.value)"
             @blur="$emit('blur', $event)"
@@ -92,7 +92,7 @@ const props = defineProps({
   maxSuggestions: { type: Number, required: false, default: 7 },
   langCode: { type: String, required: false, default: 'ENG' },
   modelValue: { type: String, required: true },
-  errorVersion: { type: Boolean, default: false }
+  errorState: { type: Boolean, default: false }
 })
 
 const canadaPostApiKey = runtimeConfig.public.addressCompleteKey

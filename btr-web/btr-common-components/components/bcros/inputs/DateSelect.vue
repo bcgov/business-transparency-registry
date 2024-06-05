@@ -46,6 +46,9 @@
 <script setup lang="ts">
 import { ComputedRef, Ref, computed, ref, watch } from 'vue'
 import { MaybeElementRef, onClickOutside } from '@vueuse/core'
+import { type UseEventBusReturn } from '@vueuse/core'
+
+const formBus = inject<UseEventBusReturn<any, string> | undefined>('form-events', undefined)
 
 const props = defineProps<{
   name: string
@@ -75,6 +78,8 @@ watch(() => selectedDate.value, val => emit('selection', val))
 
 const updateDate = (val: Date | null) => {
   selectedDate.value = val
+  formBus?.emit({ type: 'blur', path: props.name })
+  formBus?.emit({ type: 'change', path: props.name })
 }
 
 const selectedDateDisplay: ComputedRef<string> = computed(
