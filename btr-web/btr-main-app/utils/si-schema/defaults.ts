@@ -69,7 +69,12 @@ export function getDefaultInputFormSi (): SiSchemaType {
     endDate: '',
 
     effectiveDates: [{ startDate: undefined, endDate: undefined }],
-
+    phoneNumber: {
+      countryCode2letterIso: undefined,
+      countryCallingCode: undefined,
+      number: undefined,
+      extension: undefined
+    },
     uuid: UUIDv4(),
     ui: {
       action: FilingActionE.ADD

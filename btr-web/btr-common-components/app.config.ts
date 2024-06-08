@@ -24,6 +24,12 @@ export default defineAppConfig({
         primary: 'border-primary-500 placeholder-primary-500 border-b-2'
       }
     },
+    inputMenu: {
+      container: 'flex items-center w-full',
+      option: {
+        container: 'flex flex-row gap-1.5 w-full items-center'
+      }
+    },
     select: {
       base: 'bg-gray-100 hover:bg-gray-200 h-[56px] border-b-[1px] focus:border-b-2 focus:ring-0',
       rounded: 'rounded-none rounded-t-md',

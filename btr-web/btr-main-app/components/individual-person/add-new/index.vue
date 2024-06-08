@@ -151,8 +151,7 @@
       </BcrosSection>
 
       <BcrosSectionDivider />
-
-      <!--  section-header: type of interest or control -->
+      <!--  section-header: individuals details -->
       <BcrosSection
         header-icon-name="i-mdi-user-circle"
         :header-title="$t('sectionHeaders.individualsDetails')"
@@ -187,6 +186,15 @@
             name="address"
           />
         </div>
+      </BcrosSection>
+      <BcrosSection
+        :show-section-has-errors="hasErrors(['phoneNumber'])"
+        :section-title="$t('sectionTitles.phoneNumber')"
+      >
+        <BcrosInputsPhoneNumber
+          name="phoneNumber"
+          v-model="inputFormSi.phoneNumber"
+        />
       </BcrosSection>
       <BcrosSection
         :show-section-has-errors="hasErrors(['birthDate'])"

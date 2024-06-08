@@ -11,6 +11,9 @@ importers:
       '@vuepic/vue-datepicker':
         specifier: ^8.0.0
         version: 8.2.0(vue@3.4.21)
+      country-codes-list:
+        specifier: ^1.6.11
+        version: 1.6.11
       country-list:
         specifier: ^2.3.0
         version: 2.3.0
@@ -924,6 +927,9 @@ packages:
 
   cookie-es@1.0.0:
     resolution: {integrity: sha512-mWYvfOLrfEc996hlKcdABeIiPHUPC6DM2QYZdGGOvhOTbA3tjm2eBwqlJpoFdjC89NI4Qt6h0Pu06Mp+1Pj5OQ==}
+
+  country-codes-list@1.6.11:
+    resolution: {integrity: sha512-MsHoJ83tGyv9tFspeI8yHBomiTH4rruHxdWhNWGG9d1ykXgLyawh/VykmYPH5KqduY+9Q2RUNlL2/KGkXJqANA==}
 
   country-list@2.3.0:
     resolution: {integrity: sha512-qZk66RlmQm7fQjMYWku1AyjlKPogjPEorAZJG88owPExoPV8EsyCcuFLvO2afTXHEhi9liVOoyd+5A6ZS5QwaA==}
@@ -2901,6 +2907,8 @@ snapshots:
   convert-source-map@2.0.0: {}
 
   cookie-es@1.0.0: {}
+
+  country-codes-list@1.6.11: {}
 
   country-list@2.3.0: {}
 

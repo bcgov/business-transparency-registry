@@ -212,13 +212,15 @@
       "note": "Note: It is an offence to make a false or misleading statement in respect of a material fact in a record submitted to the Corporate Registry for filing. See section 427 of the Business Corporations Act."
     }
   },
-  "placeholders": {
+  "placeholder": {
     "phoneNumber": {
       "countryCode": "Country code",
-      "individualsNumber": "Individual's Phone Number",
+      "number": "Individual's Phone Number",
       "extension": "Extension"
-    },
-    "fullName": "Individual's Full Name",
+    }
+  },
+  "placeholders": {
+    "fullName": "Full Name",
     "preferredName": "Preferred Name Information",
     "dateSelect": {
       "birthdate": "Birthdate",
@@ -356,6 +358,7 @@
     "significantIndividuals": "Significant Individuals"
   },
   "sectionTitles": {
+    "phoneNumber": "Phone number",
     "profileDetails": "Your Details",
     "reviewConfirm": "Review and Confirm",
     "isYourOwnInformation": "Completing Party",
