@@ -74,7 +74,7 @@ describe('pages -> Beneficial Owner Change', () => {
     cy.get('[data-cy=addIndividualPerson]').should('contain.text', 'Control of Votes')
     cy.get('[data-cy=addIndividualPerson]').should('contain.text', 'Control of Majority of Directors')
     cy.get('[data-cy=addIndividualPerson]').should('contain.text', 'Birthdate')
-    cy.get('[data-cy=addIndividualPerson]').should('contain.text', 'Last Known Address')
+    cy.get('[data-cy=addIndividualPerson]').should('contain.text', 'Address')
     cy.get('[data-cy=addIndividualPerson]').should('contain.text', 'Canada Revenue Agency (CRA) Tax Number')
     cy.get('[data-cy=addIndividualPerson]').should('contain.text', 'Tax Residency')
     cy.get('[data-cy=addIndividualPerson]').should('contain.text', 'Unable to Obtain or Confirm Information')
@@ -117,6 +117,6 @@ describe('pages -> Beneficial Owner Change - no preloaded data in tables', () =>
       .and('contain', 'Control')
     // body should contain correct empty text
     cy.get('[data-cy="individualsSummaryTable"]').get('td')
-      .should('contain.text', 'No significant individuals added yet')
+      .should('contain.text', 'You have no Significant individuals listed')
   })
 })

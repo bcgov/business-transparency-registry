@@ -43,7 +43,6 @@
             id="individual-person-full-name"
             v-model="inputFormSi.name.fullName"
             name="name.fullName"
-            :label="$t('labels.fullName')"
             :placeholder="$t('placeholders.fullName')"
             data-cy="testFullName"
             :is-disabled="inputFormSi.name.isYourOwnInformation"
@@ -223,7 +222,7 @@
             key-attribute="alpha_2"
             :search-attributes="['name', 'alpha_2']"
           />
-          <p>
+          <p class="pt-3">
             {{ $t('labels.countryOfCitizenship.note') }}
           </p>
         </div>
@@ -235,9 +234,6 @@
         :section-title="$t('sectionTitles.taxDetails')"
       >
         <div class="w-full flex flex-col">
-          <p class="font-bold pb-5">
-            {{ $t('labels.taxNumber') }}
-          </p>
           <p>
             {{ $t('texts.taxNumber') }}
           </p>

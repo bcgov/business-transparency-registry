@@ -40,7 +40,12 @@
     >
       <slot name="typesOfControlHelp">
         <div class="flex flex-col gap-2">
-          <p>{{ $t('helpTexts.controlOfDirectors.p1') }}</p>
+          <p><b>{{ $t('helpTexts.controlOfDirectors.directControl.title') }}</b></p>
+          <p>{{ $t('helpTexts.controlOfDirectors.directControl.detail') }}</p>
+          <p><b>{{ $t('helpTexts.controlOfDirectors.indirectControl.title') }}</b></p>
+          <p>{{ $t('helpTexts.controlOfDirectors.indirectControl.detail') }}</p>
+          <p><b>{{ $t('helpTexts.controlOfDirectors.significantInfluence.title') }}</b></p>
+          <p>{{ $t('helpTexts.controlOfDirectors.significantInfluence.detail') }}</p>
         </div>
       </slot>
     </BcrosHelpTip>
@@ -50,7 +55,7 @@
       :name="name + '.jointlyOrInConcert'"
     >
       <template #inConcertControlHelp>
-        <span>{{ $t('helpTexts.significantIndividuals.helpPlaceholder1') }}</span>
+        <IndividualPersonControlJointlyOrInConcertControlHelp />
       </template>
     </IndividualPersonControlJointlyOrInConcertControl>
   </div>

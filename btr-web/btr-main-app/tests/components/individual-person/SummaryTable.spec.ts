@@ -30,7 +30,7 @@ describe('AddIndividualPersonSummaryTable tests', () => {
     expect(summaryTable.findAll('th').at(3)?.text()).toBe('Significance Dates')
     expect(summaryTable.findAll('th').at(4)?.text()).toBe('Control')
     expect(summaryTable.findAll('td').length).toBe(1)
-    expect(summaryTable.find('td').text()).toBe('No significant individuals added yet')
+    expect(summaryTable.find('td').text()).toBe('You have no Significant individuals listed')
     expect(wrapper.find('[data-cy=summary-table-name]').exists()).toBe(false)
     expect(wrapper.find('[data-cy=summary-table-address]').exists()).toBe(false)
     expect(wrapper.find('[data-cy=summary-table-details]').exists()).toBe(false)

@@ -21,10 +21,10 @@
     "significanceDates": "Significance Dates",
     "significantIndividuals": "Significant Individuals",
     "significantIndividualChangeDate": "Significant Individual Filing Effective Date",
-    "lastKnownAddress": "Last Known Address",
+    "lastKnownAddress": "Address",
     "citizenshipPermanentResidency": "Citizenship / Permanent Residency",
     "taxNumber": "Canada Revenue Agency (CRA) Tax Number",
-    "noTaxNumberLabel": "This person does not have a CRA Tax Number",
+    "noTaxNumberLabel": "This individual does not have a CRA Tax Number",
     "taxResidency": "Tax Residency",
     "isTaxResident": "Canada tax resident",
     "notTaxResident": "Not a Canada tax resident",
@@ -44,6 +44,18 @@
     "unknown": "Unknown",
     "certifySection": "Certify"
   },
+  "registriesDetailsLabels": {
+    "fullName": "Full Legal Name",
+    "birthdate": "Birthdate",
+    "addressResidential": "Residential Address",
+    "emailAddress": "Email Address",
+    "taxNumber": "Tax Number",
+    "socialInsuranceNumber": "Social Insurance Number (SIN)",
+    "citizenshipPR": "Citizenship/Permanent Residency",
+    "citizenship": "Citizenship",
+    "taxResidency": "Tax Residency",
+    "competency": "Competency"
+  },
   "buttons": {
     "addAnIndividual": "Add an Individual",
     "importYourLegacySIList": "Import your legacy SI list",
@@ -58,12 +70,12 @@
     "addAnotherEffectiveDate": "Add another effective date"
   },
   "texts": {
-    "significantIndividuals": "List all of the individual persons who have significant control of this business. Significant control is determined by control of shares or votes at general meetings, control of directors, or other interests or rights that allow the individual to control the business.",
+    "significantIndividuals": "List all of the individual who have significant control of this company. Significant control is determined by control of shares or votes at general meetings, control of directors, or other interests or rights that allow the individual to control the company.",
     "noSignificantIndividualsExistExplain": "By checking this checkbox, you confirm that, as per Business Corporations Act 119.2(3), there are no individuals considered significant individuals in relation to the company. This action ensures compliance with legislation, requiring the transparency register to include a statement indicating the absence of significant individuals.",
     "isYourOwnInformation": "Select this option if you are a significant individual and you are entering information for yourself.",
     "note": "Note: ",
     "preferredName": {
-      "checkbox": "Use a preferred name",
+      "checkbox": "This individual also has an another name they prefer to use",
       "note": "Preferred name refers to the name that an individual chooses to use and be addressed by, which may differ from their legal or given name.",
       "hint": "Example: William Smith may prefer to go by Bill Smith to their acquaintances"
     },
@@ -88,7 +100,7 @@
       "controlOfShares": "Indicate the {boldStart}type(s) of control{boldEnd} of the shares this individual has:",
       "controlOfVotes": "Indicate the {boldStart}type(s) of control{boldEnd} of the votes this individual has:",
       "shares": "If applicable, enter the {boldStart}percentage of shares{boldEnd} issued by the company that the individual controls",
-      "votes": "If applicable, enter the {boldStart}percentage of votes{boldEnd} issued by the company that the individual controls",
+      "votes": "If applicable, enter the {boldStart}percentage of votes{boldEnd} at company general meetings that the individual controls.",
       "controlOfDirectors": "If this individual has control of {boldStart}the right to elect, appoint, or remove a majority of the company's directors,{boldEnd} indicate the {boldStart}type(s) of control{boldEnd} of the right this individual has:",
       "lessThan25Note": "You are only considered a significant individual {boldStart}IF{boldEnd} you {boldStart}control 25% or more individually{boldEnd} or if you are controlling less than 25%, you need to be operating jointly or in concert with other parties.",
       "actingJointlyOrInConcert": {
@@ -173,20 +185,20 @@
 
     "otherReasons": {
       "description": "Enter any other reason(s) this individual is a significant individual.",
-      "textAreaPlaceholder": "Other reasons for individual significance"
+      "textAreaPlaceholder": "Other reasons for individual significance (Optional)"
     },
     "citizenshipPermanentResidency": "Indicate if this person is a citizen or permanent resident of Canada, or list all of the non-Canadian citizenship(s) of this person. If this person is a Citizen or Permanent resident of Canada, listing of multiple citizenships is not required.",
     "isCompetent": "I am able to manage my own financial affairs.",
     "isTaxResident": "Tax Resident of Canada",
     "isNotTaxResident": "Not a Tax Resident of Canada",
-    "myRegDetails": "Your BC Registries Details are shared with businesses that list you as a beneficial owner.",
+    "myRegDetails": "Your BC Registries Details are shared with businesses that list you as a significant individudal.",
     "significantIndividualChange": "Select the date of your significant individual changes. If you have significant individual changes that occurred on different dates, you will need to perform multiple Significant Individual Change filings — one for each unique date.",
     "tables": {
       "emptyTexts": {
-        "individualsSummaryTable": "No significant individuals added yet"
+        "individualsSummaryTable": "You have no Significant individuals listed"
       }
     },
-    "taxNumber": "A 9-digit Social Insurance Number (SIN), an Individual Tax Number (ITN), or a Temporary Taxation Number (TTN) is required if this person has one.",
+    "taxNumber": "A 9-digit Social Insurance Number (SIN), an Individual Tax Number (ITN), or a Temporary Taxation Number (TTN) is required if this individual has one.",
     "taxResidency": "Indicate if this person is a resident of Canada for Income Tax purposes.",
     "reviewConfirm": "Review the information in your registration. If you need to change anything, return to the previous step to make the necessary change.",
     "certify": {
@@ -198,10 +210,10 @@
     }
   },
   "placeholders": {
-    "fullName": "Full Name",
+    "fullName": "Individual's Full Name",
     "preferredName": "Preferred Name Information",
     "dateSelect": {
-      "birthdate": "Select Date",
+      "birthdate": "Birthdate",
       "significantIndividualChange": "Significant Individual Filing Effective Date",
       "startDate": "Start date",
       "endDate": "End date"
@@ -258,9 +270,13 @@
       "closed": "More help with significant individuals",
       "expanded": "Less help with significant individuals"
     },
-    "sharesAndVotes": {
-      "closed": "More help with shares & votes",
-      "expanded": "Less help with shares & votes"
+    "shares": {
+      "closed": "More help with shares",
+      "expanded": "Less help with shares"
+    },
+    "votes": {
+      "closed": "More help with voting shares",
+      "expanded": "Less help with voting shares"
     },
     "typesOfControl": {
       "closed": "More help with types of control",
@@ -277,21 +293,53 @@
   },
   "helpTexts": {
     "controlOfSharesVotes": {
-      "sharesAndVotes": {
-        "p1": "A significant individual must be listed in the transparency register of the company if the individual has an interest or rights or any combination of them in a significant number of shares. ",
-        "p2": "A significant number of shares is 25% or more of the issued shares of the company, or 25% or more of the voting rights of the company. Voting rights are attached to shares and the rights associated with those shares are set out in the articles of the company. While typically one share equals one vote, there may be different classes of shares that may hold special rights that afford the person who owns the shares to more than one vote.",
+      "shares": {
+        "p1": "A significant individual must be listed in the transparency register of the company if the individual has an interest or rights or any combination of them in a significant number of shares.",
+        "p2": "A significant number of shares is 25% or more of the issued shares of the company, see the {linkStart}text=\"Ministry of Finance webpage\" url=\"https://www2.gov.bc.ca/gov/content/employment-business/business/bc-companies/transparency-register\"{linkEnd} for further information, including combination rules. The issued shares of the company are set out in the central securities register.",
         "p3": "If you are unsure of how to make this determination, it is recommended you seek advice from a legal professional."
       },
+      "votes": {
+        "p1": "A significant number of voting shares is 25% or more of the voting rights of the company, see the {linkStart}text=\"Ministry of Finance webpage\" url=\"https://www2.gov.bc.ca/gov/content/employment-business/business/bc-companies/transparency-register\"{linkEnd} for further information, including combination rules.",
+        "p2": "If you are unsure of how to make this determination, it is recommended you seek advice from a legal professional."
+      },
       "typesOfControl": {
-        "p1": "Vestibulum id ligula porta felis euismod semper. Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Sed posuere consectetur est at lobortis."
+        "intro": "Control of the shares of a company can be held either as the registered owner, the beneficial owner, or through indirect control. In some cases, it is conceivable that a combination of two or more of these types of control exists and an individual may be both the registered and beneficial owner.",
+        "registeredOwner": {
+          "title": "Registered Owner",
+          "detail": "The registered owner is the natural individual who holds shares in the company."
+        },
+        "beneficialOwner": {
+          "title": "Beneficial owner (e.g., through a trust)",
+          "detail": "If shares in this business are held in trust, you must list the trustees as the registered owner, and you must also list the beneficiaries of the trust as the beneficial owners of the shares. Beneficiaries do not have to be listed in the transparency register if their beneficial interest is conditional on the death of another individual."
+        },
+        "indirectControl": {
+          "title": "Indirect control (e.g., through another business)",
+          "detail": "If another legal entity is the registered owner of the shares of a company, you must determine the individual(s), if any, that control the entity that is the registered owner of the shares."
+        }
       }
     },
     "controlOfDirectors": {
-      "p1": "Vestibulum id ligula porta felis euismod semper. Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Sed posuere consectetur est at lobortis."
+      "directControl": {
+        "title": "Direct Control",
+        "detail": "The individual has the right to elect, appoint or remove one or more of the company's directors."
+      },
+      "indirectControl": {
+        "title": "Indirect control (e.g., through another business)",
+        "detail": "If another legal entity is the registered owner of the shares of a company, you must determine the individual(s), if any, that control the entity that is the registered owner of the shares."
+      },
+      "significantInfluence": {
+        "title": "Significant influence control",
+        "detail": "An individual has the right to elect, appoint or remove one or more of the company's directors through an intermediary."
+      }
+    },
+    "actingJointlyOrInConcert": {
+      "p1": "Acting in concert is referenced in the Business Corporations Act section 119.11 (4)(a) and (b). The acting in concert rules add up the interests of different individuals where there is either an agreement or arrangement for the individuals to act in concert or both individuals are associates of each other and are deemed to act in concert.",
+      "list1": "Section 119.11(4)(a) applies if there is an agreement or arrangement under which the interests, rights or abilities are to be exercised jointly or in concert by those individuals. The individuals no longer act independently but instead in concert.",
+      "list2": "Section119.11(4)(b) applies if the individual has combined interest, rights or abilities with an associate. Certain relationships (“associate”) are deemed to act in concert: spouse of an individual, child of an individual, or relative of an individual or individual’s spouse living in the same home as the individual. In order to be deemed to act in concert, both individuals must be associates of each other. For further information please review sections 119.11(4)(b) and 192(1)(c)(d) of the BCA.",
+      "p2": "All individuals with joint control of the majority of directors must be listed as significant individuals."
     },
     "significantIndividuals": {
-      "helpPlaceholder1": "This is placeholder text. It's used as a temporary replacement for final content.",
-      "helpPlaceholder2": "Here's another example of placeholder text. It helps to visualize the layout and overall design in a mockup or prototype."
+      "detail": "A significant individual is the natural person who ultimately controls a company. There are many ways in which an individual can meet the criteria to be listed as a significant individual. Please consult the Business Corporations Act section 119.11 for further details on how to determine if your company has significant individuals and who they may be. You may also wish to consult the {linkStart}text=\"Ministry of Finance webpage\" url=\"https://www2.gov.bc.ca/gov/content/employment-business/business/bc-companies/transparency-register\"{linkEnd} for more information."
     }
   },
   "pageHeadings": {
@@ -302,7 +350,7 @@
   "sectionTitles": {
     "profileDetails": "Your Details",
     "reviewConfirm": "Review and Confirm",
-    "isYourOwnInformation": "Indicate if this is your information",
+    "isYourOwnInformation": "Completing Party",
     "individualsFullName": "Individual's Full Name",
     "controlOfShares": "Control of Shares",
     "controlOfVotes": "Control of Votes",
@@ -314,7 +362,7 @@
     "emailAddress": "Email Address",
     "individualDetails": "Individual Details",
     "citizenshipOrPR": "Citizenship / Permanent Residency",
-    "taxDetails": "Tax Details",
+    "taxDetails": "Canada Revenue Agency (CRA) Tax Number",
     "unableToObtainOrConfirmInformation": "Unable to Obtain or Confirm Information",
     "determinationOfIncapacity": "Determination of Incapacity"
   },

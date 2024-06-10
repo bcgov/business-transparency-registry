@@ -19,14 +19,18 @@
     </p>
 
     <BcrosHelpTip
-      :title="$t('helpTitles.sharesAndVotes.closed')"
-      :title-expanded="$t('helpTitles.sharesAndVotes.expanded')"
+      :title="$t(helpLabelClosed)"
+      :title-expanded="$t(helpLabelExpanded)"
     >
       <slot name="sharesAndVotesHelp">
-        <div class="flex flex-col gap-2">
-          <p>{{ $t('helpTexts.controlOfSharesVotes.sharesAndVotes.p1') }}</p>
-          <p>{{ $t('helpTexts.controlOfSharesVotes.sharesAndVotes.p2') }}</p>
-          <p>{{ $t('helpTexts.controlOfSharesVotes.sharesAndVotes.p3') }}</p>
+        <div v-if="model.controlName === ControlE.SHARES" class="flex flex-col gap-2">
+          <p>{{ $t('helpTexts.controlOfSharesVotes.shares.p1') }}</p>
+          <p><BcrosI18HelperLink translation-path="helpTexts.controlOfSharesVotes.shares.p2" /></p>
+          <p>{{ $t('helpTexts.controlOfSharesVotes.shares.p3') }}</p>
+        </div>
+        <div v-if="model.controlName === ControlE.VOTES" class="flex flex-col gap-2">
+          <p><BcrosI18HelperLink translation-path="helpTexts.controlOfSharesVotes.votes.p1" /></p>
+          <p>{{ $t('helpTexts.controlOfSharesVotes.votes.p2') }}</p>
         </div>
       </slot>
     </BcrosHelpTip>
@@ -71,7 +75,13 @@
     >
       <slot name="typesOfControlHelp">
         <div class="flex flex-col gap-2">
-          <p>{{ $t('helpTexts.controlOfSharesVotes.typesOfControl.p1') }}</p>
+          <p>{{ $t('helpTexts.controlOfSharesVotes.typesOfControl.intro') }}</p>
+          <p><b>{{ $t('helpTexts.controlOfSharesVotes.typesOfControl.registeredOwner.title') }}</b></p>
+          <p>{{ $t('helpTexts.controlOfSharesVotes.typesOfControl.registeredOwner.detail') }}</p>
+          <p><b>{{ $t('helpTexts.controlOfSharesVotes.typesOfControl.beneficialOwner.title') }}</b></p>
+          <p>{{ $t('helpTexts.controlOfSharesVotes.typesOfControl.beneficialOwner.detail') }}</p>
+          <p><b>{{ $t('helpTexts.controlOfSharesVotes.typesOfControl.indirectControl.title') }}</b></p>
+          <p>{{ $t('helpTexts.controlOfSharesVotes.typesOfControl.indirectControl.detail') }}</p>
         </div>
       </slot>
     </BcrosHelpTip>
@@ -81,7 +91,7 @@
       :name="name + '.jointlyOrInConcert'"
     >
       <template #inConcertControlHelp>
-        <span>{{ $t('helpTexts.significantIndividuals.helpPlaceholder1') }}</span>
+        <IndividualPersonControlJointlyOrInConcertControlHelp />
       </template>
     </IndividualPersonControlJointlyOrInConcertControl>
   </div>
@@ -113,12 +123,19 @@ watch(() => model.value, () => {
 
 let percentageText = ''
 let controlText = ''
+let helpLabelClosed = ''
+let helpLabelExpanded = ''
+
 if (model.value.controlName === ControlE.SHARES) {
   percentageText = 'texts.control.shares'
   controlText = 'texts.control.controlOfShares'
+  helpLabelClosed = 'helpTitles.shares.closed'
+  helpLabelExpanded = 'helpTitles.shares.expanded'
 } else if (model.value.controlName === ControlE.VOTES) {
   percentageText = 'texts.control.votes'
   controlText = 'texts.control.controlOfVotes'
+  helpLabelClosed = 'helpTitles.votes.closed'
+  helpLabelExpanded = 'helpTitles.votes.expanded'
 }
 
 // if no unique ids added on checkboxes, labels get messed up

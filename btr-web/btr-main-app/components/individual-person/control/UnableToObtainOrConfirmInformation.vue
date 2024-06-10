@@ -4,7 +4,7 @@
       v-model="isUnableToObtainOrConfirmInformation"
       name="isUnableToObtainOrConfirmInformation"
       :label="$t('labels.unableToObtainOrConfirmInformation.checkboxText')"
-      class="py-2 w-full"
+      class="pb-2 w-full"
       variant="bcGov"
       data-cy="isUnableToObtainOrConfirmInformationCheckbox"
       @change="isUnableToObtainOrConfirmInformationCheckboxChange"

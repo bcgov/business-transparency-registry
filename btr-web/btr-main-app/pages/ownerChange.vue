@@ -12,10 +12,7 @@
         :title-expanded="$t('helpTitles.significantIndividuals.expanded')"
       >
         <template #default>
-          <ul class="mx-3">
-            <li>{{ $t('helpTexts.significantIndividuals.helpPlaceholder1') }}</li>
-            <li>{{ $t('helpTexts.significantIndividuals.helpPlaceholder2') }}</li>
-          </ul>
+          <BcrosI18HelperLink translation-path="helpTexts.significantIndividuals.detail" />
         </template>
       </BcrosHelpTip>
       <div v-if="showNoSignificantIndividuals" class="p-5">

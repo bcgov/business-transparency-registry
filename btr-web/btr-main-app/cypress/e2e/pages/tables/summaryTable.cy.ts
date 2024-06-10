@@ -184,7 +184,7 @@ describe('pages -> Summary Table', () => {
     })
 
     cy.get('[data-cy="individualsSummaryTable"]').get('td')
-      .should('contain.text', 'No significant individuals added yet')
+      .should('contain.text', 'You have no Significant individuals listed')
   })
 
   it('test the REMOVE button in the Edit form', () => {
@@ -197,7 +197,7 @@ describe('pages -> Summary Table', () => {
     })
 
     cy.get('[data-cy="individualsSummaryTable"]').get('td')
-      .should('contain.text', 'No significant individuals added yet')
+      .should('contain.text', 'You have no Significant individuals listed')
   })
 
   it('Editing should be disabled when the user is adding a new SI', () => {
