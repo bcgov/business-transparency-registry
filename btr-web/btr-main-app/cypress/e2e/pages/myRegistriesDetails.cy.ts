@@ -6,7 +6,9 @@ describe('pages -> My Registries Details', () => {
   it('rendered expected visuals', () => {
     cy.get('[data-cy=myRegDetailsHeader]').should('contain', 'My BC Registries Details')
     cy.get('[data-cy=myRegDetailsHeaderSub]')
-      .should('contain', 'Your BC Registries Details are shared with businesses that list you as a beneficial owner.')
+      .should(
+        'contain', 'Your BC Registries Details are shared with businesses that list you as a significant individudal.'
+      )
     cy.get('[data-cy=myRegDetailsSectionHeader]').should('contain', 'Your Details')
     cy.get('[data-cy=myRegDetailsTable]').should('exist')
   })
@@ -16,12 +18,12 @@ describe('pages -> My Registries Details', () => {
     cy.get('[data-cy=myRegDetailsTable]').get('td').should('have.length', 16)
 
     const expectedData = [
-      { label: "Individual's Full Name", value: 'Wallaby Wobbles' },
+      { label: 'Full Legal Name', value: 'Wallaby Wobbles' },
       { label: 'Birthdate', value: 'September 25, 1993' },
       { label: 'Residential Address', value: '123 Fake StVictoria BC\u00A0\u00A0V2L 3T6Canada' },
       { label: 'Email Address', value: '1@1.com' },
       {
-        label: 'Canada Revenue Agency (CRA) Tax Number',
+        label: 'Tax Number',
         subLabel: 'Social Insurance Number (SIN)',
         value: '123 456 789'
       },

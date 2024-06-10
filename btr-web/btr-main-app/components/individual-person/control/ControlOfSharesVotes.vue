@@ -19,14 +19,18 @@
     </p>
 
     <BcrosHelpTip
-      :title="$t('helpTitles.sharesAndVotes.closed')"
-      :title-expanded="$t('helpTitles.sharesAndVotes.expanded')"
+      :title="$t(helpLabelClosed)"
+      :title-expanded="$t(helpLabelExpanded)"
     >
       <slot name="sharesAndVotesHelp">
-        <div class="flex flex-col gap-2">
-          <p>{{ $t('helpTexts.controlOfSharesVotes.sharesAndVotes.p1') }}</p>
-          <p>{{ $t('helpTexts.controlOfSharesVotes.sharesAndVotes.p2') }}</p>
-          <p>{{ $t('helpTexts.controlOfSharesVotes.sharesAndVotes.p3') }}</p>
+        <div v-if="model.controlName === ControlE.SHARES" class="flex flex-col gap-2">
+          <p>{{ $t('helpTexts.controlOfSharesVotes.shares.p1') }}</p>
+          <p><BcrosI18HelperLink translation-path="helpTexts.controlOfSharesVotes.shares.p2" /></p>
+          <p>{{ $t('helpTexts.controlOfSharesVotes.shares.p3') }}</p>
+        </div>
+        <div v-if="model.controlName === ControlE.VOTES" class="flex flex-col gap-2">
+          <p><BcrosI18HelperLink translation-path="helpTexts.controlOfSharesVotes.votes.p1" /></p>
+          <p>{{ $t('helpTexts.controlOfSharesVotes.votes.p2') }}</p>
         </div>
       </slot>
     </BcrosHelpTip>
@@ -71,7 +75,11 @@
     >
       <slot name="typesOfControlHelp">
         <div class="flex flex-col gap-2">
-          <p>{{ $t('helpTexts.controlOfSharesVotes.typesOfControl.p1') }}</p>
+          <p>{{ $t('helpTexts.controlOfSharesVotes.typesOfControl.intro') }}</p>
+          <template v-for="(control, index) in typeOfControlHelpText" :key="index">
+            <strong>{{ control.title }}</strong>
+            <p>{{ control.detail }}</p>
+          </template>
         </div>
       </slot>
     </BcrosHelpTip>
@@ -81,7 +89,7 @@
       :name="name + '.jointlyOrInConcert'"
     >
       <template #inConcertControlHelp>
-        <span>{{ $t('helpTexts.significantIndividuals.helpPlaceholder1') }}</span>
+        <IndividualPersonControlJointlyOrInConcertControlHelp />
       </template>
     </IndividualPersonControlJointlyOrInConcertControl>
   </div>
@@ -91,6 +99,8 @@
 import { v4 as UUIDv4 } from 'uuid'
 import { type UseEventBusReturn } from '@vueuse/core'
 import { SiControlOfSchemaType } from '~/utils/si-schema/definitions'
+
+const t = useNuxtApp().$i18n.t
 
 const formBus = inject<UseEventBusReturn<any, string> | undefined>('form-events', undefined)
 
@@ -113,16 +123,39 @@ watch(() => model.value, () => {
 
 let percentageText = ''
 let controlText = ''
+let helpLabelClosed = ''
+let helpLabelExpanded = ''
+
 if (model.value.controlName === ControlE.SHARES) {
   percentageText = 'texts.control.shares'
   controlText = 'texts.control.controlOfShares'
+  helpLabelClosed = 'helpTitles.shares.closed'
+  helpLabelExpanded = 'helpTitles.shares.expanded'
 } else if (model.value.controlName === ControlE.VOTES) {
   percentageText = 'texts.control.votes'
   controlText = 'texts.control.controlOfVotes'
+  helpLabelClosed = 'helpTitles.votes.closed'
+  helpLabelExpanded = 'helpTitles.votes.expanded'
 }
 
 // if no unique ids added on checkboxes, labels get messed up
 const registeredOwnerId = UUIDv4()
 const beneficialOwnerId = UUIDv4()
 const indirectControlId = UUIDv4()
+
+// help text paragraphs
+const typeOfControlHelpText = [
+  {
+    title: t('helpTexts.controlOfSharesVotes.typesOfControl.registeredOwner.title'),
+    detail: t('helpTexts.controlOfSharesVotes.typesOfControl.registeredOwner.detail')
+  },
+  {
+    title: t('helpTexts.controlOfSharesVotes.typesOfControl.beneficialOwner.title'),
+    detail: t('helpTexts.controlOfSharesVotes.typesOfControl.beneficialOwner.detail')
+  },
+  {
+    title: t('helpTexts.controlOfSharesVotes.typesOfControl.indirectControl.title'),
+    detail: t('helpTexts.controlOfSharesVotes.typesOfControl.indirectControl.detail')
+  }
+]
 </script>

@@ -6,7 +6,7 @@
         :name="name"
         :label="$t('labels.determinationOfIncapacity')"
         :variant="error ? 'error' : 'bcGov'"
-        class="py-2"
+        class="pb-2"
       />
     </UFormGroup>
     <BcrosAlertsMessage v-if="model" :flavour="AlertsFlavourE.INFO">

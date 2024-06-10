@@ -41,10 +41,10 @@
 const t = useNuxtApp().$i18n.t
 
 const items: InfoTableItemI = [
-  { label: t('labels.fullName'), info: 'Wallaby Wobbles' },
-  { label: t('labels.birthdate'), info: 'September 25, 1993' },
+  { label: t('registriesDetailsLabels.fullName'), info: 'Wallaby Wobbles' },
+  { label: t('registriesDetailsLabels.birthdate'), info: 'September 25, 1993' },
   {
-    label: t('labels.addressResidential'),
+    label: t('registriesDetailsLabels.addressResidential'),
     info: {
       country: { name: 'Canada', alpha_2: 'CA' },
       line1: '123 Fake St',
@@ -54,11 +54,20 @@ const items: InfoTableItemI = [
     },
     slot: 'address'
   },
-  { label: t('labels.emailAddress'), info: '1@1.com' },
-  { label: t('labels.taxNumber'), subLabel: t('labels.socialInsuranceNumber'), info: '123 456 789' },
-  { label: t('labels.citizenshipPR'), subLabel: t('labels.citizenship'), info: 'Canada', slot: 'citizenship' },
-  { label: t('labels.taxResidency'), info: 'Canada' },
-  { label: t('labels.competency'), info: true, slot: 'competency' }
+  { label: t('registriesDetailsLabels.emailAddress'), info: '1@1.com' },
+  {
+    label: t('registriesDetailsLabels.taxNumber'),
+    subLabel: t('registriesDetailsLabels.socialInsuranceNumber'),
+    info: '123 456 789'
+  },
+  {
+    label: t('registriesDetailsLabels.citizenshipPR'),
+    subLabel: t('registriesDetailsLabels.citizenship'),
+    info: 'Canada',
+    slot: 'citizenship'
+  },
+  { label: t('registriesDetailsLabels.taxResidency'), info: 'Canada' },
+  { label: t('registriesDetailsLabels.competency'), info: true, slot: 'competency' }
 ]
 </script>
 
