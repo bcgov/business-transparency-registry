@@ -129,5 +129,33 @@ const regions = computed(() => {
 
 const addrAutoCompleted = (selectedAddr: BtrAddressI) => {
   Object.assign(address.value, selectedAddr)
+
+  formBus?.emit({ type: 'blur', path: props.name + '.country' })
+  formBus?.emit({ type: 'change', path: props.name + '.country' })
+
+  setTimeout(() => {
+    formBus?.emit({ type: 'blur', path: props.name + '.line1' })
+    formBus?.emit({ type: 'change', path: props.name + '.line1' })
+  }, 10)
+
+  setTimeout(() => {
+    formBus?.emit({ type: 'blur', path: props.name + '.line2' })
+    formBus?.emit({ type: 'change', path: props.name + '.line2' })
+  }, 20)
+
+  setTimeout(() => {
+    formBus?.emit({ type: 'blur', path: props.name + '.city' })
+    formBus?.emit({ type: 'change', path: props.name + '.city' })
+  }, 30)
+
+  setTimeout(() => {
+    formBus?.emit({ type: 'blur', path: props.name + '.postalCode' })
+    formBus?.emit({ type: 'change', path: props.name + '.postalCode' })
+  }, 40)
+
+  setTimeout(() => {
+    formBus?.emit({ type: 'blur', path: props.name + '.region' })
+    formBus?.emit({ type: 'change', path: props.name + '.region' })
+  }, 50)
 }
 </script>
