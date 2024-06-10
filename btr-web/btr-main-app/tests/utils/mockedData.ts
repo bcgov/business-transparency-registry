@@ -62,7 +62,7 @@ export const testSI: SiSchemaType = {
   ui: {
     action: FilingActionE.ADD
   },
-  sharesInConcert: [{ uuid: '002' }],
+  sharesInConcert: [{ uuid: '002', legalName: 'Another test name' }],
   sharesActingJointly: [],
   votesInConcert: [],
   votesActingJointly: [],
@@ -129,7 +129,7 @@ export const testSI2: SiSchemaType = {
   ui: {
     action: FilingActionE.ADD
   },
-  sharesInConcert: [{ uuid: '001' }],
+  sharesInConcert: [{ uuid: '001', legalName: 'Test Name', preferredName: 'Waffles Test' }],
   sharesActingJointly: [],
   votesInConcert: [],
   votesActingJointly: [],

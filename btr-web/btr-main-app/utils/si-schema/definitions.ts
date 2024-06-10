@@ -9,7 +9,9 @@ const StartEndDateGroup = z.object({
 export type StartEndDateGroupSchemaType = z.infer<typeof StartEndDateGroup>
 
 const ConnectedIndividual = z.object({
-  uuid: z.string()
+  uuid: z.string(),
+  legalName: z.string(),
+  preferredName: z.string().optional()
 })
 
 export type ConnectedInvidualSchemaType = z.infer<typeof ConnectedIndividual>

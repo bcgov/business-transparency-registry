@@ -12,6 +12,8 @@ export interface BodsAgentI {
 
 export interface BodsConnectedIndividualI {
   uuid: string
+  legalName: string
+  preferredName?: string
 }
 
 export interface BodsSourceI {

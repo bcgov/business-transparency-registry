@@ -162,7 +162,9 @@ const individualsWithSharesActingJointly = computed({
   },
 
   set (selectedIndividuals) {
-    model.value.sharesActingJointly = selectedIndividuals.map((individual) => { return { uuid: individual.uuid } })
+    model.value.sharesActingJointly = selectedIndividuals.map((individual) => {
+      return getConnectedIndividual(individual)
+    })
   }
 })
 
@@ -178,7 +180,9 @@ const individualsWithSharesInConcert = computed({
   },
 
   set (selectedIndividuals) {
-    model.value.sharesInConcert = selectedIndividuals.map((individual) => { return { uuid: individual.uuid } })
+    model.value.sharesInConcert = selectedIndividuals.map((individual) => {
+      return getConnectedIndividual(individual)
+    })
   }
 })
 
@@ -194,7 +198,9 @@ const individualsWithVotesActingJointly = computed({
   },
 
   set (selectedIndividuals) {
-    model.value.votesActingJointly = selectedIndividuals.map((individual) => { return { uuid: individual.uuid } })
+    model.value.votesActingJointly = selectedIndividuals.map((individual) => {
+      return getConnectedIndividual(individual)
+    })
   }
 })
 
@@ -210,7 +216,9 @@ const individualsWithVotesInConcert = computed({
   },
 
   set (selectedIndividuals) {
-    model.value.votesInConcert = selectedIndividuals.map((individual) => { return { uuid: individual.uuid } })
+    model.value.votesInConcert = selectedIndividuals.map((individual) => {
+      return getConnectedIndividual(individual)
+    })
   }
 })
 
@@ -226,7 +234,9 @@ const individualsWithDirectorControlActingJointly = computed({
   },
 
   set (selectedIndividuals) {
-    model.value.directorsActingJointly = selectedIndividuals.map((individual) => { return { uuid: individual.uuid } })
+    model.value.directorsActingJointly = selectedIndividuals.map((individual) => {
+      return getConnectedIndividual(individual)
+    })
   }
 })
 
@@ -242,7 +252,14 @@ const individualsWithDirectorControlInConcert = computed({
   },
 
   set (selectedIndividuals) {
-    model.value.directorsInConcert = selectedIndividuals.map((individual) => { return { uuid: individual.uuid } })
+    model.value.directorsInConcert = selectedIndividuals.map((individual) => {
+      return getConnectedIndividual(individual)
+    })
   }
 })
+
+const getConnectedIndividual = (individual) => {
+  const si = currentSIFiling.value.significantIndividuals.find(person => person.uuid === individual.uuid)
+  return { uuid: si.uuid, legalName: si.name.fullName, preferredName: si.name.preferredName }
+}
 </script>
