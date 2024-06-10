@@ -76,12 +76,10 @@
       <slot name="typesOfControlHelp">
         <div class="flex flex-col gap-2">
           <p>{{ $t('helpTexts.controlOfSharesVotes.typesOfControl.intro') }}</p>
-          <p><b>{{ $t('helpTexts.controlOfSharesVotes.typesOfControl.registeredOwner.title') }}</b></p>
-          <p>{{ $t('helpTexts.controlOfSharesVotes.typesOfControl.registeredOwner.detail') }}</p>
-          <p><b>{{ $t('helpTexts.controlOfSharesVotes.typesOfControl.beneficialOwner.title') }}</b></p>
-          <p>{{ $t('helpTexts.controlOfSharesVotes.typesOfControl.beneficialOwner.detail') }}</p>
-          <p><b>{{ $t('helpTexts.controlOfSharesVotes.typesOfControl.indirectControl.title') }}</b></p>
-          <p>{{ $t('helpTexts.controlOfSharesVotes.typesOfControl.indirectControl.detail') }}</p>
+          <template v-for="(control, index) in typeOfControlHelpText" :key="index">
+            <strong>{{ control.title }}</strong>
+            <p>{{ control.detail }}</p>
+          </template>
         </div>
       </slot>
     </BcrosHelpTip>
@@ -101,6 +99,8 @@
 import { v4 as UUIDv4 } from 'uuid'
 import { type UseEventBusReturn } from '@vueuse/core'
 import { SiControlOfSchemaType } from '~/utils/si-schema/definitions'
+
+const t = useNuxtApp().$i18n.t
 
 const formBus = inject<UseEventBusReturn<any, string> | undefined>('form-events', undefined)
 
@@ -142,4 +142,20 @@ if (model.value.controlName === ControlE.SHARES) {
 const registeredOwnerId = UUIDv4()
 const beneficialOwnerId = UUIDv4()
 const indirectControlId = UUIDv4()
+
+// help text paragraphs
+const typeOfControlHelpText = [
+  {
+    title: t('helpTexts.controlOfSharesVotes.typesOfControl.registeredOwner.title'),
+    detail: t('helpTexts.controlOfSharesVotes.typesOfControl.registeredOwner.detail')
+  },
+  {
+    title: t('helpTexts.controlOfSharesVotes.typesOfControl.beneficialOwner.title'),
+    detail: t('helpTexts.controlOfSharesVotes.typesOfControl.beneficialOwner.detail')
+  },
+  {
+    title: t('helpTexts.controlOfSharesVotes.typesOfControl.indirectControl.title'),
+    detail: t('helpTexts.controlOfSharesVotes.typesOfControl.indirectControl.detail')
+  }
+]
 </script>
