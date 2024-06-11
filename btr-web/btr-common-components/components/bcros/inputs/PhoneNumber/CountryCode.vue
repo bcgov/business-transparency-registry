@@ -3,9 +3,19 @@
     v-model="selectedCountry"
     :options="countryListOptions"
     variant="bcGov"
+    size="sm"
     option-attribute="label"
-    :ui-menu=" { option: { container: 'flex flex-row w-full py-0 m-0' }}"
-    class="flex items-center w-full bg-red-400"
+    :ui="{
+      icon: {
+        leading: {
+          padding: {
+            sm: 'ps-1.5 pb-2'
+          }
+        }
+      }
+    }"
+    :padded="false"
+    @input="manualInput($event)"
   >
     <template #leading>
       <BcrosCountryFlag
@@ -28,16 +38,15 @@
 <script setup lang="ts">
 import countryList from 'country-codes-list'
 import BcrosCountryFlag from '~/components/bcros/CountryFlag.vue'
+import { CountryListItemI } from '~/interfaces/country-dropdown-i'
 
 const _countryListOptions =
   countryList.customList('countryCode', '{countryCallingCode},{countryNameEn},{countryNameLocal}')
 
-interface CountryListItemI {
-  countryCode2letterIso: string,
-  countryCallingCode: string,
-  label: string,
-  countryNameLocal: string,
-  countryNameEn: string
+const manualInput = (event) => {
+  selectedCountry.value = {
+    countryCallingCode: event.target.value
+  }
 }
 
 const countryListOptions: Array<CountryListItemI> = Object.keys(_countryListOptions).map(key => {

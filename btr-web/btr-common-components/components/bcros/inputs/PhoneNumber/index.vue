@@ -1,4 +1,5 @@
 <template>
+  {{ phoneNumber }}
   <div class="flex flex-row gap-4">
     <UFormGroup v-slot="{ error }" :name="name + '.countryCode'" class="w-1/4">
       <BcrosInputsPhoneNumberCountryCode
@@ -6,7 +7,6 @@
         v-model:country-code2letter-iso="phoneNumber.countryCode2letterIso"
         data-cy="phoneNumber.countryCode"
         :placeholder="$t('placeholder.phoneNumber.countryCode')"
-
       />
     </UFormGroup>
     <UFormGroup :name="name + '.number'" class="w-1/2">
