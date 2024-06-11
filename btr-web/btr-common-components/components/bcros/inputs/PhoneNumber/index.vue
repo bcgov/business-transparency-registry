@@ -11,13 +11,17 @@
     <UFormGroup :name="name + '.number'" class="w-1/2">
       <template #help>
         <BcrosTooltip
-          :text="$t('helpTexts.phoneNumber.mustBe10DigitsLongTooltip')"
           :popper="{
             placement: 'bottom',
             arrow: true,
             resize: true
           }"
         >
+          <template #tooltip-text>
+            <span class="whitespace-normal place-content: center">
+              {{ $t('helpTexts.phoneNumber.mustBe10DigitsLongTooltip') }}
+            </span>
+          </template>
           <span class="text-xs">
             {{ $t('helpTexts.phoneNumber.mustBe10DigitsLong') }}
           </span>

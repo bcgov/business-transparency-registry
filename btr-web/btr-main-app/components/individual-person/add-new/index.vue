@@ -195,6 +195,7 @@
         <BcrosInputsPhoneNumber
           v-model="inputFormSi.phoneNumber"
           name="phoneNumber"
+          data-cy="phoneNumberInput"
         />
       </BcrosSection>
       <BcrosSection
