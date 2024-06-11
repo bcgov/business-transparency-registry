@@ -23,6 +23,9 @@
         :tooltip-text="selectedCountry?.countryNameLocal"
         :country-code-iso2letter="selectedCountry?.countryCode2letterIso"
       />
+      <div v-else>
+        &nbsp;
+      </div>
     </template>
 
     <template #option="{ option: optionItem }">
@@ -39,6 +42,12 @@
 import countryList from 'country-codes-list'
 import BcrosCountryFlag from '~/components/bcros/CountryFlag.vue'
 import { CountryListItemI } from '~/interfaces/country-dropdown-i'
+import { watch } from 'vue'
+
+const countryCallingCode = defineModel<string | undefined>('countryCallingCode', { required: false })
+const countryCode2letterIso = defineModel<string | undefined>('countryCode2letterIso', { required: false })
+
+const selectedCountry = ref<CountryListItemI | undefined>(undefined)
 
 const _countryListOptions =
   countryList.customList('countryCode', '{countryCallingCode},{countryNameEn},{countryNameLocal}')
@@ -60,13 +69,12 @@ const countryListOptions: Array<CountryListItemI> = Object.keys(_countryListOpti
   }
 }).sort((a, b) => a.countryCallingCode.localeCompare(b.countryCallingCode))
 
-const countryCallingCode = defineModel<string | undefined>('countryCallingCode', { required: false })
-const countryCode2letterIso = defineModel<string | undefined>('countryCode2letterIso', { required: false })
-
-const selectedCountry = ref<CountryListItemI | undefined>(undefined)
+const selectCountry = (countryCode2letterIso: string) => {
+  selectedCountry.value = countryListOptions.find(item => item.countryCode2letterIso === countryCode2letterIso)
+}
 
 if (countryCode2letterIso.value !== undefined) {
-  selectedCountry.value = countryListOptions.find(item => item.countryCode2letterIso === countryCode2letterIso.value)
+  selectCountry(countryCode2letterIso.value)
 } else if (countryCallingCode.value !== undefined) {
   selectedCountry.value = {
     countryCallingCode: `+${countryCallingCode.value}`
@@ -85,4 +93,12 @@ watch(
   }
 )
 
+watch(
+  () => countryCode2letterIso.value,
+  () => {
+    if (selectedCountry.value === undefined && countryCode2letterIso.value !== undefined) {
+      selectCountry(countryCode2letterIso.value)
+    }
+  }
+)
 </script>

@@ -184,6 +184,7 @@
             id="addNewPersonLastKnownAddress"
             v-model="inputFormSi.address"
             name="address"
+            @country-change="countryChange"
           />
         </div>
       </BcrosSection>
@@ -419,6 +420,17 @@ const addIndividualForm = ref()
 
 const formChange = async () => {
   await addBtrPayFees()
+}
+
+const countryChange = () => {
+  if (
+    undefined === inputFormSi.phoneNumber.countryCallingCode &&
+    undefined === inputFormSi.phoneNumber.countryCode2letterIso &&
+    undefined === inputFormSi.phoneNumber.number &&
+    undefined !== inputFormSi.address?.country?.alpha_2
+  ) {
+    inputFormSi.phoneNumber.countryCode2letterIso = inputFormSi.address.country.alpha_2
+  }
 }
 
 function hasErrors (sectionErrorPaths: string[]): boolean {

@@ -50,6 +50,10 @@ import { PhoneSchemaType } from '~/interfaces/zod-schemas-t'
 
 const phoneNumber = defineModel<PhoneSchemaType>({ required: true })
 
+defineProps({
+  name: { type: String, default: 'phoneNumber' }
+})
+
 const northAmericaMask = '(###) ###-####'
 const otherMask = '##############'
 
@@ -64,13 +68,4 @@ watch(
   },
   { immediate: false, deep: true }
 )
-
-defineProps({
-  name: { type: String, default: 'phoneNumber' }
-})
-
-// watch(model, () => {
-//   formBus?.emit({ type: 'blur', path: props.name })
-//   formBus?.emit({ type: 'change', path: props.name })
-// }, { deep: true })
 </script>
