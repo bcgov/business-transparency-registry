@@ -302,6 +302,10 @@
     }
   },
   "helpTexts": {
+    "phoneNumber": {
+      "mustBe10DigitsLongTooltip": "Please double check your records and if you cannot match the info please check the section below: Unable to obtain information and detail steps taken.",
+      "mustBe10DigitsLong": "Number must be 10 digits long"
+    },
     "controlOfSharesVotes": {
       "shares": {
         "p1": "A significant individual must be listed in the transparency register of the company if the individual has an interest or rights or any combination of them in a significant number of shares.",

@@ -192,8 +192,8 @@
         :section-title="$t('sectionTitles.phoneNumber')"
       >
         <BcrosInputsPhoneNumber
-          name="phoneNumber"
           v-model="inputFormSi.phoneNumber"
+          name="phoneNumber"
         />
       </BcrosSection>
       <BcrosSection

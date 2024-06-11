@@ -6,13 +6,30 @@
         v-model:country-code2letter-iso="phoneNumber.countryCode2letterIso"
         data-cy="phoneNumber.countryCode"
         :placeholder="$t('placeholder.phoneNumber.countryCode')"
+
       />
     </UFormGroup>
-    <UFormGroup v-slot="{ error }" :name="name + '.number'" class="w-1/2">
+    <UFormGroup :name="name + '.number'" class="w-1/2">
+      <template #help>
+        <BcrosTooltip
+          :text="$t('helpTexts.phoneNumber.mustBe10DigitsLongTooltip')"
+          :popper="{
+              placement: 'bottom',
+              arrow: true,
+              resize: true
+            }"
+        >
+          <span class="text-xs">
+            {{ $t('helpTexts.phoneNumber.mustBe10DigitsLong') }}
+          </span>
+        </BcrosTooltip>
+      </template>
       <UInput
-        v-model="phoneNumber.number"
+        v-model="masked_phone_number"
         variant="bcGov"
         data-cy="phoneNumber.number"
+        v-maska:unmaskedvalue.unmasked
+        :data-maska="inputMask"
         :placeholder="$t('placeholder.phoneNumber.number')"
       />
     </UFormGroup>
@@ -28,13 +45,29 @@
 </template>
 
 <script setup lang="ts">
+import { vMaska } from "maska/vue"
 import { PhoneSchemaType } from '~/interfaces/zod-schemas-t'
-import x from '#components'
-const phoneNumber = defineModel<PhoneSchemaType>({ default: undefined })
-// const emit = defineEmits<{ (e: 'update:modelValue', value: string | undefined): void }>()
+import { watch } from 'vue'
 
-const props = defineProps({
-  name: { type: String, default: 'name.fullName' }
+const phoneNumber = defineModel<PhoneSchemaType>({ required: true })
+
+const northAmericaMask = '(###) ###-####'
+const otherMask = '##############'
+
+const unmaskedvalue = ref()
+const masked_phone_number = ref()
+const inputMask = computed(() => phoneNumber.value.countryCallingCode === '1' ? northAmericaMask : otherMask)
+
+watch(
+  () => unmaskedvalue,
+  () => {
+    phoneNumber.value.number = unmaskedvalue.value
+  },
+  { immediate: false, deep: true }
+)
+
+defineProps({
+  name: { type: String, default: 'phoneNumber' }
 })
 
 // watch(model, () => {

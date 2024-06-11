@@ -8,11 +8,11 @@
     class="flex items-center w-full bg-red-400"
   >
     <template #leading>
-        <BcrosCountryFlag
-          v-if="!!selectedCountry?.countryCode2letterIso"
-          :tooltipText="selectedCountry?.countryNameLocal"
-          :countryCodeIso2letter="selectedCountry?.countryCode2letterIso"
-        />
+      <BcrosCountryFlag
+        v-if="!!selectedCountry?.countryCode2letterIso"
+        :tooltipText="selectedCountry?.countryNameLocal"
+        :countryCodeIso2letter="selectedCountry?.countryCode2letterIso"
+      />
     </template>
 
     <template #option="{ option: optionItem }">
@@ -51,16 +51,29 @@ const countryListOptions: Array<CountryListItemI> = Object.keys(_countryListOpti
   }
 }).sort((a, b) => a.countryCallingCode.localeCompare(b.countryCallingCode))
 
-const countryCode = defineModel<string | undefined>('countryCallingCode', { required: false })
+const countryCallingCode = defineModel<string | undefined>('countryCallingCode', { required: false })
 const countryCode2letterIso = defineModel<string | undefined>('countryCode2letterIso', { required: false })
 
 const selectedCountry = ref<CountryListItemI | undefined>(undefined)
 
 if (countryCode2letterIso.value !== undefined) {
   selectedCountry.value = countryListOptions.find(item => item.countryCode2letterIso === countryCode2letterIso.value)
-} else if (countryCode.value !== undefined) {
+} else if (countryCallingCode.value !== undefined) {
   selectedCountry.value = {
-    countryCallingCode: `+${countryCode.value}`
+    countryCallingCode: `+${countryCallingCode.value}`
   }
 }
+
+watch(
+  selectedCountry,
+  (newVal) => {
+    if (newVal?.countryCallingCode !== countryCallingCode.value) {
+      countryCallingCode.value = newVal?.countryCallingCode
+    }
+    if (newVal?.countryCode2letterIso !== countryCode2letterIso.value) {
+      countryCode2letterIso.value = newVal?.countryCode2letterIso
+    }
+  }
+)
+
 </script>
