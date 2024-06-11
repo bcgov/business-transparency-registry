@@ -20,15 +20,15 @@
     <template #leading>
       <BcrosCountryFlag
         v-if="!!selectedCountry?.countryCode2letterIso"
-        :tooltipText="selectedCountry?.countryNameLocal"
-        :countryCodeIso2letter="selectedCountry?.countryCode2letterIso"
+        :tooltip-text="selectedCountry?.countryNameLocal"
+        :country-code-iso2letter="selectedCountry?.countryCode2letterIso"
       />
     </template>
 
     <template #option="{ option: optionItem }">
       <BcrosCountryFlag
-        :tooltipText="optionItem.countryNameLocal"
-        :countryCodeIso2letter="optionItem.countryCode2letterIso"
+        :tooltip-text="optionItem.countryNameLocal"
+        :country-code-iso2letter="optionItem.countryCode2letterIso"
       />
       <span class="truncate h-5">{{ optionItem.label }}</span>
     </template>
@@ -49,14 +49,14 @@ const manualInput = (event) => {
   }
 }
 
-const countryListOptions: Array<CountryListItemI> = Object.keys(_countryListOptions).map(key => {
+const countryListOptions: Array<CountryListItemI> = Object.keys(_countryListOptions).map((key) => {
   const [countryCallingCode, countryNameEn, countryNameLocal] = _countryListOptions[key].split(',')
   return {
     countryCode2letterIso: key,
-    countryCallingCode: countryCallingCode,
+    countryCallingCode,
     label: `+${countryCallingCode}`,
-    countryNameLocal: countryNameLocal,
-    countryNameEn: countryNameEn
+    countryNameLocal,
+    countryNameEn
   }
 }).sort((a, b) => a.countryCallingCode.localeCompare(b.countryCallingCode))
 

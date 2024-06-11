@@ -1,7 +1,6 @@
 <template>
-  {{ phoneNumber }}
   <div class="flex flex-row gap-4">
-    <UFormGroup v-slot="{ error }" :name="name + '.countryCode'" class="w-1/4">
+    <UFormGroup :name="name + '.countryCode'" class="w-1/4">
       <BcrosInputsPhoneNumberCountryCode
         v-model:country-calling-code="phoneNumber.countryCallingCode"
         v-model:country-code2letter-iso="phoneNumber.countryCode2letterIso"
@@ -14,10 +13,10 @@
         <BcrosTooltip
           :text="$t('helpTexts.phoneNumber.mustBe10DigitsLongTooltip')"
           :popper="{
-              placement: 'bottom',
-              arrow: true,
-              resize: true
-            }"
+            placement: 'bottom',
+            arrow: true,
+            resize: true
+          }"
         >
           <span class="text-xs">
             {{ $t('helpTexts.phoneNumber.mustBe10DigitsLong') }}
@@ -25,15 +24,15 @@
         </BcrosTooltip>
       </template>
       <UInput
-        v-model="masked_phone_number"
+        v-model="maskedPhoneNumber"
+        v-maska:unmaskedvalue.unmasked
         variant="bcGov"
         data-cy="phoneNumber.number"
-        v-maska:unmaskedvalue.unmasked
         :data-maska="inputMask"
         :placeholder="$t('placeholder.phoneNumber.number')"
       />
     </UFormGroup>
-    <UFormGroup v-slot="{ error }" :name="name + '.extension'" class="w-1/4">
+    <UFormGroup :name="name + '.extension'" class="w-1/4">
       <UInput
         v-model="phoneNumber.extension"
         :placeholder="$t('placeholder.phoneNumber.extension') + ' (' + $t('general.optional') + ')'"
@@ -45,9 +44,9 @@
 </template>
 
 <script setup lang="ts">
-import { vMaska } from "maska/vue"
-import { PhoneSchemaType } from '~/interfaces/zod-schemas-t'
+import { vMaska } from 'maska/vue'
 import { watch } from 'vue'
+import { PhoneSchemaType } from '~/interfaces/zod-schemas-t'
 
 const phoneNumber = defineModel<PhoneSchemaType>({ required: true })
 
@@ -55,7 +54,7 @@ const northAmericaMask = '(###) ###-####'
 const otherMask = '##############'
 
 const unmaskedvalue = ref()
-const masked_phone_number = ref()
+const maskedPhoneNumber = ref()
 const inputMask = computed(() => phoneNumber.value.countryCallingCode === '1' ? northAmericaMask : otherMask)
 
 watch(

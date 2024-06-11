@@ -340,8 +340,8 @@
 
 <script setup lang="ts">
 import { z } from 'zod'
-import type { FormError } from '#ui/types'
 import { BtrCountryI } from '../../../../btr-common-components/interfaces/btr-address-i'
+import type { FormError } from '#ui/types'
 import {
   validateControlSelectionForSharesAndVotes,
   validateFullNameSuperRefine,

@@ -1,6 +1,6 @@
 import { z } from 'zod'
-import { PercentageRangeE } from '~/enums/percentage-range-e'
 import { PhoneSchema } from '../../../btr-common-components/interfaces/zod-schemas-t'
+import { PercentageRangeE } from '~/enums/percentage-range-e'
 
 const StartEndDateGroup = z.object({
   startDate: z.string().min(1),
