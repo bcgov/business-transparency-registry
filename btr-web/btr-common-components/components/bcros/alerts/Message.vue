@@ -15,7 +15,7 @@
         />
       </slot>
     </div>
-    <div class="p-2 col-span-11">
+    <div class="p-2 col-span-11 text-sm">
       <slot name="default" />
     </div>
   </div>
