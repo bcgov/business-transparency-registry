@@ -110,17 +110,9 @@
         "checkbox": "This individual has interests or rights held jointly and/or exercised in concert",
         "text": "Please indicate if the individual has significant control over the company jointly, or in concert with another individual. If this applies, provide the name of the other individual(s) below, and include them as a significant individual on the transparency register.",
         "jointly": "Jointly",
-        "inConcert": "In concert",
-        "alert": {
-          "important": "Important: ",
-          "jointlyAlert": "Once all of your SIs are entered in, you are required to list all individuals who are working jointly in the table below.",
-          "inConcertAlert": "Once all of your SIs are entered in, you are required to list all individuals who are working in concert in the table below.",
-          "combined": "Once all of your SIs are entered in, you are required to list all individuals who are working jointly/in concert in the table below."
-        }
+        "inConcert": "In concert"
       }
     },
-
-
     "sharesAndVotes": {
       "controlPercentage": "Enter the percentage of shares issued for the business and/or shares entitled to votes at general meetings this individual owns or ultimately controls (or can exercise ultimate effective control over).",
       "percentageRange": {
