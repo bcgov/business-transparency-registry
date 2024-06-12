@@ -28,6 +28,10 @@
       </div>
     </template>
 
+    <template #trailing>
+      <UIcon name="i-mdi-chevron-down" />
+    </template>
+
     <template #option="{ option: optionItem }">
       <BcrosCountryFlag
         :tooltip-text="optionItem.countryNameLocal"
