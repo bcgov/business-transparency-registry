@@ -121,6 +121,9 @@ jobs:
           version: 8
           run_install: false
 
+      - name: Install dependencies
+        run: pnpm install
+
       - name: Set basic env
         working-directory: btr-web/${{ matrix.project }}
         run: |
