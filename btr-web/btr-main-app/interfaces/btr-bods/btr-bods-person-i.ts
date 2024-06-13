@@ -1,3 +1,4 @@
+import { PhoneSchemaType } from '../../../btr-common-components/interfaces/zod-schemas-t'
 import { BodsPersonTypeE, BodsStatementTypeE, BodsUnspecifiedPersonDetailsTypeE } from '~/enums/btr-bods-e'
 import {
   BodsBtrAddressI,
@@ -26,6 +27,7 @@ export interface BtrBodsPersonI {
   placeOfResidence: BodsBtrAddressI
   taxResidencies: BodsCountryI[]
   addresses: BodsBtrAddressI[]
+  phoneNumber: PhoneSchemaType
   publicationDetails: BodsPublicationDetailsI
   source: BodsSourceI
 

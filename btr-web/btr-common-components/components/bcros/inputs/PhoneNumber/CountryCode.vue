@@ -23,6 +23,7 @@
         v-if="!!selectedCountry?.countryCode2letterIso"
         :tooltip-text="selectedCountry?.countryNameLocal"
         :country-code-iso2letter="selectedCountry?.countryCode2letterIso"
+        style="z-index: 200"
       />
       <div v-else>
         &nbsp;

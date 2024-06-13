@@ -301,6 +301,12 @@ export const btrSubmissionExampleMock = {
         ],
         birthDate: '1901-01-01',
         email: 'hrvoje.fekete+1@gmail.com',
+        phoneNumber: {
+          countryCallingCode: '1',
+          countryCode2letterIso: 'ca',
+          number: '1234567890',
+          extension: '33'
+        },
         hasTaxNumber: false,
         identifiers: [],
         isComponent: false,
@@ -381,6 +387,12 @@ export const btrSubmissionExampleMock = {
         ],
         birthDate: '1991-01-24',
         email: 'hrvoje.fekete@gmail.com',
+        phoneNumber: {
+          countryCallingCode: '1',
+          countryCode2letterIso: 'ca',
+          number: '1234567890',
+          extension: '33'
+        },
         hasTaxNumber: true,
         identifiers: [
           {
@@ -458,6 +470,12 @@ export const btrSubmissionExampleMock = {
           }
         ],
         email: 'hrvoje.fekete@gmail.com',
+        phoneNumber: {
+          countryCallingCode: '1',
+          countryCode2letterIso: 'ca',
+          number: '1234567890',
+          extension: '33'
+        },
         hasTaxNumber: false,
         identifiers: [],
         isComponent: false,
@@ -572,6 +590,12 @@ export const expectedSisOutput: SiSchemaType[] = [
       { name: 'British Indian Ocean Territory', alpha_2: 'IO' },
       { name: 'Cocos (Keeling) Islands', alpha_2: 'CC' }],
     email: 'hrvoje.fekete+1@gmail.com',
+    phoneNumber: {
+      countryCallingCode: '1',
+      countryCode2letterIso: 'ca',
+      number: '1234567890',
+      extension: '33'
+    },
     tax: {
       hasTaxNumber: false,
       taxNumber: undefined
@@ -643,6 +667,12 @@ export const expectedSisOutput: SiSchemaType[] = [
     citizenships:
       [{ alpha_2: 'CA_PR', name: 'Canada (Permanent Resident)' }],
     email: 'hrvoje.fekete@gmail.com',
+    phoneNumber: {
+      countryCallingCode: '1',
+      countryCode2letterIso: 'ca',
+      number: '1234567890',
+      extension: '33'
+    },
     couldNotProvideMissingInfo: true,
     determinationOfIncapacity: false,
     tax: {
@@ -722,6 +752,12 @@ export const expectedSisOutput: SiSchemaType[] = [
     citizenships:
       [{ name: 'Canada (Citizen)', alpha_2: 'CA' }],
     email: 'hrvoje.fekete@gmail.com',
+    phoneNumber: {
+      countryCallingCode: '1',
+      countryCode2letterIso: 'ca',
+      number: '1234567890',
+      extension: '33'
+    },
     isTaxResident: true,
     effectiveDates: [
       {

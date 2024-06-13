@@ -62,7 +62,7 @@ const northAmericaMask = '(###) ###-####'
 const otherMask = '##############'
 
 const unmaskedvalue = ref()
-const maskedPhoneNumber = ref()
+const maskedPhoneNumber = ref(phoneNumber.value.number)
 const inputMask = computed(() => phoneNumber.value.countryCallingCode === '1' ? northAmericaMask : otherMask)
 
 watch(
