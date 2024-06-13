@@ -57,7 +57,6 @@ const selectedCountry = ref<CountryListItemI | undefined>(undefined)
 const _countryListOptions =
   countryList.customList('countryCode', '{countryCallingCode},{countryNameEn},{countryNameLocal}')
 
-
 const manualInput = (event) => {
   selectedCountry.value = {
     countryCallingCode: event.target.value
@@ -75,7 +74,7 @@ const countryListOptions: Array<CountryListItemI> = Object.keys(_countryListOpti
   }
 }).sort((a, b) => a.countryCallingCode.localeCompare(b.countryCallingCode))
 
-const search = (q: string) => countryListOptions.filter(lo => {
+const search = (q: string) => countryListOptions.filter((lo) => {
   return lo.countryCallingCode.includes(q) ||
     lo.countryCode2letterIso?.includes(q) ||
     lo.countryNameEn?.includes(q) ||

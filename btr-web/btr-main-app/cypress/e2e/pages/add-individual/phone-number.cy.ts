@@ -30,6 +30,7 @@ describe('pages -> Add individual', () => {
     // verify you can enter any data in the combo box
     cy.get('[data-cy="phoneNumber.countryCode"]')
       .type('23a')
+      .type('{esc}')
       .blur()
 
     cy.get('[data-cy="phoneNumber.countryCode"]')
