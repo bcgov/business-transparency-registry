@@ -4,6 +4,7 @@
     :options="countryListOptions"
     variant="bcGov"
     size="sm"
+    :search="search"
     option-attribute="label"
     :ui="{
       icon: {
@@ -56,6 +57,7 @@ const selectedCountry = ref<CountryListItemI | undefined>(undefined)
 const _countryListOptions =
   countryList.customList('countryCode', '{countryCallingCode},{countryNameEn},{countryNameLocal}')
 
+
 const manualInput = (event) => {
   selectedCountry.value = {
     countryCallingCode: event.target.value
@@ -72,6 +74,14 @@ const countryListOptions: Array<CountryListItemI> = Object.keys(_countryListOpti
     countryNameEn
   }
 }).sort((a, b) => a.countryCallingCode.localeCompare(b.countryCallingCode))
+
+const search = (q: string) => countryListOptions.filter(lo => {
+  return lo.countryCallingCode.includes(q) ||
+    lo.countryCode2letterIso?.includes(q) ||
+    lo.countryNameEn?.includes(q) ||
+    lo.countryNameLocal?.includes(q) ||
+    lo.label?.includes(q)
+})
 
 const selectCountry = (countryCode2letterIso: string) => {
   selectedCountry.value = countryListOptions.find(item => item.countryCode2letterIso === countryCode2letterIso)
