@@ -194,6 +194,7 @@ const _getSi = (
     couldNotProvideMissingInfo: person.missingInfoReason ? !!person.missingInfoReason.trim() : false,
     birthDate: person.birthDate ? person.birthDate : '',
     email: person.email,
+    phoneNumber: person.phoneNumber,
     tax: {
       hasTaxNumber: person.hasTaxNumber,
       taxNumber: _getTaxNumber(person)

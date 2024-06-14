@@ -25,24 +25,6 @@
         class="pl-5 pt-5"
         :data-cy="name + '.inConcertControl'"
       />
-      <BcrosAlertsMessage
-        v-if="actingJointly || inConcertControl"
-        class="mt-5"
-        :flavour="AlertsFlavourE.INFO"
-      >
-        <p class="py-2">
-          <strong>{{ $t('texts.control.actingJointlyOrInConcert.alert.important') }}</strong>
-          <span v-if="actingJointly && inConcertControl">
-            {{ $t('texts.control.actingJointlyOrInConcert.alert.combined') }}
-          </span>
-          <span v-else-if="actingJointly">
-            {{ $t('texts.control.actingJointlyOrInConcert.alert.jointlyAlert') }}
-          </span>
-          <span v-else>
-            {{ $t('texts.control.actingJointlyOrInConcert.alert.inConcertAlert') }}
-          </span>
-        </p>
-      </BcrosAlertsMessage>
     </div>
     <BcrosHelpTip
       :title="$t('helpTitles.inConcertControl.closed')"

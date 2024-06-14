@@ -74,6 +74,7 @@ const getPersonAndOwnershipAndControlStatements = (sif: SignificantIndividualFil
       placeOfResidence: address,
       addresses: [address],
       birthDate: siSchema.birthDate,
+      phoneNumber: siSchema.phoneNumber,
       email: siSchema.email,
       hasTaxNumber: !!siSchema.tax.hasTaxNumber,
       identifiers: SiSchemaToBtrBodsConverters.getBodsIdentifiersFromSi(siSchema),

@@ -11,6 +11,7 @@
       :ui-menu="{ label: !!error? 'text-red-500': 'text-gray-700'}"
       option-attribute="name"
       data-cy="address-country"
+      @change="countryChange"
     />
   </UFormGroup>
   <UFormGroup v-slot="{ error }" class="mt-4" :name="name + '.line1'">
@@ -94,9 +95,11 @@
 
 <script setup lang="ts">
 import { type UseEventBusReturn } from '@vueuse/core'
-import { BtrAddressI } from '~/interfaces/btr-address-i'
+import { BtrAddressI, BtrCountryI } from '~/interfaces/btr-address-i'
 
 const formBus = inject<UseEventBusReturn<any, string> | undefined>('form-events', undefined)
+
+const emit = defineEmits<(e: 'country-change', value: BtrCountryI) => void>()
 
 const address = defineModel({ type: Object as PropType<BtrAddressI>, required: true })
 
@@ -115,7 +118,7 @@ const line1ChangeEvent = () => {
 }
 
 const countries = iscCountriesListSortedByName
-// const address: Ref<BtrAddressI> = ref(props.modelValue)
+
 const regions = computed(() => {
   switch (props.modelValue.country?.alpha_2) {
     case 'US':
@@ -157,5 +160,9 @@ const addrAutoCompleted = (selectedAddr: BtrAddressI) => {
     formBus?.emit({ type: 'blur', path: props.name + '.region' })
     formBus?.emit({ type: 'change', path: props.name + '.region' })
   }, 50)
+}
+
+const countryChange = () => {
+  emit('country-change', props.modelValue.country)
 }
 </script>

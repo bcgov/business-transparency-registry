@@ -77,7 +77,7 @@
       "selectAll": "Select all countries of which this person is a citizen.",
       "placeholder": "Citizenship or permanent residency",
       "findCountry": "Find a Country",
-      "hint":"Select all that apply",
+      "hint": "Select all that apply",
       "note": "Note: An individual cannot be both a citizen and permanent resident of Canada."
     },
     "findACountry": "Find a country",
@@ -89,8 +89,12 @@
     "socialInsuranceNumber": "Social Insurance Number (SIN)",
     "taxNumber": "Tax Number"
   },
-  "placeholders": {
-    "dateSelect": "Select Date"
+  "placeholder": {
+    "phoneNumber": {
+      "countryCode": "Country code",
+      "number": "Phone Number",
+      "extension": "Extension"
+    }
   },
   "errors": {
     "validation": {

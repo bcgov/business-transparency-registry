@@ -151,8 +151,7 @@
       </BcrosSection>
 
       <BcrosSectionDivider />
-
-      <!--  section-header: type of interest or control -->
+      <!--  section-header: individuals details -->
       <BcrosSection
         header-icon-name="i-mdi-user-circle"
         :header-title="$t('sectionHeaders.individualsDetails')"
@@ -185,8 +184,19 @@
             id="addNewPersonLastKnownAddress"
             v-model="inputFormSi.address"
             name="address"
+            @country-change="countryChange"
           />
         </div>
+      </BcrosSection>
+      <BcrosSection
+        :show-section-has-errors="hasErrors(['phoneNumber'])"
+        :section-title="$t('sectionTitles.phoneNumber')"
+      >
+        <BcrosInputsPhoneNumber
+          v-model="inputFormSi.phoneNumber"
+          name="phoneNumber"
+          data-cy="phoneNumberInput"
+        />
       </BcrosSection>
       <BcrosSection
         :show-section-has-errors="hasErrors(['birthDate'])"
@@ -411,6 +421,17 @@ const addIndividualForm = ref()
 
 const formChange = async () => {
   await addBtrPayFees()
+}
+
+const countryChange = () => {
+  if (
+    undefined === inputFormSi.phoneNumber.countryCallingCode &&
+    undefined === inputFormSi.phoneNumber.countryCode2letterIso &&
+    undefined === inputFormSi.phoneNumber.number &&
+    undefined !== inputFormSi.address?.country?.alpha_2
+  ) {
+    inputFormSi.phoneNumber.countryCode2letterIso = inputFormSi.address.country.alpha_2
+  }
 }
 
 function hasErrors (sectionErrorPaths: string[]): boolean {

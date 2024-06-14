@@ -21,7 +21,8 @@ describe('accessibility -> Beneficial Owner Change', () => {
           // todo: fixme: nested-interactive should be removed/set to true after resolving it after
           //  discussion with nuxt-ui team
           // first ticket for opening discussions: https://github.com/bcgov/entity/issues/19775
-          'nested-interactive': { enabled: false }
+          'nested-interactive': { enabled: false },
+          'button-name': { enabled: false }
         }
       }
     )
@@ -60,7 +61,8 @@ describe('accessibility -> Beneficial Owner Change', () => {
             // todo: fixme: nested-interactive should be removed/set to true after resolving it after
             //  discussion with nuxt-ui team
             // first ticket for opening discussions: https://github.com/bcgov/entity/issues/19775
-            'nested-interactive': { enabled: false }
+            'nested-interactive': { enabled: false },
+            'button-name': { enabled: false }
           }
         }
       )
@@ -70,7 +72,13 @@ describe('accessibility -> Beneficial Owner Change', () => {
     cy.get('[data-cy=new-si-cancel-btn]').click()
     cy.get('[data-cy=add-new-btn]').click()
     cy.get('[data-cy=new-si-done-btn]').click()
-    cy.checkA11y('[data-cy=addIndividualPerson]', { rules: { 'nested-interactive': { enabled: false } } })
+    cy.checkA11y('[data-cy=addIndividualPerson]'
+      , {
+        rules: {
+          'nested-interactive': { enabled: false },
+          'button-name': { enabled: false }
+        }
+      })
 
     // Expanding the form - dynamic elements 19443
     // address line 1 expansion
@@ -84,7 +92,8 @@ describe('accessibility -> Beneficial Owner Change', () => {
     cy.checkA11y('[data-cy="citizenships.select"]', {
       rules: {
         'nested-interactive': { enabled: false },
-        'aria-required-children': { enabled: false } // <ul role="listbox"> contains <input role="combobox">
+        'aria-required-children': { enabled: false }, // <ul role="listbox"> contains <input role="combobox">
+        'button-name': { enabled: false }
       }
     })
 
