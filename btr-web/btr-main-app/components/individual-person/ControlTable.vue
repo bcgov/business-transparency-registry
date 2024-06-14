@@ -2,7 +2,7 @@
   <BcrosTablesTable
     data-cy="individualsControlTable"
     :headers="headers"
-    :items="currentSIFiling.significantIndividuals"
+    :items="siControlStore.allActiveAndHaveControlSis"
   >
     <template #warning>
       <tr v-if="numberOfRows === 1">
@@ -19,7 +19,7 @@
       </tr>
     </template>
     <template #table-row="{ item, index }">
-      <tr v-if="item.ui.action != FilingActionE.REMOVE && hasSharedControl(item)">
+      <tr>
         <td data-cy="control-table-name">
           <span>{{ item.name.fullName.toUpperCase() }}</span><br>
           <div v-if="item.name.preferredName" class="flex flex-col mt-2">
@@ -28,12 +28,12 @@
           </div>
           <div class="flex flex-col mt-2">
             <span class="font-bold italic">{{ `Birth year` }}</span>
-            <span>{{ item.birthDate.slice(0,4) }}</span>
+            <span>{{ item.birthDate.slice(0, 4) }}</span>
           </div>
         </td>
         <td data-cy="control-table-individual-connection" colspan="2">
           <IndividualPersonIndividualConnection
-            v-model="currentSIFiling.significantIndividuals[index]"
+            :si="item"
             :name="'individualConnection' + index"
             class="pt-0 pl-2"
             :control-type-width="String(controlTypeWidthPercentage)"
@@ -55,10 +55,9 @@
 </template>
 
 <script setup lang="ts">
-import { storeToRefs } from 'pinia'
+import { useSiControlStore } from '~/stores/si-control-store'
 
-const significantIndividuals = useSignificantIndividuals()
-const { currentSIFiling } = storeToRefs(significantIndividuals)
+const siControlStore = useSiControlStore()
 
 defineProps({
   numberOfRows: { type: Number, required: true }
