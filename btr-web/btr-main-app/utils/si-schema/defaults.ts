@@ -79,12 +79,12 @@ export function getDefaultInputFormSi (): SiSchemaType {
     ui: {
       action: FilingActionE.ADD
     },
-    sharesInConcert: [],
-    sharesActingJointly: [],
-    votesInConcert: [],
-    votesActingJointly: [],
-    directorsInConcert: [],
-    directorsActingJointly: []
+    // sharesInConcert: [],
+    // sharesActingJointly: [],
+    // votesInConcert: [],
+    // votesActingJointly: [],
+    // directorsInConcert: [],
+    // directorsActingJointly: []
   }
 }
 

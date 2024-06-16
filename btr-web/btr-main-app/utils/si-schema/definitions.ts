@@ -90,13 +90,13 @@ export const SiSchema = z.object({
   ui: z.object({
     action: z.nativeEnum(FilingActionE).optional()
   }),
-
-  sharesInConcert: z.array(ConnectedIndividual),
-  sharesActingJointly: z.array(ConnectedIndividual),
-  votesInConcert: z.array(ConnectedIndividual),
-  votesActingJointly: z.array(ConnectedIndividual),
-  directorsInConcert: z.array(ConnectedIndividual),
-  directorsActingJointly: z.array(ConnectedIndividual)
+  //
+  // sharesInConcert: z.array(ConnectedIndividual),
+  // sharesActingJointly: z.array(ConnectedIndividual),
+  // votesInConcert: z.array(ConnectedIndividual),
+  // votesActingJointly: z.array(ConnectedIndividual),
+  // directorsInConcert: z.array(ConnectedIndividual),
+  // directorsActingJointly: z.array(ConnectedIndividual)
 })
 
 export type SiSchemaType = z.infer<typeof SiSchema>

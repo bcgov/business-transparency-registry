@@ -1,13 +1,14 @@
-export interface NameAndUuidI {
-  name: string
+export interface NamesAndUuidI {
   uuid: string
+  legalName: string
+  preferredName?: string
 }
 
 export interface JointlyOrInConcertConnectionsI {
-  votesInConcert: Array<NameAndUuidI>
-  votesJointly: Array<NameAndUuidI>
+  votesInConcert: Array<NamesAndUuidI>
+  votesJointly: Array<NamesAndUuidI>
 
-  sharesInConcert: Array<NameAndUuidI>
+  sharesInConcert: Array<NamesAndUuidI>
   sharesJointly: Array<JointlyOrInConcertConnectionsI>
 
   directorsInConcert: Array<JointlyOrInConcertConnectionsI>
