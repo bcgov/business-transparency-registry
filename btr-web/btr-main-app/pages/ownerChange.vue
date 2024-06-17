@@ -76,8 +76,11 @@
 </template>
 
 <script setup lang="ts">
+import { FetchError } from 'ofetch'
 import { storeToRefs } from 'pinia'
 import { SiSchemaType } from '~/utils/si-schema/definitions'
+import fileSIApi from '~/services/file-significant-individual'
+import { StatusCodes } from 'http-status-codes'
 
 const significantIndividuals = useSignificantIndividuals()
 const { currentSIFiling } = storeToRefs(significantIndividuals)
@@ -122,9 +125,27 @@ onBeforeMount(async () => {
   const identifier = useRoute().params.identifier as string
   // FUTURE: put in a loading page or something while this happens in case network is slow
   await useBcrosBusiness().loadBusiness(identifier)
-  if (!currentSIFiling.value.businessIdentifier) {
-    await significantIndividuals.filingInit(identifier)
+  const siControlStore = useSiControlStore()
+  const { data, error } = await fileSIApi.getBtrFiling(identifier)
+
+  if (error.statusCode) {
+    if (error.statusCode !== StatusCodes.NOT_FOUND) {
+      console.error(error)
+      const err = {
+        statusCode: error.statusCode ?? StatusCodes.INTERNAL_SERVER_ERROR,
+        message: error.message,
+        category: ErrorCategoryE.SIGNIFICANT_INDIVIDUAL
+      }
+      significantIndividuals.errors.value.push(err)
+    }
+    return null
   }
+
+  if (data?.payload) {
+    significantIndividuals.filingInit(data.payload)
+    siControlStore.initActingJointlyOrInConcertFromBtrFiling(data.payload)
+  }
+
   currentSIFiling.value.certified = false
 })
 </script>

@@ -213,7 +213,7 @@ const _getSi = (
 
     uuid: person.uuid,
 
-    ui: {},
+    ui: {}
 
     // sharesInConcert: getConnectedIndividuals(oocs, ControlOfSharesDetailsE.IN_CONCERT_CONTROL),
     // sharesActingJointly: getConnectedIndividuals(oocs, ControlOfSharesDetailsE.ACTING_JOINTLY),
@@ -235,35 +235,35 @@ export const getSIsFromBtrBodsSubmission = (submission: BtrFilingI): SiSchemaTyp
   }
   return sis
 }
-//
-// export const getSiControlConnectionsFromBodsSubmission =
-//   (submission: BtrFilingI): Map<string, JointlyOrInConcertConnectionsI> => {
-//
-//     // sharesInConcert:
-//     //   sharesActingJointly:
-//     //   votesInConcert
-//     //   votesActingJointly:
-//     //   directorsInConcert
-//     //   directorsActingJointly
-//
-//     const jointlyOrInConcertConnections: Map<string, JointlyOrInConcertConnectionsI> = new Map()
-//
-//     const businessIdentifier = submission.businessIdentifier
-//     for (const person of submission.personStatements) {
-//       const oocs = _findOwnershipOrControlStatement(submission, person.statementID)
-//       if (person && oocs) {
-//
-//         const x: JointlyOrInConcertConnectionsI = {
-//           sharesInConcert: getConnectedIndividuals(oocs, ControlOfSharesDetailsE.IN_CONCERT_CONTROL),
-//           sharesJointly: getConnectedIndividuals(oocs, ControlOfSharesDetailsE.ACTING_JOINTLY),
-//           votesInConcert: getConnectedIndividuals(oocs, ControlOfVotesDetailsE.IN_CONCERT_CONTROL),
-//           votesJointly: getConnectedIndividuals(oocs, ControlOfVotesDetailsE.ACTING_JOINTLY),
-//           directorsInConcert: getConnectedIndividuals(oocs, ControlOfDirectorsDetailsE.IN_CONCERT_CONTROL),
-//           directorsJointly: getConnectedIndividuals(oocs, ControlOfDirectorsDetailsE.ACTING_JOINTLY)
-//         }
-//
-//         jointlyOrInConcertConnections.set(person.uuid, x)
-//       }
-//     }
-//     return jointlyOrInConcertConnections
-//   }
+
+
+export const getSiControlConnectionsFromBodsSubmission =
+  (submission: BtrFilingI): Map<string, JointlyOrInConcertConnectionsI> => {
+
+    // sharesInConcert:
+    //   sharesActingJointly:
+    //   votesInConcert
+    //   votesActingJointly:
+    //   directorsInConcert
+    //   directorsActingJointly
+
+    const jointlyOrInConcertConnections: Map<string, JointlyOrInConcertConnectionsI> = new Map()
+
+    for (const person of submission.personStatements) {
+      const oocs = _findOwnershipOrControlStatement(submission, person.statementID)
+      if (person && oocs) {
+
+        const connections: JointlyOrInConcertConnectionsI = {
+          sharesInConcert: getConnectedIndividuals(oocs, ControlOfSharesDetailsE.IN_CONCERT_CONTROL),
+          sharesJointly: getConnectedIndividuals(oocs, ControlOfSharesDetailsE.ACTING_JOINTLY),
+          votesInConcert: getConnectedIndividuals(oocs, ControlOfVotesDetailsE.IN_CONCERT_CONTROL),
+          votesJointly: getConnectedIndividuals(oocs, ControlOfVotesDetailsE.ACTING_JOINTLY),
+          directorsInConcert: getConnectedIndividuals(oocs, ControlOfDirectorsDetailsE.IN_CONCERT_CONTROL),
+          directorsJointly: getConnectedIndividuals(oocs, ControlOfDirectorsDetailsE.ACTING_JOINTLY)
+        }
+
+        jointlyOrInConcertConnections.set(person.uuid, connections)
+      }
+    }
+    return jointlyOrInConcertConnections
+  }

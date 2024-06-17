@@ -34,7 +34,7 @@ export const OwnershipOrControlStatements = {
             minimum: 50
           },
           type: 'shareholding',
-          connectedIndividuals: [{ uuid: '002', legalName: 'Another test name' }]
+          connectedIndividuals: []
         },
         {
           directOrIndirect: 'direct',
@@ -86,6 +86,7 @@ export const OwnershipOrControlStatements = {
       subject: { describedByEntityStatement: '' }
     }
   ],
+  phoneNumber: undefined,
   personStatements: [
     {
       placeOfResidence: {

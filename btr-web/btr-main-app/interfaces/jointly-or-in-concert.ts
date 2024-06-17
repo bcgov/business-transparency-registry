@@ -1,16 +1,12 @@
-export interface NamesAndUuidI {
-  uuid: string
-  legalName: string
-  preferredName?: string
-}
+import { ConnectedInvidualSchemaType } from '~/utils/si-schema/definitions'
 
 export interface JointlyOrInConcertConnectionsI {
-  votesInConcert: Array<NamesAndUuidI>
-  votesJointly: Array<NamesAndUuidI>
+  votesInConcert: Array<ConnectedInvidualSchemaType>
+  votesJointly: Array<ConnectedInvidualSchemaType>
 
-  sharesInConcert: Array<NamesAndUuidI>
-  sharesJointly: Array<JointlyOrInConcertConnectionsI>
+  sharesInConcert: Array<ConnectedInvidualSchemaType>
+  sharesJointly: Array<ConnectedInvidualSchemaType>
 
-  directorsInConcert: Array<JointlyOrInConcertConnectionsI>
-  directorsJointly: Array<JointlyOrInConcertConnectionsI>
+  directorsInConcert: Array<ConnectedInvidualSchemaType>
+  directorsJointly: Array<ConnectedInvidualSchemaType>
 }

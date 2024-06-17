@@ -279,8 +279,6 @@ const getInterests = (si: SiSchemaType) => {
     const startDate = dateGroup.startDate
     const endDate = dateGroup.endDate
 
-    console.log('AAA >>>>', siControlStore.actingJointlyAndInConcert)
-
     if (si.controlOfShares.percentage !== PercentageRangeE.NO_SELECTION) {
       const newInterests =
         _getInterestsOfSharesOrVotes(
