@@ -1,14 +1,12 @@
 import { defineStore } from 'pinia'
 import { StatusCodes } from 'http-status-codes'
 import { Ref } from 'vue'
-import { v4 as UUIDv4 } from 'uuid'
 import { ErrorI } from '../../btr-common-components/interfaces/error-i'
 import { dateToString } from '../../btr-common-components/utils/date'
 import fileSIApi from '@/services/file-significant-individual'
 import { SignificantIndividualFilingI } from '~/interfaces/significant-individual-filing-i'
 import { SiSchemaType } from '~/utils/si-schema/definitions'
 import { getEmptySiFiling } from '~/utils/si-schema/defaults'
-import { BodsInterestI } from '~/interfaces/btr-bods/components-i'
 import { BtrFilingI } from '~/interfaces/btr-bods/btr-filing-i'
 
 /** Manages Significant */
@@ -86,11 +84,10 @@ export const useSignificantIndividuals = defineStore('significantIndividuals', (
     submitting.value = false
   }
 
-
   /** Load the significant individuals for the business into the store */
   function loadSavedSIs (btrFiling: BtrFilingI, force = false) {
     if (!currentSavedSIs.value || currentSavedSIs.value.length === 0 || force) {
-      currentSavedSIs.value =  fileSIApi.getCurrentOwners(btrFiling) || []
+      currentSavedSIs.value = fileSIApi.getCurrentOwners(btrFiling) || []
     }
   }
 

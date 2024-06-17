@@ -59,8 +59,6 @@ import { useSiControlStore } from '~/stores/si-control-store'
 
 const siControlStore = useSiControlStore()
 
-console.log('active and in control', siControlStore.allActiveAndHaveControlSis)
-
 defineProps({
   numberOfRows: { type: Number, required: true }
 })

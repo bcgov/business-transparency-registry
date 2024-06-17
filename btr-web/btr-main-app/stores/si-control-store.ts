@@ -46,7 +46,7 @@ export const useSiControlStore = defineStore('jointlyOrInConcert', () => {
         } // else do nothing
       })
 
-      const notFoundUuids = Array.from(actingJointlyAndInConcert.value.keys()).filter(k => foundUuids.indexOf(k) === -1)
+      const notFoundUuids = Array.from(actingJointlyAndInConcert.value.keys()).filter(k => !foundUuids.includes(k))
 
       notFoundUuids.forEach((uuid: string) => {
         actingJointlyAndInConcert.value.delete(uuid)

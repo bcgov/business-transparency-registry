@@ -236,10 +236,8 @@ export const getSIsFromBtrBodsSubmission = (submission: BtrFilingI): SiSchemaTyp
   return sis
 }
 
-
 export const getSiControlConnectionsFromBodsSubmission =
   (submission: BtrFilingI): Map<string, JointlyOrInConcertConnectionsI> => {
-
     // sharesInConcert:
     //   sharesActingJointly:
     //   votesInConcert
@@ -252,7 +250,6 @@ export const getSiControlConnectionsFromBodsSubmission =
     for (const person of submission.personStatements) {
       const oocs = _findOwnershipOrControlStatement(submission, person.statementID)
       if (person && oocs) {
-
         const connections: JointlyOrInConcertConnectionsI = {
           sharesInConcert: getConnectedIndividuals(oocs, ControlOfSharesDetailsE.IN_CONCERT_CONTROL),
           sharesJointly: getConnectedIndividuals(oocs, ControlOfSharesDetailsE.ACTING_JOINTLY),

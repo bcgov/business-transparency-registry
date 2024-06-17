@@ -76,11 +76,10 @@
 </template>
 
 <script setup lang="ts">
-import { FetchError } from 'ofetch'
 import { storeToRefs } from 'pinia'
+import { StatusCodes } from 'http-status-codes'
 import { SiSchemaType } from '~/utils/si-schema/definitions'
 import fileSIApi from '~/services/file-significant-individual'
-import { StatusCodes } from 'http-status-codes'
 
 const significantIndividuals = useSignificantIndividuals()
 const { currentSIFiling } = storeToRefs(significantIndividuals)

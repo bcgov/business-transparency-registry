@@ -137,7 +137,7 @@ const props = defineProps({
   individualConnectionWidth: { type: String, required: true }
 })
 
-const allActiveSisExceptMe = allActiveSis.value.filter((asi: SiSchemaType) => asi.uuid != props.si.uuid).map(
+const allActiveSisExceptMe = allActiveSis.value.filter((asi: SiSchemaType) => asi.uuid !== props.si.uuid).map(
   (si: SiSchemaType) => ({
     uuid: si.uuid,
     legalName: si.name.fullName,

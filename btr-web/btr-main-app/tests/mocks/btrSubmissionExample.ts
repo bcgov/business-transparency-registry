@@ -612,7 +612,7 @@ export const expectedSisOutput: SiSchemaType[] = [
       }
     ],
     uuid: undefined,
-    ui: {},
+    ui: {}
 
   },
   {
@@ -686,7 +686,7 @@ export const expectedSisOutput: SiSchemaType[] = [
       }
     ],
     uuid: undefined,
-    ui: {},
+    ui: {}
 
   },
   {
@@ -756,7 +756,7 @@ export const expectedSisOutput: SiSchemaType[] = [
       }
     ],
     uuid: undefined,
-    ui: {},
+    ui: {}
 
   }
 ]
