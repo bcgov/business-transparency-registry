@@ -79,7 +79,7 @@ export function getDefaultInputFormSi (): SiSchemaType {
     ui: {
       action: FilingActionE.ADD
     }
-    }
+  }
 }
 
 export function getEmptySiFiling (): SignificantIndividualFilingI {
