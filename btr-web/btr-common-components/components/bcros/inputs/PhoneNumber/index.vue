@@ -49,7 +49,7 @@
 
 <script setup lang="ts">
 import { vMaska } from 'maska/vue'
-import { Mask } from "maska"
+import { Mask } from 'maska'
 
 import { PhoneSchemaType } from '~/interfaces/zod-schemas-t'
 
