@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-row gap-4">
+  <div class="flex flex-row gap-4 w-full">
     <UFormGroup :name="name + '.countryCode'" class="w-1/4">
       <BcrosInputsPhoneNumberCountryCode
         v-model:country-calling-code="phoneNumber.countryCallingCode"
@@ -39,10 +39,15 @@
     <UFormGroup :name="name + '.extension'" class="w-1/4">
       <UInput
         v-model="phoneNumber.extension"
-        :placeholder="$t('placeholder.phoneNumber.extension') + ' (' + $t('general.optional') + ')'"
+        :placeholder="$t('placeholder.phoneNumber.extension')"
         variant="bcGov"
         data-cy="phoneNumber.extensionCode"
       />
+      <template #help>
+        <span class="text-xs">
+          {{ $t('general.optional') }}
+        </span>
+      </template>
     </UFormGroup>
   </div>
 </template>
