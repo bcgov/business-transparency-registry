@@ -15,19 +15,15 @@
         }
       }
     }"
-    :padded="false"
+    padded
     @input="manualInput($event)"
   >
-    <template #leading>
+    <template v-if="!!selectedCountry?.countryCode2letterIso" #leading>
       <BcrosCountryFlag
-        v-if="!!selectedCountry?.countryCode2letterIso"
         :tooltip-text="selectedCountry?.countryNameLocal"
         :country-code-iso2letter="selectedCountry?.countryCode2letterIso"
         style="z-index: 200"
       />
-      <div v-else>
-        &nbsp;
-      </div>
     </template>
 
     <template #trailing>

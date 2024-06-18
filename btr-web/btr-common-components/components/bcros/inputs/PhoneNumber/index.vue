@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-row gap-4">
+  <div class="flex flex-row gap-4 w-full">
     <UFormGroup :name="name + '.countryCode'" class="w-1/4">
       <BcrosInputsPhoneNumberCountryCode
         v-model:country-calling-code="phoneNumber.countryCallingCode"
@@ -39,17 +39,23 @@
     <UFormGroup :name="name + '.extension'" class="w-1/4">
       <UInput
         v-model="phoneNumber.extension"
-        :placeholder="$t('placeholder.phoneNumber.extension') + ' (' + $t('general.optional') + ')'"
+        :placeholder="$t('placeholder.phoneNumber.extension')"
         variant="bcGov"
         data-cy="phoneNumber.extensionCode"
       />
+      <template #help>
+        <span class="text-xs">
+          {{ $t('general.optional') }}
+        </span>
+      </template>
     </UFormGroup>
   </div>
 </template>
 
 <script setup lang="ts">
 import { vMaska } from 'maska/vue'
-import { watch } from 'vue'
+import { Mask } from 'maska'
+
 import { PhoneSchemaType } from '~/interfaces/zod-schemas-t'
 
 const phoneNumber = defineModel<PhoneSchemaType>({ required: true })
@@ -65,11 +71,10 @@ const unmaskedvalue = ref()
 const maskedPhoneNumber = ref(phoneNumber.value.number)
 const inputMask = computed(() => phoneNumber.value.countryCallingCode === '1' ? northAmericaMask : otherMask)
 
-watch(
-  () => unmaskedvalue,
+watchEffect(
   () => {
-    phoneNumber.value.number = unmaskedvalue.value
-  },
-  { immediate: false, deep: true }
+    const mask = new Mask({ mask: inputMask.value })
+    phoneNumber.value.number = unmaskedvalue.value || mask.unmasked(maskedPhoneNumber.value || '')
+  }
 )
 </script>
