@@ -49,7 +49,8 @@
 
 <script setup lang="ts">
 import { vMaska } from 'maska/vue'
-import { watch } from 'vue'
+import { Mask } from "maska"
+
 import { PhoneSchemaType } from '~/interfaces/zod-schemas-t'
 
 const phoneNumber = defineModel<PhoneSchemaType>({ required: true })
@@ -65,11 +66,10 @@ const unmaskedvalue = ref()
 const maskedPhoneNumber = ref(phoneNumber.value.number)
 const inputMask = computed(() => phoneNumber.value.countryCallingCode === '1' ? northAmericaMask : otherMask)
 
-watch(
-  () => unmaskedvalue,
+watchEffect(
   () => {
-    phoneNumber.value.number = unmaskedvalue.value
-  },
-  { immediate: false, deep: true }
+    const mask = new Mask({ mask: inputMask.value })
+    phoneNumber.value.number = unmaskedvalue.value || mask.unmasked(maskedPhoneNumber.value || '')
+  }
 )
 </script>
