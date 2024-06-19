@@ -1,6 +1,6 @@
 <template>
   <div
-    class="grid grid-flow-col gap-1 py-0.5 px-2.5 m-1 rounded-lg bg-primary text-white text-sm"
+    class="grid grid-flow-col gap-1 py-0.5 px-2.5 m-1 rounded-lg bg-primary text-white text-sm flex"
     data-cy="bcrosChip"
   >
     <div>

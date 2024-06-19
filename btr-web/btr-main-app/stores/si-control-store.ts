@@ -27,8 +27,8 @@ export const useSiControlStore = defineStore('jointlyOrInConcert', () => {
     }
   }
 
-  watchEffect(
-    () => currentSIFiling,
+  watch(
+    allActiveAndHaveControlSis,
     () => {
       const foundUuids: string[] = []
       allActiveAndHaveControlSis.value.forEach((si: SiSchemaType) => {
@@ -51,10 +51,25 @@ export const useSiControlStore = defineStore('jointlyOrInConcert', () => {
       notFoundUuids.forEach((uuid: string) => {
         actingJointlyAndInConcert.value.delete(uuid)
       })
-    },
-    {
-      immediate: true,
-      deep: true
+
+      // cleanup all the selected items after removed ones
+      allActiveAndHaveControlSis.value.forEach((si: SiSchemaType) => {
+        const siControl = actingJointlyAndInConcert.value.get(si.uuid)
+        if (siControl) {
+          siControl.sharesInConcert =
+            siControl.sharesInConcert.filter(sic => !!allActiveSis.value.find(asi => asi.uuid === sic.uuid))
+          siControl.sharesJointly =
+            siControl.sharesJointly.filter(sic => !!allActiveSis.value.find(asi => asi.uuid === sic.uuid))
+          siControl.votesInConcert =
+            siControl.votesInConcert.filter(sic => !!allActiveSis.value.find(asi => asi.uuid === sic.uuid))
+          siControl.votesJointly =
+            siControl.votesJointly.filter(sic => !!allActiveSis.value.find(asi => asi.uuid === sic.uuid))
+          siControl.directorsInConcert =
+            siControl.directorsInConcert.filter(sic => !!allActiveSis.value.find(asi => asi.uuid === sic.uuid))
+          siControl.directorsJointly =
+            siControl.directorsJointly.filter(sic => !!allActiveSis.value.find(asi => asi.uuid === sic.uuid))
+        }
+      })
     }
   )
 

@@ -7,6 +7,7 @@
         <span class="italic text-sm">{{ $t('controlTableBody.controlType.jointly') }}</span>
       </div>
       <BcrosInputsCombobox
+        v-if="siControl"
         v-model="siControl.sharesJointly"
         :name="name + '.shares.jointly'"
         :label-function="(si) => si.legalName.toUpperCase()"
@@ -27,6 +28,7 @@
         <span class="italic text-sm">{{ $t('controlTableBody.controlType.inConcert') }}</span>
       </div>
       <BcrosInputsCombobox
+        v-if="siControl"
         v-model="siControl.sharesInConcert"
         :name="name + '.shares.inConcert'"
         :label-function="(si) => si.legalName.toUpperCase()"
@@ -47,6 +49,7 @@
         <span class="italic text-sm">{{ $t('controlTableBody.controlType.jointly') }}</span>
       </div>
       <BcrosInputsCombobox
+        v-if="siControl"
         v-model="siControl.votesJointly"
         :name="name + '.votes.jointly'"
         :label-function="(si) => si.legalName.toUpperCase()"
@@ -67,6 +70,7 @@
         <span class="italic text-sm">{{ $t('controlTableBody.controlType.inConcert') }}</span>
       </div>
       <BcrosInputsCombobox
+        v-if="siControl"
         v-model="siControl.votesInConcert"
         :name="name + '.votes.inConcert'"
         :label-function="(si) => si.legalName.toUpperCase()"
@@ -87,6 +91,7 @@
         <span class="italic text-sm">{{ $t('controlTableBody.controlType.jointly') }}</span>
       </div>
       <BcrosInputsCombobox
+        v-if="siControl"
         v-model="siControl.directorsJointly"
         :name="name + '.director.jointly'"
         :label-function="(si) => si.legalName.toUpperCase()"
@@ -107,6 +112,7 @@
         <span class="italic text-sm">{{ $t('controlTableBody.controlType.inConcert') }}</span>
       </div>
       <BcrosInputsCombobox
+        v-if="siControl"
         v-model="siControl.directorsInConcert"
         :name="name + '.director.inConcert'"
         :label-function="(si) => si.legalName.toUpperCase()"
@@ -137,12 +143,14 @@ const props = defineProps({
   individualConnectionWidth: { type: String, required: true }
 })
 
-const allActiveSisExceptMe = allActiveSis.value.filter((asi: SiSchemaType) => asi.uuid !== props.si.uuid).map(
-  (si: SiSchemaType) => ({
-    uuid: si.uuid,
-    legalName: si.name.fullName,
-    preferredName: si.name.preferredName
-  })
+const allActiveSisExceptMe = computed(() =>
+  allActiveSis.value.filter((asi: SiSchemaType) => asi.uuid !== props.si.uuid).map(
+    (si: SiSchemaType) => ({
+      uuid: si.uuid,
+      legalName: si.name.fullName,
+      preferredName: si.name.preferredName
+    })
+  )
 )
-const siControl: JointlyOrInConcertConnectionsI = actingJointlyAndInConcert.value.get(props.si.uuid)
+const siControl: JointlyOrInConcertConnectionsI = computed(() => actingJointlyAndInConcert.value.get(props.si.uuid))
 </script>
