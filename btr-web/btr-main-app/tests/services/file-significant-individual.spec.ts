@@ -1,12 +1,25 @@
 import { describe, expect, vi } from 'vitest'
+import { setActivePinia, createPinia } from 'pinia'
 import { testSI } from '../utils/mockedData'
-
 import { OwnershipOrControlStatements as expectedOutput } from './expected-ouptuts'
+import { useSiControlStore } from '~/stores/si-control-store'
 
 import FilingService from '~/services/file-significant-individual'
 
 describe('File significant individuals service Tests', () => {
   it('getPersonAndOwnershipAndControlStatements', () => {
+    setActivePinia(createPinia())
+    const store = useSiControlStore()
+    // fake inControl table setting the values for connected individuals
+    store.actingJointlyAndInConcert.set('001', {
+      sharesInConcert: [{ uuid: '002', legalName: 'Another test name' }],
+      directorsInConcert: [],
+      directorsJointly: [],
+      sharesJointly: [],
+      votesInConcert: [],
+      votesJointly: []
+    })
+
     const mockDate = new Date(2024, 0, 26)
     vi.setSystemTime(mockDate)
     const testExpectedOutput = expectedOutput
