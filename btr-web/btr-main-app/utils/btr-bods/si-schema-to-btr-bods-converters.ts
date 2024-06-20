@@ -275,18 +275,32 @@ const getInterests = (si: SiSchemaType) => {
   let interests: BodsInterestI[] = []
 
   for (const dateGroup of si.effectiveDates) {
+    const siControlStore = useSiControlStore()
     const startDate = dateGroup.startDate
     const endDate = dateGroup.endDate
 
     if (si.controlOfShares.percentage !== PercentageRangeE.NO_SELECTION) {
-      const newInterests = _getInterestsOfSharesOrVotes(
-        si.controlOfShares, si.sharesInConcert, si.sharesActingJointly, startDate, endDate)
+      const newInterests =
+        _getInterestsOfSharesOrVotes(
+          si.controlOfShares,
+          siControlStore.actingJointlyAndInConcert.get(si.uuid)?.sharesInConcert || [],
+          siControlStore.actingJointlyAndInConcert.get(si.uuid)?.sharesJointly || [],
+          startDate,
+          endDate
+        )
+
       interests = interests.concat(newInterests)
     }
 
     if (si.controlOfVotes.percentage !== PercentageRangeE.NO_SELECTION) {
-      const newInterests = _getInterestsOfSharesOrVotes(
-        si.controlOfVotes, si.votesInConcert, si.votesActingJointly, startDate, endDate)
+      const newInterests =
+        _getInterestsOfSharesOrVotes(
+          si.controlOfVotes,
+          siControlStore.actingJointlyAndInConcert.get(si.uuid)?.votesInConcert || [],
+          siControlStore.actingJointlyAndInConcert.get(si.uuid)?.votesJointly || [],
+          startDate,
+          endDate
+        )
       interests = interests.concat(newInterests)
     }
 
@@ -296,8 +310,14 @@ const getInterests = (si: SiSchemaType) => {
       si.controlOfDirectors.actingJointly ||
       si.controlOfDirectors.significantInfluence
     ) {
-      const newInterests = _getDirectorsInterests(
-        si.controlOfDirectors, si.directorsInConcert, si.directorsActingJointly, startDate, endDate)
+      const newInterests =
+        _getDirectorsInterests(
+          si.controlOfDirectors,
+          siControlStore.actingJointlyAndInConcert.get(si.uuid)?.directorsInConcert || [],
+          siControlStore.actingJointlyAndInConcert.get(si.uuid)?.directorsJointly || [],
+          startDate,
+          endDate
+        )
       interests = interests.concat(newInterests)
     }
   }

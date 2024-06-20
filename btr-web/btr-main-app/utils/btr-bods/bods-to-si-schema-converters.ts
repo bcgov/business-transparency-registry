@@ -10,6 +10,7 @@ import {
   SiSchemaType, StartEndDateGroupSchemaType, ConnectedInvidualSchemaType
 } from '~/utils/si-schema/definitions'
 import { getEmptyAddress } from '~/utils/si-schema/defaults'
+import { JointlyOrInConcertConnectionsI } from '~/interfaces/jointly-or-in-concert'
 
 const _findOwnershipOrControlStatement =
   (submission: BtrFilingI, personStatementId: string): BtrBodsOwnershipOrControlI | null => {
@@ -212,14 +213,7 @@ const _getSi = (
 
     uuid: person.uuid,
 
-    ui: {},
-
-    sharesInConcert: getConnectedIndividuals(oocs, ControlOfSharesDetailsE.IN_CONCERT_CONTROL),
-    sharesActingJointly: getConnectedIndividuals(oocs, ControlOfSharesDetailsE.ACTING_JOINTLY),
-    votesInConcert: getConnectedIndividuals(oocs, ControlOfVotesDetailsE.IN_CONCERT_CONTROL),
-    votesActingJointly: getConnectedIndividuals(oocs, ControlOfVotesDetailsE.ACTING_JOINTLY),
-    directorsInConcert: getConnectedIndividuals(oocs, ControlOfDirectorsDetailsE.IN_CONCERT_CONTROL),
-    directorsActingJointly: getConnectedIndividuals(oocs, ControlOfDirectorsDetailsE.ACTING_JOINTLY)
+    ui: {}
   }
 }
 
@@ -234,3 +228,25 @@ export const getSIsFromBtrBodsSubmission = (submission: BtrFilingI): SiSchemaTyp
   }
   return sis
 }
+
+export const getSiControlConnectionsFromBodsSubmission =
+  (submission: BtrFilingI): Map<string, JointlyOrInConcertConnectionsI> => {
+    const jointlyOrInConcertConnections: Map<string, JointlyOrInConcertConnectionsI> = new Map()
+
+    for (const person of submission.personStatements) {
+      const oocs = _findOwnershipOrControlStatement(submission, person.statementID)
+      if (person && oocs) {
+        const connections: JointlyOrInConcertConnectionsI = {
+          sharesInConcert: getConnectedIndividuals(oocs, ControlOfSharesDetailsE.IN_CONCERT_CONTROL),
+          sharesJointly: getConnectedIndividuals(oocs, ControlOfSharesDetailsE.ACTING_JOINTLY),
+          votesInConcert: getConnectedIndividuals(oocs, ControlOfVotesDetailsE.IN_CONCERT_CONTROL),
+          votesJointly: getConnectedIndividuals(oocs, ControlOfVotesDetailsE.ACTING_JOINTLY),
+          directorsInConcert: getConnectedIndividuals(oocs, ControlOfDirectorsDetailsE.IN_CONCERT_CONTROL),
+          directorsJointly: getConnectedIndividuals(oocs, ControlOfDirectorsDetailsE.ACTING_JOINTLY)
+        }
+
+        jointlyOrInConcertConnections.set(person.uuid, connections)
+      }
+    }
+    return jointlyOrInConcertConnections
+  }

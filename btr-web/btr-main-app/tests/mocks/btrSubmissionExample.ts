@@ -612,13 +612,8 @@ export const expectedSisOutput: SiSchemaType[] = [
       }
     ],
     uuid: undefined,
-    ui: {},
-    sharesInConcert: [],
-    sharesActingJointly: [],
-    votesInConcert: [],
-    votesActingJointly: [],
-    directorsInConcert: [],
-    directorsActingJointly: []
+    ui: {}
+
   },
   {
     missingInfoReason: 'It actually really is unless it is not',
@@ -691,13 +686,8 @@ export const expectedSisOutput: SiSchemaType[] = [
       }
     ],
     uuid: undefined,
-    ui: {},
-    sharesInConcert: [],
-    sharesActingJointly: [],
-    votesInConcert: [],
-    votesActingJointly: [],
-    directorsInConcert: [],
-    directorsActingJointly: []
+    ui: {}
+
   },
   {
     controlOfDirectors: {
@@ -766,12 +756,7 @@ export const expectedSisOutput: SiSchemaType[] = [
       }
     ],
     uuid: undefined,
-    ui: {},
-    sharesInConcert: [],
-    sharesActingJointly: [],
-    votesInConcert: [],
-    votesActingJointly: [],
-    directorsInConcert: [],
-    directorsActingJointly: []
+    ui: {}
+
   }
 ]

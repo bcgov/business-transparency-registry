@@ -1,6 +1,5 @@
 import { v4 as UUIDv4 } from 'uuid'
 
-import { FetchError } from 'ofetch'
 import SiSchemaToBtrBodsConverters from '../utils/btr-bods/si-schema-to-btr-bods-converters'
 import { SignificantIndividualFilingI } from '~/interfaces/significant-individual-filing-i'
 import { IdAsNumberI } from '~/interfaces/common-ids-i'
@@ -15,8 +14,10 @@ import {
 } from '~/utils/btr-bods/btr-bods-implementations'
 import { BtrBodsOwnershipOrControlI } from '~/interfaces/btr-bods/btr-bods-ownership-or-control-i'
 import { BtrBodsPersonI } from '~/interfaces/btr-bods/btr-bods-person-i'
-import { SiSchemaType } from '~/utils/si-schema/definitions'
-import { getSIsFromBtrBodsSubmission } from '~/utils/btr-bods/bods-to-si-schema-converters'
+import {
+  getSiControlConnectionsFromBodsSubmission,
+  getSIsFromBtrBodsSubmission
+} from '~/utils/btr-bods/bods-to-si-schema-converters'
 import { FilingActionE } from '#imports'
 
 const constructBtrApiURL = () => {
@@ -151,21 +152,24 @@ const submitSignificantIndividualFiling = async (sif: SignificantIndividualFilin
   return { data: data.value, error: error.value }
 }
 
-const getCurrentOwners =
-  async (businessIdentifier: string): Promise<{ data: SiSchemaType[] | null, error: FetchError<any> | null }> => {
-    const url = `${constructBtrApiURL()}/plots/entity/${businessIdentifier}`
-    const { data, error } =
-      await useFetchBcros<{ payload: BtrFilingI }>(url)
+const getBtrFiling = async (businessIdentifier: string) => {
+  const url = `${constructBtrApiURL()}/plots/entity/${businessIdentifier}`
+  const { data, error } = await useFetchBcros<{ payload: BtrFilingI }>(url)
+  return { data: data?.value || null, error }
+}
 
-    if (data.value?.payload) {
-      return { data: getSIsFromBtrBodsSubmission(data.value.payload), error: error.value }
-    }
+const getCurrentOwners = (btrFiling: BtrFilingI) => {
+  return getSIsFromBtrBodsSubmission(btrFiling)
+}
 
-    return { data: null, error: error.value }
-  }
+const getCurrentControlConnections = (btrFiling: BtrFilingI) => {
+  return getSiControlConnectionsFromBodsSubmission(btrFiling)
+}
 
 export default {
   getPersonAndOwnershipAndControlStatements,
   submitSignificantIndividualFiling,
-  getCurrentOwners
+  getBtrFiling,
+  getCurrentOwners,
+  getCurrentControlConnections
 }

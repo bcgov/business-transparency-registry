@@ -3,6 +3,7 @@ import { setActivePinia, createPinia, storeToRefs } from 'pinia'
 import { testSI } from '../utils/mockedData'
 import { useSignificantIndividuals } from '@/stores/significant-individuals'
 import fileSIApi from '@/services/file-significant-individual'
+import { BtrFilingI } from '~/interfaces/btr-bods/btr-filing-i'
 
 describe('Business Store Tests', () => {
   setActivePinia(createPinia())
@@ -18,11 +19,20 @@ describe('Business Store Tests', () => {
 
   it('initializes a new significant individuals filing as expected', async () => {
     fileSIApi.getCurrentOwners = vi.fn(() => {
-      return { data: [testSI], errors: [] }
+      return [testSI]
     })
 
+    const btrFiling: BtrFilingI = {
+      businessIdentifier: 'BC1234567',
+      effectiveDate: todayIsoDateString(),
+      entityStatement: [],
+      noSignificantIndividualsExist: true,
+      ownershipOrControlStatements: [],
+      personStatements: []
+    }
+
     const identifier = 'BC1234567'
-    await significantIndividuals.filingInit(identifier)
+    await significantIndividuals.filingInit(btrFiling)
     expect(currentSIFiling.value.businessIdentifier).toBe(identifier)
     expect(currentSIFiling.value.effectiveDate).toBe(todayIsoDateString())
     // FUTURE: call mocked and returning a list of existing SIs

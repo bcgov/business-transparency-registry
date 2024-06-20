@@ -86,6 +86,7 @@ export const OwnershipOrControlStatements = {
       subject: { describedByEntityStatement: '' }
     }
   ],
+  phoneNumber: undefined,
   personStatements: [
     {
       placeOfResidence: {

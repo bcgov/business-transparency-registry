@@ -1,13 +1,13 @@
 import { defineStore } from 'pinia'
 import { StatusCodes } from 'http-status-codes'
 import { Ref } from 'vue'
-import { v4 as UUIDv4 } from 'uuid'
 import { ErrorI } from '../../btr-common-components/interfaces/error-i'
 import { dateToString } from '../../btr-common-components/utils/date'
 import fileSIApi from '@/services/file-significant-individual'
 import { SignificantIndividualFilingI } from '~/interfaces/significant-individual-filing-i'
 import { SiSchemaType } from '~/utils/si-schema/definitions'
 import { getEmptySiFiling } from '~/utils/si-schema/defaults'
+import { BtrFilingI } from '~/interfaces/btr-bods/btr-filing-i'
 
 /** Manages Significant */
 export const useSignificantIndividuals = defineStore('significantIndividuals', () => {
@@ -48,12 +48,13 @@ export const useSignificantIndividuals = defineStore('significantIndividuals', (
   }
 
   /** Initialize a new significant individual filing */
-  async function filingInit (businessIdentifier: string) {
-    await loadSavedSIs(businessIdentifier)
+  function filingInit (btrFiling: BtrFilingI) {
+    loadSavedSIs(btrFiling)
+
     const folioNum = _getFolioNumber()
     currentSIFiling.value = {
       noSignificantIndividualsExist: false,
-      businessIdentifier,
+      businessIdentifier: btrFiling.businessIdentifier,
       significantIndividuals: currentSavedSIs.value,
       effectiveDate: dateToString(new Date(), 'YYYY-MM-DD'),
       certified: false,
@@ -83,40 +84,10 @@ export const useSignificantIndividuals = defineStore('significantIndividuals', (
     submitting.value = false
   }
 
-  /** Get the current significant individuals for the business */
-  async function getSIs (businessIdentifier: string): Promise<SiSchemaType[] | null> {
-    const { data, error } = await fileSIApi.getCurrentOwners(businessIdentifier)
-    if (error) {
-      if (error.statusCode !== StatusCodes.NOT_FOUND) {
-        console.error(error)
-        const err = {
-          statusCode: error.statusCode ?? StatusCodes.INTERNAL_SERVER_ERROR,
-          message: error.message,
-          category: ErrorCategoryE.SIGNIFICANT_INDIVIDUAL
-        }
-        errors.value.push(err)
-      }
-      return null
-    }
-
-    // generate missing values for new fields
-    data?.forEach((si) => {
-      if (!si.uuid) { si.uuid = UUIDv4() }
-      if (!si.sharesInConcert) { si.sharesInConcert = [] }
-      if (!si.sharesActingJointly) { si.sharesActingJointly = [] }
-      if (!si.votesInConcert) { si.votesInConcert = [] }
-      if (!si.votesActingJointly) { si.votesActingJointly = [] }
-      if (!si.directorsInConcert) { si.directorsInConcert = [] }
-      if (!si.directorsActingJointly) { si.directorsActingJointly = [] }
-    })
-
-    return data
-  }
-
   /** Load the significant individuals for the business into the store */
-  async function loadSavedSIs (businessIdentifier: string, force = false) {
-    if (currentSavedSIs.value.length === 0 || force) {
-      currentSavedSIs.value = await getSIs(businessIdentifier) || []
+  function loadSavedSIs (btrFiling: BtrFilingI, force = false) {
+    if (!currentSavedSIs.value || currentSavedSIs.value.length === 0 || force) {
+      currentSavedSIs.value = fileSIApi.getCurrentOwners(btrFiling) || []
     }
   }
 
@@ -130,6 +101,7 @@ export const useSignificantIndividuals = defineStore('significantIndividuals', (
   return {
     currentSIFiling,
     currentSavedSIs,
+    errors,
     showErrors,
     submitting,
     filingAddSI,
@@ -138,8 +110,6 @@ export const useSignificantIndividuals = defineStore('significantIndividuals', (
     filingInit,
     filingSave,
     filingSubmit,
-    getSIs,
-    loadSavedSIs,
     reset
   }
 })

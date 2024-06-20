@@ -50,7 +50,7 @@ describe('Btr to Bods util converters Tests', () => {
           details: 'controlType.shares.inConcertControl',
           startDate: SI_EXAMPLE_DATE,
           endDate: undefined,
-          connectedIndividuals: [{ uuid: '002', legalName: 'Another test name' }]
+          connectedIndividuals: []
         },
         {
           type: BodsInterestTypeE.VOTING_RIGHTS,
