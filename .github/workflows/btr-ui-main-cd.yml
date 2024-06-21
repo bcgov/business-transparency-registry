@@ -27,7 +27,6 @@ jobs:
       target: ${{ inputs.environment }}
       node_version: 20
       working_directory: "./btr-web"
-      package_name: "btr-main-app"
       app_name: "btr-ui"
     secrets:
       WORKLOAD_IDENTIFY_POOLS_PROVIDER: ${{ secrets.WORKLOAD_IDENTIFY_POOLS_PROVIDER }}
