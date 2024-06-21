@@ -13,23 +13,21 @@ on:
         required: true
         type: choice
         options:
-        - dev
-        - test
-        - prod
-      tagname:
-        description: "Specify a previous version (git tag) to deploy"
-        required: false
-        default: ""
+          - dev
+          - test
+          - prod
 
 jobs:
   btr-ui-main-cd:
-    uses: bcgov/bcregistry-sre/.github/workflows/ui-cd-pnpm.yaml@main
+    permissions:
+      contents: "write"
+      id-token: "write"
+    uses: bcgov/bcregistry-sre/.github/workflows/frontend-cd.yaml@main
     with:
-        environment: ${{ inputs.environment }}
-        tagname: ${{ inputs.tagname }}
-        working_directory: "./btr-web"
-        package_name: "btr-main-app"
+      target: ${{ inputs.environment }}
+      node_version: 20
+      working_directory: "./btr-web"
+      app_name: "btr-ui"
     secrets:
-        APP_NAME: "btr-ui"
-        OP_CONNECT_URL: ${{ secrets.OP_CONNECT_URL }}
-        OP_CONNECT_TOKEN: ${{ secrets.OP_CONNECT_TOKEN }}
+      WORKLOAD_IDENTIFY_POOLS_PROVIDER: ${{ secrets.WORKLOAD_IDENTIFY_POOLS_PROVIDER }}
+      GCP_SERVICE_ACCOUNT: ${{ secrets.GCP_SERVICE_ACCOUNT }}

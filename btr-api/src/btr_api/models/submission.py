@@ -63,7 +63,7 @@ class Submission(Versioned, db.Model):
         db.Column("submitted_datetime", db.DateTime(timezone=True),
                   server_default=func.now()))  # pylint:disable=not-callable
     payload = db.Column("payload", JSONB)
-    business_identifier = db.Column(db.String(255), nullable=False, unique=True)
+    business_identifier = db.Column(db.String(255), nullable=False, unique=True, index=True)
     # maps to invoice id created by the pay-api (used for getting receipt)
     invoice_id = db.Column(db.Integer, nullable=True)
 
