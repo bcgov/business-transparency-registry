@@ -140,10 +140,8 @@ onBeforeMount(async () => {
     return null
   }
 
-  if (data?.payload) {
-    significantIndividuals.filingInit(data.payload)
-    siControlStore.initActingJointlyOrInConcertFromBtrFiling(data.payload)
-  }
+  significantIndividuals.filingInit(identifier, data?.payload)
+  siControlStore.initActingJointlyOrInConcertFromBtrFiling(data?.payload)
 
   currentSIFiling.value.certified = false
 })

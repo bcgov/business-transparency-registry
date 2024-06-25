@@ -48,13 +48,15 @@ export const useSignificantIndividuals = defineStore('significantIndividuals', (
   }
 
   /** Initialize a new significant individual filing */
-  function filingInit (btrFiling: BtrFilingI) {
-    loadSavedSIs(btrFiling)
+  function filingInit (businessIdentifier: string, btrFiling?: BtrFilingI) {
+    if (btrFiling) {
+      loadSavedSIs(btrFiling)
+    }
 
     const folioNum = _getFolioNumber()
     currentSIFiling.value = {
       noSignificantIndividualsExist: false,
-      businessIdentifier: btrFiling.businessIdentifier,
+      businessIdentifier,
       significantIndividuals: currentSavedSIs.value,
       effectiveDate: dateToString(new Date(), 'YYYY-MM-DD'),
       certified: false,
