@@ -32,7 +32,7 @@ describe('Business Store Tests', () => {
     }
 
     const identifier = 'BC1234567'
-    await significantIndividuals.filingInit(btrFiling)
+    await significantIndividuals.filingInit(identifier, btrFiling)
     expect(currentSIFiling.value.businessIdentifier).toBe(identifier)
     expect(currentSIFiling.value.effectiveDate).toBe(todayIsoDateString())
     // FUTURE: call mocked and returning a list of existing SIs

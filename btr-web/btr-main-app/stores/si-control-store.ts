@@ -21,7 +21,11 @@ export const useSiControlStore = defineStore('jointlyOrInConcert', () => {
   // maps uuid of person and all of the associated person
   const actingJointlyAndInConcert: Ref<Map<string, JointlyOrInConcertConnectionsI>> = ref(new Map())
 
-  const initActingJointlyOrInConcertFromBtrFiling = (btrFiling: BtrFilingI, force: boolean = false) => {
+  const initActingJointlyOrInConcertFromBtrFiling = (btrFiling?: BtrFilingI, force: boolean = false) => {
+    if (!btrFiling) {
+      return
+    }
+
     if (!actingJointlyAndInConcert.value || actingJointlyAndInConcert.value.size === 0 || force) {
       actingJointlyAndInConcert.value = fileSIApi.getCurrentControlConnections(btrFiling)
     }
