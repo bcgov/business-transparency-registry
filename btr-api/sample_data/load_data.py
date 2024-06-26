@@ -14,7 +14,7 @@
 """The BTR data loader script."""
 import csv
 import sys
-from random import choice
+from random import choice, randint
 
 import pycountry
 from faker import Faker
@@ -33,8 +33,10 @@ def _get_ooc_interests(limit: int = None):
 
     def _get_details(interestType: str):
         """Return a random details string based on the interest type."""
-        if interestType in ['shareholding', 'votingRights']:
-            return choice(['controlType.sharesOrVotes.registeredOwner', 'controlType.sharesOrVotes.indirectControl', 'controlType.sharesOrVotes.beneficialOwner'])
+        if interestType == 'shareholding':
+            return choice(['controlType.shares.registeredOwner', 'controlType.shares.indirectControl', 'controlType.shares.beneficialOwner'])
+        if interestType == 'votingRights':
+            return choice(['controlType.votes.registeredOwner', 'controlType.votes.indirectControl', 'controlType.votes.beneficialOwner'])
         if interestType == 'appointmentOfBoard':
             return choice(['controlType.directors.directControl', 'controlType.directors.indirectControl', 'controlType.directors.significantInfluence'])
         return 'fake details'
@@ -45,21 +47,22 @@ def _get_ooc_interests(limit: int = None):
         for row in reader:
             type = row['type'].split('-')
             type = type[0] + ''.join(ele.title() for ele in type[1:])
-            ooc_interests.setdefault(row['_link_ooc_statement'], []).append({
+            new_interest = {
                 'type': type,
                 'beneficialOwnershipOrControl': True,
                 'details': row['details'] or _get_details(type),
                 'directOrIndirect': 'unknown',
-                'share': {
-                    'exact': row['share_exact'],
-                    'maximum': row['share_maximum'],
-                    'minimum': row['share_minimum']
-                },
                 'startDate': row['startDate'],
                 'endDate': row['endDate'],
-            })
+            }
+            if type in ['shareholding', 'votingRights']:
+                new_interest['share'] = choice([{'maximum': 100, 'minimum': 75}, {'maximum': 75, 'minimum': 50}, {'maximum': 50, 'minimum': 25}])
+
+            ooc_interests.setdefault(row['_link_ooc_statement'], []).append(new_interest)
+
             if limit and len(ooc_interests.keys()) == limit:
                 return ooc_interests
+
     return ooc_interests
 
 
@@ -99,14 +102,6 @@ def _get_entity_stmnts(limit: int = None):
                 'name': row['name'],
                 # NOTE: fake identifiers based on _link
                 'identifiers': [{'id': f"TST-E{row['_link']}", 'scheme': 'TST-E'}],
-                'publicationDetails': {
-                    'publicationDate': row['publicationDetails_publicationDate'],
-                    'bodsVersion': '0.3',
-                    'publisher': {
-                        'name': row['publicationDetails_publisher_name'],
-                        'url': row['publicationDetails_publisher_url']
-                    }
-                },
                 'foundingDate': row['foundingDate'],
                 'dissolutionDate': row['dissolutionDate'],
             }
@@ -187,30 +182,23 @@ def _get_person_stmnts(addresses: dict, names: dict, nationalities: dict, limit:
                     'statementID': row['statementID'],
                     'statementType': row['statementType'],
                     'statementDate': row['statementDate'],
-                    'isComponent': row['isComponent'],
                     'personType': row['personType'],
                     'names': names[row['_link']],
                     'nationalities': nationalities.get(row['_link'], []),
-                    'identifiers': [
-                        # NOTE: fake identifiers + tax numbers based on _link
-                        {'id': f"TST-P{row['_link']}", 'scheme': 'TST-P'},
-                        {'id': f"TST-TAX{row['_link']}", 'scheme': 'TST-TAX'},
-                    ],
-                    'publicationDetails': {
-                        'publicationDate': row['publicationDetails_publicationDate'],
-                        'bodsVersion': '0.3',
-                        'publisher': {
-                            'name': row['publicationDetails_publisher_name'],
-                            'url': row['publicationDetails_publisher_url']
-                        }
-                    },
                     'birthDate': row['birthDate'],
                     'addresses': person_addresses,
                     'placeOfResidence': person_addresses[0] if len(person_addresses) > 0 else None,
                     # NOTE: below is fake info
+                    'hasTaxNumber': choice([True, False]),
+                    'identifiers': [],
                     'taxResidencies': nationalities.get(row['_link'], []),
-                    'email': get_random_email()
+                    'email': get_random_email(),
+                    'uuid': fake.uuid4()
                 }
+                if person_stmnts[row['statementID']]['hasTaxNumber']:
+                    person_stmnts[row['statementID']]['identifiers'].append({
+                        'id': f'{randint(100, 999)} {randint(100, 999)} {randint(100, 999)}',
+                        'scheme': 'CAN-TAXID'})
                 if limit and len(person_stmnts.keys()) == limit:
                     return person_stmnts
     return person_stmnts
@@ -250,7 +238,7 @@ def _get_filings(ooc_stmnts: list, entity_stmnts: dict, person_stmnts: dict):
 def load_data():
     """Load data via csv files BTR."""
     max = 50000
-    user = User.find_by_username('service-account-btr')
+    user = User.find_by_username('service-account-nds')
     if not user:
         current_app.logger.debug('error user not found.')
         return
