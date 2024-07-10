@@ -44,7 +44,7 @@ describe('pages -> Add individual', () => {
     cy.get('[data-cy="controlOfVotes.percentage.3"]').click()
     verifyBgColorsControlOfVotes(3)
 
-    //test can unselect
+    // test can unselect
     cy.get('[data-cy="controlOfVotes.percentage.3"]').click()
     verifyBgColorsControlOfVotes(-1)
   })
