@@ -48,6 +48,11 @@ if (model.value) {
 }
 
 const selectOption = (index: number) => {
+  if (selected.value === index) {
+    selected.value = -1
+    model.value = 'noSelection'
+    return
+  }
   selected.value = index
   model.value = options[index].range
   formBus?.emit({ type: 'blur', path: props.name })

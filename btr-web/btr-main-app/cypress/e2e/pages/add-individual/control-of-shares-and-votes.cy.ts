@@ -19,9 +19,11 @@ describe('pages -> Add individual', () => {
 
   const verifyBgColorsControlOfVotes = (index: number) => {
     const nonSelected = [0, 1, 2, 3].filter(num => num !== index)
-    cy.get(`[data-cy="controlOfVotes.percentage.${index}"]`)
-      .should('have.css', 'background-color')
-      .and('eq', 'rgb(22, 105, 187)')
+    if (index !== -1) {
+      cy.get(`[data-cy="controlOfVotes.percentage.${index}"]`)
+        .should('have.css', 'background-color')
+        .and('eq', 'rgb(22, 105, 187)')
+    }
     nonSelected.forEach((num) => {
       cy.get(`[data-cy="controlOfVotes.percentage.${num}"]`)
         .should('have.css', 'background-color')
@@ -41,5 +43,9 @@ describe('pages -> Add individual', () => {
     verifyBgColorsControlOfVotes(2)
     cy.get('[data-cy="controlOfVotes.percentage.3"]').click()
     verifyBgColorsControlOfVotes(3)
+
+    //test can unselect
+    cy.get('[data-cy="controlOfVotes.percentage.3"]').click()
+    verifyBgColorsControlOfVotes(-1)
   })
 })
