@@ -40,19 +40,30 @@ The 'registers' and 'create_register' functions define the 'GET' and 'POST' meth
 """
 from http import HTTPStatus
 
-from flask import Blueprint, current_app, g, jsonify, request
-from flask_cors import cross_origin
-import json
-
 from btr_api.common.auth import jwt
-from btr_api.exceptions import ExternalServiceException, exception_response, error_request_response, AuthException
-from btr_api.models import Submission as SubmissionModel, User as UserModel
+from btr_api.exceptions import AuthException
+from btr_api.exceptions import error_request_response
+from btr_api.exceptions import exception_response
+from btr_api.exceptions import ExternalServiceException
+from btr_api.models import Submission as SubmissionModel
+from btr_api.models import User as UserModel
 from btr_api.models.submission import SubmissionSerializer
-from btr_api.services import SchemaService, SubmissionService, btr_auth, btr_bor, btr_entity, btr_pay
+from btr_api.services import btr_auth
+from btr_api.services import btr_bor
+from btr_api.services import btr_entity
+from btr_api.services import btr_pay
+from btr_api.services import SchemaService
+from btr_api.services import SubmissionService
 from btr_api.services.validator import validate_entity
+from flask import Blueprint
+from flask import current_app
+from flask import g
+from flask import jsonify
+from flask import request
+from flask_cors import cross_origin
 
 bp = Blueprint("submission", __name__)
-    
+
 REDACT_MONONYM = "mono"
 REDACT_MONONYM_FN = "mono_fn"
 REDACT_EMAIL = "mono_email"
@@ -62,7 +73,7 @@ REDACT_EMPTY = "empty"
 REDACT_DATE = "date"
 REDACT_IDENTIFIER = "identifier"
 
-#the lack of a rule means it shows fully
+# the lack of a rule means it shows fully
 REDACT_RULES = {
     btr_auth.USER_PUBLIC: {
         "prefName": REDACT_EMPTY,
@@ -73,7 +84,7 @@ REDACT_RULES = {
         "streetAdditional": REDACT_EMPTY,
         "locationDescription": REDACT_EMPTY,
         "birthDate": REDACT_EMPTY,
-        "identifiers": REDACT_EMPTY
+        "identifiers": REDACT_EMPTY,
     },
     btr_auth.USER_STAFF: {
         "email": REDACT_EMAIL,
@@ -83,38 +94,51 @@ REDACT_RULES = {
         "streetAdditional": REDACT_EMPTY,
         "locationDescription": REDACT_EMPTY,
         "birthDate": REDACT_DATE,
-        "identifiers": REDACT_IDENTIFIER
-    }
+        "identifiers": REDACT_IDENTIFIER,
+    },
 }
-    
+
 
 def redactInformation(request, payload):
     role = btr_auth.getUserType(request)
-    if (role == btr_auth.USER_COMPETENT_AUTHORITY):
+    if role == btr_auth.USER_COMPETENT_AUTHORITY:
         return payload
-    #otherwise PUBLIC or STAFF
+    # otherwise PUBLIC or STAFF
     redactionToUse = REDACT_RULES[role]
-    for person in payload['payload']['personStatements']:
-      for name in person['names']:
-        if name['type'] == 'alternative':
-          name['fullName'] = redactField(name['fullName'], redactionToUse.get('prefName'))
+    for person in payload["payload"]["personStatements"]:
+        for name in person["names"]:
+            if name["type"] == "alternative":
+                name["fullName"] = redactField(name["fullName"], redactionToUse.get("prefName"))
 
-      person['email'] = redactField(person['email'], redactionToUse.get('email'))
-      person['phoneNumber']['number'] = redactField(person['phoneNumber']['number'], redactionToUse.get('phone'))
-      for address in person['addresses']:
-          address['postalCode'] = redactField(address['postalCode'], redactionToUse.get('postal'))
-          address['street'] = redactField(address['street'], redactionToUse.get('street'))
-          address['streetAdditional'] = redactField(address['streetAdditional'], redactionToUse.get('streetAdditional'))
-          address['locationDescription'] = redactField(address['locationDescription'], redactionToUse.get('locationDescription'))
-          
-      person['placeOfResidence']['postalCode'] = redactField(person['placeOfResidence']['postalCode'], redactionToUse.get('postal'))
-      person['placeOfResidence']['street'] = redactField(person['placeOfResidence']['street'], redactionToUse.get('street'))
-      person['placeOfResidence']['streetAdditional'] = redactField(person['placeOfResidence']['streetAdditional'], redactionToUse.get('streetAdditional'))
-      person['placeOfResidence']['locationDescription'] = redactField(person['placeOfResidence']['locationDescription'], redactionToUse.get('locationDescription'))
-      person['birthDate'] = redactField(person['birthDate'], redactionToUse.get('birthDate'))
-      for identifier in person['identifiers']:
-        identifier['id'] = redactField(identifier['id'], redactionToUse.get('identifiers'))
+        person["email"] = redactField(person["email"], redactionToUse.get("email"))
+        person["phoneNumber"]["number"] = redactField(person["phoneNumber"]["number"], redactionToUse.get("phone"))
+        for address in person["addresses"]:
+            address["postalCode"] = redactField(address["postalCode"], redactionToUse.get("postal"))
+            address["street"] = redactField(address["street"], redactionToUse.get("street"))
+            address["streetAdditional"] = redactField(
+                address["streetAdditional"], redactionToUse.get("streetAdditional")
+            )
+            address["locationDescription"] = redactField(
+                address["locationDescription"], redactionToUse.get("locationDescription")
+            )
+
+        person["placeOfResidence"]["postalCode"] = redactField(
+            person["placeOfResidence"]["postalCode"], redactionToUse.get("postal")
+        )
+        person["placeOfResidence"]["street"] = redactField(
+            person["placeOfResidence"]["street"], redactionToUse.get("street")
+        )
+        person["placeOfResidence"]["streetAdditional"] = redactField(
+            person["placeOfResidence"]["streetAdditional"], redactionToUse.get("streetAdditional")
+        )
+        person["placeOfResidence"]["locationDescription"] = redactField(
+            person["placeOfResidence"]["locationDescription"], redactionToUse.get("locationDescription")
+        )
+        person["birthDate"] = redactField(person["birthDate"], redactionToUse.get("birthDate"))
+        for identifier in person["identifiers"]:
+            identifier["id"] = redactField(identifier["id"], redactionToUse.get("identifiers"))
     return jsonify(payload)
+
 
 def redactField(field, redactType):
     if redactType == REDACT_MONONYM:
@@ -122,24 +146,24 @@ def redactField(field, redactType):
     elif redactType == REDACT_MONONYM_FN:
         rv = ""
         for word in field.split():
-            if not(rv == ""):
+            if not (rv == ""):
                 rv += " "
             rv += word[0:1] + "***"
         return rv
     elif redactType == REDACT_EMAIL:
-        return field.split('@')[0][0:1] + "***" + "@***." + field.split('.')[-1]
+        return field.split("@")[0][0:1] + "***" + "@***." + field.split(".")[-1]
     elif redactType == REDACT_PHONE:
         return field[0:-7] + "***"
     elif redactType == REDACT_FULL:
         return "***"
-    #This is a space instead of blank because if it's empty the ui shows undefined in some spots
+    # This is a space instead of blank because if it's empty the ui shows undefined in some spots
     elif redactType == REDACT_EMPTY:
         return " "
     elif redactType == REDACT_DATE:
-        return field.split('-')[0]
+        return field.split("-")[0]
     elif redactType == REDACT_IDENTIFIER:
         return "*** **" + field[6:]
-        
+
     return field
 
 
@@ -165,7 +189,7 @@ def get_entity_submission(business_identifier: str):
 
     try:
         btr_auth.is_authorized(request=request, business_identifier=business_identifier)
-        account_id = request.args.get('account_id')
+        account_id = request.args.get("account_id")
         btr_auth.product_authorizations(request=request, account_id=account_id)
 
         submission = SubmissionModel.find_by_business_identifier(business_identifier)
@@ -181,7 +205,7 @@ def get_entity_submission(business_identifier: str):
 
 
 @bp.route("/", methods=("POST",))
-@cross_origin(origin='*')
+@cross_origin(origin="*")
 @jwt.requires_auth
 def create_register():
     """
@@ -192,7 +216,7 @@ def create_register():
     """
     try:
         user = UserModel.get_or_create_user_by_jwt(g.jwt_oidc_token_info)
-        account_id = request.headers.get('Account-Id', None)
+        account_id = request.headers.get("Account-Id", None)
 
         json_input = request.get_json()
 
@@ -201,18 +225,18 @@ def create_register():
         schema_service = SchemaService()
         [valid, errors] = schema_service.validate(schema_name, json_input)
         if not valid:
-            return error_request_response('Invalid schema', HTTPStatus.BAD_REQUEST, errors)
+            return error_request_response("Invalid schema", HTTPStatus.BAD_REQUEST, errors)
 
-        business_identifier = json_input.get('businessIdentifier')
+        business_identifier = json_input.get("businessIdentifier")
         btr_auth.is_authorized(request=request, business_identifier=business_identifier)
 
         # get entity
-        identifier = json_input['businessIdentifier']
+        identifier = json_input["businessIdentifier"]
         entity: dict = btr_entity.get_entity_info(jwt, identifier).json()
 
         # validate entity; return FORBIDDEN for historial and frozen companies
         if entity_errors := validate_entity(entity):
-            return error_request_response('Invalid entity', HTTPStatus.FORBIDDEN, entity_errors)
+            return error_request_response("Invalid entity", HTTPStatus.FORBIDDEN, entity_errors)
 
         # create submission
         submission = SubmissionService.create_submission(json_input, user.id)
@@ -222,26 +246,27 @@ def create_register():
             # NOTE: this will be moved out of this api once lear filings are linked
             # create invoice in pay system
             invoice_resp = btr_pay.create_invoice(account_id, jwt, json_input)
-            submission.invoice_id = invoice_resp.json()['id']
+            submission.invoice_id = invoice_resp.json()["id"]
         except ExternalServiceException as err:
             # Log error and continue to return successfully (does NOT block the submission)
             current_app.logger.info(err.error)
-            current_app.logger.error('Error creating invoice for submission: %s', submission.id)
+            current_app.logger.error("Error creating invoice for submission: %s", submission.id)
 
         submission.save()
         try:
             # NOTE: this will be moved out of this api once lear filings are linked
             # update record in BOR (search)
             token = btr_auth.get_bearer_token()
-            entity_addresses: dict[str, dict[str, dict]] = \
-                btr_entity.get_entity_info(jwt, f'{identifier}/addresses').json()
-            entity['business']['addresses'] = [entity_addresses.get('registeredOffice', {}).get('deliveryAddress')]
+            entity_addresses: dict[str, dict[str, dict]] = btr_entity.get_entity_info(
+                jwt, f"{identifier}/addresses"
+            ).json()
+            entity["business"]["addresses"] = [entity_addresses.get("registeredOffice", {}).get("deliveryAddress")]
             btr_bor.update_owners(submission, entity, token)
 
         except ExternalServiceException as err:
             # Log error and continue to return successfully (does NOT block the submission)
             current_app.logger.info(err.error)
-            current_app.logger.error('Error updating record in BOR for submission: %s', submission.id)
+            current_app.logger.error("Error updating record in BOR for submission: %s", submission.id)
 
         return jsonify(id=submission.id), HTTPStatus.CREATED
 
