@@ -35,14 +35,15 @@
 from http import HTTPStatus
 
 import requests
-from requests import exceptions
+from btr_api.exceptions import AuthException
+from btr_api.exceptions import ExternalServiceException
 from flask import Flask
-
-from btr_api.exceptions import ExternalServiceException, AuthException
+from requests import exceptions
 
 
 class AuthService:
     """Provides utility functions for connecting with the BC Registries auth-api and SSO service."""
+
     app: Flask = None
     svc_url: str = None
     timeout: int = None
@@ -64,12 +65,12 @@ class AuthService:
     def init_app(self, app: Flask):
         """Initialize app dependent variables."""
         self.app = app
-        self.svc_url = app.config.get('AUTH_SVC_URL')
-        self.timeout = app.config.get('AUTH_API_TIMEOUT', 20)
-        self.sso_svc_token_url = app.config.get('SSO_SVC_TOKEN_URL')
-        self.sso_svc_timeout = app.config.get('SSO_SVC_TIMEOUT', 20)
-        self.svc_acc_id = app.config.get('SVC_ACC_CLIENT_ID')
-        self.svc_acc_secret = app.config.get('SVC_ACC_CLIENT_SECRET')
+        self.svc_url = app.config.get("AUTH_SVC_URL")
+        self.timeout = app.config.get("AUTH_API_TIMEOUT", 20)
+        self.sso_svc_token_url = app.config.get("SSO_SVC_TOKEN_URL")
+        self.sso_svc_timeout = app.config.get("SSO_SVC_TIMEOUT", 20)
+        self.svc_acc_id = app.config.get("SVC_ACC_CLIENT_ID")
+        self.svc_acc_secret = app.config.get("SVC_ACC_CLIENT_SECRET")
 
     """
     Get the type of user based on their products, roles, and organization membership.
@@ -80,79 +81,88 @@ class AuthService:
     Returns:
         str: The type of the user (USER_COMPETENT_AUTHORITY, USER_STAFF, or USER_PUBLIC).
     """
+
     def getUserType(self, user):
-      try:
-        products = user.product_resp.json()
-        self.app.logger.info(products)
-        roles = user.auth_resp.json()["roles"]
-        if any(product for product in products if product["code"].upper() == self.CA_PRODUCT and product["subscriptionStatus"].upper() == "ACTIVE"):
-            self.app.logger.info("Get User Type: " + self.USER_COMPETENT_AUTHORITY)
-            return self.USER_COMPETENT_AUTHORITY
-        if any(role for role in roles if role == self.STAFF_ROLE):
-            self.app.logger.info("Get User Type: " + self.USER_STAFF)
-            return self.USER_STAFF
-      except Exception as e:
-        self.app.logger.error("Error in Get User Type: " + str(e))
-      
-      self.app.logger.info("Get User Type: " + self.USER_PUBLIC)
-      return self.USER_PUBLIC
+        try:
+            products = user.product_resp.json()
+            self.app.logger.info(products)
+            roles = user.auth_resp.json()["roles"]
+            if any(
+                product
+                for product in products
+                if product["code"].upper() == self.CA_PRODUCT and product["subscriptionStatus"].upper() == "ACTIVE"
+            ):
+                self.app.logger.info("Get User Type: " + self.USER_COMPETENT_AUTHORITY)
+                return self.USER_COMPETENT_AUTHORITY
+            if any(role for role in roles if role == self.STAFF_ROLE):
+                self.app.logger.info("Get User Type: " + self.USER_STAFF)
+                return self.USER_STAFF
+        except Exception as e:
+            self.app.logger.error("Error in Get User Type: " + str(e))
+
+        self.app.logger.info("Get User Type: " + self.USER_PUBLIC)
+        return self.USER_PUBLIC
 
     def get_bearer_token(self):
         """Get a valid Bearer token for the service to use."""
-        data = 'grant_type=client_credentials'
+        data = "grant_type=client_credentials"
         try:
-            res = requests.post(url=self.sso_svc_token_url,
-                                data=data,
-                                headers={'content-type': 'application/x-www-form-urlencoded'},
-                                auth=(self.svc_acc_id, self.svc_acc_secret),
-                                timeout=self.sso_svc_timeout)
+            res = requests.post(
+                url=self.sso_svc_token_url,
+                data=data,
+                headers={"content-type": "application/x-www-form-urlencoded"},
+                auth=(self.svc_acc_id, self.svc_acc_secret),
+                timeout=self.sso_svc_timeout,
+            )
             if res.status_code != HTTPStatus.OK:
-                raise ConnectionError({'statusCode': res.status_code, 'json': res.json()})
-            return res.json().get('access_token')
+                raise ConnectionError({"statusCode": res.status_code, "json": res.json()})
+            return res.json().get("access_token")
         except exceptions.Timeout as err:
-            self.app.logger.debug('SSO SVC connection timeout: %s', err.with_traceback(None))
-            raise ExternalServiceException(HTTPStatus.GATEWAY_TIMEOUT,
-                                           [{'message': 'Unable to get service account token.',
-                                             'reason': err.with_traceback(None)}]) from err
+            self.app.logger.debug("SSO SVC connection timeout: %s", err.with_traceback(None))
+            raise ExternalServiceException(
+                HTTPStatus.GATEWAY_TIMEOUT,
+                [{"message": "Unable to get service account token.", "reason": err.with_traceback(None)}],
+            ) from err
         except Exception as err:  # noqa: B902
-            self.app.logger.debug('SSO SVC connection failure: %s', err.with_traceback(None))
-            raise ExternalServiceException(HTTPStatus.SERVICE_UNAVAILABLE,
-                                           [{'message': 'Unable to get service account token.',
-                                             'reason': err.with_traceback(None)}]) from err
+            self.app.logger.debug("SSO SVC connection failure: %s", err.with_traceback(None))
+            raise ExternalServiceException(
+                HTTPStatus.SERVICE_UNAVAILABLE,
+                [{"message": "Unable to get service account token.", "reason": err.with_traceback(None)}],
+            ) from err
 
     def get_authorization_header(self, request) -> str:
         """Gets authorization header from request."""
-        authorization_header = request.headers.get('Authorization', None)
+        authorization_header = request.headers.get("Authorization", None)
         if not authorization_header:
-            error = f'Missing authorization header: {request.headers}'
-            self.app.logger.debug('Cannot find authorization_header in request.')
+            error = f"Missing authorization header: {request.headers}"
+            self.app.logger.debug("Cannot find authorization_header in request.")
             raise AuthException(error=error, status_code=HTTPStatus.UNAUTHORIZED)
 
         return authorization_header
 
-    #TODO: Add caching
-    def product_authorizations(self, request,  account_id: str) -> bool:
+    # TODO: Add caching
+    def product_authorizations(self, request, account_id: str) -> bool:
         """Authorize the user for access to the service."""
         if not account_id:
-            error = 'Missing account_id'
+            error = "Missing account_id"
             self.app.logger.debug(error)
             request.product_resp = {}
             return True
         try:
             auth_token = self.get_authorization_header(request)
             # make api call
-            headers = {'Authorization': auth_token}
-            auth_url = f'{self.svc_url}/orgs/{account_id}/products?include_hidden=true'
+            headers = {"Authorization": auth_token}
+            auth_url = f"{self.svc_url}/orgs/{account_id}/products?include_hidden=true"
             self.app.logger.debug(auth_url)
             resp = requests.get(url=auth_url, headers=headers, timeout=self.timeout)
 
             if resp.status_code >= HTTPStatus.INTERNAL_SERVER_ERROR:
-                error = f'{resp.status_code} - {str(resp.json())}'
-                self.app.logger.debug('Invalid response from auth-api: %s', error)
+                error = f"{resp.status_code} - {str(resp.json())}"
+                self.app.logger.debug("Invalid response from auth-api: %s", error)
                 request.product_resp = {}
 
             if resp.status_code != HTTPStatus.OK:
-                error = f'Unauthorized access to business: {business_identifier}'
+                error = f"Unauthorized access to products {account_id}"
                 self.app.logger.debug(error)
                 request.product_resp = {}
 
@@ -160,27 +170,27 @@ class AuthService:
             return True
         except Exception as err:
             request.product_resp = {}
+            self.app.logger.debug(err)
             return True
 
-
-    #TODO: Add caching
+    # TODO: Add caching
     def is_authorized(self, request, business_identifier: str) -> bool:
         """Authorize the user for access to the service."""
         try:
             auth_token = self.get_authorization_header(request)
             # make api call
-            headers = {'Authorization': auth_token}
-            auth_url = f'{self.svc_url}/entities/{business_identifier}/authorizations'
+            headers = {"Authorization": auth_token}
+            auth_url = f"{self.svc_url}/entities/{business_identifier}/authorizations"
 
             resp = requests.get(url=auth_url, headers=headers, timeout=self.timeout)
 
             if resp.status_code >= HTTPStatus.INTERNAL_SERVER_ERROR:
-                error = f'{resp.status_code} - {str(resp.json())}'
-                self.app.logger.debug('Invalid response from auth-api: %s', error)
+                error = f"{resp.status_code} - {str(resp.json())}"
+                self.app.logger.debug("Invalid response from auth-api: %s", error)
                 raise ExternalServiceException(error=error, status_code=HTTPStatus.SERVICE_UNAVAILABLE)
 
-            if resp.status_code != HTTPStatus.OK or 'edit' not in resp.json().get('roles', []):
-                error = f'Unauthorized access to business: {business_identifier}'
+            if resp.status_code != HTTPStatus.OK or "edit" not in resp.json().get("roles", []):
+                error = f"Unauthorized access to business: {business_identifier}"
                 self.app.logger.debug(error)
                 raise AuthException(error=error, status_code=HTTPStatus.FORBIDDEN)
 
@@ -193,8 +203,8 @@ class AuthService:
             # pass along
             raise exc
         except (requests.exceptions.ConnectionError, requests.exceptions.Timeout) as err:
-            self.app.logger.debug('Auth connection failure:', repr(err))
+            self.app.logger.debug("Auth connection failure:", repr(err))
             raise ExternalServiceException(error=repr(err), status_code=HTTPStatus.SERVICE_UNAVAILABLE) from err
         except Exception as err:
-            self.app.logger.debug('Generic Auth verification failure:', repr(err))
+            self.app.logger.debug("Generic Auth verification failure:", repr(err))
             raise ExternalServiceException(error=repr(err), status_code=HTTPStatus.SERVICE_UNAVAILABLE) from err

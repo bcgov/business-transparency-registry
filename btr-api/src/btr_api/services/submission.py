@@ -74,11 +74,11 @@ class SubmissionService:  # pylint: disable=too-few-public-methods
         - SubmissionModel: A SubmissionModel object that represents the created submission.
 
         """
-        submission = SubmissionModel.find_by_business_identifier(submission_dict['businessIdentifier'])
+        submission = SubmissionModel.find_by_business_identifier(submission_dict["businessIdentifier"])
         if not submission:
             submission = SubmissionModel()
-            submission.business_identifier = submission_dict['businessIdentifier']
-        submission.effective_date = date.fromisoformat(submission_dict['effectiveDate'])
+            submission.business_identifier = submission_dict["businessIdentifier"]
+        submission.effective_date = date.fromisoformat(submission_dict["effectiveDate"])
         submission.payload = submission_dict
         submission.submitter_id = submitter_id
         submission.invoice_id = None
