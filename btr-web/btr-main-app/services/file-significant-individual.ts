@@ -152,8 +152,8 @@ const submitSignificantIndividualFiling = async (sif: SignificantIndividualFilin
   return { data: data.value, error: error.value }
 }
 
-const getBtrFiling = async (businessIdentifier: string) => {
-  const url = `${constructBtrApiURL()}/plots/entity/${businessIdentifier}`
+const getBtrFiling = async (businessIdentifier: string, account?: string) => {
+  const url = `${constructBtrApiURL()}/plots/entity/${businessIdentifier}${account ? `?account_id=${account}` : ''}`
   const { data, error } = await useFetchBcros<{ payload: BtrFilingI }>(url)
   return { data: data?.value || null, error }
 }

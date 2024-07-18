@@ -81,6 +81,7 @@ import { StatusCodes } from 'http-status-codes'
 import { SiSchemaType } from '~/utils/si-schema/definitions'
 import fileSIApi from '~/services/file-significant-individual'
 
+const account = useBcrosAccount()
 const significantIndividuals = useSignificantIndividuals()
 const { currentSIFiling } = storeToRefs(significantIndividuals)
 
@@ -125,7 +126,7 @@ onBeforeMount(async () => {
   // FUTURE: put in a loading page or something while this happens in case network is slow
   await useBcrosBusiness().loadBusiness(identifier)
   const siControlStore = useSiControlStore()
-  const { data, error } = await fileSIApi.getBtrFiling(identifier)
+  const { data, error } = await fileSIApi.getBtrFiling(identifier, account.currentAccount?.id)
 
   if (error.statusCode) {
     if (error.statusCode !== StatusCodes.NOT_FOUND) {

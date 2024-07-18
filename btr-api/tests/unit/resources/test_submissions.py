@@ -18,6 +18,57 @@ from tests.unit.utils import create_header
 mocked_entity_response = {"business": {"adminFreeze": False, "state": "ACTIVE"}}
 mocked_entity_address_response = {"registeredOffice": {"deliveryAddress": {"addressCity": "Vancouver", "addressCountry": "Canada"}}}
 
+helper_people = [
+  {
+    "uuid": "2c5fd9bc-2ff1-4545-86aa-d1c02705f4cd",
+    "email": "test@test.com",
+    "names": [
+      {
+        "type": "individual",
+        "fullName": "Test Test"
+      },
+      {
+        "type": "alternative",
+        "fullName": "tset tset"
+      }
+    ],
+    "phoneNumber": {
+      "number": "5555555555",
+      "countryCallingCode": "1",
+      "countryCode2letterIso": "CA"
+    },
+    "addresses": [
+      {
+        "city": "Victoria",
+        "region": "BC",
+        "street": "563 Superior St",
+        "country": "CA",
+        "postalCode": "V9A 5C7",
+        "countryName": "Canada",
+        "streetAdditional": "",
+        "locationDescription": ""
+      }
+    ],
+    "placeOfResidence": {
+      "city": "Victoria",
+      "region": "BC",
+      "street": "563 Superior St",
+      "country": "CA",
+      "postalCode": "V9A 5C7",
+      "countryName": "Canada",
+      "streetAdditional": "",
+      "locationDescription": ""
+    },
+    "birthDate": "1988-01-01",
+    "identifiers": [
+      {
+        "id": "999 555 444",
+        "scheme": "CAN-TAXID",
+        "schemeName": "ITN"
+      }
+    ],
+  }
+]
 
 @pytest.mark.parametrize(
     'test_name, submission_type, payload',
@@ -469,6 +520,7 @@ def test_post_plots_invalid_entity(app, client, session, jwt, requests_mock, tes
 
 def test_get_latest_for_entity(app, client, session, jwt, requests_mock):
     """Assure latest submission details are returned."""
+    """However, there is redaction here based on jwt"""
     with nested_session(session):
         # Setup
         user = UserModel()
@@ -482,7 +534,8 @@ def test_get_latest_for_entity(app, client, session, jwt, requests_mock):
         s2_dict = {
             'businessIdentifier': test_identifier,
             'effectiveDate': '2021-01-13',
-            'ownershipOrControlStatements': {'details': 's2'}
+            'ownershipOrControlStatements': {'details': 's2'},
+            "personStatements": helper_people
         }
         s3_dict = {
             'businessIdentifier': test_identifier + 's3',
@@ -492,11 +545,16 @@ def test_get_latest_for_entity(app, client, session, jwt, requests_mock):
         (SubmissionService.create_submission(s1_dict, user.id)).save()
         (SubmissionService.create_submission(s2_dict, user.id)).save()
         (SubmissionService.create_submission(s3_dict, user.id)).save()
+        mock_account_id = 1
 
         requests_mock.get(f"{app.config.get('AUTH_SVC_URL')}/entities/{test_identifier}/authorizations",
                           json={"orgMembership": "COORDINATOR", 'roles': ['edit', 'view']})
+
+        ca_products = [{"code": "CA_SEARCH", "subscriptionStatus": "ACTIVE"}]
+        requests_mock.get(f"{app.config.get('AUTH_SVC_URL')}/orgs/{mock_account_id}/products?include_hidden=true",
+                          json=ca_products)
         # Test
-        rv = client.get(f'/plots/entity/{test_identifier}',
+        rv = client.get(f'/plots/entity/{test_identifier}?account_id={mock_account_id}',
                         headers=create_header(jwt_manager=jwt,
                                               roles=['basic'],
                                               **{'Accept-Version': 'v1',
@@ -509,3 +567,95 @@ def test_get_latest_for_entity(app, client, session, jwt, requests_mock):
         assert test_identifier == rv.json.get('business_identifier')
         assert s2_dict['effectiveDate'] == rv.json.get('effective_date')
         assert s2_dict == rv.json.get('payload')
+
+def test_get_redacted_for_entity(app, client, session, jwt, requests_mock):
+    """Assure latest submission details are returned."""
+    """However, there is redaction here based on jwt"""
+    with nested_session(session):
+        # Setup
+        user = UserModel()
+        user.save()
+        test_identifier = 'id0'
+        s1_dict = {
+            'businessIdentifier': test_identifier,
+            'effectiveDate': '2021-01-13',
+            'ownershipOrControlStatements': {'details': 's2'},
+            "personStatements": helper_people,
+        }
+        (SubmissionService.create_submission(s1_dict, user.id)).save()
+        
+        mock_account_id = 1
+
+        requests_mock.get(f"{app.config.get('AUTH_SVC_URL')}/entities/{test_identifier}/authorizations",
+                          json={"orgMembership": "COORDINATOR", 'roles': ['edit', 'view']})
+
+        ca_products = [{"code": "CA_SEARCH", "subscriptionStatus": "NOT_SUBSCRIBED"}]
+        requests_mock.get(f"{app.config.get('AUTH_SVC_URL')}/orgs/{mock_account_id}/products?include_hidden=true",
+                          json=ca_products)
+        # Test
+        rv = client.get(f'/plots/entity/{test_identifier}?account_id={mock_account_id}',
+                        headers=create_header(jwt_manager=jwt,
+                                              roles=['basic'],
+                                              **{'Accept-Version': 'v1',
+                                                 'content-type': 'application/json',
+                                                 'Account-Id': 1}))
+
+        expected_dict = {
+          'businessIdentifier': 'id0',
+          'effectiveDate': '2021-01-13',
+          'ownershipOrControlStatements': {
+              'details': 's2'
+          },
+          'personStatements': [{
+              'addresses': [{
+                  'city': 'Victoria',
+                  'country': 'CA',
+                  'countryName': 'Canada',
+                  'locationDescription': ' ',
+                  'postalCode': ' ',
+                  'region': 'BC',
+                  'street': ' ',
+                  'streetAdditional': ' '
+              }],
+              'birthDate': ' ',
+              'email': ' ',
+              'identifiers': [{
+                  'id': ' ',
+                  'scheme': 'CAN-TAXID',
+                  'schemeName': 'ITN'
+              }],
+              'names': [
+                {
+                  'fullName': 'Test Test',
+                  'type': 'individual'
+                },
+                {
+                    'fullName': ' ',
+                    'type': 'alternative'
+                }
+              ],
+              'phoneNumber': {
+                  'countryCallingCode': '1',
+                  'countryCode2letterIso': 'CA',
+                  'number': ' '
+              },
+              'placeOfResidence': {
+                  'city': 'Victoria',
+                  'country': 'CA',
+                  'countryName': 'Canada',
+                  'locationDescription': ' ',
+                  'postalCode': ' ',
+                  'region': 'BC',
+                  'street': ' ',
+                  'streetAdditional': ' '
+              },
+              'uuid': '2c5fd9bc-2ff1-4545-86aa-d1c02705f4cd'
+          }],
+        }
+
+        # Confirm outcome
+        assert rv.status_code == HTTPStatus.OK
+
+        assert test_identifier == rv.json.get('business_identifier')
+        assert s1_dict['effectiveDate'] == rv.json.get('effective_date')
+        assert expected_dict == rv.json.get('payload')

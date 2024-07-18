@@ -50,6 +50,11 @@ class AuthService:
     sso_svc_timeout: int = None
     svc_acc_id: str = None
     svc_acc_secret: str = None
+    USER_PUBLIC = "public"
+    USER_STAFF = "staff"
+    USER_COMPETENT_AUTHORITY = "ca"
+    STAFF_ROLE = "staff"
+    CA_PRODUCT = "CA_SEARCH"
 
     def __init__(self, app: Flask = None):
         """Initialize the auth service."""
@@ -65,6 +70,32 @@ class AuthService:
         self.sso_svc_timeout = app.config.get('SSO_SVC_TIMEOUT', 20)
         self.svc_acc_id = app.config.get('SVC_ACC_CLIENT_ID')
         self.svc_acc_secret = app.config.get('SVC_ACC_CLIENT_SECRET')
+
+    """
+    Get the type of user based on their products, roles, and organization membership.
+
+    Args:
+        user: User object containing product_resp and auth_resp attributes.
+
+    Returns:
+        str: The type of the user (USER_COMPETENT_AUTHORITY, USER_STAFF, or USER_PUBLIC).
+    """
+    def getUserType(self, user):
+      try:
+        products = user.product_resp.json()
+        self.app.logger.info(products)
+        roles = user.auth_resp.json()["roles"]
+        if any(product for product in products if product["code"].upper() == self.CA_PRODUCT and product["subscriptionStatus"].upper() == "ACTIVE"):
+            self.app.logger.info("Get User Type: " + self.USER_COMPETENT_AUTHORITY)
+            return self.USER_COMPETENT_AUTHORITY
+        if any(role for role in roles if role == self.STAFF_ROLE):
+            self.app.logger.info("Get User Type: " + self.USER_STAFF)
+            return self.USER_STAFF
+      except Exception as e:
+        self.app.logger.error("Error in Get User Type: " + str(e))
+      
+      self.app.logger.info("Get User Type: " + self.USER_PUBLIC)
+      return self.USER_PUBLIC
 
     def get_bearer_token(self):
         """Get a valid Bearer token for the service to use."""
@@ -99,6 +130,40 @@ class AuthService:
 
         return authorization_header
 
+    #TODO: Add caching
+    def product_authorizations(self, request,  account_id: str) -> bool:
+        """Authorize the user for access to the service."""
+        if not account_id:
+            error = 'Missing account_id'
+            self.app.logger.debug(error)
+            request.product_resp = {}
+            return True
+        try:
+            auth_token = self.get_authorization_header(request)
+            # make api call
+            headers = {'Authorization': auth_token}
+            auth_url = f'{self.svc_url}/orgs/{account_id}/products?include_hidden=true'
+            self.app.logger.debug(auth_url)
+            resp = requests.get(url=auth_url, headers=headers, timeout=self.timeout)
+
+            if resp.status_code >= HTTPStatus.INTERNAL_SERVER_ERROR:
+                error = f'{resp.status_code} - {str(resp.json())}'
+                self.app.logger.debug('Invalid response from auth-api: %s', error)
+                request.product_resp = {}
+
+            if resp.status_code != HTTPStatus.OK:
+                error = f'Unauthorized access to business: {business_identifier}'
+                self.app.logger.debug(error)
+                request.product_resp = {}
+
+            request.product_resp = resp
+            return True
+        except Exception as err:
+            request.product_resp = {}
+            return True
+
+
+    #TODO: Add caching
     def is_authorized(self, request, business_identifier: str) -> bool:
         """Authorize the user for access to the service."""
         try:
@@ -119,6 +184,7 @@ class AuthService:
                 self.app.logger.debug(error)
                 raise AuthException(error=error, status_code=HTTPStatus.FORBIDDEN)
 
+            request.auth_resp = resp
             return True
         except AuthException as e:
             # pass along

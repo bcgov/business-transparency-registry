@@ -42,6 +42,7 @@ from http import HTTPStatus
 
 from flask import Blueprint, current_app, g, jsonify, request
 from flask_cors import cross_origin
+import json
 
 from btr_api.common.auth import jwt
 from btr_api.exceptions import ExternalServiceException, exception_response, error_request_response, AuthException
@@ -51,6 +52,95 @@ from btr_api.services import SchemaService, SubmissionService, btr_auth, btr_bor
 from btr_api.services.validator import validate_entity
 
 bp = Blueprint("submission", __name__)
+    
+REDACT_MONONYM = "mono"
+REDACT_MONONYM_FN = "mono_fn"
+REDACT_EMAIL = "mono_email"
+REDACT_PHONE = "mono_phone"
+REDACT_FULL = "full"
+REDACT_EMPTY = "empty"
+REDACT_DATE = "date"
+REDACT_IDENTIFIER = "identifier"
+
+#the lack of a rule means it shows fully
+REDACT_RULES = {
+    btr_auth.USER_PUBLIC: {
+        "prefName": REDACT_EMPTY,
+        "email": REDACT_EMPTY,
+        "phone": REDACT_EMPTY,
+        "postal": REDACT_EMPTY,
+        "street": REDACT_EMPTY,
+        "streetAdditional": REDACT_EMPTY,
+        "locationDescription": REDACT_EMPTY,
+        "birthDate": REDACT_EMPTY,
+        "identifiers": REDACT_EMPTY
+    },
+    btr_auth.USER_STAFF: {
+        "email": REDACT_EMAIL,
+        "phone": REDACT_PHONE,
+        "postal": REDACT_EMPTY,
+        "street": REDACT_EMPTY,
+        "streetAdditional": REDACT_EMPTY,
+        "locationDescription": REDACT_EMPTY,
+        "birthDate": REDACT_DATE,
+        "identifiers": REDACT_IDENTIFIER
+    }
+}
+    
+
+def redactInformation(request, payload):
+    role = btr_auth.getUserType(request)
+    if (role == btr_auth.USER_COMPETENT_AUTHORITY):
+        return payload
+    #otherwise PUBLIC or STAFF
+    redactionToUse = REDACT_RULES[role]
+    for person in payload['payload']['personStatements']:
+      for name in person['names']:
+        if name['type'] == 'alternative':
+          name['fullName'] = redactField(name['fullName'], redactionToUse.get('prefName'))
+
+      person['email'] = redactField(person['email'], redactionToUse.get('email'))
+      person['phoneNumber']['number'] = redactField(person['phoneNumber']['number'], redactionToUse.get('phone'))
+      for address in person['addresses']:
+          address['postalCode'] = redactField(address['postalCode'], redactionToUse.get('postal'))
+          address['street'] = redactField(address['street'], redactionToUse.get('street'))
+          address['streetAdditional'] = redactField(address['streetAdditional'], redactionToUse.get('streetAdditional'))
+          address['locationDescription'] = redactField(address['locationDescription'], redactionToUse.get('locationDescription'))
+          
+      person['placeOfResidence']['postalCode'] = redactField(person['placeOfResidence']['postalCode'], redactionToUse.get('postal'))
+      person['placeOfResidence']['street'] = redactField(person['placeOfResidence']['street'], redactionToUse.get('street'))
+      person['placeOfResidence']['streetAdditional'] = redactField(person['placeOfResidence']['streetAdditional'], redactionToUse.get('streetAdditional'))
+      person['placeOfResidence']['locationDescription'] = redactField(person['placeOfResidence']['locationDescription'], redactionToUse.get('locationDescription'))
+      person['birthDate'] = redactField(person['birthDate'], redactionToUse.get('birthDate'))
+      for identifier in person['identifiers']:
+        identifier['id'] = redactField(identifier['id'], redactionToUse.get('identifiers'))
+    return jsonify(payload)
+
+def redactField(field, redactType):
+    if redactType == REDACT_MONONYM:
+        return field[0:1] + "***"
+    elif redactType == REDACT_MONONYM_FN:
+        rv = ""
+        for word in field.split():
+            if not(rv == ""):
+                rv += " "
+            rv += word[0:1] + "***"
+        return rv
+    elif redactType == REDACT_EMAIL:
+        return field.split('@')[0][0:1] + "***" + "@***." + field.split('.')[-1]
+    elif redactType == REDACT_PHONE:
+        return field[0:-7] + "***"
+    elif redactType == REDACT_FULL:
+        return "***"
+    #This is a space instead of blank because if it's empty the ui shows undefined in some spots
+    elif redactType == REDACT_EMPTY:
+        return " "
+    elif redactType == REDACT_DATE:
+        return field.split('-')[0]
+    elif redactType == REDACT_IDENTIFIER:
+        return "*** **" + field[6:]
+        
+    return field
 
 
 @bp.route("/<id>", methods=("GET",))
@@ -75,10 +165,12 @@ def get_entity_submission(business_identifier: str):
 
     try:
         btr_auth.is_authorized(request=request, business_identifier=business_identifier)
+        account_id = request.args.get('account_id')
+        btr_auth.product_authorizations(request=request, account_id=account_id)
 
         submission = SubmissionModel.find_by_business_identifier(business_identifier)
         if submission:
-            return jsonify(SubmissionSerializer.to_dict(submission))
+            return redactInformation(request, SubmissionSerializer.to_dict(submission))
 
         return {}, HTTPStatus.NOT_FOUND
 
