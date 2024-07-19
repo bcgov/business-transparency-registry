@@ -9,6 +9,7 @@
     >
       <!--  section: your information  -->
       <BcrosSection
+        v-if="!editMode"
         :section-title="$t('sectionTitles.isYourOwnInformation')"
         data-cy="isYourOwnInformation-section"
         rounded-bot
@@ -29,7 +30,7 @@
         </div>
       </BcrosSection>
 
-      <BcrosSectionDivider />
+      <BcrosSectionDivider v-if="!editMode" />
 
       <!--  section: individuals full name  -->
       <BcrosSection
@@ -371,7 +372,8 @@ const emits = defineEmits<{
 const props = defineProps<{
   index?: number,
   setSignificantIndividual?: SiSchemaType,
-  startDate?: string
+  startDate?: string,
+  editMode?: boolean
 }>()
 
 const t = useNuxtApp().$i18n.t

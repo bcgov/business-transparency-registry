@@ -7,118 +7,147 @@
   >
     <template #table-row="{ item, index }">
       <tr v-if="item.ui.action != FilingActionE.REMOVE && editingIndex != index">
-        <td data-cy="summary-table-name">
-          <span class="font-bold">{{ item.name.fullName.toUpperCase() }}</span><br>
-          <span v-if="item.name.preferredName">{{ item.name.preferredName }}<br></span>
-          <span>{{ item.email }}</span>
-        </td>
-        <td data-cy="summary-table-address">
-          <BcrosInputsAddressDisplay :model-value="item.address" />
-        </td>
-        <td data-cy="summary-table-details">
-          <span>{{ item.birthDate }}</span><br>
-          <span v-if="item.tax.taxNumber">{{ item.tax.taxNumber }}<br></span>
-          <span v-else>{{ $t('texts.noCRATaxNumber') }}<br></span><br>
-          <label>{{ $t('labels.citizenships') }}:</label><br>
-          <span v-for="country in item.citizenships" :key="country.alpha_2">
-            {{ country.name }}<br>
-          </span><br>
-          <span>{{ getTaxResidentText(item.name.isTaxResident) }}</span>
-        </td>
-        <td data-cy="summary-table-dates">
-          {{
-            $t('texts.dateRange', {
-              start: item.startDate ? item.startDate : $t('labels.unknown'),
-              end: item.endDate ? item.endDate : $t('labels.current')
-            })
-          }}
-        </td>
-        <td data-cy="summary-table-controls">
-          <div v-if="item.controlOfShares.percentage !== PercentageRangeE.NO_SELECTION">
-            <span class="font-bold italic">
-              {{ $t('labels.shares') }}
-            </span>
-            <p>{{ getSharesControlText(item) }}</p>
-            <p v-if="item.controlOfShares.inConcertControl">
-              {{ $t('texts.sharesAndVotes.summary.inConcert') }}
-            </p>
-          </div>
-          <div v-if="item.controlOfVotes.percentage !== PercentageRangeE.NO_SELECTION">
-            <span class="font-bold italic">
-              {{ $t('labels.votes') }}
-            </span>
-            <p>{{ getVotesControlText(item) }}</p>
-            <p v-if="item.controlOfVotes.inConcertControl">
-              {{ $t('texts.sharesAndVotes.summary.inConcert') }}
-            </p>
-          </div>
-          <div v-if="Object.values(item.controlOfDirectors).includes(true)" class="mt-3">
-            <span class="font-bold italic">
-              {{ $t('labels.directors') }}
-            </span>
-            <p>{{ getDirectorsControlText(item.controlOfDirectors) }}</p>
-            <p v-if="item.controlOfDirectors.inConcertControl">
-              {{ $t('texts.controlOfDirectors.summary.inConcert') }}
-            </p>
-          </div>
-          <div v-if="item.controlOther" class="mt-3">
-            <span class="font-bold italic">
-              {{ $t('labels.other') }}
-            </span>
-            <p>{{ item.controlOther }}</p>
-          </div>
-        </td>
-        <template v-if="edit">
-          <td data-cy="summary-table-buttons">
-            <div class="flex flex-nowrap justify-end">
-              <UButton
-                :ui="{
-                  rounded: 'rounded-none focus-visible:rounded-md',
-                  padding: { default: 'py-0' }
-                }"
-                icon="i-mdi-pencil"
-                :label="t('buttons.edit')"
-                variant="editButton"
-                :disabled="editingDisabled || isEditing"
-                data-cy="edit-button"
-                @click="openEditingMode(index)"
-              />
-              <UPopover :popper="{ placement: 'bottom-end' }">
-                <UButton
-                  :ui="{ padding: { default: 'py-0' } }"
-                  icon="i-mdi-menu-down"
-                  aria-label="show more options"
-                  variant="removeButton"
-                  :disabled="editingDisabled || isEditing"
-                  data-cy="popover-button"
-                />
-                <template #panel>
+        <td colspan="5">
+          <div class="flex flex-col">
+            <div class="flex flex-row">
+              <div data-cy="summary-table-name" class="bg-red-100 data" style="width: 20%" >
+                <span class="font-bold">{{ item.name.fullName.toUpperCase() }}</span><br>
+                <span v-if="item.name.preferredName">{{ item.name.preferredName }}<br></span>
+                <span>{{ item.email }}</span>
+              </div>
+              <div data-cy="summary-table-details" class="data" style="width: 25%" >
+                <BcrosInputsAddressDisplay :model-value="item.address" />
+                <span>{{ item.birthDate }}</span><br>
+                <span v-if="item.tax.taxNumber">{{ item.tax.taxNumber }}<br></span>
+                <span v-else>{{ $t('texts.noCRATaxNumber') }}<br></span><br>
+                <label>{{ $t('labels.citizenships') }}:</label><br>
+                <span v-for="country in item.citizenships" :key="country.alpha_2">
+                  {{ country.name }}<br>
+                </span><br>
+                <span>{{ getTaxResidentText(item.name.isTaxResident) }}</span>
+              </div>
+              <div data-cy="summary-table-controls" class="bg-red-100 data" style="width: 25%" >
+                <div v-if="item.controlOfShares.percentage !== PercentageRangeE.NO_SELECTION">
+                  <span class="font-bold italic">
+                    {{ $t('labels.shares') }}
+                  </span>
+                  <p>{{ getSharesControlText(item) }}</p>
+                  <p v-if="item.controlOfShares.inConcertControl">
+                    {{ $t('texts.sharesAndVotes.summary.inConcert') }}
+                  </p>
+                </div>
+                <div v-if="item.controlOfVotes.percentage !== PercentageRangeE.NO_SELECTION">
+                  <span class="font-bold italic">
+                    {{ $t('labels.votes') }}
+                  </span>
+                  <p>{{ getVotesControlText(item) }}</p>
+                  <p v-if="item.controlOfVotes.inConcertControl">
+                    {{ $t('texts.sharesAndVotes.summary.inConcert') }}
+                  </p>
+                </div>
+                <div v-if="Object.values(item.controlOfDirectors).includes(true)" class="mt-3">
+                  <span class="font-bold italic">
+                    {{ $t('labels.directors') }}
+                  </span>
+                  <p>{{ getDirectorsControlText(item.controlOfDirectors) }}</p>
+                  <p v-if="item.controlOfDirectors.inConcertControl">
+                    {{ $t('texts.controlOfDirectors.summary.inConcert') }}
+                  </p>
+                </div>
+                <div v-if="item.controlOther" class="mt-3">
+                  <span class="font-bold italic">
+                    {{ $t('labels.other') }}
+                  </span>
+                  <p>{{ item.controlOther }}</p>
+                </div>
+              </div>
+              <div data-cy="summary-table-dates" class="data" style="width: 20%" >
+                {{
+                  $t('texts.dateRange', {
+                    start: item.startDate ? item.startDate : $t('labels.unknown'),
+                    end: item.endDate ? item.endDate : $t('labels.current')
+                  })
+                }}
+              </div>
+              <div v-if="edit" data-cy="summary-table-buttons" class="pt-3" style="width: 10%">
+                <div class="flex flex-nowrap justify-end">
                   <UButton
-                    :ui="{ padding: { default: 'py-0' } }"
-                    class="m-2"
-                    icon="i-mdi-delete"
-                    :label="t('buttons.remove')"
-                    color="primary"
-                    variant="removeButton"
-                    data-cy="remove-button"
-                    @click="removeSignificantIndividual(index)"
+                    :ui="{
+                      rounded: 'rounded-none focus-visible:rounded-md',
+                      padding: { default: 'py-0' }
+                    }"
+                    icon="i-mdi-pencil"
+                    :label="t('buttons.edit')"
+                    variant="editButton"
+                    :disabled="editingDisabled || isEditing"
+                    data-cy="edit-button"
+                    @click="openEditingMode(index)"
                   />
-                </template>
-              </UPopover>
+                  <UPopover :popper="{ placement: 'bottom-end' }">
+                    <UButton
+                      :ui="{ padding: { default: 'py-0' } }"
+                      icon="i-mdi-menu-down"
+                      aria-label="show more options"
+                      variant="removeButton"
+                      :disabled="editingDisabled || isEditing"
+                      data-cy="popover-button"
+                    />
+                    <template #panel>
+                      <UButton
+                        :ui="{ padding: { default: 'py-0' } }"
+                        class="m-2"
+                        icon="i-mdi-delete"
+                        :label="t('buttons.remove')"
+                        color="primary"
+                        variant="removeButton"
+                        data-cy="remove-button"
+                        @click="removeSignificantIndividual(index)"
+                      />
+                    </template>
+                  </UPopover>
+                </div>
+              </div>
             </div>
-          </td>
-        </template>
+
+            <!-- 
+              placeholder row for display warning message for minor SI 
+              the v-if is set to false until the feature is implemented
+            -->
+            <div v-if="true">TBD - Message for Minor SI</div>
+
+            <div v-if="true">TBD - Unable to obtain or confirm information</div>
+
+            <!--
+              placeholder row for cessation date and buttons
+              the v-if is set to false until the feature is implemented
+            -->
+            <div v-if="true">TBD - Component for cessation date and buttons</div>
+          </div>
+        </td>
       </tr>
       <tr v-if="isEditing && editingIndex === index">
-        <td data-cy="summary-table-edit-form" colspan="100%">
-          <div class="bg-white rounded flex flex-row">
-            <label class="font-bold text-base text-gray-900 min-w-[190px] mt-3">
+        <td data-cy="summary-table-edit-form flex flex-row" colspan="100%">
+          <div class="bg-primary text-white flex flex-row justify-between">
+            <div>
+              <UIcon name="i-mdi-pencil" />
+              Editing {{ item.name.fullName }}
+            </div>
+            <UButton
+              :label="`cancel`"
+              icon="i-mdi-close"
+              :trailing="true"
+              @click="closeEditingMode"
+            />
+          </div>
+          <div class="bg-white rounded">
+            <!-- <label class="font-bold text-base text-gray-900 min-w-[190px] mt-3">
               {{ $t('labels.editIndividual') }}
-            </label>
+            </label> -->
             <IndividualPersonAddNew
               :index="index"
               :set-significant-individual="copyIndividualToEdit()"
-              class="ml-8 text-base text-gray-900"
+              class="text-base text-gray-900 bg-red-100 w-full"
+              :edit-mode="true"
               @cancel="closeEditingMode"
               @update="updateSignificantIndividual($event.index, $event.updatedSI)"
               @remove="removeSignificantIndividual(index)"
@@ -168,10 +197,10 @@ const editingIndex = ref(-1)
 const t = useNuxtApp().$i18n.t
 const headers = [
   { content: t('labels.name'), width: '20%' },
-  { content: t('labels.address'), width: '20%' },
-  { content: t('labels.details'), width: '20%' },
-  { content: t('labels.significanceDates'), width: '20%' },
-  { content: t('labels.control'), width: '20%' }
+  { content: t('labels.details'), width: '25%', customStyle: 'bg-gray-500' },
+  { content: t('labels.control'), width: '25%'},
+  { content: t('labels.significanceDates'), width: '20%', customStyle: 'bg-gray-500' },
+  { content: '', width: '10%' }
 ]
 
 const isEmptyState = computed(() => {
@@ -266,6 +295,7 @@ function openEditingMode (index: number) {
 }
 
 function closeEditingMode () {
+  console.log('closeEditingMode')
   editingIndex.value = -1
   if (props.isEditing) {
     emit('toggle-editing-mode')
@@ -292,7 +322,7 @@ function updateSignificantIndividual (index: number | undefined, updatedSI: SiSc
 </script>
 
 <style scoped>
-td {
+.data {
   @apply px-3 py-4 align-text-top whitespace-normal text-sm text-gray-700
 }
 </style>
