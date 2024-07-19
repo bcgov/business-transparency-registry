@@ -138,7 +138,7 @@ class AuthService:
 
     # TODO: Add caching
     def product_authorizations(self, request, account_id: str) -> bool:
-        """Authorize the user for access to the service."""
+        """Get the products associated with the user and account_id."""
         if not account_id:
             error = 'Missing account_id'
             self.app.logger.debug(error)
