@@ -75,12 +75,12 @@ def test_get_plots(app, client, session, jwt, requests_mock, test_name, submissi
             id = sub.id
 
         requests_mock.get(
-            f"{app.config.get('AUTH_SVC_URL')}/entities/{sub.business_identifier}/authorizations",
+            f'{app.config.get("AUTH_SVC_URL")}/entities/{sub.business_identifier}/authorizations',
             json={'orgMembership': 'COORDINATOR', 'roles': ['edit', 'view']},
         )
         # Test
         rv = client.get(
-            f"/plots/{id}",
+            f'/plots/{id}',
             headers=create_header(
                 jwt, ['basic'], **{'Accept-Version': 'v1', 'content-type': 'application/json', 'Account-Id': 1}
             ),
@@ -134,7 +134,7 @@ def test_get_plots_auth(
         search_id = sub.id
 
         requests_mock.get(
-            f"{app.config.get('AUTH_SVC_URL')}/entities/{business_identifier}/authorizations", json=auth_svc_response
+            f'{app.config.get("AUTH_SVC_URL")}/entities/{business_identifier}/authorizations', json=auth_svc_response
         )
 
         headers = create_header(
@@ -145,7 +145,7 @@ def test_get_plots_auth(
             headers = {'Accept-Version': 'v1', 'content-type': 'application/json', 'Account-Id': 1}
 
         # Test
-        rv = client.get(f"/plots/{search_id}", headers=headers)
+        rv = client.get(f'/plots/{search_id}', headers=headers)
 
     # Confirm outcome
     assert rv.status_code == expected_http_status

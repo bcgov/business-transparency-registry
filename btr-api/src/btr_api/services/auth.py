@@ -40,6 +40,8 @@ from btr_api.exceptions import ExternalServiceException
 from flask import Flask
 from requests import exceptions
 
+from btr_api.common.auth import jwt
+
 
 class AuthService:
     """Provides utility functions for connecting with the BC Registries auth-api and SSO service."""
@@ -75,18 +77,13 @@ class AuthService:
     """
     Get the type of user based on their products, roles, and organization membership.
 
-    Args:
-        user: User object containing product_resp and auth_resp attributes.
-
     Returns:
         str: The type of the user (USER_COMPETENT_AUTHORITY, USER_STAFF, or USER_PUBLIC).
     """
 
-    def getUserType(self, user):
+    def getUserType(self):
         try:
-            products = user.product_resp.json()
-            self.app.logger.info(products)
-            roles = user.auth_resp.json()['roles']
+            products = jwt.products.json()
             if any(
                 product
                 for product in products
@@ -94,8 +91,7 @@ class AuthService:
             ):
                 self.app.logger.info('Get User Type: ' + self.USER_COMPETENT_AUTHORITY)
                 return self.USER_COMPETENT_AUTHORITY
-            if any(role for role in roles if role == self.STAFF_ROLE):
-                self.app.logger.info('Get User Type: ' + self.USER_STAFF)
+            if jwt.validate_roles([self.STAFF_ROLE]):
                 return self.USER_STAFF
         except Exception as e:
             self.app.logger.error('Error in Get User Type: ' + str(e))
@@ -134,7 +130,7 @@ class AuthService:
         """Gets authorization header from request."""
         authorization_header = request.headers.get('Authorization', None)
         if not authorization_header:
-            error = f"Missing authorization header: {request.headers}"
+            error = f'Missing authorization header: {request.headers}'
             self.app.logger.debug('Cannot find authorization_header in request.')
             raise AuthException(error=error, status_code=HTTPStatus.UNAUTHORIZED)
 
@@ -146,30 +142,26 @@ class AuthService:
         if not account_id:
             error = 'Missing account_id'
             self.app.logger.debug(error)
-            request.product_resp = {}
             return True
         try:
             auth_token = self.get_authorization_header(request)
             # make api call
             headers = {'Authorization': auth_token}
-            auth_url = f"{self.svc_url}/orgs/{account_id}/products?include_hidden=true"
+            auth_url = f'{self.svc_url}/orgs/{account_id}/products?include_hidden=true'
             self.app.logger.debug(auth_url)
             resp = requests.get(url=auth_url, headers=headers, timeout=self.timeout)
 
             if resp.status_code >= HTTPStatus.INTERNAL_SERVER_ERROR:
-                error = f"{resp.status_code} - {str(resp.json())}"
+                error = f'{resp.status_code} - {str(resp.json())}'
                 self.app.logger.debug('Invalid response from auth-api: %s', error)
-                request.product_resp = {}
 
             if resp.status_code != HTTPStatus.OK:
-                error = f"Unauthorized access to products {account_id}"
+                error = f'Unauthorized access to products {account_id}'
                 self.app.logger.debug(error)
-                request.product_resp = {}
 
-            request.product_resp = resp
+            jwt.products = resp
             return True
         except Exception as err:
-            request.product_resp = {}
             self.app.logger.debug(err)
             return True
 
@@ -180,21 +172,20 @@ class AuthService:
             auth_token = self.get_authorization_header(request)
             # make api call
             headers = {'Authorization': auth_token}
-            auth_url = f"{self.svc_url}/entities/{business_identifier}/authorizations"
+            auth_url = f'{self.svc_url}/entities/{business_identifier}/authorizations'
 
             resp = requests.get(url=auth_url, headers=headers, timeout=self.timeout)
 
             if resp.status_code >= HTTPStatus.INTERNAL_SERVER_ERROR:
-                error = f"{resp.status_code} - {str(resp.json())}"
+                error = f'{resp.status_code} - {str(resp.json())}'
                 self.app.logger.debug('Invalid response from auth-api: %s', error)
                 raise ExternalServiceException(error=error, status_code=HTTPStatus.SERVICE_UNAVAILABLE)
 
             if resp.status_code != HTTPStatus.OK or 'edit' not in resp.json().get('roles', []):
-                error = f"Unauthorized access to business: {business_identifier}"
+                error = f'Unauthorized access to business: {business_identifier}'
                 self.app.logger.debug(error)
                 raise AuthException(error=error, status_code=HTTPStatus.FORBIDDEN)
 
-            request.auth_resp = resp
             return True
         except AuthException as e:
             # pass along
