@@ -13,7 +13,6 @@
 # limitations under the License.
 """Enum for redaction types."""
 from btr_api.common.enum import BaseEnum
-from btr_api.services import btr_auth
 
 
 class RedactionType(BaseEnum):

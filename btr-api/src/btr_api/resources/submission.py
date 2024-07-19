@@ -39,6 +39,12 @@ The 'registers' and 'create_register' functions define the 'GET' and 'POST' meth
 
 """
 from http import HTTPStatus
+from flask import Blueprint
+from flask import current_app
+from flask import g
+from flask import jsonify
+from flask import request
+from flask_cors import cross_origin
 
 from btr_api.common.auth import jwt
 from btr_api.exceptions import AuthException
@@ -55,15 +61,10 @@ from btr_api.services import btr_pay
 from btr_api.services import SchemaService
 from btr_api.services import SubmissionService
 from btr_api.services.validator import validate_entity
-from btr_api.utils import redactInformation
-from flask import Blueprint
-from flask import current_app
-from flask import g
-from flask import jsonify
-from flask import request
-from flask_cors import cross_origin
+from btr_api.utils import redact_information
 
 bp = Blueprint('submission', __name__)
+
 
 @bp.route('/<id>', methods=('GET',))
 def registers(id: int | None = None):  # pylint: disable=redefined-builtin
@@ -92,7 +93,7 @@ def get_entity_submission(business_identifier: str):
 
         submission = SubmissionModel.find_by_business_identifier(business_identifier)
         if submission:
-            return jsonify(redactInformation(request, SubmissionSerializer.to_dict(submission)))
+            return jsonify(redact_information(SubmissionSerializer.to_dict(submission)))
 
         return {}, HTTPStatus.NOT_FOUND
 

@@ -33,14 +33,14 @@
 # POSSIBILITY OF SUCH DAMAGE.
 """Manages auth service interactions."""
 from http import HTTPStatus
-
-import requests
-from btr_api.exceptions import AuthException
-from btr_api.exceptions import ExternalServiceException
 from flask import Flask
+import requests
 from requests import exceptions
 
+from btr_api.exceptions import AuthException
+from btr_api.exceptions import ExternalServiceException
 from btr_api.common.auth import jwt
+from btr_api.enums import UserType
 
 
 class AuthService:
@@ -53,11 +53,6 @@ class AuthService:
     sso_svc_timeout: int = None
     svc_acc_id: str = None
     svc_acc_secret: str = None
-    USER_PUBLIC = 'public'
-    USER_STAFF = 'staff'
-    USER_COMPETENT_AUTHORITY = 'ca'
-    STAFF_ROLE = 'staff'
-    CA_PRODUCT = 'CA_SEARCH'
 
     def __init__(self, app: Flask = None):
         """Initialize the auth service."""
@@ -74,30 +69,29 @@ class AuthService:
         self.svc_acc_id = app.config.get('SVC_ACC_CLIENT_ID')
         self.svc_acc_secret = app.config.get('SVC_ACC_CLIENT_SECRET')
 
-    """
-    Get the type of user based on their products, roles, and organization membership.
+    def get_user_type(self):
+        """
+        Get the type of user based on their products, roles, and organization membership.
 
-    Returns:
-        str: The type of the user (USER_COMPETENT_AUTHORITY, USER_STAFF, or USER_PUBLIC).
-    """
-
-    def getUserType(self):
+        Returns:
+            str: The type of the user (USER_COMPETENT_AUTHORITY, USER_STAFF, or USER_PUBLIC).
+        """
         try:
             products = jwt.products.json()
             if any(
                 product
                 for product in products
-                if product['code'].upper() == self.CA_PRODUCT and product['subscriptionStatus'].upper() == 'ACTIVE'
+                if product['code'].upper() == UserType.CA_PRODUCT and product['subscriptionStatus'].upper() == 'ACTIVE'
             ):
-                self.app.logger.info('Get User Type: ' + self.USER_COMPETENT_AUTHORITY)
-                return self.USER_COMPETENT_AUTHORITY
-            if jwt.validate_roles([self.STAFF_ROLE]):
-                return self.USER_STAFF
+                self.app.logger.info('Get User Type: ' + UserType.USER_COMPETENT_AUTHORITY)
+                return UserType.USER_COMPETENT_AUTHORITY
+            if jwt.validate_roles([UserType.STAFF_ROLE]):
+                return UserType.USER_STAFF
         except Exception as e:
             self.app.logger.error('Error in Get User Type: ' + str(e))
 
-        self.app.logger.info('Get User Type: ' + self.USER_PUBLIC)
-        return self.USER_PUBLIC
+        self.app.logger.info('Get User Type: ' + UserType.USER_PUBLIC)
+        return UserType.USER_PUBLIC
 
     def get_bearer_token(self):
         """Get a valid Bearer token for the service to use."""
