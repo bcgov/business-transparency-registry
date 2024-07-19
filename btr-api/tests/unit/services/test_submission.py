@@ -11,5 +11,5 @@ def test_create_submission(session):
         submission = SubmissionService.create_submission(submission_dict=SUBMISSION_DICT, submitter_id=1)
 
         # Assert the properties of the resulting SubmissionModel instance
-        assert submission.effective_date == date.fromisoformat(SUBMISSION_DICT["effectiveDate"])
+        assert submission.effective_date == date.fromisoformat(SUBMISSION_DICT['effectiveDate'])
         assert submission.payload == SUBMISSION_DICT
