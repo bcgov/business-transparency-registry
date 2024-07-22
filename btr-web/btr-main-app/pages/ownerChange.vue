@@ -126,7 +126,7 @@ onBeforeMount(async () => {
   // FUTURE: put in a loading page or something while this happens in case network is slow
   await useBcrosBusiness().loadBusiness(identifier)
   const siControlStore = useSiControlStore()
-  const { data, error } = await fileSIApi.getBtrFiling(identifier, account.currentAccount?.id)
+  const { data, error } = await fileSIApi.getBtrFiling(identifier)
 
   if (error.statusCode) {
     if (error.statusCode !== StatusCodes.NOT_FOUND) {
