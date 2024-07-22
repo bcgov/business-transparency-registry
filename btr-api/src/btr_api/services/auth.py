@@ -131,12 +131,12 @@ class AuthService:
         return authorization_header
 
     # TODO: Add caching
-    def product_authorizations(self, request, account_id: str) -> bool:
+    def product_authorizations(self, request, account_id: str) -> None:
         """Get the products associated with the user and account_id."""
         if not account_id:
             error = 'Missing account_id'
             self.app.logger.debug(error)
-            return True
+            return
         try:
             auth_token = self.get_authorization_header(request)
             # make api call
@@ -154,10 +154,10 @@ class AuthService:
                 self.app.logger.debug(error)
 
             jwt.products = resp
-            return True
+            return
         except Exception as err:
             self.app.logger.debug(err)
-            return True
+            return
 
     # TODO: Add caching
     def is_authorized(self, request, business_identifier: str) -> bool:
