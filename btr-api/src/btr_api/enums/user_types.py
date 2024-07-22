@@ -1,4 +1,4 @@
-# Copyright © 2023 Province of British Columbia
+# Copyright © 2024 Province of British Columbia
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -11,8 +11,15 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+"""Enum for user types."""
+from btr_api.common.enum import BaseEnum
 
-"""This exports all of the enums used by the application."""
-from .log_level import LogLevel
-from .redaction_types import RedactionType
-from .user_types import UserType
+
+class UserType(BaseEnum):
+    """Enum for the redaction types"""
+
+    USER_PUBLIC = 'public'
+    USER_STAFF = 'staff'
+    USER_COMPETENT_AUTHORITY = 'ca'
+    STAFF_ROLE = 'staff'
+    CA_PRODUCT = 'CA_SEARCH'

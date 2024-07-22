@@ -1,6 +1,6 @@
 from datetime import date
-from btr_api.services.submission import SubmissionService
 
+from btr_api.services.submission import SubmissionService
 from tests.unit import nested_session
 from tests.unit.utils import SUBMISSION_DICT
 

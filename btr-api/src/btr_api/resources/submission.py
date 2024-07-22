@@ -39,21 +39,34 @@ The 'registers' and 'create_register' functions define the 'GET' and 'POST' meth
 
 """
 from http import HTTPStatus
-
-from flask import Blueprint, current_app, g, jsonify, request
+from flask import Blueprint
+from flask import current_app
+from flask import g
+from flask import jsonify
+from flask import request
 from flask_cors import cross_origin
 
 from btr_api.common.auth import jwt
-from btr_api.exceptions import ExternalServiceException, exception_response, error_request_response, AuthException
-from btr_api.models import Submission as SubmissionModel, User as UserModel
+from btr_api.exceptions import AuthException
+from btr_api.exceptions import error_request_response
+from btr_api.exceptions import exception_response
+from btr_api.exceptions import ExternalServiceException
+from btr_api.models import Submission as SubmissionModel
+from btr_api.models import User as UserModel
 from btr_api.models.submission import SubmissionSerializer
-from btr_api.services import SchemaService, SubmissionService, btr_auth, btr_bor, btr_entity, btr_pay
+from btr_api.services import btr_auth
+from btr_api.services import btr_bor
+from btr_api.services import btr_entity
+from btr_api.services import btr_pay
+from btr_api.services import SchemaService
+from btr_api.services import SubmissionService
 from btr_api.services.validator import validate_entity
+from btr_api.utils import redact_information
 
-bp = Blueprint("submission", __name__)
+bp = Blueprint('submission', __name__)
 
 
-@bp.route("/<id>", methods=("GET",))
+@bp.route('/<id>', methods=('GET',))
 def registers(id: int | None = None):  # pylint: disable=redefined-builtin
     """Get the submissions, or specific submission by id."""
     try:
@@ -69,16 +82,18 @@ def registers(id: int | None = None):  # pylint: disable=redefined-builtin
         return exception_response(exception)
 
 
-@bp.route("/entity/<business_identifier>", methods=("GET",))
+@bp.route('/entity/<business_identifier>', methods=('GET',))
 def get_entity_submission(business_identifier: str):
     """Get the current submission for specified business identifier."""
 
     try:
         btr_auth.is_authorized(request=request, business_identifier=business_identifier)
+        account_id = request.headers.get('Account-Id', None)
+        btr_auth.product_authorizations(request=request, account_id=account_id)
 
         submission = SubmissionModel.find_by_business_identifier(business_identifier)
         if submission:
-            return jsonify(SubmissionSerializer.to_dict(submission))
+            return jsonify(redact_information(SubmissionSerializer.to_dict(submission)))
 
         return {}, HTTPStatus.NOT_FOUND
 
@@ -88,7 +103,7 @@ def get_entity_submission(business_identifier: str):
         return exception_response(exception)
 
 
-@bp.route("/", methods=("POST",))
+@bp.route('/', methods=('POST',))
 @cross_origin(origin='*')
 @jwt.requires_auth
 def create_register():
@@ -105,7 +120,7 @@ def create_register():
         json_input = request.get_json()
 
         # validate payload; TODO: implement business rules validations
-        schema_name = "btr-filing.schema.json"
+        schema_name = 'btr-filing.schema.json'
         schema_service = SchemaService()
         [valid, errors] = schema_service.validate(schema_name, json_input)
         if not valid:
@@ -141,8 +156,9 @@ def create_register():
             # NOTE: this will be moved out of this api once lear filings are linked
             # update record in BOR (search)
             token = btr_auth.get_bearer_token()
-            entity_addresses: dict[str, dict[str, dict]] = \
-                btr_entity.get_entity_info(jwt, f'{identifier}/addresses').json()
+            entity_addresses: dict[str, dict[str, dict]] = btr_entity.get_entity_info(
+                jwt, f'{identifier}/addresses'
+            ).json()
             entity['business']['addresses'] = [entity_addresses.get('registeredOffice', {}).get('deliveryAddress')]
             btr_bor.update_owners(submission, entity, token)
 
