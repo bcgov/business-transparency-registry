@@ -81,7 +81,6 @@ import { StatusCodes } from 'http-status-codes'
 import { SiSchemaType } from '~/utils/si-schema/definitions'
 import fileSIApi from '~/services/file-significant-individual'
 
-const account = useBcrosAccount()
 const significantIndividuals = useSignificantIndividuals()
 const { currentSIFiling } = storeToRefs(significantIndividuals)
 
