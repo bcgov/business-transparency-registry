@@ -1,5 +1,7 @@
 <template>
   <BcrosTablesTable
+    :table-name="`Acting jointly or in concert`"
+    icon="i-mdi-account-multiple-plus-outline"
     data-cy="individualsControlTable"
     :headers="headers"
     :items="siControlStore.allActiveAndHaveControlSis"
@@ -19,7 +21,7 @@
       </tr>
     </template>
     <template #table-row="{ item, index }">
-      <tr>
+      <tr class="border-t border-gray-200">
         <td data-cy="control-table-name">
           <span>{{ item.name.fullName.toUpperCase() }}</span><br>
           <BcrosTablesDetailsInfoBox

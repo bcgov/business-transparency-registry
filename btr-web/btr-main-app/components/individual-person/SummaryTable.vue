@@ -1,10 +1,25 @@
 <template>
   <BcrosTablesTable
     data-cy="individualsSummaryTable"
+    :table-name="`Significant Individuals`"
+    icon="i-mdi-account-multiple-outline"
     :headers="headers"
     :items="individuals"
     :empty-state="$t('texts.tables.emptyTexts.individualsSummaryTable')"
   >
+    <!-- To-Do:
+      the v-if is set to false for now; it will be update in ticket #21234 so the
+      warning message is displayed when there is any redacted information.
+     -->
+    <template v-if="false" #header-warning>
+      <div class="flex flex-row ml-3">
+        <UIcon name="i-mdi-alert" class="bg-orange-500 mt-0.5 mr-1" />
+        <span class="text-sm">
+          <strong>{{ `Note` }}:</strong>
+          {{ `Some information is not shown due to privacy reasons` }}
+        </span>
+      </div>
+    </template>
     <template #table-row="{ item, index }">
       <!-- To-Do:
         The content of table data will be updated in ticket #21234 to match the new UI design;
@@ -188,13 +203,16 @@
 
       <tr v-if="isEditing && editingIndex === index">
         <td data-cy="summary-table-edit-form flex flex-row" colspan="100%">
-          <div class="bg-primary text-white flex flex-row justify-between">
-            <div>
-              <UIcon name="i-mdi-pencil" />
-              Editing {{ capFirstLetterInName(item.name.fullName) }}
+          <div class="bg-primary text-white flex items-center justify-between p-3">
+            <div class="flex item-center">
+              <UIcon name="i-mdi-pencil mt-1 mr-1" />
+              <span class="font-bold">
+                Editing {{ capFirstLetterInName(item.name.fullName) }}
+              </span>
             </div>
             <UButton
-              :label="`cancel`"
+              class="items-center"
+              :label="`Cancel`"
               icon="i-mdi-close"
               :trailing="true"
               @click="closeEditingMode"
@@ -204,7 +222,7 @@
             <IndividualPersonAddNew
               :index="index"
               :set-significant-individual="copyIndividualToEdit()"
-              class="text-base text-gray-900 bg-red-100 w-full"
+              class="text-base text-gray-900 w-full pb-5"
               :edit-mode="true"
               @cancel="closeEditingMode"
               @update="updateSignificantIndividual($event.index, $event.updatedSI)"
@@ -345,7 +363,6 @@ function openEditingMode (index: number) {
 }
 
 function closeEditingMode () {
-  console.log('closeEditingMode')
   editingIndex.value = -1
   if (props.isEditing) {
     emit('toggle-editing-mode')
