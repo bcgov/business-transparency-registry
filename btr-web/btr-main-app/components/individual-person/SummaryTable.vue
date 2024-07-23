@@ -202,7 +202,7 @@
       </template>
 
       <tr v-if="isEditing && editingIndex === index">
-        <td data-cy="summary-table-edit-form flex flex-row" colspan="100%">
+        <td data-cy="summary-table-edit-form" colspan="100%">
           <div class="bg-primary text-white flex items-center justify-between p-3">
             <div class="flex item-center">
               <UIcon name="i-mdi-pencil mt-1 mr-1" />

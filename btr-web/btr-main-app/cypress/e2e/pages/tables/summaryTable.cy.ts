@@ -9,10 +9,9 @@ describe('pages -> Summary Table', () => {
     const summaryTableHeaders = cy.get('[data-cy="individualsSummaryTable"]').get('th')
     summaryTableHeaders
       .should('contain', 'Name')
-      .and('contain', 'Address')
       .and('contain', 'Details')
-      .and('contain', 'Significance Dates')
       .and('contain', 'Control')
+      .and('contain', 'Effective Dates')
   })
 
   it('summary table body is rendered', () => {
@@ -26,34 +25,31 @@ describe('pages -> Summary Table', () => {
       cy.get('[data-cy="individualsSummaryTable"]')
         .get('[data-cy=summary-table-name]').contains(testData.profile1.fullName.toUpperCase())
         .get('[data-cy=summary-table-name]').contains(testData.profile1.preferredName)
-        .get('[data-cy=summary-table-name]').contains(testData.profile1.email)
-        .get('[data-cy=summary-table-address]').contains(testData.profile1.address.streetAddress)
-        .get('[data-cy=summary-table-address]').contains(testData.profile1.address.city)
-        .get('[data-cy=summary-table-address]').contains(testData.profile1.address.province[1])
-        .get('[data-cy=summary-table-address]').contains(testData.profile1.address.postalCode)
-        .get('[data-cy=summary-table-address]').contains(testData.profile1.address.country)
+        .get('[data-cy=summary-table-details]').contains(testData.profile1.email)
+        .get('[data-cy=summary-table-details]').contains(testData.profile1.address.streetAddress)
+        .get('[data-cy=summary-table-details]').contains(testData.profile1.address.city)
+        .get('[data-cy=summary-table-details]').contains(testData.profile1.address.province[1])
+        .get('[data-cy=summary-table-details]').contains(testData.profile1.address.postalCode)
+        .get('[data-cy=summary-table-details]').contains(testData.profile1.address.country)
         .get('[data-cy=summary-table-details]').contains(testData.profile1.taxNumber)
-        .get('[data-cy=summary-table-details]').contains(testData.profile1.summaryTable.citizenship)
-        .get('[data-cy=summary-table-details]').contains(testData.profile1.summaryTable.taxResidency)
-        // todo: fixme: update on #TBD with new summary table
-        // .get('[data-cy=summary-table-controls]').contains(testData.profile1.summaryTable.shareControl)
-        // todo: fixme: update on #20756
-        // .get('[data-cy=summary-table-controls]').contains(testData.profile1.summaryTable.directorControl)
+
+      // todo: update tests for the Control column for SI profile 1
+      // .get('[data-cy=summary-table-controls]').contains(testData.profile1.summaryTable.shareControl)
+      // .get('[data-cy=summary-table-controls]').contains(testData.profile1.summaryTable.directorControl)
+
         .get('[data-cy=summary-table-dates]').contains(expectedDate)
         .get('[data-cy=summary-table-name]').contains(testData.profile2.fullName.toUpperCase())
         .get('[data-cy=summary-table-name]').contains(testData.profile2.preferredName)
-        .get('[data-cy=summary-table-name]').contains(testData.profile2.email)
-        .get('[data-cy=summary-table-address]').contains(testData.profile2.address.streetAddress)
-        .get('[data-cy=summary-table-address]').contains(testData.profile2.address.city)
-        .get('[data-cy=summary-table-address]').contains(testData.profile2.address.province[1])
-        .get('[data-cy=summary-table-address]').contains(testData.profile2.address.postalCode)
-        .get('[data-cy=summary-table-address]').contains(testData.profile2.address.country)
+        .get('[data-cy=summary-table-details]').contains(testData.profile2.email)
+        .get('[data-cy=summary-table-details]').contains(testData.profile2.address.streetAddress)
+        .get('[data-cy=summary-table-details]').contains(testData.profile2.address.city)
+        .get('[data-cy=summary-table-details]').contains(testData.profile2.address.province[1])
+        .get('[data-cy=summary-table-details]').contains(testData.profile2.address.postalCode)
+        .get('[data-cy=summary-table-details]').contains(testData.profile2.address.country)
         .get('[data-cy=summary-table-details]').contains(testData.profile2.taxNumber)
-        .get('[data-cy=summary-table-details]').contains(testData.profile2.summaryTable.citizenship)
-        .get('[data-cy=summary-table-details]').contains(testData.profile2.summaryTable.taxResidency)
-      // todo: fixme: update on #TBD with new summary table
+
+      // todo: update tests for the Control column for SI profile 2
       // .get('[data-cy=summary-table-controls]').contains(testData.profile2.summaryTable.shareControl)
-      // todo: fixme: update on #20756
       // .get('[data-cy=summary-table-controls]').contains(testData.profile2.summaryTable.directorControl)
     })
   })
@@ -61,7 +57,7 @@ describe('pages -> Summary Table', () => {
   it('test the edit button', () => {
     // Edit buttons are rendered and enabled; edit form is not displayed
     cy.get('[data-cy=edit-button]').first().should('not.have.attr', 'disabled')
-    cy.get('[data-cy=individualsSummaryTable]').should('not.contain', 'Edit an Individual')
+    cy.get('[data-cy=individualsSummaryTable]').should('not.contain', 'Editing')
     cy.get('[data-cy=summary-table-edit-form]').should('not.exist')
 
     // Click the first edit button to start editing the first significant individual profile
@@ -71,7 +67,7 @@ describe('pages -> Summary Table', () => {
     // and the "Add an Individual" button is disabled
     cy.get('[data-cy=summary-table-edit-form]').should('exist')
     cy.get('[data-cy=edit-button]').first().should('have.attr', 'disabled')
-    cy.get('[data-cy=individualsSummaryTable]').should('contain', 'Edit an Individual')
+    cy.get('[data-cy=individualsSummaryTable]').should('contain', 'Editing')
     cy.get('[data-cy=add-new-btn]').should('have.attr', 'disabled')
   })
 
@@ -142,7 +138,7 @@ describe('pages -> Summary Table', () => {
       cy.get('[data-cy=summary-table-name]').should('not.contain', 'NEW NAME')
 
       // the edit form will be closed
-      cy.get('[data-cy=individualsSummaryTable]').should('not.contain', 'Edit an Individual')
+      cy.get('[data-cy=individualsSummaryTable]').should('not.contain', 'Editing')
 
       // the edit buttons will be enabled
       cy.get('[data-cy=edit-button]').eq(0).should('not.have.attr', 'disabled')
@@ -168,7 +164,7 @@ describe('pages -> Summary Table', () => {
       })
     })
 
-    cy.get('[data-cy=individualsSummaryTable]').should('not.contain', 'Edit an Individual')
+    cy.get('[data-cy=individualsSummaryTable]').should('not.contain', 'Editing')
     cy.get('[data-cy=edit-button]').eq(0).should('not.have.attr', 'disabled')
     cy.get('[data-cy=edit-button]').eq(1).should('not.have.attr', 'disabled')
     cy.get('[data-cy=add-new-btn]').should('not.have.attr', 'disabled')

@@ -55,21 +55,18 @@ describe('pages -> Review and Confirm', () => {
       const summaryTable = cy.get('[data-cy="individualsSummaryTable"]')
       summaryTable.get('[data-cy=summary-table-name]').contains(testData.profile1.fullName.toUpperCase())
       summaryTable.get('[data-cy=summary-table-name]').contains(testData.profile1.preferredName)
-      summaryTable.get('[data-cy=summary-table-name]').contains(testData.profile1.email)
-      summaryTable.get('[data-cy=summary-table-address]').contains(testData.profile1.address.streetAddress)
-      summaryTable.get('[data-cy=summary-table-address]').contains(testData.profile1.address.city)
-      summaryTable.get('[data-cy=summary-table-address]').contains(testData.profile1.address.province[1])
-      summaryTable.get('[data-cy=summary-table-address]').contains(testData.profile1.address.postalCode)
-      summaryTable.get('[data-cy=summary-table-address]').contains(testData.profile1.address.country)
+      summaryTable.get('[data-cy=summary-table-details]').contains(testData.profile1.email)
+      summaryTable.get('[data-cy=summary-table-details]').contains(testData.profile1.address.streetAddress)
+      summaryTable.get('[data-cy=summary-table-details]').contains(testData.profile1.address.city)
+      summaryTable.get('[data-cy=summary-table-details]').contains(testData.profile1.address.province[1])
+      summaryTable.get('[data-cy=summary-table-details]').contains(testData.profile1.address.postalCode)
+      summaryTable.get('[data-cy=summary-table-details]').contains(testData.profile1.address.country)
       summaryTable.get('[data-cy=summary-table-details]').contains(testData.profile1.taxNumber)
-      summaryTable.get('[data-cy=summary-table-details]').contains(testData.profile1.summaryTable.citizenship)
-      summaryTable.get('[data-cy=summary-table-details]').contains(testData.profile1.summaryTable.taxResidency)
 
       summaryTable.get('[data-cy=summary-table-dates]').contains(expectedDate)
 
-      // todo: fixme: update on #TBD with new summary table
+      // To-Do: add tests for control column in the new summary table in #21234
       // summaryTable.get('[data-cy=summary-table-controls]').contains(testData.profile1.summaryTable.shareControl)
-      // todo: fixme: update on #20756
       // summaryTable.get('[data-cy=summary-table-controls]').contains(testData.profile1.summaryTable.directorControl)
 
       // can click 'back' to go back to non review page
