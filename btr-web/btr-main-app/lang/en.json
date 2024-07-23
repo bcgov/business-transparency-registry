@@ -21,7 +21,7 @@
     "shares": "Shares",
     "votes": "Votes",
     "sharesAndVotes": "Control of Shares and Votes",
-    "significanceDates": "Significance Dates",
+    "effectiveDates": "Effective Dates",
     "significantIndividuals": "Significant Individuals",
     "significantIndividualChangeDate": "Significant Individual Filing Effective Date",
     "lastKnownAddress": "Address",
@@ -145,10 +145,6 @@
         "inConcert": "25% or more of shares or votes exercised in concert"
       }
     },
-
-
-
-
     "controlOfDirectors": {
       "text": {
         "part1": "If this individual has control of the right to ",
@@ -175,9 +171,6 @@
         "inConcert": "Control of directors exercised in concert"
       }
     },
-
-
-
     "otherReasons": {
       "description": "Enter any other reason(s) this individual is a significant individual.",
       "textAreaPlaceholder": "Other reasons for individual significance (Optional)"

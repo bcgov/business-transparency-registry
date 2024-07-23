@@ -22,14 +22,18 @@
       <tr>
         <td data-cy="control-table-name">
           <span>{{ item.name.fullName.toUpperCase() }}</span><br>
-          <div v-if="item.name.preferredName" class="flex flex-col mt-2">
-            <span class="font-bold italic">{{ `Preferred name` }}</span>
-            <span>{{ item.name.preferredName }}</span>
-          </div>
-          <div class="flex flex-col mt-2">
-            <span class="font-bold italic">{{ `Birth year` }}</span>
-            <span>{{ item.birthDate.slice(0, 4) }}</span>
-          </div>
+          <BcrosTablesDetailsInfoBox
+            v-if="item.name.preferredName"
+            class="mt-3"
+            :title="$t('controlTableBody.name.preferredName')"
+            :content="item.name.preferredName"
+          />
+          <BcrosTablesDetailsInfoBox
+            v-if="item.name.preferredName"
+            class="mt-3"
+            :title="$t('controlTableBody.name.birthYear')"
+            :content="item.birthDate.slice(0, 4)"
+          />
         </td>
         <td data-cy="control-table-individual-connection" colspan="2">
           <IndividualPersonIndividualConnection

@@ -14,7 +14,7 @@
           </th>
         </tr>
       </thead>
-      <tbody class="divide-y divide-gray-200">
+      <tbody>
         <slot name="warning" />
         <slot v-for="(item, index) in items" :item="item" :index="index" name="table-row" />
         <slot :items="items" name="empty-state">
