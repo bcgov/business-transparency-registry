@@ -1,7 +1,14 @@
 <template>
   <div
     class="w-full"
-    :class="showSectionHasErrors ? 'border-l-[3px] border-red-500' : ''"
+    :class="[
+      showSectionHasErrors ? 'border-l-[3px] border-red-500' : '',
+      border ? 'border border-gray-100' : '',
+      noTopBorder ? 'border-t-0' : '',
+      noBotBorder ? 'border-b-0' : 'b',
+      roundedTop ? 'rounded-t' : '',
+      roundedBot ? 'rounded-b' : ''
+    ]"
   >
     <div
       v-if="showHeader"
@@ -57,7 +64,11 @@ const props = defineProps({
   headerText: { type: String, required: false, default: undefined },
 
   roundedTop: { type: Boolean, required: false, default: false },
-  roundedBot: { type: Boolean, required: false, default: false }
+  roundedBot: { type: Boolean, required: false, default: false },
+
+  border: { type: Boolean, required: false, default: false },
+  noTopBorder: { type: Boolean, required: false, default: false },
+  noBotBorder: { type: Boolean, required: false, default: false }
 })
 
 const showHeader = computed(

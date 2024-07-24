@@ -8,21 +8,21 @@
     :empty-state="$t('texts.tables.emptyTexts.individualsSummaryTable')"
   >
     <!-- To-Do:
-      the v-if is set to false for now; it will be update in ticket #21234 so the
+      the v-if is set to false for now; it will be update in ticket #21656 so the
       warning message is displayed when there is any redacted information.
      -->
-    <template v-if="false" #header-warning>
+    <template v-if="true" #header-warning>
       <div class="flex flex-row ml-3">
         <UIcon name="i-mdi-alert" class="bg-orange-500 mt-0.5 mr-1" />
         <span class="text-sm">
-          <strong>{{ `Note` }}:</strong>
-          {{ `Some information is not shown due to privacy reasons` }}
+          <strong>{{ $t('summaryTable.alert.note') }}:</strong>
+          {{ $t('summaryTable.alert.hiddenInfo') }}
         </span>
       </div>
     </template>
     <template #table-row="{ item, index }">
       <!-- To-Do:
-        The content of table data will be updated in ticket #21234 to match the new UI design;
+        The content of table data will be updated in ticket #21656 to match the new UI design;
         Re-organize the i18n file for Summary Table
       -->
       <template v-if="item.ui.action != FilingActionE.REMOVE && editingIndex != index">
@@ -36,12 +36,12 @@
               </div>
               <BcrosTablesDetailsInfoBox
                 v-if="item.name.preferredName"
-                :title="`Preferred Name`"
+                :title="$t('summaryTable.body.preferredName')"
                 :content="item.name.preferredName"
               />
               <BcrosTablesDetailsInfoBox
                 v-if="item.birthDate"
-                :title="`Born`"
+                :title="$t('summaryTable.body.born')"
                 :content="item.birthDate"
               />
               <!--
@@ -62,15 +62,18 @@
 
               <BcrosTablesDetailsInfoBox
                 v-if="item.address.locationDescription"
-                :title="`Location description`"
+                :title="$t('summaryTable.body.locationDescription')"
                 :content="item.address.locationDescription"
               />
 
               <!-- To-Do: phone number -->
 
               <BcrosTablesDetailsInfoBox
-                :title="`Tax Residency`"
-                :content="item.isTaxResident? 'Canada' : 'Other'"
+                :title="$t('summaryTable.body.taxResidency.label')"
+                :content="item.isTaxResident?
+                  $t('summaryTable.body.taxResidency.canada') :
+                  $t('summaryTable.body.taxResidency.other')
+                "
               />
 
               <div v-if="item.tax.taxNumber">
@@ -236,7 +239,7 @@
       <tr v-if="isEmptyState">
         <td colspan="100%">
           <div class="text-sm text-center text-gray-700 px-3 py-4">
-            {{ $t('texts.tables.emptyTexts.individualsSummaryTable') }}
+            {{ $t('summaryTable.empty') }}
           </div>
         </td>
       </tr>

@@ -65,7 +65,7 @@ describe('pages -> Review and Confirm', () => {
 
       summaryTable.get('[data-cy=summary-table-dates]').contains(expectedDate)
 
-      // To-Do: add tests for control column in the new summary table in #21234
+      // To-Do: add tests for control column in the new summary table in #21656
       // summaryTable.get('[data-cy=summary-table-controls]').contains(testData.profile1.summaryTable.shareControl)
       // summaryTable.get('[data-cy=summary-table-controls]').contains(testData.profile1.summaryTable.directorControl)
 

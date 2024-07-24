@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-col">
-    <div class="flex flex-row w-full rounded-t-[5px] items-center bg-gray-300 p-3">
+    <div class="flex flex-row w-full rounded-t-[5px] items-center bg-gray-300 p-5" data-cy="table-header">
       <UIcon v-if="icon != ''" :name="icon" class="text-bcGovColor-footer text-2xl mr-2.5" />
       <span class="font-bold text-l">
         {{ tableName }}

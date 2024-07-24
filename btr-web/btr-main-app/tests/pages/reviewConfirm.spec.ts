@@ -15,7 +15,7 @@ describe('Tests for review and confirm page', () => {
     expect(wrapper.find('[data-cy="page-header"]').exists()).toBe(true)
     expect(wrapper.find('[data-cy="review-confirm-section-heading"]').exists()).toBe(true)
     expect(wrapper.find('[data-cy="effective-date-select"]').exists()).toBe(true)
-    expect(wrapper.find('[data-cy="summary-table-header"]').exists()).toBe(true)
+    expect(wrapper.find('[data-cy="table-header"]').exists()).toBe(true)
     expect(wrapper.find('[data-cy="individualsSummaryTable"]').exists()).toBe(true)
     expect(wrapper.find('[data-cy="certify-section"]').exists()).toBe(true)
   })

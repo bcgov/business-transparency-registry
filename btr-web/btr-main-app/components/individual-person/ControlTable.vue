@@ -1,6 +1,6 @@
 <template>
   <BcrosTablesTable
-    :table-name="`Acting jointly or in concert`"
+    :table-name="$t('controlTable.tableName')"
     icon="i-mdi-account-multiple-plus-outline"
     data-cy="individualsControlTable"
     :headers="headers"
@@ -13,8 +13,8 @@
             :flavour="AlertsFlavourE.ALERT"
           >
             <p class="py-2">
-              <strong>{{ $t('controlTableBody.alert.important') }}</strong>
-              <BcrosI18HelperBold translation-path="controlTableBody.alert.message" />
+              <strong>{{ $t('controlTable.body.alert.important') }}</strong>
+              <BcrosI18HelperBold translation-path="controlTable.body.alert.message" />
             </p>
           </BcrosAlertsMessage>
         </td>
@@ -27,13 +27,13 @@
           <BcrosTablesDetailsInfoBox
             v-if="item.name.preferredName"
             class="mt-3"
-            :title="$t('controlTableBody.name.preferredName')"
+            :title="$t('controlTable.body.name.preferredName')"
             :content="item.name.preferredName"
           />
           <BcrosTablesDetailsInfoBox
             v-if="item.name.preferredName"
             class="mt-3"
-            :title="$t('controlTableBody.name.birthYear')"
+            :title="$t('controlTable.body.name.birthYear')"
             :content="item.birthDate.slice(0, 4)"
           />
         </td>
@@ -52,7 +52,7 @@
       <tr v-if="numberOfRows === 0">
         <td colspan="100%">
           <div class="text-sm text-center text-gray-700 px-3 py-4">
-            {{ $t('controlTableBody.empty') }}
+            {{ $t('controlTable.body.empty') }}
           </div>
         </td>
       </tr>
@@ -71,9 +71,9 @@ defineProps({
 
 const t = useNuxtApp().$i18n.t
 const headers = [
-  { content: t('controlTableHeader.name'), width: '20%' },
-  { content: t('controlTableHeader.controlType'), width: '20%', customStyle: 'text-right' },
-  { content: t('controlTableHeader.individualConnection'), width: '60%' }
+  { content: t('controlTable.header.name'), width: '20%' },
+  { content: t('controlTable.header.controlType'), width: '20%', customStyle: 'text-right' },
+  { content: t('controlTable.header.individualConnection'), width: '60%' }
 ]
 
 const controlTypeWidth = parseFloat(headers[1].width.replace('%', ''))

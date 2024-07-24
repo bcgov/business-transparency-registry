@@ -65,7 +65,7 @@ describe('AddIndividualPersonSummaryTable tests', () => {
     expect(details.text()).toContain('Tax Residency')
     expect(details.text()).toContain('Canada')
   })
-  // To-Do: update this test to reflect the content of control column in the new summary table in #21234
+  // To-Do: update this test to reflect the content of control column in the new summary table in #21656
   it('displays the Controls column as expected', async () => {
     si.controlOfVotes.registeredOwner = true
     si.controlOfVotes.beneficialOwner = true

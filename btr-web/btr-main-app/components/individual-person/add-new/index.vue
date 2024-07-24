@@ -37,7 +37,9 @@
         :show-section-has-errors="hasErrors(['name.'])"
         :section-title="$t('sectionTitles.individualsFullName')"
         rounded-bot
-        rounded-top
+        :rounded-top="!editMode"
+        :border="editMode"
+        no-top-border
       >
         <div class="flex-col w-full">
           <BcrosInputsNameField
@@ -83,12 +85,16 @@
         :header-title="$t('sectionHeaders.controlOf')"
         :header-text="$t('sectionIntroText.controlOf')"
         rounded-top
+        :border="editMode"
+        no-bot-border
       />
 
       <!--  section: type of interest or control of shares -->
       <BcrosSection
         :show-section-has-errors="false"
         :section-title="$t('sectionTitles.controlOfShares')"
+        :border="editMode"
+        no-top-border
       >
         <IndividualPersonControlOfSharesVotes v-model="inputFormSi.controlOfShares" name="controlOfShares" />
       </BcrosSection>
@@ -97,6 +103,8 @@
       <BcrosSection
         :show-section-has-errors="false"
         :section-title="$t('sectionTitles.controlOfVotes')"
+        :border="editMode"
+        no-top-border
       >
         <IndividualPersonControlOfSharesVotes v-model="inputFormSi.controlOfVotes" name="controlOfVotes" />
       </BcrosSection>
@@ -105,6 +113,8 @@
       <BcrosSection
         :show-section-has-errors="false"
         :section-title="$t('sectionTitles.controlOfMajorityOfDirectors')"
+        :border="editMode"
+        no-top-border
       >
         <IndividualPersonControlOfDirectors v-model="inputFormSi.controlOfDirectors" name="controlOfDirectors" />
       </BcrosSection>
@@ -114,6 +124,8 @@
         :show-section-has-errors="hasErrors(['otherReasons'])"
         :section-title="$t('sectionTitles.otherReasons')"
         rounded-bot
+        :border="editMode"
+        no-top-border
       >
         <div class="w-full">
           <IndividualPersonControlOtherReasons
@@ -133,6 +145,8 @@
         :header-title="$t('sectionHeaders.effectiveDates')"
         :header-text="$t('sectionIntroText.effectiveDates')"
         rounded-top
+        :border="editMode"
+        no-bot-border
       />
 
       <!--  section: effective dates -->
@@ -140,6 +154,8 @@
         :show-section-has-errors="hasErrors(['effectiveDates'])"
         :section-title="$t('sectionTitles.effectiveDates')"
         rounded-bot
+        :border="editMode"
+        no-top-border
       >
         <div class="w-full">
           <IndividualPersonEffectiveDates
@@ -158,11 +174,15 @@
         :header-title="$t('sectionHeaders.individualsDetails')"
         :header-text="$t('sectionIntroText.individualsDetails')"
         rounded-top
+        :border="editMode"
+        no-bot-border
       />
       <!--  section: email address  -->
       <BcrosSection
         :show-section-has-errors="hasErrors(['email'])"
         :section-title="$t('sectionTitles.emailAddress')"
+        :border="editMode"
+        no-top-border
       >
         <div class="flex-col w-full">
           <BcrosInputsEmailField
@@ -179,6 +199,8 @@
       <BcrosSection
         :show-section-has-errors="hasErrors(['address.'])"
         :section-title="$t('labels.lastKnownAddress')"
+        :border="editMode"
+        no-top-border
       >
         <div class="flex-col w-full">
           <BcrosInputsAddress
@@ -192,6 +214,8 @@
       <BcrosSection
         :show-section-has-errors="hasErrors(['phoneNumber'])"
         :section-title="$t('sectionTitles.phoneNumber')"
+        :border="editMode"
+        no-top-border
       >
         <BcrosInputsPhoneNumber
           v-model="inputFormSi.phoneNumber"
@@ -202,6 +226,8 @@
       <BcrosSection
         :show-section-has-errors="hasErrors(['birthDate'])"
         :section-title="$t('labels.birthdate')"
+        :border="editMode"
+        no-top-border
       >
         <div class="flex-col w-full">
           <BcrosInputsDateSelect
@@ -219,6 +245,8 @@
       <BcrosSection
         :show-section-has-errors="hasErrors(['citizenships'])"
         :section-title="$t('sectionTitles.citizenshipOrPR')"
+        :border="editMode"
+        no-top-border
       >
         <div class="flex-col w-full">
           <BcrosInputsCombobox
@@ -243,6 +271,8 @@
       <BcrosSection
         :show-section-has-errors="hasErrors(['tax.'])"
         :section-title="$t('sectionTitles.taxDetails')"
+        :border="editMode"
+        no-top-border
       >
         <div class="w-full flex flex-col">
           <p>
@@ -262,6 +292,8 @@
       <bcrosSection
         :show-section-has-errors="hasErrors(['isTaxResident'])"
         :section-title="$t('labels.taxResidency')"
+        :border="editMode"
+        no-top-border
       >
         <div class="flex flex-col w-full">
           <p>
@@ -280,6 +312,8 @@
         :show-section-has-errors="hasErrors(['determinationOfIncapacity'])"
         :section-title="$t('sectionTitles.determinationOfIncapacity')"
         rounded-bot
+        :border="editMode"
+        no-top-border
       >
         <DeterminationOfIncapacity
           v-model="inputFormSi.determinationOfIncapacity"
@@ -295,6 +329,7 @@
         :section-title="$t('sectionTitles.unableToObtainOrConfirmInformation')"
         rounded-top
         rounded-bot
+        :border="editMode"
       >
         <div class="w-full">
           <IndividualPersonControlUnableToObtainOrConfirmInformation
