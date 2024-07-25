@@ -3,8 +3,8 @@
     <!-- shares acting jointly -->
     <div v-if="si.controlOfShares.actingJointly" class="flex w-full">
       <div class="flex flex-col text-right pr-4" :style="`width: ${controlTypeWidth}%`">
-        <span>{{ $t('controlTableBody.controlType.shares') }}</span>
-        <span class="italic text-sm">{{ $t('controlTableBody.controlType.jointly') }}</span>
+        <span>{{ $t('controlTable.body.controlType.shares') }}</span>
+        <span class="italic text-sm">{{ $t('controlTable.body.controlType.jointly') }}</span>
       </div>
       <BcrosInputsCombobox
         v-if="siControl"
@@ -12,9 +12,9 @@
         :name="name + '.shares.jointly'"
         :label-function="(si) => si.legalName.toUpperCase()"
         :items="allActiveSisExceptMe"
-        :search-placeholder="$t('controlTableBody.individualConnection.placeholder.searchInput')"
-        :label-placeholder="$t('controlTableBody.individualConnection.placeholder.jointly')"
-        :floating-label="$t(`controlTableBody.individualConnection.floatingLabel.jointly`)"
+        :search-placeholder="$t('controlTable.body.individualConnection.placeholder.searchInput')"
+        :label-placeholder="$t('controlTable.body.individualConnection.placeholder.jointly')"
+        :floating-label="$t(`controlTable.body.individualConnection.floatingLabel.jointly`)"
         key-attribute="uuid"
         :search-attributes="['name']"
         :style="`width: ${individualConnectionWidth}%`"
@@ -24,8 +24,8 @@
     <!-- shares in concert -->
     <div v-if="si.controlOfShares.inConcertControl" class="flex w-full">
       <div class="flex flex-col text-right pr-4" :style="`width: ${controlTypeWidth}%`">
-        <span>{{ $t('controlTableBody.controlType.shares') }}</span>
-        <span class="italic text-sm">{{ $t('controlTableBody.controlType.inConcert') }}</span>
+        <span>{{ $t('controlTable.body.controlType.shares') }}</span>
+        <span class="italic text-sm">{{ $t('controlTable.body.controlType.inConcert') }}</span>
       </div>
       <BcrosInputsCombobox
         v-if="siControl"
@@ -33,9 +33,9 @@
         :name="name + '.shares.inConcert'"
         :label-function="(si) => si.legalName.toUpperCase()"
         :items="allActiveSisExceptMe"
-        :search-placeholder="$t('controlTableBody.individualConnection.placeholder.searchInput')"
-        :label-placeholder="$t('controlTableBody.individualConnection.placeholder.inConcert')"
-        :floating-label="$t(`controlTableBody.individualConnection.floatingLabel.inConcert`)"
+        :search-placeholder="$t('controlTable.body.individualConnection.placeholder.searchInput')"
+        :label-placeholder="$t('controlTable.body.individualConnection.placeholder.inConcert')"
+        :floating-label="$t(`controlTable.body.individualConnection.floatingLabel.inConcert`)"
         key-attribute="uuid"
         :search-attributes="['name']"
         :style="`width: ${individualConnectionWidth}%`"
@@ -45,8 +45,8 @@
     <!-- votes acting jointly -->
     <div v-if="si.controlOfVotes.actingJointly" class="flex w-full">
       <div class="flex flex-col text-right pr-4" :style="`width: ${controlTypeWidth}%`">
-        <span>{{ $t('controlTableBody.controlType.votes') }}</span>
-        <span class="italic text-sm">{{ $t('controlTableBody.controlType.jointly') }}</span>
+        <span>{{ $t('controlTable.body.controlType.votes') }}</span>
+        <span class="italic text-sm">{{ $t('controlTable.body.controlType.jointly') }}</span>
       </div>
       <BcrosInputsCombobox
         v-if="siControl"
@@ -54,9 +54,9 @@
         :name="name + '.votes.jointly'"
         :label-function="(si) => si.legalName.toUpperCase()"
         :items="allActiveSisExceptMe"
-        :search-placeholder="$t('controlTableBody.individualConnection.placeholder.searchInput')"
-        :label-placeholder="$t('controlTableBody.individualConnection.placeholder.jointly')"
-        :floating-label="$t(`controlTableBody.individualConnection.floatingLabel.jointly`)"
+        :search-placeholder="$t('controlTable.body.individualConnection.placeholder.searchInput')"
+        :label-placeholder="$t('controlTable.body.individualConnection.placeholder.jointly')"
+        :floating-label="$t(`controlTable.body.individualConnection.floatingLabel.jointly`)"
         key-attribute="uuid"
         :search-attributes="['name']"
         :style="`width: ${individualConnectionWidth}%`"
@@ -66,8 +66,8 @@
     <!-- votes in concert -->
     <div v-if="si.controlOfVotes.inConcertControl" class="flex w-full">
       <div class="flex flex-col text-right pr-4" :style="`width: ${controlTypeWidth}%`">
-        <span>{{ $t('controlTableBody.controlType.votes') }}</span>
-        <span class="italic text-sm">{{ $t('controlTableBody.controlType.inConcert') }}</span>
+        <span>{{ $t('controlTable.body.controlType.votes') }}</span>
+        <span class="italic text-sm">{{ $t('controlTable.body.controlType.inConcert') }}</span>
       </div>
       <BcrosInputsCombobox
         v-if="siControl"
@@ -75,9 +75,9 @@
         :name="name + '.votes.inConcert'"
         :label-function="(si) => si.legalName.toUpperCase()"
         :items="allActiveSisExceptMe"
-        :search-placeholder="$t('controlTableBody.individualConnection.placeholder.searchInput')"
-        :label-placeholder="$t('controlTableBody.individualConnection.placeholder.inConcert')"
-        :floating-label="$t(`controlTableBody.individualConnection.floatingLabel.inConcert`)"
+        :search-placeholder="$t('controlTable.body.individualConnection.placeholder.searchInput')"
+        :label-placeholder="$t('controlTable.body.individualConnection.placeholder.inConcert')"
+        :floating-label="$t(`controlTable.body.individualConnection.floatingLabel.inConcert`)"
         key-attribute="uuid"
         :search-attributes="['name']"
         :style="`width: ${individualConnectionWidth}%`"
@@ -87,8 +87,8 @@
     <!-- control of directors acting jointly -->
     <div v-if="si.controlOfDirectors.actingJointly" class="flex w-full">
       <div class="flex flex-col text-right pr-4" :style="`width: ${controlTypeWidth}%`">
-        <span>{{ $t('controlTableBody.controlType.director') }}</span>
-        <span class="italic text-sm">{{ $t('controlTableBody.controlType.jointly') }}</span>
+        <span>{{ $t('controlTable.body.controlType.director') }}</span>
+        <span class="italic text-sm">{{ $t('controlTable.body.controlType.jointly') }}</span>
       </div>
       <BcrosInputsCombobox
         v-if="siControl"
@@ -96,9 +96,9 @@
         :name="name + '.director.jointly'"
         :label-function="(si) => si.legalName.toUpperCase()"
         :items="allActiveSisExceptMe"
-        :search-placeholder="$t('controlTableBody.individualConnection.placeholder.searchInput')"
-        :label-placeholder="$t('controlTableBody.individualConnection.placeholder.jointly')"
-        :floating-label="$t(`controlTableBody.individualConnection.floatingLabel.jointly`)"
+        :search-placeholder="$t('controlTable.body.individualConnection.placeholder.searchInput')"
+        :label-placeholder="$t('controlTable.body.individualConnection.placeholder.jointly')"
+        :floating-label="$t(`controlTable.body.individualConnection.floatingLabel.jointly`)"
         key-attribute="uuid"
         :search-attributes="['name']"
         :style="`width: ${individualConnectionWidth}%`"
@@ -108,8 +108,8 @@
     <!-- control of directors in concert -->
     <div v-if="si.controlOfDirectors.inConcertControl" class="flex w-full">
       <div class="flex flex-col text-right pr-4" :style="`width: ${controlTypeWidth}%`">
-        <span>{{ $t('controlTableBody.controlType.director') }}</span>
-        <span class="italic text-sm">{{ $t('controlTableBody.controlType.inConcert') }}</span>
+        <span>{{ $t('controlTable.body.controlType.director') }}</span>
+        <span class="italic text-sm">{{ $t('controlTable.body.controlType.inConcert') }}</span>
       </div>
       <BcrosInputsCombobox
         v-if="siControl"
@@ -117,9 +117,9 @@
         :name="name + '.director.inConcert'"
         :label-function="(si) => si.legalName.toUpperCase()"
         :items="allActiveSisExceptMe"
-        :search-placeholder="$t('controlTableBody.individualConnection.placeholder.searchInput')"
-        :label-placeholder="$t('controlTableBody.individualConnection.placeholder.inConcert')"
-        :floating-label="$t(`controlTableBody.individualConnection.floatingLabel.inConcert`)"
+        :search-placeholder="$t('controlTable.body.individualConnection.placeholder.searchInput')"
+        :label-placeholder="$t('controlTable.body.individualConnection.placeholder.inConcert')"
+        :floating-label="$t(`controlTable.body.individualConnection.floatingLabel.inConcert`)"
         key-attribute="uuid"
         :search-attributes="['name']"
         :style="`width: ${individualConnectionWidth}%`"

@@ -1,5 +1,7 @@
 <template>
   <BcrosTablesTable
+    :table-name="$t('controlTable.tableName')"
+    icon="i-mdi-account-multiple-plus-outline"
     data-cy="individualsControlTable"
     :headers="headers"
     :items="siControlStore.allActiveAndHaveControlSis"
@@ -11,25 +13,29 @@
             :flavour="AlertsFlavourE.ALERT"
           >
             <p class="py-2">
-              <strong>{{ $t('controlTableBody.alert.important') }}</strong>
-              <BcrosI18HelperBold translation-path="controlTableBody.alert.message" />
+              <strong>{{ $t('controlTable.body.alert.important') }}</strong>
+              <BcrosI18HelperBold translation-path="controlTable.body.alert.message" />
             </p>
           </BcrosAlertsMessage>
         </td>
       </tr>
     </template>
     <template #table-row="{ item, index }">
-      <tr>
+      <tr class="border-t border-gray-200">
         <td data-cy="control-table-name">
           <span>{{ item.name.fullName.toUpperCase() }}</span><br>
-          <div v-if="item.name.preferredName" class="flex flex-col mt-2">
-            <span class="font-bold italic">{{ `Preferred name` }}</span>
-            <span>{{ item.name.preferredName }}</span>
-          </div>
-          <div class="flex flex-col mt-2">
-            <span class="font-bold italic">{{ `Birth year` }}</span>
-            <span>{{ item.birthDate.slice(0, 4) }}</span>
-          </div>
+          <BcrosTablesDetailsInfoBox
+            v-if="item.name.preferredName"
+            class="mt-3"
+            :title="$t('controlTable.body.name.preferredName')"
+            :content="item.name.preferredName"
+          />
+          <BcrosTablesDetailsInfoBox
+            v-if="item.name.preferredName"
+            class="mt-3"
+            :title="$t('controlTable.body.name.birthYear')"
+            :content="item.birthDate.slice(0, 4)"
+          />
         </td>
         <td data-cy="control-table-individual-connection" colspan="2">
           <IndividualPersonIndividualConnection
@@ -46,7 +52,7 @@
       <tr v-if="numberOfRows === 0">
         <td colspan="100%">
           <div class="text-sm text-center text-gray-700 px-3 py-4">
-            {{ $t('controlTableBody.empty') }}
+            {{ $t('controlTable.body.empty') }}
           </div>
         </td>
       </tr>
@@ -65,9 +71,9 @@ defineProps({
 
 const t = useNuxtApp().$i18n.t
 const headers = [
-  { content: t('controlTableHeader.name'), width: '20%' },
-  { content: t('controlTableHeader.controlType'), width: '20%', customStyle: 'text-right' },
-  { content: t('controlTableHeader.individualConnection'), width: '60%' }
+  { content: t('controlTable.header.name'), width: '20%' },
+  { content: t('controlTable.header.controlType'), width: '20%', customStyle: 'text-right' },
+  { content: t('controlTable.header.individualConnection'), width: '60%' }
 ]
 
 const controlTypeWidth = parseFloat(headers[1].width.replace('%', ''))

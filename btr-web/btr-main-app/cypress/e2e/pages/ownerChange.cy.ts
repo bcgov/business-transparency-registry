@@ -111,9 +111,8 @@ describe('pages -> Beneficial Owner Change - no preloaded data in tables', () =>
     const summaryTableHeaders = cy.get('[data-cy="individualsSummaryTable"]').get('th')
     summaryTableHeaders
       .should('contain', 'Name')
-      .and('contain', 'Address')
       .and('contain', 'Details')
-      .and('contain', 'Significance Dates')
+      .and('contain', 'Effective Dates')
       .and('contain', 'Control')
     // body should contain correct empty text
     cy.get('[data-cy="individualsSummaryTable"]').get('td')

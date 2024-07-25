@@ -1,76 +1,141 @@
 <template>
   <BcrosTablesTable
     data-cy="individualsSummaryTable"
+    :table-name="`Significant Individuals`"
+    icon="i-mdi-account-multiple-outline"
     :headers="headers"
     :items="individuals"
     :empty-state="$t('texts.tables.emptyTexts.individualsSummaryTable')"
   >
+    <!-- To-Do:
+      the v-if is set to false for now; it will be update in ticket #21656 so the
+      warning message is displayed when there is any redacted information.
+     -->
+    <template v-if="false" #header-warning>
+      <div class="flex flex-row ml-3">
+        <UIcon name="i-mdi-alert" class="bg-orange-500 mt-0.5 mr-1" />
+        <span class="text-sm">
+          <strong>{{ $t('summaryTable.alert.note') }}:</strong>
+          {{ $t('summaryTable.alert.hiddenInfo') }}
+        </span>
+      </div>
+    </template>
     <template #table-row="{ item, index }">
-      <tr v-if="item.ui.action != FilingActionE.REMOVE && editingIndex != index">
-        <td data-cy="summary-table-name">
-          <span class="font-bold">{{ item.name.fullName.toUpperCase() }}</span><br>
-          <span v-if="item.name.preferredName">{{ item.name.preferredName }}<br></span>
-          <span>{{ item.email }}</span>
-        </td>
-        <td data-cy="summary-table-address">
-          <BcrosInputsAddressDisplay :model-value="item.address" />
-        </td>
-        <td data-cy="summary-table-details">
-          <span>{{ item.birthDate }}</span><br>
-          <span v-if="item.tax.taxNumber">{{ item.tax.taxNumber }}<br></span>
-          <span v-else>{{ $t('texts.noCRATaxNumber') }}<br></span><br>
-          <label>{{ $t('labels.citizenships') }}:</label><br>
-          <span v-for="country in item.citizenships" :key="country.alpha_2">
-            {{ country.name }}<br>
-          </span><br>
-          <span>{{ getTaxResidentText(item.name.isTaxResident) }}</span>
-        </td>
-        <td data-cy="summary-table-dates">
-          {{
-            $t('texts.dateRange', {
-              start: item.startDate ? item.startDate : $t('labels.unknown'),
-              end: item.endDate ? item.endDate : $t('labels.current')
-            })
-          }}
-        </td>
-        <td data-cy="summary-table-controls">
-          <div v-if="item.controlOfShares.percentage !== PercentageRangeE.NO_SELECTION">
-            <span class="font-bold italic">
-              {{ $t('labels.shares') }}
-            </span>
-            <p>{{ getSharesControlText(item) }}</p>
-            <p v-if="item.controlOfShares.inConcertControl">
-              {{ $t('texts.sharesAndVotes.summary.inConcert') }}
-            </p>
-          </div>
-          <div v-if="item.controlOfVotes.percentage !== PercentageRangeE.NO_SELECTION">
-            <span class="font-bold italic">
-              {{ $t('labels.votes') }}
-            </span>
-            <p>{{ getVotesControlText(item) }}</p>
-            <p v-if="item.controlOfVotes.inConcertControl">
-              {{ $t('texts.sharesAndVotes.summary.inConcert') }}
-            </p>
-          </div>
-          <div v-if="Object.values(item.controlOfDirectors).includes(true)" class="mt-3">
-            <span class="font-bold italic">
-              {{ $t('labels.directors') }}
-            </span>
-            <p>{{ getDirectorsControlText(item.controlOfDirectors) }}</p>
-            <p v-if="item.controlOfDirectors.inConcertControl">
-              {{ $t('texts.controlOfDirectors.summary.inConcert') }}
-            </p>
-          </div>
-          <div v-if="item.controlOther" class="mt-3">
-            <span class="font-bold italic">
-              {{ $t('labels.other') }}
-            </span>
-            <p>{{ item.controlOther }}</p>
-          </div>
-        </td>
-        <template v-if="edit">
-          <td data-cy="summary-table-buttons">
-            <div class="flex flex-nowrap justify-end">
+      <!-- To-Do:
+        The content of table data will be updated in ticket #21656 to match the new UI design;
+        Re-organize the i18n file for Summary Table
+      -->
+      <template v-if="item.ui.action != FilingActionE.REMOVE && editingIndex != index">
+        <tr class="data-row border-t border-gray-200">
+          <!-- Name Column -->
+          <td data-cy="summary-table-name">
+            <div class="data-wrapper">
+              <div>
+                {{ item.name.fullName.toUpperCase() }}
+                <!-- To-Do: add the tag for status, e.g., 'NEW', 'UPDATED', 'CEASED' -->
+              </div>
+              <BcrosTablesDetailsInfoBox
+                v-if="item.name.preferredName"
+                :title="$t('summaryTable.body.preferredName')"
+                :content="item.name.preferredName"
+              />
+              <BcrosTablesDetailsInfoBox
+                v-if="item.birthDate"
+                :title="$t('summaryTable.body.born')"
+                :content="item.birthDate"
+              />
+              <!--
+                To-Do: display country flags for countries of citizenship
+                Question: how do we handle multiple citizenships?
+              -->
+            </div>
+          </td>
+
+          <!-- Detials Column -->
+          <td data-cy="summary-table-details">
+            <div class="data-wrapper">
+              <div>{{ item.email }}</div>
+
+              <BcrosInputsAddressDisplay
+                :model-value="item.address"
+              />
+
+              <BcrosTablesDetailsInfoBox
+                v-if="item.address.locationDescription"
+                :title="$t('summaryTable.body.locationDescription')"
+                :content="item.address.locationDescription"
+              />
+
+              <!-- To-Do: phone number -->
+
+              <BcrosTablesDetailsInfoBox
+                :title="$t('summaryTable.body.taxResidency.label')"
+                :content="item.isTaxResident?
+                  $t('summaryTable.body.taxResidency.canada') :
+                  $t('summaryTable.body.taxResidency.other')
+                "
+              />
+
+              <div v-if="item.tax.taxNumber">
+                {{ item.tax.taxNumber }}
+              </div>
+            </div>
+          </td>
+
+          <!-- Control Column -->
+          <td data-cy="summary-table-controls">
+            <div class="data-wrapper">
+              <div v-if="item.controlOfShares.percentage !== PercentageRangeE.NO_SELECTION">
+                <span class="font-bold italic">
+                  {{ $t('labels.shares') }}
+                </span>
+                <p>{{ getSharesControlText(item) }}</p>
+                <p v-if="item.controlOfShares.inConcertControl">
+                  {{ $t('texts.sharesAndVotes.summary.inConcert') }}
+                </p>
+              </div>
+              <div v-if="item.controlOfVotes.percentage !== PercentageRangeE.NO_SELECTION">
+                <span class="font-bold italic">
+                  {{ $t('labels.votes') }}
+                </span>
+                <p>{{ getVotesControlText(item) }}</p>
+                <p v-if="item.controlOfVotes.inConcertControl">
+                  {{ $t('texts.sharesAndVotes.summary.inConcert') }}
+                </p>
+              </div>
+              <div v-if="Object.values(item.controlOfDirectors).includes(true)">
+                <span class="font-bold italic">
+                  {{ $t('labels.directors') }}
+                </span>
+                <p>{{ getDirectorsControlText(item.controlOfDirectors) }}</p>
+                <p v-if="item.controlOfDirectors.inConcertControl">
+                  {{ $t('texts.controlOfDirectors.summary.inConcert') }}
+                </p>
+              </div>
+              <div v-if="item.controlOther">
+                <span class="font-bold italic">
+                  {{ $t('labels.other') }}
+                </span>
+                <p>{{ item.controlOther }}</p>
+              </div>
+            </div>
+          </td>
+
+          <!-- Effective Dates Column -->
+          <td data-cy="summary-table-dates">
+            <div class="data-wrapper">
+              {{
+                $t('texts.dateRange', {
+                  start: item.startDate ? item.startDate : $t('labels.unknown'),
+                  end: item.endDate ? item.endDate : $t('labels.current')
+                })
+              }}<br>
+              {{ item.startDate }}<br>
+              {{ item.endDate }}
+            </div>
+          </td>
+          <td v-if="edit" data-cy="summary-table-buttons" class="action-button align-top">
+            <div class="flex flex-nowrap justify-end overflow-hidden mt-2">
               <UButton
                 :ui="{
                   rounded: 'rounded-none focus-visible:rounded-md',
@@ -107,18 +172,61 @@
               </UPopover>
             </div>
           </td>
-        </template>
-      </tr>
+        </tr>
+
+        <!--
+          placeholder row for display warning message for minor SI
+          the v-if is set to false until the feature is implemented;
+          rules for minor: #20621
+        -->
+        <tr v-if="false">
+          <td colspan="5">
+            TBD - Message for Minor SI
+          </td>
+        </tr>
+
+        <!-- to be updated in #21660 -->
+        <tr v-if="item.missingInfoReason !== ''">
+          <td colspan="5">
+            TBD - Unable to obtain or confirm information
+            {{ item.missingInfoReason }}
+          </td>
+        </tr>
+
+        <!--
+          placeholder row for cessation date and buttons
+          the v-if is set to false until the feature is implemented
+        -->
+        <tr v-if="false">
+          <td colspan="5">
+            TBD - Component for cessation date and buttons
+          </td>
+        </tr>
+      </template>
+
       <tr v-if="isEditing && editingIndex === index">
         <td data-cy="summary-table-edit-form" colspan="100%">
-          <div class="bg-white rounded flex flex-row">
-            <label class="font-bold text-base text-gray-900 min-w-[190px] mt-3">
-              {{ $t('labels.editIndividual') }}
-            </label>
+          <div class="bg-primary text-white flex items-center justify-between p-3">
+            <div class="flex item-center">
+              <UIcon name="i-mdi-pencil mt-1 mr-1" />
+              <span class="font-bold">
+                Editing {{ capFirstLetterInName(item.name.fullName) }}
+              </span>
+            </div>
+            <UButton
+              class="items-center"
+              :label="`Cancel`"
+              icon="i-mdi-close"
+              :trailing="true"
+              @click="closeEditingMode"
+            />
+          </div>
+          <div class="bg-white rounded">
             <IndividualPersonAddNew
               :index="index"
               :set-significant-individual="copyIndividualToEdit()"
-              class="ml-8 text-base text-gray-900"
+              class="text-base text-gray-900 w-full pb-5"
+              :edit-mode="true"
               @cancel="closeEditingMode"
               @update="updateSignificantIndividual($event.index, $event.updatedSI)"
               @remove="removeSignificantIndividual(index)"
@@ -131,7 +239,7 @@
       <tr v-if="isEmptyState">
         <td colspan="100%">
           <div class="text-sm text-center text-gray-700 px-3 py-4">
-            {{ $t('texts.tables.emptyTexts.individualsSummaryTable') }}
+            {{ $t('summaryTable.empty') }}
           </div>
         </td>
       </tr>
@@ -167,23 +275,15 @@ const editingIndex = ref(-1)
 
 const t = useNuxtApp().$i18n.t
 const headers = [
-  { content: t('labels.name'), width: '20%' },
-  { content: t('labels.address'), width: '20%' },
-  { content: t('labels.details'), width: '20%' },
-  { content: t('labels.significanceDates'), width: '20%' },
-  { content: t('labels.control'), width: '20%' }
+  { content: t('labels.name'), width: '25%' },
+  { content: t('labels.details'), width: '25%' },
+  { content: t('labels.control'), width: '30%' },
+  { content: t('labels.effectiveDates'), width: '20%' }
 ]
 
 const isEmptyState = computed(() => {
   return props.individuals.filter(individual => individual.ui.action !== FilingActionE.REMOVE).length === 0
 })
-
-function getTaxResidentText (isTaxResident: boolean) {
-  if (isTaxResident) {
-    return t('texts.isTaxResident')
-  }
-  return t('texts.isNotTaxResident')
-}
 
 function getControlTextField (items: { value: boolean, field: string }[]) {
   const activeLabels = items.filter(item => item.value).map(item => item.field)
@@ -289,10 +389,22 @@ function updateSignificantIndividual (index: number | undefined, updatedSI: SiSc
   }
   closeEditingMode()
 }
+
+/** Capitalize the first letter in the given fullname. */
+function capFirstLetterInName (fullName: string) {
+  return fullName
+    .split(' ')
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ')
+}
 </script>
 
 <style scoped>
-td {
+.data-row > td:not(.action-button) {
   @apply px-3 py-4 align-text-top whitespace-normal text-sm text-gray-700
+}
+
+.data-wrapper {
+  @apply flex flex-col gap-3
 }
 </style>

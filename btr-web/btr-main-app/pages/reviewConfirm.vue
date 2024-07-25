@@ -16,18 +16,11 @@
       </div>
     </div>
     <div class="bg-white rounded-[5px] mt-10">
-      <div class="bg-blue-50 flex p-5 rounded-t-[5px]">
-        <UIcon class="text-blue-400 text-2xl" name="i-mdi-account-star" />
-        <h3 class="font-bold ml-2" data-cy="summary-table-header">
-          {{ $t('labels.significantIndividuals') }}
-        </h3>
-      </div>
       <IndividualPersonSummaryTable
         :individuals="currentSIFiling.significantIndividuals || []"
         :edit="false"
       />
     </div>
-
     <h2 class="font-bold text-lg mt-16" data-cy="review-confirm-section-heading">
       1. {{ $t('texts.folioNumber.reviewAndConfirm.title') }}
     </h2>

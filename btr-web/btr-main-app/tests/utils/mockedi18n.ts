@@ -13,7 +13,8 @@ export const mockedI18n = createI18n({
       placeholders: { ...enCommon.placeholders, ...en.placeholders },
       pageHeadings: { ...en.pageHeadings },
       sectionTitles: { ...en.sectionTitles },
-      texts: { ...en.texts }
+      texts: { ...en.texts },
+      summaryTable: { ...en.summaryTable }
     }
   }
 })

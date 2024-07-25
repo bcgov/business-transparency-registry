@@ -21,7 +21,7 @@
     "shares": "Shares",
     "votes": "Votes",
     "sharesAndVotes": "Control of Shares and Votes",
-    "significanceDates": "Significance Dates",
+    "effectiveDates": "Effective Dates",
     "significantIndividuals": "Significant Individuals",
     "significantIndividualChangeDate": "Significant Individual Filing Effective Date",
     "lastKnownAddress": "Address",
@@ -145,10 +145,6 @@
         "inConcert": "25% or more of shares or votes exercised in concert"
       }
     },
-
-
-
-
     "controlOfDirectors": {
       "text": {
         "part1": "If this individual has control of the right to ",
@@ -175,9 +171,6 @@
         "inConcert": "Control of directors exercised in concert"
       }
     },
-
-
-
     "otherReasons": {
       "description": "Enter any other reason(s) this individual is a significant individual.",
       "textAreaPlaceholder": "Other reasons for individual significance (Optional)"
@@ -188,11 +181,6 @@
     "isNotTaxResident": "Not a Tax Resident of Canada",
     "myRegDetails": "Your BC Registries Details are shared with businesses that list you as a significant individudal.",
     "significantIndividualChange": "Select the date of your significant individual changes. If you have significant individual changes that occurred on different dates, you will need to perform multiple Significant Individual Change filings — one for each unique date.",
-    "tables": {
-      "emptyTexts": {
-        "individualsSummaryTable": "You have no Significant individuals listed"
-      }
-    },
     "taxNumber": "A 9-digit Social Insurance Number (SIN), an Individual Tax Number (ITN), or a Temporary Taxation Number (TTN) is required if this individual has one.",
     "taxResidency": "Indicate if this person is a resident of Canada for Income Tax purposes.",
     "reviewConfirm": "Review the information in your registration. If you need to change anything, return to the previous step to make the necessary change.",
@@ -389,38 +377,64 @@
       "proof":"{boldStart}Attention:{boldEnd} The Registrar may request proof of the determination of incapacity. The company must retain proof of the determination of incapacity made by a court, health authority designate or prescribed individual as long as this individual is incapable of managing their own affairs."
     }
   },
-  "controlTableHeader": {
-    "name": "Name",
-    "controlType": "Control Type",
-    "individualConnection": "Individual Connection"
-  },
-  "controlTableBody": {
-    "name": {
-      "preferredName": "Preferred Name",
-      "birthYear": "Birth year"
+  "controlTable": {
+    "tableName": "Acting jointly or in concert",
+    "header": {
+      "name": "Name",
+      "controlType": "Control Type",
+      "individualConnection": "Individual Connection"
     },
-    "controlType": {
-      "shares": "Shares",
-      "votes": "Votes",
-      "director": "Control of Directors",
-      "jointly": "Jointly",
-      "inConcert": "In concert"
-    },
-    "individualConnection": {
-      "placeholder": {
-        "jointly": "Choose individual(s) acting jointly",
-        "inConcert": "Choose individual(s) acting in concert",
-        "searchInput": "Find a person"
+    "body": {
+      "name": {
+        "preferredName": "Preferred Name",
+        "birthYear": "Birth year"
       },
-      "floatingLabel": {
-        "jointly": "Individual(s) acting jointly",
-        "inConcert": "Individual(s) acting in concert"
+      "controlType": {
+        "shares": "Shares",
+        "votes": "Votes",
+        "director": "Control of Directors",
+        "jointly": "Jointly",
+        "inConcert": "In concert"
+      },
+      "individualConnection": {
+        "placeholder": {
+          "jointly": "Choose individual(s) acting jointly",
+          "inConcert": "Choose individual(s) acting in concert",
+          "searchInput": "Find a person"
+        },
+        "floatingLabel": {
+          "jointly": "Individual(s) acting jointly",
+          "inConcert": "Individual(s) acting in concert"
+        }
+      },
+      "empty": "No data for this table (placeholder text)",
+      "alert": {
+        "important": "Important: ",
+        "message": "You have only entered 1 individual who is acting jointly and or in concert. You need {boldStart}at least 2 individuals{boldEnd} who are listed as acting jointly and or in concert in order to complete your submission."
       }
+    }
+  },
+  "summaryTable": {
+    "tableName": "Significant Individuals",
+    "header": {
+      "name": "Name",
+      "control": "Control",
+      "effectiveDates": "Effective Dates"
     },
-    "empty": "No data for this table (placeholder text)",
+    "body": {
+      "preferredName": "Preferred Name",
+      "born": "Born",
+      "taxResidency": {
+        "label": "Tax Residency",
+        "canada": "Canada",
+        "other": "Other"
+      },
+      "locationDescription": "Location Description"
+    },
+    "empty": "You have no Significant individuals listed",
     "alert": {
-      "important": "Important: ",
-      "message": "You have only entered 1 individual who is acting jointly and or in concert. You need {boldStart}at least 2 individuals{boldEnd} who are listed as acting jointly and or in concert in order to complete your submission."
+      "note": "Note",
+      "hiddenInfo": "Some information is not shown due to privacy reasons"
     }
   }
 }
