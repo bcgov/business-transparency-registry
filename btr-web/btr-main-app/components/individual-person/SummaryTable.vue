@@ -11,7 +11,7 @@
       the v-if is set to false for now; it will be update in ticket #21656 so the
       warning message is displayed when there is any redacted information.
      -->
-    <template v-if="true" #header-warning>
+    <template v-if="false" #header-warning>
       <div class="flex flex-row ml-3">
         <UIcon name="i-mdi-alert" class="bg-orange-500 mt-0.5 mr-1" />
         <span class="text-sm">
