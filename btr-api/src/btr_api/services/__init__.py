@@ -37,6 +37,7 @@ from .bor import BorService
 from .entity import EntityService
 from .json_schema import SchemaService
 from .pay import PayService
+from .registries_search import RegSearchService
 from .submission import SubmissionService
 
 PAYMENT_REQUEST_TEMPLATE = {
@@ -49,3 +50,4 @@ btr_pay = PayService(default_invoice_payload={'filingInfo': {'filingTypes': [{'f
 btr_auth = AuthService()
 btr_bor = BorService()
 btr_entity = EntityService()
+btr_reg_search = RegSearchService()

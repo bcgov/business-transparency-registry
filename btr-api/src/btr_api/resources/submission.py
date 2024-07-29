@@ -58,6 +58,7 @@ from btr_api.services import btr_auth
 from btr_api.services import btr_bor
 from btr_api.services import btr_entity
 from btr_api.services import btr_pay
+from btr_api.services import btr_reg_search
 from btr_api.services import SchemaService
 from btr_api.services import SubmissionService
 from btr_api.services.validator import validate_entity
@@ -161,11 +162,13 @@ def create_register():
             ).json()
             entity['business']['addresses'] = [entity_addresses.get('registeredOffice', {}).get('deliveryAddress')]
             btr_bor.update_owners(submission, entity, token)
+            # update record in REG Search
+            btr_reg_search.update_business(submission, entity, token)
 
         except ExternalServiceException as err:
             # Log error and continue to return successfully (does NOT block the submission)
             current_app.logger.info(err.error)
-            current_app.logger.error('Error updating record in BOR for submission: %s', submission.id)
+            current_app.logger.error('Error updating search record for submission: %s', submission.id)
 
         return jsonify(id=submission.id), HTTPStatus.CREATED
 

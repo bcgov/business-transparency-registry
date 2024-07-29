@@ -192,7 +192,7 @@ def _get_filing(entity_stmnt: dict, person_stmnts: dict, ooc_stmnts: list):
 
 def generate_data(locale_counts: dict[str, int]):
     """Generate sample data for search."""
-    user = User.find_by_username('service-account-nds')
+    user = User.find_by_username('service-account-btr')
 
     if not user:
         current_app.logger.debug('error user not found.')
