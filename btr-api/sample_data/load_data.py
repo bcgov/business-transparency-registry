@@ -238,7 +238,7 @@ def _get_filings(ooc_stmnts: list, entity_stmnts: dict, person_stmnts: dict):
 def load_data():
     """Load data via csv files BTR."""
     max = 50000
-    user = User.find_by_username('service-account-nds')
+    user = User.find_by_username('service-account-btr')
     if not user:
         current_app.logger.debug('error user not found.')
         return

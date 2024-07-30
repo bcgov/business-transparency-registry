@@ -58,6 +58,7 @@ from btr_api.services import btr_auth
 from btr_api.services import btr_bor
 from btr_api.services import btr_entity
 from btr_api.services import btr_pay
+from btr_api.services import btr_reg_search
 from btr_api.services import SchemaService
 from btr_api.services import SubmissionService
 from btr_api.services.validator import validate_entity
@@ -130,8 +131,7 @@ def create_register():
         btr_auth.is_authorized(request=request, business_identifier=business_identifier)
 
         # get entity
-        identifier = json_input['businessIdentifier']
-        entity: dict = btr_entity.get_entity_info(jwt, identifier).json()
+        entity: dict = btr_entity.get_entity_info(jwt, business_identifier).json()
 
         # validate entity; return FORBIDDEN for historial and frozen companies
         if entity_errors := validate_entity(entity):
@@ -157,15 +157,17 @@ def create_register():
             # update record in BOR (search)
             token = btr_auth.get_bearer_token()
             entity_addresses: dict[str, dict[str, dict]] = btr_entity.get_entity_info(
-                jwt, f'{identifier}/addresses'
+                jwt, f'{business_identifier}/addresses'
             ).json()
             entity['business']['addresses'] = [entity_addresses.get('registeredOffice', {}).get('deliveryAddress')]
             btr_bor.update_owners(submission, entity, token)
+            # update record in REG Search
+            btr_reg_search.update_business(submission, entity, token)
 
         except ExternalServiceException as err:
             # Log error and continue to return successfully (does NOT block the submission)
             current_app.logger.info(err.error)
-            current_app.logger.error('Error updating record in BOR for submission: %s', submission.id)
+            current_app.logger.error('Error updating search record for submission: %s', submission.id)
 
         return jsonify(id=submission.id), HTTPStatus.CREATED
 

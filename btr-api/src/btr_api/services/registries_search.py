@@ -31,7 +31,10 @@
 # CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
-"""Manages bor api interactions."""
+"""Manages registries search api interactions.
+
+NOTE: this is temporary as the trickle feed listener will handle this in the future.
+"""
 from http import HTTPStatus
 
 import requests
@@ -41,55 +44,66 @@ from btr_api.exceptions import ExternalServiceException
 from btr_api.models import Submission
 
 
-class BorService:
+class RegSearchService:
     """
-    A class that provides utility functions for connecting with the BC Registries bor-api.
+    A class that provides utility functions for connecting with the BC Registries search-api.
     """
     app: Flask = None
     svc_url: str = None
     timeout: int = None
 
     def __init__(self, app: Flask = None):
-        """Initialize the bor service."""
+        """Initialize the registries search service."""
         if app:
             self.init_app(app)
 
     def init_app(self, app: Flask):
         """Initialize app dependent variables."""
         self.app = app
-        self.svc_url = app.config.get('BOR_SVC_URL')
-        self.timeout = app.config.get('BOR_API_TIMEOUT', 20)
+        self.svc_url = app.config.get('SEARCH_SVC_URL')
+        self.timeout = app.config.get('SEARCH_API_TIMEOUT', 20)
 
-    def update_owners(self, submission: Submission, business: dict, token: str) -> requests.Response:
-        """Update owners via the bor-api."""
+    def update_business(self, submission: Submission, business: dict, token: str) -> requests.Response:
+        """Update businesses via the search-api."""
         try:
+            business_identifier = business['business']['identifier']
             # collect current parties
-            parties = {}
+            parties = []
             for person in submission.payload.get('personStatements', []):
-                person_id = person['statementID']
-                parties[person_id] = person
+                party_name = ''
+                for name in person.get('names'):
+                    if name.get('type') == 'individual':  # expecting this to be 'individual' or 'alternative'
+                        party_name = name.get('fullName')
+                        break
+                if not party_name:
+                    self.app.logger.debug('Person names: %s', person.get('names'))
+                    self.app.logger.error('Error parsing SI name for %s', business_identifier)
 
-            # combine ownership details and parties
-            owners = []
-            for ownership_info in submission.payload.get('ownershipOrControlStatements', []):
-                party_id = ownership_info['interestedParty']['describedByPersonStatement']
-                ownership_info['interestedParty'] = {
-                    'describedByPersonStatement': party_id,
-                    **parties[party_id]
-                }
-                owners.append(ownership_info)
+                parties.append({
+                    'id': f"{business_identifier}_{person['uuid']}",
+                    'partyName': party_name,
+                    'partyRoles': ['significant individual'],
+                    'partyType': 'person'
+                })
 
-            # make update call to bor with headers + payload
-            payload = {**business, 'owners': owners}
+            # make update call to reg search with headers + payload
+            payload = {
+                'type': 'partial',
+                'businesses': [{
+                    'id': business_identifier,
+                    'parties': {'add': parties}
+                }]
+            }
+
             headers = {'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json'}
-            resp = requests.put(url=self.svc_url + '/internal/solr/update',
+            resp = requests.put(url=self.svc_url + '/internal/solr/import',
                                 json=payload,
                                 headers=headers,
                                 timeout=self.timeout)
 
-            if resp.status_code not in [HTTPStatus.OK, HTTPStatus.CREATED, HTTPStatus.ACCEPTED]:
+            if not resp.ok:
                 error = f'{resp.status_code} - {str(resp.json())}'
-                self.app.logger.debug('Invalid response from bor-api: %s', error)
+                self.app.logger.debug('Invalid response from search-api: %s', error)
                 raise ExternalServiceException(error=error, status_code=HTTPStatus.SERVICE_UNAVAILABLE)
 
             return resp
@@ -98,8 +112,8 @@ class BorService:
             # pass along
             raise exc
         except (requests.exceptions.ConnectionError, requests.exceptions.Timeout) as err:
-            self.app.logger.debug('bor-api connection failure:', repr(err))
+            self.app.logger.debug('search-api connection failure:', repr(err))
             raise ExternalServiceException(error=repr(err), status_code=HTTPStatus.SERVICE_UNAVAILABLE) from err
         except Exception as err:
-            self.app.logger.debug('bor-api integration (update owners) failure:', repr(err))
+            self.app.logger.debug('search-api integration (update businesses) failure:', repr(err))
             raise ExternalServiceException(error=repr(err), status_code=HTTPStatus.SERVICE_UNAVAILABLE) from err
