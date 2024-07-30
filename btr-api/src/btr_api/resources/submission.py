@@ -131,8 +131,7 @@ def create_register():
         btr_auth.is_authorized(request=request, business_identifier=business_identifier)
 
         # get entity
-        identifier = json_input['businessIdentifier']
-        entity: dict = btr_entity.get_entity_info(jwt, identifier).json()
+        entity: dict = btr_entity.get_entity_info(jwt, business_identifier).json()
 
         # validate entity; return FORBIDDEN for historial and frozen companies
         if entity_errors := validate_entity(entity):
@@ -158,7 +157,7 @@ def create_register():
             # update record in BOR (search)
             token = btr_auth.get_bearer_token()
             entity_addresses: dict[str, dict[str, dict]] = btr_entity.get_entity_info(
-                jwt, f'{identifier}/addresses'
+                jwt, f'{business_identifier}/addresses'
             ).json()
             entity['business']['addresses'] = [entity_addresses.get('registeredOffice', {}).get('deliveryAddress')]
             btr_bor.update_owners(submission, entity, token)

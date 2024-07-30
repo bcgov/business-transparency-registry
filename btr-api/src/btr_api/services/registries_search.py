@@ -66,7 +66,7 @@ class RegSearchService:
     def update_business(self, submission: Submission, business: dict, token: str) -> requests.Response:
         """Update businesses via the search-api."""
         try:
-            business_identifier = business['identifier']
+            business_identifier = business['business']['identifier']
             # collect current parties
             parties = []
             for person in submission.payload.get('personStatements', []):
@@ -90,7 +90,7 @@ class RegSearchService:
             payload = {
                 'type': 'partial',
                 'businesses': [{
-                    'id': business['identifier'],
+                    'id': business_identifier,
                     'parties': {'add': parties}
                 }]
             }
@@ -101,7 +101,7 @@ class RegSearchService:
                                 headers=headers,
                                 timeout=self.timeout)
 
-            if resp.status_code not in [HTTPStatus.OK, HTTPStatus.CREATED, HTTPStatus.ACCEPTED]:
+            if not resp.ok:
                 error = f'{resp.status_code} - {str(resp.json())}'
                 self.app.logger.debug('Invalid response from search-api: %s', error)
                 raise ExternalServiceException(error=error, status_code=HTTPStatus.SERVICE_UNAVAILABLE)
