@@ -20,6 +20,7 @@
         </span>
       </div>
     </template>
+
     <template #table-row="{ item, index }">
       <tr v-if="item.ui.action != FilingActionE.REMOVE && editingIndex != index">
         <td data-cy="summary-table-name">
@@ -55,8 +56,8 @@
           </p>
         </td>
         <template v-if="edit">
-          <td data-cy="summary-table-buttons">
-            <div class="flex flex-nowrap justify-end">
+          <td v-if="edit" data-cy="summary-table-buttons" class="action-button align-top">
+            <div class="flex flex-nowrap justify-end overflow-hidden mt-2">
               <UButton
                 :ui="{
                   rounded: 'rounded-none focus-visible:rounded-md',
@@ -93,37 +94,37 @@
               </UPopover>
             </div>
           </td>
-        </tr>
+        </template>
+      </tr>
 
-        <!--
+      <!--
           placeholder row for display warning message for minor SI
           the v-if is set to false until the feature is implemented;
           rules for minor: #20621
         -->
-        <tr v-if="false">
-          <td colspan="5">
-            TBD - Message for Minor SI
-          </td>
-        </tr>
+      <tr v-if="false">
+        <td colspan="5">
+          TBD - Message for Minor SI
+        </td>
+      </tr>
 
-        <!-- to be updated in #21660 -->
-        <tr v-if="item.missingInfoReason !== ''">
-          <td colspan="5">
-            TBD - Unable to obtain or confirm information
-            {{ item.missingInfoReason }}
-          </td>
-        </tr>
+      <!-- to be updated in #21660 -->
+      <tr v-if="item.missingInfoReason !== ''">
+        <td colspan="5">
+          TBD - Unable to obtain or confirm information
+          {{ item.missingInfoReason }}
+        </td>
+      </tr>
 
-        <!--
+      <!--
           placeholder row for cessation date and buttons
           the v-if is set to false until the feature is implemented
         -->
-        <tr v-if="false">
-          <td colspan="5">
-            TBD - Component for cessation date and buttons
-          </td>
-        </tr>
-      </template>
+      <tr v-if="false">
+        <td colspan="5">
+          TBD - Component for cessation date and buttons
+        </td>
+      </tr>
 
       <tr v-if="isEditing && editingIndex === index">
         <td data-cy="summary-table-edit-form" colspan="100%">
@@ -156,6 +157,7 @@
         </td>
       </tr>
     </template>
+
     <template #empty-state>
       <tr v-if="isEmptyState">
         <td colspan="100%">
