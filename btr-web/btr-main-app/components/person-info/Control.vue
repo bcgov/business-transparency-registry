@@ -101,9 +101,6 @@
         class="inline-block mr-1"
       >
       <br>
-      <div class="mt-2">
-        {{ getDirectorsControlText(item.controlOfDirectors) }}
-      </div>
       <UAccordion
         v-if="directorsAccordionItems.length"
         multiple
@@ -334,34 +331,34 @@ const convertDetailsToIcons = (details: SearchResultI, votes?: boolean, director
   if (!directors) {
     const checkField = votes ? details.controlOfVotes : details.controlOfShares
     if (checkField.beneficialOwner) {
-      rv.push({ src: '/_nuxt/assets/icons/shares-votes/beneficial-owner.svg', alt: 'Beneficial owner' })
+      rv.push({ src: '/icons/shares-votes/beneficial-owner.svg', alt: 'Beneficial owner' })
     }
 
     if (checkField.indirectControl) {
-      rv.push({ src: '/_nuxt/assets/icons/shares-votes/indirect-control.svg', alt: 'Indirect control' })
+      rv.push({ src: '/icons/shares-votes/indirect-control.svg', alt: 'Indirect control' })
     }
 
     if (checkField.registeredOwner) {
-      rv.push({ src: '/_nuxt/assets/icons/shares-votes/registered-owner.svg', alt: 'Registered owner' })
+      rv.push({ src: '/icons/shares-votes/registered-owner.svg', alt: 'Registered owner' })
     }
   }
 
   if (directors) {
     if (details.controlOfDirectors?.directControl) {
-      rv.push({ src: '/_nuxt/assets/icons/directors/direct-control.svg', alt: 'Direct control' })
+      rv.push({ src: '/icons/directors/direct-control.svg', alt: 'Direct control' })
     }
 
     if (details.controlOfDirectors?.indirectControl) {
-      rv.push({ src: '/_nuxt/assets/icons/directors/indirect-control.svg', alt: 'Indirect control' })
+      rv.push({ src: '/icons/directors/indirect-control.svg', alt: 'Indirect control' })
     }
 
     if (details.controlOfDirectors?.significantInfluence) {
-      rv.push({ src: '/_nuxt/assets/icons/directors/significant-influence.svg', alt: 'Significant influence' })
+      rv.push({ src: '/icons/directors/significant-influence.svg', alt: 'Significant influence' })
     }
   }
 
   if (rv.length === 0) {
-    rv.push({ src: '/_nuxt/assets/icons/other.svg', alt: 'Other' })
+    rv.push({ src: '/icons/other.svg', alt: 'Other' })
   }
   return rv
 }
