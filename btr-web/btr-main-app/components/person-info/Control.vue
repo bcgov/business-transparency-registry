@@ -186,7 +186,7 @@ const sharesAccordionItems = computed(() => {
   if (jointly.value.length > 0) {
     rv.push({
       label: `Acting jointly (${jointly.value.length + 1})`,
-      content: prop.item.name.fullName + '<br>' + jointly.value.map(i => i.legalName).join('<br>'),
+      content: jointly.value.map(i => i.legalName).join('<br>'),
       padded: false
     })
   }
@@ -194,7 +194,7 @@ const sharesAccordionItems = computed(() => {
   if (inconcert.value.length > 0) {
     rv.push({
       label: `Acting in concert(${inconcert.value.length + 1})`,
-      content: prop.item.name.fullName + '<br>' + inconcert.value.map(i => i.legalName).join('<br>'),
+      content: inconcert.value.map(i => i.legalName).join('<br>'),
       padded: false
     })
   }
@@ -208,7 +208,7 @@ const votesAccordionItems = computed(() => {
   if (jointly.value.length > 0) {
     rv.push({
       label: `Acting jointly (${jointly.value.length + 1})`,
-      content: prop.item.name.fullName + '<br>' + jointly.value.map(i => i.legalName).join('<br>'),
+      content: jointly.value.map(i => i.legalName).join('<br>'),
       padded: false
     })
   }
@@ -216,7 +216,7 @@ const votesAccordionItems = computed(() => {
   if (inconcert.value.length > 0) {
     rv.push({
       label: `Acting in concert(${inconcert.value.length + 1})`,
-      content: prop.item.name.fullName + '<br>' + inconcert.value.map(i => i.legalName).join('<br>'),
+      content: inconcert.value.map(i => i.legalName).join('<br>'),
       padded: false
     })
   }
@@ -231,7 +231,7 @@ const directorsAccordionItems = computed(() => {
   if (jointly.value.length > 0) {
     rv.push({
       label: `Acting jointly (${jointly.value.length + 1})`,
-      content: prop.item.name.fullName + '<br>' + jointly.value.map(i => i.legalName).join('<br>'),
+      content: jointly.value.map(i => i.legalName).join('<br>'),
       padded: false
     })
   }
@@ -239,7 +239,7 @@ const directorsAccordionItems = computed(() => {
   if (inconcert.value.length > 0) {
     rv.push({
       label: `Acting in concert(${inconcert.value.length + 1})`,
-      content: prop.item.name.fullName + '<br>' + inconcert.value.map(i => i.legalName).join('<br>'),
+      content: inconcert.value.map(i => i.legalName).join('<br>'),
       padded: false
     })
   }
