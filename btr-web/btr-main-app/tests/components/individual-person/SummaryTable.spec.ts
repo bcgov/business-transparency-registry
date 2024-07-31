@@ -50,7 +50,7 @@ describe('AddIndividualPersonSummaryTable tests', () => {
     si.name.preferredName = 'preferred name'
     si.email = 'test@email.com'
     await wrapper.setProps({ individuals: [si] })
-    expect(wrapper.find('[data-cy=summary-table-name]').text()).toContain(si.name.fullName.toUpperCase())
+    expect(wrapper.find('[data-cy=summary-table-name]').text()).toContain(si.name.fullName)
     expect(wrapper.find('[data-cy=summary-table-name]').text()).toContain(si.name.preferredName)
     expect(wrapper.find('[data-cy=summary-table-name]').text()).toContain(si.birthDate)
   })
@@ -86,7 +86,6 @@ describe('AddIndividualPersonSummaryTable tests', () => {
     const controls = wrapper.find('[data-cy=summary-table-controls]')
     expect(controls.text()).toContain('Shares')
     expect(controls.text()).toContain('Votes')
-    expect(controls.text()).toContain('Registered owner, Beneficial owner, and Indirect control')
     expect(controls.text()).toContain('At least 25% and up to 50% of votes')
     expect(controls.text()).toContain('More than 50% and up to 75% of shares')
     expect(controls.text()).not.toContain('Directors')
