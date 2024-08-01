@@ -1,12 +1,12 @@
 <template>
   <div data-cy="address-display">
-    <div
-      v-for="addressLine, i in addressData"
+    <p
+      v-for="(addressLine, i) in addressData"
       :key="addressLine + i"
       data-cy="address-line"
     >
       {{ addressLine }}
-    </div>
+    </p>
     <BcrosDetailsInfoBox
       v-if="address.locationDescription"
       class="mt-2"

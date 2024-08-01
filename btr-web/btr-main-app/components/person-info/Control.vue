@@ -140,6 +140,7 @@
 <script setup lang="ts">
 import { SiSchemaType, SiControlOfDirectorsSchemaType } from '~/utils/si-schema/definitions'
 import SiSchemaToBtrBodsConverters from '~/utils/btr-bods/si-schema-to-btr-bods-converters'
+import { ControlOfSharesDetailsE, ControlOfVotesDetailsE, ControlOfDirectorsDetailsE } from '~/enums/btr-bods-e'
 import { PercentageRangeE } from '~/enums/percentage-range-e'
 const t = useNuxtApp().$i18n.t
 
@@ -148,35 +149,28 @@ type IconType = { src: string; alt: string }
 const prop = defineProps<{ item: SiSchemaType }>()
 const interests = SiSchemaToBtrBodsConverters.getInterests(prop.item)
 
-const INTERESTS_SHARES_JOINT = 'controlType.shares.actingJointly'
-const INTERESTS_SHARES_CONCERT = 'controlType.shares.inConcertControl'
-const INTERESTS_VOTES_JOINT = 'controlType.votes.actingJointly'
-const INTERESTS_VOTES_CONCERT = 'controlType.votes.inConcertControl'
-const INTERESTS_DIRECTORS_JOINT = 'controlType.directors.actingJointly'
-const INTERESTS_DIRECTORS_CONCERT = 'controlType.directors.inConcertControl'
-
 const sharesJointly = computed(() => {
-  return interests.find(i => i.details === INTERESTS_SHARES_JOINT)?.connectedIndividuals || []
+  return interests.find(i => i.details === ControlOfSharesDetailsE.ACTING_JOINTLY)?.connectedIndividuals || []
 })
 
 const sharesInConcert = computed(() => {
-  return interests.find(i => i.details === INTERESTS_SHARES_CONCERT)?.connectedIndividuals || []
+  return interests.find(i => i.details === ControlOfSharesDetailsE.IN_CONCERT_CONTROL)?.connectedIndividuals || []
 })
 
 const votesJointly = computed(() => {
-  return interests.find(i => i.details === INTERESTS_VOTES_JOINT)?.connectedIndividuals || []
+  return interests.find(i => i.details === ControlOfVotesDetailsE.ACTING_JOINTLY)?.connectedIndividuals || []
 })
 
 const votesInConcert = computed(() => {
-  return interests.find(i => i.details === INTERESTS_VOTES_CONCERT)?.connectedIndividuals || []
+  return interests.find(i => i.details === ControlOfVotesDetailsE.IN_CONCERT_CONTROL)?.connectedIndividuals || []
 })
 
 const directorsJointly = computed(() => {
-  return interests.find(i => i.details === INTERESTS_DIRECTORS_JOINT)?.connectedIndividuals || []
+  return interests.find(i => i.details === ControlOfDirectorsDetailsE.ACTING_JOINTLY)?.connectedIndividuals || []
 })
 
 const directorsInConcert = computed(() => {
-  return interests.find(i => i.details === INTERESTS_DIRECTORS_CONCERT)?.connectedIndividuals || []
+  return interests.find(i => i.details === ControlOfDirectorsDetailsE.IN_CONCERT_CONTROL)?.connectedIndividuals || []
 })
 
 const sharesAccordionItems = computed(() => {
@@ -185,7 +179,7 @@ const sharesAccordionItems = computed(() => {
   const inconcert = sharesInConcert
   if (jointly.value.length > 0) {
     rv.push({
-      label: `Acting jointly (${jointly.value.length + 1})`,
+      label: `Acting jointly (${jointly.value.length})`,
       content: jointly.value.map(i => i.legalName).join('<br>'),
       padded: false
     })
@@ -193,7 +187,7 @@ const sharesAccordionItems = computed(() => {
 
   if (inconcert.value.length > 0) {
     rv.push({
-      label: `Acting in concert(${inconcert.value.length + 1})`,
+      label: `Acting in concert(${inconcert.value.length})`,
       content: inconcert.value.map(i => i.legalName).join('<br>'),
       padded: false
     })
@@ -207,7 +201,7 @@ const votesAccordionItems = computed(() => {
   const inconcert = votesInConcert
   if (jointly.value.length > 0) {
     rv.push({
-      label: `Acting jointly (${jointly.value.length + 1})`,
+      label: `Acting jointly (${jointly.value.length})`,
       content: jointly.value.map(i => i.legalName).join('<br>'),
       padded: false
     })
@@ -215,7 +209,7 @@ const votesAccordionItems = computed(() => {
 
   if (inconcert.value.length > 0) {
     rv.push({
-      label: `Acting in concert(${inconcert.value.length + 1})`,
+      label: `Acting in concert(${inconcert.value.length})`,
       content: inconcert.value.map(i => i.legalName).join('<br>'),
       padded: false
     })
@@ -230,7 +224,7 @@ const directorsAccordionItems = computed(() => {
 
   if (jointly.value.length > 0) {
     rv.push({
-      label: `Acting jointly (${jointly.value.length + 1})`,
+      label: `Acting jointly (${jointly.value.length})`,
       content: jointly.value.map(i => i.legalName).join('<br>'),
       padded: false
     })
@@ -238,7 +232,7 @@ const directorsAccordionItems = computed(() => {
 
   if (inconcert.value.length > 0) {
     rv.push({
-      label: `Acting in concert(${inconcert.value.length + 1})`,
+      label: `Acting in concert(${inconcert.value.length})`,
       content: inconcert.value.map(i => i.legalName).join('<br>'),
       padded: false
     })
