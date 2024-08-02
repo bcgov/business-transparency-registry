@@ -20,120 +20,42 @@
         </span>
       </div>
     </template>
+
     <template #table-row="{ item, index }">
-      <!-- To-Do:
-        The content of table data will be updated in ticket #21656 to match the new UI design;
-        Re-organize the i18n file for Summary Table
-      -->
-      <template v-if="item.ui.action != FilingActionE.REMOVE && editingIndex != index">
-        <tr class="data-row border-t border-gray-200">
-          <!-- Name Column -->
-          <td data-cy="summary-table-name">
-            <div class="data-wrapper">
-              <div>
-                {{ item.name.fullName.toUpperCase() }}
-                <!-- To-Do: add the tag for status, e.g., 'NEW', 'UPDATED', 'CEASED' -->
-              </div>
-              <BcrosTablesDetailsInfoBox
-                v-if="item.name.preferredName"
-                :title="$t('summaryTable.body.preferredName')"
-                :content="item.name.preferredName"
-              />
-              <BcrosTablesDetailsInfoBox
-                v-if="item.birthDate"
-                :title="$t('summaryTable.body.born')"
-                :content="item.birthDate"
-              />
-              <!--
-                To-Do: display country flags for countries of citizenship
-                Question: how do we handle multiple citizenships?
-              -->
-            </div>
-          </td>
+      <tr v-if="item.ui.action != FilingActionE.REMOVE && editingIndex != index">
+        <td data-cy="summary-table-name">
+          <PersonInfoName
+            :item="{
+              'legalName': item.name.fullName,
+              'alternateName': item.name.preferredName,
+              'birthDate': item.birthDate}"
+          />
+          <PersonInfoCitizenship
+            :nationalities="item.citizenships"
+          />
+        </td>
+        <!-- <td data-cy="summary-table-address">
+          <BcrosInputsAddressDisplay :model-value="item.address" />
+        </td> -->
+        <td class="align-top" data-cy="summary-table-details">
+          <PersonInfoDetails :item="item" />
+        </td>
 
-          <!-- Detials Column -->
-          <td data-cy="summary-table-details">
-            <div class="data-wrapper">
-              <div>{{ item.email }}</div>
+        <td data-cy="summary-table-controls">
+          <PersonInfoControl :item="item" />
+        </td>
 
-              <BcrosInputsAddressDisplay
-                :model-value="item.address"
-              />
-
-              <BcrosTablesDetailsInfoBox
-                v-if="item.address.locationDescription"
-                :title="$t('summaryTable.body.locationDescription')"
-                :content="item.address.locationDescription"
-              />
-
-              <!-- To-Do: phone number -->
-
-              <BcrosTablesDetailsInfoBox
-                :title="$t('summaryTable.body.taxResidency.label')"
-                :content="item.isTaxResident?
-                  $t('summaryTable.body.taxResidency.canada') :
-                  $t('summaryTable.body.taxResidency.other')
-                "
-              />
-
-              <div v-if="item.tax.taxNumber">
-                {{ item.tax.taxNumber }}
-              </div>
-            </div>
-          </td>
-
-          <!-- Control Column -->
-          <td data-cy="summary-table-controls">
-            <div class="data-wrapper">
-              <div v-if="item.controlOfShares.percentage !== PercentageRangeE.NO_SELECTION">
-                <span class="font-bold italic">
-                  {{ $t('labels.shares') }}
-                </span>
-                <p>{{ getSharesControlText(item) }}</p>
-                <p v-if="item.controlOfShares.inConcertControl">
-                  {{ $t('texts.sharesAndVotes.summary.inConcert') }}
-                </p>
-              </div>
-              <div v-if="item.controlOfVotes.percentage !== PercentageRangeE.NO_SELECTION">
-                <span class="font-bold italic">
-                  {{ $t('labels.votes') }}
-                </span>
-                <p>{{ getVotesControlText(item) }}</p>
-                <p v-if="item.controlOfVotes.inConcertControl">
-                  {{ $t('texts.sharesAndVotes.summary.inConcert') }}
-                </p>
-              </div>
-              <div v-if="Object.values(item.controlOfDirectors).includes(true)">
-                <span class="font-bold italic">
-                  {{ $t('labels.directors') }}
-                </span>
-                <p>{{ getDirectorsControlText(item.controlOfDirectors) }}</p>
-                <p v-if="item.controlOfDirectors.inConcertControl">
-                  {{ $t('texts.controlOfDirectors.summary.inConcert') }}
-                </p>
-              </div>
-              <div v-if="item.controlOther">
-                <span class="font-bold italic">
-                  {{ $t('labels.other') }}
-                </span>
-                <p>{{ item.controlOther }}</p>
-              </div>
-            </div>
-          </td>
-
-          <!-- Effective Dates Column -->
-          <td data-cy="summary-table-dates">
-            <div class="data-wrapper">
-              {{
-                $t('texts.dateRange', {
-                  start: item.startDate ? item.startDate : $t('labels.unknown'),
-                  end: item.endDate ? item.endDate : $t('labels.current')
-                })
-              }}<br>
-              {{ item.startDate }}<br>
-              {{ item.endDate }}
-            </div>
-          </td>
+        <td data-cy="summary-table-dates">
+          <p v-for="date in item.effectiveDates" :key="date.startDate">
+            {{
+              $t('texts.dateRange', {
+                start: date.startDate ? date.startDate : $t('labels.unknown'),
+                end: date.endDate ? date.endDate : $t('labels.current')
+              })
+            }}
+          </p>
+        </td>
+        <template v-if="edit">
           <td v-if="edit" data-cy="summary-table-buttons" class="action-button align-top">
             <div class="flex flex-nowrap justify-end overflow-hidden mt-2">
               <UButton
@@ -172,37 +94,37 @@
               </UPopover>
             </div>
           </td>
-        </tr>
+        </template>
+      </tr>
 
-        <!--
+      <!--
           placeholder row for display warning message for minor SI
           the v-if is set to false until the feature is implemented;
           rules for minor: #20621
         -->
-        <tr v-if="false">
-          <td colspan="5">
-            TBD - Message for Minor SI
-          </td>
-        </tr>
+      <tr v-if="false">
+        <td colspan="5">
+          TBD - Message for Minor SI
+        </td>
+      </tr>
 
-        <!-- to be updated in #21660 -->
-        <tr v-if="item.missingInfoReason !== ''">
-          <td colspan="5">
-            TBD - Unable to obtain or confirm information
-            {{ item.missingInfoReason }}
-          </td>
-        </tr>
+      <!-- to be updated in #21660 -->
+      <tr v-if="item.missingInfoReason !== ''">
+        <td colspan="5">
+          TBD - Unable to obtain or confirm information
+          {{ item.missingInfoReason }}
+        </td>
+      </tr>
 
-        <!--
+      <!--
           placeholder row for cessation date and buttons
           the v-if is set to false until the feature is implemented
         -->
-        <tr v-if="false">
-          <td colspan="5">
-            TBD - Component for cessation date and buttons
-          </td>
-        </tr>
-      </template>
+      <tr v-if="false">
+        <td colspan="5">
+          TBD - Component for cessation date and buttons
+        </td>
+      </tr>
 
       <tr v-if="isEditing && editingIndex === index">
         <td data-cy="summary-table-edit-form" colspan="100%">
@@ -235,6 +157,7 @@
         </td>
       </tr>
     </template>
+
     <template #empty-state>
       <tr v-if="isEmptyState">
         <td colspan="100%">
@@ -248,8 +171,7 @@
 </template>
 
 <script setup lang="ts">
-import { SiControlOfDirectorsSchemaType, SiSchemaType } from '~/utils/si-schema/definitions'
-import { PercentageRangeE } from '~/enums/percentage-range-e'
+import { SiSchemaType } from '~/utils/si-schema/definitions'
 
 const emit = defineEmits(['toggle-editing-mode'])
 const props = defineProps({
@@ -276,89 +198,14 @@ const editingIndex = ref(-1)
 const t = useNuxtApp().$i18n.t
 const headers = [
   { content: t('labels.name'), width: '25%' },
-  { content: t('labels.details'), width: '25%' },
-  { content: t('labels.control'), width: '30%' },
+  { content: t('labels.details'), width: '30%' },
+  { content: t('labels.control'), width: '25%' },
   { content: t('labels.effectiveDates'), width: '20%' }
 ]
 
 const isEmptyState = computed(() => {
   return props.individuals.filter(individual => individual.ui.action !== FilingActionE.REMOVE).length === 0
 })
-
-function getControlTextField (items: { value: boolean, field: string }[]) {
-  const activeLabels = items.filter(item => item.value).map(item => item.field)
-  return activeLabels.join('') || ''
-}
-
-function getSharesControlText (si: SiSchemaType) {
-  const field = getControlTextField([
-    { value: si.controlOfShares.registeredOwner || si.controlOfVotes.registeredOwner, field: 'registered' },
-    { value: si.controlOfShares.beneficialOwner || si.controlOfVotes.beneficialOwner, field: 'beneficial' },
-    { value: si.controlOfShares.indirectControl || si.controlOfVotes.indirectControl, field: 'indirect' }
-  ])
-
-  const shareRanges: Map<PercentageRangeE, string> = new Map([
-    [PercentageRangeE.MORE_THAN_75, t('texts.sharesAndVotes.percentageRange.moreThan75', { sharesOrVotes: 'shares' })],
-    [PercentageRangeE.MORE_THAN_50_TO_75, t('texts.sharesAndVotes.percentageRange.moreThan50To75',
-      { sharesOrVotes: 'shares' })],
-    [PercentageRangeE.AT_LEAST_25_TO_50, t('texts.sharesAndVotes.percentageRange.atLeast25To50',
-      { sharesOrVotes: 'shares' })],
-    [PercentageRangeE.LESS_THAN_25, t('texts.sharesAndVotes.percentageRange.lessThan25', { sharesOrVotes: 'shares' })],
-    [PercentageRangeE.NO_SELECTION, '']
-  ])
-
-  let shares: string = ''
-  if (si.controlOfShares.percentage) {
-    shares = shareRanges.get(si.controlOfShares.percentage) || ''
-  }
-
-  if (field) {
-    return t(
-      `texts.sharesAndVotes.summary.${field}`, { sharesAndVotes: shares })
-  }
-  return ''
-}
-
-function getVotesControlText (si: SiSchemaType) {
-  const field = getControlTextField([
-    { value: si.controlOfVotes.registeredOwner, field: 'registered' },
-    { value: si.controlOfVotes.beneficialOwner, field: 'beneficial' },
-    { value: si.controlOfVotes.indirectControl, field: 'indirect' }
-  ])
-
-  const voteRanges: Map<PercentageRangeE, string> = new Map([
-    [PercentageRangeE.MORE_THAN_75, t('texts.sharesAndVotes.percentageRange.moreThan75', { sharesOrVotes: 'votes' })],
-    [PercentageRangeE.MORE_THAN_50_TO_75, t('texts.sharesAndVotes.percentageRange.moreThan50To75',
-      { sharesOrVotes: 'votes' })],
-    [PercentageRangeE.AT_LEAST_25_TO_50, t('texts.sharesAndVotes.percentageRange.atLeast25To50',
-      { sharesOrVotes: 'votes' })],
-    [PercentageRangeE.LESS_THAN_25, t('texts.sharesAndVotes.percentageRange.lessThan25', { sharesOrVotes: 'votes' })],
-    [PercentageRangeE.NO_SELECTION, '']
-  ])
-
-  let votes: string = ''
-  if (si.controlOfVotes.percentage) {
-    votes += voteRanges.get(si.controlOfVotes.percentage)
-  }
-  if (field) {
-    return t(
-      `texts.sharesAndVotes.summary.${field}`, { sharesAndVotes: votes })
-  }
-
-  return ''
-}
-
-function getDirectorsControlText (controlOfDirectors: SiControlOfDirectorsSchemaType) {
-  const field = getControlTextField([
-    { value: controlOfDirectors.directControl, field: 'direct' },
-    { value: controlOfDirectors.indirectControl, field: 'indirect' },
-    { value: controlOfDirectors.significantInfluence, field: 'significantinfluence' }
-  ])
-  if (field) {
-    return t(`texts.controlOfDirectors.summary.${field}`)
-  }
-  return ''
-}
 
 function openEditingMode (index: number) {
   editingIndex.value = index
@@ -402,6 +249,9 @@ function capFirstLetterInName (fullName: string) {
 <style scoped>
 .data-row > td:not(.action-button) {
   @apply px-3 py-4 align-text-top whitespace-normal text-sm text-gray-700
+}
+td {
+  @apply px-3 py-4 align-top whitespace-normal text-sm text-gray-700
 }
 
 .data-wrapper {

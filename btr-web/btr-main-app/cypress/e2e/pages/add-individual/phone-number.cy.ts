@@ -37,7 +37,7 @@ describe('pages -> Add individual', () => {
       .should('have.value', '23a')
 
     cy.get('[data-cy="phoneNumberInput"]')
-      .find('.flag.f-ca')
+      .find('ul .flag.f-ca')
       .should('not.exist')
 
     // clear input
@@ -51,11 +51,11 @@ describe('pages -> Add individual', () => {
       .find('button')
       .click()
 
-    cy.get('.flag.f-ca')
+    cy.get('ul .flag.f-ca')
       .click()
 
     cy.get('[data-cy="phoneNumberInput"]')
-      .find('.flag.f-ca')
+      .find('input+span .flag.f-ca')
       .should('exist')
 
     cy.get('[data-cy="phoneNumber.countryCode"]')
@@ -75,11 +75,11 @@ describe('pages -> Add individual', () => {
       .find('button')
       .click()
 
-    cy.get('.flag.f-ca')
+    cy.get('ul .flag.f-ca')
       .click()
 
     cy.get('[data-cy="phoneNumberInput"]')
-      .find('.flag.f-ca')
+      .find('input+span .flag.f-ca')
       .should('exist')
 
     cy.get('[data-cy="phoneNumber.countryCode"]')

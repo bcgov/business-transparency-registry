@@ -39,6 +39,7 @@
     "vitest-environment-nuxt": "^1.0.0"
   },
   "dependencies": {
+    "country-list": "^2.3.0",
     "pinia": "^2.1.7",
     "uuid": "^9.0.1"
   }

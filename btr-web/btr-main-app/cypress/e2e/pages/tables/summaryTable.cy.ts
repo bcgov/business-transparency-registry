@@ -23,7 +23,7 @@ describe('pages -> Summary Table', () => {
 
       // check if the summary table contains` the correct data
       cy.get('[data-cy="individualsSummaryTable"]')
-        .get('[data-cy=summary-table-name]').contains(testData.profile1.fullName.toUpperCase())
+        .get('[data-cy=summary-table-name]').contains(testData.profile1.fullName)
         .get('[data-cy=summary-table-name]').contains(testData.profile1.preferredName)
         .get('[data-cy=summary-table-details]').contains(testData.profile1.email)
         .get('[data-cy=summary-table-details]').contains(testData.profile1.address.streetAddress)
@@ -32,13 +32,14 @@ describe('pages -> Summary Table', () => {
         .get('[data-cy=summary-table-details]').contains(testData.profile1.address.postalCode)
         .get('[data-cy=summary-table-details]').contains(testData.profile1.address.country)
         .get('[data-cy=summary-table-details]').contains(testData.profile1.taxNumber)
-
-      // todo: update tests for the Control column for SI profile 1
-      // .get('[data-cy=summary-table-controls]').contains(testData.profile1.summaryTable.shareControl)
-      // .get('[data-cy=summary-table-controls]').contains(testData.profile1.summaryTable.directorControl)
-
+        // .get('[data-cy=summary-table-details]').contains(testData.profile1.summaryTable.citizenship)
+        .get('[data-cy=summary-table-details]').contains(testData.profile1.summaryTable.taxResidency)
+        // todo: fixme: update on #TBD with new summary table
+        // .get('[data-cy=summary-table-controls]').contains(testData.profile1.summaryTable.shareControl)
+        // todo: fixme: update on #20756
+        // .get('[data-cy=summary-table-controls]').contains(testData.profile1.summaryTable.directorControl)
         .get('[data-cy=summary-table-dates]').contains(expectedDate)
-        .get('[data-cy=summary-table-name]').contains(testData.profile2.fullName.toUpperCase())
+        .get('[data-cy=summary-table-name]').contains(testData.profile2.fullName)
         .get('[data-cy=summary-table-name]').contains(testData.profile2.preferredName)
         .get('[data-cy=summary-table-details]').contains(testData.profile2.email)
         .get('[data-cy=summary-table-details]').contains(testData.profile2.address.streetAddress)
@@ -47,8 +48,9 @@ describe('pages -> Summary Table', () => {
         .get('[data-cy=summary-table-details]').contains(testData.profile2.address.postalCode)
         .get('[data-cy=summary-table-details]').contains(testData.profile2.address.country)
         .get('[data-cy=summary-table-details]').contains(testData.profile2.taxNumber)
-
-      // todo: update tests for the Control column for SI profile 2
+        // .get('[data-cy=summary-table-details]').contains(testData.profile2.summaryTable.citizenship)
+        .get('[data-cy=summary-table-details]').contains(testData.profile2.summaryTable.taxResidency)
+      // todo: fixme: update on #TBD with new summary table
       // .get('[data-cy=summary-table-controls]').contains(testData.profile2.summaryTable.shareControl)
       // .get('[data-cy=summary-table-controls]').contains(testData.profile2.summaryTable.directorControl)
     })
@@ -127,14 +129,14 @@ describe('pages -> Summary Table', () => {
     cy.fixture('individuals').then((testData) => {
       cy.addTestIndividuals()
 
-      cy.get('[data-cy=summary-table-name]').contains(testData.profile1.fullName.toUpperCase())
+      cy.get('[data-cy=summary-table-name]').contains(testData.profile1.fullName)
 
       cy.get('[data-cy=edit-button]').first().click()
 
       // When CANCEL button is clicked, the profile will not be changed
       cy.get('#individual-person-full-name').clear().type('NEW NAME')
       cy.get('[data-cy=new-si-cancel-btn]').click()
-      cy.get('[data-cy=summary-table-name]').contains(testData.profile1.fullName.toUpperCase())
+      cy.get('[data-cy=summary-table-name]').contains(testData.profile1.fullName)
       cy.get('[data-cy=summary-table-name]').should('not.contain', 'NEW NAME')
 
       // the edit form will be closed

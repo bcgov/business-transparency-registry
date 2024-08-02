@@ -17,7 +17,7 @@
     "citizenships": [{ "name": "Canada (Citizen)", "alpha_2": "CA" }],
     "summaryTable": {
       "citizenship": "Citizenship(s):Canada",
-      "taxResidency": "Tax Resident of Canada",
+      "taxResidency": "Canada",
       "shareControl": "Registered owner: More than 75% of shares; More than 75% of votes",
       "directorControl": "Direct control of the majority of directors"
     }
@@ -40,7 +40,7 @@
     "citizenships": [{ "name": "Canada (Citizen)", "alpha_2": "CA" }],
     "summaryTable": {
       "citizenship": "Citizenship(s):Canada",
-      "taxResidency": "Tax Resident of Canada",
+      "taxResidency": "Canada",
       "shareControl": "Registered owner: More than 75% of shares; More than 75% of votes",
       "directorControl": "Direct control of the majority of directors"
     }

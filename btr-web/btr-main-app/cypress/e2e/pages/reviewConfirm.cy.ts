@@ -53,7 +53,7 @@ describe('pages -> Review and Confirm', () => {
 
       // check if the summary table contain the correct data
       const summaryTable = cy.get('[data-cy="individualsSummaryTable"]')
-      summaryTable.get('[data-cy=summary-table-name]').contains(testData.profile1.fullName.toUpperCase())
+      summaryTable.get('[data-cy=summary-table-name]').contains(testData.profile1.fullName)
       summaryTable.get('[data-cy=summary-table-name]').contains(testData.profile1.preferredName)
       summaryTable.get('[data-cy=summary-table-details]').contains(testData.profile1.email)
       summaryTable.get('[data-cy=summary-table-details]').contains(testData.profile1.address.streetAddress)
