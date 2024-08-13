@@ -1,3 +1,13 @@
+<script setup lang="ts">
+defineProps({
+  tableName: { type: String, required: true },
+  icon: { type: String, default: '' },
+  headers: { type: Array, required: true },
+  items: { type: Array, required: true },
+  emptyState: { type: String, default: 'No data available' }
+})
+</script>
+
 <template>
   <div class="flex flex-col">
     <div class="flex flex-row w-full rounded-t-[5px] items-center bg-gray-300 p-5" data-cy="table-header">
@@ -39,17 +49,3 @@
     </div>
   </div>
 </template>
-
-<script setup lang="ts">
-defineProps({
-  tableName: { type: String, required: true },
-  icon: { type: String, default: '' },
-  headers: { type: Array, required: true },
-  items: { type: Array, required: true },
-  emptyState: { type: String, default: 'No data available' }
-})
-</script>
-
-<style scoped>
-
-</style>

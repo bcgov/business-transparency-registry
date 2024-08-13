@@ -1,3 +1,30 @@
+<script setup lang="ts">
+import { SiSchemaType } from '~/utils/si-schema/definitions'
+import { useSiControlStore } from '~/stores/si-control-store'
+import { JointlyOrInConcertConnectionsI } from '~/interfaces/jointly-or-in-concert'
+
+const siControlStore = useSiControlStore()
+const { allActiveSis, actingJointlyAndInConcert } = storeToRefs(siControlStore)
+
+const props = defineProps({
+  si: { type: Object as PropType<SiSchemaType>, required: true },
+  name: { type: String, default: 'name' },
+  controlTypeWidth: { type: String, required: true },
+  individualConnectionWidth: { type: String, required: true }
+})
+
+const allActiveSisExceptMe = computed(() =>
+  allActiveSis.value.filter((asi: SiSchemaType) => asi.uuid !== props.si.uuid).map(
+    (si: SiSchemaType) => ({
+      uuid: si.uuid,
+      legalName: si.name.fullName,
+      preferredName: si.name.preferredName
+    })
+  )
+)
+const siControl: JointlyOrInConcertConnectionsI = computed(() => actingJointlyAndInConcert.value.get(props.si.uuid))
+</script>
+
 <template>
   <div class="flex flex-col space-y-3">
     <!-- shares acting jointly -->
@@ -127,30 +154,3 @@
     </div>
   </div>
 </template>
-
-<script setup lang="ts">
-import { SiSchemaType } from '~/utils/si-schema/definitions'
-import { useSiControlStore } from '~/stores/si-control-store'
-import { JointlyOrInConcertConnectionsI } from '~/interfaces/jointly-or-in-concert'
-
-const siControlStore = useSiControlStore()
-const { allActiveSis, actingJointlyAndInConcert } = storeToRefs(siControlStore)
-
-const props = defineProps({
-  si: { type: Object as PropType<SiSchemaType>, required: true },
-  name: { type: String, default: 'name' },
-  controlTypeWidth: { type: String, required: true },
-  individualConnectionWidth: { type: String, required: true }
-})
-
-const allActiveSisExceptMe = computed(() =>
-  allActiveSis.value.filter((asi: SiSchemaType) => asi.uuid !== props.si.uuid).map(
-    (si: SiSchemaType) => ({
-      uuid: si.uuid,
-      legalName: si.name.fullName,
-      preferredName: si.name.preferredName
-    })
-  )
-)
-const siControl: JointlyOrInConcertConnectionsI = computed(() => actingJointlyAndInConcert.value.get(props.si.uuid))
-</script>

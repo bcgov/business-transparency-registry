@@ -1,3 +1,75 @@
+<script setup lang="ts">
+import { storeToRefs } from 'pinia'
+import { StatusCodes } from 'http-status-codes'
+import { SiSchemaType } from '~/utils/si-schema/definitions'
+import fileSIApi from '~/services/file-significant-individual'
+
+const significantIndividuals = useSignificantIndividuals()
+const { currentSIFiling } = storeToRefs(significantIndividuals)
+
+const expandNewSI = ref(false)
+const showNoSignificantIndividuals = computed(
+  (): boolean =>
+    !(currentSIFiling.value.significantIndividuals?.filter(si => si.action !== FilingActionE.REMOVE).length > 0) &&
+    !expandNewSI.value)
+
+const numOfIndividualsWithSharedControl = computed(() => {
+  return currentSIFiling.value.significantIndividuals?.filter(
+    si => si.ui.action !== FilingActionE.REMOVE && hasSharedControl(si)
+  ).length
+})
+
+const isEditing = ref(false)
+
+const isAddingNewSI = ref(false)
+
+const toggleEditingMode = () => {
+  isEditing.value = !isEditing.value
+}
+
+function handleAddNewButtonClick () {
+  expandNewSI.value = true
+  isAddingNewSI.value = true
+}
+
+function addNewSI (si: SiSchemaType) {
+  significantIndividuals.filingAddSI(si)
+  expandNewSI.value = false
+  isAddingNewSI.value = false
+}
+
+function cancelAddNewSI () {
+  expandNewSI.value = false
+  isAddingNewSI.value = false
+}
+
+onBeforeMount(async () => {
+  const identifier = useRoute().params.identifier as string
+  // FUTURE: put in a loading page or something while this happens in case network is slow
+  await useBcrosBusiness().loadBusiness(identifier)
+  const siControlStore = useSiControlStore()
+  const { data, error } = await fileSIApi.getBtrFiling(identifier)
+
+  if (error.statusCode) {
+    if (error.statusCode !== StatusCodes.NOT_FOUND) {
+      console.error(error)
+      const err = {
+        statusCode: error.statusCode ?? StatusCodes.INTERNAL_SERVER_ERROR,
+        message: error.message,
+        category: ErrorCategoryE.SIGNIFICANT_INDIVIDUAL
+      }
+      significantIndividuals.errors.value.push(err)
+    }
+    return null
+  }
+
+  significantIndividuals.filingInit(identifier, data?.payload)
+  siControlStore.initActingJointlyOrInConcertFromBtrFiling(data?.payload)
+
+  currentSIFiling.value.certified = false
+})
+</script>
+
 <template>
   <div data-cy="owner-change">
     <div class="my-5" data-cy="noSignificantIndividualsExist-section">
@@ -74,75 +146,3 @@
     </div>
   </div>
 </template>
-
-<script setup lang="ts">
-import { storeToRefs } from 'pinia'
-import { StatusCodes } from 'http-status-codes'
-import { SiSchemaType } from '~/utils/si-schema/definitions'
-import fileSIApi from '~/services/file-significant-individual'
-
-const significantIndividuals = useSignificantIndividuals()
-const { currentSIFiling } = storeToRefs(significantIndividuals)
-
-const expandNewSI = ref(false)
-const showNoSignificantIndividuals = computed(
-  (): boolean =>
-    !(currentSIFiling.value.significantIndividuals?.filter(si => si.action !== FilingActionE.REMOVE).length > 0) &&
-    !expandNewSI.value)
-
-const numOfIndividualsWithSharedControl = computed(() => {
-  return currentSIFiling.value.significantIndividuals?.filter(
-    si => si.ui.action !== FilingActionE.REMOVE && hasSharedControl(si)
-  ).length
-})
-
-const isEditing = ref(false)
-
-const isAddingNewSI = ref(false)
-
-const toggleEditingMode = () => {
-  isEditing.value = !isEditing.value
-}
-
-function handleAddNewButtonClick () {
-  expandNewSI.value = true
-  isAddingNewSI.value = true
-}
-
-function addNewSI (si: SiSchemaType) {
-  significantIndividuals.filingAddSI(si)
-  expandNewSI.value = false
-  isAddingNewSI.value = false
-}
-
-function cancelAddNewSI () {
-  expandNewSI.value = false
-  isAddingNewSI.value = false
-}
-
-onBeforeMount(async () => {
-  const identifier = useRoute().params.identifier as string
-  // FUTURE: put in a loading page or something while this happens in case network is slow
-  await useBcrosBusiness().loadBusiness(identifier)
-  const siControlStore = useSiControlStore()
-  const { data, error } = await fileSIApi.getBtrFiling(identifier)
-
-  if (error.statusCode) {
-    if (error.statusCode !== StatusCodes.NOT_FOUND) {
-      console.error(error)
-      const err = {
-        statusCode: error.statusCode ?? StatusCodes.INTERNAL_SERVER_ERROR,
-        message: error.message,
-        category: ErrorCategoryE.SIGNIFICANT_INDIVIDUAL
-      }
-      significantIndividuals.errors.value.push(err)
-    }
-    return null
-  }
-
-  significantIndividuals.filingInit(identifier, data?.payload)
-  siControlStore.initActingJointlyOrInConcertFromBtrFiling(data?.payload)
-
-  currentSIFiling.value.certified = false
-})
-</script>
