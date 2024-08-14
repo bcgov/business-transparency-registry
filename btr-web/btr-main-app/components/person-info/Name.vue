@@ -1,3 +1,12 @@
+<script setup lang="ts">
+type NameInfoT = {
+  legalName?: string
+  alternateName?: string
+  birthDate?: string
+}
+defineProps<{ icon?: string, item: NameInfoT }>()
+</script>
+
 <template>
   <div class="flex space-x-1">
     <div>
@@ -20,15 +29,6 @@
     </div>
   </div>
 </template>
-
-<script setup lang="ts">
-type NameInfoT = {
-  legalName?: string
-  alternateName?: string
-  birthDate?: string
-}
-defineProps<{ icon?: string, item: NameInfoT }>()
-</script>
 
 <style lang="scss" scoped>
 .info-section {

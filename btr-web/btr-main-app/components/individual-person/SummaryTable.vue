@@ -1,3 +1,79 @@
+<script setup lang="ts">
+import { SiSchemaType } from '~/utils/si-schema/definitions'
+
+const emit = defineEmits(['toggle-editing-mode'])
+const props = defineProps({
+  individuals: {
+    type: Array as PropType<SiSchemaType[]>,
+    required: true
+  },
+  edit: {
+    type: Boolean,
+    default: false
+  },
+  isEditing: {
+    type: Boolean,
+    default: false
+  },
+  editingDisabled: {
+    type: Boolean,
+    default: false
+  }
+})
+
+const editingIndex = ref(-1)
+
+const t = useNuxtApp().$i18n.t
+const headers = [
+  { content: t('labels.name'), width: '25%' },
+  { content: t('labels.details'), width: '30%' },
+  { content: t('labels.control'), width: '25%' },
+  { content: t('labels.effectiveDates'), width: '20%' }
+]
+
+const isEmptyState = computed(() => {
+  return props.individuals.filter(individual => individual.ui.action !== FilingActionE.REMOVE).length === 0
+})
+
+function openEditingMode (index: number) {
+  editingIndex.value = index
+  emit('toggle-editing-mode')
+}
+
+function closeEditingMode () {
+  editingIndex.value = -1
+  if (props.isEditing) {
+    emit('toggle-editing-mode')
+  }
+}
+
+function copyIndividualToEdit () {
+  const individualToEdit = JSON.parse(JSON.stringify(props.individuals[editingIndex.value]))
+  individualToEdit.action = FilingActionE.EDIT
+  return individualToEdit
+}
+
+function removeSignificantIndividual (index: number) {
+  useSignificantIndividuals().filingRemoveSI(index)
+  closeEditingMode()
+}
+
+function updateSignificantIndividual (index: number | undefined, updatedSI: SiSchemaType) {
+  if (index !== undefined) {
+    useSignificantIndividuals().filingUpdateSI(index, updatedSI)
+  }
+  closeEditingMode()
+}
+
+/** Capitalize the first letter in the given fullname. */
+function capFirstLetterInName (fullName: string) {
+  return fullName
+    .split(' ')
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ')
+}
+</script>
+
 <template>
   <BcrosTablesTable
     data-cy="individualsSummaryTable"
@@ -169,82 +245,6 @@
     </template>
   </BcrosTablesTable>
 </template>
-
-<script setup lang="ts">
-import { SiSchemaType } from '~/utils/si-schema/definitions'
-
-const emit = defineEmits(['toggle-editing-mode'])
-const props = defineProps({
-  individuals: {
-    type: Array as PropType<SiSchemaType[]>,
-    required: true
-  },
-  edit: {
-    type: Boolean,
-    default: false
-  },
-  isEditing: {
-    type: Boolean,
-    default: false
-  },
-  editingDisabled: {
-    type: Boolean,
-    default: false
-  }
-})
-
-const editingIndex = ref(-1)
-
-const t = useNuxtApp().$i18n.t
-const headers = [
-  { content: t('labels.name'), width: '25%' },
-  { content: t('labels.details'), width: '30%' },
-  { content: t('labels.control'), width: '25%' },
-  { content: t('labels.effectiveDates'), width: '20%' }
-]
-
-const isEmptyState = computed(() => {
-  return props.individuals.filter(individual => individual.ui.action !== FilingActionE.REMOVE).length === 0
-})
-
-function openEditingMode (index: number) {
-  editingIndex.value = index
-  emit('toggle-editing-mode')
-}
-
-function closeEditingMode () {
-  editingIndex.value = -1
-  if (props.isEditing) {
-    emit('toggle-editing-mode')
-  }
-}
-
-function copyIndividualToEdit () {
-  const individualToEdit = JSON.parse(JSON.stringify(props.individuals[editingIndex.value]))
-  individualToEdit.action = FilingActionE.EDIT
-  return individualToEdit
-}
-
-function removeSignificantIndividual (index: number) {
-  useSignificantIndividuals().filingRemoveSI(index)
-  closeEditingMode()
-}
-
-function updateSignificantIndividual (index: number | undefined, updatedSI: SiSchemaType) {
-  if (index !== undefined) {
-    useSignificantIndividuals().filingUpdateSI(index, updatedSI)
-  }
-  closeEditingMode()
-}
-
-/** Capitalize the first letter in the given fullname. */
-function capFirstLetterInName (fullName: string) {
-  return fullName
-    .split(' ')
-    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(' ')
-}
-</script>
 
 <style scoped>
 .data-row > td:not(.action-button) {

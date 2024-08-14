@@ -1,14 +1,3 @@
-<template>
-  <div class="w-2/3 mr-2" :class="countries.length === 1 ? 'flex justify-center' : 'grid gap-x-1 grid-cols-2'">
-    <BcrosCountryFlag
-      v-for="elem in countries"
-      :key="elem.alpha_2"
-      :country-code-iso2letter="get2LetterCode(elem.alpha_2)"
-      :tooltip-text="getNameSC(elem.alpha_2) || elem.alpha_2"
-    />
-  </div>
-</template>
-
 <script setup lang="ts">
 import { getName } from 'country-list'
 
@@ -39,5 +28,15 @@ const getNameSC = function (countryCodeAlpha2: string): string {
 
   return getName(countryCodeAlpha2)
 }
-
 </script>
+
+<template>
+  <div class="w-2/3 mr-2" :class="countries.length === 1 ? 'flex justify-center' : 'grid gap-x-1 grid-cols-2'">
+    <BcrosCountryFlag
+      v-for="elem in countries"
+      :key="elem.alpha_2"
+      :country-code-iso2letter="get2LetterCode(elem.alpha_2)"
+      :tooltip-text="getNameSC(elem.alpha_2) || elem.alpha_2"
+    />
+  </div>
+</template>
