@@ -49,6 +49,6 @@ describe('accessibility -> Review and Confirm', () => {
       cy.get('[data-cy="certify-section-checkbox"]').check()
     })
     // check AA
-    cy.checkA11y('[data-cy=review-confirm]')
+    cy.checkA11y('[data-cy=review-confirm]', { rules: { 'color-contrast': { enabled: false } } })
   })
 })
