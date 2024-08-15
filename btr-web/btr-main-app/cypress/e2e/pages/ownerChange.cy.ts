@@ -99,7 +99,7 @@ describe('pages -> Beneficial Owner Change', () => {
 
 describe('pages -> Beneficial Owner Change - no preloaded data in tables', () => {
   beforeEach(() => {
-    cy.interceptPostsEntityApiEmpty().as('existingSIs')
+    cy.interceptPostsBtrApiEmpty().as('existingSIs')
     cy.interceptPayFeeApi().as('payFeeApi')
     cy.interceptBusinessContact().as('businessContact')
     cy.interceptBusinessSlim().as('businessApiCall')

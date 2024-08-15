@@ -5,7 +5,7 @@ describe('pages -> Add individual', () => {
   const i18nCommon = json
   beforeEach(() => {
     // setup intercepts
-    cy.interceptPostsEntityApi().as('existingSIs')
+    cy.interceptPostsBtrApi().as('existingSIs')
     cy.interceptPayFeeApi().as('payFeeApi')
     cy.interceptBusinessContact().as('businessContact')
     cy.interceptBusinessSlim().as('businessApiCall')

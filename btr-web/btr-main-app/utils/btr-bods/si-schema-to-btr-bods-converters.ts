@@ -320,15 +320,16 @@ const getInterests = (si: SiSchemaType) => {
         )
       interests = interests.concat(newInterests)
     }
-  }
 
-  if (si.controlOther) {
-    interests.push({
-      type: BodsInterestTypeE.OTHER_INFLUENCE_OR_CONTROL,
-      details: si.controlOther
-    })
+    if (si.controlOther) {
+      interests.push({
+        type: BodsInterestTypeE.OTHER_INFLUENCE_OR_CONTROL,
+        details: si.controlOther,
+        startDate,
+        endDate
+      })
+    }
   }
-
   return interests
 }
 

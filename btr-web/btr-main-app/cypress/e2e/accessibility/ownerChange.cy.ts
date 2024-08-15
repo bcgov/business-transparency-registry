@@ -105,6 +105,12 @@ describe('accessibility -> Beneficial Owner Change', () => {
     // cy.checkA11y('[data-cy=owner-change]')
   })
 
+  it('checks the summary table passes accessibility (empty)', () => {
+    cy.visitHomePageNoFakeData()
+    cy.injectAxe()
+    cy.checkA11y('[data-cy=individualsSummaryTable]')
+  })
+
   it('checks the summary table passes accessibility', () => {
     cy.checkA11y('[data-cy=individualsSummaryTable]', { rules: { 'nested-interactive': { enabled: false } } })
 
@@ -124,23 +130,29 @@ describe('accessibility -> Beneficial Owner Change', () => {
       }
     })
 
-    // close the popover panel
-    cy.get('[data-cy=popover-button]').eq(0).click()
+    // verify cease component
+    cy.get('[data-cy=popover-action-button]').click()
+    cy.checkA11y('[data-cy=summary-table-buttons]', {
+      rules: {
+        'nested-interactive': { enabled: false },
+        'aria-hidden-focus': { enabled: false }
+      }
+    })
 
     // This will be uncommented when all accessibility issues in the form are resolved
     // edit form
-    // cy.get('[data-cy=edit-button]').eq(0).click()
+    // cy.get('[data-cy=action-button]').eq(0).click()
     // cy.checkA11y('[data-cy=individualsSummaryTable]')
     // cy.get('[data-cy=new-si-cancel-btn]').click()
 
     // empty table
-    cy.get('[data-cy=popover-button]').then((buttons) => {
-      for (let i = 0; i < buttons.length; i++) {
-        cy.get('[data-cy=popover-button]').first().click()
-        cy.get('[data-cy=remove-button]').click()
-      }
-    })
-    cy.checkA11y('[data-cy=individualsSummaryTable]')
+    // cy.get('[data-cy=popover-button]').then((buttons) => {
+    //   for (let i = 0; i < buttons.length; i++) {
+    //     cy.get('[data-cy=popover-button]').first().click()
+    //     cy.get('[data-cy=popover-action-button]').click()
+    //   }
+    // })
+    // cy.checkA11y('[data-cy=individualsSummaryTable]')
   })
 
   it('Verifies the date selector passes AA', () => {

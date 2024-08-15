@@ -1,22 +1,14 @@
 describe('accessibility -> Review and Confirm', () => {
-  beforeEach(() => {
-    cy.visitHomePageWithFakeDataAndAxeInject()
-  })
-
   it('checks page passes accessibility (empty form)', () => {
-    // form not filled out with empty existing
-    cy.get('[data-cy=popover-button]').then((buttons) => {
-      for (let i = 0; i < buttons.length; i++) {
-        cy.get('[data-cy=popover-button]').first().click()
-        cy.get('[data-cy=remove-button]').click()
-      }
-    })
+    cy.visitHomePageNoFakeData()
+    cy.injectAxe()
     cy.get('[data-cy=button-control-right-button]').click()
     cy.location('pathname').should('include', '/review-confirm')
     cy.checkA11y('[data-cy=review-confirm]')
   })
 
   it('checks page passes accessibility (form filled out)', () => {
+    cy.visitHomePageWithFakeDataAndAxeInject()
     // enter form data
     cy.fixture('individuals').then((testData) => {
       cy.get('[data-cy=add-new-btn]').click()

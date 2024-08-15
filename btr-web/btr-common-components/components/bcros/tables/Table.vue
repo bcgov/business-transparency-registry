@@ -2,8 +2,8 @@
 defineProps({
   tableName: { type: String, required: true },
   icon: { type: String, default: '' },
-  headers: { type: Array, required: true },
-  items: { type: Array, required: true },
+  headers: { type: Array<any>, required: true },
+  items: { type: Array<any>, required: true },
   emptyState: { type: String, default: 'No data available' }
 })
 </script>
@@ -17,7 +17,7 @@ defineProps({
       </span>
       <slot name="header-warning" />
     </div>
-    <div class="bg-white px-10 pb-5 rounded-b-[5px] relative overflow-visible">
+    <div class="bg-white px-2 pb-5 rounded-b-[5px] relative overflow-visible">
       <table class="min-w-full table-fixed divide-y divide-gray-300">
         <thead>
           <tr>

@@ -38,10 +38,10 @@ export async function siChangeSubmit () {
   )
 
   const significantIndividuals = useSignificantIndividuals()
+  significantIndividuals.currentSIFiling.significantIndividuals = significantIndividuals.allActiveSIs
   const result = FilingSchema.safeParse(significantIndividuals.currentSIFiling)
   if (!result.success) {
-    // eslint-disable-next-line no-console
-    console.log('<> remove this line when validation errors are displayed on page', result.error.issues)
+    console.warn('<> remove this line when validation errors are displayed on page', result.error.issues)
     significantIndividuals.showErrors = true
   } else {
     await significantIndividuals.filingSubmit()

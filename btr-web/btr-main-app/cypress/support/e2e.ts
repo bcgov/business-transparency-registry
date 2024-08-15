@@ -1,7 +1,7 @@
 import 'cypress-axe'
 import './ownerChangeFormHelper'
 
-Cypress.Commands.add('interceptPostsEntityApi', () => {
+Cypress.Commands.add('interceptPostsBtrApi', () => {
   cy.fixture('plotsEntityExistingSiResponse').then((plotsEntityExistingSiResponse) => {
     cy.intercept(
       'GET',
@@ -10,7 +10,7 @@ Cypress.Commands.add('interceptPostsEntityApi', () => {
   })
 })
 
-Cypress.Commands.add('interceptPostsEntityApiNoSis', () => {
+Cypress.Commands.add('interceptPostsBtrApiNoSis', () => {
   cy.fixture('plotsEntityExistingSiResponseNoSis').then((plotsEntityExistingSiResponseNoSis) => {
     cy.intercept(
       'GET',
@@ -19,7 +19,7 @@ Cypress.Commands.add('interceptPostsEntityApiNoSis', () => {
   })
 })
 
-Cypress.Commands.add('interceptPostsEntityApiEmpty', () => {
+Cypress.Commands.add('interceptPostsBtrApiEmpty', () => {
   cy.intercept(
     'GET',
     '/plots/entity/BC0871427',
@@ -74,7 +74,7 @@ Cypress.Commands.add('interceptBusinessContact', () => {
 })
 
 Cypress.Commands.add('visitHomePageNoFakeData', () => {
-  cy.interceptPostsEntityApiNoSis().as('existingSIs')
+  cy.interceptPostsBtrApiNoSis().as('existingSIs')
   cy.interceptPayFeeApi().as('payFeeApi')
   cy.interceptBusinessContact().as('businessContact')
   cy.interceptBusinessSlim().as('businessApiCall')
@@ -83,7 +83,7 @@ Cypress.Commands.add('visitHomePageNoFakeData', () => {
 })
 
 Cypress.Commands.add('visitHomePageWithFakeData', () => {
-  cy.interceptPostsEntityApi().as('existingSIs')
+  cy.interceptPostsBtrApi().as('existingSIs')
   cy.interceptPayFeeApi().as('payFeeApi')
   cy.interceptBusinessContact().as('businessContact')
   cy.interceptBusinessSlim().as('businessApiCall')
@@ -96,7 +96,7 @@ Cypress.Commands.add('visitHomePageWithFakeDataAndAxeInject', () => {
   cy.injectAxe()
 })
 
-Cypress.Commands.add('addTestIndividuals', () => {
+Cypress.Commands.add('addTestIndividuals', (multiple = true) => {
   cy.fixture('individuals').then((testData) => {
     cy.get('[data-cy=add-new-btn]').click()
     cy.get('#individual-person-full-name').type(testData.profile1.fullName)
@@ -129,36 +129,38 @@ Cypress.Commands.add('addTestIndividuals', () => {
     cy.get('[data-cy="testTaxResidency"]').get('[type="radio"][value="true"]').check()
     cy.get('[data-cy=new-si-done-btn]').click()
 
-    // Add the second individual
-    cy.get('[data-cy=add-new-btn]').click()
-    cy.get('#individual-person-full-name').type(testData.profile2.fullName)
-    cy.get('[data-cy=usePreferredName').check()
-    cy.get('#individual-person-preferred-name').type(testData.profile2.preferredName)
-    cy.get('#individual-person-email').type(testData.profile2.email)
-    // todo: fixme: update on #20758
-    // cy.get('[data-cy=testPercentOfShares]').click()
-    // cy.get('[data-cy=testPercentOfShares]').find('li').eq(2).click()
-    // cy.get('[data-cy=testPercentOfVotes]').click()
-    // cy.get('[data-cy=testPercentOfVotes]').find('li').eq(3).click()
-    // todo: fixme: update on #20756
-    // cy.get('[data-cy="testTypeOfControl"]').get('[name="registeredOwner"]').check()
-    // cy.get('[data-cy="testControlOfDirectors"]').get('[name="directControl"]').check()
-    cy.get('[data-cy="start-date-select"]').click().then(() => {
-      cy.get('.bcros-date-picker__calendar__day.dp__today').parent().click()
-    })
-    cy.get('#addNewPersonBirthdate').trigger('click')
-    cy.get('[data-cy=date-picker]').get('.bcros-date-picker__calendar__day.dp__today').trigger('click')
-    cy.get('[data-cy="address-country"]').click()
-    cy.get('[data-cy="address-country"]').get('li').contains(testData.profile2.address.country).click()
-    cy.get('[data-cy="address-line1-autocomplete"]').type(testData.profile2.address.streetAddress)
-    cy.get('[data-cy="address-city"]').type(testData.profile2.address.city)
-    cy.get('[data-cy="address-region-select"]').click()
-    cy.get('[data-cy="address-region-select"]').get('li').contains(testData.profile2.address.province[0]).click()
-    cy.get('[data-cy="address-postal-code"]').type(testData.profile2.address.postalCode)
-    cy.get('[data-cy="citizenshipsComboboxButton"]').click()
-    cy.get('[id^="headlessui-combobox-options"]').find('li').first().click({ force: true })
-    cy.get('[data-cy="tax-number-input"]').type(testData.profile2.taxNumber)
-    cy.get('[data-cy="testTaxResidency"]').get('[type="radio"][value="true"]').check()
-    cy.get('[data-cy=new-si-done-btn]').click()
+    if (multiple) {
+      // Add the second individual
+      cy.get('[data-cy=add-new-btn]').click()
+      cy.get('#individual-person-full-name').type(testData.profile2.fullName)
+      cy.get('[data-cy=usePreferredName').check()
+      cy.get('#individual-person-preferred-name').type(testData.profile2.preferredName)
+      cy.get('#individual-person-email').type(testData.profile2.email)
+      // todo: fixme: update on #20758
+      // cy.get('[data-cy=testPercentOfShares]').click()
+      // cy.get('[data-cy=testPercentOfShares]').find('li').eq(2).click()
+      // cy.get('[data-cy=testPercentOfVotes]').click()
+      // cy.get('[data-cy=testPercentOfVotes]').find('li').eq(3).click()
+      // todo: fixme: update on #20756
+      // cy.get('[data-cy="testTypeOfControl"]').get('[name="registeredOwner"]').check()
+      // cy.get('[data-cy="testControlOfDirectors"]').get('[name="directControl"]').check()
+      cy.get('[data-cy="start-date-select"]').click().then(() => {
+        cy.get('.bcros-date-picker__calendar__day.dp__today').parent().click()
+      })
+      cy.get('#addNewPersonBirthdate').trigger('click')
+      cy.get('[data-cy=date-picker]').get('.bcros-date-picker__calendar__day.dp__today').trigger('click')
+      cy.get('[data-cy="address-country"]').click()
+      cy.get('[data-cy="address-country"]').get('li').contains(testData.profile2.address.country).click()
+      cy.get('[data-cy="address-line1-autocomplete"]').type(testData.profile2.address.streetAddress)
+      cy.get('[data-cy="address-city"]').type(testData.profile2.address.city)
+      cy.get('[data-cy="address-region-select"]').click()
+      cy.get('[data-cy="address-region-select"]').get('li').contains(testData.profile2.address.province[0]).click()
+      cy.get('[data-cy="address-postal-code"]').type(testData.profile2.address.postalCode)
+      cy.get('[data-cy="citizenshipsComboboxButton"]').click()
+      cy.get('[id^="headlessui-combobox-options"]').find('li').first().click({ force: true })
+      cy.get('[data-cy="tax-number-input"]').type(testData.profile2.taxNumber)
+      cy.get('[data-cy="testTaxResidency"]').get('[type="radio"][value="true"]').check()
+      cy.get('[data-cy=new-si-done-btn]').click()
+    }
   })
 })
