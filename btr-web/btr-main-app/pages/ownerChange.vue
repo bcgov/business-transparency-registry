@@ -5,11 +5,7 @@ import { SiSchemaType } from '~/utils/si-schema/definitions'
 import fileSIApi from '~/services/file-significant-individual'
 
 const significantIndividuals = useSignificantIndividuals()
-const { currentSIFiling, allActiveSIs, allEditableSIs } : {
-    currentSIFiling: Ref<SignificantIndividualFilingI>,
-    allActiveSIs: Ref<SiSchemaType[]>,
-    allEditableSIs: Ref<SiSchemaType[]>
-} = storeToRefs(significantIndividuals)
+const { currentSIFiling, allActiveSIs, allEditableSIs } = storeToRefs(significantIndividuals)
 
 const expandNewSI = ref(false)
 const showNoSignificantIndividuals = computed(

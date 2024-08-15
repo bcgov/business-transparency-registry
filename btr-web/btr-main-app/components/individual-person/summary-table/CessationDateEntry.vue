@@ -26,13 +26,13 @@ const cancel = () => {
     :border="true"
     rounded-top
     rounded-bottom
-    :section-title="'Cessation Date'"
+    :section-title="$t('labels.cessationDate')"
   >
     <div class="flex-col w-full">
       <BcrosInputsDateSelect
         name="cessationDate"
         :max-date="new Date()"
-        :placeholder="'End Date'"
+        :placeholder="$t('labels.endDate')"
         @selection="cessationDate = dateToString($event, 'YYYY-MM-DD')"
       />
 
@@ -40,7 +40,7 @@ const cancel = () => {
         <UButton
           class="px-10 py-3"
           color="primary"
-          :label="'Cancel'"
+          :label="$t('buttons.cancel')"
           variant="outline"
           data-cy="cease-cancel"
           @click="cancel()"
@@ -48,7 +48,7 @@ const cancel = () => {
         <UButton
           class="px-10 py-3"
           color="primary"
-          :label="'Done'"
+          :label="$t('buttons.done')"
           variant="solid"
           type="submit"
           data-cy="cease-done"

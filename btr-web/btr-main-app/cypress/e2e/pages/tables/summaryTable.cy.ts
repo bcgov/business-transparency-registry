@@ -173,7 +173,10 @@ describe('pages -> Summary Table', () => {
     cy.get('@nameItem').find('.f-bd').should('not.exist')
     cy.get('@actionButton').should('contain.text', 'Update')
     cy.get('@summaryTable').find('[data-cy="summary-table-row-cease"]').should('not.exist')
-    // click 'cease'
+
+    // 'cease' verification
+    cy.get('@summaryRow').first().find('[data-cy=summary-table-dates]').as('datesItem')
+      .should('contain.text', 'Current')
     cy.get('@summaryActions').find('[data-cy="popover-button"]').click()
     cy.get('@summaryActions').find('[data-cy="popover-action-button"]')
       .should('exist')
@@ -193,14 +196,18 @@ describe('pages -> Summary Table', () => {
     cy.get('@cessationSelect').find('[data-cy=cease-done]').click()
     // verify 'cease' badge / opacity
     cy.get('@cessationSelect').should('not.exist')
-    cy.get('@nameItem').find('[data-cy="name-badge"]').should('have.text', 'CEASED')
+    cy.get('@nameItem').find('[data-cy="name-badge"]')
+      .should('contain.text', 'UPDATED')
+      .should('contain.text', 'CEASED')
     cy.get('@nameItem').find('.opacity-55').should('exist')
+    cy.get('@datesItem').should('not.contain.text', 'Current')
     cy.get('@actionButton').should('contain.text', 'Undo')
     // click undo
     cy.get('@actionButton').click()
     // verify cease is undone
     cy.get('@nameItem').find('[data-cy="name-badge"]').should('not.exist')
     cy.get('@nameItem').find('.opacity-55').should('not.exist')
+    cy.get('@datesItem').should('contain.text', 'Current')
     cy.get('@actionButton').should('contain.text', 'Update')
   })
 

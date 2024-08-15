@@ -39,7 +39,7 @@ export const useSignificantIndividuals = defineStore('significantIndividuals', (
     if (!significantIndividual.ui.actions.includes(FilingActionE.ADD)) {
       significantIndividual.ui.actions.push(FilingActionE.ADD)
     }
-    if (isCeased) {
+    if (isCeased && !significantIndividual.ui.actions.includes(FilingActionE.CEASE)) {
       significantIndividual.ui.actions.push(FilingActionE.CEASE)
     }
     // add new filing to list
@@ -54,14 +54,17 @@ export const useSignificantIndividuals = defineStore('significantIndividuals', (
   }
 
   /** Update the significant individual at the given index */
-  const filingUpdateSI = (significantIndividual: SiSchemaType, index?: number, ceaseOnly?: boolean) => {
+  const filingUpdateSI = (significantIndividual: SiSchemaType, index?: number) => {
     significantIndividual.ui.actions ??= []
     const isCeased = significantIndividual.effectiveDates.filter(date => !date.endDate).length === 0
     if (index === undefined) {
       // newly added SI
       _filingAddSI(significantIndividual, isCeased)
     } else {
-      if (!ceaseOnly && !significantIndividual.ui.actions.includes(FilingActionE.EDIT)) {
+      if (
+        !significantIndividual.ui.actions.includes(FilingActionE.ADD) &&
+        !significantIndividual.ui.actions.includes(FilingActionE.EDIT)
+      ) {
         significantIndividual.ui.actions.push(FilingActionE.EDIT)
       }
       if (isCeased && !significantIndividual.ui.actions.includes(FilingActionE.CEASE)) {
@@ -74,9 +77,10 @@ export const useSignificantIndividuals = defineStore('significantIndividuals', (
 
   /** Cease the significant individual at the given index */
   const filingCeaseSI = (index: number, cessationDate: string) => {
-    const activeDateGrp = allEditableSIs.value[index].effectiveDates.filter(dateGrp => !dateGrp.endDate)[0]
+    const ceasedSI: SiSchemaType = JSON.parse(JSON.stringify(allEditableSIs.value[index]))
+    const activeDateGrp = ceasedSI.effectiveDates.filter(dateGrp => !dateGrp.endDate)[0]
     activeDateGrp.endDate = cessationDate
-    filingUpdateSI(allEditableSIs.value[index], index, true)
+    filingUpdateSI(ceasedSI, index)
   }
 
   /** Remove the significant individual at the given index */
@@ -142,13 +146,15 @@ export const useSignificantIndividuals = defineStore('significantIndividuals', (
   function loadSavedSIs (btrFiling: BtrFilingI, force = false) {
     if (!savedSIs.value || savedSIs.value.length === 0 || force) {
       savedSIs.value = fileSIApi.getCurrentOwners(btrFiling) || []
-      allEditableSIs.value = savedSIs.value.filter((si, index) => {
-        if (!si.ui.actions?.includes(FilingActionE.HISTORICAL)) {
-          si.ui.origIndex = index
-          return true
-        }
-        return false
-      })
+      allEditableSIs.value = JSON.parse(JSON.stringify(
+        savedSIs.value.filter((si, index) => {
+          if (!si.ui.actions?.includes(FilingActionE.HISTORICAL)) {
+            si.ui.origIndex = index
+            return true
+          }
+          return false
+        })
+      ))
     }
   }
 

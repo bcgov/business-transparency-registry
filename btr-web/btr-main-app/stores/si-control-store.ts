@@ -5,7 +5,7 @@ import { BtrFilingI } from '~/interfaces/btr-bods/btr-filing-i'
 import fileSIApi from '~/services/file-significant-individual'
 
 export const useSiControlStore = defineStore('jointlyOrInConcert', () => {
-  const { allActiveSIs } : { allActiveSIs: Ref<SiSchemaType[]> } = storeToRefs(useSignificantIndividuals())
+  const { allActiveSIs } = storeToRefs(useSignificantIndividuals())
 
   const allActiveAndHaveControlSis = computed(
     (): SiSchemaType[] => allActiveSIs.value.filter(activeSi => hasSharedControl(activeSi))

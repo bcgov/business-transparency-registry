@@ -37,21 +37,23 @@ const isEmptyState = computed(() => {
 })
 
 const getBadges = (item: SiSchemaType) => {
-  if (item.ui.actions?.includes(FilingActionE.CEASE) && item.ui.actions?.includes(FilingActionE.ADD)) {
-    return [{ label: 'NEW' }, { label: 'CEASED', colour: 'gray' }]
+  if (!item.ui.actions?.length) {
+    return
   }
-  if (item.ui.actions?.includes(FilingActionE.CEASE)) {
-    return [{ label: 'CEASED', colour: 'gray' }]
-  }
+  const badges = []
   if (item.ui.actions?.includes(FilingActionE.ADD)) {
-    return [{ label: 'NEW' }]
+    badges.push({ label: t('badges.new') })
   }
   if (item.ui.actions?.includes(FilingActionE.EDIT)) {
-    return [{ label: 'UPDATED' }]
+    badges.push({ label: t('badges.updated') })
   }
-  if (item.ui.actions?.includes(FilingActionE.HISTORICAL)) {
-    return [{ label: 'HISTORICAL', colour: 'yellow' }]
+  if (
+    item.ui.actions?.includes(FilingActionE.CEASE) ||
+    item.ui.actions?.includes(FilingActionE.HISTORICAL)
+  ) {
+    badges.push({ label: t('badges.ceased'), colour: 'gray' })
   }
+  return badges
 }
 
 const getActionButton = (item: SiSchemaType, index: number) => {
@@ -61,7 +63,7 @@ const getActionButton = (item: SiSchemaType, index: number) => {
       actionArg: index,
       disabled: props.editingDisabled || props.isEditing,
       icon: 'i-mdi-pencil',
-      label: 'Edit'
+      label: t('buttons.edit')
     }
   }
   if (item.ui.actions?.includes(FilingActionE.EDIT) || item.ui.actions?.includes(FilingActionE.CEASE)) {
@@ -70,7 +72,7 @@ const getActionButton = (item: SiSchemaType, index: number) => {
       actionArg: index,
       disabled: props.editingDisabled || props.isEditing,
       icon: 'i-mdi-undo',
-      label: 'Undo'
+      label: t('buttons.undo')
     }
   }
   return {
@@ -78,7 +80,7 @@ const getActionButton = (item: SiSchemaType, index: number) => {
     actionArg: index,
     disabled: props.editingDisabled || props.isEditing,
     icon: 'i-mdi-pencil',
-    label: 'Update'
+    label: t('buttons.update')
   }
 }
 
@@ -98,14 +100,14 @@ const getActionDropDownItems = (item: SiSchemaType, index: number) => {
       actionArg: index,
       disabled: props.editingDisabled || props.isEditing,
       icon: 'i-mdi-pencil',
-      label: 'Edit'
+      label: t('buttons.edit')
     }]
   }
   return [{
     action: triggerCeaseSI,
     actionArg: index,
     disabled: props.editingDisabled || props.isEditing,
-    label: 'Cease'
+    label: t('buttons.cease')
   }]
 }
 
@@ -124,9 +126,7 @@ const undoSIChanges = (index: number) => {
 }
 
 const triggerCeaseSI = (index: number) => {
-  const { allEditableSIs }: {
-    allEditableSIs: Ref<SiSchemaType>
-  } = storeToRefs(useSignificantIndividuals())
+  const { allEditableSIs } = storeToRefs(useSignificantIndividuals())
   // show cease date input
   allEditableSIs.value[index].ui.showCeaseDateInput = true
 }
