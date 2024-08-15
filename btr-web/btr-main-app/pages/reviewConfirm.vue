@@ -56,7 +56,7 @@ import { SiSchemaType } from '~/utils/si-schema/definitions'
 const significantIndividuals = useSignificantIndividuals()
 const { currentSIFiling, allSIs }: {
   currentSIFiling: SignificantIndividualFilingI,
-  allEditableSIs: SiSchemaType[]
+  allSIs: SiSchemaType[]
 } = storeToRefs(significantIndividuals)
 
 const maxFolioNumberLength = 30

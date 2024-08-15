@@ -144,15 +144,6 @@ describe('accessibility -> Beneficial Owner Change', () => {
     // cy.get('[data-cy=action-button]').eq(0).click()
     // cy.checkA11y('[data-cy=individualsSummaryTable]')
     // cy.get('[data-cy=new-si-cancel-btn]').click()
-
-    // empty table
-    // cy.get('[data-cy=popover-button]').then((buttons) => {
-    //   for (let i = 0; i < buttons.length; i++) {
-    //     cy.get('[data-cy=popover-button]').first().click()
-    //     cy.get('[data-cy=popover-action-button]').click()
-    //   }
-    // })
-    // cy.checkA11y('[data-cy=individualsSummaryTable]')
   })
 
   it('Verifies the date selector passes AA', () => {

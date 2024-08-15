@@ -208,10 +208,10 @@ describe('pages -> Summary Table', () => {
     cy.get('[data-cy="individualsSummaryTable"]').as('summaryTable')
       .find('[data-cy="summary-table-row"]').as('summaryRow')
       .should('exist')
-      .should('have.length', 2)
+      .should('have.length', 3)
 
     cy.addTestIndividuals(false)
-    cy.get('@summaryRow').should('have.length', 3)
+    cy.get('@summaryRow').should('have.length', 4)
 
     cy.fixture('individuals').then((testData) => {
       cy.get('@summaryRow').first().find('[data-cy=summary-table-name]').as('nameItem')
@@ -247,7 +247,7 @@ describe('pages -> Summary Table', () => {
         .click()
 
       // verify removal
-      cy.get('@summaryRow').should('have.length', 2)
+      cy.get('@summaryRow').should('have.length', 3)
       cy.get('@nameItem').should('not.contain.text', testData.profile1.fullName)
       cy.get('@nameItem').find('[data-cy="name-badge"]').should('not.exist')
       cy.get('@actionButton').should('contain.text', 'Update')

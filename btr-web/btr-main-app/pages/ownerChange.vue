@@ -52,7 +52,7 @@ onBeforeMount(async () => {
 
   if (error?.value?.statusCode) {
     if (error?.value?.statusCode !== StatusCodes.NOT_FOUND) {
-      console.error(error)
+      console.error(error.value)
       const err = {
         statusCode: error?.value?.statusCode ?? StatusCodes.INTERNAL_SERVER_ERROR,
         message: error?.value?.message,
