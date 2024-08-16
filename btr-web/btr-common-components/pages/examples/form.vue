@@ -136,8 +136,7 @@ const addr: Ref<BtrAddressI> = ref({
 })
 
 function submit (event: FormSubmitEvent<Schema>) {
-  // eslint-disable-next-line no-console
-  console.log(event.data)
+  console.info(event.data)
 }
 </script>
 

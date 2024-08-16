@@ -27,7 +27,7 @@ describe('pages -> Review and Confirm', () => {
 
   it('integration test for adding an individual and reviewing the summary', () => {
     cy.fixture('individuals').then((testData) => {
-      cy.interceptPostsEntityApi().as('existingSIs')
+      cy.interceptPostsBtrApi().as('existingSIs')
       cy.visit('/')
       cy.wait(['@existingSIs', '@businessApiCall', '@payFeeApi', '@businessContact'])
 
@@ -106,10 +106,10 @@ describe('pages -> Review and Confirm', () => {
   })
 
   it('verify that you cannot submit without individuals when no checkbox selected', () => {
-    cy.interceptPostsEntityApiNoSis().as('noExistingSIs')
+    cy.interceptPostsBtrApiNoSis().as('noExistingSIs')
     cy.visit('/', {
       onBeforeLoad (win) {
-        cy.stub(win.console, 'log').as('consoleLog')
+        cy.stub(win.console, 'warn').as('consoleWarn')
       }
     })
     cy.wait(['@noExistingSIs', '@businessApiCall', '@payFeeApi', '@businessContact'])
@@ -136,7 +136,7 @@ describe('pages -> Review and Confirm', () => {
     cy.get('[data-cy=button-control-right-button]').eq(1).click()
 
     // verify console error shows issues, did not get redirected
-    cy.get('@consoleLog')
+    cy.get('@consoleWarn')
       .should('be.calledWith', '<> remove this line when validation errors are displayed on page')
     cy.url().should('include', '/beneficial-owner-change/review-confirm')
 
@@ -144,7 +144,7 @@ describe('pages -> Review and Confirm', () => {
     cy.get('[data-cy=button-control-right-button]').eq(0).should('have.text', 'Back')
     cy.get('[data-cy=button-control-right-button]').eq(0).click()
 
-    cy.get('[data-cy="noSignificantIndividualsExist-checkbox"]').click()
+    cy.get('[data-cy="noSignificantIndividualsExist-checkbox"]').click().should('be.checked')
 
     // click 'Review and Confirm' button to go back to review the summary
     cy.get('[data-cy="button-control-right-button"]').click()

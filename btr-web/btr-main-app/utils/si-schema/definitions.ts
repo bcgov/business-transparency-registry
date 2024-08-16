@@ -88,7 +88,9 @@ export const SiSchema = z.object({
 
   // UI helper values
   ui: z.object({
-    action: z.nativeEnum(FilingActionE).optional()
+    actions: z.array(z.nativeEnum(FilingActionE)).optional(),
+    origIndex: z.number().optional(),
+    showCeaseDateInput: z.boolean().optional()
   })
 })
 

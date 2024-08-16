@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { IndividualPersonSummaryTableActionButton, IndividualPersonSummaryTableCessationDateEntry } from '#components'
 import { SiSchemaType } from '~/utils/si-schema/definitions'
 
 const emit = defineEmits(['toggle-editing-mode'])
@@ -32,8 +33,103 @@ const headers = [
 ]
 
 const isEmptyState = computed(() => {
-  return props.individuals.filter(individual => individual.ui.action !== FilingActionE.REMOVE).length === 0
+  return props.individuals.filter(individual => !individual.ui.actions?.includes(FilingActionE.HISTORICAL)).length === 0
 })
+
+const getBadges = (item: SiSchemaType) => {
+  if (!item.ui.actions?.length) {
+    return
+  }
+  const badges = []
+  if (item.ui.actions?.includes(FilingActionE.ADD)) {
+    badges.push({ label: t('badges.new') })
+  }
+  if (item.ui.actions?.includes(FilingActionE.EDIT)) {
+    badges.push({ label: t('badges.updated') })
+  }
+  if (
+    item.ui.actions?.includes(FilingActionE.CEASE) ||
+    item.ui.actions?.includes(FilingActionE.HISTORICAL)
+  ) {
+    badges.push({ label: t('badges.ceased'), colour: 'gray' })
+  }
+  return badges
+}
+
+const getActionButton = (item: SiSchemaType, index: number) => {
+  if (item.ui.actions?.includes(FilingActionE.ADD)) {
+    return {
+      action: openEditingMode,
+      actionArg: index,
+      disabled: props.editingDisabled || props.isEditing,
+      icon: 'i-mdi-pencil',
+      label: t('buttons.edit')
+    }
+  }
+  if (item.ui.actions?.includes(FilingActionE.EDIT) || item.ui.actions?.includes(FilingActionE.CEASE)) {
+    return {
+      action: undoSIChanges,
+      actionArg: index,
+      disabled: props.editingDisabled || props.isEditing,
+      icon: 'i-mdi-undo',
+      label: t('buttons.undo')
+    }
+  }
+  return {
+    action: openEditingMode,
+    actionArg: index,
+    disabled: props.editingDisabled || props.isEditing,
+    icon: 'i-mdi-pencil',
+    label: t('buttons.update')
+  }
+}
+
+const getActionDropDownItems = (item: SiSchemaType, index: number) => {
+  if (item.ui.actions?.includes(FilingActionE.ADD)) {
+    return [{
+      action: removeSignificantIndividual,
+      actionArg: index,
+      disabled: props.editingDisabled || props.isEditing,
+      icon: 'i-mdi-delete',
+      label: t('buttons.remove')
+    }]
+  }
+  if (item.ui.actions?.includes(FilingActionE.EDIT) || item.ui.actions?.includes(FilingActionE.CEASE)) {
+    return [{
+      action: openEditingMode,
+      actionArg: index,
+      disabled: props.editingDisabled || props.isEditing,
+      icon: 'i-mdi-pencil',
+      label: t('buttons.edit')
+    }]
+  }
+  return [{
+    action: triggerCeaseSI,
+    actionArg: index,
+    disabled: props.editingDisabled || props.isEditing,
+    label: t('buttons.cease')
+  }]
+}
+
+const getOpacityClass = (item: SiSchemaType) => {
+  if (
+    item.ui.actions?.includes(FilingActionE.CEASE) ||
+    item.ui.actions?.includes(FilingActionE.HISTORICAL)
+  ) {
+    return 'opacity-55'
+  }
+  return ''
+}
+
+const undoSIChanges = (index: number) => {
+  useSignificantIndividuals().undoSIChanges(index)
+}
+
+const triggerCeaseSI = (index: number) => {
+  const { allEditableSIs } = storeToRefs(useSignificantIndividuals())
+  // show cease date input
+  allEditableSIs.value[index].ui.showCeaseDateInput = true
+}
 
 function openEditingMode (index: number) {
   editingIndex.value = index
@@ -48,8 +144,7 @@ function closeEditingMode () {
 }
 
 function copyIndividualToEdit () {
-  const individualToEdit = JSON.parse(JSON.stringify(props.individuals[editingIndex.value]))
-  individualToEdit.action = FilingActionE.EDIT
+  const individualToEdit: SiSchemaType = JSON.parse(JSON.stringify(props.individuals[editingIndex.value]))
   return individualToEdit
 }
 
@@ -60,7 +155,7 @@ function removeSignificantIndividual (index: number) {
 
 function updateSignificantIndividual (index: number | undefined, updatedSI: SiSchemaType) {
   if (index !== undefined) {
-    useSignificantIndividuals().filingUpdateSI(index, updatedSI)
+    useSignificantIndividuals().filingUpdateSI(updatedSI, index)
   }
   closeEditingMode()
 }
@@ -97,31 +192,31 @@ function capFirstLetterInName (fullName: string) {
       </div>
     </template>
 
-    <template #table-row="{ item, index }">
-      <tr v-if="item.ui.action != FilingActionE.REMOVE && editingIndex != index">
+    <template #table-row="{ item, index } : { item: SiSchemaType, index: number }">
+      <tr v-if="editingIndex != index" class="border-t-[1px] border-gray-400" data-cy="summary-table-row">
         <td data-cy="summary-table-name">
           <PersonInfoName
+            :badges="getBadges(item)"
             :item="{
               'legalName': item.name.fullName,
               'alternateName': item.name.preferredName,
-              'birthDate': item.birthDate}"
+              'birthDate': item.birthDate,
+              'class': getOpacityClass(item)}"
           />
           <PersonInfoCitizenship
+            :class="getOpacityClass(item)"
             :nationalities="item.citizenships"
           />
         </td>
-        <!-- <td data-cy="summary-table-address">
-          <BcrosInputsAddressDisplay :model-value="item.address" />
-        </td> -->
-        <td class="align-top" data-cy="summary-table-details">
+        <td class="align-top" :class="getOpacityClass(item)" data-cy="summary-table-details">
           <PersonInfoDetails :item="item" />
         </td>
 
-        <td data-cy="summary-table-controls">
+        <td :class="getOpacityClass(item)" data-cy="summary-table-controls">
           <PersonInfoControl :item="item" />
         </td>
 
-        <td data-cy="summary-table-dates">
+        <td :class="getOpacityClass(item)" data-cy="summary-table-dates">
           <p v-for="date in item.effectiveDates" :key="date.startDate">
             {{
               $t('texts.dateRange', {
@@ -131,44 +226,13 @@ function capFirstLetterInName (fullName: string) {
             }}
           </p>
         </td>
+        <!-- NOTE: getOpacityClass is not applied to the edit column on purpose -->
         <template v-if="edit">
-          <td v-if="edit" data-cy="summary-table-buttons" class="action-button align-top">
-            <div class="flex flex-nowrap justify-end overflow-hidden mt-2">
-              <UButton
-                :ui="{
-                  rounded: 'rounded-none focus-visible:rounded-md',
-                  padding: { default: 'py-0' }
-                }"
-                icon="i-mdi-pencil"
-                :label="t('buttons.edit')"
-                variant="editButton"
-                :disabled="editingDisabled || isEditing"
-                data-cy="edit-button"
-                @click="openEditingMode(index)"
-              />
-              <UPopover :popper="{ placement: 'bottom-end' }">
-                <UButton
-                  :ui="{ padding: { default: 'py-0' } }"
-                  icon="i-mdi-menu-down"
-                  aria-label="show more options"
-                  variant="removeButton"
-                  :disabled="editingDisabled || isEditing"
-                  data-cy="popover-button"
-                />
-                <template #panel>
-                  <UButton
-                    :ui="{ padding: { default: 'py-0' } }"
-                    class="m-2"
-                    icon="i-mdi-delete"
-                    :label="t('buttons.remove')"
-                    color="primary"
-                    variant="removeButton"
-                    data-cy="remove-button"
-                    @click="removeSignificantIndividual(index)"
-                  />
-                </template>
-              </UPopover>
-            </div>
+          <td data-cy="summary-table-buttons" class="action-button align-top">
+            <IndividualPersonSummaryTableActionButton
+              :button="getActionButton(item, index)"
+              :dropdown-items="getActionDropDownItems(item, index)"
+            />
           </td>
         </template>
       </tr>
@@ -178,31 +242,31 @@ function capFirstLetterInName (fullName: string) {
           the v-if is set to false until the feature is implemented;
           rules for minor: #20621
         -->
-      <tr v-if="false">
+      <tr v-if="editingIndex != index && false" data-cy="summary-table-row-minor">
         <td colspan="5">
           TBD - Message for Minor SI
         </td>
       </tr>
 
       <!-- to be updated in #21660 -->
-      <tr v-if="item.missingInfoReason !== ''">
+      <tr v-if="editingIndex != index && item.missingInfoReason !== ''" data-cy="summary-table-row-missing-info">
         <td colspan="5">
           TBD - Unable to obtain or confirm information
           {{ item.missingInfoReason }}
         </td>
       </tr>
 
-      <!--
-          placeholder row for cessation date and buttons
-          the v-if is set to false until the feature is implemented
-        -->
-      <tr v-if="false">
+      <tr v-if="editingIndex != index && item.ui.showCeaseDateInput" data-cy="summary-table-row-cease">
         <td colspan="5">
-          TBD - Component for cessation date and buttons
+          <IndividualPersonSummaryTableCessationDateEntry :individual="item" :index="index" />
         </td>
       </tr>
 
-      <tr v-if="isEditing && editingIndex === index">
+      <tr
+        v-if="isEditing && editingIndex === index"
+        class="border-t-[1px] border-gray-400"
+        data-cy="summary-table-row-edit"
+      >
         <td data-cy="summary-table-edit-form" colspan="100%">
           <div class="bg-primary text-white flex items-center justify-between p-3">
             <div class="flex item-center">
@@ -253,7 +317,6 @@ function capFirstLetterInName (fullName: string) {
 td {
   @apply px-3 py-4 align-top whitespace-normal text-sm text-gray-700
 }
-
 .data-wrapper {
   @apply flex flex-col gap-3
 }

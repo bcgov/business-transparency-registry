@@ -5,18 +5,14 @@ import { SiSchemaType } from '~/utils/si-schema/definitions'
 import fileSIApi from '~/services/file-significant-individual'
 
 const significantIndividuals = useSignificantIndividuals()
-const { currentSIFiling } = storeToRefs(significantIndividuals)
+const { currentSIFiling, allActiveSIs, allEditableSIs } = storeToRefs(significantIndividuals)
 
 const expandNewSI = ref(false)
 const showNoSignificantIndividuals = computed(
-  (): boolean =>
-    !(currentSIFiling.value.significantIndividuals?.filter(si => si.action !== FilingActionE.REMOVE).length > 0) &&
-    !expandNewSI.value)
+  (): boolean => !(allEditableSIs.value.length > 0) && !expandNewSI.value)
 
 const numOfIndividualsWithSharedControl = computed(() => {
-  return currentSIFiling.value.significantIndividuals?.filter(
-    si => si.ui.action !== FilingActionE.REMOVE && hasSharedControl(si)
-  ).length
+  return allActiveSIs.value.filter(si => hasSharedControl(si)).length
 })
 
 const isEditing = ref(false)
@@ -33,7 +29,7 @@ function handleAddNewButtonClick () {
 }
 
 function addNewSI (si: SiSchemaType) {
-  significantIndividuals.filingAddSI(si)
+  significantIndividuals.filingUpdateSI(si)
   expandNewSI.value = false
   isAddingNewSI.value = false
 }
@@ -50,12 +46,12 @@ onBeforeMount(async () => {
   const siControlStore = useSiControlStore()
   const { data, error } = await fileSIApi.getBtrFiling(identifier)
 
-  if (error.statusCode) {
-    if (error.statusCode !== StatusCodes.NOT_FOUND) {
-      console.error(error)
+  if (error?.value?.statusCode) {
+    if (error?.value?.statusCode !== StatusCodes.NOT_FOUND) {
+      console.error(error.value)
       const err = {
-        statusCode: error.statusCode ?? StatusCodes.INTERNAL_SERVER_ERROR,
-        message: error.message,
+        statusCode: error?.value?.statusCode ?? StatusCodes.INTERNAL_SERVER_ERROR,
+        message: error?.value?.message,
         category: ErrorCategoryE.SIGNIFICANT_INDIVIDUAL
       }
       significantIndividuals.errors.value.push(err)
@@ -132,7 +128,7 @@ onBeforeMount(async () => {
       />
       <div v-if="expandNewSI" class="w-full h-12" data-cy="spacer" />
       <IndividualPersonSummaryTable
-        :individuals="currentSIFiling.significantIndividuals || []"
+        :individuals="allEditableSIs || []"
         :edit="true"
         :is-editing="isEditing"
         :editing-disabled="isAddingNewSI"

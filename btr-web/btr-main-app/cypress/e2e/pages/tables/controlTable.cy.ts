@@ -1,3 +1,5 @@
+import { BtrFilingI } from '../../../../interfaces/btr-bods/btr-filing-i'
+
 describe('pages -> Control Table', () => {
   beforeEach(() => {
     cy.visitHomePageWithFakeData()
@@ -11,27 +13,37 @@ describe('pages -> Control Table', () => {
   // 1) the first SI has shares in concert with the second SI
   // 2) the first SI has shares held jointly with the third SI
   it('The control table is working as expected', () => {
-    cy.fixture('plotsEntityExistingSiResponse').then((plotsEntityExistingSiResponse) => {
-      const name1 = plotsEntityExistingSiResponse.payload.personStatements[0].names[0].fullName.toUpperCase()
-      const name2 = plotsEntityExistingSiResponse.payload.personStatements[1].names[0].fullName.toUpperCase()
-      const name3 = plotsEntityExistingSiResponse.payload.personStatements[2].names[0].fullName.toUpperCase()
-      const numOfSI = plotsEntityExistingSiResponse.payload.personStatements.length
+    cy.fixture('plotsEntityExistingSiResponse').then((siData: { payload: BtrFilingI }) => {
+      // should only display records for current active SIs
+      const viewableOwnrStmnts = siData.payload.ownershipOrControlStatements.filter(
+        ownrStmnt => !!ownrStmnt.interests.find(interest => !interest.endDate))
+
+      const personStmnt1 = siData.payload.personStatements.find(
+        person => person.statementID === viewableOwnrStmnts[0].interestedParty.describedByPersonStatement)
+      const personStmnt2 = siData.payload.personStatements.find(
+        person => person.statementID === viewableOwnrStmnts[1].interestedParty.describedByPersonStatement)
+      const personStmnt3 = siData.payload.personStatements.find(
+        person => person.statementID === viewableOwnrStmnts[2].interestedParty.describedByPersonStatement)
+      const name1 = personStmnt1?.names[0].fullName.toUpperCase()
+      const name2 = personStmnt2?.names[0].fullName.toUpperCase()
+      const name3 = personStmnt3?.names[0].fullName.toUpperCase()
+      const numOfSI = viewableOwnrStmnts.length
 
       // update the first SI to add control of shares held in concert and jointly
-      cy.get('[data-cy=edit-button]').eq(0).click()
+      cy.get('[data-cy=action-button]').eq(0).click()
       cy.get('[data-cy="controlOfShares.jointlyOrInConcert.hasJointlyOrInConcert"]').check()
       cy.get('[data-cy="controlOfShares.jointlyOrInConcert.actingJointly"]').check()
       cy.get('[data-cy="controlOfShares.jointlyOrInConcert.inConcertControl"]').check()
       cy.get('[data-cy=new-si-done-btn]').click()
 
       // update the second SI to add control of shares in concert
-      cy.get('[data-cy=edit-button]').eq(1).click()
+      cy.get('[data-cy=action-button]').eq(1).click()
       cy.get('[data-cy="controlOfShares.jointlyOrInConcert.hasJointlyOrInConcert"]').check()
       cy.get('[data-cy="controlOfShares.jointlyOrInConcert.inConcertControl"]').check()
       cy.get('[data-cy=new-si-done-btn]').click()
 
       // update the third SI to add control of shares held jointly
-      cy.get('[data-cy=edit-button]').eq(2).click()
+      cy.get('[data-cy=action-button]').eq(2).click()
       cy.get('[data-cy="controlOfShares.jointlyOrInConcert.hasJointlyOrInConcert"]').check()
       cy.get('[data-cy="controlOfShares.jointlyOrInConcert.actingJointly"]').check()
       cy.get('[data-cy=new-si-done-btn]').click()
@@ -89,16 +101,17 @@ describe('pages -> Control Table', () => {
 
   it('A warning message is displayed when only one siginiciant individual has shared control', () => {
     // update the first SI to add control of votes in concert
-    cy.get('[data-cy=edit-button]').eq(0).click()
-    cy.get('[data-cy="controlOfVotes.jointlyOrInConcert.hasJointlyOrInConcert"]').check()
-    cy.get('[data-cy="controlOfVotes.jointlyOrInConcert.inConcertControl"]').check()
+    cy.get('[data-cy=action-button]').eq(0).click()
+    cy.get('[data-cy="controlOfShares.jointlyOrInConcert.hasJointlyOrInConcert"]').check()
+    cy.get('[data-cy="controlOfShares.jointlyOrInConcert.actingJointly"]').check()
+    cy.get('[data-cy="controlOfShares.jointlyOrInConcert.inConcertControl"]').check()
     cy.get('[data-cy=new-si-done-btn]').click()
 
     // the warning message should be rendered
     cy.get('[data-cy="alertsMessage:alert"]').should('exist')
 
     // add another SI to the table
-    cy.get('[data-cy=edit-button]').eq(1).click()
+    cy.get('[data-cy=action-button]').eq(1).click()
     cy.get('[data-cy="controlOfVotes.jointlyOrInConcert.hasJointlyOrInConcert"]').check()
     cy.get('[data-cy="controlOfVotes.jointlyOrInConcert.inConcertControl"]').check()
     cy.get('[data-cy=new-si-done-btn]').click()

@@ -135,7 +135,11 @@ const submitSignificantIndividualFiling = async (sif: SignificantIndividualFilin
     certified: sif.certified,
     noSignificantIndividualsExist: sif.noSignificantIndividualsExist,
     businessIdentifier: sif.businessIdentifier,
-    significantIndividuals: sif.significantIndividuals.filter(si => si.ui.action !== FilingActionE.REMOVE),
+    significantIndividuals: sif.significantIndividuals.filter(
+      si => si.ui.actions?.includes(FilingActionE.ADD) ||
+        si.ui.actions?.includes(FilingActionE.CEASE) ||
+        si.ui.actions?.includes(FilingActionE.EDIT)
+    ),
     effectiveDate: sif.effectiveDate,
     folioNumber: sif.folioNumber
   }

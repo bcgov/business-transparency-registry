@@ -17,7 +17,7 @@
     </div>
     <div class="bg-white rounded-[5px] mt-10">
       <IndividualPersonSummaryTable
-        :individuals="currentSIFiling.significantIndividuals || []"
+        :individuals="allSIs || []"
         :edit="false"
       />
     </div>
@@ -51,9 +51,13 @@
 <script setup lang="ts">
 import { storeToRefs } from 'pinia'
 import { z } from 'zod'
+import { SiSchemaType } from '~/utils/si-schema/definitions'
 
 const significantIndividuals = useSignificantIndividuals()
-const { currentSIFiling } = storeToRefs(significantIndividuals)
+const { currentSIFiling, allSIs }: {
+  currentSIFiling: SignificantIndividualFilingI,
+  allSIs: SiSchemaType[]
+} = storeToRefs(significantIndividuals)
 
 const maxFolioNumberLength = 30
 

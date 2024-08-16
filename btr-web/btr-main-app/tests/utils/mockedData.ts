@@ -60,7 +60,7 @@ export const testSI: SiSchemaType = {
   couldNotProvideMissingInfo: false,
   uuid: '001',
   ui: {
-    action: FilingActionE.ADD
+    actions: [FilingActionE.ADD]
   }
 }
 

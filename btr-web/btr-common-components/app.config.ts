@@ -5,9 +5,8 @@ export default defineAppConfig({
     red: 'red',
     button: {
       variant: {
+        ghost: 'hover:bg-inherit',
         solid: 'hover:bg-opacity-[.92] hover:bg-{color}-500',
-        editButton: 'text-primary border-0 border-r-2 border-gray focus-visible:ring-2 focus-visible:ring-primary',
-        removeButton: 'text-primary border-0 focus-visible:ring-2 focus-visible:ring-primary',
         combobox: 'bg-gray-100 hover:bg-gray-200 border-b-[1px] rounded-none rounded-t-md'
       }
     },
@@ -84,14 +83,13 @@ export default defineAppConfig({
       label: 'text-base text-gray-900'
     },
     tooltip: {
+      base: 'h-full p-3',
       background: 'bg-gray-700',
       color: 'text-white',
-      ring: 'ring-1 ring-gray-700',
-      rounded: 'rounded-none',
-      base: 'h-auto text-base p-3',
+      ring: 'ring-0',
+      width: 'max-w-none',
       arrow: {
-        base: 'before:w-3 before:h-3',
-        ring: 'before:ring-1 before:ring-gray-700',
+        ring: 'before:ring-0',
         background: 'before:bg-gray-700'
       }
     }

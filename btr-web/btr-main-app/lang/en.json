@@ -4,6 +4,8 @@
   },
   "labels": {
     "addEndDate": "Add end date",
+    "cessationDate": "Cessation Date",
+    "endDate": "End Date",
     "determinationOfIncapacity": "This individual is incapable of managing their own affairs",
     "noSignificantIndividualsExist": "There are no current significant individuals for this business",
     "importLegacySIList": "Import your legacy SI list",
@@ -59,6 +61,11 @@
     "taxResidency": "Tax Residency",
     "competency": "Competency"
   },
+  "badges": {
+    "ceased": "CEASED",
+    "new": "NEW",
+    "updated": "UPDATED"
+  },
   "buttons": {
     "addAnIndividual": "Add an Individual",
     "importYourLegacySIList": "Import your legacy SI list",
@@ -67,10 +74,13 @@
       "cancel": "Cancel transparent register information"
     },
     "cancel": "Cancel",
+    "cease": "Cease",
     "done": "Done",
     "remove": "Remove",
     "edit": "Edit",
-    "addAnotherEffectiveDate": "Add another effective date"
+    "addAnotherEffectiveDate": "Add another effective date",
+    "undo": "Undo",
+    "update": "Update"
   },
   "texts": {
     "significantIndividuals": "List all of the individual who have significant control of this company. Significant control is determined by control of shares or votes at general meetings, control of directors, or other interests or rights that allow the individual to control the company.",

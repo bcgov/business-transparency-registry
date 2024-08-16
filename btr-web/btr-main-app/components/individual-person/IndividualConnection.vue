@@ -4,7 +4,10 @@ import { useSiControlStore } from '~/stores/si-control-store'
 import { JointlyOrInConcertConnectionsI } from '~/interfaces/jointly-or-in-concert'
 
 const siControlStore = useSiControlStore()
-const { allActiveSis, actingJointlyAndInConcert } = storeToRefs(siControlStore)
+const { allActiveSIs, actingJointlyAndInConcert }: {
+  allActiveSIs: Ref<SiSchemaType[]>,
+  actingJointlyAndInConcert: Ref<Map<string, JointlyOrInConcertConnectionsI>>
+} = storeToRefs(siControlStore)
 
 const props = defineProps({
   si: { type: Object as PropType<SiSchemaType>, required: true },
@@ -14,7 +17,7 @@ const props = defineProps({
 })
 
 const allActiveSisExceptMe = computed(() =>
-  allActiveSis.value.filter((asi: SiSchemaType) => asi.uuid !== props.si.uuid).map(
+  allActiveSIs.value.filter((asi: SiSchemaType) => asi.uuid !== props.si.uuid).map(
     (si: SiSchemaType) => ({
       uuid: si.uuid,
       legalName: si.name.fullName,
@@ -22,7 +25,7 @@ const allActiveSisExceptMe = computed(() =>
     })
   )
 )
-const siControl: JointlyOrInConcertConnectionsI = computed(() => actingJointlyAndInConcert.value.get(props.si.uuid))
+const siControl = computed(() => actingJointlyAndInConcert.value.get(props.si.uuid))
 </script>
 
 <template>
