@@ -1,7 +1,7 @@
 <script setup lang="ts">
 type ActionBtnT = {
-  action: (val?: any) => any,
-  actionArg?: any,
+  action: Function,
+  actionArg?: number,
   disabled: boolean,
   icon?: string,
   label: string
@@ -12,7 +12,7 @@ defineProps<{ button: ActionBtnT, dropdownItems?: ActionBtnT[] }>()
 </script>
 
 <template>
-  <div class="flex flex-nowrap justify-end overflow-hidden mt-2">
+  <div class="flex flex-nowrap justify-end overflow-hidden">
     <UButton
       :ui="{
         rounded: 'rounded-none focus-visible:rounded-md',
