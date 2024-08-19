@@ -19,6 +19,13 @@ Cypress.Commands.add('interceptPostsBtrApiNoSis', () => {
   })
 })
 
+Cypress.Commands.add('interceptPostsBtrApiNoPreviousSubmissions', () => {
+  cy.intercept(
+    'GET',
+    '/plots/entity/BC0871427',
+    { statusCode: 404, headers: { 'x-not-found': 'true' } })
+})
+
 Cypress.Commands.add('interceptPostsBtrApiEmpty', () => {
   cy.intercept(
     'GET',
@@ -71,6 +78,15 @@ Cypress.Commands.add('interceptBusinessContact', () => {
         contact)
     })
   })
+})
+
+Cypress.Commands.add('visitHomePageNoPreviousSiSubmissions', () => {
+  cy.interceptPostsBtrApiNoPreviousSubmissions().as('noSubmissionsSi')
+  cy.interceptPayFeeApi().as('payFeeApi')
+  cy.interceptBusinessContact().as('businessContact')
+  cy.interceptBusinessSlim().as('businessApiCall')
+  cy.visit('/')
+  cy.wait(['@noSubmissionsSi', '@businessApiCall', '@payFeeApi', '@businessContact'])
 })
 
 Cypress.Commands.add('visitHomePageNoFakeData', () => {
