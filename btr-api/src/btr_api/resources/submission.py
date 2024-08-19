@@ -74,8 +74,8 @@ def registers(id: int | None = None):  # pylint: disable=redefined-builtin
     try:
         if submission := SubmissionModel.find_by_id(id):
             btr_auth.is_authorized(request=request, business_identifier=submission.business_identifier)
-            if submission.previous_payload is None or submission.previous_payload == '':
-                submission.previous_payload = submission.payload
+            if submission.submitted_payload is None or submission.submitted_payload == '':
+                submission.submitted_payload = submission.payload
             redacted = redact_information(SubmissionSerializer.to_dict(submission))
             return jsonify(type=submission.type, submission=redacted.payload)
 
@@ -98,8 +98,8 @@ def get_entity_submission(business_identifier: str):
 
         submission = SubmissionModel.find_by_business_identifier(business_identifier)
         if submission:
-            if submission.previous_payload is None or submission.previous_payload == '':
-                submission.previous_payload = submission.payload
+            if submission.submitted_payload is None or submission.submitted_payload == '':
+                submission.submitted_payload = submission.payload
             return jsonify(redact_information(SubmissionSerializer.to_dict(submission)))
 
         return {}, HTTPStatus.NOT_FOUND
@@ -210,7 +210,7 @@ def update_submission(id: int):
             if entity_errors := validate_entity(entity):
                 return error_request_response('Invalid entity', HTTPStatus.FORBIDDEN, entity_errors)
             
-            submission.previous_payload = submission.payload
+            submission.submitted_payload = request.get_json()
             subDict = SubmissionSerializer.to_dict(submission)
             newPayload = deep_spread(subDict['payload'], request.get_json())
             

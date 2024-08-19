@@ -83,5 +83,5 @@ class SubmissionService:  # pylint: disable=too-few-public-methods
         submission.submitter_id = submitter_id
         submission.invoice_id = None
 
-        submission.previous_payload = submission_dict
+        submission.submitted_payload = submission_dict
         return submission

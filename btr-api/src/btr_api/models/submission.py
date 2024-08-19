@@ -66,7 +66,7 @@ class Submission(Versioned, db.Model):
     business_identifier = db.Column(db.String(255), nullable=False, unique=True, index=True)
     # maps to invoice id created by the pay-api (used for getting receipt)
     invoice_id = db.Column(db.Integer, nullable=True)
-    previous_payload = db.Column("previous_payload", JSONB)
+    submitted_payload = db.Column("submitted_payload", JSONB)
 
     # Relationships
     submitter_id = db.Column('submitter_id', db.Integer, db.ForeignKey('users.id'))
@@ -121,5 +121,5 @@ class SubmissionSerializer:
             'payload': submission.payload,
             'business_identifier': submission.business_identifier,
             'submitter_id': submission.submitter_id,
-            'previous_payload': submission.previous_payload
+            'submitted_payload': submission.submitted_payload
         }
