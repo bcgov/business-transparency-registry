@@ -210,9 +210,9 @@ def update_submission(id: int):
             if entity_errors := validate_entity(entity):
                 return error_request_response('Invalid entity', HTTPStatus.FORBIDDEN, entity_errors)
             
-            submission.submitted_payload = request.get_json()
+            submitted_json = request.get_json()
             subDict = SubmissionSerializer.to_dict(submission)
-            newPayload = deep_spread(subDict['payload'], request.get_json())
+            newPayload = deep_spread(subDict['payload'], submitted_json)
             
             # validate payload; TODO: implement business rules validations
             schema_name = 'btr-filing.schema.json'
@@ -221,8 +221,8 @@ def update_submission(id: int):
             if not valid:
                 return error_request_response('Invalid schema', HTTPStatus.BAD_REQUEST, errors)
 
-            db.session.expire_all()
-            submission.payload = newPayload
+            submission = SubmissionService.update_submission(submission, newPayload, user.id, submitted_json)
+
             submission.save()
             try:
                 # NOTE: this will be moved out of this api once lear filings are linked
