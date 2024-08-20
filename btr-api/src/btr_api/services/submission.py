@@ -105,7 +105,7 @@ class SubmissionService:  # pylint: disable=too-few-public-methods
         - SubmissionModel: A SubmissionModel object that represents the created submission.
 
         """
-        
+
         submission.effective_date = date.fromisoformat(submission_dict['effectiveDate'])
         submission.payload = submission_dict
         submission.submitter_id = submitter_id

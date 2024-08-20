@@ -13,6 +13,7 @@ from btr_api.services import SubmissionService
 from sqlalchemy import text
 from tests.unit import nested_session
 from tests.unit.utils import create_header
+from btr_api.utils import redact_information
 
 mocked_entity_response = {'business': {'adminFreeze': False, 'state': 'ACTIVE'}}
 mocked_entity_address_response = {
@@ -90,7 +91,8 @@ def test_get_plots(app, client, session, jwt, requests_mock, test_name, submissi
         assert rv.status_code == HTTPStatus.OK
 
         if payload:
-            for key, value in payload.items():
+            redacted_payload = redact_information(payload)
+            for key, value in redacted_payload.items():
                 assert key in rv.text
                 assert value in rv.text
 

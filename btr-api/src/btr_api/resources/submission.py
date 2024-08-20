@@ -63,7 +63,6 @@ from btr_api.services import SchemaService
 from btr_api.services import SubmissionService
 from btr_api.services.validator import validate_entity
 from btr_api.utils import redact_information, deep_spread
-from btr_api.models import db
 
 bp = Blueprint('submission', __name__)
 
@@ -77,7 +76,7 @@ def registers(id: int | None = None):  # pylint: disable=redefined-builtin
             if submission.submitted_payload is None or submission.submitted_payload == '':
                 submission.submitted_payload = submission.payload
             redacted = redact_information(SubmissionSerializer.to_dict(submission))
-            return jsonify(type=submission.type, submission=redacted.payload)
+            return jsonify(type=submission.type, submission=redacted['payload'])
 
         return {}, HTTPStatus.NOT_FOUND
 
@@ -182,10 +181,10 @@ def create_register():
     except Exception as exception:  # noqa: B902
         return exception_response(exception)
 
-@bp.route('/<id>', methods=('PUT',))
+@bp.route('/<sub_id>', methods=('PUT',))
 @cross_origin(origin='*')
 @jwt.requires_auth
-def update_submission(id: int):
+def update_submission(sub_id: int):
     """
     Update an existing submission.
     Any fields that are not in the payload will be ignored.
@@ -197,7 +196,7 @@ def update_submission(id: int):
     try:
         user = UserModel.get_or_create_user_by_jwt(g.jwt_oidc_token_info)
         account_id = request.headers.get('Account-Id', None)
-        submission = SubmissionModel.find_by_id(id)
+        submission = SubmissionModel.find_by_id(sub_id)
         if submission:
             business_identifier = submission.business_identifier
             btr_auth.is_authorized(request=request, business_identifier=business_identifier)
@@ -209,19 +208,19 @@ def update_submission(id: int):
             # validate entity; return FORBIDDEN for historial and frozen companies
             if entity_errors := validate_entity(entity):
                 return error_request_response('Invalid entity', HTTPStatus.FORBIDDEN, entity_errors)
-            
+
             submitted_json = request.get_json()
-            subDict = SubmissionSerializer.to_dict(submission)
-            newPayload = deep_spread(subDict['payload'], submitted_json)
-            
+            sub_dict = SubmissionSerializer.to_dict(submission)
+            new_payload = deep_spread(sub_dict['payload'], submitted_json)
+
             # validate payload; TODO: implement business rules validations
             schema_name = 'btr-filing.schema.json'
             schema_service = SchemaService()
-            [valid, errors] = schema_service.validate(schema_name, newPayload)
+            [valid, errors] = schema_service.validate(schema_name, new_payload)
             if not valid:
                 return error_request_response('Invalid schema', HTTPStatus.BAD_REQUEST, errors)
 
-            submission = SubmissionService.update_submission(submission, newPayload, user.id, submitted_json)
+            submission = SubmissionService.update_submission(submission, new_payload, user.id, submitted_json)
 
             submission.save()
             try:
