@@ -77,9 +77,8 @@ class SubmissionService:  # pylint: disable=too-few-public-methods
         """
         submission = SubmissionModel.find_by_business_identifier(submission_dict['businessIdentifier'])
         if submission:
-            raise Exception(
-                f"Submission with business identifier {submission_dict['businessIdentifier']} already exists"
-                )  # pylint: disable=broad-exception-raised
+            raise Exception(  # pylint: disable=broad-exception-raised
+                f"Submission with business identifier {submission_dict['businessIdentifier']} already exists")
         submission = SubmissionModel()
         submission.effective_date = date.fromisoformat(submission_dict['effectiveDate'])
         submission.payload = submission_dict
