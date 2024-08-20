@@ -144,7 +144,7 @@ def create_register():
         if entity_errors := validate_entity(entity):
             return error_request_response('Invalid entity', HTTPStatus.FORBIDDEN, entity_errors)
 
-        # create submission
+        # create submission -- this will now throw an exception if submission exists
         submission = SubmissionService.create_submission(json_input, user.id)
         # save before attempting invoice creation so that we can log the id for ops if there's an error
         submission.save_to_session()
