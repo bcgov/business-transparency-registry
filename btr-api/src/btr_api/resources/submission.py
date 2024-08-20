@@ -72,7 +72,9 @@ def registers(id: int | None = None):  # pylint: disable=redefined-builtin
     """Get the submissions, or specific submission by id."""
     try:
         if submission := SubmissionModel.find_by_id(id):
+            account_id = request.headers.get('Account-Id', None)
             btr_auth.is_authorized(request=request, business_identifier=submission.business_identifier)
+            btr_auth.product_authorizations(request=request, account_id=account_id)
             if submission.submitted_payload is None or submission.submitted_payload == '':
                 submission.submitted_payload = submission.payload
             redacted = redact_information(SubmissionSerializer.to_dict(submission))
