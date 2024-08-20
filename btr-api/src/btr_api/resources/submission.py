@@ -83,12 +83,8 @@ def registers(id: int | None = None):  # pylint: disable=redefined-builtin
         return {}, HTTPStatus.NOT_FOUND
 
     except AuthException as aex:
-        current_app.logger.debug("auth ex")
-        current_app.logger.debug(aex)
         return exception_response(aex)
     except Exception as exception:  # noqa: B902
-        current_app.logger.debug("ex")
-        current_app.logger.debug(exception)
         return exception_response(exception)
 
 

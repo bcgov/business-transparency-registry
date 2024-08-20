@@ -79,6 +79,10 @@ def test_get_plots(app, client, session, jwt, requests_mock, test_name, submissi
             f'{app.config.get("AUTH_SVC_URL")}/entities/{sub.business_identifier}/authorizations',
             json={'orgMembership': 'COORDINATOR', 'roles': ['edit', 'view']},
         )
+
+        requests_mock.get(
+            f'{app.config.get("AUTH_SVC_URL")}/entities/1/products?include_hidden=true',
+            json={'products': [{'code': 'CA', 'subscriptionStatus': 'ACTIVE'}]})
         # Test
         rv = client.get(
             f'/plots/{id}',
@@ -138,6 +142,10 @@ def test_get_plots_auth(
         requests_mock.get(
             f'{app.config.get("AUTH_SVC_URL")}/entities/{business_identifier}/authorizations', json=auth_svc_response
         )
+
+        requests_mock.get(
+            f'{app.config.get("AUTH_SVC_URL")}/entities/1/products?include_hidden=true',
+            json={'products': [{'code': 'CA', 'subscriptionStatus': 'ACTIVE'}]})
 
         headers = create_header(
             jwt, ['basic'], **{'Accept-Version': 'v1', 'content-type': 'application/json', 'Account-Id': 1}
