@@ -181,6 +181,7 @@ def create_register():
     except Exception as exception:  # noqa: B902
         return exception_response(exception)
 
+
 @bp.route('/<sub_id>', methods=('PUT',))
 @cross_origin(origin='*')
 @jwt.requires_auth
@@ -189,7 +190,7 @@ def update_submission(sub_id: int):
     Update an existing submission.
     Any fields that are not in the payload will be ignored.
     To remove a field the payload explicitly pass null
-    
+
     Returns:
         A tuple containing the response JSON and the HTTP status code.
     """

@@ -1,5 +1,6 @@
 """Function to redact fields and or a submission based on roles with a variety of options"""
 
+
 def deep_spread(dict1, dict2):
     """
     Function to perform the spread operator on nested dicts
@@ -17,7 +18,7 @@ def deep_spread(dict1, dict2):
 
     return_dict = {}
 
-    #Create all values in dict1 and if applicable merge values in dict2
+    # Create all values in dict1 and if applicable merge values in dict2
     for key, value in dict1.items():
         if isinstance(value, dict):
             if any(isinstance(i, dict) for i in value.values()):

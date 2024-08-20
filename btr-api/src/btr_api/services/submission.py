@@ -87,7 +87,11 @@ class SubmissionService:  # pylint: disable=too-few-public-methods
         return submission
 
     @staticmethod
-    def update_submission(submission: SubmissionModel, submission_dict: dict, submitter_id: int, payload: dict) -> SubmissionModel:
+    def update_submission(
+        submission: SubmissionModel,
+        submission_dict: dict,
+        submitter_id: int,
+        payload: dict) -> SubmissionModel:
         """
 
         Update Submission
