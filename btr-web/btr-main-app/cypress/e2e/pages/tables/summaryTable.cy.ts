@@ -26,6 +26,7 @@ describe('pages -> Summary Table', () => {
         .find('tbody').find('[data-cy="summary-table-row"]').as('summaryRow')
         .should('have.length', viewableOwnrStmnts.length)
 
+      let unableToConfirmCount = 0
       for (const i in viewableOwnrStmnts) {
         const ownrStmnt = viewableOwnrStmnts[i]
         const personStmnt = siData.payload.personStatements.find(
@@ -42,7 +43,8 @@ describe('pages -> Summary Table', () => {
         }
         // address
         const address = personStmnt?.addresses[0]
-        cy.get('@summaryRow').eq(Number(i)).find('[data-cy=summary-table-details]').as('detailsItem')
+        cy.get('@summaryRow')
+          .find('[data-cy=summary-table-details]').as('detailsItem')
           .should('contain.text', address?.street)
           .should('contain.text', address?.city)
           .should('contain.text', address?.region)
@@ -62,9 +64,11 @@ describe('pages -> Summary Table', () => {
         // phone
         cy.get('@detailsItem').should('contain.text', personStmnt?.phoneNumber.number)
         // interests / dates
-        cy.get('@summaryRow').eq(Number(i)).find('[data-cy=summary-table-controls]').as('controlItem')
+        cy.get('@summaryRow')
+          .find('[data-cy=summary-table-controls]').as('controlItem')
           .should('exist')
-        cy.get('@summaryRow').eq(Number(i)).find('[data-cy=summary-table-dates]').as('datesItem')
+        cy.get('@summaryRow')
+          .find('[data-cy=summary-table-dates]').as('datesItem')
           .should('exist')
         for (const interest of ownrStmnt.interests) {
           // control
@@ -86,7 +90,13 @@ describe('pages -> Summary Table', () => {
           cy.get('@datesItem').should('contain.text', interest.endDate || 'Current')
         }
         // action buttons
-        cy.get('@summaryRow').eq(Number(i)).find('[data-cy=summary-table-buttons]').should('contain.text', 'Update')
+        cy.get('@summaryRow').find('[data-cy=summary-table-buttons]').should('contain.text', 'Update')
+        // unable to obtain information row
+        if (personStmnt?.missingInfoReason) {
+          cy.testMissingInfoRow(unableToConfirmCount, personStmnt.missingInfoReason)
+          // NOTE: not every record will include this row so need can't use the summary row index
+          unableToConfirmCount += 1
+        }
       }
     })
   })
@@ -157,6 +167,13 @@ describe('pages -> Summary Table', () => {
     cy.get('[id^="headlessui-combobox-options"]').find('li').eq(20).click({ force: true })
     // click 'Done'
     cy.get('[data-cy=new-si-done-btn]').click()
+    // should trigger 'updating' row for 1 second
+    cy.get('@summaryTable').find('[data-cy="summary-table-row-updating"]')
+      .should('exist')
+      .should('have.length', 1)
+      .as('rowsUpdating')
+    cy.wait(1000)
+    cy.get('@rowsUpdating').should('not.exist')
     // should have 'updated' badge / undo option / changes
     cy.get('@summaryRow').first().find('[data-cy=summary-table-name]').as('nameItem')
       .find('[data-cy="name-badge"]')
@@ -168,6 +185,13 @@ describe('pages -> Summary Table', () => {
       .should('contain.text', 'Undo')
     // click undo
     cy.get('@actionButton').click()
+    // should trigger 'updating' row for 1 second
+    cy.get('@summaryTable').find('[data-cy="summary-table-row-updating"]')
+      .should('exist')
+      .should('have.length', 1)
+      .as('rowsUpdating')
+    cy.wait(1000)
+    cy.get('@rowsUpdating').should('not.exist')
     // verify changes are undone
     cy.get('@nameItem').find('[data-cy="name-badge"]').should('not.exist')
     cy.get('@nameItem').find('.f-bd').should('not.exist')
@@ -194,6 +218,13 @@ describe('pages -> Summary Table', () => {
       .find('.bcros-date-picker__calendar__day.dp__today')
       .trigger('click')
     cy.get('@cessationSelect').find('[data-cy=cease-done]').click()
+    // should trigger 'updating' row for 1 second
+    cy.get('@summaryTable').find('[data-cy="summary-table-row-updating"]')
+      .should('exist')
+      .should('have.length', 1)
+      .as('rowsUpdating')
+    cy.wait(1000)
+    cy.get('@rowsUpdating').should('not.exist')
     // verify 'cease' badge / opacity
     cy.get('@cessationSelect').should('not.exist')
     cy.get('@nameItem').find('[data-cy="name-badge"]')
@@ -204,6 +235,13 @@ describe('pages -> Summary Table', () => {
     cy.get('@actionButton').should('contain.text', 'Undo')
     // click undo
     cy.get('@actionButton').click()
+    // should trigger 'updating' row for 1 second
+    cy.get('@summaryTable').find('[data-cy="summary-table-row-updating"]')
+      .should('exist')
+      .should('have.length', 1)
+      .as('rowsUpdating')
+    cy.wait(1000)
+    cy.get('@rowsUpdating').should('not.exist')
     // verify cease is undone
     cy.get('@nameItem').find('[data-cy="name-badge"]').should('not.exist')
     cy.get('@nameItem').find('.opacity-55').should('not.exist')
@@ -218,6 +256,14 @@ describe('pages -> Summary Table', () => {
       .should('have.length', 3)
 
     cy.addTestIndividuals(false)
+    // should trigger 'updating' on all rows for 1 second
+    cy.get('@summaryTable').find('[data-cy="summary-table-row-updating"]')
+      .should('exist')
+      .should('have.length', 4)
+      .as('rowsUpdating')
+    cy.wait(1000)
+    cy.get('@rowsUpdating').should('not.exist')
+
     cy.get('@summaryRow').should('have.length', 4)
 
     cy.fixture('individuals').then((testData) => {
@@ -243,6 +289,13 @@ describe('pages -> Summary Table', () => {
       cy.get('[data-cy=add-new-btn]').should('have.attr', 'disabled')
       // click 'Done'
       cy.get('[data-cy=new-si-done-btn]').click()
+      // should trigger 'updating' row for 1 second
+      cy.get('@summaryTable').find('[data-cy="summary-table-row-updating"]')
+        .should('exist')
+        .should('have.length', 1)
+        .as('rowsUpdating')
+      cy.wait(1000)
+      cy.get('@rowsUpdating').should('not.exist')
       cy.get('@summaryTable').find('[data-cy="summary-table-row-edit"]').should('not.exist')
 
       // click 'remove'
@@ -252,7 +305,13 @@ describe('pages -> Summary Table', () => {
         .should('exist')
         .should('have.text', 'Remove')
         .click()
-
+      // should trigger 'updating' row for 1 second
+      cy.get('@summaryTable').find('[data-cy="summary-table-row-updating"]')
+        .should('exist')
+        .should('have.length', 3)
+        .as('rowsUpdating')
+      cy.wait(1000)
+      cy.get('@rowsUpdating').should('not.exist')
       // verify removal
       cy.get('@summaryRow').should('have.length', 3)
       cy.get('@nameItem').should('not.contain.text', testData.profile1.fullName)

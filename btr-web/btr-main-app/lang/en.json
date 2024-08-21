@@ -39,6 +39,7 @@
       "title": "Unable to Obtain or Confirm Information",
       "checkboxText": "It is not possible to obtain or confirm some information about this individual",
       "description": "Enter the steps and efforts taken to obtain or confirm the required information about this individual.",
+      "stepsTaken": "Steps taken",
       "textAreaPlaceholder": "Steps and efforts taken to obtain or confirm required information",
       "alert": {
         "important": "Important:",
@@ -79,6 +80,8 @@
     "remove": "Remove",
     "edit": "Edit",
     "addAnotherEffectiveDate": "Add another effective date",
+    "less": "Less",
+    "more": "More",
     "undo": "Undo",
     "update": "Update"
   },
