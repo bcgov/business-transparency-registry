@@ -180,3 +180,32 @@ Cypress.Commands.add('addTestIndividuals', (multiple = true) => {
     }
   })
 })
+
+Cypress.Commands.add('testMissingInfoRow', (index: number, text: string) => {
+  cy.get('[data-cy="individualsSummaryTable"]')
+    .find('tbody')
+    .find('[data-cy="summary-table-row-missing-info"]').eq(Number(index))
+    .should('exist')
+    .find('td').as('items')
+    .should('have.length', 2)
+  cy.get('@items').eq(0).should('have.text', 'Unable to Obtain or Confirm Information')
+  cy.get('@items').eq(1).as('info').should('contain.text', 'Steps taken')
+  if (text.length < 200) {
+    cy.get('@info').find('[data-cy="missing-info-text"]').should('have.text', text)
+    cy.get('@info').find('[data-cy=missing-info-toggle-btn]').should('not.exist')
+  } else {
+    cy.get('@info').find('[data-cy="missing-info-text"]').as('text')
+      .should('have.text', text.substring(0, 200))
+    cy.get('@info').find('[data-cy=missing-info-toggle-btn]')
+      .should('exist').as('toggleBtn')
+      .should('have.text', 'More')
+    // expand text
+    cy.get('@toggleBtn').click()
+    cy.get('@text').should('have.text', text)
+    cy.get('@toggleBtn').should('have.text', 'Less')
+    // back to minimize
+    cy.get('@toggleBtn').click()
+    cy.get('@text').should('have.text', text.substring(0, 200))
+    cy.get('@toggleBtn').should('have.text', 'More')
+  }
+})

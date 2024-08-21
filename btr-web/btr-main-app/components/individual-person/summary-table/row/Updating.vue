@@ -4,7 +4,7 @@ defineProps<{ si: SiSchemaType }>()
 </script>
 
 <template>
-  <tr class="bg-gray-100 animate-pulse">
+  <tr class="bg-gray-100 animate-pulse" data-cy="summary-table-row-updating">
     <td>
       <PersonInfoName
         :item="{

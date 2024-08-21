@@ -103,6 +103,7 @@ export const useSignificantIndividuals = defineStore('significantIndividuals', (
     const activeDateGrp = ceasedSI.effectiveDates.filter(dateGrp => !dateGrp.endDate)[0]
     activeDateGrp.endDate = cessationDate
     filingUpdateSI(ceasedSI, index)
+    _applyUpdatingSI(index)
   }
 
   /** Remove the significant individual at the given index */

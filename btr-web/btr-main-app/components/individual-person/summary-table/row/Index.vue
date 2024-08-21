@@ -119,7 +119,7 @@ const opacityClass = computed(() => {
     data-cy="summary-table-row-missing-info"
   >
     <td>
-      Unable Obtain or Confirm Information
+      {{ $t('labels.unableToObtainOrConfirmInformation.title') }}
     </td>
     <td colspan="4">
       <IndividualPersonSummaryTableRowMissingInfo :missing-info="si.missingInfoReason" />

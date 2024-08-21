@@ -35,18 +35,24 @@ describe('pages -> Control Table', () => {
       cy.get('[data-cy="controlOfShares.jointlyOrInConcert.actingJointly"]').check()
       cy.get('[data-cy="controlOfShares.jointlyOrInConcert.inConcertControl"]').check()
       cy.get('[data-cy=new-si-done-btn]').click()
+      // wait 1 second for updating row
+      cy.wait(1000)
 
       // update the second SI to add control of shares in concert
       cy.get('[data-cy=action-button]').eq(1).click()
       cy.get('[data-cy="controlOfShares.jointlyOrInConcert.hasJointlyOrInConcert"]').check()
       cy.get('[data-cy="controlOfShares.jointlyOrInConcert.inConcertControl"]').check()
       cy.get('[data-cy=new-si-done-btn]').click()
+      // wait 1 second for updating row
+      cy.wait(1000)
 
       // update the third SI to add control of shares held jointly
       cy.get('[data-cy=action-button]').eq(2).click()
       cy.get('[data-cy="controlOfShares.jointlyOrInConcert.hasJointlyOrInConcert"]').check()
       cy.get('[data-cy="controlOfShares.jointlyOrInConcert.actingJointly"]').check()
       cy.get('[data-cy=new-si-done-btn]').click()
+      // wait 1 second for updating row
+      cy.wait(1000)
 
       // the table should display the information of all three people
       cy.get('[data-cy=individualsControlTable]')
@@ -106,6 +112,8 @@ describe('pages -> Control Table', () => {
     cy.get('[data-cy="controlOfShares.jointlyOrInConcert.actingJointly"]').check()
     cy.get('[data-cy="controlOfShares.jointlyOrInConcert.inConcertControl"]').check()
     cy.get('[data-cy=new-si-done-btn]').click()
+    // wait 1 second for updating row
+    cy.wait(1000)
 
     // the warning message should be rendered
     cy.get('[data-cy="alertsMessage:alert"]').should('exist')
@@ -115,6 +123,8 @@ describe('pages -> Control Table', () => {
     cy.get('[data-cy="controlOfVotes.jointlyOrInConcert.hasJointlyOrInConcert"]').check()
     cy.get('[data-cy="controlOfVotes.jointlyOrInConcert.inConcertControl"]').check()
     cy.get('[data-cy=new-si-done-btn]').click()
+    // wait 1 second for updating row
+    cy.wait(1000)
 
     // the warning message is hidden
     cy.get('[data-cy="alertsMessage:alert"]').should('not.exist')

@@ -15,7 +15,7 @@ const missingInfoDisplay = computed(() => {
   <BcrosDetailsInfoBox :title="$t('labels.unableToObtainOrConfirmInformation.stepsTaken')">
     <template #content>
       <p>
-        <span>{{ missingInfoDisplay }}</span>
+        <span data-cy="missing-info-text">{{ missingInfoDisplay }}</span>
         <span v-if="isExpandable && !isExpanded">...</span>
         <UButton
           v-if="isExpandable"
@@ -24,6 +24,7 @@ const missingInfoDisplay = computed(() => {
           :label="isExpanded ? $t('buttons.less') : $t('buttons.more')"
           :padded="false"
           variant="link"
+          data-cy="missing-info-toggle-btn"
           @click="isExpanded = !isExpanded"
         />
       </p>
