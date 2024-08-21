@@ -15,8 +15,8 @@ def deep_spread(dict1, dict2, path=''):
     dict2 = { 'a': {'x': [2], 'z': {'b': 2}}, 'b': 4, 'd': 7 }
     deep_spread(dict1, dict2) --> { 'a': {'x': [2], z: {'a': 1, 'b': 2}}, 'b': 4, 'c': 3, 'd': 7 }
 
-    lists are replace with a few exceptions, lists of objects with a UUID field a statementID field will be updated based on that field, 
-    personStatements --> name is a special case that matches on type
+    lists are replace with a few exceptions, lists of objects with a UUID field a statementID field will
+    be updated based on that field, personStatements --> name is a special case that matches on type
     """
     # pylint: disable=too-many-branches
     return_dict = {}
@@ -36,7 +36,7 @@ def deep_spread(dict1, dict2, path=''):
             else:
                 return_dict[key] = {**value, **dict2.get(key, {})}
         elif isinstance(value, list):
-            ## list of objects have special cases
+            # list of objects have special cases
             if all(isinstance(i, dict) for i in value) and len(value) > 0:
                 if 'uuid' in value[0]:
                     use_default = False
@@ -78,13 +78,13 @@ def merge_list_on_field(l1, l2, field_name):
     if not isinstance(l1, list) or len(l1) < 1 or not isinstance(l1[0], dict):
         return l2
 
-    if not isinstance(l2, list) or len(l2 ) < 1 or not isinstance(l2[0], dict):
+    if not isinstance(l2, list) or len(l2) < 1 or not isinstance(l2[0], dict):
         return l1
 
     # return list is the list we will return
     return_list = []
 
-    #unique field values is an array mapping return_list/l1 to the unique field values ie 0: l1[0].uuid
+    # unique field values is an array mapping return_list/l1 to the unique field values ie 0: l1[0].uuid
     unique_field_values = []
     for val in l1:
         if val[field_name]:
