@@ -30,19 +30,37 @@ def deep_spread(dict1, dict2, path=''):
             if any(isinstance(i, dict) for i in value.values()):
                 return_dict[key] = deep_spread(value, dict2.get(key, {}), path + key)
             elif any(isinstance(i, list) for i in value.values()):
-                return_dict[key] = deep_spread(value, dict2.get(key, []), path + key)
+                return_dict[key] = deep_spread(value, dict2.get(key, {}), path + key)
             else:
                 return_dict[key] = {**value, **dict2.get(key, {})}
         elif isinstance(value, list):
             ## list of objects have special cases
             if all(isinstance(i, dict) for i in value):
                 if len(value) > 0:
-                    if "uuid" in value[0]:
-                        return_dict[key] = merge_list_on_field(value, dict2.get(key, []), "uuid")
-                    elif "statementID" in value[0]:
-                        return_dict[key] = merge_list_on_field(value, dict2.get(key, []), "statementID")
-                    elif "type" in value[0] and path == "personStatements.names":
-                        return_dict[key] = merge_list_on_field(value, dict2.get(key, []), "type")
+                    if 'uuid' in value[0]:
+                        return_dict[key] = merge_list_on_field(value, dict2.get(key, []), 'uuid')
+                    elif 'statementID' in value[0]:
+                        return_dict[key] = merge_list_on_field(value, dict2.get(key, []), 'statementID')
+                    elif 'type' in value[0] and path == 'personStatements.names':
+                        return_dict[key] = merge_list_on_field(value, dict2.get(key, []), 'type')
+                    else:
+                        return_dict[key] = value
+                        if dict2.get(key, '') is None:
+                            del return_dict[key]
+                        elif dict2.get(key, None) is not None:
+                            return_dict[key] = dict2[key]
+                else:
+                    return_dict[key] = value
+                    if dict2.get(key, '') is None:
+                        del return_dict[key]
+                    elif dict2.get(key, None) is not None:
+                        return_dict[key] = dict2[key]
+            else:
+                return_dict[key] = value
+                if dict2.get(key, '') is None:
+                    del return_dict[key]
+                elif dict2.get(key, None) is not None:
+                    return_dict[key] = dict2[key]
                         
         else:
             return_dict[key] = value
@@ -66,16 +84,22 @@ def deep_spread(dict1, dict2, path=''):
 
 
 def merge_list_on_field(l1, l2, field_name):
+    if not(isinstance(l1, list)):
+        return l2
+    
+    if not(isinstance(l2, list)):
+        return l1
+    
     if len(l1) < 1:
         return l1
 
     if len(l2) < 1:
         return l2
     
-    if not(isinstance(l1, dict)):
+    if not(isinstance(l1[0], dict)):
         return l2
     
-    if not(isinstance(l2, dict)):
+    if not(isinstance(l2[0], dict)):
         return l1
     
     # return list is the list we will return
