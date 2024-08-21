@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { IndividualPersonSummaryTableActionButton, IndividualPersonSummaryTableCessationDateEntry } from '#components'
 import { SiSchemaType } from '~/utils/si-schema/definitions'
 
 const emit = defineEmits(['toggle-editing-mode'])
@@ -22,6 +21,7 @@ const props = defineProps({
   }
 })
 
+const { allEditableSIs } = storeToRefs(useSignificantIndividuals())
 const editingIndex = ref(-1)
 
 const t = useNuxtApp().$i18n.t
@@ -35,26 +35,6 @@ const headers = [
 const isEmptyState = computed(() => {
   return props.individuals.filter(individual => !individual.ui.actions?.includes(FilingActionE.HISTORICAL)).length === 0
 })
-
-const getBadges = (item: SiSchemaType) => {
-  if (!item.ui.actions?.length) {
-    return
-  }
-  const badges = []
-  if (item.ui.actions?.includes(FilingActionE.ADD)) {
-    badges.push({ label: t('badges.new') })
-  }
-  if (item.ui.actions?.includes(FilingActionE.EDIT)) {
-    badges.push({ label: t('badges.updated') })
-  }
-  if (
-    item.ui.actions?.includes(FilingActionE.CEASE) ||
-    item.ui.actions?.includes(FilingActionE.HISTORICAL)
-  ) {
-    badges.push({ label: t('badges.ceased'), colour: 'gray' })
-  }
-  return badges
-}
 
 const getActionButton = (item: SiSchemaType, index: number) => {
   if (item.ui.actions?.includes(FilingActionE.ADD)) {
@@ -111,22 +91,11 @@ const getActionDropDownItems = (item: SiSchemaType, index: number) => {
   }]
 }
 
-const getOpacityClass = (item: SiSchemaType) => {
-  if (
-    item.ui.actions?.includes(FilingActionE.CEASE) ||
-    item.ui.actions?.includes(FilingActionE.HISTORICAL)
-  ) {
-    return 'opacity-55'
-  }
-  return ''
-}
-
 const undoSIChanges = (index: number) => {
   useSignificantIndividuals().undoSIChanges(index)
 }
 
 const triggerCeaseSI = (index: number) => {
-  const { allEditableSIs } = storeToRefs(useSignificantIndividuals())
   // show cease date input
   allEditableSIs.value[index].ui.showCeaseDateInput = true
 }
@@ -193,77 +162,19 @@ function capFirstLetterInName (fullName: string) {
     </template>
 
     <template #table-row="{ item, index } : { item: SiSchemaType, index: number }">
-      <tr v-if="editingIndex != index" class="border-t-[1px] border-gray-400" data-cy="summary-table-row">
-        <td data-cy="summary-table-name">
-          <PersonInfoName
-            :badges="getBadges(item)"
-            :item="{
-              'legalName': item.name.fullName,
-              'alternateName': item.name.preferredName,
-              'birthDate': item.birthDate,
-              'class': getOpacityClass(item)}"
-          />
-          <PersonInfoCitizenship
-            :class="getOpacityClass(item)"
-            :nationalities="item.citizenships"
-          />
-        </td>
-        <td class="align-top" :class="getOpacityClass(item)" data-cy="summary-table-details">
-          <PersonInfoDetails :item="item" />
-        </td>
-
-        <td :class="getOpacityClass(item)" data-cy="summary-table-controls">
-          <PersonInfoControl :item="item" />
-        </td>
-
-        <td :class="getOpacityClass(item)" data-cy="summary-table-dates">
-          <p v-for="date in item.effectiveDates" :key="date.startDate">
-            {{
-              $t('texts.dateRange', {
-                start: date.startDate ? date.startDate : $t('labels.unknown'),
-                end: date.endDate ? date.endDate : $t('labels.current')
-              })
-            }}
-          </p>
-        </td>
-        <!-- NOTE: getOpacityClass is not applied to the edit column on purpose -->
-        <template v-if="edit">
-          <td data-cy="summary-table-buttons" class="action-button align-top">
-            <IndividualPersonSummaryTableActionButton
-              :button="getActionButton(item, index)"
-              :dropdown-items="getActionDropDownItems(item, index)"
-            />
-          </td>
-        </template>
-      </tr>
-
-      <!--
-          placeholder row for display warning message for minor SI
-          the v-if is set to false until the feature is implemented;
-          rules for minor: #20621
-        -->
-      <tr v-if="editingIndex != index && false" data-cy="summary-table-row-minor">
-        <td colspan="5">
-          TBD - Message for Minor SI
-        </td>
-      </tr>
-
-      <!-- to be updated in #21660 -->
-      <tr v-if="editingIndex != index && item.missingInfoReason !== ''" data-cy="summary-table-row-missing-info">
-        <td colspan="5">
-          TBD - Unable to obtain or confirm information
-          {{ item.missingInfoReason }}
-        </td>
-      </tr>
-
-      <tr v-if="editingIndex != index && item.ui.showCeaseDateInput" data-cy="summary-table-row-cease">
-        <td colspan="5">
-          <IndividualPersonSummaryTableCessationDateEntry :individual="item" :index="index" />
-        </td>
-      </tr>
-
+      <IndividualPersonSummaryTableRowUpdating
+        v-if="item.ui.updating && editingIndex != index"
+        :si="item"
+      />
+      <IndividualPersonSummaryTableRow
+        v-else-if="editingIndex != index"
+        :si="item"
+        :index="index"
+        :action-btn="edit ? getActionButton(item, index) : undefined"
+        :action-dropdown-btns="getActionDropDownItems(item, index)"
+      />
       <tr
-        v-if="isEditing && editingIndex === index"
+        v-else-if="isEditing && editingIndex === index"
         class="border-t-[1px] border-gray-400"
         data-cy="summary-table-row-edit"
       >
@@ -311,13 +222,7 @@ function capFirstLetterInName (fullName: string) {
 </template>
 
 <style scoped>
-.data-row > td:not(.action-button) {
-  @apply px-3 py-4 align-text-top whitespace-normal text-sm text-gray-700
-}
 td {
   @apply px-3 py-4 align-top whitespace-normal text-sm text-gray-700
-}
-.data-wrapper {
-  @apply flex flex-col gap-3
 }
 </style>

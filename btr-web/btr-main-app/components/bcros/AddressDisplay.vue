@@ -24,11 +24,11 @@ const props = defineProps<{ address: Partial<AddressI> }>()
 
 const addressData = computed((): string[] => {
   return [
-    props.address.line1,
-    props.address.line2,
+    props.address.line1 ?? '',
+    props.address.line2 ?? '',
     [props.address.city, props.address.region, props.address.postalCode].filter(val => !!val).join(' '),
     // NOTE: getName throws an error when called with undefined
-    getName(props.address.country.alpha_2 ?? '') || props.address.country.name
+    getName(props.address.country?.alpha_2 ?? '') || props.address.country?.name || ''
   ].filter(val => !!val)
 })
 </script>

@@ -25,6 +25,30 @@ export const useSignificantIndividuals = defineStore('significantIndividuals', (
     (): SiSchemaType[] => allEditableSIs.value.concat(
       savedSIs.value.filter(si => si.ui.actions?.includes(FilingActionE.HISTORICAL))))
 
+  /**
+   * Applies 'updating' to the si record or all si records.
+   * Needed for the nuxt/ui table to render changes to si array fields correctly.
+   */
+  const _applyUpdatingSI = (index?: number) => {
+    if (index !== undefined) {
+      // apply it to specified record
+      allEditableSIs.value[index].ui.updating = true
+      setTimeout(() => {
+        allEditableSIs.value[index].ui.updating = false
+      }, 1000)
+    } else {
+      // apply it to all records
+      for (const si of allEditableSIs.value) {
+        si.ui.updating = true
+      }
+      setTimeout(() => {
+        for (const si of allEditableSIs.value) {
+          si.ui.updating = false
+        }
+      }, 1000)
+    }
+  }
+
   const _getFolioNumber = (): string => {
     const business = useBcrosBusiness()
     if (business.currentFolioNumber) {
@@ -46,11 +70,7 @@ export const useSignificantIndividuals = defineStore('significantIndividuals', (
     const lastNewSIIndex = allEditableSIs.value.findLastIndex(
       si => si.ui.actions?.includes(FilingActionE.ADD))
     allEditableSIs.value.splice(lastNewSIIndex + 1, 0, significantIndividual)
-    // NOTE: resetting the list is needed, otherwise the table renders
-    // the citizenships array incorrectly when NEW people are added (nuxt/ui table issue).
-    const tempList = [...allEditableSIs.value]
-    allEditableSIs.value = []
-    setTimeout(() => { allEditableSIs.value = tempList }, 25)
+    _applyUpdatingSI()
   }
 
   /** Update the significant individual at the given index */
@@ -71,7 +91,9 @@ export const useSignificantIndividuals = defineStore('significantIndividuals', (
         significantIndividual.ui.actions.push(FilingActionE.CEASE)
       }
       // update SI in the list
-      allEditableSIs.value.splice(index, 1, significantIndividual)
+      const editableSI = { ...significantIndividual, ui: { ...significantIndividual.ui, updating: true } }
+      allEditableSIs.value.splice(index, 1, editableSI)
+      _applyUpdatingSI(index)
     }
   }
 
@@ -86,19 +108,16 @@ export const useSignificantIndividuals = defineStore('significantIndividuals', (
   /** Remove the significant individual at the given index */
   const filingRemoveSI = (index: number) => {
     allEditableSIs.value.splice(index, 1)
+    _applyUpdatingSI()
   }
 
   /** Remove the significant individual at the given index */
   const undoSIChanges = (index: number) => {
     const origIndex = allEditableSIs.value[index].ui.origIndex
-    if (origIndex) {
+    if (origIndex !== undefined) {
       const editableSI = { ...savedSIs.value[origIndex], ui: { origIndex } }
       allEditableSIs.value.splice(index, 1, editableSI)
-      // NOTE: resetting the list is needed, otherwise the table renders
-      // the old citizenships array incorrectly (nuxt/ui table issue).
-      const tempList = [...allEditableSIs.value]
-      allEditableSIs.value = []
-      setTimeout(() => { allEditableSIs.value = tempList }, 25)
+      _applyUpdatingSI(index)
     }
   }
 

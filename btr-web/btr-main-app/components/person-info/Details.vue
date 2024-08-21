@@ -27,17 +27,18 @@
         {{ displayPhoneNumber(item.phoneNumber.number) }}
       </div>
     </div>
-    <div v-if="item.tax" class="flex">
+    <div v-if="item.tax || taxResidency" class="flex">
       <div>
         <UIcon class="text-[20px]" name="i-mdi-bank-outline" />
       </div>
       <div class="ml-1">
         <BcrosDetailsInfoBox
+          v-if="taxResidency"
           class="mb-2"
           title="Tax Residency"
           :content="taxResidency"
         />
-        <div v-if="item.tax.taxNumber">
+        <div v-if="item.tax?.taxNumber">
           {{ item.tax.taxNumber }}
         </div>
       </div>
@@ -64,7 +65,15 @@ type SearchResultI = {
 }
 
 const prop = defineProps<{ item: SearchResultI }>()
-const taxResidency = !prop.item.isTaxResident ? 'Other' : 'Canada'
+
+const t = useNuxtApp().$i18n.t
+
+const taxResidency: Ref<string | undefined> = ref(undefined)
+if (prop.item.isTaxResident !== undefined) {
+  taxResidency.value = prop.item.isTaxResident
+    ? t('summaryTable.body.taxResidency.canada')
+    : t('summaryTable.body.taxResidency.other')
+}
 const displayPhoneNumber = (num: string) => num.replace(/(\s{3})(\s{3})(\s{4})/, '($1) $2-$3')
 </script>
 

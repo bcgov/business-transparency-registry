@@ -90,7 +90,8 @@ export const SiSchema = z.object({
   ui: z.object({
     actions: z.array(z.nativeEnum(FilingActionE)).optional(),
     origIndex: z.number().optional(),
-    showCeaseDateInput: z.boolean().optional()
+    showCeaseDateInput: z.boolean().optional(),
+    updating: z.boolean().optional()
   })
 })
 
