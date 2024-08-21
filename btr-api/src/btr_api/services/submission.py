@@ -61,8 +61,7 @@ class SubmissionService:  # pylint: disable=too-few-public-methods
 
         Create Submission
 
-        This method creates the current submission for the business using the provided submission dict.
-        Update is no longer allowed
+        This method creates/replaces the current submission for the business using the provided submission dict.
 
         Parameters:
         - submission_dict (dict): A dictionary containing the submission data. It should have the following keys:
@@ -76,10 +75,9 @@ class SubmissionService:  # pylint: disable=too-few-public-methods
 
         """
         submission = SubmissionModel.find_by_business_identifier(submission_dict['businessIdentifier'])
-        if submission:
-            raise Exception(  # pylint: disable=broad-exception-raised
-                f"Submission with business identifier {submission_dict['businessIdentifier']} already exists")
-        submission = SubmissionModel()
+        if not submission:
+            submission = SubmissionModel()
+            submission.business_identifier = submission_dict['businessIdentifier']
         submission.effective_date = date.fromisoformat(submission_dict['effectiveDate'])
         submission.payload = submission_dict
         submission.submitter_id = submitter_id

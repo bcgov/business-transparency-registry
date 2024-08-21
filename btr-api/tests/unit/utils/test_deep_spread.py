@@ -72,3 +72,46 @@ def test_complex():
 
     # Verify result
     assert deep_spread(dict1, dict2) == expected
+
+def test_array():
+    # Prepare data
+    dict1 = {
+        'persons': [
+            {
+                'uuid': '1',
+                'name': 'John',
+                'age': 30
+            },
+            {
+                'uuid': '2',
+                'name': 'Jane',
+                'age': 25
+            }
+        ]
+      }
+    dict2 = {
+      'persons': [
+          {
+              'uuid': '1',
+              'name': 'Brandon',
+              'age': 30
+          },
+      ]
+    }
+    expected = {
+      'persons': [
+          {
+              'uuid': '1',
+              'name': 'Brandon',
+              'age': 30
+          },
+          {
+                'uuid': '2',
+                'name': 'Jane',
+                'age': 25
+          }
+      ]
+    }
+
+    # Verify result
+    assert deep_spread(dict1, dict2) == expected

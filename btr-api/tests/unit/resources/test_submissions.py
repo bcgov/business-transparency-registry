@@ -393,17 +393,11 @@ def test_post_plots(app, client, session, jwt, requests_mock):
         legal_api_entity_addresses_mock = requests_mock.get(
             f"{app.config.get('LEGAL_SVC_URL')}/businesses/{identifier}/addresses", json=mocked_entity_address_response
         )
-        
-        submission = SubmissionModel.find_by_business_identifier(submission_dict['businessIdentifier'])
-        method = client.post
-        url = '/plots'
-        if submission:
-            method = client.put
-            url = '/plots/' + submission.id
+
         with nested_session(session):
             mocked_username = 'wibbly wabble'
-            rv = method(
-                url,
+            rv = client.post(
+                '/plots',
                 json=json_data,
                 headers=create_header(
                     jwt_manager=jwt,
