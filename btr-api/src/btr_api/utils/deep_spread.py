@@ -18,7 +18,7 @@ def deep_spread(dict1, dict2, path=''):
     lists are replace with a few exceptions, lists of objects with a UUID field a statementID field will be updated based on that field, 
     personStatements --> name is a special case that matches on type
     """
-
+    # pylint: disable=too-many-branches
     return_dict = {}
 
     if path != '':
@@ -26,7 +26,9 @@ def deep_spread(dict1, dict2, path=''):
 
     # Create all values in dict1 and if applicable merge values in dict2
     for key, value in dict1.items():
+        use_default = True
         if isinstance(value, dict):
+            use_default = False
             if any(isinstance(i, dict) for i in value.values()):
                 return_dict[key] = deep_spread(value, dict2.get(key, {}), path + key)
             elif any(isinstance(i, list) for i in value.values()):
@@ -37,25 +39,15 @@ def deep_spread(dict1, dict2, path=''):
             ## list of objects have special cases
             if all(isinstance(i, dict) for i in value) and len(value) > 0:
                 if 'uuid' in value[0]:
+                    use_default = False
                     return_dict[key] = merge_list_on_field(value, dict2.get(key, []), 'uuid')
                 elif 'statementID' in value[0]:
+                    use_default = False
                     return_dict[key] = merge_list_on_field(value, dict2.get(key, []), 'statementID')
                 elif 'type' in value[0] and path == 'personStatements.names':
+                    use_default = False
                     return_dict[key] = merge_list_on_field(value, dict2.get(key, []), 'type')
-                else:
-                    return_dict[key] = value
-                    if dict2.get(key, '') is None:
-                        del return_dict[key]
-                    elif dict2.get(key, None) is not None:
-                        return_dict[key] = dict2[key]
-            else:
-                return_dict[key] = value
-                if dict2.get(key, '') is None:
-                    del return_dict[key]
-                elif dict2.get(key, None) is not None:
-                    return_dict[key] = dict2[key]
-
-        else:
+        if use_default:
             return_dict[key] = value
             if dict2.get(key, '') is None:
                 del return_dict[key]
@@ -96,7 +88,7 @@ def merge_list_on_field(l1, l2, field_name):
     unique_field_values = []
     for val in l1:
         if val[field_name]:
-          unique_field_values.append(val[field_name])
+            unique_field_values.append(val[field_name])
         return_list.append(val)
 
     for val in l2:
