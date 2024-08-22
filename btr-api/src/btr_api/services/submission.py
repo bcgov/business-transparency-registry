@@ -113,7 +113,6 @@ class SubmissionService:  # pylint: disable=too-few-public-methods
         submission.effective_date = date.fromisoformat(submission_dict['effectiveDate'])
         submission.payload = submission_dict
         submission.submitter_id = submitter_id
-        submission.invoice_id = None
 
         submission.submitted_payload = payload
         return submission

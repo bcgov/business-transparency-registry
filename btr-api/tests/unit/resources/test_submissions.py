@@ -425,6 +425,89 @@ def test_post_plots(app, client, session, jwt, requests_mock):
             user = UserModel.find_by_id(created_submission.submitter_id)
             assert user.username == mocked_username
 
+def test_put_plots(app, client, session, jwt, requests_mock):
+    """Assure put submission works."""
+    mocked_invoice_id = 9876
+    pay_api_mock = requests_mock.post(
+        f"{app.config.get('PAYMENT_SVC_URL')}/payment-requests", json={'id': mocked_invoice_id}
+    )
+    auth_mock = requests_mock.post(app.config.get('SSO_SVC_TOKEN_URL'), json={'access_token': 'token'})
+    bor_api_mock = requests_mock.put(
+        f"{app.config.get('BOR_SVC_URL')}/internal/solr/update", json={'message': 'Update accepted'}
+    )
+
+    current_dir = os.path.dirname(__file__)
+    with open(os.path.join(current_dir, '..', '..', 'mocks', 'significantIndividualsFiling', 'valid.json')) as file:
+        json_data = json.load(file)
+
+        identifier = json_data['businessIdentifier']
+        requests_mock.get(
+            f"{app.config.get('AUTH_SVC_URL')}/entities/{identifier}/authorizations",
+            json={'orgMembership': 'COORDINATOR', 'roles': ['edit', 'view']},
+        )
+        legal_api_entity_mock = requests_mock.get(
+            f"{app.config.get('LEGAL_SVC_URL')}/businesses/{identifier}", json=mocked_entity_response
+        )
+        legal_api_entity_addresses_mock = requests_mock.get(
+            f"{app.config.get('LEGAL_SVC_URL')}/businesses/{identifier}/addresses", json=mocked_entity_address_response
+        )
+
+        with nested_session(session):
+            mocked_username = 'wibbly wabble'
+            rv = client.post(
+                '/plots',
+                json=json_data,
+                headers=create_header(
+                    jwt_manager=jwt,
+                    roles=['basic'],
+                    username=mocked_username,
+                    **{'Accept-Version': 'v1', 'content-type': 'application/json', 'Account-Id': 1},
+                ),
+            )
+
+            assert rv.status_code == HTTPStatus.CREATED
+            submission_id = rv.json.get('id')
+            assert submission_id
+            url = f"/plots/{submission_id}"
+            put_data = {
+                'personStatements': [{
+                    "statementID": "bd4061d6-1a24-4356-93f3-c489b56610a4",
+                    'names': [
+                        {
+                            "type": "individual",
+                            "fullName": "Full2 Name2"
+                        }
+                    ]
+                }]
+            }
+            
+            rv = client.put(
+              url,
+              json=put_data,
+              headers=create_header(
+                    jwt_manager=jwt,
+                    roles=['basic'],
+                    username=mocked_username,
+                    **{'Accept-Version': 'v1', 'content-type': 'application/json', 'Account-Id': 1},
+              ),
+            )
+
+            assert rv.status_code == HTTPStatus.OK
+            json_data['personStatements'][0]['names'][0]['fullName'] = 'Full2 Name2'
+
+            # check submission details
+            updated_submission = SubmissionModel.find_by_id(submission_id)
+            assert updated_submission
+            assert updated_submission.business_identifier == json_data['businessIdentifier']
+            # check pay link
+            assert updated_submission.invoice_id == mocked_invoice_id
+            
+            #Check name changed
+            assert updated_submission.payload['personStatements'][0]['names'][0]['fullName'] == json_data['personStatements'][0]['names'][0]['fullName']
+            assert updated_submission.payload['entityStatement'] == json_data['entityStatement']
+            
+
+
 
 def test_post_plots_pay_error(app, client, session, jwt, requests_mock):
     """Assure post submission works (pay error)."""
