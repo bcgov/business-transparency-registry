@@ -9,14 +9,14 @@ import { getFolioValidator } from '~/utils/validators'
 export function reviewConfirm () {
   const { currentSIFiling } = storeToRefs(useSignificantIndividuals())
   // FUTURE: change to check if SI being edited? Design needs to be flushed out. Temporary log filing data for devs.
-  if (!currentSIFiling) {
+  if (!currentSIFiling.value) {
     return
   }
   // NOTE: filing validation only needs to happen before submission -- reviewConfirm can still have validation issues
   // navigate to reviewConfirm page
   useRouter().push({
     name: RouteNameE.REVIEW_CONFIRM,
-    params: { identifier: currentSIFiling.businessIdentifier }
+    params: { identifier: currentSIFiling.value.businessIdentifier }
   })
 }
 
@@ -45,7 +45,7 @@ export async function siChangeSubmit () {
     significantIndividuals.showErrors = true
   } else {
     await significantIndividuals.filingSubmit()
-    const businessIdentifier = significantIndividuals.currentSIFiling.businessIdentifier
+    const businessIdentifier = useBcrosBusiness().currentBusinessIdentifier
     significantIndividuals.reset()
     useRouter().push({
       name: RouteNameE.BEN_OWNR_CHNG,

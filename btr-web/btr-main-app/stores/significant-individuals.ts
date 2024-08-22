@@ -8,6 +8,7 @@ import { ErrorI, FilingActionE, SignificantIndividualFilingI } from '#imports'
 
 /** Manages Significant */
 export const useSignificantIndividuals = defineStore('significantIndividuals', () => {
+  const { currentBusinessIdentifier } = storeToRefs(useBcrosBusiness())
   const currentSIFiling: Ref<SignificantIndividualFilingI> = ref(getEmptySiFiling()) // current significant individual change filing
   // saved SIs from fetched from the api for this business (includes historicals)
   const savedSIs: Ref<SiSchemaType[]> = ref([])
@@ -24,7 +25,11 @@ export const useSignificantIndividuals = defineStore('significantIndividuals', (
   const allSIs = computed(
     (): SiSchemaType[] => allEditableSIs.value.concat(
       savedSIs.value.filter(si => si.ui.actions?.includes(FilingActionE.HISTORICAL))))
-
+  watch(currentBusinessIdentifier, () => {
+    if (currentBusinessIdentifier.value) {
+      currentSIFiling.value.businessIdentifier = currentBusinessIdentifier.value
+    }
+  })
   /**
    * Applies 'updating' to the si record or all si records.
    * Needed for the nuxt/ui table to render changes to si array fields correctly.
@@ -179,7 +184,9 @@ export const useSignificantIndividuals = defineStore('significantIndividuals', (
   }
 
   function reset () {
+    const { currentBusinessIdentifier } = storeToRefs(useBcrosBusiness())
     currentSIFiling.value = getEmptySiFiling()
+    currentSIFiling.value.businessIdentifier = currentBusinessIdentifier.value
     savedSIs.value = []
     allEditableSIs.value = []
     showErrors.value = false
