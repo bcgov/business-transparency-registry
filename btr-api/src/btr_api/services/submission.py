@@ -83,4 +83,36 @@ class SubmissionService:  # pylint: disable=too-few-public-methods
         submission.submitter_id = submitter_id
         submission.invoice_id = None
 
+        submission.submitted_payload = submission_dict
+        return submission
+
+    @staticmethod
+    def update_submission(
+          submission: SubmissionModel,
+          submission_dict: dict,
+          submitter_id: int,
+          payload: dict) -> SubmissionModel:
+        """
+
+        Update Submission
+
+        This method replaces the current submission for the business using the provided submission dict.
+
+        Parameters:
+        - submission_dict (dict): A dictionary containing the submission data. It should have the following keys:
+            - 'effectiveDate': A string representing the effective date of the submission in ISO format (YYYY-MM-DD).
+            - 'businessIdentifier': A string representing the business identifier for the submission.
+            - Any other key-value pairs representing additional payload data.
+        - submitter_id (int): The id of the user who is creating the submission.
+
+        Returns:
+        - SubmissionModel: A SubmissionModel object that represents the created submission.
+
+        """
+
+        submission.effective_date = date.fromisoformat(submission_dict['effectiveDate'])
+        submission.payload = submission_dict
+        submission.submitter_id = submitter_id
+
+        submission.submitted_payload = payload
         return submission

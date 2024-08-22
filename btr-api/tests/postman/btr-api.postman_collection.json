@@ -1,17 +1,15 @@
 {
 	"info": {
-		"_postman_id": "84f09f78-41df-4273-88d6-8af1ab661fc0",
+		"_postman_id": "0478611d-1e23-409a-88ad-aa52abe35044",
 		"name": "btr-api",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "18245960",
-		"_collection_link": "https://solar-spaceship-554441.postman.co/workspace/BaseApi~c3dcd8d9-dd08-48b8-bc11-94c7e12e1d47/collection/18245960-84f09f78-41df-4273-88d6-8af1ab661fc0?action=share&source=collection_link&creator=18245960"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
 		{
 			"name": "authenticate",
 			"item": [
 				{
-					"name": "authenticate",
+					"name": "authenticate - I don't work for submssion",
 					"event": [
 						{
 							"listen": "test",
@@ -266,6 +264,55 @@
 								{
 									"key": "identifier",
 									"value": "12345"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "account-id",
+								"value": "3113",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"personStatements\": [\n        {\n            \"uuid\": \"84d36ff4-c002-42fa-bfcd-e3cca9d01ef2\",\n            \"names\": [\n                {\n                \"fullName\": \"updated tester\",\n                \"type\": \"individual\"\n                }\n            ]\n        }\n    ]\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{internal_url}}/plots/:identifier",
+							"host": [
+								"{{internal_url}}"
+							],
+							"path": [
+								"plots",
+								":identifier"
+							],
+							"variable": [
+								{
+									"key": "identifier",
+									"value": "1"
 								}
 							]
 						}

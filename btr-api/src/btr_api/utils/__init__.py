@@ -33,3 +33,4 @@
 # POSSIBILITY OF SUCH DAMAGE.
 """This module wraps utilities used by the API."""
 from .redact import redact_information, redact_field
+from .deep_spread import deep_spread

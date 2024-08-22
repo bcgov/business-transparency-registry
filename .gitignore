@@ -152,3 +152,5 @@ htmlcov/
 
 # bods csvs
 **/bods_csvs/*
+
+**.DS_Store
