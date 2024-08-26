@@ -117,8 +117,16 @@ const getPersonAndOwnershipAndControlStatements = (sif: SignificantIndividualFil
 
 const convertToBtrBodsForSubmit = (sif: SignificantIndividualFilingI): BtrFilingI => {
   const businessDetails = getCurrentBusinessAsBtrBodsEntityI()
-
   const { ownershipOrControlStatements, personStatements } = getPersonAndOwnershipAndControlStatements(sif)
+
+  for (const personS of personStatements) {
+    const k = Object.keys(personS)
+    for (let i = 0; i < k.length; i++) {
+      if ((typeof personS[k[i]] === 'string') && (personS[k[i]] === '')) {
+        delete personS[k[i]]
+      }
+    }
+  }
 
   return {
     noSignificantIndividualsExist: sif.noSignificantIndividualsExist,

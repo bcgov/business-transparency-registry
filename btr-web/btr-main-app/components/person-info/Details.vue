@@ -9,13 +9,18 @@
         {{ item.email }}
       </div>
     </div>
-    <div v-if="item.address" class="flex">
+    <div
+      v-if="item.address &&
+        item.address.country &&
+        (item.address.country.alpha_2 || item.address.country.name)"
+      class="flex"
+    >
       <div>
         <UIcon class="text-[20px]" name="i-mdi-email-outline" />
       </div>
       <BcrosAddressDisplay class="ml-1" :address="item.address" />
     </div>
-    <div v-if="item.phoneNumber" class="flex">
+    <div v-if="item.phoneNumber && item.phoneNumber.number" class="flex">
       <div>
         <UIcon class="text-[20px]" name="i-mdi-phone" />
       </div>

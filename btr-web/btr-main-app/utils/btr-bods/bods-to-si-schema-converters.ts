@@ -224,7 +224,8 @@ export const getSIsFromBtrBodsSubmission = (submission: BtrFilingI): SiSchemaTyp
     const oocs = _findOwnershipOrControlStatement(submission, person.statementID)
     if (person && oocs) {
       const si = _getSi(person, oocs, businessIdentifier)
-      if (si.effectiveDates.filter(date => !date.endDate).length === 0) {
+      const fullInfo = !(si.couldNotProvideMissingInfo && si.missingInfoReason)
+      if ((fullInfo) && (si.effectiveDates.filter(date => !date.endDate).length === 0)) {
         // set previously ceased SIs to historical
         si.ui.actions ??= []
         si.ui.actions.push(FilingActionE.HISTORICAL)
