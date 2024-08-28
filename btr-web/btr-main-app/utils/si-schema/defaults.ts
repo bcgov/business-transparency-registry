@@ -19,6 +19,7 @@ export function getEmptyAddress (): AddressSchemaType {
 
 export function getDefaultInputFormSi (): SiSchemaType {
   return {
+    newOrUpdatedFields: [],
     name: {
       isYourOwnInformation: false,
       isUsePreferredName: false,

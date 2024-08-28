@@ -78,6 +78,7 @@
         class="w-full"
         :variant="error ? 'error' : 'bcGov'"
         data-cy="address-postal-code"
+        @change="emit('postal-code-change')"
       />
     </UFormGroup>
   </div>
@@ -99,7 +100,12 @@ import { BtrAddressI, BtrCountryI } from '~/interfaces/btr-address-i'
 
 const formBus = inject<UseEventBusReturn<any, string> | undefined>('form-events', undefined)
 
-const emit = defineEmits<(e: 'country-change', value: BtrCountryI) => void>()
+// eslint-disable-next-line func-call-spacing
+const emit = defineEmits<{
+  (e: 'country-change', value: BtrCountryI): void
+  (e: 'line1-change', value: string): void
+  (e: 'postal-code-change', value: string): void
+}>()
 
 const address = defineModel({ type: Object as PropType<BtrAddressI>, required: true })
 
@@ -115,6 +121,7 @@ const line1BlurEvent = () => {
 }
 const line1ChangeEvent = () => {
   formBus?.emit({ type: 'change', path: props.name + '.line1' })
+  emit('line1-change')
 }
 
 const countries = iscCountriesListSortedByName

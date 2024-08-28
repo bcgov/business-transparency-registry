@@ -49,6 +49,7 @@
             :placeholder="$t('placeholders.fullName')"
             data-cy="testFullName"
             :is-disabled="inputFormSi.name.isYourOwnInformation"
+            @change="setNewOrChanged(['name.fullName'])"
           />
           <div class="pt-5" />
           <UFormGroup name="doNothing">
@@ -71,6 +72,7 @@
                 :placeholder="$t('placeholders.preferredName')"
                 data-cy="testPreferredName"
                 :help="$t('texts.preferredName.hint')"
+                @change="setNewOrChanged(['name.preferredName'])"
               />
             </div>
           </div>
@@ -96,7 +98,11 @@
         :border="editMode"
         no-top-border
       >
-        <IndividualPersonControlOfSharesVotes v-model="inputFormSi.controlOfShares" name="controlOfShares" />
+        <IndividualPersonControlOfSharesVotes
+          v-model="inputFormSi.controlOfShares"
+          name="controlOfShares"
+          @change="setNewOrChanged(['controlOfShares'])"
+        />
       </BcrosSection>
 
       <!--  section: type of interest or control of votes -->
@@ -106,7 +112,11 @@
         :border="editMode"
         no-top-border
       >
-        <IndividualPersonControlOfSharesVotes v-model="inputFormSi.controlOfVotes" name="controlOfVotes" />
+        <IndividualPersonControlOfSharesVotes
+          v-model="inputFormSi.controlOfVotes"
+          name="controlOfVotes"
+          @change="setNewOrChanged(['controlOfVotes'])"
+        />
       </BcrosSection>
 
       <!--  section: control of majority of directors  -->
@@ -116,7 +126,11 @@
         :border="editMode"
         no-top-border
       >
-        <IndividualPersonControlOfDirectors v-model="inputFormSi.controlOfDirectors" name="controlOfDirectors" />
+        <IndividualPersonControlOfDirectors
+          v-model="inputFormSi.controlOfDirectors"
+          name="controlOfDirectors"
+          @change="setNewOrChanged(['controlOfDirectors'])"
+        />
       </BcrosSection>
 
       <!--  section: other reasons  -->
@@ -133,6 +147,7 @@
             v-model="inputFormSi.controlOther"
             name="otherReasons"
             data-cy="otherReasons"
+            @change="setNewOrChanged(['controlOther'])"
           />
         </div>
       </BcrosSection>
@@ -163,6 +178,7 @@
             name="effectiveDates"
             data-cy="effectiveDates"
             @dates-updated="inputFormSi.effectiveDates = $event"
+            @change="setNewOrChanged(['effectiveDates'])"
           />
         </div>
       </BcrosSection>
@@ -191,11 +207,12 @@
             name="email"
             :placeholder="$t('labels.emailAddress')"
             data-cy="testEmail"
+            @change="setNewOrChanged(['email'])"
           />
         </div>
       </BcrosSection>
 
-      <!--  section: individual details  -->
+      <!--  section: individual details address  -->
       <BcrosSection
         :show-section-has-errors="hasErrors(['address.'])"
         :section-title="$t('labels.lastKnownAddress')"
@@ -208,6 +225,8 @@
             v-model="inputFormSi.address"
             name="address"
             @country-change="countryChange"
+            @postal-code-change="setNewOrChanged(['postalCode'])"
+            @line1-change="setNewOrChanged(['streetAddress'])"
           />
         </div>
       </BcrosSection>
@@ -221,6 +240,7 @@
           v-model="inputFormSi.phoneNumber"
           name="phoneNumber"
           data-cy="phoneNumberInput"
+          @change="setNewOrChanged(['phoneNumber'])"
         />
       </BcrosSection>
       <BcrosSection
@@ -237,6 +257,7 @@
             :max-date="new Date()"
             :placeholder="$t('placeholders.dateSelect.birthdate')"
             @selection="inputFormSi.birthDate = dateToString($event, 'YYYY-MM-DD')"
+            @change="setNewOrChanged(['birthDate'])"
           />
         </div>
       </BcrosSection>
@@ -260,6 +281,7 @@
             :label-placeholder="$t('labels.countryOfCitizenship.placeholder')"
             key-attribute="alpha_2"
             :search-attributes="['name', 'alpha_2']"
+            @change="setNewOrChanged(['countriesOfCitizenship'])"
           />
           <p class="pt-3">
             {{ $t('labels.countryOfCitizenship.note') }}
@@ -286,6 +308,7 @@
             variant="bcGov"
             data-cy="testTaxNumber"
             @clear-errors="clearErrors($event)"
+            @change="setNewOrChanged(['tax', 'taxNumber'])"
           />
         </div>
       </BcrosSection>
@@ -304,6 +327,7 @@
             name="isTaxResident"
             variant="bcGov"
             data-cy="testTaxResidency"
+            @change="setNewOrChanged(['isTaxResident'])"
           />
         </div>
       </bcrosSection>
@@ -318,6 +342,7 @@
         <DeterminationOfIncapacity
           v-model="inputFormSi.determinationOfIncapacity"
           name="determinationOfIncapacity"
+          @change="setNewOrChanged(['determinationOfIncapacity'])"
         />
       </BcrosSection>
 
@@ -337,6 +362,7 @@
             name="missingInfoReason"
             :missing-info="inputFormSi.couldNotProvideMissingInfo"
             @update:missing-info="inputFormSi.couldNotProvideMissingInfo = $event"
+            @change="setNewOrChanged(['missingInfoReason'])"
           />
         </div>
       </BcrosSection>
@@ -377,9 +403,10 @@
 </template>
 
 <script setup lang="ts">
-import { z } from 'zod'
+import { RefinementCtx, z } from 'zod'
 import type { FormError } from '#ui/types'
 import { BtrCountryI } from '../../../../btr-common-components/interfaces/btr-address-i'
+import { validateEmailRfc6532Regex } from '../../../../btr-common-components/utils'
 import {
   validateControlSelectionForSharesAndVotes,
   validateFullNameSuperRefine,
@@ -430,6 +457,14 @@ const AddressSchemaExtended = AddressSchema.extend({
     }, t('errors.validation.address.country'))
 })
 
+const AddressSchemaExtendedEdit = AddressSchemaExtended.extend({
+  line1: z.string().optional(),
+  postalCode: z.string().optional(),
+  locationDescription: z.string().optional()
+})
+
+z.setErrorMap(CustomSiSchemaErrorMap)
+
 const SiSchemaExtended = SiSchema.extend({
   couldNotProvideMissingInfo: z.literal(false),
   name: SiNameExtended,
@@ -443,16 +478,101 @@ const SiSchemaExtended = SiSchema.extend({
   isTaxResident: z.boolean()
 })
 
-z.setErrorMap(CustomSiSchemaErrorMap)
-
-const formSchema = z.discriminatedUnion('couldNotProvideMissingInfo', [
+let formSchema: any = z.discriminatedUnion('couldNotProvideMissingInfo', [
   z.object({
     couldNotProvideMissingInfo: z.literal(true),
     missingInfoReason: z.string().transform(s => s.trim()).pipe(z.string().min(1)),
-    name: SiNameExtended
+    name: SiNameSchema
   }),
   SiSchemaExtended
 ])
+
+if (props.editMode) {
+  const SiSchemaExtendedEdit = SiSchemaExtended.extend({
+    birthDate: z.string().optional(),
+    name: SiNameExtended,
+    address: AddressSchemaExtendedEdit,
+    tax: TaxSchema,
+    email: z.string().optional()
+  })
+
+  formSchema = z.discriminatedUnion('couldNotProvideMissingInfo', [
+    z.object({
+      couldNotProvideMissingInfo: z.literal(true),
+      missingInfoReason: z.string().transform(s => s.trim()).pipe(z.string().min(1)),
+      name: SiNameExtended
+    }),
+    SiSchemaExtendedEdit
+  ]).superRefine((schema: SiSchemaType, ctx: RefinementCtx): never => {
+    // this superRefine is to work out through the redacted data fields and validate them only on change
+
+    // birthdate check
+    if (schema.newOrUpdatedFields.includes('birthDate')) {
+      if (!schema.birthDate || schema.birthDate.trim() === '') {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          path: ['birthDate'],
+          message: t('errors.validation.birthDate.required')
+        })
+      }
+    }
+    // phone check // its already optional nothing to do here
+
+    // street address
+    if (schema.newOrUpdatedFields.includes('streetAddress')) {
+      if (!schema.address || !schema.address.line1 || schema.address.line1.trim() === '') {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          path: ['address', 'line1'],
+          message: t('errors.validation.address.line1')
+        })
+      }
+    }
+    // postal code
+    if (schema.newOrUpdatedFields.includes('postalCode')) {
+      if (!schema.address || !schema.address.postalCode || schema.address.postalCode.trim() === '') {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          path: ['address', 'postalCode'],
+          message: t('errors.validation.address.postalCode')
+        })
+      }
+    }
+    // location description // its already optional nothing to do here
+
+    // SIN
+    if (schema.newOrUpdatedFields.includes('taxNumber')) {
+      // add tax to path, so that subsequent tax validator creates erroro messages with path
+      ctx.path.push('tax')
+      validateTaxNumberInfo(schema.tax, ctx)
+      // remove tax from path so it does not add it in next ctx errors
+      const taxPath = ctx.path.findIndex(v => v === 'tax')
+      if (taxPath !== -1) {
+        ctx.path.splice(taxPath, 1)
+      }
+    }
+
+    // email
+    if (schema.newOrUpdatedFields.includes('email')) {
+      if (!schema.email || schema.email.trim() === '') {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          path: ['email'],
+          message: t('errors.validation.email.empty')
+        })
+      }
+      if (!validateEmailRfc6532Regex(schema.email)) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          path: ['email'],
+          message: t('errors.validation.email.invalid')
+        })
+      }
+    }
+    return z.NEVER
+  })
+}
+// extend schema end
 
 const addIndividualForm = ref()
 
@@ -518,6 +638,14 @@ const setIsYourOwnInformation = (event: any) => {
 }
 
 const inputFormSi: SiSchemaType = reactive(getDefaultInputFormSi())
+
+const setNewOrChanged = (fieldNames: Array<string>) => {
+  for (let i = 0; i < fieldNames.length; i++) {
+    if (!inputFormSi.newOrUpdatedFields.includes(fieldNames[i])) {
+      inputFormSi.newOrUpdatedFields.push(fieldNames[i])
+    }
+  }
+}
 
 if (props.setSignificantIndividual) {
   isEditing.value = (props.index !== undefined)

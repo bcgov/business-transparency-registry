@@ -66,6 +66,7 @@ export const AddressSchema = z.object({
 export type AddressSchemaType = z.infer<typeof AddressSchema>
 
 export const SiSchema = z.object({
+  newOrUpdatedFields: z.array(z.string()),
   couldNotProvideMissingInfo: z.boolean(),
   missingInfoReason: z.string().optional(),
   name: SiNameSchema,
