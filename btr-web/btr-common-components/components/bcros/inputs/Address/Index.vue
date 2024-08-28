@@ -34,6 +34,7 @@
       class="w-full flex-1"
       :variant="error ? 'error' : 'bcGov'"
       data-cy="address-line2"
+      @change="emit('line2-change')"
     />
   </UFormGroup>
   <!--  city; region combo; postal code -->
@@ -46,6 +47,7 @@
         class="pr-4 w-full"
         :variant="error ? 'error' : 'bcGov'"
         data-cy="address-city"
+        @change="emit('city-change')"
       />
     </UFormGroup>
     <UFormGroup v-slot="{ error }" class="sm:flex-1" :name="name + '.region'">
@@ -60,6 +62,7 @@
         option-attribute="name"
         value-attribute="code"
         data-cy="address-region-select"
+        @change="emit('region-change')"
       />
       <UInput
         v-else
@@ -68,6 +71,7 @@
         class="pr-4 w-full"
         :variant="error ? 'error' : 'bcGov'"
         data-cy="address-region-input"
+        @change="emit('region-change')"
       />
     </UFormGroup>
     <UFormGroup v-slot="{ error }" class="sm:flex-1" :name="name + '.postalCode'">
@@ -90,6 +94,7 @@
       class="w-full"
       :variant="error ? 'error' : 'bcGov'"
       data-cy="address-location-description"
+      @change="emit('location-description-change')"
     />
   </UFormGroup>
 </template>
@@ -104,7 +109,11 @@ const formBus = inject<UseEventBusReturn<any, string> | undefined>('form-events'
 const emit = defineEmits<{
   (e: 'country-change', value: BtrCountryI): void
   (e: 'line1-change', value: string): void
+  (e: 'line2-change', value: string): void
+  (e: 'city-change', value: string): void
+  (e: 'region-change', value: string): void
   (e: 'postal-code-change', value: string): void
+  (e: 'location-description-change', value: string): void
 }>()
 
 const address = defineModel({ type: Object as PropType<BtrAddressI>, required: true })

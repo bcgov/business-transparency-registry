@@ -225,8 +225,12 @@
             v-model="inputFormSi.address"
             name="address"
             @country-change="countryChange"
-            @postal-code-change="setNewOrChanged(['postalCode'])"
-            @line1-change="setNewOrChanged(['streetAddress'])"
+            @postal-code-change="setNewOrChanged(['address.postalCode'])"
+            @line1-change="setNewOrChanged(['address.line1'])"
+            @line2-change="setNewOrChanged(['address.line2'])"
+            @city-change="setNewOrChanged(['address.city'])"
+            @region-change="setNewOrChanged(['address.region'])"
+            @location-description-change="setNewOrChanged(['address.locationDescription'])"
           />
         </div>
       </BcrosSection>
@@ -519,7 +523,7 @@ if (props.editMode) {
     // phone check // its already optional nothing to do here
 
     // street address
-    if (schema.newOrUpdatedFields.includes('streetAddress')) {
+    if (schema.newOrUpdatedFields.includes('address.line1')) {
       if (!schema.address || !schema.address.line1 || schema.address.line1.trim() === '') {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
@@ -529,7 +533,7 @@ if (props.editMode) {
       }
     }
     // postal code
-    if (schema.newOrUpdatedFields.includes('postalCode')) {
+    if (schema.newOrUpdatedFields.includes('address.postalCode')) {
       if (!schema.address || !schema.address.postalCode || schema.address.postalCode.trim() === '') {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
