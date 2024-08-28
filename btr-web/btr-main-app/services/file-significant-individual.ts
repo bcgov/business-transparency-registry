@@ -119,6 +119,9 @@ const convertToBtrBodsForSubmit = (sif: SignificantIndividualFilingI): BtrFiling
   const businessDetails = getCurrentBusinessAsBtrBodsEntityI()
   const { ownershipOrControlStatements, personStatements } = getPersonAndOwnershipAndControlStatements(sif)
 
+  // note that the api will receive empty strings and then fail validation
+  // as empty string is not null and not allowed on those fields.
+  // therefore this removes the empty strings to avoid that problem
   for (const personS of personStatements) {
     const k = Object.keys(personS)
     for (let i = 0; i < k.length; i++) {

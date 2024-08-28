@@ -9,12 +9,7 @@
         {{ item.email }}
       </div>
     </div>
-    <div
-      v-if="item.address &&
-        item.address.country &&
-        (item.address.country.alpha_2 || item.address.country.name)"
-      class="flex"
-    >
+    <div v-if="showAddress" class="flex">
       <div>
         <UIcon class="text-[20px]" name="i-mdi-email-outline" />
       </div>
@@ -80,6 +75,20 @@ if (prop.item.isTaxResident !== undefined) {
     : t('summaryTable.body.taxResidency.other')
 }
 const displayPhoneNumber = (num: string) => num.replace(/(\s{3})(\s{3})(\s{4})/, '($1) $2-$3')
+
+const showAddress = computed(() => {
+  if (!prop.item.address) {
+    return false
+  }
+  let rv = prop.item.address.country && (prop.item.address.country.alpha_2 || prop.item.address.country.name)
+  rv = rv || prop.item.address.city
+  rv = rv || prop.item.address.line1
+  rv = rv || prop.item.address.locationDescription
+  rv = rv || prop.item.address.postalCode
+  rv = rv || prop.item.address.region
+  return rv
+})
+
 </script>
 
 <style lang="scss" scoped>
