@@ -160,17 +160,34 @@
     "email": {
       "type": "string",
       "format": "email"
+    },
+    "missingInfoReason": {
+      "description": "An explanation for why certain details are omitted. required if things other than name are omitted",
+      "anyOf": [
+        { "type": "string", "minLength": 1 },
+        { "type": "null" }
+      ] 
     }
   },
-  "required": [
-    "statementID",
-    "statementType",
-    "personType",
-    "isComponent",
-    "publicationDetails",
-    "hasTaxNumber",
-    "email",
-    "nationalities",
-    "names"
+  "oneOf": [
+    {
+      "required": [
+        "statementID",
+        "statementType",
+        "personType",
+        "isComponent",
+        "publicationDetails",
+        "hasTaxNumber",
+        "email",
+        "nationalities",
+        "names"
+      ]
+    },
+    {
+      "required": [
+        "names",
+        "missingInfoReason"
+      ]
+    }
   ]
 }
