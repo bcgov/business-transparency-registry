@@ -109,7 +109,7 @@ const formBus = inject<UseEventBusReturn<any, string> | undefined>('form-events'
 const emit = defineEmits<{
   (e: 'country-change', value: BtrCountryI): void
   (e: 'line1-change', value: string): void
-  (e: 'line2-change', value: string): void
+  (e: 'line2-change', value: string | undefined): void
   (e: 'city-change', value: string): void
   (e: 'region-change', value: string): void
   (e: 'postal-code-change', value: string): void
@@ -130,7 +130,7 @@ const line1BlurEvent = () => {
 }
 const line1ChangeEvent = () => {
   formBus?.emit({ type: 'change', path: props.name + '.line1' })
-  emit('line1-change')
+  emit('line1-change', props.modelValue.line1)
 }
 
 const countries = iscCountriesListSortedByName
@@ -149,32 +149,40 @@ const regions = computed(() => {
 const addrAutoCompleted = (selectedAddr: BtrAddressI) => {
   Object.assign(address.value, selectedAddr)
 
-  formBus?.emit({ type: 'blur', path: props.name + '.country' })
-  formBus?.emit({ type: 'change', path: props.name + '.country' })
+  setTimeout(() => {
+    formBus?.emit({ type: 'blur', path: props.name + '.country' })
+    formBus?.emit({ type: 'change', path: props.name + '.country' })
+    emit('country-change', props.modelValue.country)
+  })
 
   setTimeout(() => {
     formBus?.emit({ type: 'blur', path: props.name + '.line1' })
     formBus?.emit({ type: 'change', path: props.name + '.line1' })
+    emit('line1-change', props.modelValue.line1)
   }, 10)
 
   setTimeout(() => {
     formBus?.emit({ type: 'blur', path: props.name + '.line2' })
     formBus?.emit({ type: 'change', path: props.name + '.line2' })
+    emit('line2-change', props.modelValue.line2)
   }, 20)
 
   setTimeout(() => {
     formBus?.emit({ type: 'blur', path: props.name + '.city' })
     formBus?.emit({ type: 'change', path: props.name + '.city' })
+    emit('city-change', props.modelValue.city)
   }, 30)
 
   setTimeout(() => {
     formBus?.emit({ type: 'blur', path: props.name + '.postalCode' })
     formBus?.emit({ type: 'change', path: props.name + '.postalCode' })
+    emit('postal-code-change', props.modelValue.postalCode)
   }, 40)
 
   setTimeout(() => {
     formBus?.emit({ type: 'blur', path: props.name + '.region' })
     formBus?.emit({ type: 'change', path: props.name + '.region' })
+    emit('region-change', props.modelValue.region)
   }, 50)
 }
 

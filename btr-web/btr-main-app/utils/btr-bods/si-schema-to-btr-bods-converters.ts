@@ -14,16 +14,31 @@ import {
 } from '~/utils/si-schema/definitions'
 
 const getBodsAddressFromSi = (si: SiSchemaType): BodsBtrAddressI => {
-  return {
-    street: si.address.line1,
-    streetAdditional: si.address.line2,
-    city: si.address.city,
-    region: si.address.region,
-    postalCode: si.address.postalCode,
-    locationDescription: si.address.locationDescription ? si.address.locationDescription : '',
-    country: si.address.country?.alpha_2 ? si.address.country.alpha_2 : '',
-    countryName: si.address.country?.name ? si.address.country.name : ''
+  const addr = {} as BodsBtrAddressI
+  if (si.ui.newOrUpdatedFields.includes('address.line1')) {
+    addr.street = si.address.line1
   }
+  if (si.ui.newOrUpdatedFields.includes('address.line2')) {
+    addr.streetAdditional = si.address.line2
+  }
+  if (si.ui.newOrUpdatedFields.includes('address.city')) {
+    addr.city = si.address.city
+  }
+  if (si.ui.newOrUpdatedFields.includes('address.country')) {
+    addr.country = si.address.country?.alpha_2 || ''
+    addr.countryName = si.address.country?.name || ''
+  }
+  if (si.ui.newOrUpdatedFields.includes('address.region')) {
+    addr.region = si.address.region
+  }
+  if (si.ui.newOrUpdatedFields.includes('address.postalCode')) {
+    addr.postalCode = si.address.postalCode
+  }
+  if (si.ui.newOrUpdatedFields.includes('address.locationDescription')) {
+    addr.locationDescription = si.address.locationDescription || ''
+  }
+
+  return addr || undefined
 }
 
 const getBodsNamesFromSi = (si: SiSchemaType) => {

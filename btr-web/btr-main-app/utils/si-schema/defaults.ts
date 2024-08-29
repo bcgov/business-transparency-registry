@@ -19,7 +19,6 @@ export function getEmptyAddress (): AddressSchemaType {
 
 export function getDefaultInputFormSi (): SiSchemaType {
   return {
-    newOrUpdatedFields: [],
     name: {
       isYourOwnInformation: false,
       isUsePreferredName: false,
@@ -78,7 +77,8 @@ export function getDefaultInputFormSi (): SiSchemaType {
     },
     uuid: UUIDv4(),
     ui: {
-      action: FilingActionE.ADD
+      newOrUpdatedFields: [],
+      actions: []
     }
   }
 }

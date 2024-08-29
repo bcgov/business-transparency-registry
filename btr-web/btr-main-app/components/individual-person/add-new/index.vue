@@ -486,7 +486,12 @@ let formSchema: any = z.discriminatedUnion('couldNotProvideMissingInfo', [
   z.object({
     couldNotProvideMissingInfo: z.literal(true),
     missingInfoReason: z.string().transform(s => s.trim()).pipe(z.string().min(1)),
-    name: SiNameSchema
+    name: SiNameSchema,
+
+    ui: z.object({
+      newOrUpdatedFields: z.array(z.string())
+    })
+
   }),
   SiSchemaExtended
 ])
@@ -504,14 +509,18 @@ if (props.editMode) {
     z.object({
       couldNotProvideMissingInfo: z.literal(true),
       missingInfoReason: z.string().transform(s => s.trim()).pipe(z.string().min(1)),
-      name: SiNameExtended
+      name: SiNameExtended,
+
+      ui: z.object({
+        newOrUpdatedFields: z.array(z.string())
+      })
     }),
     SiSchemaExtendedEdit
   ]).superRefine((schema: SiSchemaType, ctx: RefinementCtx): never => {
     // this superRefine is to work out through the redacted data fields and validate them only on change
 
     // birthdate check
-    if (schema.newOrUpdatedFields.includes('birthDate')) {
+    if (schema.ui.newOrUpdatedFields.includes('birthDate')) {
       if (!schema.birthDate || schema.birthDate.trim() === '') {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
@@ -523,7 +532,7 @@ if (props.editMode) {
     // phone check // its already optional nothing to do here
 
     // street address
-    if (schema.newOrUpdatedFields.includes('address.line1')) {
+    if (schema.ui.newOrUpdatedFields.includes('address.line1')) {
       if (!schema.address || !schema.address.line1 || schema.address.line1.trim() === '') {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
@@ -533,7 +542,7 @@ if (props.editMode) {
       }
     }
     // postal code
-    if (schema.newOrUpdatedFields.includes('address.postalCode')) {
+    if (schema.ui.newOrUpdatedFields.includes('address.postalCode')) {
       if (!schema.address || !schema.address.postalCode || schema.address.postalCode.trim() === '') {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
@@ -545,7 +554,7 @@ if (props.editMode) {
     // location description // its already optional nothing to do here
 
     // SIN
-    if (schema.newOrUpdatedFields.includes('taxNumber')) {
+    if (schema.ui.newOrUpdatedFields.includes('taxNumber')) {
       // add tax to path, so that subsequent tax validator creates erroro messages with path
       ctx.path.push('tax')
       validateTaxNumberInfo(schema.tax, ctx)
@@ -557,7 +566,7 @@ if (props.editMode) {
     }
 
     // email
-    if (schema.newOrUpdatedFields.includes('email')) {
+    if (schema.ui.newOrUpdatedFields.includes('email')) {
       if (!schema.email || schema.email.trim() === '') {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
@@ -593,6 +602,7 @@ const countryChange = () => {
   ) {
     inputFormSi.phoneNumber.countryCode2letterIso = inputFormSi.address.country.alpha_2
   }
+  setNewOrChanged(['address.country'])
 }
 
 function hasErrors (sectionErrorPaths: string[]): boolean {
@@ -645,8 +655,8 @@ const inputFormSi: SiSchemaType = reactive(getDefaultInputFormSi())
 
 const setNewOrChanged = (fieldNames: Array<string>) => {
   for (let i = 0; i < fieldNames.length; i++) {
-    if (!inputFormSi.newOrUpdatedFields.includes(fieldNames[i])) {
-      inputFormSi.newOrUpdatedFields.push(fieldNames[i])
+    if (!inputFormSi.ui.newOrUpdatedFields.includes(fieldNames[i])) {
+      inputFormSi.ui.newOrUpdatedFields.push(fieldNames[i])
     }
   }
 }

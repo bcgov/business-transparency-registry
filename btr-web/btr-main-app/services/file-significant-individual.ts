@@ -70,6 +70,15 @@ const getPersonAndOwnershipAndControlStatements = (sif: SignificantIndividualFil
     source.assertedBy = [{ name: siSchema.name.fullName }]
     source.description = BtrSourceDescriptionProvidedByBtrGovBC
     const address = SiSchemaToBtrBodsConverters.getBodsAddressFromSi(siSchema)
+    const identifiers = SiSchemaToBtrBodsConverters.getBodsIdentifiersFromSi(siSchema)
+    const hasTaxNumber = !!siSchema.tax.hasTaxNumber
+    const names = SiSchemaToBtrBodsConverters.getBodsNamesFromSi(siSchema)
+
+    // countries stuff
+    const nationalities = SiSchemaToBtrBodsConverters.getBodsNationalitiesFromSi(siSchema)
+    const isPermanentResidentCa = siSchema.citizenships.findIndex(country => country.alpha_2 === 'CA_PR') !== -1
+    const taxResidencies =  SiSchemaToBtrBodsConverters.getTaxResidenciesFromSi(siSchema)
+
     const personStatement: BtrBodsPersonI = {
       missingInfoReason: siSchema.missingInfoReason,
       placeOfResidence: address,
@@ -77,20 +86,21 @@ const getPersonAndOwnershipAndControlStatements = (sif: SignificantIndividualFil
       birthDate: siSchema.birthDate,
       phoneNumber: siSchema.phoneNumber,
       email: siSchema.email,
-      hasTaxNumber: !!siSchema.tax.hasTaxNumber,
-      identifiers: SiSchemaToBtrBodsConverters.getBodsIdentifiersFromSi(siSchema),
+      hasTaxNumber: hasTaxNumber,
+      identifiers: identifiers,
       isComponent: false,
-      names: SiSchemaToBtrBodsConverters.getBodsNamesFromSi(siSchema),
-      nationalities: SiSchemaToBtrBodsConverters.getBodsNationalitiesFromSi(siSchema),
-      isPermanentResidentCa: siSchema.citizenships.findIndex(country => country.alpha_2 === 'CA_PR') !== -1,
+      names: names,
+      nationalities: nationalities,
+      isPermanentResidentCa: isPermanentResidentCa,
+      taxResidencies: taxResidencies,
+      determinationOfIncapacity: siSchema.determinationOfIncapacity,
+
+      // common, always existing
       personType: SiSchemaToBtrBodsConverters.getPersonType(siSchema),
       publicationDetails: BtrBodsBcrosPublicationDetails(),
       source,
       statementDate: todayIsoDateString(),
       statementType: BodsStatementTypeE.PERSON_STATEMENT,
-      taxResidencies: SiSchemaToBtrBodsConverters.getTaxResidenciesFromSi(siSchema),
-
-      determinationOfIncapacity: siSchema.determinationOfIncapacity,
 
       statementID: UUIDv4(), // todo: fixme we should update schema only if there are changes to the schema itself....
       uuid: siSchema.uuid

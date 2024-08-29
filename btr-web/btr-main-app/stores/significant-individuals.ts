@@ -121,7 +121,7 @@ export const useSignificantIndividuals = defineStore('significantIndividuals', (
   const undoSIChanges = (index: number) => {
     const origIndex = allEditableSIs.value[index].ui.origIndex
     if (origIndex !== undefined) {
-      const editableSI = { ...savedSIs.value[origIndex], ui: { origIndex } }
+      const editableSI = { ...savedSIs.value[origIndex], ui: { origIndex, newOrUpdatedFields: [] } }
       allEditableSIs.value.splice(index, 1, editableSI)
       _applyUpdatingSI(index)
     }
