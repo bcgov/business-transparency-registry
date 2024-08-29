@@ -49,7 +49,7 @@
             :placeholder="$t('placeholders.fullName')"
             data-cy="testFullName"
             :is-disabled="inputFormSi.name.isYourOwnInformation"
-            @change="setNewOrChanged(['name.fullName'])"
+            @change="setNewOrChanged([InputFieldsE.FULL_NAME])"
           />
           <div class="pt-5" />
           <UFormGroup name="doNothing">
@@ -72,7 +72,7 @@
                 :placeholder="$t('placeholders.preferredName')"
                 data-cy="testPreferredName"
                 :help="$t('texts.preferredName.hint')"
-                @change="setNewOrChanged(['name.preferredName'])"
+                @change="setNewOrChanged([InputFieldsE.PREFERRED_NAME])"
               />
             </div>
           </div>
@@ -101,7 +101,7 @@
         <IndividualPersonControlOfSharesVotes
           v-model="inputFormSi.controlOfShares"
           name="controlOfShares"
-          @change="setNewOrChanged(['controlOfShares'])"
+          @change="setNewOrChanged([InputFieldsE.CONTROL_OF_SHARES])"
         />
       </BcrosSection>
 
@@ -115,7 +115,7 @@
         <IndividualPersonControlOfSharesVotes
           v-model="inputFormSi.controlOfVotes"
           name="controlOfVotes"
-          @change="setNewOrChanged(['controlOfVotes'])"
+          @change="setNewOrChanged([InputFieldsE.CONTROL_OF_VOTES])"
         />
       </BcrosSection>
 
@@ -129,7 +129,7 @@
         <IndividualPersonControlOfDirectors
           v-model="inputFormSi.controlOfDirectors"
           name="controlOfDirectors"
-          @change="setNewOrChanged(['controlOfDirectors'])"
+          @change="setNewOrChanged([InputFieldsE.CONTROL_OF_DIRECTORS])"
         />
       </BcrosSection>
 
@@ -147,7 +147,7 @@
             v-model="inputFormSi.controlOther"
             name="otherReasons"
             data-cy="otherReasons"
-            @change="setNewOrChanged(['controlOther'])"
+            @change="setNewOrChanged([InputFieldsE.CONTROL_OTHER])"
           />
         </div>
       </BcrosSection>
@@ -178,7 +178,7 @@
             name="effectiveDates"
             data-cy="effectiveDates"
             @dates-updated="inputFormSi.effectiveDates = $event"
-            @change="setNewOrChanged(['effectiveDates'])"
+            @change="setNewOrChanged([InputFieldsE.EFFECTIVE_DATES])"
           />
         </div>
       </BcrosSection>
@@ -207,7 +207,7 @@
             name="email"
             :placeholder="$t('labels.emailAddress')"
             data-cy="testEmail"
-            @change="setNewOrChanged(['email'])"
+            @change="setNewOrChanged([InputFieldsE.EMAIL])"
           />
         </div>
       </BcrosSection>
@@ -225,12 +225,12 @@
             v-model="inputFormSi.address"
             name="address"
             @country-change="countryChange"
-            @postal-code-change="setNewOrChanged(['address.postalCode'])"
-            @line1-change="setNewOrChanged(['address.line1'])"
-            @line2-change="setNewOrChanged(['address.line2'])"
-            @city-change="setNewOrChanged(['address.city'])"
-            @region-change="setNewOrChanged(['address.region'])"
-            @location-description-change="setNewOrChanged(['address.locationDescription'])"
+            @postal-code-change="setNewOrChanged([InputFieldsE.ADDRESS_POSTAL_CODE])"
+            @line1-change="setNewOrChanged([InputFieldsE.ADDRESS_LINE1])"
+            @line2-change="setNewOrChanged([InputFieldsE.ADDRESS_LINE2])"
+            @city-change="setNewOrChanged([InputFieldsE.ADDRESS_CITY])"
+            @region-change="setNewOrChanged([InputFieldsE.ADDRESS_REGION])"
+            @location-description-change="setNewOrChanged([InputFieldsE.ADDRESS_LOCATION_DESCRIPTION])"
           />
         </div>
       </BcrosSection>
@@ -244,11 +244,11 @@
           v-model="inputFormSi.phoneNumber"
           name="phoneNumber"
           data-cy="phoneNumberInput"
-          @change="setNewOrChanged(['phoneNumber'])"
+          @change="setNewOrChanged([InputFieldsE.PHONE_NUMBER])"
         />
       </BcrosSection>
       <BcrosSection
-        :show-section-has-errors="hasErrors(['birthDate'])"
+        :show-section-has-errors="hasErrors([InputFieldsE.BIRTH_DATE])"
         :section-title="$t('labels.birthdate')"
         :border="editMode"
         no-top-border
@@ -261,7 +261,7 @@
             :max-date="new Date()"
             :placeholder="$t('placeholders.dateSelect.birthdate')"
             @selection="inputFormSi.birthDate = dateToString($event, 'YYYY-MM-DD')"
-            @change="setNewOrChanged(['birthDate'])"
+            @change="setNewOrChanged([InputFieldsE.BIRTH_DATE])"
           />
         </div>
       </BcrosSection>
@@ -285,7 +285,7 @@
             :label-placeholder="$t('labels.countryOfCitizenship.placeholder')"
             key-attribute="alpha_2"
             :search-attributes="['name', 'alpha_2']"
-            @change="setNewOrChanged(['countriesOfCitizenship'])"
+            @change="setNewOrChanged([InputFieldsE.CITIZENSHIPS])"
           />
           <p class="pt-3">
             {{ $t('labels.countryOfCitizenship.note') }}
@@ -312,7 +312,7 @@
             variant="bcGov"
             data-cy="testTaxNumber"
             @clear-errors="clearErrors($event)"
-            @change="setNewOrChanged(['tax', 'taxNumber'])"
+            @change="setNewOrChanged([InputFieldsE.TAX, InputFieldsE.TAX_NUMBER])"
           />
         </div>
       </BcrosSection>
@@ -331,7 +331,7 @@
             name="isTaxResident"
             variant="bcGov"
             data-cy="testTaxResidency"
-            @change="setNewOrChanged(['isTaxResident'])"
+            @change="setNewOrChanged([InputFieldsE.IS_TAX_RESIDENT])"
           />
         </div>
       </bcrosSection>
@@ -346,7 +346,7 @@
         <DeterminationOfIncapacity
           v-model="inputFormSi.determinationOfIncapacity"
           name="determinationOfIncapacity"
-          @change="setNewOrChanged(['determinationOfIncapacity'])"
+          @change="setNewOrChanged([InputFieldsE.DETERMINATION_OF_INCAPACITY])"
         />
       </BcrosSection>
 
@@ -366,7 +366,7 @@
             name="missingInfoReason"
             :missing-info="inputFormSi.couldNotProvideMissingInfo"
             @update:missing-info="inputFormSi.couldNotProvideMissingInfo = $event"
-            @change="setNewOrChanged(['missingInfoReason'])"
+            @change="setNewOrChanged([InputFieldsE.MISSING_INFO_REASON])"
           />
         </div>
       </BcrosSection>
@@ -602,7 +602,7 @@ const countryChange = () => {
   ) {
     inputFormSi.phoneNumber.countryCode2letterIso = inputFormSi.address.country.alpha_2
   }
-  setNewOrChanged(['address.country'])
+  setNewOrChanged([InputFieldsE.ADDRESS_COUNTRY])
 }
 
 function hasErrors (sectionErrorPaths: string[]): boolean {
