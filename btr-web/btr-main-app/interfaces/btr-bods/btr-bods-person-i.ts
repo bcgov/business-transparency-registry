@@ -14,29 +14,31 @@ export interface BtrBodsPersonI {
   statementDate: string
   isComponent: boolean
   personType: BodsPersonTypeE
+  publicationDetails: BodsPublicationDetailsI
+  source: BodsSourceI
+
   unspecifiedPersonDetails?: {
     reason: BodsUnspecifiedPersonDetailsTypeE
     description?: string
   }
-  names: BodsNameI[]
-  identifiers: BodsIdentifierI[]
-  nationalities: BodsCountryI[]
-  isPermanentResidentCa: boolean
+  names?: BodsNameI[]
+  identifiers?: BodsIdentifierI[]
+  nationalities?: BodsCountryI[]
+  isPermanentResidentCa?: boolean
   birthDate?: string
   deathDate?: string
-  placeOfResidence: BodsBtrAddressI
-  taxResidencies: BodsCountryI[]
-  addresses: BodsBtrAddressI[]
-  phoneNumber: PhoneSchemaType
-  publicationDetails: BodsPublicationDetailsI
-  source: BodsSourceI
+  placeOfResidence?: BodsBtrAddressI
+  taxResidencies?: BodsCountryI[]
+  addresses?: BodsBtrAddressI[]
+  phoneNumber?: PhoneSchemaType
 
-  determinationOfIncapacity: boolean
+  determinationOfIncapacity?: boolean
 
-  hasTaxNumber: boolean
-  email: string
+  hasTaxNumber?: boolean
+  email?: string
 
   missingInfoReason?: string
 
-  uuid: string
+  // this is user uuid from our API, not the statementID. Statement ID needs to change when there is new data
+  uuid?: string
 }

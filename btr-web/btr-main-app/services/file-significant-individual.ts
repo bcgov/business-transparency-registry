@@ -18,7 +18,8 @@ import {
   getSiControlConnectionsFromBodsSubmission,
   getSIsFromBtrBodsSubmission
 } from '~/utils/btr-bods/bods-to-si-schema-converters'
-import { FilingActionE } from '#imports'
+import { FilingActionE, InputFieldsE } from '#imports'
+import { hasFieldChanged } from '~/utils/ui'
 
 const constructBtrApiURL = () => {
   const runtimeConfig = useRuntimeConfig()
@@ -71,45 +72,51 @@ const getPersonAndOwnershipAndControlStatements = (sif: SignificantIndividualFil
     source.description = BtrSourceDescriptionProvidedByBtrGovBC
     const address = SiSchemaToBtrBodsConverters.getBodsAddressFromSi(siSchema)
     const identifiers = SiSchemaToBtrBodsConverters.getBodsIdentifiersFromSi(siSchema)
-    const hasTaxNumber = !!siSchema.tax.hasTaxNumber
+    const hasTaxNumber = hasFieldChanged(siSchema, InputFieldsE.TAX) ? !!siSchema.tax.hasTaxNumber : undefined
     const names = SiSchemaToBtrBodsConverters.getBodsNamesFromSi(siSchema)
 
     // countries stuff
     const nationalities = SiSchemaToBtrBodsConverters.getBodsNationalitiesFromSi(siSchema)
-    const isPermanentResidentCa = siSchema.citizenships.findIndex(country => country.alpha_2 === 'CA_PR') !== -1
-    const taxResidencies =  SiSchemaToBtrBodsConverters.getTaxResidenciesFromSi(siSchema)
+    const isPermanentResidentCa =
+      hasFieldChanged(siSchema, InputFieldsE.CITIZENSHIPS) ?
+        siSchema.citizenships.findIndex(country => country.alpha_2 === 'CA_PR') !== -1 : undefined
+    const taxResidencies = SiSchemaToBtrBodsConverters.getTaxResidenciesFromSi(siSchema)
 
     const personStatement: BtrBodsPersonI = {
-      missingInfoReason: siSchema.missingInfoReason,
+      missingInfoReason:
+        hasFieldChanged(siSchema, InputFieldsE.MISSING_INFO_REASON) ? siSchema.missingInfoReason : undefined,
       placeOfResidence: address,
-      addresses: [address],
-      birthDate: siSchema.birthDate,
-      phoneNumber: siSchema.phoneNumber,
-      email: siSchema.email,
+      addresses: address ? [address] : undefined,
+      birthDate: hasFieldChanged(siSchema, InputFieldsE.BIRTH_DATE) ? siSchema.birthDate : undefined,
+      phoneNumber: hasFieldChanged(siSchema, InputFieldsE.PHONE_NUMBER) ? siSchema.phoneNumber : undefined,
+      email: hasFieldChanged(siSchema, InputFieldsE.EMAIL) ? siSchema.email : undefined,
       hasTaxNumber: hasTaxNumber,
       identifiers: identifiers,
-      isComponent: false,
+
       names: names,
       nationalities: nationalities,
       isPermanentResidentCa: isPermanentResidentCa,
       taxResidencies: taxResidencies,
-      determinationOfIncapacity: siSchema.determinationOfIncapacity,
+      determinationOfIncapacity:
+        hasFieldChanged(siSchema, InputFieldsE.DETERMINATION_OF_INCAPACITY) ?
+          siSchema.determinationOfIncapacity : undefined,
+      uuid: siSchema.uuid,
 
-      // common, always existing
+      // common, part of bods
+      isComponent: false,
       personType: SiSchemaToBtrBodsConverters.getPersonType(siSchema),
       publicationDetails: BtrBodsBcrosPublicationDetails(),
       source,
       statementDate: todayIsoDateString(),
       statementType: BodsStatementTypeE.PERSON_STATEMENT,
 
-      statementID: UUIDv4(), // todo: fixme we should update schema only if there are changes to the schema itself....
-      uuid: siSchema.uuid
+      statementID: UUIDv4() // todo: fixme we should update schema only if there are changes to the schema itself....
     }
 
     const oocs: BtrBodsOwnershipOrControlI = {
       statementID: UUIDv4(),
-      interestedParty: { describedByPersonStatement: personStatement.statementID },
       interests: SiSchemaToBtrBodsConverters.getInterests(siSchema),
+      interestedParty: { describedByPersonStatement: personStatement.statementID },
       isComponent: false,
       publicationDetails: BtrBodsBcrosPublicationDetails(),
       source,

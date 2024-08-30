@@ -54,7 +54,7 @@ onBeforeMount(async () => {
         message: error?.value?.message,
         category: ErrorCategoryE.SIGNIFICANT_INDIVIDUAL
       }
-      significantIndividuals.errors.value.push(err)
+      significantIndividuals.errors.push(err)
     }
     return null
   }
