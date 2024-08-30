@@ -24,7 +24,9 @@
           :placeholder="$t('placeholders.taxNumber')"
           class="w-80"
           @focusout="formatInput"
+          @change="taxNumberChanged=true; emit('tax-number-changed')"
           @focus="focusTaxNumber"
+          @blur="revertTaxNumber"
         />
       </UFormGroup>
     </div>
@@ -50,17 +52,36 @@
 const hasTaxNumber = defineModel('hasTaxNumber', { type: Boolean, required: false, default: undefined })
 const taxNumber = defineModel('taxNumber', { type: [String, undefined], required: false, default: undefined })
 
-const emit = defineEmits<(e: 'clear-errors', path: string) => void>()
-const props = defineProps<{ name: string, variant: string }>()
+// eslint-disable-next-line func-call-spacing
+const emit = defineEmits<{
+  (e: 'clear-errors', path: string): void
+  (e: 'tax-number-changed', path: string): void
+}>()
+
+const props = defineProps<{ name: string, variant: string, isEditing: boolean }>()
 
 const taxNumberInputGroupRef = ref() // UFormGroup ref
 const formatInput = () => {
   taxNumber.value = formatTaxNumber(taxNumber.value)
 }
 
+const taxNumberFieldUuid = getRandomUuid()
+const taxNumberChanged = ref(false)
+
 const focusTaxNumber = () => {
   emit('clear-errors', props.name + '.hasTaxNumber')
   hasTaxNumber.value = true
+  if (props.isEditing) {
+    setFieldOriginalValue(taxNumberFieldUuid, taxNumber.value)
+    taxNumber.value = ''
+  }
+}
+
+const revertTaxNumber = () => {
+  const originalValue = getFieldOriginalValue(taxNumberFieldUuid)
+  if (props.isEditing && !taxNumberChanged.value && originalValue) {
+    taxNumber.value = originalValue
+  }
 }
 
 const clearTaxNumber = () => {

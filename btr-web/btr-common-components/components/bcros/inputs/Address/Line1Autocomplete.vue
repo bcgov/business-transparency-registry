@@ -98,7 +98,10 @@ const props = defineProps({
 const canadaPostApiKey = runtimeConfig.public.addressCompleteKey
 const suggestedAddresses: Ref<Array<CanadaPostApiFindResponseItemI>> = ref([])
 // @ts-ignore
-const line1: Ref<string> = ref(props.modelValue)
+const line1: Ref<string> = ref('')
+
+watch(props.modelValue, () => {line1.value = props.modelValue}, { immediate: true })
+
 const val = ref()
 val.value = { id: 'empty' }
 const selectFromDropdown = async (address: CanadaPostApiFindResponseItemI, event: Event) => {

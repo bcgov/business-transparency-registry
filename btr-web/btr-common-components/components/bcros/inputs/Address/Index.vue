@@ -23,7 +23,9 @@
       data-cy="address-line1-autocomplete"
       @addr-auto-completed="addrAutoCompleted"
       @blur="line1BlurEvent"
+      @focusin="clearLine1FieldFieldOnEdit"
       @change="line1ChangeEvent"
+      @focusout="revertLine1Field"
     />
   </UFormGroup>
   <UFormGroup v-slot="{ error }" class="mt-4" :name="name + '.line2'">
@@ -82,7 +84,9 @@
         class="w-full"
         :variant="error ? 'error' : 'bcGov'"
         data-cy="address-postal-code"
+        @focus="clearPostalCodeFieldFieldOnEdit"
         @change="emit('postal-code-change')"
+        @blur="revertPostalCodeField"
       />
     </UFormGroup>
   </div>
@@ -94,7 +98,9 @@
       class="w-full"
       :variant="error ? 'error' : 'bcGov'"
       data-cy="address-location-description"
+      @focus="clearLocationDescriptionFieldFieldOnEdit"
       @change="emit('location-description-change')"
+      @blur="revertLocationDescriptionField"
     />
   </UFormGroup>
 </template>
@@ -122,16 +128,65 @@ const props = defineProps({
   name: { type: String, default: 'addressInput' },
   label: { type: String, default: '' },
   id: { type: String, required: true },
-  modelValue: { type: Object as PropType<BtrAddressI>, required: true }
+  modelValue: { type: Object as PropType<BtrAddressI>, required: true },
+  isEditing: { type: Boolean, required: true }
 })
 
 const line1BlurEvent = () => {
   formBus?.emit({ type: 'blur', path: props.name + '.line1' })
 }
 const line1ChangeEvent = () => {
+  hasLine1Changed.value=true
   formBus?.emit({ type: 'change', path: props.name + '.line1' })
   emit('line1-change', props.modelValue.line1)
 }
+
+const postalCodeFieldUuid = getRandomUuid()
+const hasPostalCodeChanged = ref(false)
+const clearPostalCodeFieldFieldOnEdit = () => {
+  if (props.isEditing) {
+    setFieldOriginalValue(postalCodeFieldUuid, address.value.postalCode)
+    address.value.postalCode = ''
+  }
+}
+const revertPostalCodeField = () => {
+  const originalValue = getFieldOriginalValue(postalCodeFieldUuid)
+  if (props.isEditing && !hasPostalCodeChanged.value && originalValue) {
+    address.value.postalCode = originalValue
+  }
+}
+
+const locationDescriptionFieldUuid = getRandomUuid()
+const hasLocationDescriptionChanged = ref(false)
+const clearLocationDescriptionFieldFieldOnEdit = () => {
+  if (props.isEditing) {
+    setFieldOriginalValue(locationDescriptionFieldUuid, address.value.locationDescription)
+    address.value.locationDescription = ''
+  }
+}
+const revertLocationDescriptionField = () => {
+  const originalValue = getFieldOriginalValue(locationDescriptionFieldUuid)
+  if (props.isEditing && !hasLocationDescriptionChanged.value && originalValue) {
+    address.value.locationDescription = originalValue
+  }
+}
+
+const line1FieldUuid = getRandomUuid()
+const hasLine1Changed = ref(false)
+const clearLine1FieldFieldOnEdit = () => {
+  if (props.isEditing) {
+    setFieldOriginalValue(line1FieldUuid, address.value.line1)
+    address.value.line1 = ''
+  }
+}
+const revertLine1Field = () => {
+  const originalValue = getFieldOriginalValue(line1FieldUuid)
+  if (props.isEditing && !hasLine1Changed.value && originalValue) {
+    address.value.line1 = originalValue
+  }
+}
+
+
 
 const countries = iscCountriesListSortedByName
 

@@ -3,16 +3,21 @@
     <div class="grow grid grid-cols-2 items-center gap-4 relative ">
       <div v-if="highlightRow" class="absolute inset-0 bg-bcGovColor-activeBlue/[0.2] z-50 rounded" />
       <div class="flex-grow">
+        <!-- isEditing is set to false, as we dont want to clear these dates on focus -->
+        <!-- if additional logic for editing is needed, we need to update this logic -->
         <BcrosInputsDateSelect
           :name="name + '.startDate'"
           :initial-date="dateStringToDate(dates.startDate || '') || undefined"
           :max-date="dates.endDate ? dateStringToDate(dates.endDate) || new Date() : new Date()"
           :placeholder="$t('placeholders.dateSelect.startDate')"
           data-cy="start-date-select"
+          :is-editing="false"
           @selection="selectStartDate($event)"
         />
       </div>
       <div class="flex-grow">
+        <!-- isEditing is set to false, as we dont want to clear these dates on focus -->
+        <!-- if additional logic for editing is needed, we need to update this logic -->
         <BcrosInputsDateSelect
           v-if="isEndDateVisible"
           :class="{'bg-blue-500': highlightRow}"
@@ -23,6 +28,7 @@
           :removable="removableEndDate"
           :placeholder="$t('placeholders.dateSelect.endDate')"
           data-cy="end-date-select"
+          :is-editing="false"
           @remove-control="showEndDate(false)"
           @selection="selectEndDate($event)"
         />

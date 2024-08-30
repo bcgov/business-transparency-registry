@@ -19,7 +19,6 @@ import {
   getSIsFromBtrBodsSubmission
 } from '~/utils/btr-bods/bods-to-si-schema-converters'
 import { FilingActionE, InputFieldsE } from '#imports'
-import { hasFieldChanged } from '~/utils/ui'
 
 const constructBtrApiURL = () => {
   const runtimeConfig = useRuntimeConfig()

@@ -13,6 +13,9 @@
       @click="showDatePicker = true"
       @keydown.enter="showDatePicker = true"
       @update:model-value="handleManualDateEntry($event)"
+      @focus="clearDateFieldOnEdit"
+      @change="hasDateChanged=true"
+      @blur="revertDateField"
     >
       <template #trailing>
         <UIcon
@@ -38,7 +41,7 @@
       :default-selected-date="selectedDate"
       :set-min-date="minDate"
       :set-max-date="maxDate"
-      @selected-date="updateDate($event); showDatePicker = false"
+      @selected-date="updateDate($event); showDatePicker = false; hasDateChanged = true"
     />
   </UFormGroup>
 </template>
@@ -57,7 +60,8 @@ const props = defineProps<{
   maxDate?: Date,
   placeholder?: string,
   variant?: string
-  removable?: boolean
+  removable?: boolean,
+  isEditing: boolean
 }>()
 
 /* eslint-disable func-call-spacing */
@@ -106,4 +110,19 @@ const iconClass = computed(() => {
   }
   return 'text-gray-700'
 })
+
+const dateFieldUuid = getRandomUuid()
+const hasDateChanged = ref(false)
+const clearDateFieldOnEdit = () => {
+  if (props.isEditing) {
+    setFieldOriginalValue(dateFieldUuid, selectedDate.value)
+    selectedDate.value = null
+  }
+}
+const revertDateField = () => {
+  const originalValue = getFieldOriginalValue(dateFieldUuid)
+  if (props.isEditing && !hasDateChanged.value && originalValue) {
+    selectedDate.value = originalValue
+  }
+}
 </script>

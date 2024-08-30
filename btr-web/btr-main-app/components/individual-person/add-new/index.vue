@@ -177,8 +177,9 @@
             :initial-date-groups="inputFormSi.effectiveDates"
             name="effectiveDates"
             data-cy="effectiveDates"
-            @dates-updated="inputFormSi.effectiveDates = $event"
-            @change="setNewOrChanged([InputFieldsE.EFFECTIVE_DATES])"
+            :is-editing="isEditing"
+            @dates-updated="inputFormSi.effectiveDates = $event;
+            setNewOrChanged([InputFieldsE.EFFECTIVE_DATES])"
           />
         </div>
       </BcrosSection>
@@ -207,7 +208,9 @@
             name="email"
             :placeholder="$t('labels.emailAddress')"
             data-cy="testEmail"
+            @focus="clearEmailFieldOnEdit"
             @change="setNewOrChanged([InputFieldsE.EMAIL])"
+            @blur="revertEmailField"
           />
         </div>
       </BcrosSection>
@@ -224,6 +227,7 @@
             id="addNewPersonLastKnownAddress"
             v-model="inputFormSi.address"
             name="address"
+            :is-editing="isEditing"
             @country-change="countryChange"
             @postal-code-change="setNewOrChanged([InputFieldsE.ADDRESS_POSTAL_CODE])"
             @line1-change="setNewOrChanged([InputFieldsE.ADDRESS_LINE1])"
@@ -244,6 +248,7 @@
           v-model="inputFormSi.phoneNumber"
           name="phoneNumber"
           data-cy="phoneNumberInput"
+          :is-editing="isEditing"
           @change="setNewOrChanged([InputFieldsE.PHONE_NUMBER])"
         />
       </BcrosSection>
@@ -262,6 +267,7 @@
             :placeholder="$t('placeholders.dateSelect.birthdate')"
             @selection="inputFormSi.birthDate = dateToString($event, 'YYYY-MM-DD')"
             @change="setNewOrChanged([InputFieldsE.BIRTH_DATE])"
+            :is-editing="isEditing"
           />
         </div>
       </BcrosSection>
@@ -310,9 +316,10 @@
             v-model:taxNumber="inputFormSi.tax.taxNumber"
             name="tax"
             variant="bcGov"
+            :is-editing="isEditing"
             data-cy="testTaxNumber"
             @clear-errors="clearErrors($event)"
-            @change="setNewOrChanged([InputFieldsE.TAX, InputFieldsE.TAX_NUMBER])"
+            @tax-number-changed="setNewOrChanged([InputFieldsE.TAX, InputFieldsE.TAX_NUMBER])"
           />
         </div>
       </BcrosSection>
@@ -447,6 +454,20 @@ const bcrosAccount = useBcrosAccount()
 
 const isEditing = ref(false)
 
+const emailFieldUuid = getRandomUuid()
+const clearEmailFieldOnEdit = () => {
+  if (isEditing) {
+    setFieldOriginalValue(emailFieldUuid, inputFormSi.email)
+    inputFormSi.email = ''
+  }
+}
+const revertEmailField = () => {
+  const originalValue = getFieldOriginalValue(emailFieldUuid)
+  if (isEditing && !hasFieldChanged(inputFormSi, InputFieldsE.EMAIL) && originalValue) {
+    inputFormSi.email = originalValue
+  }
+}
+
 // extend existing schema with
 const SiControlOfExtended = SiControlOfSchema.superRefine(validateControlSelectionForSharesAndVotes)
 const SiNameExtended = SiNameSchema
@@ -520,7 +541,7 @@ if (props.editMode) {
     // this superRefine is to work out through the redacted data fields and validate them only on change
 
     // birthdate check
-    if (schema.ui.newOrUpdatedFields.includes('birthDate')) {
+    if (schema.ui.newOrUpdatedFields.includes(InputFieldsE.BIRTH_DATE)) {
       if (!schema.birthDate || schema.birthDate.trim() === '') {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
@@ -532,7 +553,7 @@ if (props.editMode) {
     // phone check // its already optional nothing to do here
 
     // street address
-    if (schema.ui.newOrUpdatedFields.includes('address.line1')) {
+    if (schema.ui.newOrUpdatedFields.includes(InputFieldsE.ADDRESS_LINE1)) {
       if (!schema.address || !schema.address.line1 || schema.address.line1.trim() === '') {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
@@ -542,7 +563,7 @@ if (props.editMode) {
       }
     }
     // postal code
-    if (schema.ui.newOrUpdatedFields.includes('address.postalCode')) {
+    if (schema.ui.newOrUpdatedFields.includes(InputFieldsE.ADDRESS_POSTAL_CODE)) {
       if (!schema.address || !schema.address.postalCode || schema.address.postalCode.trim() === '') {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
@@ -554,7 +575,7 @@ if (props.editMode) {
     // location description // its already optional nothing to do here
 
     // SIN
-    if (schema.ui.newOrUpdatedFields.includes('taxNumber')) {
+    if (schema.ui.newOrUpdatedFields.includes(InputFieldsE.TAX_NUMBER)) {
       // add tax to path, so that subsequent tax validator creates erroro messages with path
       ctx.path.push('tax')
       validateTaxNumberInfo(schema.tax, ctx)
@@ -566,7 +587,7 @@ if (props.editMode) {
     }
 
     // email
-    if (schema.ui.newOrUpdatedFields.includes('email')) {
+    if (schema.ui.newOrUpdatedFields.includes(InputFieldsE.EMAIL)) {
       if (!schema.email || schema.email.trim() === '') {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,

@@ -12,7 +12,6 @@ import { PercentageRangeE } from '~/enums/percentage-range-e'
 import {
   SiControlOfDirectorsSchemaType, SiControlOfSchemaType, ConnectedInvidualSchemaType, SiSchemaType
 } from '~/utils/si-schema/definitions'
-import { hasFieldChanged } from '~/utils/ui'
 
 const getBodsAddressFromSi = (si: SiSchemaType): BodsBtrAddressI | undefined => {
   const addr = {} as BodsBtrAddressI
