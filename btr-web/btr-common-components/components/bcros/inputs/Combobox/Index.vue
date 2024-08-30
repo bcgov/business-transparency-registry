@@ -16,6 +16,7 @@
       multiple
       :by="keyAttribute"
       :search-attributes="searchAttributes"
+      @change="$emit('value-changed', model)"
     >
       <UButton
         class="w-full min-h-[56px] h-fit flex items-center relative"
@@ -70,6 +71,7 @@ import { type UseEventBusReturn } from '@vueuse/core'
 
 const formBus = inject<UseEventBusReturn<any, string> | undefined>('form-events', undefined)
 
+defineEmits<{(e: 'value-changed', value: any): void}>()
 const model = defineModel({ type: Array as PropType<any[]>, required: true })
 const props = defineProps({
   name: { type: String, default: 'name' },

@@ -285,7 +285,7 @@
             :label-placeholder="$t('labels.countryOfCitizenship.placeholder')"
             key-attribute="alpha_2"
             :search-attributes="['name', 'alpha_2']"
-            @change="setNewOrChanged([InputFieldsE.CITIZENSHIPS])"
+            @value-changed="setNewOrChanged([InputFieldsE.CITIZENSHIPS])"
           />
           <p class="pt-3">
             {{ $t('labels.countryOfCitizenship.note') }}
