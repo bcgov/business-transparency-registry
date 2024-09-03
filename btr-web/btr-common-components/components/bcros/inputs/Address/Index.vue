@@ -25,7 +25,7 @@
       @blur="line1BlurEvent"
       @focusin="clearLine1FieldFieldOnEdit"
       @change="line1ChangeEvent"
-      @focusout="revertLine1Field"
+      @focusout="revertUnchangedLine1Field"
     />
   </UFormGroup>
   <UFormGroup v-slot="{ error }" class="mt-4" :name="name + '.line2'">
@@ -36,7 +36,7 @@
       class="w-full flex-1"
       :variant="error ? 'error' : 'bcGov'"
       data-cy="address-line2"
-      @change="emit('line2-change')"
+      @change="emit('line2-change', address.line2)"
     />
   </UFormGroup>
   <!--  city; region combo; postal code -->
@@ -49,7 +49,7 @@
         class="pr-4 w-full"
         :variant="error ? 'error' : 'bcGov'"
         data-cy="address-city"
-        @change="emit('city-change')"
+        @change="emit('city-change', address.city)"
       />
     </UFormGroup>
     <UFormGroup v-slot="{ error }" class="sm:flex-1" :name="name + '.region'">
@@ -64,7 +64,7 @@
         option-attribute="name"
         value-attribute="code"
         data-cy="address-region-select"
-        @change="emit('region-change')"
+        @change="emit('region-change', address.region)"
       />
       <UInput
         v-else
@@ -73,7 +73,7 @@
         class="pr-4 w-full"
         :variant="error ? 'error' : 'bcGov'"
         data-cy="address-region-input"
-        @change="emit('region-change')"
+        @change="emit('region-change', address.region)"
       />
     </UFormGroup>
     <UFormGroup v-slot="{ error }" class="sm:flex-1" :name="name + '.postalCode'">
@@ -85,8 +85,8 @@
         :variant="error ? 'error' : 'bcGov'"
         data-cy="address-postal-code"
         @focus="clearPostalCodeFieldFieldOnEdit"
-        @change="emit('postal-code-change')"
-        @blur="revertPostalCodeField"
+        @change="emit('postal-code-change', address.postalCode)"
+        @blur="revertUncangedPostalCodeField"
       />
     </UFormGroup>
   </div>
@@ -99,8 +99,8 @@
       :variant="error ? 'error' : 'bcGov'"
       data-cy="address-location-description"
       @focus="clearLocationDescriptionFieldFieldOnEdit"
-      @change="emit('location-description-change')"
-      @blur="revertLocationDescriptionField"
+      @change="emit('location-description-change', address.locationDescription || '')"
+      @blur="revertUnchangedLocationDescriptionField"
     />
   </UFormGroup>
 </template>
@@ -136,7 +136,7 @@ const line1BlurEvent = () => {
   formBus?.emit({ type: 'blur', path: props.name + '.line1' })
 }
 const line1ChangeEvent = () => {
-  hasLine1Changed.value=true
+  hasLine1Changed.value = true
   formBus?.emit({ type: 'change', path: props.name + '.line1' })
   emit('line1-change', props.modelValue.line1)
 }
@@ -149,7 +149,7 @@ const clearPostalCodeFieldFieldOnEdit = () => {
     address.value.postalCode = ''
   }
 }
-const revertPostalCodeField = () => {
+const revertUncangedPostalCodeField = () => {
   const originalValue = getFieldOriginalValue(postalCodeFieldUuid)
   if (props.isEditing && !hasPostalCodeChanged.value && originalValue) {
     address.value.postalCode = originalValue
@@ -164,7 +164,7 @@ const clearLocationDescriptionFieldFieldOnEdit = () => {
     address.value.locationDescription = ''
   }
 }
-const revertLocationDescriptionField = () => {
+const revertUnchangedLocationDescriptionField = () => {
   const originalValue = getFieldOriginalValue(locationDescriptionFieldUuid)
   if (props.isEditing && !hasLocationDescriptionChanged.value && originalValue) {
     address.value.locationDescription = originalValue
@@ -179,14 +179,12 @@ const clearLine1FieldFieldOnEdit = () => {
     address.value.line1 = ''
   }
 }
-const revertLine1Field = () => {
+const revertUnchangedLine1Field = () => {
   const originalValue = getFieldOriginalValue(line1FieldUuid)
   if (props.isEditing && !hasLine1Changed.value && originalValue) {
     address.value.line1 = originalValue
   }
 }
-
-
 
 const countries = iscCountriesListSortedByName
 

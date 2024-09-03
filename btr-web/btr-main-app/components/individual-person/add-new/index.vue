@@ -179,7 +179,7 @@
             data-cy="effectiveDates"
             :is-editing="isEditing"
             @dates-updated="inputFormSi.effectiveDates = $event;
-            setNewOrChanged([InputFieldsE.EFFECTIVE_DATES])"
+                            setNewOrChanged([InputFieldsE.EFFECTIVE_DATES])"
           />
         </div>
       </BcrosSection>
@@ -210,7 +210,7 @@
             data-cy="testEmail"
             @focus="clearEmailFieldOnEdit"
             @change="setNewOrChanged([InputFieldsE.EMAIL])"
-            @blur="revertEmailField"
+            @blur="revertUnchangedEmailField"
           />
         </div>
       </BcrosSection>
@@ -265,9 +265,9 @@
             :initial-date="!!inputFormSi.birthDate ? dateStringToDate(inputFormSi.birthDate) || undefined : undefined"
             :max-date="new Date()"
             :placeholder="$t('placeholders.dateSelect.birthdate')"
+            :is-editing="isEditing"
             @selection="inputFormSi.birthDate = dateToString($event, 'YYYY-MM-DD')"
             @change="setNewOrChanged([InputFieldsE.BIRTH_DATE])"
-            :is-editing="isEditing"
           />
         </div>
       </BcrosSection>
@@ -461,7 +461,7 @@ const clearEmailFieldOnEdit = () => {
     inputFormSi.email = ''
   }
 }
-const revertEmailField = () => {
+const revertUnchangedEmailField = () => {
   const originalValue = getFieldOriginalValue(emailFieldUuid)
   if (isEditing && !hasFieldChanged(inputFormSi, InputFieldsE.EMAIL) && originalValue) {
     inputFormSi.email = originalValue
@@ -675,6 +675,7 @@ const setIsYourOwnInformation = (event: any) => {
 const inputFormSi: SiSchemaType = reactive(getDefaultInputFormSi())
 
 const setNewOrChanged = (fieldNames: Array<string>) => {
+  inputFormSi.ui.newOrUpdatedFields ??= []
   for (let i = 0; i < fieldNames.length; i++) {
     if (!inputFormSi.ui.newOrUpdatedFields.includes(fieldNames[i])) {
       inputFormSi.ui.newOrUpdatedFields.push(fieldNames[i])

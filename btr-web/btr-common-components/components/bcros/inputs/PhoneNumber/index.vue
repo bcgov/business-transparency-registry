@@ -33,10 +33,10 @@
         variant="bcGov"
         data-cy="phoneNumber.number"
         :data-maska="inputMask"
+        :placeholder="$t('placeholder.phoneNumber.number')"
         @focus="clearPhoneNumberOnEdit"
         @change="phoneNumberUpdated=true"
-        @blur="revertPhoneNumber"
-        :placeholder="$t('placeholder.phoneNumber.number')"
+        @blur="revertUnchangedPhoneNumber"
       />
     </UFormGroup>
     <UFormGroup :name="name + '.extension'" class="w-1/4">
@@ -90,7 +90,7 @@ const clearPhoneNumberOnEdit = () => {
     maskedPhoneNumber.value = ''
   }
 }
-const revertPhoneNumber = () => {
+const revertUnchangedPhoneNumber = () => {
   const originalValue = getFieldOriginalValue(phoneFieldUuid)
   if (props.isEditing && !phoneNumberUpdated.value && originalValue) {
     maskedPhoneNumber.value = originalValue

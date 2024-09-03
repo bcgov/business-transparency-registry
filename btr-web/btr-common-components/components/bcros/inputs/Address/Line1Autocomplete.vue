@@ -100,7 +100,7 @@ const suggestedAddresses: Ref<Array<CanadaPostApiFindResponseItemI>> = ref([])
 // @ts-ignore
 const line1: Ref<string> = ref('')
 
-watch(props.modelValue, () => {line1.value = props.modelValue}, { immediate: true })
+watch(props.modelValue, () => { line1.value = props.modelValue }, { immediate: true })
 
 const val = ref()
 val.value = { id: 'empty' }

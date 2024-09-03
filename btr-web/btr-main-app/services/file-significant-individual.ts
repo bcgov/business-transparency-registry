@@ -77,8 +77,9 @@ const getPersonAndOwnershipAndControlStatements = (sif: SignificantIndividualFil
     // countries stuff
     const nationalities = SiSchemaToBtrBodsConverters.getBodsNationalitiesFromSi(siSchema)
     const isPermanentResidentCa =
-      hasFieldChanged(siSchema, InputFieldsE.CITIZENSHIPS) ?
-        siSchema.citizenships.findIndex(country => country.alpha_2 === 'CA_PR') !== -1 : undefined
+      hasFieldChanged(siSchema, InputFieldsE.CITIZENSHIPS)
+        ? siSchema.citizenships.findIndex(country => country.alpha_2 === 'CA_PR') !== -1
+        : undefined
     const taxResidencies = SiSchemaToBtrBodsConverters.getTaxResidenciesFromSi(siSchema)
 
     const personStatement: BtrBodsPersonI = {
@@ -89,16 +90,17 @@ const getPersonAndOwnershipAndControlStatements = (sif: SignificantIndividualFil
       birthDate: hasFieldChanged(siSchema, InputFieldsE.BIRTH_DATE) ? siSchema.birthDate : undefined,
       phoneNumber: hasFieldChanged(siSchema, InputFieldsE.PHONE_NUMBER) ? siSchema.phoneNumber : undefined,
       email: hasFieldChanged(siSchema, InputFieldsE.EMAIL) ? siSchema.email : undefined,
-      hasTaxNumber: hasTaxNumber,
-      identifiers: identifiers,
+      hasTaxNumber,
+      identifiers,
 
-      names: names,
-      nationalities: nationalities,
-      isPermanentResidentCa: isPermanentResidentCa,
-      taxResidencies: taxResidencies,
+      names,
+      nationalities,
+      isPermanentResidentCa,
+      taxResidencies,
       determinationOfIncapacity:
-        hasFieldChanged(siSchema, InputFieldsE.DETERMINATION_OF_INCAPACITY) ?
-          siSchema.determinationOfIncapacity : undefined,
+        hasFieldChanged(siSchema, InputFieldsE.DETERMINATION_OF_INCAPACITY)
+          ? siSchema.determinationOfIncapacity
+          : undefined,
       uuid: siSchema.uuid,
 
       // common, part of bods

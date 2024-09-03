@@ -24,9 +24,9 @@
           :placeholder="$t('placeholders.taxNumber')"
           class="w-80"
           @focusout="formatInput"
-          @change="taxNumberChanged=true; emit('tax-number-changed')"
+          @change="taxNumberChanged=true; emit('tax-number-changed', taxNumber)"
           @focus="focusTaxNumber"
-          @blur="revertTaxNumber"
+          @blur="revertUnchangedTaxNumber"
         />
       </UFormGroup>
     </div>
@@ -77,7 +77,7 @@ const focusTaxNumber = () => {
   }
 }
 
-const revertTaxNumber = () => {
+const revertUnchangedTaxNumber = () => {
   const originalValue = getFieldOriginalValue(taxNumberFieldUuid)
   if (props.isEditing && !taxNumberChanged.value && originalValue) {
     taxNumber.value = originalValue

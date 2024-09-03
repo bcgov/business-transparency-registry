@@ -1,5 +1,8 @@
 import { v4 as UUIDv4 } from 'uuid'
 
+import { SiSchemaType } from '~/utils/si-schema/definitions'
+import { InputFieldsE } from '~/enums/input-fields-e'
+
 const tempContainer: { [key: string]: any } = {}
 
 export const getRandomUuid: () => string = () => UUIDv4()
@@ -12,9 +15,6 @@ export const setFieldOriginalValue = (fieldUUid: string, fieldValue: any) => {
 export const getFieldOriginalValue = (fieldUUid: string): any => {
   return tempContainer[fieldUUid]
 }
-
-import { SiSchemaType } from '~/utils/si-schema/definitions'
-import { InputFieldsE } from '~/enums/input-fields-e'
 
 export const hasFieldChanged = (si: SiSchemaType, field: InputFieldsE) => {
   return si.ui.newOrUpdatedFields.includes(field)

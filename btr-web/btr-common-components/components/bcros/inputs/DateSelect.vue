@@ -15,7 +15,7 @@
       @update:model-value="handleManualDateEntry($event)"
       @focus="clearDateFieldOnEdit"
       @change="hasDateChanged=true"
-      @blur="revertDateField"
+      @blur="revertUnchangedDateField"
     >
       <template #trailing>
         <UIcon
@@ -119,7 +119,7 @@ const clearDateFieldOnEdit = () => {
     selectedDate.value = null
   }
 }
-const revertDateField = () => {
+const revertUnchangedDateField = () => {
   const originalValue = getFieldOriginalValue(dateFieldUuid)
   if (props.isEditing && !hasDateChanged.value && originalValue) {
     selectedDate.value = originalValue
