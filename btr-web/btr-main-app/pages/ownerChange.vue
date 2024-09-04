@@ -47,7 +47,9 @@ onBeforeMount(async () => {
   const { data, error } = await fileSIApi.getBtrFiling(identifier)
 
   if (error?.value?.statusCode) {
+    significantIndividuals.previousFilingSubmissionId = null
     if (error?.value?.statusCode !== StatusCodes.NOT_FOUND) {
+      significantIndividuals.previousFilingSubmissionId = undefined
       console.error(error.value)
       const err = {
         statusCode: error?.value?.statusCode ?? StatusCodes.INTERNAL_SERVER_ERROR,
@@ -57,6 +59,8 @@ onBeforeMount(async () => {
       significantIndividuals.errors.push(err)
     }
     return null
+  } else {
+    significantIndividuals.previousFilingSubmissionId = data?.id
   }
 
   significantIndividuals.filingInit(identifier, data?.payload)

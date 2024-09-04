@@ -8,6 +8,7 @@
           class="mt-3"
           :value="true"
           :aria-label="$t('placeholders.taxNumber')"
+          @change="emit('has-tax-number-changed')"
         />
       </UFormGroup>
       <UFormGroup
@@ -38,7 +39,7 @@
           v-model="hasTaxNumber"
           :value="false"
           :variant="error ? 'error' : variant"
-          @change="clearTaxNumber"
+          @change="clearTaxNumber; emit('has-tax-number-changed')"
         />
         <label for="noTaxNumberRadioButton" class="ml-5" :class="{ 'text-red-500': error}">
           {{ $t('labels.noTaxNumberLabel') }}
@@ -56,6 +57,7 @@ const taxNumber = defineModel('taxNumber', { type: [String, undefined], required
 const emit = defineEmits<{
   (e: 'clear-errors', path: string): void
   (e: 'tax-number-changed', path: string): void
+  (e: 'has-tax-number-changed'): void
 }>()
 
 const props = defineProps<{ name: string, variant: string, isEditing: boolean }>()

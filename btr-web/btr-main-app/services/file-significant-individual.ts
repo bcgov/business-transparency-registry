@@ -71,7 +71,7 @@ const getPersonAndOwnershipAndControlStatements = (sif: SignificantIndividualFil
     source.description = BtrSourceDescriptionProvidedByBtrGovBC
     const address = SiSchemaToBtrBodsConverters.getBodsAddressFromSi(siSchema)
     const identifiers = SiSchemaToBtrBodsConverters.getBodsIdentifiersFromSi(siSchema)
-    const hasTaxNumber = hasFieldChanged(siSchema, InputFieldsE.TAX) ? !!siSchema.tax.hasTaxNumber : undefined
+    const hasTaxNumber = hasFieldChanged(siSchema, InputFieldsE.TAX) ? !!siSchema.tax.hasTaxNumber : 'undefined'
     const names = SiSchemaToBtrBodsConverters.getBodsNamesFromSi(siSchema)
 
     // countries stuff
@@ -84,7 +84,7 @@ const getPersonAndOwnershipAndControlStatements = (sif: SignificantIndividualFil
 
     const personStatement: BtrBodsPersonI = {
       missingInfoReason:
-        hasFieldChanged(siSchema, InputFieldsE.MISSING_INFO_REASON) ? siSchema.missingInfoReason : undefined,
+        hasFieldChanged(siSchema, InputFieldsE.MISSING_INFO_REASON) ? siSchema.missingInfoReason : '',
       placeOfResidence: address,
       addresses: address ? [address] : undefined,
       birthDate: hasFieldChanged(siSchema, InputFieldsE.BIRTH_DATE) ? siSchema.birthDate : undefined,
@@ -159,7 +159,7 @@ const convertToBtrBodsForSubmit = (sif: SignificantIndividualFilingI): BtrFiling
   }
 }
 
-const submitSignificantIndividualFiling = async (sif: SignificantIndividualFilingI) => {
+const submitSignificantIndividualFiling = async (sif: SignificantIndividualFilingI, previousSubmissionId?: number) => {
   const submitSif: SignificantIndividualFilingI = {
     certified: sif.certified,
     noSignificantIndividualsExist: sif.noSignificantIndividualsExist,
@@ -174,14 +174,18 @@ const submitSignificantIndividualFiling = async (sif: SignificantIndividualFilin
   }
   const submitData = convertToBtrBodsForSubmit(submitSif)
 
-  const url = constructBtrApiURL() + '/plots'
+  let url = constructBtrApiURL() + '/plots'
+  let method = 'POST'
+  if (previousSubmissionId) {
+    method = 'PUT'
+    url += `/${previousSubmissionId}`
+  }
   const { data, error } = await useFetchBcros<IdAsNumberI>(url,
     {
-      method: 'POST',
+      method,
       body: submitData,
       headers: { 'Content-Type': 'application/json' }
     })
-
   return { data: data.value, error: error.value }
 }
 

@@ -3,6 +3,7 @@ import { BtrBodsPersonI } from '~/interfaces/btr-bods/btr-bods-person-i'
 import { BtrBodsOwnershipOrControlI } from '~/interfaces/btr-bods/btr-bods-ownership-or-control-i'
 
 export interface BtrFilingI {
+  id: number
   noSignificantIndividualsExist: boolean
   businessIdentifier: string
   effectiveDate: string

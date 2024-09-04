@@ -23,7 +23,7 @@
       data-cy="address-line1-autocomplete"
       @addr-auto-completed="addrAutoCompleted"
       @blur="line1BlurEvent"
-      @focusin="clearLine1FieldFieldOnEdit"
+      @focusin="clearLine1FieldOnEdit"
       @change="line1ChangeEvent"
       @focusout="revertUnchangedLine1Field"
     />
@@ -173,7 +173,7 @@ const revertUnchangedLocationDescriptionField = () => {
 
 const line1FieldUuid = getRandomUuid()
 const hasLine1Changed = ref(false)
-const clearLine1FieldFieldOnEdit = () => {
+const clearLine1FieldOnEdit = () => {
   if (props.isEditing) {
     setFieldOriginalValue(line1FieldUuid, address.value.line1)
     address.value.line1 = ''

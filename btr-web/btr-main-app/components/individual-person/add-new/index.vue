@@ -320,6 +320,7 @@
             data-cy="testTaxNumber"
             @clear-errors="clearErrors($event)"
             @tax-number-changed="setNewOrChanged([InputFieldsE.TAX, InputFieldsE.TAX_NUMBER])"
+            @has-tax-number-changed="setNewOrChanged([InputFieldsE.TAX])"
           />
         </div>
       </BcrosSection>
@@ -415,9 +416,9 @@
 
 <script setup lang="ts">
 import { RefinementCtx, z } from 'zod'
-import type { FormError } from '#ui/types'
 import { BtrCountryI } from '../../../../btr-common-components/interfaces/btr-address-i'
 import { validateEmailRfc6532Regex } from '../../../../btr-common-components/utils'
+import type { FormError } from '#ui/types'
 import {
   validateControlSelectionForSharesAndVotes,
   validateFullNameSuperRefine,
