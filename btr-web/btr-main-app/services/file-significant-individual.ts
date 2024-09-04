@@ -71,7 +71,7 @@ const getPersonAndOwnershipAndControlStatements = (sif: SignificantIndividualFil
     source.description = BtrSourceDescriptionProvidedByBtrGovBC
     const address = SiSchemaToBtrBodsConverters.getBodsAddressFromSi(siSchema)
     const identifiers = SiSchemaToBtrBodsConverters.getBodsIdentifiersFromSi(siSchema)
-    const hasTaxNumber = hasFieldChanged(siSchema, InputFieldsE.TAX) ? !!siSchema.tax.hasTaxNumber : 'undefined'
+    const hasTaxNumber = hasFieldChanged(siSchema, InputFieldsE.TAX) ? !!siSchema.tax.hasTaxNumber : undefined
     const names = SiSchemaToBtrBodsConverters.getBodsNamesFromSi(siSchema)
 
     // countries stuff
