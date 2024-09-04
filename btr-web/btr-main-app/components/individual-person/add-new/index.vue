@@ -49,6 +49,7 @@
             :placeholder="$t('placeholders.fullName')"
             data-cy="testFullName"
             :is-disabled="inputFormSi.name.isYourOwnInformation"
+            @change="setNewOrChanged([InputFieldsE.FULL_NAME])"
           />
           <div class="pt-5" />
           <UFormGroup name="doNothing">
@@ -71,6 +72,7 @@
                 :placeholder="$t('placeholders.preferredName')"
                 data-cy="testPreferredName"
                 :help="$t('texts.preferredName.hint')"
+                @change="setNewOrChanged([InputFieldsE.PREFERRED_NAME])"
               />
             </div>
           </div>
@@ -96,7 +98,11 @@
         :border="editMode"
         no-top-border
       >
-        <IndividualPersonControlOfSharesVotes v-model="inputFormSi.controlOfShares" name="controlOfShares" />
+        <IndividualPersonControlOfSharesVotes
+          v-model="inputFormSi.controlOfShares"
+          name="controlOfShares"
+          @change="setNewOrChanged([InputFieldsE.CONTROL_OF_SHARES])"
+        />
       </BcrosSection>
 
       <!--  section: type of interest or control of votes -->
@@ -106,7 +112,11 @@
         :border="editMode"
         no-top-border
       >
-        <IndividualPersonControlOfSharesVotes v-model="inputFormSi.controlOfVotes" name="controlOfVotes" />
+        <IndividualPersonControlOfSharesVotes
+          v-model="inputFormSi.controlOfVotes"
+          name="controlOfVotes"
+          @change="setNewOrChanged([InputFieldsE.CONTROL_OF_VOTES])"
+        />
       </BcrosSection>
 
       <!--  section: control of majority of directors  -->
@@ -116,7 +126,11 @@
         :border="editMode"
         no-top-border
       >
-        <IndividualPersonControlOfDirectors v-model="inputFormSi.controlOfDirectors" name="controlOfDirectors" />
+        <IndividualPersonControlOfDirectors
+          v-model="inputFormSi.controlOfDirectors"
+          name="controlOfDirectors"
+          @change="setNewOrChanged([InputFieldsE.CONTROL_OF_DIRECTORS])"
+        />
       </BcrosSection>
 
       <!--  section: other reasons  -->
@@ -133,6 +147,7 @@
             v-model="inputFormSi.controlOther"
             name="otherReasons"
             data-cy="otherReasons"
+            @change="setNewOrChanged([InputFieldsE.CONTROL_OTHER])"
           />
         </div>
       </BcrosSection>
@@ -162,7 +177,9 @@
             :initial-date-groups="inputFormSi.effectiveDates"
             name="effectiveDates"
             data-cy="effectiveDates"
-            @dates-updated="inputFormSi.effectiveDates = $event"
+            :is-editing="isEditing"
+            @dates-updated="inputFormSi.effectiveDates = $event;
+                            setNewOrChanged([InputFieldsE.EFFECTIVE_DATES])"
           />
         </div>
       </BcrosSection>
@@ -191,11 +208,14 @@
             name="email"
             :placeholder="$t('labels.emailAddress')"
             data-cy="testEmail"
+            @focus="clearEmailFieldOnEdit"
+            @change="setNewOrChanged([InputFieldsE.EMAIL])"
+            @blur="revertUnchangedEmailField"
           />
         </div>
       </BcrosSection>
 
-      <!--  section: individual details  -->
+      <!--  section: individual details address  -->
       <BcrosSection
         :show-section-has-errors="hasErrors(['address.'])"
         :section-title="$t('labels.lastKnownAddress')"
@@ -207,7 +227,14 @@
             id="addNewPersonLastKnownAddress"
             v-model="inputFormSi.address"
             name="address"
+            :is-editing="isEditing"
             @country-change="countryChange"
+            @postal-code-change="setNewOrChanged([InputFieldsE.ADDRESS_POSTAL_CODE])"
+            @line1-change="setNewOrChanged([InputFieldsE.ADDRESS_LINE1])"
+            @line2-change="setNewOrChanged([InputFieldsE.ADDRESS_LINE2])"
+            @city-change="setNewOrChanged([InputFieldsE.ADDRESS_CITY])"
+            @region-change="setNewOrChanged([InputFieldsE.ADDRESS_REGION])"
+            @location-description-change="setNewOrChanged([InputFieldsE.ADDRESS_LOCATION_DESCRIPTION])"
           />
         </div>
       </BcrosSection>
@@ -221,10 +248,12 @@
           v-model="inputFormSi.phoneNumber"
           name="phoneNumber"
           data-cy="phoneNumberInput"
+          :is-editing="isEditing"
+          @change="setNewOrChanged([InputFieldsE.PHONE_NUMBER])"
         />
       </BcrosSection>
       <BcrosSection
-        :show-section-has-errors="hasErrors(['birthDate'])"
+        :show-section-has-errors="hasErrors([InputFieldsE.BIRTH_DATE])"
         :section-title="$t('labels.birthdate')"
         :border="editMode"
         no-top-border
@@ -236,7 +265,9 @@
             :initial-date="!!inputFormSi.birthDate ? dateStringToDate(inputFormSi.birthDate) || undefined : undefined"
             :max-date="new Date()"
             :placeholder="$t('placeholders.dateSelect.birthdate')"
+            :is-editing="isEditing"
             @selection="inputFormSi.birthDate = dateToString($event, 'YYYY-MM-DD')"
+            @change="setNewOrChanged([InputFieldsE.BIRTH_DATE])"
           />
         </div>
       </BcrosSection>
@@ -260,6 +291,7 @@
             :label-placeholder="$t('labels.countryOfCitizenship.placeholder')"
             key-attribute="alpha_2"
             :search-attributes="['name', 'alpha_2']"
+            @value-changed="setNewOrChanged([InputFieldsE.CITIZENSHIPS])"
           />
           <p class="pt-3">
             {{ $t('labels.countryOfCitizenship.note') }}
@@ -284,8 +316,11 @@
             v-model:taxNumber="inputFormSi.tax.taxNumber"
             name="tax"
             variant="bcGov"
+            :is-editing="isEditing"
             data-cy="testTaxNumber"
             @clear-errors="clearErrors($event)"
+            @tax-number-changed="setNewOrChanged([InputFieldsE.TAX, InputFieldsE.TAX_NUMBER])"
+            @has-tax-number-changed="setNewOrChanged([InputFieldsE.TAX])"
           />
         </div>
       </BcrosSection>
@@ -304,6 +339,7 @@
             name="isTaxResident"
             variant="bcGov"
             data-cy="testTaxResidency"
+            @change="setNewOrChanged([InputFieldsE.IS_TAX_RESIDENT])"
           />
         </div>
       </bcrosSection>
@@ -318,6 +354,7 @@
         <DeterminationOfIncapacity
           v-model="inputFormSi.determinationOfIncapacity"
           name="determinationOfIncapacity"
+          @change="setNewOrChanged([InputFieldsE.DETERMINATION_OF_INCAPACITY])"
         />
       </BcrosSection>
 
@@ -337,6 +374,7 @@
             name="missingInfoReason"
             :missing-info="inputFormSi.couldNotProvideMissingInfo"
             @update:missing-info="inputFormSi.couldNotProvideMissingInfo = $event"
+            @change="setNewOrChanged([InputFieldsE.MISSING_INFO_REASON])"
           />
         </div>
       </BcrosSection>
@@ -377,9 +415,10 @@
 </template>
 
 <script setup lang="ts">
-import { z } from 'zod'
+import { RefinementCtx, z } from 'zod'
 import type { FormError } from '#ui/types'
 import { BtrCountryI } from '../../../../btr-common-components/interfaces/btr-address-i'
+import { validateEmailRfc6532Regex } from '../../../../btr-common-components/utils'
 import {
   validateControlSelectionForSharesAndVotes,
   validateFullNameSuperRefine,
@@ -416,6 +455,20 @@ const bcrosAccount = useBcrosAccount()
 
 const isEditing = ref(false)
 
+const emailFieldUuid = getRandomUuid()
+const clearEmailFieldOnEdit = () => {
+  if (isEditing) {
+    setFieldOriginalValue(emailFieldUuid, inputFormSi.email)
+    inputFormSi.email = ''
+  }
+}
+const revertUnchangedEmailField = () => {
+  const originalValue = getFieldOriginalValue(emailFieldUuid)
+  if (isEditing && !hasFieldChanged(inputFormSi, InputFieldsE.EMAIL) && originalValue) {
+    inputFormSi.email = originalValue
+  }
+}
+
 // extend existing schema with
 const SiControlOfExtended = SiControlOfSchema.superRefine(validateControlSelectionForSharesAndVotes)
 const SiNameExtended = SiNameSchema
@@ -430,6 +483,14 @@ const AddressSchemaExtended = AddressSchema.extend({
     }, t('errors.validation.address.country'))
 })
 
+const AddressSchemaExtendedEdit = AddressSchemaExtended.extend({
+  line1: z.string().optional(),
+  postalCode: z.string().optional(),
+  locationDescription: z.string().optional()
+})
+
+z.setErrorMap(CustomSiSchemaErrorMap)
+
 const SiSchemaExtended = SiSchema.extend({
   couldNotProvideMissingInfo: z.literal(false),
   name: SiNameExtended,
@@ -443,16 +504,110 @@ const SiSchemaExtended = SiSchema.extend({
   isTaxResident: z.boolean()
 })
 
-z.setErrorMap(CustomSiSchemaErrorMap)
-
-const formSchema = z.discriminatedUnion('couldNotProvideMissingInfo', [
+let formSchema: any = z.discriminatedUnion('couldNotProvideMissingInfo', [
   z.object({
     couldNotProvideMissingInfo: z.literal(true),
     missingInfoReason: z.string().transform(s => s.trim()).pipe(z.string().min(1)),
-    name: SiNameExtended
+    name: SiNameSchema,
+
+    ui: z.object({
+      newOrUpdatedFields: z.array(z.string())
+    })
+
   }),
   SiSchemaExtended
 ])
+
+if (props.editMode) {
+  const SiSchemaExtendedEdit = SiSchemaExtended.extend({
+    birthDate: z.string().optional(),
+    name: SiNameExtended,
+    address: AddressSchemaExtendedEdit,
+    tax: TaxSchema,
+    email: z.string().optional()
+  })
+
+  formSchema = z.discriminatedUnion('couldNotProvideMissingInfo', [
+    z.object({
+      couldNotProvideMissingInfo: z.literal(true),
+      missingInfoReason: z.string().transform(s => s.trim()).pipe(z.string().min(1)),
+      name: SiNameExtended,
+
+      ui: z.object({
+        newOrUpdatedFields: z.array(z.string())
+      })
+    }),
+    SiSchemaExtendedEdit
+  ]).superRefine((schema: SiSchemaType, ctx: RefinementCtx): never => {
+    // this superRefine is to work out through the redacted data fields and validate them only on change
+
+    // birthdate check
+    if (schema.ui.newOrUpdatedFields.includes(InputFieldsE.BIRTH_DATE)) {
+      if (!schema.birthDate || schema.birthDate.trim() === '') {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          path: ['birthDate'],
+          message: t('errors.validation.birthDate.required')
+        })
+      }
+    }
+    // phone check // its already optional nothing to do here
+
+    // street address
+    if (schema.ui.newOrUpdatedFields.includes(InputFieldsE.ADDRESS_LINE1)) {
+      if (!schema.address || !schema.address.line1 || schema.address.line1.trim() === '') {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          path: ['address', 'line1'],
+          message: t('errors.validation.address.line1')
+        })
+      }
+    }
+    // postal code
+    if (schema.ui.newOrUpdatedFields.includes(InputFieldsE.ADDRESS_POSTAL_CODE)) {
+      if (!schema.address || !schema.address.postalCode || schema.address.postalCode.trim() === '') {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          path: ['address', 'postalCode'],
+          message: t('errors.validation.address.postalCode')
+        })
+      }
+    }
+    // location description // its already optional nothing to do here
+
+    // SIN
+    if (schema.ui.newOrUpdatedFields.includes(InputFieldsE.TAX_NUMBER)) {
+      // add tax to path, so that subsequent tax validator creates erroro messages with path
+      ctx.path.push('tax')
+      validateTaxNumberInfo(schema.tax, ctx)
+      // remove tax from path so it does not add it in next ctx errors
+      const taxPath = ctx.path.findIndex(v => v === 'tax')
+      if (taxPath !== -1) {
+        ctx.path.splice(taxPath, 1)
+      }
+    }
+
+    // email
+    if (schema.ui.newOrUpdatedFields.includes(InputFieldsE.EMAIL)) {
+      if (!schema.email || schema.email.trim() === '') {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          path: ['email'],
+          message: t('errors.validation.email.empty')
+        })
+      }
+      if (!validateEmailRfc6532Regex(schema.email)) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          path: ['email'],
+          message: t('errors.validation.email.invalid')
+        })
+      }
+    }
+    return z.NEVER
+  })
+}
+// extend schema end
 
 const addIndividualForm = ref()
 
@@ -469,6 +624,7 @@ const countryChange = () => {
   ) {
     inputFormSi.phoneNumber.countryCode2letterIso = inputFormSi.address.country.alpha_2
   }
+  setNewOrChanged([InputFieldsE.ADDRESS_COUNTRY])
 }
 
 function hasErrors (sectionErrorPaths: string[]): boolean {
@@ -518,6 +674,15 @@ const setIsYourOwnInformation = (event: any) => {
 }
 
 const inputFormSi: SiSchemaType = reactive(getDefaultInputFormSi())
+
+const setNewOrChanged = (fieldNames: Array<string>) => {
+  inputFormSi.ui.newOrUpdatedFields ??= []
+  for (let i = 0; i < fieldNames.length; i++) {
+    if (!inputFormSi.ui.newOrUpdatedFields.includes(fieldNames[i])) {
+      inputFormSi.ui.newOrUpdatedFields.push(fieldNames[i])
+    }
+  }
+}
 
 if (props.setSignificantIndividual) {
   isEditing.value = (props.index !== undefined)

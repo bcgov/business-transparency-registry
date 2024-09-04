@@ -88,6 +88,7 @@ export const SiSchema = z.object({
 
   // UI helper values
   ui: z.object({
+    newOrUpdatedFields: z.array(z.string()),
     actions: z.array(z.nativeEnum(FilingActionE)).optional(),
     origIndex: z.number().optional(),
     showCeaseDateInput: z.boolean().optional(),

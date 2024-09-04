@@ -34,6 +34,9 @@
         data-cy="phoneNumber.number"
         :data-maska="inputMask"
         :placeholder="$t('placeholder.phoneNumber.number')"
+        @focus="clearPhoneNumberOnEdit"
+        @change="phoneNumberUpdated=true"
+        @blur="revertUnchangedPhoneNumber"
       />
     </UFormGroup>
     <UFormGroup :name="name + '.extension'" class="w-1/4">
@@ -60,8 +63,9 @@ import { PhoneSchemaType } from '~/interfaces/zod-schemas-t'
 
 const phoneNumber = defineModel<PhoneSchemaType>({ required: true })
 
-defineProps({
-  name: { type: String, default: 'phoneNumber' }
+const props = defineProps({
+  name: { type: String, default: 'phoneNumber' },
+  isEditing: { type: Boolean, required: true }
 })
 
 const northAmericaMask = '(###) ###-####'
@@ -77,4 +81,19 @@ watchEffect(
     phoneNumber.value.number = unmaskedvalue.value || mask.unmasked(maskedPhoneNumber.value || '')
   }
 )
+
+const phoneNumberUpdated = ref(false)
+const phoneFieldUuid = getRandomUuid()
+const clearPhoneNumberOnEdit = () => {
+  if (props.isEditing) {
+    setFieldOriginalValue(phoneFieldUuid, maskedPhoneNumber)
+    maskedPhoneNumber.value = ''
+  }
+}
+const revertUnchangedPhoneNumber = () => {
+  const originalValue = getFieldOriginalValue(phoneFieldUuid)
+  if (props.isEditing && !phoneNumberUpdated.value && originalValue) {
+    maskedPhoneNumber.value = originalValue
+  }
+}
 </script>

@@ -13,17 +13,32 @@ import {
   SiControlOfDirectorsSchemaType, SiControlOfSchemaType, ConnectedInvidualSchemaType, SiSchemaType
 } from '~/utils/si-schema/definitions'
 
-const getBodsAddressFromSi = (si: SiSchemaType): BodsBtrAddressI => {
-  return {
-    street: si.address.line1,
-    streetAdditional: si.address.line2,
-    city: si.address.city,
-    region: si.address.region,
-    postalCode: si.address.postalCode,
-    locationDescription: si.address.locationDescription ? si.address.locationDescription : '',
-    country: si.address.country?.alpha_2 ? si.address.country.alpha_2 : '',
-    countryName: si.address.country?.name ? si.address.country.name : ''
+const getBodsAddressFromSi = (si: SiSchemaType): BodsBtrAddressI | undefined => {
+  const addr = {} as BodsBtrAddressI
+  if (hasFieldChanged(si, InputFieldsE.ADDRESS_LINE1)) {
+    addr.street = si.address.line1
   }
+  if (hasFieldChanged(si, InputFieldsE.ADDRESS_LINE2)) {
+    addr.streetAdditional = si.address.line2
+  }
+  if (hasFieldChanged(si, InputFieldsE.ADDRESS_CITY)) {
+    addr.city = si.address.city
+  }
+  if (hasFieldChanged(si, InputFieldsE.ADDRESS_COUNTRY)) {
+    addr.country = si.address.country?.alpha_2 || ''
+    addr.countryName = si.address.country?.name || ''
+  }
+  if (hasFieldChanged(si, InputFieldsE.ADDRESS_REGION)) {
+    addr.region = si.address.region
+  }
+  if (hasFieldChanged(si, InputFieldsE.ADDRESS_POSTAL_CODE)) {
+    addr.postalCode = si.address.postalCode
+  }
+  if (hasFieldChanged(si, InputFieldsE.ADDRESS_LOCATION_DESCRIPTION)) {
+    addr.locationDescription = si.address.locationDescription as string
+  }
+
+  return Object.keys(addr).length > 0 ? addr : undefined
 }
 
 const getBodsNamesFromSi = (si: SiSchemaType) => {
@@ -34,7 +49,7 @@ const getBodsNamesFromSi = (si: SiSchemaType) => {
     }
   ]
 
-  if (si.name.preferredName) {
+  if (hasFieldChanged(si, InputFieldsE.PREFERRED_NAME) && si.name.preferredName) {
     names.push({
       fullName: si.name.preferredName,
       type: BodsNameTypeE.ALTERNATIVE
@@ -44,6 +59,9 @@ const getBodsNamesFromSi = (si: SiSchemaType) => {
 }
 
 const getBodsIdentifiersFromSi = (si: SiSchemaType) => {
+  if (!hasFieldChanged(si, InputFieldsE.TAX)) {
+    return undefined
+  }
   const identifiers: BodsIdentifierI[] = []
   if (si.tax?.taxNumber) {
     identifiers.push({
@@ -304,11 +322,12 @@ const getInterests = (si: SiSchemaType) => {
       interests = interests.concat(newInterests)
     }
 
-    if (si.controlOfDirectors.indirectControl ||
-      si.controlOfDirectors.inConcertControl ||
-      si.controlOfDirectors.directControl ||
-      si.controlOfDirectors.actingJointly ||
-      si.controlOfDirectors.significantInfluence
+    if (hasFieldChanged(si, InputFieldsE.CONTROL_OF_DIRECTORS) &&
+      (si.controlOfDirectors.indirectControl ||
+        si.controlOfDirectors.inConcertControl ||
+        si.controlOfDirectors.directControl ||
+        si.controlOfDirectors.actingJointly ||
+        si.controlOfDirectors.significantInfluence)
     ) {
       const newInterests =
         _getDirectorsInterests(
@@ -321,7 +340,7 @@ const getInterests = (si: SiSchemaType) => {
       interests = interests.concat(newInterests)
     }
 
-    if (si.controlOther) {
+    if (hasFieldChanged(si, InputFieldsE.CONTROL_OTHER) && si.controlOther) {
       interests.push({
         type: BodsInterestTypeE.OTHER_INFLUENCE_OR_CONTROL,
         details: si.controlOther,
@@ -333,7 +352,11 @@ const getInterests = (si: SiSchemaType) => {
   return interests
 }
 
-const getBodsNationalitiesFromSi = (si: SiSchemaType): BodsCountryI[] => {
+const getBodsNationalitiesFromSi = (si: SiSchemaType): BodsCountryI[] | undefined => {
+  if (!hasFieldChanged(si, InputFieldsE.CITIZENSHIPS)) {
+    return undefined
+  }
+
   const citizenships: BodsCountryI[] = []
   for (const btrCountry of si.citizenships) {
     if (btrCountry.alpha_2 !== 'CA_PR') {
@@ -345,7 +368,11 @@ const getBodsNationalitiesFromSi = (si: SiSchemaType): BodsCountryI[] => {
   return citizenships
 }
 
-const getTaxResidenciesFromSi = (si: SiSchemaType): BodsCountryI[] => {
+const getTaxResidenciesFromSi = (si: SiSchemaType): BodsCountryI[] | undefined => {
+  if (!hasFieldChanged(si, InputFieldsE.IS_TAX_RESIDENT)) {
+    return undefined
+  }
+
   const taxResidencies: BodsCountryI[] = []
   if (si.isTaxResident) {
     taxResidencies.push({ name: 'Canada', code: 'CA' })

@@ -25,6 +25,8 @@ describe('File significant individuals service Tests', () => {
     const testExpectedOutput = expectedOutput
     testExpectedOutput.personStatements[0].statementDate = todayIsoDateString()
     testExpectedOutput.ownershipOrControlStatements[0].statementDate = todayIsoDateString()
+    const si = testSI
+    si.ui.newOrUpdatedFields = Object.values(InputFieldsE)
     const result = FilingService.getPersonAndOwnershipAndControlStatements(
       {
         noSignificantIndividualsExist: false,
@@ -32,7 +34,7 @@ describe('File significant individuals service Tests', () => {
         certified: false,
         effectiveDate: '2020-02-20',
         folioNumber: 'This, is, Folio!!!',
-        significantIndividuals: [testSI]
+        significantIndividuals: [si]
       })
 
     expect(result).toBeTruthy()

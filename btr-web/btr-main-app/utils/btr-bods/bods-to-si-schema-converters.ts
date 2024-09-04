@@ -213,7 +213,9 @@ const _getSi = (
 
     uuid: person.uuid,
 
-    ui: {}
+    ui: {
+      newOrUpdatedFields: []
+    }
   }
 }
 

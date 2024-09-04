@@ -9,6 +9,12 @@ import { ErrorI, FilingActionE, SignificantIndividualFilingI } from '#imports'
 /** Manages Significant */
 export const useSignificantIndividuals = defineStore('significantIndividuals', () => {
   const { currentBusinessIdentifier } = storeToRefs(useBcrosBusiness())
+  /** hasPreviousFiling is set to undefined until request to the backend for previous filings is finished,
+   * if request is 2xx it should be set to fetched submission id
+   * if request is 404 it should be set to null
+   * otherwise is will be left at undefined
+   * */
+  const previousFilingSubmissionId: Ref<string | undefined | null> = ref(undefined)
   const currentSIFiling: Ref<SignificantIndividualFilingI> = ref(getEmptySiFiling()) // current significant individual change filing
   // saved SIs from fetched from the api for this business (includes historicals)
   const savedSIs: Ref<SiSchemaType[]> = ref([])
@@ -121,7 +127,7 @@ export const useSignificantIndividuals = defineStore('significantIndividuals', (
   const undoSIChanges = (index: number) => {
     const origIndex = allEditableSIs.value[index].ui.origIndex
     if (origIndex !== undefined) {
-      const editableSI = { ...savedSIs.value[origIndex], ui: { origIndex } }
+      const editableSI = { ...savedSIs.value[origIndex], ui: { origIndex, newOrUpdatedFields: [] } }
       allEditableSIs.value.splice(index, 1, editableSI)
       _applyUpdatingSI(index)
     }
@@ -154,7 +160,8 @@ export const useSignificantIndividuals = defineStore('significantIndividuals', (
   async function filingSubmit () {
     submitting.value = true
     currentSIFiling.value.significantIndividuals = allEditableSIs.value
-    const { error } = await fileSIApi.submitSignificantIndividualFiling(currentSIFiling.value)
+    const { error } =
+      await fileSIApi.submitSignificantIndividualFiling(currentSIFiling.value, previousFilingSubmissionId.value)
     if (error) {
       console.error(error)
       const err = {
@@ -197,6 +204,7 @@ export const useSignificantIndividuals = defineStore('significantIndividuals', (
     allSIs,
     allActiveSIs,
     allEditableSIs,
+    previousFilingSubmissionId,
     currentSIFiling,
     savedSIs,
     errors,

@@ -7,9 +7,21 @@ import siSchemaToBtrBodsConverters from '~/utils/btr-bods/si-schema-to-btr-bods-
 describe('Btr to Bods util converters Tests', () => {
   it('getBodsNamesFromSi', () => {
     const input = testSI
+    input.ui.newOrUpdatedFields.push(InputFieldsE.FULL_NAME)
+    input.ui.newOrUpdatedFields.push(InputFieldsE.PREFERRED_NAME)
     const expectedOutput = [
       { fullName: 'Test Name', type: BodsNameTypeE.INDIVIDUAL },
       { fullName: 'Waffles Test', type: BodsNameTypeE.ALTERNATIVE }
+    ]
+    const result = siSchemaToBtrBodsConverters.getBodsNamesFromSi(input)
+    expect(result).toEqual(expectedOutput)
+  })
+
+  it('getBodsNamesFromSi returns just name and not preferred name if no updates on preferred name', () => {
+    const input = testSI
+    input.ui.newOrUpdatedFields = []
+    const expectedOutput = [
+      { fullName: 'Test Name', type: BodsNameTypeE.INDIVIDUAL }
     ]
     const result = siSchemaToBtrBodsConverters.getBodsNamesFromSi(input)
     expect(result).toEqual(expectedOutput)
@@ -19,6 +31,7 @@ describe('Btr to Bods util converters Tests', () => {
     const input = testSI
     const expectedOutput =
       [{ id: '000 000 000', scheme: 'CAN-TAXID', schemeName: 'ITN' }]
+    input.ui.newOrUpdatedFields = [InputFieldsE.TAX, InputFieldsE.TAX_NUMBER]
     const result = siSchemaToBtrBodsConverters.getBodsIdentifiersFromSi(input)
     expect(result).toEqual(expectedOutput)
   })
@@ -78,6 +91,11 @@ describe('Btr to Bods util converters Tests', () => {
           connectedIndividuals: undefined
         }
       ]
+    input.ui.newOrUpdatedFields = [
+      InputFieldsE.CONTROL_OF_SHARES,
+      InputFieldsE.CONTROL_OF_VOTES,
+      InputFieldsE.CONTROL_OF_DIRECTORS
+    ]
     const result = siSchemaToBtrBodsConverters.getInterests(input)
     expect(result).toEqual(expectedOutput)
   })
@@ -85,6 +103,7 @@ describe('Btr to Bods util converters Tests', () => {
   it('getBodsNationalitiesFromSi', () => {
     const input = testSI
     const expectedOutput = [{ name: 'Canada', code: 'CA' }]
+    input.ui.newOrUpdatedFields = [InputFieldsE.CITIZENSHIPS]
     const result = siSchemaToBtrBodsConverters.getBodsNationalitiesFromSi(input)
     expect(result).toEqual(expectedOutput)
 
@@ -104,6 +123,7 @@ describe('Btr to Bods util converters Tests', () => {
 
   it('getTaxResidenciesFromSi', () => {
     const input = testSI
+    input.ui.newOrUpdatedFields = [InputFieldsE.IS_TAX_RESIDENT]
     const expectedOutput = [{ name: 'Canada', code: 'CA' }]
     const result = siSchemaToBtrBodsConverters.getTaxResidenciesFromSi(input)
     expect(result).toEqual(expectedOutput)

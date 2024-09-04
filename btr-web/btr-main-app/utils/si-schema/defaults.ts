@@ -77,7 +77,8 @@ export function getDefaultInputFormSi (): SiSchemaType {
     },
     uuid: UUIDv4(),
     ui: {
-      action: FilingActionE.ADD
+      newOrUpdatedFields: [],
+      actions: []
     }
   }
 }

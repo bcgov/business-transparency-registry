@@ -23,7 +23,9 @@
       data-cy="address-line1-autocomplete"
       @addr-auto-completed="addrAutoCompleted"
       @blur="line1BlurEvent"
+      @focusin="clearLine1FieldOnEdit"
       @change="line1ChangeEvent"
+      @focusout="revertUnchangedLine1Field"
     />
   </UFormGroup>
   <UFormGroup v-slot="{ error }" class="mt-4" :name="name + '.line2'">
@@ -34,6 +36,7 @@
       class="w-full flex-1"
       :variant="error ? 'error' : 'bcGov'"
       data-cy="address-line2"
+      @change="emit('line2-change', address.line2)"
     />
   </UFormGroup>
   <!--  city; region combo; postal code -->
@@ -46,6 +49,7 @@
         class="pr-4 w-full"
         :variant="error ? 'error' : 'bcGov'"
         data-cy="address-city"
+        @change="emit('city-change', address.city)"
       />
     </UFormGroup>
     <UFormGroup v-slot="{ error }" class="sm:flex-1" :name="name + '.region'">
@@ -60,6 +64,7 @@
         option-attribute="name"
         value-attribute="code"
         data-cy="address-region-select"
+        @change="emit('region-change', address.region)"
       />
       <UInput
         v-else
@@ -68,6 +73,7 @@
         class="pr-4 w-full"
         :variant="error ? 'error' : 'bcGov'"
         data-cy="address-region-input"
+        @change="emit('region-change', address.region)"
       />
     </UFormGroup>
     <UFormGroup v-slot="{ error }" class="sm:flex-1" :name="name + '.postalCode'">
@@ -78,6 +84,9 @@
         class="w-full"
         :variant="error ? 'error' : 'bcGov'"
         data-cy="address-postal-code"
+        @focus="clearPostalCodeFieldFieldOnEdit"
+        @change="emit('postal-code-change', address.postalCode)"
+        @blur="revertUncangedPostalCodeField"
       />
     </UFormGroup>
   </div>
@@ -89,6 +98,9 @@
       class="w-full"
       :variant="error ? 'error' : 'bcGov'"
       data-cy="address-location-description"
+      @focus="clearLocationDescriptionFieldFieldOnEdit"
+      @change="emit('location-description-change', address.locationDescription || '')"
+      @blur="revertUnchangedLocationDescriptionField"
     />
   </UFormGroup>
 </template>
@@ -99,7 +111,16 @@ import { BtrAddressI, BtrCountryI } from '~/interfaces/btr-address-i'
 
 const formBus = inject<UseEventBusReturn<any, string> | undefined>('form-events', undefined)
 
-const emit = defineEmits<(e: 'country-change', value: BtrCountryI) => void>()
+// eslint-disable-next-line func-call-spacing
+const emit = defineEmits<{
+  (e: 'country-change', value: BtrCountryI): void
+  (e: 'line1-change', value: string): void
+  (e: 'line2-change', value: string | undefined): void
+  (e: 'city-change', value: string): void
+  (e: 'region-change', value: string): void
+  (e: 'postal-code-change', value: string): void
+  (e: 'location-description-change', value: string): void
+}>()
 
 const address = defineModel({ type: Object as PropType<BtrAddressI>, required: true })
 
@@ -107,14 +128,62 @@ const props = defineProps({
   name: { type: String, default: 'addressInput' },
   label: { type: String, default: '' },
   id: { type: String, required: true },
-  modelValue: { type: Object as PropType<BtrAddressI>, required: true }
+  modelValue: { type: Object as PropType<BtrAddressI>, required: true },
+  isEditing: { type: Boolean, required: true }
 })
 
 const line1BlurEvent = () => {
   formBus?.emit({ type: 'blur', path: props.name + '.line1' })
 }
 const line1ChangeEvent = () => {
+  hasLine1Changed.value = true
   formBus?.emit({ type: 'change', path: props.name + '.line1' })
+  emit('line1-change', props.modelValue.line1)
+}
+
+const postalCodeFieldUuid = getRandomUuid()
+const hasPostalCodeChanged = ref(false)
+const clearPostalCodeFieldFieldOnEdit = () => {
+  if (props.isEditing) {
+    setFieldOriginalValue(postalCodeFieldUuid, address.value.postalCode)
+    address.value.postalCode = ''
+  }
+}
+const revertUncangedPostalCodeField = () => {
+  const originalValue = getFieldOriginalValue(postalCodeFieldUuid)
+  if (props.isEditing && !hasPostalCodeChanged.value && originalValue) {
+    address.value.postalCode = originalValue
+  }
+}
+
+const locationDescriptionFieldUuid = getRandomUuid()
+const hasLocationDescriptionChanged = ref(false)
+const clearLocationDescriptionFieldFieldOnEdit = () => {
+  if (props.isEditing) {
+    setFieldOriginalValue(locationDescriptionFieldUuid, address.value.locationDescription)
+    address.value.locationDescription = ''
+  }
+}
+const revertUnchangedLocationDescriptionField = () => {
+  const originalValue = getFieldOriginalValue(locationDescriptionFieldUuid)
+  if (props.isEditing && !hasLocationDescriptionChanged.value && originalValue) {
+    address.value.locationDescription = originalValue
+  }
+}
+
+const line1FieldUuid = getRandomUuid()
+const hasLine1Changed = ref(false)
+const clearLine1FieldOnEdit = () => {
+  if (props.isEditing) {
+    setFieldOriginalValue(line1FieldUuid, address.value.line1)
+    address.value.line1 = ''
+  }
+}
+const revertUnchangedLine1Field = () => {
+  const originalValue = getFieldOriginalValue(line1FieldUuid)
+  if (props.isEditing && !hasLine1Changed.value && originalValue) {
+    address.value.line1 = originalValue
+  }
 }
 
 const countries = iscCountriesListSortedByName
@@ -133,32 +202,40 @@ const regions = computed(() => {
 const addrAutoCompleted = (selectedAddr: BtrAddressI) => {
   Object.assign(address.value, selectedAddr)
 
-  formBus?.emit({ type: 'blur', path: props.name + '.country' })
-  formBus?.emit({ type: 'change', path: props.name + '.country' })
+  setTimeout(() => {
+    formBus?.emit({ type: 'blur', path: props.name + '.country' })
+    formBus?.emit({ type: 'change', path: props.name + '.country' })
+    emit('country-change', props.modelValue.country)
+  })
 
   setTimeout(() => {
     formBus?.emit({ type: 'blur', path: props.name + '.line1' })
     formBus?.emit({ type: 'change', path: props.name + '.line1' })
+    emit('line1-change', props.modelValue.line1)
   }, 10)
 
   setTimeout(() => {
     formBus?.emit({ type: 'blur', path: props.name + '.line2' })
     formBus?.emit({ type: 'change', path: props.name + '.line2' })
+    emit('line2-change', props.modelValue.line2)
   }, 20)
 
   setTimeout(() => {
     formBus?.emit({ type: 'blur', path: props.name + '.city' })
     formBus?.emit({ type: 'change', path: props.name + '.city' })
+    emit('city-change', props.modelValue.city)
   }, 30)
 
   setTimeout(() => {
     formBus?.emit({ type: 'blur', path: props.name + '.postalCode' })
     formBus?.emit({ type: 'change', path: props.name + '.postalCode' })
+    emit('postal-code-change', props.modelValue.postalCode)
   }, 40)
 
   setTimeout(() => {
     formBus?.emit({ type: 'blur', path: props.name + '.region' })
     formBus?.emit({ type: 'change', path: props.name + '.region' })
+    emit('region-change', props.modelValue.region)
   }, 50)
 }
 
