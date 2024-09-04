@@ -30,6 +30,7 @@ REDACT_RULES = {
 }
 
 
+# pylint: disable=too-many-branches
 def redact_information(payload):
     """
     Function to redact information from a submission based on rules as defined above
@@ -47,43 +48,45 @@ def redact_information(payload):
                 name['fullName'] = redact_field(name['fullName'], redaction_to_use.get('prefName'))
 
         if 'email' in person:
-          person['email'] = redact_field(person['email'], redaction_to_use.get('email'))
+            person['email'] = redact_field(person['email'], redaction_to_use.get('email'))
         if 'phoneNumber' in person and 'number' in person['phoneNumber']:
-          person['phoneNumber']['number'] = redact_field(person['phoneNumber']['number'], redaction_to_use.get('phone'))
+            person['phoneNumber']['number'] = redact_field(
+                person['phoneNumber']['number'], redaction_to_use.get('phone')
+            )
 
         for address in person['addresses']:
             if 'postalCode' in address:
-              address['postalCode'] = redact_field(address['postalCode'], redaction_to_use.get('postal'))
+                address['postalCode'] = redact_field(address['postalCode'], redaction_to_use.get('postal'))
             if 'street' in address:
-              address['street'] = redact_field(address['street'], redaction_to_use.get('street'))
+                address['street'] = redact_field(address['street'], redaction_to_use.get('street'))
             if 'streetAdditional' in address:
-              address['streetAdditional'] = redact_field(
-                  address['streetAdditional'], redaction_to_use.get('streetAdditional')
-              )
+                address['streetAdditional'] = redact_field(
+                    address['streetAdditional'], redaction_to_use.get('streetAdditional')
+                )
             if 'locationDescription' in address:
-              address['locationDescription'] = redact_field(
-                  address['locationDescription'], redaction_to_use.get('locationDescription')
-              )
+                address['locationDescription'] = redact_field(
+                    address['locationDescription'], redaction_to_use.get('locationDescription')
+                )
 
         if 'placeOfResidence' in person and 'postalCode' in person['placeOfResidence']:
-          person['placeOfResidence']['postalCode'] = redact_field(
-              person['placeOfResidence']['postalCode'], redaction_to_use.get('postal')
-          )
+            person['placeOfResidence']['postalCode'] = redact_field(
+                person['placeOfResidence']['postalCode'], redaction_to_use.get('postal')
+            )
         if 'placeOfResidence' in person and 'street' in person['placeOfResidence']:
-          person['placeOfResidence']['street'] = redact_field(
-              person['placeOfResidence']['street'], redaction_to_use.get('street')
-          )
+            person['placeOfResidence']['street'] = redact_field(
+                person['placeOfResidence']['street'], redaction_to_use.get('street')
+            )
         if 'placeOfResidence' in person and 'streetAdditional' in person['placeOfResidence']:
-          person['placeOfResidence']['streetAdditional'] = redact_field(
-              person['placeOfResidence']['streetAdditional'], redaction_to_use.get('streetAdditional')
-          )
+            person['placeOfResidence']['streetAdditional'] = redact_field(
+                person['placeOfResidence']['streetAdditional'], redaction_to_use.get('streetAdditional')
+            )
         if 'placeOfResidence' in person and 'locationDescription' in person['placeOfResidence']:
-          person['placeOfResidence']['locationDescription'] = redact_field(
-              person['placeOfResidence']['locationDescription'], redaction_to_use.get('locationDescription')
-          )
+            person['placeOfResidence']['locationDescription'] = redact_field(
+                person['placeOfResidence']['locationDescription'], redaction_to_use.get('locationDescription')
+            )
 
         if 'birthDate' in person:
-          person['birthDate'] = redact_field(person['birthDate'], redaction_to_use.get('birthDate'))
+            person['birthDate'] = redact_field(person['birthDate'], redaction_to_use.get('birthDate'))
         for identifier in person['identifiers']:
             identifier['id'] = redact_field(identifier['id'], redaction_to_use.get('identifiers'))
     return payload
