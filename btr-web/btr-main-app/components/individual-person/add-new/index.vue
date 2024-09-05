@@ -374,7 +374,7 @@
             name="missingInfoReason"
             :missing-info="inputFormSi.couldNotProvideMissingInfo"
             @update:missing-info="inputFormSi.couldNotProvideMissingInfo = $event"
-            @change="setNewOrChanged([InputFieldsE.MISSING_INFO_REASON])"
+            @update:model-value="setNewOrChanged([InputFieldsE.MISSING_INFO_REASON])"
           />
         </div>
       </BcrosSection>
