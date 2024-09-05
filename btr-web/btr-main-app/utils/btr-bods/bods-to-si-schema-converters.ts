@@ -42,7 +42,7 @@ const _getCitizenships = (btrBodsPerson: BtrBodsPersonI): CountrySchemaType[] =>
     })
   }
 
-  for (const country of btrBodsPerson.nationalities) {
+  for (const country of btrBodsPerson.nationalities || []) {
     const countryCode: string = country.code
     let countryName: string = country.name
 
@@ -75,8 +75,9 @@ function _getSIAddress (btrBodsAddress: BodsBtrAddressI): AddressSchemaType {
 }
 
 function _getTaxNumber (btrBodsPerson: BtrBodsPersonI) {
+  const identifiers = btrBodsPerson.identifiers || []
   const taxIdentifierCa =
-    btrBodsPerson.identifiers.find(identifier =>
+    identifiers.find(identifier =>
       identifier.scheme === 'CAN-TAXID' && identifier.schemeName === 'ITN'
     )
   return taxIdentifierCa?.id || undefined
@@ -158,6 +159,13 @@ function _getEffectiveDates (oocs: BtrBodsOwnershipOrControlI) {
   return effectiveDates
 }
 
+function _getTaxResidency (person: BtrBodsPersonI) {
+  if (!person.taxResidencies) {
+    return undefined
+  }
+  return !!(person.taxResidencies.find(country => country.code === 'CA'))
+}
+
 const _getSi = (
   person: BtrBodsPersonI, oocs: BtrBodsOwnershipOrControlI, businessIdentifier: string
 ): SiSchemaType => {
@@ -195,7 +203,7 @@ const _getSi = (
     couldNotProvideMissingInfo: person.missingInfoReason ? !!person.missingInfoReason.trim() : false,
     birthDate: person.birthDate ? person.birthDate : '',
     email: person.email,
-    phoneNumber: person.phoneNumber,
+    phoneNumber: person.phoneNumber || {},
     tax: {
       hasTaxNumber: person.hasTaxNumber,
       taxNumber: _getTaxNumber(person)
@@ -206,8 +214,8 @@ const _getSi = (
       isYourOwnInformation: false, // todo: fixme ?? how do we want to set this
       isUsePreferredName: !!(preferredName.trim())
     },
-    isTaxResident: !!(person.taxResidencies.find(country => country.code === 'CA')),
-    determinationOfIncapacity: person.determinationOfIncapacity,
+    isTaxResident: _getTaxResidency(person),
+    determinationOfIncapacity: person.determinationOfIncapacity || false,
 
     effectiveDates: _getEffectiveDates(oocs),
 
