@@ -54,7 +54,7 @@ def redact_information(payload):
                 person['phoneNumber']['number'], redaction_to_use.get('phone')
             )
 
-        for address in person['addresses']:
+        for address in person.get('addresses', []):
             if 'postalCode' in address:
                 address['postalCode'] = redact_field(address['postalCode'], redaction_to_use.get('postal'))
             if 'street' in address:
@@ -87,7 +87,7 @@ def redact_information(payload):
 
         if 'birthDate' in person:
             person['birthDate'] = redact_field(person['birthDate'], redaction_to_use.get('birthDate'))
-        for identifier in person['identifiers']:
+        for identifier in person.get('identifiers', []):
             identifier['id'] = redact_field(identifier['id'], redaction_to_use.get('identifiers'))
     return payload
 
