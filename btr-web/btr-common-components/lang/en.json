@@ -3,7 +3,8 @@
     "beneficialOwnerChange": "Significant Individual Change",
     "businessDashboard": "My Business Registry",
     "myRegDetails": "My BC Registries Details",
-    "registryDashboard": "BC Registries Dashboard"
+    "registryDashboard": "BC Registries Dashboard",
+    "requestOmit": "Request to omit information"
   },
   "business": {
     "legalTypes": {
