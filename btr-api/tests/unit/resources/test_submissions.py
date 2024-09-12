@@ -6,14 +6,17 @@ from http import HTTPStatus
 
 import pytest
 import requests
+from sqlalchemy import text
+
+from btr_api.enums import UserType
 from btr_api.models import Submission as SubmissionModel
 from btr_api.models import SubmissionType
 from btr_api.models import User as UserModel
 from btr_api.services import SubmissionService
-from sqlalchemy import text
+from btr_api.utils import redact_information
+
 from tests.unit import nested_session
 from tests.unit.utils import create_header
-from btr_api.utils import redact_information
 
 mocked_entity_response = {'business': {'adminFreeze': False, 'state': 'ACTIVE'}}
 mocked_entity_address_response = {
@@ -55,10 +58,10 @@ helper_people = [
 
 
 @pytest.mark.parametrize(
-    'test_name, submission_type, payload',
-    [('simple json', SubmissionType.other, {'racoondog': 'red'})],
+    'test_name, submission_type, payload, user_type',
+    [('simple json', SubmissionType.other, {'racoondog': 'red'}, UserType.USER_COMPETENT_AUTHORITY)],
 )
-def test_get_plots(app, client, session, jwt, requests_mock, test_name, submission_type, payload):
+def test_get_plots(app, client, session, jwt, requests_mock, test_name, submission_type, payload, user_type):
     """Get the plot submissions.
     A parameterized set of tests that runs defined scenarios.
     """
@@ -95,7 +98,7 @@ def test_get_plots(app, client, session, jwt, requests_mock, test_name, submissi
         assert rv.status_code == HTTPStatus.OK
 
         if payload:
-            redacted_payload = redact_information(payload,) --- need to update
+            redacted_payload = redact_information(payload, user_type)
             for key, value in redacted_payload.items():
                 assert key in rv.text
                 assert value in rv.text
