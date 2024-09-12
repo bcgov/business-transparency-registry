@@ -75,7 +75,7 @@ def registers(id: int | None = None):  # pylint: disable=redefined-builtin
             account_id = request.headers.get('Account-Id', None)
             btr_auth.is_authorized(request=request, business_identifier=submission.business_identifier)
             btr_auth.product_authorizations(request=request, account_id=account_id)
-            redacted = redact_information(SubmissionSerializer.to_dict(submission))
+            redacted = redact_information(SubmissionSerializer.to_dict(submission), btr_auth.get_user_type())
             return jsonify(type=submission.type, submission=redacted['payload'])
 
         return {}, HTTPStatus.NOT_FOUND
@@ -97,7 +97,7 @@ def get_entity_submission(business_identifier: str):
 
         submission = SubmissionModel.find_by_business_identifier(business_identifier)
         if submission:
-            return jsonify(redact_information(SubmissionSerializer.to_dict(submission)))
+            return jsonify(redact_information(SubmissionSerializer.to_dict(submission), btr_auth.get_user_type()))
 
         return {}, HTTPStatus.NOT_FOUND
 
@@ -238,7 +238,8 @@ def update_submission(sub_id: int):
                 # Log error and continue to return successfully (does NOT block the submission)
                 current_app.logger.info(err.error)
                 current_app.logger.error('Error updating submission: %s', submission.id)
-            return jsonify(redact_information(SubmissionSerializer.to_dict(submission))), HTTPStatus.OK
+            return jsonify(redact_information(SubmissionSerializer.to_dict(submission),
+                                              btr_auth.get_user_type())), HTTPStatus.OK
 
         return {}, HTTPStatus.NOT_FOUND
 

@@ -31,25 +31,38 @@
 # CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
-"""This module wraps helper services used by the API."""
-from .auth import AuthService
-from .bor import BorService
-from .email import EmailService
-from .entity import EntityService
-from .json_schema import SchemaService
-from .pay import PayService
-from .registries_search import RegSearchService
-from .submission import SubmissionService
+"""API endpoints for triggering notifications."""
+from http import HTTPStatus
+from flask import Blueprint, request
 
-PAYMENT_REQUEST_TEMPLATE = {
-    'filingInfo': {'filingTypes': [{'filingTypeCode': 'REGSIGIN'}]},
-    'businessInfo': {'corpType': 'BTR'}
-}
-btr_pay = PayService(default_invoice_payload={'filingInfo': {'filingTypes': [{'filingTypeCode': 'REGSIGIN'}]},
-                                              'businessInfo': {'corpType': 'BTR'}})
+from btr_api.exceptions import exception_response
+from btr_api.models import Submission
+from btr_api.services import btr_auth, btr_email, btr_entity
 
-btr_auth = AuthService()
-btr_bor = BorService()
-btr_email = EmailService()
-btr_entity = EntityService()
-btr_reg_search = RegSearchService()
+bp = Blueprint('notify', __name__)
+
+
+@bp.route('', methods=('POST',))
+def registers():  # pylint: disable=redefined-builtin
+    """Trigger an email notification to all the given business's SIs."""
+    try:
+        json_input: dict = request.get_json()
+        if business_identifier := json_input.get('businessIdentifier'):
+            if submission := Submission.find_by_business_identifier(business_identifier):
+                token = btr_auth.get_bearer_token()
+                business = btr_entity.get_entity_info(None, business_identifier, token).json()
+                delivery_address = btr_entity.get_entity_info(
+                    None, f'{business_identifier}/addresses?addressType=deliveryAddress', token).json()
+                business_contact = btr_auth.get_business_contact(business_identifier, token)
+                business_info = {**business, **delivery_address, 'contact': {**business_contact}}
+                submission = Submission.find_by_business_identifier(business_identifier)
+
+                btr_email.send_added_to_btr_emails(submission, business_info, token)
+                # NOTE: below is temporary for testing (not sure what will trigger this or how yet)
+                btr_email.send_updating_minor_btr_email(submission.payload['personStatements'][0], business_info, token)
+                return {}, HTTPStatus.ACCEPTED
+
+        return {}, HTTPStatus.NOT_FOUND
+
+    except Exception as exception:  # noqa: B902
+        return exception_response(exception)

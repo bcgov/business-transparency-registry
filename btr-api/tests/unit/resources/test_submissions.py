@@ -95,7 +95,7 @@ def test_get_plots(app, client, session, jwt, requests_mock, test_name, submissi
         assert rv.status_code == HTTPStatus.OK
 
         if payload:
-            redacted_payload = redact_information(payload)
+            redacted_payload = redact_information(payload,) --- need to update
             for key, value in redacted_payload.items():
                 assert key in rv.text
                 assert value in rv.text

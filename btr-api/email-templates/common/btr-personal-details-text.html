@@ -1,0 +1,1 @@
+The following details about you will be publicly searchable on the publication date, **90 days after your {{ start_date_desc }}**, as per the [Business Corporations Act]({{ business_act_url }}):
