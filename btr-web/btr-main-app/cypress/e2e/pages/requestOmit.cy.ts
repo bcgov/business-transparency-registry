@@ -38,15 +38,15 @@ describe('pages -> Request To Omit', () => {
     cy.contains(i18nCommon.errors.validation.fullName.empty).should('not.exist')
 
     cy.get('[name="email"]').type('123')
-    cy.get('[name="name"]').click();
+    cy.get('[name="name"]').click()
     cy.contains(i18nCommon.errors.validation.email.invalid).should('exist')
     cy.contains(i18nCommon.errors.validation.email.empty).should('not.exist')
     cy.get('[name="email"]').clear()
-    cy.get('[name="name"]').click();
+    cy.get('[name="name"]').click()
     cy.contains(i18nCommon.errors.validation.email.invalid).should('not.exist')
     cy.contains(i18nCommon.errors.validation.email.empty).should('exist')
     cy.get('[name="email"]').type('John@Doe.ca')
-    cy.get('[name="name"]').click();
+    cy.get('[name="name"]').click()
     cy.contains(i18nCommon.errors.validation.email.invalid).should('not.exist')
     cy.contains(i18nCommon.errors.validation.email.empty).should('not.exist')
 
