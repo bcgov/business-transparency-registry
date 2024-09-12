@@ -1,16 +1,24 @@
 <template>
-  <UFormGroup v-slot="{ error }" :label="label" :name="name" :help="help">
-    <UInput
-      :id="id"
-      type="text"
-      v-bind="$attrs"
-      :value="model"
-      :variant="error ? 'error' : variant"
-      :placeholder="placeholder"
-      :disabled="isDisabled"
-      @input="$emit('update:modelValue', $event.target.value)"
-      @blur="normalizeInput"
-    />
+  <UFormGroup :label="label" :name="name" :help="help">
+    <template #default="{ error }">
+      <UInput
+        :id="id"
+        type="text"
+        v-bind="$attrs"
+        :value="model"
+        :variant="error ? 'error' : variant"
+        :placeholder="placeholder"
+        :disabled="isDisabled"
+        @input="$emit('update:modelValue', $event.target.value)"
+        @blur="normalizeInput"
+      />
+    </template>
+
+    <template #error="{ error }">
+      <p class="mt-2 text-red-500 dark:text-red-400 text-sm">
+        {{ translate && error ? $t(error) : error ? error : '' }}
+      </p>
+    </template>
   </UFormGroup>
 </template>
 
@@ -30,7 +38,8 @@ const props = defineProps({
   name: { type: String, default: 'name.fullName' },
   variant: { type: String, default: 'bcGov' },
   help: { type: String, default: '' },
-  isDisabled: { type: Boolean, default: false }
+  isDisabled: { type: Boolean, default: false },
+  translate: { type: Boolean, default: false }
 })
 
 watch(model, () => {

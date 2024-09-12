@@ -8,7 +8,7 @@
       "header": "Request to Omit Information",
       "completingParty": "Completing Party",
       "completingPartyIntro": "Provide information about the individual completing this request:",
-      "significantIndividual": "Significant Individuals | Significant Individual",
+      "significantIndividual": "Significant Individual | Significant Individuals",
       "representative": "Representative for significant individual",
       "certifyPart2": ", am requesting to have the above significant individual’s information publicly omitted from the BC Business Transparency Registry for the above business. I certify that I have relevant knowledge of this significant individual and that I am authorized to make this filing."
     },
@@ -276,7 +276,8 @@
       "folioNumber": {
         "maxLengthExceeded": "The Folio or Reference number should be up to 30 characters",
         "specialCharacter": "The Folio or Reference number should contain only alpha numeric characters"
-      }
+      },
+      "certify": "You must certify that you are the individual completing this filing."
     }
   },
   "helpTitles": {
