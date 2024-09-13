@@ -1,6 +1,11 @@
 <script setup lang="ts">
+import { z } from 'zod'
 import { getDefaultInputFormCompletingParty } from '~/utils/omit-schema/defaults'
-import { CompletingPartySchemaType, CompletingPartySchema } from '~/utils/omit-schema/definitions'
+import {
+  CompletingPartySchemaType,
+  CompletingPartySchema,
+  CompletingPartyErrorMap
+} from '~/utils/omit-schema/definitions'
 import { CompletingIndividualTypeE, CompletingIndividualTranslationsE } from '~/enums/omit/completing-individual-type-e'
 const t = useNuxtApp().$i18n.t
 
@@ -50,6 +55,7 @@ function hasErrors (sectionErrorPaths: string[]): boolean {
 }
 
 const formSchema: CompletingPartySchemaType = CompletingPartySchema
+z.setErrorMap(CompletingPartyErrorMap)
 
 </script>
 
@@ -82,12 +88,6 @@ const formSchema: CompletingPartySchemaType = CompletingPartySchema
                 :options="individualTypeOptions"
               />
             </template>
-
-            <template #error="{ error }">
-              <p class="mt-2 text-red-500 dark:text-red-400 text-sm">
-                {{ error ? $t(error) : '' }}
-              </p>
-            </template>
           </UFormGroup>
         </div>
       </BcrosSection>
@@ -105,7 +105,6 @@ const formSchema: CompletingPartySchemaType = CompletingPartySchema
             v-model="model.name"
             name="name"
             :placeholder="$t('placeholders.fullName')"
-            :translate="true"
           />
         </div>
       </BcrosSection>
@@ -122,7 +121,6 @@ const formSchema: CompletingPartySchemaType = CompletingPartySchema
             id="completing-party-email"
             v-model="model.email"
             name="email"
-            :translate="true"
             :placeholder="$t('registriesDetailsLabels.emailAddressLC')"
           />
         </div>
@@ -146,12 +144,6 @@ const formSchema: CompletingPartySchemaType = CompletingPartySchema
                 :class="error ? 'text-red-500 dark:text-red-400' : ''"
                 :show-label="false"
               />
-            </template>
-
-            <template #error="{ error }">
-              <p class="mt-2 text-red-500 dark:text-red-400 text-sm">
-                {{ error ? $t(error) : '' }}
-              </p>
             </template>
           </UFormGroup>
         </div>

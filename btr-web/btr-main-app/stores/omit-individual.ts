@@ -7,12 +7,12 @@ export const useOmitIndividual = defineStore('bcros/omitIndividual', () => {
 
   /** Load the omit individuals for the business into the store */
   function loadSavedOmitIndividual () {
-    // TODO: Add when api for get implemented
+    // TODO: #22111 Add when api for get implemented
   }
 
   /** Create the omit individuals in the api */
   function createSavedOmitIndividual () {
-    // TODO: Add when api for get implemented
+    // TODO: #22111 Add when api for get implemented
   }
 
   return {
