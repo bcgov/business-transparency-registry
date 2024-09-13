@@ -82,8 +82,8 @@ const props = defineProps({
   border: { type: Boolean, required: false, default: false },
   noTopBorder: { type: Boolean, required: false, default: false },
   noBotBorder: { type: Boolean, required: false, default: false },
-  paddedX: { type: Boolean, required: false, default: true},
-  paddedY: { type: Boolean, required: false, default: true}
+  paddedX: { type: Boolean, required: false, default: true },
+  paddedY: { type: Boolean, required: false, default: true }
 })
 
 const showHeader = computed(
