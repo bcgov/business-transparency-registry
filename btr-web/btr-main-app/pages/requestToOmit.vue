@@ -42,7 +42,6 @@ async function handleDoneButtonClick () {
     <BcrosSection
       data-cy="completing-party"
       :section-title="$t('labels.requestOmit.completingParty')"
-      :section-title-full="true"
       section-title-icon="i-mdi-account-supervisor-circle-outline"
       rounded-bot
       rounded-top

@@ -70,7 +70,6 @@ const props = defineProps({
   showSectionHasErrors: { type: Boolean, required: false, default: false },
   sectionTitle: { type: String, required: false, default: undefined },
   sectionTitleIcon: { type: String, required: false, default: undefined },
-  sectionTitleFull: { type: Boolean, required: false, default: undefined },
 
   headerIconName: { type: String, required: false, default: undefined },
   headerTitle: { type: String, required: false, default: undefined },
@@ -85,6 +84,10 @@ const props = defineProps({
   paddedX: { type: Boolean, required: false, default: true },
   paddedY: { type: Boolean, required: false, default: true }
 })
+
+const sectionTitleFull = computed(
+  () => typeof props.sectionTitleIcon === 'string' && props.sectionTitleIcon !== ''
+)
 
 const showHeader = computed(
   () => !!slots['header-content'] || !!props.headerIconName || !!props.headerTitle || !!props.headerText
