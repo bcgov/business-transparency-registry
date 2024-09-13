@@ -35,7 +35,7 @@
 from http import HTTPStatus
 from flask import Blueprint, request
 
-from btr_api.exceptions import exception_response
+from btr_api.exceptions import error_request_response, exception_response
 from btr_api.models import Submission
 from btr_api.services import btr_auth, btr_email, btr_entity
 
@@ -62,7 +62,10 @@ def registers():  # pylint: disable=redefined-builtin
                 btr_email.send_updating_minor_btr_email(submission.payload['personStatements'][0], business_info, token)
                 return {}, HTTPStatus.ACCEPTED
 
-        return {}, HTTPStatus.NOT_FOUND
+            return {}, HTTPStatus.NOT_FOUND
+        return error_request_response('Error parsing request',
+                                      HTTPStatus.BAD_REQUEST,
+                                      [{'Expected field not found': '"businessIdentifier" is a required field'}])
 
     except Exception as exception:  # noqa: B902
         return exception_response(exception)

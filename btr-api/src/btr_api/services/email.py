@@ -86,7 +86,7 @@ class EmailService:
         full_name = get_name(person, 'individual')
         citizenship = get_citizenship_public_desc(person)
 
-        template = Path(f'{self.template_path}/btr-{EmailType.UPDATING_MINOR_PUBLIC.value}.html').read_text('utf-8')
+        template = Path(f'{self.template_path}/btr-{EmailType.UPDATING_MINOR_PUBLIC.value}.md').read_text('utf-8')
         filled_template = self._substitute_template_parts(template)
         jinja_template = Template(filled_template, autoescape=True)
 
@@ -152,7 +152,7 @@ class EmailService:
         full_name = get_name(person, 'individual')
         citizenship = get_citizenship_public_desc(person)
 
-        template = Path(f'{self.template_path}/btr-{email_type.value}.html').read_text('utf-8')
+        template = Path(f'{self.template_path}/btr-{email_type.value}.md').read_text('utf-8')
         filled_template = self._substitute_template_parts(template)
         jinja_template = Template(filled_template, autoescape=True)
 
@@ -213,10 +213,10 @@ class EmailService:
     def _substitute_template_parts(self, template_code: str) -> str:
         """Substitute template parts in main template.
 
-        Template parts are marked by [[partname.html]] in templates.
+        Template parts are marked by [[partname.md]] in templates.
 
         This functionality is restricted by:
-        - markup must be exactly [[partname.html]] and have no extra spaces around file name
+        - markup must be exactly [[partname.md]] and have no extra spaces around file name
         - template parts can only be one level deep, ie: this rudimentary framework does not handle nested template
         parts. There is no recursive search and replace.
         """
@@ -230,10 +230,10 @@ class EmailService:
             'footer'
         ]
 
-        # substitute template parts - marked up by [[filename.html]]
+        # substitute template parts - marked up by [[filename.md]]
         for template_part in template_parts:
-            template_part_code = Path(f'{self.template_path}/common/{template_part}.html').read_text('utf-8')
-            template_code = template_code.replace(f'[[{template_part}.html]]', template_part_code)
+            template_part_code = Path(f'{self.template_path}/common/{template_part}.md').read_text('utf-8')
+            template_code = template_code.replace(f'[[{template_part}.md]]', template_part_code)
 
         return template_code
 
@@ -245,7 +245,6 @@ class EmailService:
         try:
             # send out an email to each person in the submission for the business
             for person in submission.payload.get('personStatements', []):
-
                 email_msg = self._compose_added_email(person, business_info, submission.effective_date)
                 self._send_email(email_msg, token)
 
@@ -253,6 +252,7 @@ class EmailService:
             # pass along
             raise bus_exc
         except Exception as unhandled_exception:
+            self.app.logger.debug(unhandled_exception.with_traceback(None))
             raise BusinessException('Error sending email notification',
                                     business_info['business']['identifier'],
                                     HTTPStatus.INTERNAL_SERVER_ERROR) from unhandled_exception
@@ -270,6 +270,7 @@ class EmailService:
             # pass along
             raise bus_exc
         except Exception as unhandled_exception:
+            self.app.logger.debug(unhandled_exception.with_traceback(None))
             raise BusinessException('Error sending email notification',
                                     business_info['business']['identifier'],
                                     HTTPStatus.INTERNAL_SERVER_ERROR) from unhandled_exception
