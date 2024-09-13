@@ -35,12 +35,14 @@
     </div>
     <div
       v-if="showContent"
-      class="px-8 py-10 mb-0.5 bg-white flex w-full"
+      class="mb-0.5 bg-white flex w-full"
       :class="{
         'rounded-t': roundedTop && !showHeader,
         'rounded-b': roundedBot,
         'flex-col': sectionTitleFull,
-        'flex-row': !sectionTitleFull
+        'flex-row': !sectionTitleFull,
+        'px-8': paddedX,
+        'py-10': paddedY
       }"
     >
       <slot name="section-title">
@@ -79,7 +81,9 @@ const props = defineProps({
 
   border: { type: Boolean, required: false, default: false },
   noTopBorder: { type: Boolean, required: false, default: false },
-  noBotBorder: { type: Boolean, required: false, default: false }
+  noBotBorder: { type: Boolean, required: false, default: false },
+  paddedX: { type: Boolean, required: false, default: true},
+  paddedY: { type: Boolean, required: false, default: true}
 })
 
 const showHeader = computed(

@@ -76,6 +76,7 @@ z.setErrorMap(CompletingPartyErrorMap)
         rounded-bot
         :rounded-top="!editMode"
         :border="false"
+        :padded-x="false"
       >
         <div class="flex-col w-full">
           <UFormGroup name="invididualType" eager-validation>
@@ -98,6 +99,7 @@ z.setErrorMap(CompletingPartyErrorMap)
         rounded-bot
         :rounded-top="!editMode"
         :border="false"
+        :padded-x="false"
       >
         <div class="flex-col w-full">
           <BcrosInputsNameField
@@ -115,6 +117,7 @@ z.setErrorMap(CompletingPartyErrorMap)
         rounded-bot
         :rounded-top="!editMode"
         :border="false"
+        :padded-x="false"
       >
         <div class="flex-col w-full">
           <BcrosInputsEmailField
@@ -132,6 +135,7 @@ z.setErrorMap(CompletingPartyErrorMap)
         rounded-bot
         :rounded-top="!editMode"
         :border="false"
+        :padded-x="false"
       >
         <div class="flex-col w-full">
           <UFormGroup name="certify" eager-validation>

@@ -40,11 +40,22 @@
     <h2 class="font-bold text-lg mt-16" data-cy="certify-section-label">
       2. {{ $t('labels.certifySection') }}
     </h2>
-    <ReviewConfirmCertify
-      v-model="currentSIFiling.certified"
-      :name="userFullName"
-      data-cy="certify-section"
-    />
+    <BcrosSection
+      :section-title="$t('texts.certify.certification')"
+      rounded-bot
+      :border="false"
+    >
+      <div class="flex-col w-full">
+        <UFormGroup name="certified">
+          <ReviewConfirmCertify
+            v-model="currentSIFiling.certified"
+            :name="userFullName"
+            data-cy="certify-section"
+            :show-label="false"
+          />
+        </UFormGroup>
+      </div>
+    </BcrosSection>
   </div>
 </template>
 

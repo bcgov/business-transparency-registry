@@ -1,7 +1,7 @@
 <template>
-  <div class="mt-5 p-10 bg-white rounded flex">
+  <div class="mt-5 bg-white rounded flex">
     <label v-if="showLabel" class="font-bold w-[200px]">{{ $t('texts.certify.certification') }}</label>
-    <div class="ml-20">
+    <div :class="showLabel ? 'ml-20' : ''">
       <div>
         <UCheckbox
           v-model="certified"

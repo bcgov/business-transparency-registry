@@ -1,19 +1,21 @@
+import * as i18nCommon from '../../../../btr-common-components/lang/en.json'
+import * as i18n from '../../../lang/en.json'
 describe('pages -> Request To Omit', () => {
-  let i18nCommon: any
-  let i18n: any
+  // let i18nCommon: any
+  // let i18n: any
   beforeEach(() => {
-    cy.readFile('../btr-common-components/lang/en.json').then((json) => { i18nCommon = json })
-    cy.readFile('lang/en.json').then((json) => { i18n = json })
+    // cy.readFile('../btr-common-components/lang/en.json').then((json) => { i18nCommon = json })
+    // cy.readFile('lang/en.json').then((json) => { i18n = json })
     cy.visit('/request-to-omit')
   })
 
   it('rendered expected visuals', () => {
-    cy.get('[data-cy=request-to-omit-header]').should('contain', 'BC Business Transparency Registry')
-    cy.get('[data-cy=request-to-omit-title]')
+    cy.get('[data-cy="request-to-omit-header"]').should('contain', 'BC Business Transparency Registry')
+    cy.get('[data-cy="request-to-omit-title"]')
       .should(
         'contain', 'Request to Omit Information'
       )
-    cy.get('[data-cy=request-to-omit-text]').should('contain',
+    cy.get('[data-cy="request-to-omit-text"]').should('contain',
       'You can request to have some or all of your information publicly omitted '
     )
   })
