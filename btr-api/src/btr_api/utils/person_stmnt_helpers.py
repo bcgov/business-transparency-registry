@@ -1,4 +1,4 @@
-# Copyright © 2023 Province of British Columbia
+# Copyright © 2024 Province of British Columbia
 #
 # Licensed under the BSD 3 Clause License, (the "License");
 # you may not use this file except in compliance with the License.
@@ -31,53 +31,22 @@
 # CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
-"""
-This module is responsible for registering the endpoints.
-
-The register_endpoints function registers the provided blueprints and URL prefixes to the Flask application.
-"""
-from flask import Flask
-
-from .base import bp as base_endpoint
-from .notify import bp as notify_endpoint
-from .ops import bp as ops_endpoint
-from .submission import bp as submission_endpoint
-from .json_schema import bp as json_schema_endpoint
+"""Helper methods for traversing the person statement of an SI submission."""
 
 
-def register_endpoints(app: Flask):
-    """
-    Register Endpoints
+def get_name(person_statment: dict, name_type: str):
+    """Returns the person name of the given name type."""
+    for name in person_statment.get('names'):
+        if name.get('type') == name_type:  # expecting this to be 'individual' or 'alternative'
+            return name.get('fullName')
+    return None
 
-    Registers the provided blueprints and URL prefixes to the Flask application.
 
-    :param app: The Flask application to register the endpoints to.
-    :type app: Flask
-    """
-    # Allow base route to match with, and without a trailing slash
-    app.url_map.strict_slashes = False
+def get_citizenship_public_desc(person_statment: dict):
+    """Returns the public description for the person citizenship."""
+    has_canadian_citz = 'CA' in [country.get('code') for country in person_statment.get('nationalities', [])]
+    citizenship = 'Canada (Citizen)' if has_canadian_citz else 'Other'
+    if person_statment.get('isPermanentResidentCa', False):
+        citizenship = 'Canada (Permanent Resident)'
 
-    app.register_blueprint(
-        url_prefix="/",
-        blueprint=base_endpoint,
-    )
-
-    app.register_blueprint(
-        url_prefix="/ops",
-        blueprint=ops_endpoint,
-    )
-
-    app.register_blueprint(
-        url_prefix='/notify',
-        blueprint=notify_endpoint,
-    )
-
-    app.register_blueprint(
-        url_prefix="/plots",
-        blueprint=submission_endpoint,
-    )
-
-    app.register_blueprint(
-        url_prefix="/json-schemas",
-        blueprint=json_schema_endpoint,
-    )
+    return citizenship

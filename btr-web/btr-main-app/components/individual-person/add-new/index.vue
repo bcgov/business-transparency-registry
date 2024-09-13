@@ -266,7 +266,9 @@
             :max-date="new Date()"
             :placeholder="$t('placeholders.dateSelect.birthdate')"
             :is-editing="isEditing"
-            @selection="inputFormSi.birthDate = dateToString($event, 'YYYY-MM-DD')"
+            @selection="
+              inputFormSi.birthDate = dateToString($event, 'YYYY-MM-DD');
+              setNewOrChanged([InputFieldsE.BIRTH_DATE])"
             @change="setNewOrChanged([InputFieldsE.BIRTH_DATE])"
           />
         </div>

@@ -193,3 +193,39 @@ class AuthService:
         except Exception as err:
             self.app.logger.debug('Generic Auth verification failure:', repr(err))
             raise ExternalServiceException(error=repr(err), status_code=HTTPStatus.SERVICE_UNAVAILABLE) from err
+
+    def get_business_contact(self, business_identifier: str, token: str) -> bool:
+        """Get the business contact information from auth."""
+        try:
+            headers = {'Authorization': 'Bearer ' + token}
+            auth_url = f'{self.svc_url}/entities/{business_identifier}'
+
+            resp = requests.get(url=auth_url, headers=headers, timeout=self.timeout)
+            if resp.status_code >= HTTPStatus.INTERNAL_SERVER_ERROR:
+                error = f'{resp.status_code} - {str(resp.json())}'
+                self.app.logger.debug('Invalid response from auth-api: %s', error)
+                raise ExternalServiceException(error=error, status_code=HTTPStatus.SERVICE_UNAVAILABLE)
+
+            if (
+                resp.status_code != HTTPStatus.OK or
+                not resp.json().get('contacts') or
+                not isinstance(resp.json()['contacts'], list) or
+                len(resp.json()['contacts']) < 1
+            ):
+                error = f'Unable to get business contacts for: {business_identifier}'
+                self.app.logger.debug(error)
+                raise AuthException(error=error, status_code=HTTPStatus.INTERNAL_SERVER_ERROR)
+
+            return resp.json()['contacts'][0]
+        except AuthException as e:
+            # pass along
+            raise e
+        except ExternalServiceException as exc:
+            # pass along
+            raise exc
+        except (requests.exceptions.ConnectionError, requests.exceptions.Timeout) as err:
+            self.app.logger.debug('Auth connection failure:', repr(err))
+            raise ExternalServiceException(error=repr(err), status_code=HTTPStatus.SERVICE_UNAVAILABLE) from err
+        except Exception as err:
+            self.app.logger.debug('Generic Auth verification failure:', repr(err))
+            raise ExternalServiceException(error=repr(err), status_code=HTTPStatus.SERVICE_UNAVAILABLE) from err

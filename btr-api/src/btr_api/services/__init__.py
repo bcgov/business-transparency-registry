@@ -34,6 +34,7 @@
 """This module wraps helper services used by the API."""
 from .auth import AuthService
 from .bor import BorService
+from .email import EmailService
 from .entity import EntityService
 from .json_schema import SchemaService
 from .pay import PayService
@@ -49,5 +50,6 @@ btr_pay = PayService(default_invoice_payload={'filingInfo': {'filingTypes': [{'f
 
 btr_auth = AuthService()
 btr_bor = BorService()
+btr_email = EmailService()
 btr_entity = EntityService()
 btr_reg_search = RegSearchService()

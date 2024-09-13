@@ -109,10 +109,21 @@ class Config:  # pylint: disable=too-few-public-methods
     LEGAL_SVC_URL = os.getenv('LEGAL_API_URL', '') + os.getenv('LEGAL_API_VERSION_2', '')
     BOR_SVC_URL = os.getenv('BOR_API_URL', '') + os.getenv('BOR_API_VERSION', '')
     SEARCH_SVC_URL = os.getenv('REGISTRIES_SEARCH_API_URL', '') + os.getenv('REGISTRIES_SEARCH_API_VERSION', '')
+    NOTIFY_SVC_URL = os.getenv('NOTIFY_API_URL', '') + os.getenv('NOTIFY_API_VERSION', '') + '/notify/'
 
     SSO_SVC_TOKEN_URL = os.getenv('KEYCLOAK_AUTH_TOKEN_URL')
     SVC_ACC_CLIENT_ID = os.getenv('BTR_SERVICE_ACCOUNT_CLIENT_ID')
     SVC_ACC_CLIENT_SECRET = os.getenv('BTR_SERVICE_ACCOUNT_SECRET')
+
+    EMAIL_TEMPLATE_PATH = os.getenv('EMAIL_TEMPLATE_PATH')
+    EMAIL_BUSINESS_ACT_URL = os.getenv('EMAIL_BUSINESS_ACT_URL')
+    EMAIL_BUSINESS_DETAILS_URL = os.getenv('REGISTRY_SEARCH_URL')
+    EMAIL_BTR_OMIT_URL = os.getenv('BUSINESS_TRANSPARENCY_REGISTRY_URL', '') + '/request-to-omit'
+    EMAIL_BCREG_EMAIL = os.getenv('EMAIL_BCREG_EMAIL')
+    EMAIL_TOLL_FREE_TEL = os.getenv('EMAIL_TOLL_FREE_TEL')
+    EMAIL_VICTORIA_OFFICE_TEL = os.getenv('EMAIL_VICTORIA_OFFICE_TEL')
+
+    LEGISLATIVE_TIMEZONE = os.getenv('LEGISLATIVE_TIMEZONE', 'America/Vancouver')
 
 
 class Production(Config):  # pylint: disable=too-few-public-methods
@@ -159,6 +170,7 @@ class Testing(Config):  # pylint: disable=too-few-public-methods
     PAYMENT_SVC_URL = 'https://test-pay-url'
     LEGAL_SVC_URL = 'https://test-legal-url'
     BOR_SVC_URL = 'https://test-bor-url'
+    NOTIFY_API_URL = 'https://test-notify-api-url'
 
     SSO_SVC_TOKEN_URL = 'https://test-token-url'
     SVC_ACC_CLIENT_ID = 'service-account'

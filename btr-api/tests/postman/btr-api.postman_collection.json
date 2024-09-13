@@ -1,8 +1,10 @@
 {
 	"info": {
-		"_postman_id": "0478611d-1e23-409a-88ad-aa52abe35044",
+		"_postman_id": "68d315c3-9ac3-4b72-b91c-9e6127b8238f",
 		"name": "btr-api",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "6835935",
+		"_collection_link": "https://warped-escape-616276.postman.co/workspace/bc-registries~8ef8e652-492a-4d19-b978-d4f0da255b2c/collection/6835935-68d315c3-9ac3-4b72-b91c-9e6127b8238f?action=share&source=collection_link&creator=6835935"
 	},
 	"item": [
 		{
@@ -314,6 +316,37 @@
 									"key": "identifier",
 									"value": "1"
 								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "notification",
+			"item": [
+				{
+					"name": "send-email",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"businessIdentifier\": \"BC1230113\"\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{internal_url}}/notify",
+							"host": [
+								"{{internal_url}}"
+							],
+							"path": [
+								"notify"
 							]
 						}
 					},

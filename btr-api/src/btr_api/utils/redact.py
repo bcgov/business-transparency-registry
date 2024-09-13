@@ -1,7 +1,6 @@
 """Function to redact fields and or a submission based on roles with a variety of options"""
 from flask import current_app
 
-from btr_api.services import btr_auth
 from btr_api.enums import RedactionType, UserType
 
 # the lack of a rule means it shows fully
@@ -31,11 +30,10 @@ REDACT_RULES = {
 
 
 # pylint: disable=too-many-branches
-def redact_information(payload):
+def redact_information(payload, role):
     """
     Function to redact information from a submission based on rules as defined above
     """
-    role = btr_auth.get_user_type()
     if role == UserType.USER_COMPETENT_AUTHORITY:
         return payload
     # otherwise PUBLIC or STAFF

@@ -13,6 +13,7 @@
 # limitations under the License.
 
 """This exports all of the enums used by the application."""
+from .email_type import EmailType
 from .log_level import LogLevel
 from .redaction_types import RedactionType
 from .user_types import UserType
