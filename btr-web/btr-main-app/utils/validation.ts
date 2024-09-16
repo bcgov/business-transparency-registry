@@ -184,6 +184,47 @@ export function validateFullNameSuperRefine (form: any, ctx: RefinementCtx): nev
   return z.NEVER
 }
 
+export function validateNameSuperRefine (nameVal: string, ctx: RefinementCtx): never {
+  // name
+  if (nameVal) {
+    const normalizedFullName = normalizeName(nameVal)
+    if (normalizedFullName.length < 1) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        translate: 'errors.validation.fullName.empty',
+        fatal: true
+      })
+      return z.NEVER
+    }
+
+    if (normalizedFullName.length > 150) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        translate: 'errors.validation.fullName.maxLengthExceeded',
+        fatal: true
+      })
+      return z.NEVER
+    }
+
+    if (!validateNameCharacters(normalizedFullName)) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        translate: 'errors.validation.fullName.specialCharacter',
+        fatal: true
+      })
+      return z.NEVER
+    }
+  } else {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      translate: 'errors.validation.fullName.empty',
+      fatal: true
+    })
+    return z.NEVER
+  }
+  return z.NEVER
+}
+
 /**
  * Validate the citizenship selection:
  * Rule 1: at least one country has been selected for citizenship

@@ -1,7 +1,13 @@
 import { RouteNameE } from '~/enums/route-name-e'
 
 export default defineNuxtRouteMiddleware((to) => {
-  const expectedRoutes = [RouteNameE.BEN_OWNR_CHNG, RouteNameE.MY_REG_DETAILS, RouteNameE.REVIEW_CONFIRM]
+  const expectedRoutes = [
+    RouteNameE.BEN_OWNR_CHNG,
+    RouteNameE.MY_REG_DETAILS,
+    RouteNameE.REVIEW_CONFIRM,
+    RouteNameE.REQUEST_OMIT
+  ]
+
   // temporary until there is a launch point for this app
   if (!expectedRoutes.includes(to.name as RouteNameE)) {
     let identifier = 'BC0871427' // exists in dev

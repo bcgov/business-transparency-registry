@@ -33,3 +33,8 @@ export function getMyRegDetailsCrumb (): BreadcrumbI {
   const t = useNuxtApp().$i18n.t
   return { text: t('breadcrumbs.myRegDetails') }
 }
+
+export function getRequestOmitCrumb (): BreadcrumbI {
+  const t = useNuxtApp().$i18n.t
+  return { text: t('breadcrumbs.requestOmit') }
+}

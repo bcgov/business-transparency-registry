@@ -35,15 +35,26 @@
     </div>
     <div
       v-if="showContent"
-      class="px-8 py-10 mb-0.5 bg-white flex flex-row w-full"
+      class="mb-0.5 bg-white flex w-full"
       :class="{
         'rounded-t': roundedTop && !showHeader,
         'rounded-b': roundedBot,
+        'flex-col': sectionTitleFull,
+        'flex-row': !sectionTitleFull,
+        'px-8': paddedX,
+        'py-10': paddedY
       }"
     >
       <slot name="section-title">
-        <div class="flex-none w-40 mr-7">
+        <div
+          class="flex-none mr-7"
+          :class="{
+            'w-40': !sectionTitleFull,
+            'w-full': sectionTitleFull
+          }"
+        >
           <span class="font-bold min-w-[190px] mt-3" :class="showSectionHasErrors ? 'text-red-500' : ''">
+            <UIcon v-if="sectionTitleIcon" :name="sectionTitleIcon" />
             {{ sectionTitle }}
           </span>
         </div>
@@ -58,6 +69,7 @@ const slots = useSlots()
 const props = defineProps({
   showSectionHasErrors: { type: Boolean, required: false, default: false },
   sectionTitle: { type: String, required: false, default: undefined },
+  sectionTitleIcon: { type: String, required: false, default: undefined },
 
   headerIconName: { type: String, required: false, default: undefined },
   headerTitle: { type: String, required: false, default: undefined },
@@ -68,8 +80,14 @@ const props = defineProps({
 
   border: { type: Boolean, required: false, default: false },
   noTopBorder: { type: Boolean, required: false, default: false },
-  noBotBorder: { type: Boolean, required: false, default: false }
+  noBotBorder: { type: Boolean, required: false, default: false },
+  paddedX: { type: Boolean, required: false, default: true },
+  paddedY: { type: Boolean, required: false, default: true }
 })
+
+const sectionTitleFull = computed(
+  () => typeof props.sectionTitleIcon === 'string' && props.sectionTitleIcon !== ''
+)
 
 const showHeader = computed(
   () => !!slots['header-content'] || !!props.headerIconName || !!props.headerTitle || !!props.headerText

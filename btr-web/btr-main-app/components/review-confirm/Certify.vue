@@ -1,7 +1,7 @@
 <template>
-  <div class="mt-5 p-10 bg-white rounded flex">
-    <label class="font-bold w-[200px]">{{ $t('texts.certify.certification') }}</label>
-    <div class="ml-20">
+  <div class="mt-5 bg-white rounded flex">
+    <label v-if="showLabel" class="font-bold w-[200px]">{{ $t('texts.certify.certification') }}</label>
+    <div :class="showLabel ? 'ml-20' : ''">
       <div>
         <UCheckbox
           v-model="certified"
@@ -15,7 +15,7 @@
               <div>
                 <span>{{ $t('texts.certify.part1') }}</span>
                 <span class="font-bold">{{ name.toUpperCase() }}</span>
-                <span>{{ $t('texts.certify.part2') }}</span>
+                <span>{{ part2Text ? part2Text : $t('texts.certify.part2') }}</span>
               </div>
               <br>
               <div>
@@ -38,7 +38,9 @@
 defineEmits<(e: 'update:modelValue', value: boolean) => void>()
 defineProps({
   name: { type: String, required: true, default: 'name' },
-  modelValue: { type: Boolean, required: true, default: false }
+  modelValue: { type: Boolean, required: true, default: false },
+  part2Text: { type: String, required: false, default: '' },
+  showLabel: { type: Boolean, required: false, default: true }
 })
 
 let date = ''

@@ -1,6 +1,11 @@
 import type { RouterConfig } from '@nuxt/schema'
 import { RouteNameE } from '../enums/route-name-e'
-import { getBusinessDashboardCrumb, getBusinessNameCrumb, getMyRegDetailsCrumb } from '~/utils/breadcrumbs'
+import {
+  getBusinessDashboardCrumb,
+  getBusinessNameCrumb,
+  getMyRegDetailsCrumb,
+  getRequestOmitCrumb
+} from '~/utils/breadcrumbs'
 
 export default <RouterConfig> {
   // https://router.vuejs.org/api/interfaces/routeroptions.html#routes
@@ -41,6 +46,16 @@ export default <RouterConfig> {
           rightButtons: [getSIChangeBack, getSIChangeSubmit]
         },
         layout: 'business'
+      }
+    },
+    {
+      name: RouteNameE.REQUEST_OMIT,
+      path: '/request-to-omit',
+      component: () => import('~/pages/requestToOmit.vue').then(r => r.default || r),
+      meta: {
+        breadcrumbs: [getBcrosHomeDashboardCrumb, getRequestOmitCrumb],
+        layout: 'default',
+        title: 'Request to Omit Information'
       }
     },
     {
