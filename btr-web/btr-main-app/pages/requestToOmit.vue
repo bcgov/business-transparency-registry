@@ -49,9 +49,9 @@ async function handleDoneButtonClick () {
       <BcrosCompletingParty ref="cpRef" v-model="omitIndividual.completingParty" />
     </BcrosSection>
 
-    <div class="mt-5 w-full max-w-[1360px] mb-5 h-[46px]">
+    <div class="mt-5 w-full mb-5 flex justify-end">
       <UButton
-        class="px-10 py-3 float-right"
+        class="px-10 py-3"
         label="Submit"
         color="primary"
         variant="solid"
