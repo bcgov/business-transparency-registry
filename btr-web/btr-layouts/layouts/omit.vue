@@ -1,8 +1,8 @@
 <template>
-  <div data-cy="default-layout">
+  <div data-cy="omit-layout">
     <BcrosHeader />
     <BcrosBreadcrumb v-if="crumbConstructors.length > 0" :crumb-constructors="crumbConstructors" />
-    <div class="mx-auto px-4 w-full max-w-[787px]">
+    <div class="px-4 w-full max-w-[787px]">
       <slot />
     </div>
     <BcrosButtonControl
