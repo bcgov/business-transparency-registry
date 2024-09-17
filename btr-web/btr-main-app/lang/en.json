@@ -214,7 +214,8 @@
       "part1": "I, ",
       "part2": ", certify that I have relevant knowledge of this BC Benefit Company and that I am authorized to make this filing.",
       "date": "Date: ",
-      "note": "Note: It is an offence to make a false or misleading statement in respect of a material fact in a record submitted to the Corporate Registry for filing. See section 427 of the Business Corporations Act."
+      "note": "Note: It is an offence to make a false or misleading statement in respect of a material fact in a record submitted to the Corporate Registry for filing. See section 427 of the Business Corporations Act.",
+      "noteAlt": "Note: It is an offence to make a false or misleading statement in respect of a material fact in a record submitted to the Transparency Registry Filing. See section 427 of the Business Corporations Act."
     }
   },
   "placeholder": {
