@@ -53,7 +53,7 @@ describe('pages -> Request To Omit', () => {
     cy.contains(i18nCommon.errors.validation.email.empty).should('not.exist')
 
     cy.contains(i18n.errors.validation.certify).should('not.exist')
-    cy.get('[data-cy="new-omit-done-btn"]').click()
+    cy.get('[data-cy="button-control-right-button"]').click()
     cy.contains(i18n.errors.validation.certify).should('exist')
     cy.get('[name="certification"]').click()
     cy.contains(i18n.errors.validation.certify).should('not.exist')
