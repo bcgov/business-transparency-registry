@@ -65,7 +65,9 @@ def registers():  # pylint: disable=redefined-builtin
                 # NOTE: below is temporary for testing (not sure what will trigger this or how yet)
                 test_minor_person = submission.payload['personStatements'][0]
                 if test_minor_person['email']:
-                    btr_email.send_updating_minor_btr_email(submission.payload['personStatements'][0], business_info, token)
+                    btr_email.send_updating_minor_btr_email(submission.payload['personStatements'][0],
+                                                            business_info,
+                                                            token)
 
                 return {}, HTTPStatus.ACCEPTED
 

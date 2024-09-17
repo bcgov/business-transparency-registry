@@ -45,7 +45,6 @@ from jinja2 import Template
 
 from btr_api.enums import EmailType
 from btr_api.exceptions import BusinessException
-from btr_api.models import Submission
 from btr_api.utils.legislation_datetime import LegislationDatetime
 from btr_api.utils.person_stmnt_helpers import get_citizenship_public_desc, get_name
 

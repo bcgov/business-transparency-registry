@@ -165,7 +165,7 @@ def create_register():
             # Log error and continue to return successfully (does NOT block the submission)
             current_app.logger.info(err.error)
             current_app.logger.error('Error updating search record for submission: %s', submission.id)
-        
+
         try:
             # NOTE: will be moved to person or ownership table @event.listens_for after_insert #23291
             # send emails out to newly added people
@@ -261,7 +261,7 @@ def update_submission(sub_id: int):
                 # Log error and continue to return successfully (does NOT block the submission)
                 current_app.logger.info(err.error)
                 current_app.logger.error('Error updating search records for submission: %s', submission.id)
-            
+
             try:
                 # NOTE: will be moved to person or ownership table @event.listens_for after_insert #23291
                 # send emails out to newly added people
@@ -276,7 +276,6 @@ def update_submission(sub_id: int):
                     # NOTE: unable to confirm information people may not have an email entered
                     if person['uuid'] not in existing_people and person.get('email'):
                         btr_email.send_added_to_btr_email(person, business_info, submission.effective_date, token)
-                
 
             except (BusinessException, ExternalServiceException) as err:
                 # Log error and continue to return successfully (does NOT block the submission)
