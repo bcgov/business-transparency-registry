@@ -170,7 +170,7 @@ class Testing(Config):  # pylint: disable=too-few-public-methods
     PAYMENT_SVC_URL = 'https://test-pay-url'
     LEGAL_SVC_URL = 'https://test-legal-url'
     BOR_SVC_URL = 'https://test-bor-url'
-    NOTIFY_API_URL = 'https://test-notify-api-url'
+    NOTIFY_SVC_URL = 'https://test-notify-api-url'
 
     SSO_SVC_TOKEN_URL = 'https://test-token-url'
     SVC_ACC_CLIENT_ID = 'service-account'
