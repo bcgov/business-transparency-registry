@@ -1,64 +1,828 @@
 SUBMISSION_DICT = {
-    'businessIdentifier': 'BC1234567',
-    'effectiveDate': '2023-12-31',
-    'entityStatement': {
-        "statementID": "1234qwe423",
-        "statementType": "entityStatement",
-        "statementDate": "1999-04-11",
-        "isComponent": False,
-        "entityType": "registeredEntity",
-        "name": "Test Entity",
+    "businessIdentifier": "BC1230113",
+    "effectiveDate": "2024-09-16",
+    "entityStatement": {
+        "entityType": "legalEntity",
         "identifiers": [],
+        "isComponent": False,
+        "name": "1230113 B.C. LTD.",
+        "publicationDetails": {
+            "bodsVersion": "0.3",
+            "publicationDate": "2024-09-16",
+            "publisher": {
+                "name": "BCROS - BC Registries and Online Services",
+                "url": "https://www.bcregistry.gov.bc.ca/"
+            }
+        },
+        "source": {
+            "assertedBy": [
+                {
+                    "name": "BCROS - BC Registries and Online Services",
+                    "uri": "https://www.bcregistry.gov.bc.ca/"
+                }
+            ],
+            "retrievedAt": "2024-09-16T14:04:11.646Z",
+            "type": [
+                "officialRegister",
+                "verified"
+            ]
+        },
+        "statementDate": "2024-09-16",
+        "statementID": "8ec1160a-48e3-4906-a5bc-881c76ab15dc",
+        "statementType": "entityStatement"
     },
-    "personStatements": [
-        {
-            "statementID": "0987rncn99",
-            "statementType": "personStatement",
-            "statementDate": "2020-09-05",
-            "isComponent": False,
-            "personType": "knownPerson",
-            "names": [{"type": "individual", "fullName": "Full Name"}],
-            "hasTaxNumber": True,
-            "email": "test@test.gov.bc.ca",
-            "nationalities": [{"name": "Canada", "code": "CA"}],
-        }
-    ],
+    "noSignificantIndividualsExist": False,
     "ownershipOrControlStatements": [
         {
-            "statementID": "12342djmce3",
-            "statementType": "ownershipOrControlStatement",
-            "statementDate": "2021-10-13",
-            "isComponent": False,
-            "subject": {
-                "describedByEntityStatement": "1234qwe423"
-            },
             "interestedParty": {
-                "describedByPersonStatement": "0987rncn99"
+                "describedByPersonStatement": "adc8e916-d5f1-4ebb-b27d-e2f660f44a6d"
             },
             "interests": [
                 {
-                    "type": "otherInfluenceOrControl",
+                    "details": "controlType.shares.beneficialOwner",
                     "directOrIndirect": "direct",
-                    "beneficialOwnershipOrControl": True,
-                    "details": "",
-                    "share": {"exact": 27},
-                    "startDate": "2021-02-01"
+                    "share": {
+                        "exclusiveMaximum": False,
+                        "exclusiveMinimum": False,
+                        "maximum": 50,
+                        "minimum": 25
+                    },
+                    "startDate": "2014-11-07",
+                    "type": "shareholding"
                 },
                 {
-                    "type": "shareholding",
-                    "directOrIndirect": "unknown",
-                    "beneficialOwnershipOrControl": True,
-                    "details": "SharesThroughRightsOrExercisedInConcert",
-                    "startDate": "2021-01-01"
+                    "details": "controlType.shares.registeredOwner",
+                    "directOrIndirect": "direct",
+                    "share": {
+                        "exclusiveMaximum": False,
+                        "exclusiveMinimum": False,
+                        "maximum": 50,
+                        "minimum": 25
+                    },
+                    "startDate": "2014-11-07",
+                    "type": "shareholding"
                 },
                 {
-                    "type": "appointmentOfBoard",
+                    "details": "controlType.votes.beneficialOwner",
                     "directOrIndirect": "direct",
-                    "beneficialOwnershipOrControl": True,
-                    "details": "",
-                    "startDate": "2021-01-05"
+                    "share": {
+                        "exclusiveMaximum": False,
+                        "exclusiveMinimum": True,
+                        "maximum": 75,
+                        "minimum": 50
+                    },
+                    "startDate": "2014-11-07",
+                    "type": "votingRights"
+                },
+                {
+                    "details": "controlType.directors.directControl",
+                    "directOrIndirect": "direct",
+                    "startDate": "2014-11-07",
+                    "type": "appointmentOfBoard"
+                },
+                {
+                    "details": "another reason",
+                    "startDate": "2014-11-07",
+                    "type": "otherInfluenceOrControl"
                 }
-            ]
+            ],
+            "isComponent": False,
+            "publicationDetails": {
+                "bodsVersion": "0.3",
+                "publicationDate": "2024-09-11",
+                "publisher": {
+                    "name": "BCROS - BC Registries and Online Services",
+                    "url": "https://www.bcregistry.gov.bc.ca/"
+                }
+            },
+            "source": {
+                "assertedBy": [
+                    {
+                        "name": "Waffles Butter"
+                    }
+                ],
+                "description": "Using Gov BC - BTR - Web UI",
+                "type": [
+                    "selfDeclaration"
+                ]
+            },
+            "statementDate": "2024-09-11",
+            "statementID": "76f237fb-6311-429d-8d74-80f2c0c4f8f8",
+            "statementType": "ownershipOrControlStatement",
+            "subject": {
+                "describedByEntityStatement": ""
+            }
+        },
+        {
+            "interestedParty": {
+                "describedByPersonStatement": "3eddc48d-a052-4826-b865-8b640af9f753"
+            },
+            "interests": [
+                {
+                    "details": "controlType.shares.indirectControl",
+                    "directOrIndirect": "indirect",
+                    "share": {
+                        "exclusiveMaximum": False,
+                        "exclusiveMinimum": False,
+                        "maximum": 50,
+                        "minimum": 25
+                    },
+                    "startDate": "2019-09-19",
+                    "type": "shareholding"
+                },
+                {
+                    "details": "controlType.votes.registeredOwner",
+                    "directOrIndirect": "direct",
+                    "share": {
+                        "exclusiveMaximum": False,
+                        "exclusiveMinimum": False,
+                        "maximum": 50,
+                        "minimum": 25
+                    },
+                    "startDate": "2019-09-19",
+                    "type": "votingRights"
+                },
+                {
+                    "details": "controlType.directors.significantInfluence",
+                    "directOrIndirect": "indirect",
+                    "startDate": "2019-09-19",
+                    "type": "appointmentOfBoard"
+                },
+                {
+                    "details": "Reason",
+                    "startDate": "2019-09-19",
+                    "type": "otherInfluenceOrControl"
+                }
+            ],
+            "isComponent": False,
+            "publicationDetails": {
+                "bodsVersion": "0.3",
+                "publicationDate": "2024-09-11",
+                "publisher": {
+                    "name": "BCROS - BC Registries and Online Services",
+                    "url": "https://www.bcregistry.gov.bc.ca/"
+                }
+            },
+            "source": {
+                "assertedBy": [
+                    {
+                        "name": "Waffles Butter"
+                    }
+                ],
+                "description": "Using Gov BC - BTR - Web UI",
+                "type": [
+                    "selfDeclaration"
+                ]
+            },
+            "statementDate": "2024-09-11",
+            "statementID": "0cd13fd9-db64-4323-b125-7cfbf71b93bf",
+            "statementType": "ownershipOrControlStatement",
+            "subject": {
+                "describedByEntityStatement": ""
+            }
+        },
+        {
+            "interestedParty": {
+                "describedByPersonStatement": "d19bec8b-7eee-46e7-81f0-f6c2e977c308"
+            },
+            "interests": [
+                {
+                    "details": "controlType.shares.indirectControl",
+                    "directOrIndirect": "indirect",
+                    "share": {
+                        "exclusiveMaximum": True,
+                        "exclusiveMinimum": False,
+                        "maximum": 25,
+                        "minimum": 0
+                    },
+                    "startDate": "2021-09-07",
+                    "type": "shareholding"
+                },
+                {
+                    "details": "controlType.directors.indirectControl",
+                    "directOrIndirect": "indirect",
+                    "startDate": "2021-09-07",
+                    "type": "appointmentOfBoard"
+                }
+            ],
+            "isComponent": False,
+            "publicationDetails": {
+                "bodsVersion": "0.3",
+                "publicationDate": "2024-09-11",
+                "publisher": {
+                    "name": "BCROS - BC Registries and Online Services",
+                    "url": "https://www.bcregistry.gov.bc.ca/"
+                }
+            },
+            "source": {
+                "assertedBy": [
+                    {
+                        "name": "Waffles Butter"
+                    }
+                ],
+                "description": "Using Gov BC - BTR - Web UI",
+                "type": [
+                    "selfDeclaration"
+                ]
+            },
+            "statementDate": "2024-09-11",
+            "statementID": "3d960654-c1e2-4e8c-863f-9c0b6223055b",
+            "statementType": "ownershipOrControlStatement",
+            "subject": {
+                "describedByEntityStatement": ""
+            }
+        },
+        {
+            "interestedParty": {
+                "describedByPersonStatement": "eeb415d1-3e68-4e15-87b0-b6b2e3287724"
+            },
+            "interests": [
+                {
+                    "details": "controlType.shares.beneficialOwner",
+                    "directOrIndirect": "direct",
+                    "share": {
+                        "exclusiveMaximum": False,
+                        "exclusiveMinimum": False,
+                        "maximum": 50,
+                        "minimum": 25
+                    },
+                    "startDate": "2014-11-07",
+                    "type": "shareholding"
+                },
+                {
+                    "details": "controlType.shares.registeredOwner",
+                    "directOrIndirect": "direct",
+                    "share": {
+                        "exclusiveMaximum": False,
+                        "exclusiveMinimum": False,
+                        "maximum": 50,
+                        "minimum": 25
+                    },
+                    "startDate": "2014-11-07",
+                    "type": "shareholding"
+                },
+                {
+                    "details": "controlType.votes.beneficialOwner",
+                    "directOrIndirect": "direct",
+                    "share": {
+                        "exclusiveMaximum": False,
+                        "exclusiveMinimum": True,
+                        "maximum": 75,
+                        "minimum": 50
+                    },
+                    "startDate": "2014-11-07",
+                    "type": "votingRights"
+                }
+            ],
+            "isComponent": False,
+            "publicationDetails": {
+                "bodsVersion": "0.3",
+                "publicationDate": "2024-09-11",
+                "publisher": {
+                    "name": "BCROS - BC Registries and Online Services",
+                    "url": "https://www.bcregistry.gov.bc.ca/"
+                }
+            },
+            "source": {
+                "assertedBy": [
+                    {
+                        "name": "Kial Jinnah"
+                    }
+                ],
+                "description": "Using Gov BC - BTR - Web UI",
+                "type": [
+                    "selfDeclaration"
+                ]
+            },
+            "statementDate": "2024-09-11",
+            "statementID": "f5dcfa9b-9bf9-4f91-a7c9-dfc0641f0114",
+            "statementType": "ownershipOrControlStatement",
+            "subject": {
+                "describedByEntityStatement": ""
+            }
+        },
+        {
+            "interestedParty": {
+                "describedByPersonStatement": "1199dc30-6cd8-47fa-be79-f057348ab36b"
+            },
+            "interests": [
+                {
+                    "details": "controlType.shares.beneficialOwner",
+                    "directOrIndirect": "direct",
+                    "share": {
+                        "exclusiveMaximum": False,
+                        "exclusiveMinimum": False,
+                        "maximum": 50,
+                        "minimum": 25
+                    },
+                    "startDate": "2014-11-07",
+                    "type": "shareholding"
+                },
+                {
+                    "details": "controlType.shares.registeredOwner",
+                    "directOrIndirect": "direct",
+                    "share": {
+                        "exclusiveMaximum": False,
+                        "exclusiveMinimum": False,
+                        "maximum": 50,
+                        "minimum": 25
+                    },
+                    "startDate": "2014-11-07",
+                    "type": "shareholding"
+                },
+                {
+                    "details": "controlType.votes.beneficialOwner",
+                    "directOrIndirect": "direct",
+                    "share": {
+                        "exclusiveMaximum": False,
+                        "exclusiveMinimum": True,
+                        "maximum": 75,
+                        "minimum": 50
+                    },
+                    "startDate": "2014-11-07",
+                    "type": "votingRights"
+                }
+            ],
+            "isComponent": False,
+            "publicationDetails": {
+                "bodsVersion": "0.3",
+                "publicationDate": "2024-09-11",
+                "publisher": {
+                    "name": "BCROS - BC Registries and Online Services",
+                    "url": "https://www.bcregistry.gov.bc.ca/"
+                }
+            },
+            "source": {
+                "assertedBy": [
+                    {
+                        "name": "Kial Jinnah"
+                    }
+                ],
+                "description": "Using Gov BC - BTR - Web UI",
+                "type": [
+                    "selfDeclaration"
+                ]
+            },
+            "statementDate": "2024-09-11",
+            "statementID": "6c08495f-c9d7-4c85-8d4f-8ed7c108fe3d",
+            "statementType": "ownershipOrControlStatement",
+            "subject": {
+                "describedByEntityStatement": ""
+            }
+        },
+        {
+            "interestedParty": {
+                "describedByPersonStatement": "94444c8b-7c9f-4dd6-ae4a-1a748ce08e67"
+            },
+            "interests": [
+                {
+                    "details": "controlType.shares.indirectControl",
+                    "directOrIndirect": "indirect",
+                    "share": {
+                        "exclusiveMaximum": False,
+                        "exclusiveMinimum": False,
+                        "maximum": 50,
+                        "minimum": 25
+                    },
+                    "startDate": "2019-09-19",
+                    "type": "shareholding"
+                },
+                {
+                    "details": "controlType.votes.registeredOwner",
+                    "directOrIndirect": "direct",
+                    "share": {
+                        "exclusiveMaximum": False,
+                        "exclusiveMinimum": False,
+                        "maximum": 50,
+                        "minimum": 25
+                    },
+                    "startDate": "2019-09-19",
+                    "type": "votingRights"
+                }
+            ],
+            "isComponent": False,
+            "publicationDetails": {
+                "bodsVersion": "0.3",
+                "publicationDate": "2024-09-12",
+                "publisher": {
+                    "name": "BCROS - BC Registries and Online Services",
+                    "url": "https://www.bcregistry.gov.bc.ca/"
+                }
+            },
+            "source": {
+                "assertedBy": [
+                    {
+                        "name": "Waffles Butter"
+                    }
+                ],
+                "description": "Using Gov BC - BTR - Web UI",
+                "type": [
+                    "selfDeclaration"
+                ]
+            },
+            "statementDate": "2024-09-12",
+            "statementID": "d51b1744-15ef-46aa-93f6-9607d29ecce5",
+            "statementType": "ownershipOrControlStatement",
+            "subject": {
+                "describedByEntityStatement": ""
+            }
+        },
+        {
+            "interestedParty": {
+                "describedByPersonStatement": "ce935e86-f4b9-4938-b12e-29c5e5cc213d"
+            },
+            "interests": [
+                {
+                    "details": "controlType.shares.indirectControl",
+                    "directOrIndirect": "indirect",
+                    "share": {
+                        "exclusiveMaximum": True,
+                        "exclusiveMinimum": False,
+                        "maximum": 25,
+                        "minimum": 0
+                    },
+                    "startDate": "2021-09-07",
+                    "type": "shareholding"
+                }
+            ],
+            "isComponent": False,
+            "publicationDetails": {
+                "bodsVersion": "0.3",
+                "publicationDate": "2024-09-12",
+                "publisher": {
+                    "name": "BCROS - BC Registries and Online Services",
+                    "url": "https://www.bcregistry.gov.bc.ca/"
+                }
+            },
+            "source": {
+                "assertedBy": [
+                    {
+                        "name": "Waffles Butter"
+                    }
+                ],
+                "description": "Using Gov BC - BTR - Web UI",
+                "type": [
+                    "selfDeclaration"
+                ]
+            },
+            "statementDate": "2024-09-12",
+            "statementID": "f4d9f29b-559b-4353-9bd4-89ada5ae5209",
+            "statementType": "ownershipOrControlStatement",
+            "subject": {
+                "describedByEntityStatement": ""
+            }
+        },
+        {
+            "interestedParty": {
+                "describedByPersonStatement": "3434139e-ad4b-44a3-884a-1a199db8ad6f"
+            },
+            "interests": [
+                {
+                    "details": "controlType.shares.indirectControl",
+                    "directOrIndirect": "indirect",
+                    "share": {
+                        "exclusiveMaximum": False,
+                        "exclusiveMinimum": False,
+                        "maximum": 50,
+                        "minimum": 25
+                    },
+                    "startDate": "2019-09-19",
+                    "type": "shareholding"
+                },
+                {
+                    "details": "controlType.votes.registeredOwner",
+                    "directOrIndirect": "direct",
+                    "share": {
+                        "exclusiveMaximum": False,
+                        "exclusiveMinimum": False,
+                        "maximum": 50,
+                        "minimum": 25
+                    },
+                    "startDate": "2019-09-19",
+                    "type": "votingRights"
+                }
+            ],
+            "isComponent": False,
+            "publicationDetails": {
+                "bodsVersion": "0.3",
+                "publicationDate": "2024-09-12",
+                "publisher": {
+                    "name": "BCROS - BC Registries and Online Services",
+                    "url": "https://www.bcregistry.gov.bc.ca/"
+                }
+            },
+            "source": {
+                "assertedBy": [
+                    {
+                        "name": "Wallaby Willow"
+                    }
+                ],
+                "description": "Using Gov BC - BTR - Web UI",
+                "type": [
+                    "selfDeclaration"
+                ]
+            },
+            "statementDate": "2024-09-12",
+            "statementID": "d4875026-b3fd-417c-8831-bd9d3595b0b0",
+            "statementType": "ownershipOrControlStatement",
+            "subject": {
+                "describedByEntityStatement": ""
+            }
+        },
+        {
+            "interestedParty": {
+                "describedByPersonStatement": "4b7863a1-4fbf-42a5-afe8-8f4a4f3ca049"
+            },
+            "interests": [
+                {
+                    "details": "controlType.shares.indirectControl",
+                    "directOrIndirect": "indirect",
+                    "share": {
+                        "exclusiveMaximum": False,
+                        "exclusiveMinimum": False,
+                        "maximum": 50,
+                        "minimum": 25
+                    },
+                    "startDate": "2019-09-19",
+                    "type": "shareholding"
+                },
+                {
+                    "details": "controlType.votes.registeredOwner",
+                    "directOrIndirect": "direct",
+                    "share": {
+                        "exclusiveMaximum": False,
+                        "exclusiveMinimum": False,
+                        "maximum": 50,
+                        "minimum": 25
+                    },
+                    "startDate": "2019-09-19",
+                    "type": "votingRights"
+                }
+            ],
+            "isComponent": False,
+            "publicationDetails": {
+                "bodsVersion": "0.3",
+                "publicationDate": "2024-09-16",
+                "publisher": {
+                    "name": "BCROS - BC Registries and Online Services",
+                    "url": "https://www.bcregistry.gov.bc.ca/"
+                }
+            },
+            "source": {
+                "assertedBy": [
+                    {
+                        "name": "Wallaby Willow"
+                    }
+                ],
+                "description": "Using Gov BC - BTR - Web UI",
+                "type": [
+                    "selfDeclaration"
+                ]
+            },
+            "statementDate": "2024-09-16",
+            "statementID": "aef71bd1-8c64-4fff-a2d5-9a25b450745d",
+            "statementType": "ownershipOrControlStatement",
+            "subject": {
+                "describedByEntityStatement": ""
+            }
+        }
+    ],
+    "personStatements": [
+        {
+            "addresses": [
+                {
+                    "city": "Edmonton",
+                    "country": "CA",
+                    "countryName": "Canada",
+                    "postalCode": "T6T 1B6",
+                    "region": "AB",
+                    "street": "4323 33 St NW",
+                    "streetAdditional": ""
+                }
+            ],
+            "birthDate": "2014-11-07",
+            "email": "kial@daxiom.com",
+            "hasTaxNumber": True,
+            "identifiers": [
+                {
+                    "id": "711 612 325",
+                    "scheme": "CAN-TAXID",
+                    "schemeName": "ITN"
+                }
+            ],
+            "isComponent": False,
+            "isPermanentResidentCa": False,
+            "names": [
+                {
+                    "fullName": "Kial Jinnah",
+                    "type": "individual"
+                }
+            ],
+            "nationalities": [
+                {
+                    "code": "CA",
+                    "name": "Canada"
+                }
+            ],
+            "personType": "knownPerson",
+            "phoneNumber": {
+                "countryCallingCode": "1",
+                "countryCode2letterIso": "CA",
+                "number": "7783888844"
+            },
+            "placeOfResidence": {
+                "city": "Edmonton",
+                "country": "CA",
+                "countryName": "Canada",
+                "postalCode": "T6T 1B6",
+                "region": "AB",
+                "street": "4323 33 St NW",
+                "streetAdditional": ""
+            },
+            "publicationDetails": {
+                "bodsVersion": "0.3",
+                "publicationDate": "2024-09-11",
+                "publisher": {
+                    "name": "BCROS - BC Registries and Online Services",
+                    "url": "https://www.bcregistry.gov.bc.ca/"
+                }
+            },
+            "source": {
+                "assertedBy": [
+                    {
+                        "name": "Kial Jinnah"
+                    }
+                ],
+                "description": "Using Gov BC - BTR - Web UI",
+                "type": [
+                    "selfDeclaration"
+                ]
+            },
+            "statementDate": "2024-09-11",
+            "statementID": "1199dc30-6cd8-47fa-be79-f057348ab36b",
+            "statementType": "personStatement",
+            "taxResidencies": [
+                {
+                    "code": "CA",
+                    "name": "Canada"
+                }
+            ],
+            "uuid": "a4b3844a-f68b-4092-b490-85a603f6d424"
+        },
+        {
+            "addresses": [
+                {
+                    "city": "Vancouver",
+                    "country": "CA",
+                    "countryName": "Canada",
+                    "postalCode": "V6H 2T8",
+                    "region": "BC",
+                    "street": "Th-3023 Birch St",
+                    "streetAdditional": ""
+                }
+            ],
+            "birthDate": "2000-02-02",
+            "email": "kial@daxiom.com",
+            "hasTaxNumber": True,
+            "identifiers": [
+                {
+                    "id": "402 931 299",
+                    "scheme": "CAN-TAXID",
+                    "schemeName": "ITN"
+                }
+            ],
+            "isComponent": False,
+            "isPermanentResidentCa": True,
+            "names": [
+                {
+                    "fullName": "Wallaby Willow",
+                    "type": "individual"
+                }
+            ],
+            "nationalities": [
+                {
+                    "code": "AL",
+                    "name": "Albania"
+                },
+                {
+                    "code": "BZ",
+                    "name": "Belize"
+                }
+            ],
+            "personType": "knownPerson",
+            "phoneNumber": {
+                "countryCallingCode": "1",
+                "countryCode2letterIso": "CA",
+                "number": "2508747772"
+            },
+            "placeOfResidence": {
+                "city": "Vancouver",
+                "country": "CA",
+                "countryName": "Canada",
+                "postalCode": "V6H 2T8",
+                "region": "BC",
+                "street": "Th-3023 Birch St",
+                "streetAdditional": ""
+            },
+            "publicationDetails": {
+                "bodsVersion": "0.3",
+                "publicationDate": "2024-09-16",
+                "publisher": {
+                    "name": "BCROS - BC Registries and Online Services",
+                    "url": "https://www.bcregistry.gov.bc.ca/"
+                }
+            },
+            "source": {
+                "assertedBy": [
+                    {
+                        "name": "Wallaby Willow"
+                    }
+                ],
+                "description": "Using Gov BC - BTR - Web UI",
+                "type": [
+                    "selfDeclaration"
+                ]
+            },
+            "statementDate": "2024-09-16",
+            "statementID": "4b7863a1-4fbf-42a5-afe8-8f4a4f3ca049",
+            "statementType": "personStatement",
+            "taxResidencies": [
+                {
+                    "code": "CA",
+                    "name": "Canada"
+                }
+            ],
+            "uuid": "1a825cce-a3fa-47b2-b8c3-e2fae40ac7df"
+        },
+        {
+            "addresses": [
+                {
+                    "city": "Longueuil",
+                    "country": "CA",
+                    "countryName": "Canada",
+                    "postalCode": "J4H 3X9",
+                    "region": "QC",
+                    "street": "433-405 Ch De Chambly",
+                    "streetAdditional": ""
+                }
+            ],
+            "birthDate": "2005-09-13",
+            "email": "kial@daxiom.com",
+            "hasTaxNumber": False,
+            "identifiers": [],
+            "isComponent": False,
+            "isPermanentResidentCa": False,
+            "names": [
+                {
+                    "fullName": "Waffles Butter",
+                    "type": "individual"
+                }
+            ],
+            "nationalities": [
+                {
+                    "code": "US",
+                    "name": "United States"
+                }
+            ],
+            "personType": "knownPerson",
+            "phoneNumber": {
+                "countryCallingCode": "1",
+                "countryCode2letterIso": "CA",
+                "number": "7784467467"
+            },
+            "placeOfResidence": {
+                "city": "Longueuil",
+                "country": "CA",
+                "countryName": "Canada",
+                "postalCode": "J4H 3X9",
+                "region": "QC",
+                "street": "433-405 Ch De Chambly",
+                "streetAdditional": ""
+            },
+            "publicationDetails": {
+                "bodsVersion": "0.3",
+                "publicationDate": "2024-09-12",
+                "publisher": {
+                    "name": "BCROS - BC Registries and Online Services",
+                    "url": "https://www.bcregistry.gov.bc.ca/"
+                }
+            },
+            "source": {
+                "assertedBy": [
+                    {
+                        "name": "Waffles Butter"
+                    }
+                ],
+                "description": "Using Gov BC - BTR - Web UI",
+                "type": [
+                    "selfDeclaration"
+                ]
+            },
+            "statementDate": "2024-09-12",
+            "statementID": "ce935e86-f4b9-4938-b12e-29c5e5cc213d",
+            "statementType": "personStatement",
+            "taxResidencies": [],
+            "uuid": "839e35b8-d536-42e6-82ba-ba3c5a13582d"
         }
     ]
 }

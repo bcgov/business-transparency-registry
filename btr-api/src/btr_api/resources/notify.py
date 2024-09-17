@@ -57,9 +57,16 @@ def registers():  # pylint: disable=redefined-builtin
                 business_info = {**business, **delivery_address, 'contact': {**business_contact}}
                 submission = Submission.find_by_business_identifier(business_identifier)
 
-                btr_email.send_added_to_btr_emails(submission, business_info, token)
+                for person in submission.payload['personStatements']:
+                    # NOTE: unable to confirm information people may not have an email entered
+                    if person['email']:
+                        btr_email.send_added_to_btr_email(person, business_info, submission.effective_date, token)
+
                 # NOTE: below is temporary for testing (not sure what will trigger this or how yet)
-                btr_email.send_updating_minor_btr_email(submission.payload['personStatements'][0], business_info, token)
+                test_minor_person = submission.payload['personStatements'][0]
+                if test_minor_person['email']:
+                    btr_email.send_updating_minor_btr_email(submission.payload['personStatements'][0], business_info, token)
+
                 return {}, HTTPStatus.ACCEPTED
 
             return {}, HTTPStatus.NOT_FOUND

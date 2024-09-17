@@ -111,15 +111,12 @@ class SubmissionSerializer:
 
     @staticmethod
     def to_dict(submission: Submission) -> dict:
-        """Return the submission class as a dict."""
+        """Return the submission class as a dict for response purposes."""
 
         return {
             'id': submission.id,
             'type': submission.type.value,
-            'effective_date': submission.effective_date.isoformat() if submission.effective_date else None,
-            'submitted_datetime': submission.submitted_datetime.isoformat(),
+            'submittedDatetime': submission.submitted_datetime.isoformat(),
             'payload': submission.payload,
-            'business_identifier': submission.business_identifier,
-            'submitter_id': submission.submitter_id,
-            'submitted_payload': submission.submitted_payload
+            'submitterId': submission.submitter_id,
         }

@@ -2,10 +2,12 @@
 """
 import json
 import os
+from datetime import datetime
 from http import HTTPStatus
 
 import pytest
 import requests
+from dateutil.relativedelta import relativedelta
 from sqlalchemy import text
 
 from btr_api.enums import UserType
@@ -18,10 +20,11 @@ from btr_api.utils import redact_information
 from tests.unit import nested_session
 from tests.unit.utils import create_header
 
-mocked_entity_response = {'business': {'adminFreeze': False, 'state': 'ACTIVE'}}
+mocked_entity_response = {'business': {'adminFreeze': False, 'state': 'ACTIVE', 'legalName': 'Mocked Business', 'identifier': 'BC1234567'}}
 mocked_entity_address_response = {
-    'registeredOffice': {'deliveryAddress': {'addressCity': 'Vancouver', 'addressCountry': 'Canada'}}
+    'deliveryAddress': {'addressCity': 'Vancouver', 'addressCountry': 'Canada', 'streetAddress': 'Fake Street'}
 }
+mocked_auth_entity_contact_response = {'contacts':[{'email': 'business@email.com', 'phone': '123-456 7890'}]}
 
 helper_people = [
     {
@@ -55,6 +58,51 @@ helper_people = [
         'identifiers': [{'id': '999 555 444', 'scheme': 'CAN-TAXID', 'schemeName': 'ITN'}],
     }
 ]
+
+def verify_emails_sent(json_data: dict, email_mock) -> dict:
+    """Return the expected email dict to verify for the data given."""
+    expected_emails = {}
+    for person in json_data['personStatements']:
+        # should have been called once per person with email
+        if email := person.get('email'):
+            is_minor = (
+                person.get('birthDate') and
+                datetime.fromisoformat(json_data['effectiveDate']) - relativedelta(years=19) <
+                datetime.fromisoformat(person['birthDate'])
+            )
+            name = [x for x in person['names'] if x['type'] == 'individual'][0]['fullName']
+            # NOTE: for test simplicity expects unique emails per person
+            assert email not in expected_emails.keys()
+            expected_emails[email] = {'is_minor': is_minor, 'name': name, 'citizenship': person.get('nationalities'), 'birth': person.get('birthDate')}
+
+    assert email_mock.call_count == len(expected_emails.keys())
+    for email, expected in expected_emails.items():
+        email_verified = False
+        for email_sent in email_mock.request_history:
+            if email in email_sent.json()['recipients']:
+                # verify subject
+                assert email_sent.json()['content']['subject'] == 'You have been listed in the B.C. Transparency Register'
+                def verify_text_in_email(text: str):
+                    print(email_sent.json()['content']['body'])
+                    assert text in email_sent.json()['content']['body']
+
+                verify_text_in_email('has registered you as a significant individual in their Business Transparency Registry.')
+                verify_text_in_email(expected['name'])
+                if expected['birth']:
+                    verify_text_in_email(expected['birth'][0:4])
+                else:
+                    verify_text_in_email('Not Entered')
+
+                if expected['is_minor']:
+                    verify_text_in_email('Notification of B.C. Business Transparency Registry Filing')
+                    verify_text_in_email(expected['birth'])
+                else:
+                    verify_text_in_email('Notification that your B.C. Business Transparency Registry Filing Information will be public in 90 days')
+                email_verified = True
+                break
+        assert email_verified
+                
+    
 
 
 @pytest.mark.parametrize(
@@ -171,7 +219,8 @@ def test_post_plots_db_mocked(app, session, client, jwt, mocker, requests_mock):
     bor_api_mock = requests_mock.put(
         f"{app.config.get('BOR_SVC_URL')}/internal/solr/update", json={'message': 'Update accepted'}
     )
-
+    
+    email_mock = requests_mock.post(f"{app.config.get('NOTIFY_SVC_URL')}", json={})
     current_dir = os.path.dirname(__file__)
     mock_user_save = mocker.patch.object(UserModel, 'save')
     mock_submission_save = mocker.patch.object(SubmissionModel, 'save')
@@ -186,8 +235,13 @@ def test_post_plots_db_mocked(app, session, client, jwt, mocker, requests_mock):
         legal_api_entity_mock = requests_mock.get(
             f"{app.config.get('LEGAL_SVC_URL')}/businesses/{identifier}", json=mocked_entity_response
         )
-        legal_api_entity_addresses_mock = requests_mock.get(
-            f"{app.config.get('LEGAL_SVC_URL')}/businesses/{identifier}/addresses", json=mocked_entity_address_response
+        legal_api_delivery_address_mock = requests_mock.get(
+            f"{app.config.get('LEGAL_SVC_URL')}/businesses/{identifier}/addresses?addressType=deliveryAddress",
+            json=mocked_entity_address_response
+        )
+        auth_api_entity_contact_mock = requests_mock.get(
+            f"{app.config.get('AUTH_SVC_URL')}/entities/{identifier}",
+            json=mocked_auth_entity_contact_response
         )
 
         rv = client.post(
@@ -211,163 +265,69 @@ def test_post_plots_db_mocked(app, session, client, jwt, mocker, requests_mock):
     assert legal_api_entity_mock.called == True
     assert pay_api_mock.called == True
     assert auth_mock.called == True
-    assert legal_api_entity_addresses_mock.called == True
+    assert legal_api_delivery_address_mock.called == True
     assert bor_api_mock.called == True
+    assert auth_api_entity_contact_mock.called == True
+    assert email_mock.called == True
     assert pay_api_mock.request_history[0].json() == {
         'filingInfo': {'filingTypes': [{'filingTypeCode': 'REGSIGIN'}]},
         'businessInfo': {'corpType': 'BTR', 'businessIdentifier': json_data['businessIdentifier']},
         'details': [{'label': 'Incorporation Number: ', 'value': json_data['businessIdentifier']}],
     }
+    
     assert bor_api_mock.request_history[0].json() == {
         'business': {
-            'addresses': [mocked_entity_address_response['registeredOffice']['deliveryAddress']],
-            'adminFreeze': False,
-            'state': 'ACTIVE',
+            'addresses': [mocked_entity_address_response['deliveryAddress']],
+            **mocked_entity_response['business']
         },
         'owners': [
-            {
-                'interestedParty': {
-                    'describedByPersonStatement': 'bd4061d6-1a24-4356-93f3-c489b56610a4',
-                    'birthDate': '1980-06-13',
-                    'email': 'test@test.gov.bc.ca',
-                    'hasTaxNumber': True,
-                    'isComponent': False,
-                    'names': [{'fullName': 'Full1 Name1', 'type': 'individual'}],
-                    'nationalities': [{'code': 'CA', 'name': 'Canada'}],
-                    'personType': 'knownPerson',
-                    'publicationDetails': {
-                        'bodsVersion': '1.0',
-                        'publicationDate': '2022-12-31',
-                        'publisher': {
-                            'name': 'Publisher Name',
-                            'source': {'url': 'http://source.url'},
-                            'uri': 'http://publisher.uri',
-                        },
-                    },
-                    'source': {
-                        'asserted': '2023-02-18',
-                        'description': 'The description',
-                        'metadata': 'Metadata',
-                        'retrievedAt': '2023-02-28T23:17:17Z',
-                        'url': 'https://yourwebsite.com',
-                    },
-                    'statementDate': '2023-02-28',
-                    'statementID': 'bd4061d6-1a24-4356-93f3-c489b56610a4',
-                    'statementType': 'personStatement',
-                },
-                'interests': [
-                    {
-                        'beneficialOwnershipOrControl': True,
-                        'details': 'controlType.sharesOrVotes.registeredOwner',
-                        'directOrIndirect': 'unknown',
-                        'share': {'maximum': 75, 'minimum': 50},
-                        'startDate': '2023-03-01',
-                        'type': 'shareholding',
-                    },
-                    {
-                        'beneficialOwnershipOrControl': True,
-                        'details': '',
-                        'directOrIndirect': 'direct',
-                        'startDate': '2023-01-01',
-                        'type': 'appointmentOfBoard',
-                    },
-                ],
-                'isComponent': False,
-                'publicationDetails': {
-                    'bodsVersion': '1.0',
-                    'publicationDate': '2022-12-31',
-                    'publisher': {
-                        'name': 'Publisher Name',
-                        'source': {'url': 'http://source.url'},
-                        'uri': 'http://publisher.uri',
-                    },
-                },
-                'source': {
-                    'asserted': '2023-02-18',
-                    'description': 'The description',
-                    'metadata': 'Metadata',
-                    'retrievedAt': '2023-02-28T23:17:17Z',
-                    'url': 'https://yourwebsite.com',
-                },
-                'statementDate': '2023-02-28',
-                'statementID': 'bd4061d6-1a24-4356-93f3-c489b56610a3',
-                'statementType': 'ownershipOrControlStatement',
-                'subject': {'describedByEntityStatement': 'bd4061d6-1a24-4356-93f3-c489b56610a2'},
+            {'interestedParty': {'describedByPersonStatement': '1199dc30-6cd8-47fa-be79-f057348ab36b', 'addresses': [{'city': 'Edmonton', 'country': 'CA', 'countryName': 'Canada', 'postalCode': 'T6T 1B6', 'region': 'AB', 'street': '4323 33 St NW', 'streetAdditional': ''}], 'birthDate': '2023-11-07', 'email': 'fake@email.com', 'hasTaxNumber': True, 'identifiers': [{'id': '711 612 325', 'scheme': 'CAN-TAXID', 'schemeName': 'ITN'}], 'isComponent': False, 'isPermanentResidentCa': False, 'names': [{'fullName': 'Kial Jinnah', 'type': 'individual'}], 'nationalities': [{'code': 'CA', 'name': 'Canada'}], 'personType': 'knownPerson', 'phoneNumber': {'countryCallingCode': '1', 'countryCode2letterIso': 'CA', 'number': '7783888844'}, 'placeOfResidence': {'city': 'Edmonton', 'country': 'CA', 'countryName': 'Canada', 'postalCode': 'T6T 1B6', 'region': 'AB', 'street': '4323 33 St NW', 'streetAdditional': ''}, 'publicationDetails': {'bodsVersion': '0.3', 'publicationDate': '2024-09-11', 'publisher': {'name': 'BCROS - BC Registries and Online Services', 'url': 'https://www.bcregistry.gov.bc.ca/'}}, 'source': {'assertedBy': [{'name': 'Kial Jinnah'}], 'description': 'Using Gov BC - BTR - Web UI', 'type': ['selfDeclaration']}, 'statementDate': '2024-09-11', 'statementID': '1199dc30-6cd8-47fa-be79-f057348ab36b', 'statementType': 'personStatement', 'taxResidencies': [{'code': 'CA', 'name': 'Canada'}], 'uuid': 'a4b3844a-f68b-4092-b490-85a603f6d424'},
+             'interests': [{'details': 'controlType.shares.beneficialOwner', 'directOrIndirect': 'direct', 'share': {'exclusiveMaximum': False, 'exclusiveMinimum': False, 'maximum': 50, 'minimum': 25}, 'startDate': '2014-11-07', 'type': 'shareholding'}, {'details': 'controlType.shares.registeredOwner', 'directOrIndirect': 'direct', 'share': {'exclusiveMaximum': False, 'exclusiveMinimum': False, 'maximum': 50, 'minimum': 25}, 'startDate': '2014-11-07', 'type': 'shareholding'}, {'details': 'controlType.votes.beneficialOwner', 'directOrIndirect': 'direct', 'share': {'exclusiveMaximum': False, 'exclusiveMinimum': True, 'maximum': 75, 'minimum': 50}, 'startDate': '2014-11-07', 'type': 'votingRights'}],
+             'isComponent': False,
+             'publicationDetails': {'bodsVersion': '0.3', 'publicationDate': '2024-09-11', 'publisher': {'name': 'BCROS - BC Registries and Online Services', 'url': 'https://www.bcregistry.gov.bc.ca/'}},
+             'source': {'assertedBy': [{'name': 'Kial Jinnah'}], 'description': 'Using Gov BC - BTR - Web UI', 'type': ['selfDeclaration']},
+             'statementDate': '2024-09-11',
+             'statementID': '6c08495f-c9d7-4c85-8d4f-8ed7c108fe3d',
+             'statementType': 'ownershipOrControlStatement',
+             'subject': {'describedByEntityStatement': ''}
             },
-            {
-                'interestedParty': {
-                    'describedByPersonStatement': '123456ab123456ab123456ab123456ab123456ab123456ab123456ab1234',
-                    'birthDate': '1997-04-23',
-                    'email': 'test2@test2.gov.bc.ca',
-                    'hasTaxNumber': True,
-                    'isComponent': False,
-                    'names': [
-                        {'fullName': 'Full2 Name2', 'type': 'individual'},
-                        {'fullName': 'preffered2', 'type': 'alternative'},
-                    ],
-                    'nationalities': [{'code': 'FR', 'name': 'France'}],
-                    'personType': 'knownPerson',
-                    'publicationDetails': {
-                        'bodsVersion': '1.0',
-                        'publicationDate': '2022-12-31',
-                        'publisher': {
-                            'name': 'Publisher Name',
-                            'source': {'url': 'http://source.url'},
-                            'uri': 'http://publisher.uri',
-                        },
-                    },
-                    'source': {
-                        'asserted': '2023-02-18',
-                        'description': 'The description',
-                        'metadata': 'Metadata',
-                        'retrievedAt': '2023-02-28T23:17:17Z',
-                        'url': 'https://yourwebsite.com',
-                    },
-                    'statementDate': '2023-02-28',
-                    'statementID': '123456ab123456ab123456ab123456ab123456ab123456ab123456ab1234',
-                    'statementType': 'personStatement',
-                },
-                'interests': [
-                    {
-                        'beneficialOwnershipOrControl': True,
-                        'details': 'controlType.sharesOrVotes.beneficialOwner',
-                        'directOrIndirect': 'direct',
-                        'share': {'maximum': 50, 'minimum': 25},
-                        'startDate': '2023-03-01',
-                        'type': 'votingRights',
-                    },
-                    {
-                        'beneficialOwnershipOrControl': True,
-                        'details': '',
-                        'directOrIndirect': 'direct',
-                        'startDate': '2023-01-01',
-                        'type': 'appointmentOfBoard',
-                    },
-                ],
-                'isComponent': False,
-                'publicationDetails': {
-                    'bodsVersion': '1.0',
-                    'publicationDate': '2022-12-31',
-                    'publisher': {
-                        'name': 'Publisher Name',
-                        'source': {'url': 'http://source.url'},
-                        'uri': 'http://publisher.uri',
-                    },
-                },
-                'source': {
-                    'asserted': '2023-02-18',
-                    'description': 'The description',
-                    'metadata': 'Metadata',
-                    'retrievedAt': '2023-02-28T23:17:17Z',
-                    'url': 'https://yourwebsite.com',
-                },
-                'statementDate': '2023-02-28',
-                'statementID': '9876qw9876qw9876qw9876qw9876qw9876qw9876qw9876qw9876qw9876qw',
-                'statementType': 'ownershipOrControlStatement',
-                'subject': {'describedByEntityStatement': 'bd4061d6-1a24-4356-93f3-c489b56610a2'},
-            },
-        ],
+            {'interestedParty': {'describedByPersonStatement': 'ce935e86-f4b9-4938-b12e-29c5e5cc213d', 'addresses': [{'city': 'Longueuil', 'country': 'CA', 'countryName': 'Canada', 'postalCode': 'J4H 3X9', 'region': 'QC', 'street': '433-405 Ch De Chambly', 'streetAdditional': ''}], 'birthDate': '2005-09-13', 'email': 'fake3@email.com', 'hasTaxNumber': False, 'identifiers': [], 'isComponent': False, 'isPermanentResidentCa': False, 'names': [{'fullName': 'Waffles Butter', 'type': 'individual'}], 'nationalities': [{'code': 'US', 'name': 'United States'}], 'personType': 'knownPerson', 'phoneNumber': {'countryCallingCode': '1', 'countryCode2letterIso': 'CA', 'number': '7784467467'}, 'placeOfResidence': {'city': 'Longueuil', 'country': 'CA', 'countryName': 'Canada', 'postalCode': 'J4H 3X9', 'region': 'QC', 'street': '433-405 Ch De Chambly', 'streetAdditional': ''}, 'publicationDetails': {'bodsVersion': '0.3', 'publicationDate': '2024-09-12', 'publisher': {'name': 'BCROS - BC Registries and Online Services', 'url': 'https://www.bcregistry.gov.bc.ca/'}}, 'source': {'assertedBy': [{'name': 'Waffles Butter'}], 'description': 'Using Gov BC - BTR - Web UI', 'type': ['selfDeclaration']}, 'statementDate': '2024-09-12', 'statementID': 'ce935e86-f4b9-4938-b12e-29c5e5cc213d', 'statementType': 'personStatement', 'taxResidencies': [], 'uuid': '839e35b8-d536-42e6-82ba-ba3c5a13582d'},
+             'interests': [{'details': 'controlType.shares.indirectControl', 'directOrIndirect': 'indirect', 'share': {'exclusiveMaximum': True, 'exclusiveMinimum': False, 'maximum': 25, 'minimum': 0}, 'startDate': '2021-09-07', 'type': 'shareholding'}],
+             'isComponent': False,
+             'publicationDetails': {'bodsVersion': '0.3', 'publicationDate': '2024-09-12', 'publisher': {'name': 'BCROS - BC Registries and Online Services', 'url': 'https://www.bcregistry.gov.bc.ca/'}},
+             'source': {'assertedBy': [{'name': 'Waffles Butter'}], 'description': 'Using Gov BC - BTR - Web UI', 'type': ['selfDeclaration']},
+             'statementDate': '2024-09-12',
+             'statementID': 'f4d9f29b-559b-4353-9bd4-89ada5ae5209',
+             'statementType': 'ownershipOrControlStatement',
+             'subject': {'describedByEntityStatement': ''}},
+            {'interestedParty': {'describedByPersonStatement': '4b7863a1-4fbf-42a5-afe8-8f4a4f3ca049', 'addresses': [{'city': 'Vancouver', 'country': 'CA', 'countryName': 'Canada', 'postalCode': 'V6H 2T8', 'region': 'BC', 'street': 'Th-3023 Birch St', 'streetAdditional': ''}], 'birthDate': '2000-02-02', 'email': 'fake2@email.com', 'hasTaxNumber': True, 'identifiers': [{'id': '402 931 299', 'scheme': 'CAN-TAXID', 'schemeName': 'ITN'}], 'isComponent': False, 'isPermanentResidentCa': True, 'names': [{'fullName': 'Wallaby Willow', 'type': 'individual'}], 'nationalities': [{'code': 'AL', 'name': 'Albania'}, {'code': 'BZ', 'name': 'Belize'}], 'personType': 'knownPerson', 'phoneNumber': {'countryCallingCode': '1', 'countryCode2letterIso': 'CA', 'number': '2508747772'}, 'placeOfResidence': {'city': 'Vancouver', 'country': 'CA', 'countryName': 'Canada', 'postalCode': 'V6H 2T8', 'region': 'BC', 'street': 'Th-3023 Birch St', 'streetAdditional': ''}, 'publicationDetails': {'bodsVersion': '0.3', 'publicationDate': '2024-09-16', 'publisher': {'name': 'BCROS - BC Registries and Online Services', 'url': 'https://www.bcregistry.gov.bc.ca/'}}, 'source': {'assertedBy': [{'name': 'Wallaby Willow'}], 'description': 'Using Gov BC - BTR - Web UI', 'type': ['selfDeclaration']}, 'statementDate': '2024-09-16', 'statementID': '4b7863a1-4fbf-42a5-afe8-8f4a4f3ca049', 'statementType': 'personStatement', 'taxResidencies': [{'code': 'CA', 'name': 'Canada'}], 'uuid': '1a825cce-a3fa-47b2-b8c3-e2fae40ac7df'},
+             'interests': [{'details': 'controlType.shares.indirectControl', 'directOrIndirect': 'indirect', 'share': {'exclusiveMaximum': False, 'exclusiveMinimum': False, 'maximum': 50, 'minimum': 25}, 'startDate': '2019-09-19', 'type': 'shareholding'}, {'details': 'controlType.votes.registeredOwner', 'directOrIndirect': 'direct', 'share': {'exclusiveMaximum': False, 'exclusiveMinimum': False, 'maximum': 50, 'minimum': 25}, 'startDate': '2019-09-19', 'type': 'votingRights'}],
+             'isComponent': False,
+             'publicationDetails': {'bodsVersion': '0.3', 'publicationDate': '2024-09-16', 'publisher': {'name': 'BCROS - BC Registries and Online Services', 'url': 'https://www.bcregistry.gov.bc.ca/'}},
+             'source': {'assertedBy': [{'name': 'Wallaby Willow'}], 'description': 'Using Gov BC - BTR - Web UI', 'type': ['selfDeclaration']},
+             'statementDate': '2024-09-16',
+             'statementID': 'aef71bd1-8c64-4fff-a2d5-9a25b450745d',
+             'statementType': 'ownershipOrControlStatement',
+             'subject': {'describedByEntityStatement': ''}},
+            {'interestedParty': {'describedByPersonStatement': 'e935e86-f4b9-4938-b12e-29c5e5cc213e', 'addresses': [{'city': 'Longueuil', 'country': 'CA', 'countryName': 'Canada', 'postalCode': 'J4H 3X9', 'region': 'QC', 'street': '433-405 Ch De Chambly', 'streetAdditional': ''}], 'email': 'fake4@email.com', 'hasTaxNumber': False, 'identifiers': [], 'isComponent': False, 'isPermanentResidentCa': False, 'missingInfoReason': 'Test person with no birth date', 'names': [{'fullName': 'Tester MissingInfoBday', 'type': 'individual'}], 'personType': 'knownPerson', 'placeOfResidence': {'city': 'Longueuil', 'country': 'CA', 'countryName': 'Canada', 'postalCode': 'J4H 3X9', 'region': 'QC', 'street': '433-405 Ch De Chambly', 'streetAdditional': ''}, 'publicationDetails': {'bodsVersion': '0.3', 'publicationDate': '2024-09-12', 'publisher': {'name': 'BCROS - BC Registries and Online Services', 'url': 'https://www.bcregistry.gov.bc.ca/'}}, 'source': {'assertedBy': [{'name': 'Waffles Butter'}], 'description': 'Using Gov BC - BTR - Web UI', 'type': ['selfDeclaration']}, 'statementDate': '2024-09-12', 'statementID': 'e935e86-f4b9-4938-b12e-29c5e5cc213e', 'statementType': 'personStatement', 'taxResidencies': [], 'uuid': '939e35b8-d536-42e6-82ba-ba3c5a13582z'},
+             'interests': [],
+             'isComponent': False, 'publicationDetails': {'bodsVersion': '0.3', 'publicationDate': '2024-09-12', 'publisher': {'name': 'BCROS - BC Registries and Online Services', 'url': 'https://www.bcregistry.gov.bc.ca/'}},
+             'source': {'assertedBy': [{'name': 'test inc'}], 'description': 'Using Gov BC - BTR - Web UI', 'type': ['selfDeclaration']},
+             'statementDate': '2024-09-12',
+             'statementID': 'dcb727ae-0980-4c4c-a599-6ba5fde5a8b7',
+             'statementType': 'ownershipOrControlStatement',
+             'subject': {'describedByEntityStatement': ''}},
+            {'interestedParty': {'describedByPersonStatement': 'd935e86-f4b9-4938-b12e-29c5e5cc213d', 'addresses': [{'city': 'Longueuil', 'country': 'CA', 'countryName': 'Canada', 'postalCode': 'J4H 3X9', 'region': 'QC', 'street': '433-405 Ch De Chambly', 'streetAdditional': ''}], 'hasTaxNumber': False, 'identifiers': [], 'isComponent': False, 'isPermanentResidentCa': False, 'missingInfoReason': 'Test person with no email', 'names': [{'fullName': 'Test MissingInfoEmail', 'type': 'individual'}], 'personType': 'knownPerson', 'placeOfResidence': {'city': 'Longueuil', 'country': 'CA', 'countryName': 'Canada', 'postalCode': 'J4H 3X9', 'region': 'QC', 'street': '433-405 Ch De Chambly', 'streetAdditional': ''}, 'publicationDetails': {'bodsVersion': '0.3', 'publicationDate': '2024-09-12', 'publisher': {'name': 'BCROS - BC Registries and Online Services', 'url': 'https://www.bcregistry.gov.bc.ca/'}}, 'source': {'assertedBy': [{'name': 'Waffles Butter'}], 'description': 'Using Gov BC - BTR - Web UI', 'type': ['selfDeclaration']}, 'statementDate': '2024-09-12', 'statementID': 'd935e86-f4b9-4938-b12e-29c5e5cc213d', 'statementType': 'personStatement', 'taxResidencies': [], 'uuid': '939e35b8-d536-42e6-82ba-ba3c5a13582z'},
+             'interests': [],
+             'isComponent': False,
+             'publicationDetails': {'bodsVersion': '0.3', 'publicationDate': '2024-09-12', 'publisher': {'name': 'BCROS - BC Registries and Online Services', 'url': 'https://www.bcregistry.gov.bc.ca/'}},
+             'source': {'assertedBy': [{'name': 'test inc'}], 'description': 'Using Gov BC - BTR - Web UI', 'type': ['selfDeclaration']},
+             'statementDate': '2024-09-12',
+             'statementID': 'dcb727ae-0980-4c4c-a599-6ba5fde5a8b7',
+             'statementType': 'ownershipOrControlStatement',
+             'subject': {'describedByEntityStatement': ''}}]
     }
+    verify_emails_sent(json_data, email_mock)
 
 
 def test_post_plots(app, client, session, jwt, requests_mock):
@@ -380,6 +340,7 @@ def test_post_plots(app, client, session, jwt, requests_mock):
     bor_api_mock = requests_mock.put(
         f"{app.config.get('BOR_SVC_URL')}/internal/solr/update", json={'message': 'Update accepted'}
     )
+    email_mock = requests_mock.post(f"{app.config.get('NOTIFY_SVC_URL')}", json={})
 
     current_dir = os.path.dirname(__file__)
     with open(os.path.join(current_dir, '..', '..', 'mocks', 'significantIndividualsFiling', 'valid.json')) as file:
@@ -393,8 +354,13 @@ def test_post_plots(app, client, session, jwt, requests_mock):
         legal_api_entity_mock = requests_mock.get(
             f"{app.config.get('LEGAL_SVC_URL')}/businesses/{identifier}", json=mocked_entity_response
         )
-        legal_api_entity_addresses_mock = requests_mock.get(
-            f"{app.config.get('LEGAL_SVC_URL')}/businesses/{identifier}/addresses", json=mocked_entity_address_response
+        legal_api_delivery_address_mock = requests_mock.get(
+            f"{app.config.get('LEGAL_SVC_URL')}/businesses/{identifier}/addresses?addressType=deliveryAddress",
+            json=mocked_entity_address_response
+        )
+        auth_api_entity_contact_mock = requests_mock.get(
+            f"{app.config.get('AUTH_SVC_URL')}/entities/{identifier}",
+            json=mocked_auth_entity_contact_response
         )
 
         with nested_session(session):
@@ -413,10 +379,6 @@ def test_post_plots(app, client, session, jwt, requests_mock):
             assert rv.status_code == HTTPStatus.CREATED
             submission_id = rv.json.get('id')
             assert submission_id
-            assert legal_api_entity_mock.called == True
-            assert pay_api_mock.called == True
-            assert legal_api_entity_addresses_mock.called == True
-            assert bor_api_mock.called == True
             # check submission details
             created_submission = SubmissionModel.find_by_id(submission_id)
             assert created_submission
@@ -427,6 +389,15 @@ def test_post_plots(app, client, session, jwt, requests_mock):
             assert created_submission.submitter_id
             user = UserModel.find_by_id(created_submission.submitter_id)
             assert user.username == mocked_username
+            # post submission things all triggered
+            assert legal_api_entity_mock.called == True
+            assert pay_api_mock.called == True
+            assert auth_mock.called == True
+            assert legal_api_delivery_address_mock.called == True
+            assert bor_api_mock.called == True
+            assert auth_api_entity_contact_mock.called == True
+            assert email_mock.called == True
+            verify_emails_sent(json_data, email_mock)
 
 def test_put_plots(app, client, session, jwt, requests_mock):
     """Assure put submission works."""
@@ -438,6 +409,7 @@ def test_put_plots(app, client, session, jwt, requests_mock):
     bor_api_mock = requests_mock.put(
         f"{app.config.get('BOR_SVC_URL')}/internal/solr/update", json={'message': 'Update accepted'}
     )
+    email_mock = requests_mock.post(f"{app.config.get('NOTIFY_SVC_URL')}", json={})
 
     current_dir = os.path.dirname(__file__)
     with open(os.path.join(current_dir, '..', '..', 'mocks', 'significantIndividualsFiling', 'valid.json')) as file:
@@ -451,8 +423,13 @@ def test_put_plots(app, client, session, jwt, requests_mock):
         legal_api_entity_mock = requests_mock.get(
             f"{app.config.get('LEGAL_SVC_URL')}/businesses/{identifier}", json=mocked_entity_response
         )
-        legal_api_entity_addresses_mock = requests_mock.get(
-            f"{app.config.get('LEGAL_SVC_URL')}/businesses/{identifier}/addresses", json=mocked_entity_address_response
+        legal_api_delivery_address_mock = requests_mock.get(
+            f"{app.config.get('LEGAL_SVC_URL')}/businesses/{identifier}/addresses?addressType=deliveryAddress",
+            json=mocked_entity_address_response
+        )
+        auth_api_entity_contact_mock = requests_mock.get(
+            f"{app.config.get('AUTH_SVC_URL')}/entities/{identifier}",
+            json=mocked_auth_entity_contact_response
         )
 
         with nested_session(session):
@@ -474,7 +451,8 @@ def test_put_plots(app, client, session, jwt, requests_mock):
             url = f"/plots/{submission_id}"
             put_data = {
                 'personStatements': [{
-                    "statementID": "bd4061d6-1a24-4356-93f3-c489b56610a4",
+                    'uuid': json_data['personStatements'][0]['uuid'],
+                    'statementID': json_data['personStatements'][0]['statementID'],
                     'names': [
                         {
                             "type": "individual",
@@ -508,6 +486,15 @@ def test_put_plots(app, client, session, jwt, requests_mock):
             #Check name changed
             assert updated_submission.payload['personStatements'][0]['names'][0]['fullName'] == json_data['personStatements'][0]['names'][0]['fullName']
             assert updated_submission.payload['entityStatement'] == json_data['entityStatement']
+
+            # post submission things all triggered
+            assert legal_api_entity_mock.called == True
+            assert pay_api_mock.called == True
+            assert auth_mock.called == True
+            assert legal_api_delivery_address_mock.called == True
+            assert bor_api_mock.called == True
+            assert auth_api_entity_contact_mock.called == True
+            assert email_mock.called == True
             
 
 
@@ -521,6 +508,7 @@ def test_post_plots_pay_error(app, client, session, jwt, requests_mock):
     bor_api_mock = requests_mock.put(
         f"{app.config.get('BOR_SVC_URL')}/internal/solr/update", json={'message': 'Update accepted'}
     )
+    email_mock = requests_mock.post(f"{app.config.get('NOTIFY_SVC_URL')}", json={})
 
     current_dir = os.path.dirname(__file__)
     with open(os.path.join(current_dir, '..', '..', 'mocks', 'significantIndividualsFiling', 'valid.json')) as file:
@@ -534,8 +522,13 @@ def test_post_plots_pay_error(app, client, session, jwt, requests_mock):
         legal_api_entity_mock = requests_mock.get(
             f"{app.config.get('LEGAL_SVC_URL')}/businesses/{identifier}", json=mocked_entity_response
         )
-        legal_api_entity_addresses_mock = requests_mock.get(
-            f"{app.config.get('LEGAL_SVC_URL')}/businesses/{identifier}/addresses", json=mocked_entity_address_response
+        legal_api_delivery_address_mock = requests_mock.get(
+            f"{app.config.get('LEGAL_SVC_URL')}/businesses/{identifier}/addresses?addressType=deliveryAddress",
+            json=mocked_entity_address_response
+        )
+        auth_api_entity_contact_mock = requests_mock.get(
+            f"{app.config.get('AUTH_SVC_URL')}/entities/{identifier}",
+            json=mocked_auth_entity_contact_response
         )
 
         with nested_session(session):
@@ -554,8 +547,10 @@ def test_post_plots_pay_error(app, client, session, jwt, requests_mock):
             assert legal_api_entity_mock.called == True
             assert pay_api_mock.called == True
             assert auth_mock.called == True
-            assert legal_api_entity_addresses_mock.called == True
+            assert legal_api_delivery_address_mock.called == True
             assert bor_api_mock.called == True
+            assert auth_api_entity_contact_mock.called == True
+            assert email_mock.called == True
             # check submission details
             created_submission = SubmissionModel.find_by_id(submission_id)
             assert created_submission
@@ -569,6 +564,7 @@ def test_post_plots_auth_error(app, client, session, jwt, requests_mock):
     pay_api_mock = requests_mock.post(f"{app.config.get('PAYMENT_SVC_URL')}/payment-requests", json={'id': 1234})
     auth_mock = requests_mock.post(app.config.get('SSO_SVC_TOKEN_URL'), exc=requests.exceptions.ConnectTimeout)
     bor_api_mock = requests_mock.put(f"{app.config.get('BOR_SVC_URL')}/internal/solr/update", json={})
+    email_mock = requests_mock.post(f"{app.config.get('NOTIFY_SVC_URL')}", json={})
 
     current_dir = os.path.dirname(__file__)
     with open(os.path.join(current_dir, '..', '..', 'mocks', 'significantIndividualsFiling', 'valid.json')) as file:
@@ -582,8 +578,13 @@ def test_post_plots_auth_error(app, client, session, jwt, requests_mock):
         legal_api_entity_mock = requests_mock.get(
             f"{app.config.get('LEGAL_SVC_URL')}/businesses/{identifier}", json=mocked_entity_response
         )
-        legal_api_entity_addresses_mock = requests_mock.get(
-            f"{app.config.get('LEGAL_SVC_URL')}/businesses/{identifier}/addresses", json=mocked_entity_address_response
+        legal_api_delivery_address_mock = requests_mock.get(
+            f"{app.config.get('LEGAL_SVC_URL')}/businesses/{identifier}/addresses?addressType=deliveryAddress",
+            json=mocked_entity_address_response
+        )
+        auth_api_entity_contact_mock = requests_mock.get(
+            f"{app.config.get('AUTH_SVC_URL')}/entities/{identifier}",
+            json=mocked_auth_entity_contact_response
         )
 
         with nested_session(session):
@@ -602,8 +603,10 @@ def test_post_plots_auth_error(app, client, session, jwt, requests_mock):
             assert legal_api_entity_mock.called == True
             assert pay_api_mock.called == True
             assert auth_mock.called == True
-            assert legal_api_entity_addresses_mock.called == False
+            assert legal_api_delivery_address_mock.called == False
             assert bor_api_mock.called == False
+            assert auth_api_entity_contact_mock.called == False
+            assert email_mock.called == False
             # check submission details
             created_submission = SubmissionModel.find_by_id(submission_id)
             assert created_submission
@@ -617,6 +620,7 @@ def test_post_plots_bor_error(app, client, session, jwt, requests_mock):
     bor_api_mock = requests_mock.put(
         f"{app.config.get('BOR_SVC_URL')}/internal/solr/update", exc=requests.exceptions.ConnectTimeout
     )
+    email_mock = requests_mock.post(f"{app.config.get('NOTIFY_SVC_URL')}", json={})
 
     current_dir = os.path.dirname(__file__)
     with open(os.path.join(current_dir, '..', '..', 'mocks', 'significantIndividualsFiling', 'valid.json')) as file:
@@ -630,8 +634,13 @@ def test_post_plots_bor_error(app, client, session, jwt, requests_mock):
         legal_api_entity_mock = requests_mock.get(
             f"{app.config.get('LEGAL_SVC_URL')}/businesses/{identifier}", json=mocked_entity_response
         )
-        legal_api_entity_addresses_mock = requests_mock.get(
-            f"{app.config.get('LEGAL_SVC_URL')}/businesses/{identifier}/addresses", json=mocked_entity_address_response
+        legal_api_delivery_address_mock = requests_mock.get(
+            f"{app.config.get('LEGAL_SVC_URL')}/businesses/{identifier}/addresses?addressType=deliveryAddress",
+            json=mocked_entity_address_response
+        )
+        auth_api_entity_contact_mock = requests_mock.get(
+            f"{app.config.get('AUTH_SVC_URL')}/entities/{identifier}",
+            json=mocked_auth_entity_contact_response
         )
 
         with nested_session(session):
@@ -650,8 +659,67 @@ def test_post_plots_bor_error(app, client, session, jwt, requests_mock):
             assert legal_api_entity_mock.called == True
             assert pay_api_mock.called == True
             assert auth_mock.called == True
-            assert legal_api_entity_addresses_mock.called == True
+            assert legal_api_delivery_address_mock.called == True
             assert bor_api_mock.called == True
+            assert auth_api_entity_contact_mock.called == True
+            assert email_mock.called == True
+            # check submission details
+            created_submission = SubmissionModel.find_by_id(submission_id)
+            assert created_submission
+            assert created_submission.business_identifier == json_data['businessIdentifier']
+
+
+def test_post_plots_email_error(app, client, session, jwt, requests_mock):
+    """Assure post submission works (email error)."""
+    pay_api_mock = requests_mock.post(f"{app.config.get('PAYMENT_SVC_URL')}/payment-requests", json={'id': 1234})
+    auth_mock = requests_mock.post(app.config.get('SSO_SVC_TOKEN_URL'), json={'access_token': 'token'})
+    bor_api_mock = requests_mock.put(
+        f"{app.config.get('BOR_SVC_URL')}/internal/solr/update", json={}
+    )
+    email_mock = requests_mock.post(f"{app.config.get('NOTIFY_SVC_URL')}", exc=requests.exceptions.ConnectTimeout)
+
+    current_dir = os.path.dirname(__file__)
+    with open(os.path.join(current_dir, '..', '..', 'mocks', 'significantIndividualsFiling', 'valid.json')) as file:
+        json_data = json.load(file)
+
+        identifier = json_data['businessIdentifier']
+        requests_mock.get(
+            f"{app.config.get('AUTH_SVC_URL')}/entities/{identifier}/authorizations",
+            json={'orgMembership': 'COORDINATOR', 'roles': ['edit', 'view']},
+        )
+        legal_api_entity_mock = requests_mock.get(
+            f"{app.config.get('LEGAL_SVC_URL')}/businesses/{identifier}", json=mocked_entity_response
+        )
+        legal_api_delivery_address_mock = requests_mock.get(
+            f"{app.config.get('LEGAL_SVC_URL')}/businesses/{identifier}/addresses?addressType=deliveryAddress",
+            json=mocked_entity_address_response
+        )
+        auth_api_entity_contact_mock = requests_mock.get(
+            f"{app.config.get('AUTH_SVC_URL')}/entities/{identifier}",
+            json=mocked_auth_entity_contact_response
+        )
+
+        with nested_session(session):
+            rv = client.post(
+                '/plots',
+                json=json_data,
+                headers=create_header(
+                    jwt_manager=jwt,
+                    roles=['basic'],
+                    **{'Accept-Version': 'v1', 'content-type': 'application/json', 'Account-Id': 1},
+                ),
+            )
+            # should have still completed even though email sending failed
+            assert rv.status_code == HTTPStatus.CREATED
+            submission_id = rv.json.get('id')
+            assert submission_id
+            assert legal_api_entity_mock.called == True
+            assert pay_api_mock.called == True
+            assert auth_mock.called == True
+            assert legal_api_delivery_address_mock.called == True
+            assert bor_api_mock.called == True
+            assert auth_api_entity_contact_mock.called == True
+            assert email_mock.called == True
             # check submission details
             created_submission = SubmissionModel.find_by_id(submission_id)
             assert created_submission
@@ -677,6 +745,7 @@ def test_post_plots_invalid_entity(
     bor_api_mock = requests_mock.put(
         f"{app.config.get('BOR_SVC_URL')}/internal/solr/update", json={'message': 'Update accepted'}
     )
+    email_mock = requests_mock.post(f"{app.config.get('NOTIFY_SVC_URL')}", json={})
 
     current_dir = os.path.dirname(__file__)
     with open(os.path.join(current_dir, '..', '..', 'mocks', 'significantIndividualsFiling', 'valid.json')) as file:
@@ -691,8 +760,13 @@ def test_post_plots_invalid_entity(
         legal_api_entity_mock = requests_mock.get(
             f"{app.config.get('LEGAL_SVC_URL')}/businesses/{identifier}", json=mocked_entity_response
         )
-        legal_api_entity_addresses_mock = requests_mock.get(
-            f"{app.config.get('LEGAL_SVC_URL')}/businesses/{identifier}/addresses", json=mocked_entity_address_response
+        legal_api_delivery_address_mock = requests_mock.get(
+            f"{app.config.get('LEGAL_SVC_URL')}/businesses/{identifier}/addresses?addressType=deliveryAddress",
+            json=mocked_entity_address_response
+        )
+        auth_api_entity_contact_mock = requests_mock.get(
+            f"{app.config.get('AUTH_SVC_URL')}/entities/{identifier}",
+            json=mocked_auth_entity_contact_response
         )
 
         with nested_session(session):
@@ -710,8 +784,10 @@ def test_post_plots_invalid_entity(
             assert legal_api_entity_mock.called == True
             assert pay_api_mock.called == False
             assert auth_mock.called == False
-            assert legal_api_entity_addresses_mock.called == False
+            assert legal_api_delivery_address_mock.called == False
             assert bor_api_mock.called == False
+            assert auth_api_entity_contact_mock.called == False
+            assert email_mock.called == False
 
 
 def test_get_latest_for_entity(app, client, session, jwt, requests_mock):
@@ -764,10 +840,9 @@ def test_get_latest_for_entity(app, client, session, jwt, requests_mock):
 
         # Confirm outcome
         assert rv.status_code == HTTPStatus.OK
-
-        assert test_identifier == rv.json.get('business_identifier')
-        assert s2_dict['effectiveDate'] == rv.json.get('effective_date')
         assert s2_dict == rv.json.get('payload')
+        assert test_identifier == rv.json['payload'].get('businessIdentifier')
+        assert s2_dict['effectiveDate'] == rv.json['payload'].get('effectiveDate')
 
 
 def test_get_redacted_for_entity(app, client, session, jwt, requests_mock):
@@ -851,6 +926,6 @@ def test_get_redacted_for_entity(app, client, session, jwt, requests_mock):
         # Confirm outcome
         assert rv.status_code == HTTPStatus.OK
 
-        assert test_identifier == rv.json.get('business_identifier')
-        assert s1_dict['effectiveDate'] == rv.json.get('effective_date')
         assert expected_dict == rv.json.get('payload')
+        assert test_identifier == rv.json['payload'].get('businessIdentifier')
+        assert s1_dict['effectiveDate'] == rv.json['payload'].get('effectiveDate')
