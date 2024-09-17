@@ -1,7 +1,8 @@
   {
   "general": {
     "optional": "Optional",
-    "regName": "BC Business Transparency Registry"
+    "regName": "BC Business Transparency Registry",
+    "submit": "Submit"
   },
   "labels": {
     "requestOmit": {

@@ -54,7 +54,7 @@
           }"
         >
           <span class="font-bold min-w-[190px] mt-3" :class="showSectionHasErrors ? 'text-red-500' : ''">
-            <UIcon v-if="sectionTitleIcon" :name="sectionTitleIcon" />
+            <UIcon v-if="sectionTitleIcon" class="text-2xl align-bottom" :name="sectionTitleIcon" />
             {{ sectionTitle }}
           </span>
         </div>

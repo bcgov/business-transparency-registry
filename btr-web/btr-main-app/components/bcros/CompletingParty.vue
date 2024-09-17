@@ -77,6 +77,8 @@ z.setErrorMap(CompletingPartyErrorMap)
         :rounded-top="!editMode"
         :border="false"
         :padded-x="false"
+        :padded-y="false"
+        class="py-9 -ml-8 pl-8"
       >
         <div class="flex-col w-full">
           <UFormGroup name="invididualType" eager-validation>
@@ -87,6 +89,7 @@ z.setErrorMap(CompletingPartyErrorMap)
                 name="invididualType"
                 class="inline-block"
                 :options="individualTypeOptions"
+                :ui-radio="{wrapper: 'relative flex items-start mb-4'}"
               />
             </template>
           </UFormGroup>
@@ -100,6 +103,8 @@ z.setErrorMap(CompletingPartyErrorMap)
         :rounded-top="!editMode"
         :border="false"
         :padded-x="false"
+        :padded-y="false"
+        class="py-9 -ml-8 pl-8"
       >
         <div class="flex-col w-full">
           <BcrosInputsNameField
@@ -118,6 +123,8 @@ z.setErrorMap(CompletingPartyErrorMap)
         :rounded-top="!editMode"
         :border="false"
         :padded-x="false"
+        :padded-y="false"
+        class="py-9 -ml-8 pl-8"
       >
         <div class="flex-col w-full">
           <BcrosInputsEmailField
@@ -136,6 +143,8 @@ z.setErrorMap(CompletingPartyErrorMap)
         :rounded-top="!editMode"
         :border="false"
         :padded-x="false"
+        :padded-y="false"
+        class="py-9 -ml-8 pl-8"
       >
         <div class="flex-col w-full">
           <UFormGroup name="certify" eager-validation>

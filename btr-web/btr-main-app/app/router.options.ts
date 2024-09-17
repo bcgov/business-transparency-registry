@@ -54,8 +54,12 @@ export default <RouterConfig> {
       component: () => import('~/pages/requestToOmit.vue').then(r => r.default || r),
       meta: {
         breadcrumbs: [getBcrosHomeDashboardCrumb, getRequestOmitCrumb],
-        layout: 'default',
-        title: 'Request to Omit Information'
+        layout: 'omit',
+        title: 'Request to Omit Information',
+        buttonControl: {
+          leftButtons: [],
+          rightButtons: [getOmitSubmitButton]
+        }
       }
     },
     {
