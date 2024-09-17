@@ -53,3 +53,15 @@ export async function siChangeSubmit () {
     })
   }
 }
+
+export function getOmitSubmitButton () {
+  const t = useNuxtApp().$i18n.t
+  const omitIndividual = useOmitIndividual()
+  return {
+    action: omitIndividual.submitOmit,
+    class: 'font-bold',
+    icon: '',
+    label: t('general.submit'),
+    trailing: true
+  }
+}
