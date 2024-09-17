@@ -24,7 +24,7 @@
               </div>
               <br>
               <div>
-                {{ $t('texts.certify.note') }}
+                {{ `${altNote} ? ${$t('texts.certify.noteAlt')} : ${$t('texts.certify.note')}` }}
               </div>
             </div>
           </template>
@@ -40,7 +40,8 @@ defineProps({
   name: { type: String, required: true, default: 'name' },
   modelValue: { type: Boolean, required: true, default: false },
   part2Text: { type: String, required: false, default: '' },
-  showLabel: { type: Boolean, required: false, default: true }
+  showLabel: { type: Boolean, required: false, default: true },
+  altNote: { type: Boolean, required: false, default: false }
 })
 
 let date = ''

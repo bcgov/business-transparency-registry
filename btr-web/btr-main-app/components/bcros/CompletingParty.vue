@@ -78,7 +78,7 @@ z.setErrorMap(CompletingPartyErrorMap)
         :border="false"
         :padded-x="false"
         :padded-y="false"
-        class="py-9 -ml-8 pl-8"
+        class="pt-9 -ml-8 pl-8"
       >
         <div class="flex-col w-full">
           <UFormGroup name="invididualType" eager-validation>
@@ -104,7 +104,7 @@ z.setErrorMap(CompletingPartyErrorMap)
         :border="false"
         :padded-x="false"
         :padded-y="false"
-        class="py-9 -ml-8 pl-8"
+        class="pt-9 -ml-8 pl-8"
       >
         <div class="flex-col w-full">
           <BcrosInputsNameField
@@ -124,7 +124,7 @@ z.setErrorMap(CompletingPartyErrorMap)
         :border="false"
         :padded-x="false"
         :padded-y="false"
-        class="py-9 -ml-8 pl-8"
+        class="pt-9 -ml-8 pl-8"
       >
         <div class="flex-col w-full">
           <BcrosInputsEmailField
@@ -156,6 +156,7 @@ z.setErrorMap(CompletingPartyErrorMap)
                 data-cy="certify-section"
                 :class="error ? 'text-red-500 dark:text-red-400' : ''"
                 :show-label="false"
+                :alt-note="true"
               />
             </template>
           </UFormGroup>
