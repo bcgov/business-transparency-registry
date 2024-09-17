@@ -8,7 +8,7 @@ const { completingPartyRef } = storeToRefs(omitIndividual)
 
 <template>
   <div class="w-full">
-    <div>
+    <div class="max-w-[787px]">
       <div data-cy="request-to-omit-header">
         <h3 class="text-xl font-bold mb-2.5">
           {{ $t('general.regName') }}

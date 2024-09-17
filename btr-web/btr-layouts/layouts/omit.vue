@@ -2,7 +2,7 @@
   <div data-cy="omit-layout">
     <BcrosHeader />
     <BcrosBreadcrumb v-if="crumbConstructors.length > 0" :crumb-constructors="crumbConstructors" />
-    <div class="px-4 w-full max-w-[787px]">
+    <div class="mx-auto px-4 w-full max-w-bcroslg">
       <slot />
     </div>
     <BcrosButtonControl
