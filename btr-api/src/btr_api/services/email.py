@@ -45,7 +45,6 @@ from jinja2 import Template
 
 from btr_api.enums import EmailType
 from btr_api.exceptions import BusinessException
-from btr_api.models import Submission
 from btr_api.utils.legislation_datetime import LegislationDatetime
 from btr_api.utils.person_stmnt_helpers import get_citizenship_public_desc, get_name
 
@@ -130,14 +129,12 @@ class EmailService:
         # birth
         birthdate = person.get('birthDate')
         birth_year = 'Not Entered'
-        is_minor = False
         if birthdate:
             birthdate = LegislationDatetime.as_legislation_timezone_from_date_str(birthdate)
             birth_year = birthdate.year
             minor_threshold = effective_datetime - relativedelta(years=19)
-            is_minor = minor_threshold < birthdate
 
-            if is_minor:
+            if minor_threshold < birthdate:
                 # update email type and date info
                 email_type = EmailType.ADDING_MINOR
                 start_date_label = 'Birth Date'
@@ -162,8 +159,8 @@ class EmailService:
         html_out = jinja_template.render(
             business_name=business_info['business']['legalName'],
             business_address_street=business_info['deliveryAddress']['streetAddress'],
-            business_contact_email=business_info['contact']['email'],
-            business_contact_phone=business_info['contact']['phone'],
+            business_contact_email=business_info['contact'].get('email'),
+            business_contact_phone=business_info['contact'].get('phone'),
             business_identifier=identifier,
             full_name=full_name,
             birth_year=str(birth_year),
@@ -237,16 +234,15 @@ class EmailService:
 
         return template_code
 
-    def send_added_to_btr_emails(self,
-                                 submission: Submission,
-                                 business_info: dict,
-                                 token: str):
+    def send_added_to_btr_email(self,
+                                person_statement: dict,
+                                business_info: dict,
+                                effective_date: date,
+                                token: str):
         """Send 'added person to btr' email via notify api."""
         try:
-            # send out an email to each person in the submission for the business
-            for person in submission.payload.get('personStatements', []):
-                email_msg = self._compose_added_email(person, business_info, submission.effective_date)
-                self._send_email(email_msg, token)
+            email_msg = self._compose_added_email(person_statement, business_info, effective_date)
+            self._send_email(email_msg, token)
 
         except BusinessException as bus_exc:
             # pass along
