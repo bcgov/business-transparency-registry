@@ -1,213 +1,627 @@
 {
-  "noSignificantIndividualsExist": false,
-  "businessIdentifier": "12345",
-  "effectiveDate": "2023-03-01",
-  "entityStatement": {
-    "statementID": "bd4061d6-1a24-4356-93f3-c489b56610a2",
-    "statementType": "entityStatement",
-    "statementDate": "2023-02-28",
-    "isComponent": false,
-    "entityType": "registeredEntity",
-    "name": "Your Entity",
-    "identifiers": [],
-    "publicationDetails": {
-      "publicationDate": "2022-12-31",
-      "bodsVersion": "1.0",
-      "publisher": {
-        "uri": "http://publisher.uri",
-        "name": "Publisher Name",
+    "businessIdentifier": "BC1230113",
+    "effectiveDate": "2024-09-16",
+    "entityStatement": {
+        "entityType": "legalEntity",
+        "identifiers": [],
+        "isComponent": false,
+        "name": "1230113 B.C. LTD.",
+        "publicationDetails": {
+            "bodsVersion": "0.3",
+            "publicationDate": "2024-09-16",
+            "publisher": {
+                "name": "BCROS - BC Registries and Online Services",
+                "url": "https://www.bcregistry.gov.bc.ca/"
+            }
+        },
         "source": {
-          "url": "http://source.url"
-        }
-      }
-    }
-  },
-  "personStatements": [
-    {
-      "statementID": "bd4061d6-1a24-4356-93f3-c489b56610a4",
-      "statementType": "personStatement",
-      "statementDate": "2023-02-28",
-      "isComponent": false,
-      "personType": "knownPerson",
-      "birthDate": "1980-06-13",
-      "names": [
-        {
-          "type": "individual",
-          "fullName": "Full1 Name1"
-        }
-      ],
-      "publicationDetails": {
-        "publicationDate": "2022-12-31",
-        "bodsVersion": "1.0",
-        "publisher": {
-          "uri": "http://publisher.uri",
-          "name": "Publisher Name",
-          "source": {
-            "url": "http://source.url"
-          }
-        }
-      },
-      "hasTaxNumber": true,
-      "email": "test@test.gov.bc.ca",
-      "nationalities": [
-        {
-          "name": "Canada",
-          "code": "CA"
-        }
-      ],
-      "source": {
-        "description": "The description",
-        "url": "https://yourwebsite.com",
-        "metadata": "Metadata",
-        "retrievedAt": "2023-02-28T23:17:17Z",
-        "asserted": "2023-02-18"
-      }
+            "assertedBy": [
+                {
+                    "name": "BCROS - BC Registries and Online Services",
+                    "uri": "https://www.bcregistry.gov.bc.ca/"
+                }
+            ],
+            "retrievedAt": "2024-09-16T14:04:11.646Z",
+            "type": [
+                "officialRegister",
+                "verified"
+            ]
+        },
+        "statementDate": "2024-09-16",
+        "statementID": "8ec1160a-48e3-4906-a5bc-881c76ab15dc",
+        "statementType": "entityStatement"
     },
-    {
-      "statementID": "123456ab123456ab123456ab123456ab123456ab123456ab123456ab1234",
-      "statementType": "personStatement",
-      "statementDate": "2023-02-28",
-      "isComponent": false,
-      "personType": "knownPerson",
-      "birthDate": "1997-04-23",
-      "names": [
+    "noSignificantIndividualsExist": false,
+    "ownershipOrControlStatements": [
         {
-          "type": "individual",
-          "fullName": "Full2 Name2"
+            "interestedParty": {
+                "describedByPersonStatement": "1199dc30-6cd8-47fa-be79-f057348ab36b"
+            },
+            "interests": [
+                {
+                    "details": "controlType.shares.beneficialOwner",
+                    "directOrIndirect": "direct",
+                    "share": {
+                        "exclusiveMaximum": false,
+                        "exclusiveMinimum": false,
+                        "maximum": 50,
+                        "minimum": 25
+                    },
+                    "startDate": "2014-11-07",
+                    "type": "shareholding"
+                },
+                {
+                    "details": "controlType.shares.registeredOwner",
+                    "directOrIndirect": "direct",
+                    "share": {
+                        "exclusiveMaximum": false,
+                        "exclusiveMinimum": false,
+                        "maximum": 50,
+                        "minimum": 25
+                    },
+                    "startDate": "2014-11-07",
+                    "type": "shareholding"
+                },
+                {
+                    "details": "controlType.votes.beneficialOwner",
+                    "directOrIndirect": "direct",
+                    "share": {
+                        "exclusiveMaximum": false,
+                        "exclusiveMinimum": true,
+                        "maximum": 75,
+                        "minimum": 50
+                    },
+                    "startDate": "2014-11-07",
+                    "type": "votingRights"
+                }
+            ],
+            "isComponent": false,
+            "publicationDetails": {
+                "bodsVersion": "0.3",
+                "publicationDate": "2024-09-11",
+                "publisher": {
+                    "name": "BCROS - BC Registries and Online Services",
+                    "url": "https://www.bcregistry.gov.bc.ca/"
+                }
+            },
+            "source": {
+                "assertedBy": [
+                    {
+                        "name": "Kial Jinnah"
+                    }
+                ],
+                "description": "Using Gov BC - BTR - Web UI",
+                "type": [
+                    "selfDeclaration"
+                ]
+            },
+            "statementDate": "2024-09-11",
+            "statementID": "6c08495f-c9d7-4c85-8d4f-8ed7c108fe3d",
+            "statementType": "ownershipOrControlStatement",
+            "subject": {
+                "describedByEntityStatement": ""
+            }
         },
         {
-          "type": "alternative",
-          "fullName": "preffered2"
-        }
-      ],
-      "publicationDetails": {
-        "publicationDate": "2022-12-31",
-        "bodsVersion": "1.0",
-        "publisher": {
-          "uri": "http://publisher.uri",
-          "name": "Publisher Name",
-          "source": {
-            "url": "http://source.url"
-          }
-        }
-      },
-      "hasTaxNumber": true,
-      "email": "test2@test2.gov.bc.ca",
-      "nationalities": [
-        {
-          "name": "France",
-          "code": "FR"
-        }
-      ],
-      "source": {
-        "description": "The description",
-        "url": "https://yourwebsite.com",
-        "metadata": "Metadata",
-        "retrievedAt": "2023-02-28T23:17:17Z",
-        "asserted": "2023-02-18"
-      }
-    }
-  ],
-  "ownershipOrControlStatements": [
-    {
-      "statementID": "bd4061d6-1a24-4356-93f3-c489b56610a3",
-      "statementType": "ownershipOrControlStatement",
-      "statementDate": "2023-02-28",
-      "isComponent": false,
-      "subject": {
-        "describedByEntityStatement": "bd4061d6-1a24-4356-93f3-c489b56610a2"
-      },
-      "interestedParty": {
-        "describedByPersonStatement": "bd4061d6-1a24-4356-93f3-c489b56610a4"
-      },
-      "publicationDetails": {
-        "publicationDate": "2022-12-31",
-        "bodsVersion": "1.0",
-        "publisher": {
-          "uri": "http://publisher.uri",
-          "name": "Publisher Name",
-          "source": {
-            "url": "http://source.url"
-          }
-        }
-      },
-      "source": {
-        "description": "The description",
-        "url": "https://yourwebsite.com",
-        "metadata": "Metadata",
-        "retrievedAt": "2023-02-28T23:17:17Z",
-        "asserted": "2023-02-18"
-      },
-      "interests": [
-        {
-          "type": "shareholding",
-          "directOrIndirect": "unknown",
-          "beneficialOwnershipOrControl": true,
-          "details": "controlType.sharesOrVotes.registeredOwner",
-          "share": {
-            "maximum": 75,
-            "minimum": 50
-          },
-          "startDate": "2023-03-01"
+            "interestedParty": {
+                "describedByPersonStatement": "ce935e86-f4b9-4938-b12e-29c5e5cc213d"
+            },
+            "interests": [
+                {
+                    "details": "controlType.shares.indirectControl",
+                    "directOrIndirect": "indirect",
+                    "share": {
+                        "exclusiveMaximum": true,
+                        "exclusiveMinimum": false,
+                        "maximum": 25,
+                        "minimum": 0
+                    },
+                    "startDate": "2021-09-07",
+                    "type": "shareholding"
+                }
+            ],
+            "isComponent": false,
+            "publicationDetails": {
+                "bodsVersion": "0.3",
+                "publicationDate": "2024-09-12",
+                "publisher": {
+                    "name": "BCROS - BC Registries and Online Services",
+                    "url": "https://www.bcregistry.gov.bc.ca/"
+                }
+            },
+            "source": {
+                "assertedBy": [
+                    {
+                        "name": "Waffles Butter"
+                    }
+                ],
+                "description": "Using Gov BC - BTR - Web UI",
+                "type": [
+                    "selfDeclaration"
+                ]
+            },
+            "statementDate": "2024-09-12",
+            "statementID": "f4d9f29b-559b-4353-9bd4-89ada5ae5209",
+            "statementType": "ownershipOrControlStatement",
+            "subject": {
+                "describedByEntityStatement": ""
+            }
         },
         {
-          "type": "appointmentOfBoard",
-          "directOrIndirect": "direct",
-          "beneficialOwnershipOrControl": true,
-          "details": "",
-          "startDate": "2023-01-01"
-        }
-      ]
-    },
-    {
-      "statementID": "9876qw9876qw9876qw9876qw9876qw9876qw9876qw9876qw9876qw9876qw",
-      "statementType": "ownershipOrControlStatement",
-      "statementDate": "2023-02-28",
-      "isComponent": false,
-      "subject": {
-        "describedByEntityStatement": "bd4061d6-1a24-4356-93f3-c489b56610a2"
-      },
-      "interestedParty": {
-        "describedByPersonStatement": "123456ab123456ab123456ab123456ab123456ab123456ab123456ab1234"
-      },
-      "publicationDetails": {
-        "publicationDate": "2022-12-31",
-        "bodsVersion": "1.0",
-        "publisher": {
-          "uri": "http://publisher.uri",
-          "name": "Publisher Name",
-          "source": {
-            "url": "http://source.url"
-          }
-        }
-      },
-      "source": {
-        "description": "The description",
-        "url": "https://yourwebsite.com",
-        "metadata": "Metadata",
-        "retrievedAt": "2023-02-28T23:17:17Z",
-        "asserted": "2023-02-18"
-      },
-      "interests": [
-        {
-          "type": "votingRights",
-          "directOrIndirect": "direct",
-          "beneficialOwnershipOrControl": true,
-          "details": "controlType.sharesOrVotes.beneficialOwner",
-          "share": {
-            "maximum": 50,
-            "minimum": 25
-          },
-          "startDate": "2023-03-01"
+            "interestedParty": {
+                "describedByPersonStatement": "4b7863a1-4fbf-42a5-afe8-8f4a4f3ca049"
+            },
+            "interests": [
+                {
+                    "details": "controlType.shares.indirectControl",
+                    "directOrIndirect": "indirect",
+                    "share": {
+                        "exclusiveMaximum": false,
+                        "exclusiveMinimum": false,
+                        "maximum": 50,
+                        "minimum": 25
+                    },
+                    "startDate": "2019-09-19",
+                    "type": "shareholding"
+                },
+                {
+                    "details": "controlType.votes.registeredOwner",
+                    "directOrIndirect": "direct",
+                    "share": {
+                        "exclusiveMaximum": false,
+                        "exclusiveMinimum": false,
+                        "maximum": 50,
+                        "minimum": 25
+                    },
+                    "startDate": "2019-09-19",
+                    "type": "votingRights"
+                }
+            ],
+            "isComponent": false,
+            "publicationDetails": {
+                "bodsVersion": "0.3",
+                "publicationDate": "2024-09-16",
+                "publisher": {
+                    "name": "BCROS - BC Registries and Online Services",
+                    "url": "https://www.bcregistry.gov.bc.ca/"
+                }
+            },
+            "source": {
+                "assertedBy": [
+                    {
+                        "name": "Wallaby Willow"
+                    }
+                ],
+                "description": "Using Gov BC - BTR - Web UI",
+                "type": [
+                    "selfDeclaration"
+                ]
+            },
+            "statementDate": "2024-09-16",
+            "statementID": "aef71bd1-8c64-4fff-a2d5-9a25b450745d",
+            "statementType": "ownershipOrControlStatement",
+            "subject": {
+                "describedByEntityStatement": ""
+            }
         },
         {
-          "type": "appointmentOfBoard",
-          "directOrIndirect": "direct",
-          "beneficialOwnershipOrControl": true,
-          "details": "",
-          "startDate": "2023-01-01"
+            "interestedParty": {
+                "describedByPersonStatement": "e935e86-f4b9-4938-b12e-29c5e5cc213e"
+            },
+            "interests": [],
+            "isComponent": false,
+            "publicationDetails": {
+                "bodsVersion": "0.3",
+                "publicationDate": "2024-09-12",
+                "publisher": {
+                    "name": "BCROS - BC Registries and Online Services",
+                    "url": "https://www.bcregistry.gov.bc.ca/"
+                }
+            },
+            "source": {
+                "assertedBy": [
+                    {
+                        "name": "test inc"
+                    }
+                ],
+                "description": "Using Gov BC - BTR - Web UI",
+                "type": [
+                    "selfDeclaration"
+                ]
+            },
+            "statementDate": "2024-09-12",
+            "statementID": "dcb727ae-0980-4c4c-a599-6ba5fde5a8b7",
+            "statementType": "ownershipOrControlStatement",
+            "subject": {
+                "describedByEntityStatement": ""
+            }
+        },
+        {
+            "interestedParty": {
+                "describedByPersonStatement": "d935e86-f4b9-4938-b12e-29c5e5cc213d"
+            },
+            "interests": [],
+            "isComponent": false,
+            "publicationDetails": {
+                "bodsVersion": "0.3",
+                "publicationDate": "2024-09-12",
+                "publisher": {
+                    "name": "BCROS - BC Registries and Online Services",
+                    "url": "https://www.bcregistry.gov.bc.ca/"
+                }
+            },
+            "source": {
+                "assertedBy": [
+                    {
+                        "name": "test inc"
+                    }
+                ],
+                "description": "Using Gov BC - BTR - Web UI",
+                "type": [
+                    "selfDeclaration"
+                ]
+            },
+            "statementDate": "2024-09-12",
+            "statementID": "dcb727ae-0980-4c4c-a599-6ba5fde5a8b7",
+            "statementType": "ownershipOrControlStatement",
+            "subject": {
+                "describedByEntityStatement": ""
+            }
         }
-      ]
-    }
-  ]
+    ],
+    "personStatements": [
+        {
+            "addresses": [
+                {
+                    "city": "Edmonton",
+                    "country": "CA",
+                    "countryName": "Canada",
+                    "postalCode": "T6T 1B6",
+                    "region": "AB",
+                    "street": "4323 33 St NW",
+                    "streetAdditional": ""
+                }
+            ],
+            "birthDate": "2023-11-07",
+            "email": "fake@email.com",
+            "hasTaxNumber": true,
+            "identifiers": [
+                {
+                    "id": "711 612 325",
+                    "scheme": "CAN-TAXID",
+                    "schemeName": "ITN"
+                }
+            ],
+            "isComponent": false,
+            "isPermanentResidentCa": false,
+            "names": [
+                {
+                    "fullName": "Kial Jinnah",
+                    "type": "individual"
+                }
+            ],
+            "nationalities": [
+                {
+                    "code": "CA",
+                    "name": "Canada"
+                }
+            ],
+            "personType": "knownPerson",
+            "phoneNumber": {
+                "countryCallingCode": "1",
+                "countryCode2letterIso": "CA",
+                "number": "7783888844"
+            },
+            "placeOfResidence": {
+                "city": "Edmonton",
+                "country": "CA",
+                "countryName": "Canada",
+                "postalCode": "T6T 1B6",
+                "region": "AB",
+                "street": "4323 33 St NW",
+                "streetAdditional": ""
+            },
+            "publicationDetails": {
+                "bodsVersion": "0.3",
+                "publicationDate": "2024-09-11",
+                "publisher": {
+                    "name": "BCROS - BC Registries and Online Services",
+                    "url": "https://www.bcregistry.gov.bc.ca/"
+                }
+            },
+            "source": {
+                "assertedBy": [
+                    {
+                        "name": "Kial Jinnah"
+                    }
+                ],
+                "description": "Using Gov BC - BTR - Web UI",
+                "type": [
+                    "selfDeclaration"
+                ]
+            },
+            "statementDate": "2024-09-11",
+            "statementID": "1199dc30-6cd8-47fa-be79-f057348ab36b",
+            "statementType": "personStatement",
+            "taxResidencies": [
+                {
+                    "code": "CA",
+                    "name": "Canada"
+                }
+            ],
+            "uuid": "a4b3844a-f68b-4092-b490-85a603f6d424"
+        },
+        {
+            "addresses": [
+                {
+                    "city": "Vancouver",
+                    "country": "CA",
+                    "countryName": "Canada",
+                    "postalCode": "V6H 2T8",
+                    "region": "BC",
+                    "street": "Th-3023 Birch St",
+                    "streetAdditional": ""
+                }
+            ],
+            "birthDate": "2000-02-02",
+            "email": "fake2@email.com",
+            "hasTaxNumber": true,
+            "identifiers": [
+                {
+                    "id": "402 931 299",
+                    "scheme": "CAN-TAXID",
+                    "schemeName": "ITN"
+                }
+            ],
+            "isComponent": false,
+            "isPermanentResidentCa": true,
+            "names": [
+                {
+                    "fullName": "Wallaby Willow",
+                    "type": "individual"
+                }
+            ],
+            "nationalities": [
+                {
+                    "code": "AL",
+                    "name": "Albania"
+                },
+                {
+                    "code": "BZ",
+                    "name": "Belize"
+                }
+            ],
+            "personType": "knownPerson",
+            "phoneNumber": {
+                "countryCallingCode": "1",
+                "countryCode2letterIso": "CA",
+                "number": "2508747772"
+            },
+            "placeOfResidence": {
+                "city": "Vancouver",
+                "country": "CA",
+                "countryName": "Canada",
+                "postalCode": "V6H 2T8",
+                "region": "BC",
+                "street": "Th-3023 Birch St",
+                "streetAdditional": ""
+            },
+            "publicationDetails": {
+                "bodsVersion": "0.3",
+                "publicationDate": "2024-09-16",
+                "publisher": {
+                    "name": "BCROS - BC Registries and Online Services",
+                    "url": "https://www.bcregistry.gov.bc.ca/"
+                }
+            },
+            "source": {
+                "assertedBy": [
+                    {
+                        "name": "Wallaby Willow"
+                    }
+                ],
+                "description": "Using Gov BC - BTR - Web UI",
+                "type": [
+                    "selfDeclaration"
+                ]
+            },
+            "statementDate": "2024-09-16",
+            "statementID": "4b7863a1-4fbf-42a5-afe8-8f4a4f3ca049",
+            "statementType": "personStatement",
+            "taxResidencies": [
+                {
+                    "code": "CA",
+                    "name": "Canada"
+                }
+            ],
+            "uuid": "1a825cce-a3fa-47b2-b8c3-e2fae40ac7df"
+        },
+        {
+            "addresses": [
+                {
+                    "city": "Longueuil",
+                    "country": "CA",
+                    "countryName": "Canada",
+                    "postalCode": "J4H 3X9",
+                    "region": "QC",
+                    "street": "433-405 Ch De Chambly",
+                    "streetAdditional": ""
+                }
+            ],
+            "birthDate": "2005-09-13",
+            "email": "fake3@email.com",
+            "hasTaxNumber": false,
+            "identifiers": [],
+            "isComponent": false,
+            "isPermanentResidentCa": false,
+            "names": [
+                {
+                    "fullName": "Waffles Butter",
+                    "type": "individual"
+                }
+            ],
+            "nationalities": [
+                {
+                    "code": "US",
+                    "name": "United States"
+                }
+            ],
+            "personType": "knownPerson",
+            "phoneNumber": {
+                "countryCallingCode": "1",
+                "countryCode2letterIso": "CA",
+                "number": "7784467467"
+            },
+            "placeOfResidence": {
+                "city": "Longueuil",
+                "country": "CA",
+                "countryName": "Canada",
+                "postalCode": "J4H 3X9",
+                "region": "QC",
+                "street": "433-405 Ch De Chambly",
+                "streetAdditional": ""
+            },
+            "publicationDetails": {
+                "bodsVersion": "0.3",
+                "publicationDate": "2024-09-12",
+                "publisher": {
+                    "name": "BCROS - BC Registries and Online Services",
+                    "url": "https://www.bcregistry.gov.bc.ca/"
+                }
+            },
+            "source": {
+                "assertedBy": [
+                    {
+                        "name": "Waffles Butter"
+                    }
+                ],
+                "description": "Using Gov BC - BTR - Web UI",
+                "type": [
+                    "selfDeclaration"
+                ]
+            },
+            "statementDate": "2024-09-12",
+            "statementID": "ce935e86-f4b9-4938-b12e-29c5e5cc213d",
+            "statementType": "personStatement",
+            "taxResidencies": [],
+            "uuid": "839e35b8-d536-42e6-82ba-ba3c5a13582d"
+        },
+        {
+            "addresses": [
+                {
+                    "city": "Longueuil",
+                    "country": "CA",
+                    "countryName": "Canada",
+                    "postalCode": "J4H 3X9",
+                    "region": "QC",
+                    "street": "433-405 Ch De Chambly",
+                    "streetAdditional": ""
+                }
+            ],
+            "email": "fake4@email.com",
+            "hasTaxNumber": false,
+            "identifiers": [],
+            "isComponent": false,
+            "isPermanentResidentCa": false,
+            "missingInfoReason": "Test person with no birth date",
+            "names": [
+                {
+                    "fullName": "Tester MissingInfoBday",
+                    "type": "individual"
+                }
+            ],
+            "personType": "knownPerson",
+            "placeOfResidence": {
+                "city": "Longueuil",
+                "country": "CA",
+                "countryName": "Canada",
+                "postalCode": "J4H 3X9",
+                "region": "QC",
+                "street": "433-405 Ch De Chambly",
+                "streetAdditional": ""
+            },
+            "publicationDetails": {
+                "bodsVersion": "0.3",
+                "publicationDate": "2024-09-12",
+                "publisher": {
+                    "name": "BCROS - BC Registries and Online Services",
+                    "url": "https://www.bcregistry.gov.bc.ca/"
+                }
+            },
+            "source": {
+                "assertedBy": [
+                    {
+                        "name": "Waffles Butter"
+                    }
+                ],
+                "description": "Using Gov BC - BTR - Web UI",
+                "type": [
+                    "selfDeclaration"
+                ]
+            },
+            "statementDate": "2024-09-12",
+            "statementID": "e935e86-f4b9-4938-b12e-29c5e5cc213e",
+            "statementType": "personStatement",
+            "taxResidencies": [],
+            "uuid": "939e35b8-d536-42e6-82ba-ba3c5a13582z"
+        },
+        {
+            "addresses": [
+                {
+                    "city": "Longueuil",
+                    "country": "CA",
+                    "countryName": "Canada",
+                    "postalCode": "J4H 3X9",
+                    "region": "QC",
+                    "street": "433-405 Ch De Chambly",
+                    "streetAdditional": ""
+                }
+            ],
+            "hasTaxNumber": false,
+            "identifiers": [],
+            "isComponent": false,
+            "isPermanentResidentCa": false,
+            "missingInfoReason": "Test person with no email",
+            "names": [
+                {
+                    "fullName": "Test MissingInfoEmail",
+                    "type": "individual"
+                }
+            ],
+            "personType": "knownPerson",
+            "placeOfResidence": {
+                "city": "Longueuil",
+                "country": "CA",
+                "countryName": "Canada",
+                "postalCode": "J4H 3X9",
+                "region": "QC",
+                "street": "433-405 Ch De Chambly",
+                "streetAdditional": ""
+            },
+            "publicationDetails": {
+                "bodsVersion": "0.3",
+                "publicationDate": "2024-09-12",
+                "publisher": {
+                    "name": "BCROS - BC Registries and Online Services",
+                    "url": "https://www.bcregistry.gov.bc.ca/"
+                }
+            },
+            "source": {
+                "assertedBy": [
+                    {
+                        "name": "Waffles Butter"
+                    }
+                ],
+                "description": "Using Gov BC - BTR - Web UI",
+                "type": [
+                    "selfDeclaration"
+                ]
+            },
+            "statementDate": "2024-09-12",
+            "statementID": "d935e86-f4b9-4938-b12e-29c5e5cc213d",
+            "statementType": "personStatement",
+            "taxResidencies": [],
+            "uuid": "939e35b8-d536-42e6-82ba-ba3c5a13582z"
+        }
+    ]
 }
