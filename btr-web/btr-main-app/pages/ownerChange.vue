@@ -79,6 +79,9 @@ onBeforeMount(async () => {
       <p class="mt-5" data-cy="page-info-text">
         {{ $t('texts.significantIndividuals') }}
       </p>
+      <p class="mt-5 italic" data-cy="collection-notice-text">
+        {{ $t('texts.collectionNotice') }}
+      </p>
       <BcrosHelpTip
         :title="$t('helpTitles.significantIndividuals.closed')"
         :title-expanded="$t('helpTitles.significantIndividuals.expanded')"
