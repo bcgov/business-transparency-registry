@@ -35,6 +35,7 @@ const { completingPartyRef } = storeToRefs(omitIndividual)
         section-title-icon="i-mdi-account-supervisor-circle-outline"
         rounded-bot
         rounded-top
+        :padded-top="true"
         class="mb-10"
       >
         <BcrosCompletingParty ref="completingPartyRef" v-model="omitIndividual.completingParty" />

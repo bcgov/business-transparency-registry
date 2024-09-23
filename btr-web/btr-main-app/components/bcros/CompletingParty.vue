@@ -73,8 +73,6 @@ z.setErrorMap(CompletingPartyErrorMap)
       <BcrosSection
         :show-section-has-errors="hasErrors(['invididualType'])"
         :section-title="$t('labels.requestOmit.completingParty')"
-        rounded-bot
-        :rounded-top="!editMode"
         :border="false"
         :padded-x="false"
         :padded-y="false"
@@ -99,8 +97,6 @@ z.setErrorMap(CompletingPartyErrorMap)
       <BcrosSection
         :show-section-has-errors="hasErrors(['name'])"
         :section-title="$t('placeholders.fullName')"
-        rounded-bot
-        :rounded-top="!editMode"
         :border="false"
         :padded-x="false"
         :padded-y="false"
@@ -119,8 +115,6 @@ z.setErrorMap(CompletingPartyErrorMap)
       <BcrosSection
         :show-section-has-errors="hasErrors(['email'])"
         :section-title="$t('registriesDetailsLabels.emailAddress')"
-        rounded-bot
-        :rounded-top="!editMode"
         :border="false"
         :padded-x="false"
         :padded-y="false"
@@ -139,12 +133,10 @@ z.setErrorMap(CompletingPartyErrorMap)
       <BcrosSection
         :show-section-has-errors="hasErrors(['certify'])"
         :section-title="$t('labels.certifySection')"
-        rounded-bot
-        :rounded-top="!editMode"
         :border="false"
         :padded-x="false"
         :padded-y="false"
-        class="py-9 -ml-8 pl-8"
+        class="pt-9 -ml-8 pl-8 pb-10"
       >
         <div class="flex-col w-full">
           <UFormGroup name="certify" eager-validation>
