@@ -24,7 +24,7 @@
               </div>
               <br>
               <div>
-                {{ `${altNote} ? ${$t('texts.certify.noteAlt')} : ${$t('texts.certify.note')}` }}
+                {{ altNote ? $t('texts.certify.noteAlt') : $t('texts.certify.note') }}
               </div>
             </div>
           </template>

@@ -42,7 +42,8 @@
         'flex-col': sectionTitleFull,
         'flex-row': !sectionTitleFull,
         'px-8': paddedX,
-        'py-10': paddedY
+        'py-10': paddedY && !paddedTop,
+        'pt-10': paddedTop
       }"
     >
       <slot name="section-title">
@@ -82,7 +83,8 @@ const props = defineProps({
   noTopBorder: { type: Boolean, required: false, default: false },
   noBotBorder: { type: Boolean, required: false, default: false },
   paddedX: { type: Boolean, required: false, default: true },
-  paddedY: { type: Boolean, required: false, default: true }
+  paddedY: { type: Boolean, required: false, default: true },
+  paddedTop: { type: Boolean, required: false, default: false }
 })
 
 const sectionTitleFull = computed(
