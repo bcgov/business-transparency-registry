@@ -196,9 +196,8 @@ def update_submission(sub_id: int):
             btr_auth.is_authorized(request=request, business_identifier=business_identifier)
             btr_auth.product_authorizations(request=request, account_id=account_id)
 
-            # get entity (use service token so that the entity data is cached for emails)
-            service_token = btr_auth.get_bearer_token()
-            entity: dict = btr_entity.get_entity_info(None, business_identifier, service_token).json()
+            # get entity
+            entity: dict = btr_entity.get_entity_info(jwt, business_identifier).json()
 
             # validate entity; return FORBIDDEN for historial and frozen companies
             if entity_errors := validate_entity(entity):
