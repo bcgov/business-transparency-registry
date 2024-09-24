@@ -110,12 +110,11 @@ const getPersonAndOwnershipAndControlStatements = (sif: SignificantIndividualFil
       source,
       statementDate: todayIsoDateString(),
       statementType: BodsStatementTypeE.PERSON_STATEMENT,
-
-      statementID: UUIDv4() // todo: fixme we should update schema only if there are changes to the schema itself....
+      statementID: siSchema.uuid
     }
 
     const oocs: BtrBodsOwnershipOrControlI = {
-      statementID: UUIDv4(),
+      statementID: siSchema.ownershipStatementId || UUIDv4(),
       interests: SiSchemaToBtrBodsConverters.getInterests(siSchema),
       interestedParty: { describedByPersonStatement: personStatement.statementID },
       isComponent: false,

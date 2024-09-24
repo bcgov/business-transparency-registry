@@ -1,10 +1,12 @@
+from __future__ import annotations
+
 import datetime
-from unittest import mock
 
 import pytest
 
-from btr_api.config import Testing
-from btr_api.models.user import User, db
+from btr_api.models import User
+
+from tests.unit.utils.db_helpers import clear_db
 
 
 @pytest.fixture
@@ -24,7 +26,8 @@ def test_display_name_without_name():
     assert sample_user.display_name == "testUserName"
 
 
-def test_find_by_id(client, session, sample_user):
+def test_find_by_id(session, sample_user):
+    clear_db(session)
     session.add(sample_user)
     session.commit()
 
@@ -42,21 +45,19 @@ def test_find_by_username(client, session, sample_user):
     assert result.username == sample_user.username
 
 
-def test_find_by_sub(client, session, sample_user):
-    # session.add(sample_user)
-    # session.commit()
-
+def test_find_by_sub(sample_user):
     result = User.find_by_sub(sample_user.sub)
-
     assert result.sub == sample_user.sub
 
 
-def test_create_from_jwt_token(client, session,sample_user):
+def test_create_from_jwt_token(session):
+    clear_db(session)
     sample_token = {
         "iss": "test",
         "sub": f"subTest{datetime.datetime.now().strftime('%Y%m%d%H%M')}",
         "idp_userid": "testUserID",
         "loginSource": "testLogin",
+        "username": "test"
     }
 
     result = User.create_from_jwt_token(sample_token)
@@ -64,7 +65,7 @@ def test_create_from_jwt_token(client, session,sample_user):
     assert result.login_source == sample_token['loginSource']
 
 
-def test_save(client, session, sample_user):
+def test_save(session, sample_user):
     u1 = User.find_by_username(sample_user.username)
     if not u1:
         session.add(sample_user)
@@ -75,8 +76,3 @@ def test_save(client, session, sample_user):
     result = User.find_by_username("totallyNewOne")
     assert result
     assert result.username == "totallyNewOne"
-
-
-def test_delete(sample_user):
-    result = sample_user.delete()
-    assert result == sample_user

@@ -85,6 +85,7 @@ export const SiSchema = z.object({
   effectiveDates: z.array(StartEndDateGroup).min(1),
 
   uuid: z.string().min(1),
+  ownershipStatementId: z.string(),
 
   // UI helper values
   ui: z.object({

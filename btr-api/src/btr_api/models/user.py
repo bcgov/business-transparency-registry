@@ -1,6 +1,6 @@
 # Copyright © 2023 Province of British Columbia
 #
-# Licensed under the BSD 3 Clause License, (the "License");
+# Licensed under the BSD 3 Clause License, (the 'License');
 # you may not use this file except in compliance with the License.
 # The template for the license can be found here
 #    https://opensource.org/license/bsd-3-clause/
@@ -38,11 +38,19 @@ here as a convenience for audit and db reporting.
 """
 from __future__ import annotations
 
-from flask import current_app
+from datetime import datetime
+from typing import TYPE_CHECKING
 
-from .db import db
+from flask import current_app
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+
+from .base import Base
 from ..common.enum import auto
 from ..common.enum import BaseEnum
+
+if TYPE_CHECKING:
+    # https://mypy.readthedocs.io/en/stable/runtime_troubles.html#import-cycles
+    from .submission import Submission
 
 
 class UserRoles(BaseEnum):
@@ -59,22 +67,24 @@ class UserRoles(BaseEnum):
     # pylint: enable=invalid-name
 
 
-class User(db.Model):
+class User(Base):
     """Used to hold the audit information for a User of this service."""
 
-    __tablename__ = "users"
+    __tablename__ = 'users'
 
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(1000), index=True)
-    firstname = db.Column(db.String(1000))
-    lastname = db.Column(db.String(1000))
-    middlename = db.Column(db.String(1000))
-    email = db.Column(db.String(1024))
-    sub = db.Column(db.String(36), unique=True)
-    iss = db.Column(db.String(1024))
-    idp_userid = db.Column(db.String(256), index=True)
-    login_source = db.Column(db.String(200), nullable=True)
-    creation_date = db.Column(db.DateTime(timezone=True))
+    id: Mapped[int] = mapped_column(primary_key=True)
+    username: Mapped[str] = mapped_column(index=True)
+    firstname: Mapped[str] = mapped_column(nullable=True)
+    lastname: Mapped[str] = mapped_column(nullable=True)
+    middlename: Mapped[str] = mapped_column(nullable=True)
+    email: Mapped[str] = mapped_column(nullable=True)
+    sub: Mapped[str] = mapped_column(unique=True)
+    iss: Mapped[str] = mapped_column()
+    idp_userid: Mapped[str] = mapped_column(index=True)
+    login_source: Mapped[str] = mapped_column(nullable=True)
+    creation_date: Mapped[datetime] = mapped_column(default=datetime.now)
+    # relationships
+    submissions: Mapped[list['Submission']] = relationship(back_populates='submitter')
 
     @property
     def display_name(self):
@@ -83,16 +93,16 @@ class User(db.Model):
         If there is actual name info, return that; otherwise username.
         """
         if self.firstname or self.lastname or self.middlename:
-            return " ".join(filter(None, [self.firstname, self.middlename, self.lastname])).strip()
+            return ' '.join(filter(None, [self.firstname, self.middlename, self.lastname])).strip()
 
         # parse off idir\ or @idir
-        if self.username[:4] == "idir":
+        if self.username[:4] == 'idir':
             return self.username[5:]
-        if self.username[-4:] == "idir":
+        if self.username[-4:] == 'idir':
             return self.username[:-5]
 
         # do not show services card usernames
-        if self.username[:4] == "bcsc":
+        if self.username[:4] == 'bcsc':
             return None
 
         return self.username if self.username else None
@@ -105,7 +115,7 @@ class User(db.Model):
     @classmethod
     def find_by_jwt_token(cls, token: dict) -> User | None:
         """Return a User if they exist and match the provided JWT."""
-        if user_id := token.get("idp_userid"):
+        if user_id := token.get('idp_userid'):
             return cls.query.filter_by(idp_userid=user_id).one_or_none()
         return None
 
@@ -119,15 +129,15 @@ class User(db.Model):
         if token:
             conf = current_app.config
             user = User(
-                username=token.get(conf.get("JWT_OIDC_USERNAME"), None),
-                firstname=token.get(conf.get("JWT_OIDC_FIRSTNAME"), None),
-                lastname=token.get(conf.get("JWT_OIDC_LASTNAME"), None),
-                iss=token["iss"],
-                sub=token["sub"],
-                idp_userid=token["idp_userid"],
-                login_source=token["loginSource"],
+                username=token.get(conf.get('JWT_OIDC_USERNAME'), None),
+                firstname=token.get(conf.get('JWT_OIDC_FIRSTNAME'), None),
+                lastname=token.get(conf.get('JWT_OIDC_LASTNAME'), None),
+                iss=token['iss'],
+                sub=token['sub'],
+                idp_userid=token['idp_userid'],
+                login_source=token['loginSource'],
             )
-            current_app.logger.debug(f"Creating user JWT:{token}; User:{user}")
+            current_app.logger.debug(f'Creating user JWT:{token}; User:{user}')
             user.save()
             return user
         return None
@@ -138,18 +148,18 @@ class User(db.Model):
         # GET existing or CREATE new user based on the JWT info
         try:
             user = User.find_by_jwt_token(jwt_oidc_token)
-            current_app.logger.debug(f"finding user: {jwt_oidc_token}")
+            current_app.logger.debug(f'finding user: {jwt_oidc_token}')
             if not user:
-                current_app.logger.debug(f"didnt find user, create new user:{jwt_oidc_token}")
+                current_app.logger.debug(f'didnt find user, create new user:{jwt_oidc_token}')
                 user = User.create_from_jwt_token(jwt_oidc_token)
 
             return user
         except Exception as err:
             current_app.logger.error(err.with_traceback(None))
             raise Exception(  # pylint: disable=broad-exception-raised
-                "unable_to_get_or_create_user",
-                '{"code": "unable_to_get_or_create_user",'
-                '"description": "Unable to get or create user from the JWT"}',
+                'unable_to_get_or_create_user',
+                "{'code': 'unable_to_get_or_create_user',"
+                "'description': 'Unable to get or create user from the JWT'}",
             ) from err
 
     @classmethod
@@ -161,13 +171,3 @@ class User(db.Model):
     def find_by_sub(cls, sub) -> User | None:
         """Return a User based on the unique sub field."""
         return cls.query.filter_by(sub=sub).one_or_none()
-
-    def save(self):
-        """Store the User into the local cache."""
-        db.session.add(self)
-        db.session.commit()
-
-    def delete(self):
-        """Cannot delete User records."""
-        return self
-        # need to intercept the ORM and stop Users from being deleted

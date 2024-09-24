@@ -73,3 +73,13 @@ def downgrade():
 
     op.drop_table('users')
     # ### end Alembic commands ###
+    op.execute(f"""
+               DELETE
+               FROM pg_enum
+               WHERE enumtypid = (SELECT oid FROM pg_type WHERE typname='submissiontype')
+               """)
+    op.execute(f"""
+               DELETE
+               FROM pg_type
+               WHERE typname='submissiontype'
+               """)
