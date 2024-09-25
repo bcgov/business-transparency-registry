@@ -164,7 +164,7 @@ describe('pages -> Summary Table', () => {
     // update citizenships
     cy.get('[data-cy="citizenshipsComboboxButton"]').click()
     // select bangladesh
-    cy.get('[id^="headlessui-combobox-options"]').find('li').eq(20).click({ force: true })
+    cy.get('[id^="headlessui-combobox-options"]').find('li').eq(18).click({ force: true })
     // click 'Done'
     cy.get('[data-cy=new-si-done-btn]').click()
     // should trigger 'updating' row for 1 second
@@ -321,7 +321,9 @@ describe('pages -> Summary Table', () => {
   })
 
   it('test two ways to remove citizenship in the edit form', () => {
-    cy.addTestIndividuals()
+    cy.fixture('individuals').then((testData) => {
+      cy.addSingleTestSi(testData.profile3)
+    })
 
     // open the edit form for the first SI and ensure it has one citizenship selected,
     // remove the citizenship by clicking on the selected item in the dropdown, and the SI should have no citizenship
@@ -330,12 +332,10 @@ describe('pages -> Summary Table', () => {
     cy.get('[data-cy="citizenshipsComboboxButton"]').click()
     cy.get('[id^="headlessui-combobox-options"]').find('li').first().click({ force: true })
     cy.get('[data-cy="citizenshipsComboboxChip"]').should('have.length', 0)
-
     cy.get('[data-cy=new-si-cancel-btn]').click()
-
     // open the edit form for the second SI and ensure it has one citizenship selected,
     // remove the citizenship by clicking on the selected citizenship tag, and the SI should have no citizenship
-    cy.get('[data-cy=action-button]').eq(1).click()
+    cy.get('[data-cy=action-button]').eq(0).click()
     cy.get('[data-cy="citizenshipsComboboxChip"]').should('have.length', 1)
     cy.get('[data-cy="citizenshipsComboboxChip"]').eq(0).get('[data-cy="close-icon"]').click()
     cy.get('[data-cy="citizenshipsComboboxChip"]').should('have.length', 0)
@@ -346,29 +346,29 @@ describe('pages -> Summary Table', () => {
     const expectedDate = dateToString(today, 'YYYY-MM-DD')
 
     cy.fixture('individuals').then((testData) => {
-      cy.addTestIndividuals()
+      cy.addSingleTestSi(testData.profile3)
 
       cy.get('[data-cy=action-button]').first().click()
 
-      cy.get('#individual-person-full-name').should('have.value', testData.profile1.fullName)
-      cy.get('#individual-person-preferred-name').should('have.value', testData.profile1.preferredName)
-      cy.get('#individual-person-email').should('have.value', testData.profile1.email)
+      cy.get('#individual-person-full-name').should('have.value', testData.profile3.fullName)
+      cy.get('#individual-person-preferred-name').should('have.value', testData.profile3.preferredName)
+      cy.get('#individual-person-email').should('have.value', testData.profile3.email)
       // todo: fixme update with #TBD
-      // .get('input[name="percentOfShares[range]"]').invoke('val').should('eq', testData.profile1.percentOfShares)
-      // .get('input[name="percentOfShares[range]"]').invoke('val').should('eq', testData.profile1.percentOfVotes)
+      // .get('input[name="percentOfShares[range]"]').invoke('val').should('eq', testData.profile3.percentOfShares)
+      // .get('input[name="percentOfShares[range]"]').invoke('val').should('eq', testData.profile3.percentOfVotes)
       // todo: fixme update with #20756
       // .get('[data-cy="testTypeOfControl"]').get('[name="registeredOwner"]').should('be.checked')
       // .get('[data-cy="testControlOfDirectors"]').get('[name="directControl"]').should('be.checked')
       // todo: fix on #TBD (summary table ticket)
       // .get('[data-cy=date-select]').should('have.value', expectedDate)
       cy.get('[data-cy="start-date-select"]').find('input').should('have.value', expectedDate)
-      cy.get('[data-cy="address-country"]').contains(testData.profile1.address.country)
+      cy.get('[data-cy="address-country"]').contains(testData.profile3.address.country)
       cy.get('[data-cy="address-line1-autocomplete"] input')
-        .should('have.value', testData.profile1.address.streetAddress)
-      cy.get('[data-cy="address-city"]').should('have.value', testData.profile1.address.city)
-      cy.get('[data-cy="address-region-select"]').contains(testData.profile1.address.province[0])
-      cy.get('[data-cy="address-postal-code"]').should('have.value', testData.profile1.address.postalCode)
-      cy.get('[data-cy="citizenshipsComboboxButton"]').contains(testData.profile1.citizenships[0].name)
+        .should('have.value', testData.profile3.address.streetAddress)
+      cy.get('[data-cy="address-city"]').should('have.value', testData.profile3.address.city)
+      cy.get('[data-cy="address-region-select"]').contains(testData.profile3.address.province[0])
+      cy.get('[data-cy="address-postal-code"]').should('have.value', testData.profile3.address.postalCode)
+      cy.get('[data-cy="citizenshipsComboboxButton"]').contains(testData.profile3.citizenships[0].name)
     })
   })
 

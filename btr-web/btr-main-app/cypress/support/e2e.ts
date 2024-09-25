@@ -37,7 +37,7 @@ Cypress.Commands.add('interceptPayFeeApi', () => {
   cy.fixture('payFeeForBtrRegsigin').then((payFeesForBtrRegsigin) => {
     cy.intercept(
       'GET',
-      'https://pay-api-dev.apps.silver.devops.gov.bc.ca/api/v1/fees/BTR/REGSIGIN',
+      '**/api/v1/fees/BTR/REGSIGIN',
       { data: payFeesForBtrRegsigin })
   })
 })
@@ -46,7 +46,7 @@ Cypress.Commands.add('interceptLearApiEmptyResponse', () => {
   cy.fixture('payFeeForBtrRegsigin').then(() => {
     cy.intercept(
       'GET',
-      'https://pay-api-dev.apps.silver.devops.gov.bc.ca/api/v1/fees/BTR/REGSIGIN',
+      '**/api/v1/fees/BTR/REGSIGIN',
       {})
   })
 })
@@ -55,7 +55,7 @@ Cypress.Commands.add('interceptAccounts', () => {
   cy.fixture('accounts').then((accounts) => {
     cy.intercept(
       'GET',
-      'https://auth-api-dev.apps.silver.devops.gov.bc.ca/api/v1/users/testSub/settings',
+      '**/api/v1/users/testSub/settings',
       accounts)
   })
 })
@@ -64,7 +64,7 @@ Cypress.Commands.add('interceptBusinessSlim', () => {
   cy.fixture('business').then((business) => {
     cy.intercept(
       'GET',
-      `https://legal-api-dev.apps.silver.devops.gov.bc.ca/api/v2/businesses/${business.identifier}?slim=true`,
+      `**/api/v2/businesses/${business.identifier}?slim=true`,
       { business })
   })
 })
@@ -74,7 +74,7 @@ Cypress.Commands.add('interceptBusinessContact', () => {
     cy.fixture('businessContact').then((contact) => {
       cy.intercept(
         'GET',
-        `https://auth-api-dev.apps.silver.devops.gov.bc.ca/api/v1/entities/${business.identifier}`,
+        `**/api/v1/entities/${business.identifier}`,
         contact)
     })
   })
@@ -112,71 +112,64 @@ Cypress.Commands.add('visitHomePageWithFakeDataAndAxeInject', () => {
   cy.injectAxe()
 })
 
+Cypress.Commands.add('siSelectCitizenship', (citizenships: Array<BtrCountryI>) => {
+  const isCitizen = citizenships.findIndex((country: BtrCountryI) => country.alpha_2 === 'CA') !== -1
+  const isPr = citizenships.findIndex((country: BtrCountryI) => country.alpha_2 === 'CA_PR') !== -1
+  if (isCitizen) {
+    cy.get('input[data-cy="citizenships-ca-citizen-radio"]').check()
+  } else if (isPr) {
+    cy.get('input[data-cy="citizenships-ca-pr-radio"]').check()
+  } else {
+    cy.get('input[data-cy="citizenships-other-radio"]').check()
+    cy.get('[data-cy="citizenshipsComboboxButton"]').click().then(
+      () => {
+        for (const country of citizenships) {
+          cy.get('[id^="headlessui-combobox-options"]').contains(`${country.name}`).first().click({ force: true })
+        }
+      }
+    )
+  }
+})
+
+Cypress.Commands.add('addSingleTestSi', (profile: any) => {
+  cy.get('[data-cy=add-new-btn]').click()
+  cy.get('#individual-person-full-name').type(profile.fullName)
+  cy.get('[data-cy=usePreferredName').check()
+  cy.get('#individual-person-preferred-name').type(profile.preferredName)
+  cy.get('#individual-person-email').type(profile.email)
+  // todo: fixme: update on #20758
+  // cy.get('[data-cy=testPercentOfShares]').click()
+  // cy.get('[data-cy=testPercentOfShares]').find('li').first().click()
+  // cy.get('[data-cy=testPercentOfVotes]').click()
+  // cy.get('[data-cy=testPercentOfVotes]').find('li').first().click()
+  // todo: fixme: update on #20756
+  // cy.get('[data-cy="testTypeOfControl"]').get('[name="registeredOwner"]').check()
+  // cy.get('[data-cy="testControlOfDirectors"]').get('[name="directControl"]').check()
+  cy.get('[data-cy="start-date-select"]').click().then(() => {
+    cy.get('.bcros-date-picker__calendar__day.dp__today').parent().click()
+  })
+  cy.get('#addNewPersonBirthdate').trigger('click')
+  cy.get('[data-cy=date-picker]').get('.bcros-date-picker__calendar__day.dp__today').trigger('click')
+  cy.get('[data-cy="address-country"]').click()
+  cy.get('[data-cy="address-country"]').get('li').contains(profile.address.country).click()
+  cy.get('[data-cy="address-line1-autocomplete"]').type(profile.address.streetAddress)
+  cy.get('[data-cy="address-city"]').type(profile.address.city)
+  cy.get('[data-cy="address-region-select"]').click()
+  cy.get('[data-cy="address-region-select"]').get('li').contains(profile.address.province[0]).click()
+  cy.get('[data-cy="address-postal-code"]').type(profile.address.postalCode)
+
+  cy.siSelectCitizenship(profile.citizenships)
+
+  cy.get('[data-cy="tax-number-input"]').type(profile.taxNumber)
+  cy.get('[data-cy="testTaxResidency"]').get('[type="radio"][value="true"]').check()
+  cy.get('[data-cy=new-si-done-btn]').click()
+})
+
 Cypress.Commands.add('addTestIndividuals', (multiple = true) => {
   cy.fixture('individuals').then((testData) => {
-    cy.get('[data-cy=add-new-btn]').click()
-    cy.get('#individual-person-full-name').type(testData.profile1.fullName)
-    cy.get('[data-cy=usePreferredName').check()
-    cy.get('#individual-person-preferred-name').type(testData.profile1.preferredName)
-    cy.get('#individual-person-email').type(testData.profile1.email)
-    // todo: fixme: update on #TBD with new summary table
-    // cy.get('[data-cy=testPercentOfShares]').click()
-    // cy.get('[data-cy=testPercentOfShares]').find('li').first().click()
-    // cy.get('[data-cy=testPercentOfVotes]').click()
-    // cy.get('[data-cy=testPercentOfVotes]').find('li').first().click()
-    // todo: fixme: update on #20756
-    // cy.get('[data-cy="testTypeOfControl"]').get('[name="registeredOwner"]').check()
-    // cy.get('[data-cy="testControlOfDirectors"]').get('[name="directControl"]').check()
-    cy.get('[data-cy="start-date-select"]').click().then(() => {
-      cy.get('.bcros-date-picker__calendar__day.dp__today').parent().click()
-    })
-    cy.get('#addNewPersonBirthdate').trigger('click')
-    cy.get('[data-cy=date-picker]').get('.bcros-date-picker__calendar__day.dp__today').trigger('click')
-    cy.get('[data-cy="address-country"]').click()
-    cy.get('[data-cy="address-country"]').get('li').contains(testData.profile1.address.country).click()
-    cy.get('[data-cy="address-line1-autocomplete"]').type(testData.profile1.address.streetAddress)
-    cy.get('[data-cy="address-city"]').type(testData.profile1.address.city)
-    cy.get('[data-cy="address-region-select"]').click()
-    cy.get('[data-cy="address-region-select"]').get('li').contains(testData.profile1.address.province[0]).click()
-    cy.get('[data-cy="address-postal-code"]').type(testData.profile1.address.postalCode)
-    cy.get('[data-cy="citizenshipsComboboxButton"]').click()
-    cy.get('[id^="headlessui-combobox-options"]').find('li').first().click({ force: true })
-    cy.get('[data-cy="tax-number-input"]').type(testData.profile1.taxNumber)
-    cy.get('[data-cy="testTaxResidency"]').get('[type="radio"][value="true"]').check()
-    cy.get('[data-cy=new-si-done-btn]').click()
-
+    cy.addSingleTestSi(testData.profile1)
     if (multiple) {
-      // Add the second individual
-      cy.get('[data-cy=add-new-btn]').click()
-      cy.get('#individual-person-full-name').type(testData.profile2.fullName)
-      cy.get('[data-cy=usePreferredName').check()
-      cy.get('#individual-person-preferred-name').type(testData.profile2.preferredName)
-      cy.get('#individual-person-email').type(testData.profile2.email)
-      // todo: fixme: update on #20758
-      // cy.get('[data-cy=testPercentOfShares]').click()
-      // cy.get('[data-cy=testPercentOfShares]').find('li').eq(2).click()
-      // cy.get('[data-cy=testPercentOfVotes]').click()
-      // cy.get('[data-cy=testPercentOfVotes]').find('li').eq(3).click()
-      // todo: fixme: update on #20756
-      // cy.get('[data-cy="testTypeOfControl"]').get('[name="registeredOwner"]').check()
-      // cy.get('[data-cy="testControlOfDirectors"]').get('[name="directControl"]').check()
-      cy.get('[data-cy="start-date-select"]').click().then(() => {
-        cy.get('.bcros-date-picker__calendar__day.dp__today').parent().click()
-      })
-      cy.get('#addNewPersonBirthdate').trigger('click')
-      cy.get('[data-cy=date-picker]').get('.bcros-date-picker__calendar__day.dp__today').trigger('click')
-      cy.get('[data-cy="address-country"]').click()
-      cy.get('[data-cy="address-country"]').get('li').contains(testData.profile2.address.country).click()
-      cy.get('[data-cy="address-line1-autocomplete"]').type(testData.profile2.address.streetAddress)
-      cy.get('[data-cy="address-city"]').type(testData.profile2.address.city)
-      cy.get('[data-cy="address-region-select"]').click()
-      cy.get('[data-cy="address-region-select"]').get('li').contains(testData.profile2.address.province[0]).click()
-      cy.get('[data-cy="address-postal-code"]').type(testData.profile2.address.postalCode)
-      cy.get('[data-cy="citizenshipsComboboxButton"]').click()
-      cy.get('[id^="headlessui-combobox-options"]').find('li').first().click({ force: true })
-      cy.get('[data-cy="tax-number-input"]').type(testData.profile2.taxNumber)
-      cy.get('[data-cy="testTaxResidency"]').get('[type="radio"][value="true"]').check()
-      cy.get('[data-cy=new-si-done-btn]').click()
+      cy.addSingleTestSi(testData.profile2)
     }
   })
 })

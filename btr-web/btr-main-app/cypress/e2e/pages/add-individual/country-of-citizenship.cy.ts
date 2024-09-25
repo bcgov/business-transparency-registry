@@ -1,11 +1,5 @@
 describe('pages -> Add individual', () => {
-  let en: any
-
   beforeEach(() => {
-    cy.readFile('lang/en.json').then((json) => {
-      en = json
-    })
-
     cy.visit('/')
   })
 
@@ -18,12 +12,15 @@ describe('pages -> Add individual', () => {
     // open dropdown
     cy.get('[data-cy="citizenshipsComboboxButton"]').click()
 
-    // check options are generating, 250 if not filtered (Canadian Citizen + PR + USA + 247 other countries)
-    cy.get('[id^="headlessui-combobox-options"]').find('li').should('have.length', 250)
+    // check options are generating, 248 if not filtered (USA + 247 other countries)
+    // Canadian and PR are now extracted as different options
+    cy.get('[id^="headlessui-combobox-options"]').find('li').should('have.length', 248)
 
-    // select first item on the list ('Canada (Citizen)') and ensure a chip is displayed
+    // select first item on the list ('United States') and ensure a chip is displayed
     cy.get('[id^="headlessui-combobox-options"]').find('li').first().click({ force: true })
-    cy.get('[data-cy="citizenshipsComboboxChip"]').should('have.length', 1)
+    cy.get('[data-cy="citizenshipsComboboxChip"]')
+      .should('have.length', 1)
+      .should('have.text', 'United States')
 
     // filter options
     cy.get('[id^="headlessui-combobox-input"]').eq(1).type('Cro')
@@ -34,26 +31,28 @@ describe('pages -> Add individual', () => {
     cy.get('[id^="headlessui-combobox-options"]').find('li').first().click({ force: true })
     cy.get('[id^="headlessui-combobox-options"]').find('li').first().should('have.text', 'Croatia Selected')
 
-    // make sure two chips are displayed (Canada and Croatia)
+    // make sure two chips are displayed (United States and Croatia)
     cy.get('[data-cy="citizenshipsComboboxChip"]').should('have.length', 2)
     cy.get('[data-cy="citizenshipsComboboxChip"]').last().should('have.text', 'Croatia')
   })
 
-  it('test the validation rule for the citizenship dropdown', () => {
+  it('test selections unselect and clear other options', () => {
     cy.get('[data-cy=add-new-btn]').trigger('click')
     cy.get('[data-cy="citizenshipsComboboxButton"]').click()
 
-    // When both Canadian citizen and PR are selected, an error is raised
-    cy.get('[id^="headlessui-combobox-options"]').find('li').eq(0).click({ force: true })
-    cy.get('[id^="headlessui-combobox-options"]').find('li').eq(1).click({ force: true })
-    cy.contains(en.errors.validation.citizenship.prCitizen).should('exist')
+    // Select citizen
+    cy.get('input[data-cy="citizenships-ca-citizen-radio"]').check()
+    cy.get('input[data-cy="citizenships-ca-pr-radio"]').should('not.be.checked')
+    cy.get('input[data-cy="citizenships-other-radio"]').should('not.be.checked')
 
-    // unselect the PR option to remove the error
-    cy.get('[id^="headlessui-combobox-options"]').find('li').eq(1).click({ force: true })
-    cy.contains(en.errors.validation.citizenship.prCitizen).should('not.exist')
+    // select PR
+    cy.get('input[data-cy="citizenships-ca-pr-radio"]').check()
+    cy.get('input[data-cy="citizenships-ca-citizen-radio"]').should('not.be.checked')
+    cy.get('input[data-cy="citizenships-other-radio"]').should('not.be.checked')
 
-    // clear the selection
-    cy.get('[id^="headlessui-combobox-options"]').find('li').eq(0).click({ force: true })
-    cy.contains(en.errors.validation.citizenship.required).should('exist')
+    // select other
+    cy.get('input[data-cy="citizenships-other-radio"]').check()
+    cy.get('input[data-cy="citizenships-ca-pr-radio"]').should('not.be.checked')
+    cy.get('input[data-cy="citizenships-ca-citizen-radio"]').should('not.be.checked')
   })
 })

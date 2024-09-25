@@ -72,11 +72,11 @@
     "postalCode": "Postal Code",
     "locationDescription": "Location Description (For rural addresses - Optional)",
     "countryOfCitizenship": {
-      "citizen": "Citizen of Canada",
-      "pr": "Permanent resident of Canada",
+      "citizen": "Canadian citizen",
+      "pr": "Canadian permanent resident",
       "others": "Other citizenship(s)",
       "selectAll": "Select all countries of which this person is a citizen.",
-      "placeholder": "Citizenship or permanent residency",
+      "placeholder": "Other Citizenships",
       "findCountry": "Find a Country",
       "hint": "Select all that apply",
       "note": "Note: An individual cannot be both a citizen and permanent resident of Canada."
