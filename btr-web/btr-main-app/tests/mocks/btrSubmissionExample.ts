@@ -141,7 +141,7 @@ export const btrSubmissionExampleMock = {
           ]
         },
         statementDate: '2024-01-30',
-        statementID: 'ea7e5edb-8d2c-4970-b90a-2e3a237fd67b', 
+        statementID: 'ea7e5edb-8d2c-4970-b90a-2e3a237fd67b',
         statementType: 'ownershipOrControlStatement',
         subject: {
           describedByEntityStatement: ''
