@@ -97,7 +97,7 @@ class Submission(Versioned, Base):
     @classmethod
     def get_filtered_submissions(cls):
         """Return the submissions."""
-        query = cls.query.order_by(desc(Submission.effective_date))
+        query = cls.query.order_by(desc(Submission.submitted_datetime))
         return query.all()
 
 
