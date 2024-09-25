@@ -42,6 +42,7 @@ The individual services can be invoked as per the requirements.
 """
 from copy import deepcopy
 from http import HTTPStatus
+import uuid
 
 from flask import current_app
 
@@ -85,9 +86,10 @@ class SubmissionService:  # pylint: disable=too-few-public-methods
         for person_stmnt in new_person_stmnts:
             ownership_stmnt = SubmissionService._get_linked_ownership_stmnt(person_stmnt['statementID'],
                                                                             new_ownership_stmnts)
-            person = Person(person_json=deepcopy(person_stmnt))
+            person = Person(statement_id=uuid.uuid4(), person_json=deepcopy(person_stmnt))
             person.save_to_session()
-            ownership = Ownership(ownership_json=deepcopy(ownership_stmnt),
+            ownership = Ownership(statement_id=uuid.uuid4(),
+                                  ownership_json=deepcopy(ownership_stmnt),
                                   person=person,
                                   submission=submission)
             ownership.save_to_session()

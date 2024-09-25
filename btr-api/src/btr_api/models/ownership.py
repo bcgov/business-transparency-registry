@@ -56,7 +56,7 @@ class Ownership(Versioned, Base):
     __tablename__ = 'ownership'
 
     id: Mapped[int] = mapped_column(primary_key=True)
-    statement_id: Mapped[uuid.UUID] = mapped_column(nullable=False, unique=True, default=uuid.uuid4)
+    statement_id: Mapped[uuid.UUID] = mapped_column(nullable=False, unique=True)
     ownership_json = Column(JSONB, nullable=False)
 
     # Relationships
@@ -90,6 +90,14 @@ class Ownership(Versioned, Base):
 @event.listens_for(Ownership, 'before_insert')
 def receive_before_insert(mapper, connection, target: Ownership):  # pylint: disable=unused-argument
     """Set the statement_id and describedByPersonStatement within the ownership_json."""
-    target.statement_id = uuid.uuid4()
     target.ownership_json['statementID'] = str(target.statement_id)
     target.ownership_json['interestedParty']['describedByPersonStatement'] = str(target.person.statement_id)
+
+    for interest in target.ownership_json.get('interests', []):
+        for individual in interest.get('connectedIndividuals', []):
+            # update the mapping to the generated statement id
+            if (
+                individual.get('uuid') and
+                (matching_statement_id := target.person.find_statement_id_by_uuid(individual['uuid']))
+            ):
+                individual['uuid'] = matching_statement_id

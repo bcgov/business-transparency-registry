@@ -90,11 +90,17 @@ class Person(Versioned, Base):
         """Return the person by statement."""
         return cls.query.filter_by(statement_id=statement_id).one_or_none()
 
+    @classmethod
+    def find_statement_id_by_uuid(cls, orig_uuid: str) -> str:
+        """Return the generated statement id by the uuid in the person_json."""
+        # NOTE: if this becomes slow add a jsonb index or pass in the ownership id as well
+        person: Person = cls.query.filter(cls.person_json['uuid'].astext == orig_uuid).one_or_none()
+        return str(person.statement_id) if person else None
+
 
 @event.listens_for(Person, 'before_insert')
 def receive_before_insert(mapper, connection, target: Person):  # pylint: disable=unused-argument
     """Set the statement_id within the person_json and the birthdate."""
-    target.statement_id = uuid.uuid4()
     target.person_json['statementID'] = str(target.statement_id)
 
     if birthdate := target.person_json.get('birthDate'):
