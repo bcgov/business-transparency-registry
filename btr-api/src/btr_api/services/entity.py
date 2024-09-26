@@ -65,7 +65,7 @@ class EntityService:
         self.timeout = app.config.get('LEGAL_SVC_TIMEOUT', 20)
         entity_cache.init_app(app)
 
-    def get_cache_key(self, jwt: JwtManager, path: str, token: str):
+    def get_cache_key(self, jwt: JwtManager, path: str, token: str = None):
         """Return the cache key for the given args."""
         if not token:
             token = jwt.get_token_auth_header()

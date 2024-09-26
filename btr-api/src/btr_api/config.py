@@ -126,7 +126,8 @@ class Config:  # pylint: disable=too-few-public-methods
     LEGISLATIVE_TIMEZONE = os.getenv('LEGISLATIVE_TIMEZONE', 'America/Vancouver')
 
     # Cache stuff
-    CACHE_TYPE = os.getenv('CACHE_TYPE', 'SimpleCache')
+    CACHE_TYPE = os.getenv('CACHE_TYPE', 'FileSystemCache')
+    CACHE_DIR = os.getenv('CACHE_DIR', 'cache')
     try:
         CACHE_DEFAULT_TIMEOUT = int(os.getenv('CACHE_DEFAULT_TIMEOUT', '300'))
     except (TypeError, ValueError):

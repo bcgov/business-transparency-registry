@@ -108,7 +108,7 @@ class AuthService:
         self.app.logger.info('Get User Type: ' + UserType.USER_PUBLIC)
         return UserType.USER_PUBLIC
 
-    @auth_cache.cached(timeout=300)
+    @auth_cache.cached(timeout=300, key_prefix='view/token')
     def get_bearer_token(self):
         """Get a valid Bearer token for the service to use."""
         data = 'grant_type=client_credentials'

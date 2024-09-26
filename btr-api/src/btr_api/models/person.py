@@ -39,6 +39,7 @@ from datetime import date, datetime
 from typing import TYPE_CHECKING
 
 from dateutil.relativedelta import relativedelta
+from flask import current_app
 from sqlalchemy import Column, event
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import Mapped, mapped_column, relationship
@@ -92,10 +93,14 @@ class Person(Versioned, Base):
 
     @classmethod
     def find_statement_id_by_uuid(cls, orig_uuid: str) -> str:
-        """Return the generated statement id by the uuid in the person_json."""
-        # NOTE: if this becomes slow add a jsonb index or pass in the ownership id as well
-        person: Person = cls.query.filter(cls.person_json['uuid'].astext == orig_uuid).one_or_none()
-        return str(person.statement_id) if person else None
+        """Return the generated statement id by the uuid in the person_json and the ownership id."""
+        # NOTE: if this becomes slow add a jsonb index
+        try:
+            person: Person = cls.query.filter(cls.person_json['uuid'].astext == orig_uuid).one_or_none()
+            return str(person.statement_id) if person else None
+        except TypeError as err:
+            current_app.logger.debug(err.with_traceback(None))
+            current_app.logger.error(f'Error multiple uuids on person json for uuid={orig_uuid}')
 
 
 @event.listens_for(Person, 'before_insert')
