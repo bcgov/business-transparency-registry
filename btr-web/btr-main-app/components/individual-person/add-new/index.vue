@@ -281,23 +281,12 @@
         :border="editMode"
         no-top-border
       >
-        <div class="flex-col w-full">
-          <BcrosInputsCombobox
-            id="countriesOfCitizenship"
+        <div class="flex flex-col w-full">
+          <IndividualPersonCitizenship
             v-model="inputFormSi.citizenships"
             name="citizenships"
-            :help="$t('labels.countryOfCitizenship.hint')"
-            :label-function="(c) => c.name"
-            :items="citizenshipOptions"
-            :search-placeholder="$t('labels.countryOfCitizenship.findCountry')"
-            :label-placeholder="$t('labels.countryOfCitizenship.placeholder')"
-            key-attribute="alpha_2"
-            :search-attributes="['name', 'alpha_2']"
-            @value-changed="setNewOrChanged([InputFieldsE.CITIZENSHIPS])"
+            @citizenship-updated="setNewOrChanged([InputFieldsE.CITIZENSHIPS])"
           />
-          <p class="pt-3">
-            {{ $t('labels.countryOfCitizenship.note') }}
-          </p>
         </div>
       </BcrosSection>
 

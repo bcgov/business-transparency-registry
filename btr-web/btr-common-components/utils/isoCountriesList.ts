@@ -2034,8 +2034,9 @@ export const iscCountriesListSortedByName = isoCountriesList.toSorted(
 
 // three options that will be placed on the top of the citizenship dropdown menu
 const canadaUS: Array<BtrCountryI> = [
-  { name: 'Canada (Citizen)', alpha_2: 'CA' },
-  { name: 'Canada (Permanent Resident)', alpha_2: 'CA_PR' },
+  // todo: keeping commented here for now, will possibly remove this in future
+  // { name: 'Canada (Citizen)', alpha_2: 'CA' },
+  // { name: 'Canada (Permanent Resident)', alpha_2: 'CA_PR' },
   { name: 'United States', alpha_2: 'US' }
 ]
 

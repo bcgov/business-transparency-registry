@@ -6,11 +6,11 @@ describe('Layout -> Business Details', () => {
     // setup intercepts
     cy.intercept(
       'GET',
-      `https://legal-api-dev.apps.silver.devops.gov.bc.ca/api/v2/businesses/${business.identifier}?slim=true`,
+      `https://**/api/v2/businesses/${business.identifier}?slim=true`,
       { business }).as('businessDetailsSlim')
     cy.intercept(
       'GET',
-      `https://auth-api-dev.apps.silver.devops.gov.bc.ca/api/v1/entities/${business.identifier}`,
+      `https://**/api/v1/entities/${business.identifier}`,
       contact).as('businessDetails')
     cy.visit(`/${business.identifier}/beneficial-owner-change`)
     cy.wait(['@businessDetailsSlim', '@businessDetails'])
@@ -37,11 +37,11 @@ describe('Layout -> Business Details', () => {
     // setup intercepts
     cy.intercept(
       'GET',
-      `https://legal-api-dev.apps.silver.devops.gov.bc.ca/api/v2/businesses/${businessCP.identifier}?slim=true`,
+      `https://**/api/v2/businesses/${businessCP.identifier}?slim=true`,
       { business: businessCP }).as('businessDetailsSlim')
     cy.intercept(
       'GET',
-      `https://auth-api-dev.apps.silver.devops.gov.bc.ca/api/v1/entities/${businessCP.identifier}`,
+      `https://**/api/v1/entities/${businessCP.identifier}`,
       contact).as('businessDetails').as('businessDetailsSlim')
 
     cy.visit(`/${businessCP.identifier}/beneficial-owner-change`)
@@ -59,11 +59,11 @@ describe('Layout -> Business Details', () => {
     // setup intercepts
     cy.intercept(
       'GET',
-      `https://legal-api-dev.apps.silver.devops.gov.bc.ca/api/v2/businesses/${businessSP.identifier}?slim=true`,
+      `https://**/api/v2/businesses/${businessSP.identifier}?slim=true`,
       { business: businessSP })
     cy.intercept(
       'GET',
-      `https://auth-api-dev.apps.silver.devops.gov.bc.ca/api/v1/entities/${businessSP.identifier}`,
+      `https://**/api/v1/entities/${businessSP.identifier}`,
       contact)
     cy.visit(`/${businessSP.identifier}/beneficial-owner-change`)
     cy.wait(1000)
@@ -79,11 +79,11 @@ describe('Layout -> Business Details', () => {
     // setup intercepts
     cy.intercept(
       'GET',
-      `https://legal-api-dev.apps.silver.devops.gov.bc.ca/api/v2/businesses/${businessGP.identifier}?slim=true`,
+      `https://**/api/v2/businesses/${businessGP.identifier}?slim=true`,
       { business: businessGP })
     cy.intercept(
       'GET',
-      `https://auth-api-dev.apps.silver.devops.gov.bc.ca/api/v1/entities/${businessGP.identifier}`,
+      `https://**/api/v1/entities/${businessGP.identifier}`,
       contact)
     cy.visit(`/${businessGP.identifier}/beneficial-owner-change`)
     cy.wait(1000)
