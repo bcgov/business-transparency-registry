@@ -154,3 +154,6 @@ htmlcov/
 **/bods_csvs/*
 
 **.DS_Store
+
+# cache dir
+btr-api/cache/*
