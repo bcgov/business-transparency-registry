@@ -1,4 +1,4 @@
-# Copyright © 2023 Province of British Columbia
+# Copyright © 2024 Province of British Columbia
 #
 # Licensed under the BSD 3 Clause License, (the "License");
 # you may not use this file except in compliance with the License.
@@ -31,22 +31,33 @@
 # CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
-"""This exports all of the models and schemas used by the application."""
-from .db import db  # noqa: I001
-from .ownership import Ownership
-from .person import Person
-from .submission import Submission
-from .submission import SubmissionType
-from .user import User
-from .user import UserRoles
+"""Base Model."""
+
+from .db import db
 
 
-__all__ = (
-    "db",
-    "Ownership",
-    "Person",
-    "Submission",
-    "SubmissionType",
-    "User",
-    "UserRoles",
-)
+class Base(db.Model):
+    """Base model class for db tables."""
+
+    __abstract__ = True
+
+    def save(self):
+        """Save and commit to the session."""
+        db.session.add(self)
+        db.session.commit()
+
+    def save_to_session(self):
+        """Save to the session. Does not commit."""
+        db.session.add(self)
+
+        return self
+
+    @staticmethod
+    def commit():
+        """Commit the session."""
+        db.session.commit()
+
+    @staticmethod
+    def rollback():
+        """RollBack the session."""
+        db.session.rollback()

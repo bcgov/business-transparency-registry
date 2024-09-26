@@ -1,4 +1,4 @@
-# Copyright © 2023 Province of British Columbia
+# Copyright © 2024 Province of British Columbia
 #
 # Licensed under the BSD 3 Clause License, (the "License");
 # you may not use this file except in compliance with the License.
@@ -31,22 +31,18 @@
 # CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
-"""This exports all of the models and schemas used by the application."""
-from .db import db  # noqa: I001
-from .ownership import Ownership
-from .person import Person
-from .submission import Submission
-from .submission import SubmissionType
-from .user import User
-from .user import UserRoles
+"""DB tests helper methods."""
+from sqlalchemy import text
+
+from btr_api.models import User
 
 
-__all__ = (
-    "db",
-    "Ownership",
-    "Person",
-    "Submission",
-    "SubmissionType",
-    "User",
-    "UserRoles",
-)
+def clear_db(session):
+    """Clear db of all data."""
+    session.execute(text('delete from ownership'))
+    session.execute(text('delete from ownership_history'))
+    session.execute(text('delete from person'))
+    session.execute(text('delete from person_history'))
+    session.execute(text('delete from submission'))
+    session.execute(text('delete from submission_history'))
+    session.execute(text('delete from users'))

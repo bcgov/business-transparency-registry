@@ -219,7 +219,8 @@ const _getSi = (
 
     effectiveDates: _getEffectiveDates(oocs),
 
-    uuid: person.uuid,
+    uuid: person.statementID,
+    ownershipStatementId: oocs.statementID,
 
     ui: {
       newOrUpdatedFields: []

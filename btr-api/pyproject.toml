@@ -23,6 +23,7 @@ flask-jwt-oidc = "^0.3.0"
 gunicorn = "^21.2.0"
 jsonschema = {extras = ["format"], version = "^4.20.0"}
 pycountry = "^23.12.11"
+flask-caching = "^2.3.0"
 
 [tool.poetry.group.test.dependencies]
 freezegun = "^1.2.2"

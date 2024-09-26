@@ -39,11 +39,21 @@ The `SubmissionService` class provides the method `create_submission`,
 which accepts a dictionary as an input and returns a SubmissionModel object.
 
 The individual services can be invoked as per the requirements.
-
 """
-from datetime import date
+from copy import deepcopy
+from http import HTTPStatus
+import uuid
 
-from btr_api.models import Submission as SubmissionModel
+from flask import current_app
+
+from btr_api.common.auth import jwt
+from btr_api.exceptions import BusinessException, ExternalServiceException
+from btr_api.models import Ownership, Person, Submission as SubmissionModel
+from btr_api.utils import deep_spread
+
+from .auth import AuthService
+from .email import EmailService
+from .entity import EntityService
 
 
 class SubmissionService:  # pylint: disable=too-few-public-methods
@@ -52,15 +62,61 @@ class SubmissionService:  # pylint: disable=too-few-public-methods
 
     Creates a submission model based on the given submission dictionary. The submission dictionary should contain
     the necessary information for creating a submission.
-
     """
+    @staticmethod
+    def _get_linked_ownership_stmnt(person_stmnt_id: str, ownership_stmnts: list[dict]):
+        """Return the linked ownership statement. Raises a BusinessException if a linked statement is not found."""
+        for ownership in ownership_stmnts:
+            if ownership['interestedParty']['describedByPersonStatement'] == person_stmnt_id:
+                return ownership
+
+        raise BusinessException(
+            'Invalid payload. All submitted person statements must be linked to an ownership statement.',
+            f'Person statement id: {person_stmnt_id}',
+            HTTPStatus.BAD_REQUEST)
+
+    @staticmethod
+    def add_statements(submission: SubmissionModel,
+                       new_person_stmnts: list[dict],
+                       new_ownership_stmnts: list[dict]):
+        """
+        Add the ownership and person statement records to the session.
+        NOTE: Each person statement needs a 1:1 link with a corresponding ownership statement.
+        """
+        for person_stmnt in new_person_stmnts:
+            ownership_stmnt = SubmissionService._get_linked_ownership_stmnt(person_stmnt['statementID'],
+                                                                            new_ownership_stmnts)
+            person = Person(statement_id=uuid.uuid4(), person_json=deepcopy(person_stmnt))
+            person.save_to_session()
+            ownership = Ownership(statement_id=uuid.uuid4(),
+                                  ownership_json=deepcopy(ownership_stmnt),
+                                  person=person,
+                                  submission=submission)
+            ownership.save_to_session()
+            try:
+                if person_stmnt.get('email'):
+                    business_identifier = submission.submitted_payload['businessIdentifier']
+                    auth = AuthService(current_app)
+                    entity = EntityService(current_app)
+                    token = auth.get_bearer_token()
+                    business = entity.get_entity_info(jwt, business_identifier).json()
+                    delivery_address = EntityService(current_app).get_entity_info(
+                        None, f'{business_identifier}/addresses?addressType=deliveryAddress', token).json()
+                    business_contact = auth.get_business_contact(token, business_identifier)
+                    business_info = {**business, **delivery_address, 'contact': {**business_contact}}
+                    EmailService(current_app).send_added_to_btr_email(person.person_json,
+                                                                      business_info,
+                                                                      submission.submitted_payload['effectiveDate'],
+                                                                      token)
+
+            except (BusinessException, ExternalServiceException) as err:
+                # Log error and continue to return successfully (does NOT block the submission)
+                current_app.logger.info(err.error)
+                current_app.logger.error('Error sending email for person: %s', person.id)
 
     @staticmethod
     def create_submission(submission_dict: dict, submitter_id: int) -> SubmissionModel:
         """
-
-        Create Submission
-
         This method creates/replaces the current submission for the business using the provided submission dict.
 
         Parameters:
@@ -72,30 +128,27 @@ class SubmissionService:  # pylint: disable=too-few-public-methods
 
         Returns:
         - SubmissionModel: A SubmissionModel object that represents the created submission.
-
         """
         submission = SubmissionModel.find_by_business_identifier(submission_dict['businessIdentifier'])
-        if not submission:
-            submission = SubmissionModel()
-            submission.business_identifier = submission_dict['businessIdentifier']
-        submission.effective_date = date.fromisoformat(submission_dict['effectiveDate'])
-        submission.payload = submission_dict
-        submission.submitter_id = submitter_id
-        submission.invoice_id = None
+        if submission:
+            return SubmissionService.update_submission(submission, submission_dict, submitter_id)
 
-        submission.submitted_payload = submission_dict
+        # init submission
+        submission = SubmissionModel(submitter_id=submitter_id,
+                                     invoice_id=None,
+                                     submitted_payload=submission_dict)
+        submission.save_to_session()
+        # add ownership / person records to session
+        SubmissionService.add_statements(submission,
+                                         submission.submitted_payload['personStatements'],
+                                         submission.submitted_payload['ownershipOrControlStatements'])
         return submission
 
     @staticmethod
-    def update_submission(
-          submission: SubmissionModel,
-          submission_dict: dict,
-          submitter_id: int,
-          payload: dict) -> SubmissionModel:
+    def update_submission(submission: SubmissionModel,
+                          submission_dict: dict,
+                          submitter_id: int) -> SubmissionModel:
         """
-
-        Update Submission
-
         This method replaces the current submission for the business using the provided submission dict.
 
         Parameters:
@@ -107,12 +160,44 @@ class SubmissionService:  # pylint: disable=too-few-public-methods
 
         Returns:
         - SubmissionModel: A SubmissionModel object that represents the created submission.
-
         """
-
-        submission.effective_date = date.fromisoformat(submission_dict['effectiveDate'])
-        submission.payload = submission_dict
+        submission.submitted_payload = submission_dict
         submission.submitter_id = submitter_id
+        # update ownership statements
+        new_person_stmnts = []
+        new_ownership_stmnts = []
+        for person_stmnt in submission_dict['personStatements']:
+            person_stmnt_id = person_stmnt['statementID']
+            ownership_stmnt = SubmissionService._get_linked_ownership_stmnt(
+                person_stmnt_id,
+                submission_dict['ownershipOrControlStatements']
+            )
+            ownership_stmnt_id = ownership_stmnt['statementID']
+            if current_ownership := Ownership.find_by_statement_id(ownership_stmnt_id):
+                if current_ownership.submission_id != submission.id:
+                    raise BusinessException(
+                        'Invalid payload. Existing ownership statement linked to a different submission.',
+                        f'Ownership statement id: {ownership_stmnt_id}',
+                        HTTPStatus.BAD_REQUEST
+                    )
 
-        submission.submitted_payload = payload
+                if str(current_ownership.person.statement_id) != person_stmnt_id:
+                    raise BusinessException(
+                        'Invalid payload. Existing ownership statement linked to a different person.',
+                        f'Ownership statement id: {ownership_stmnt_id}',
+                        HTTPStatus.BAD_REQUEST
+                    )
+                # TODO: 'deep_spread' needs to be fixed #23489
+                current_ownership.ownership_json = deep_spread(current_ownership.ownership_json,
+                                                               ownership_stmnt)
+
+                current_ownership.person.person_json = deep_spread(current_ownership.person.person_json,
+                                                                   person_stmnt)
+                current_ownership.save_to_session()
+            else:
+                new_ownership_stmnts.append(ownership_stmnt)
+                new_person_stmnts.append(person_stmnt)
+
+        SubmissionService.add_statements(submission, new_person_stmnts, new_ownership_stmnts)
+
         return submission

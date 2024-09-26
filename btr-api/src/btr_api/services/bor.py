@@ -65,19 +65,21 @@ class BorService:
         try:
             # collect current parties
             parties = {}
-            for person in submission.payload.get('personStatements', []):
+            for person in submission.person_statements_json:
                 person_id = person['statementID']
                 parties[person_id] = person
 
             # combine ownership details and parties
             owners = []
-            for ownership_info in submission.payload.get('ownershipOrControlStatements', []):
-                party_id = ownership_info['interestedParty']['describedByPersonStatement']
-                ownership_info['interestedParty'] = {
-                    'describedByPersonStatement': party_id,
-                    **parties[party_id]
-                }
-                owners.append(ownership_info)
+            for ownership_info in submission.ownership_statements:
+                party_id = ownership_info.ownership_json['interestedParty']['describedByPersonStatement']
+                owners.append({
+                    **ownership_info.ownership_json,
+                    'interestedParty': {
+                        'describedByPersonStatement': party_id,
+                        **parties[party_id]
+                    }
+                })
 
             # make update call to bor with headers + payload
             payload = {**business, 'owners': owners}

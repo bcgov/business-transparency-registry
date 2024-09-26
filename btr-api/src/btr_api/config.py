@@ -125,6 +125,13 @@ class Config:  # pylint: disable=too-few-public-methods
 
     LEGISLATIVE_TIMEZONE = os.getenv('LEGISLATIVE_TIMEZONE', 'America/Vancouver')
 
+    # Cache stuff
+    CACHE_TYPE = os.getenv('CACHE_TYPE', 'SimpleCache')
+    try:
+        CACHE_DEFAULT_TIMEOUT = int(os.getenv('CACHE_DEFAULT_TIMEOUT', '300'))
+    except (TypeError, ValueError):
+        CACHE_DEFAULT_TIMEOUT = 300
+
 
 class Production(Config):  # pylint: disable=too-few-public-methods
     """Production class configuration that should override vars for production.

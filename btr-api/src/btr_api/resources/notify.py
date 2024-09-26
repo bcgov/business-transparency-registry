@@ -53,7 +53,7 @@ def registers():  # pylint: disable=redefined-builtin
                 business = btr_entity.get_entity_info(None, business_identifier, token).json()
                 delivery_address = btr_entity.get_entity_info(
                     None, f'{business_identifier}/addresses?addressType=deliveryAddress', token).json()
-                business_contact = btr_auth.get_business_contact(business_identifier, token)
+                business_contact = btr_auth.get_business_contact(token, business_identifier)
                 business_info = {**business, **delivery_address, 'contact': {**business_contact}}
                 submission = Submission.find_by_business_identifier(business_identifier)
 

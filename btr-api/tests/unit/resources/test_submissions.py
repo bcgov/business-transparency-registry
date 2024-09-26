@@ -8,17 +8,20 @@ from http import HTTPStatus
 import pytest
 import requests
 from dateutil.relativedelta import relativedelta
-from sqlalchemy import text
 
 from btr_api.enums import UserType
 from btr_api.models import Submission as SubmissionModel
 from btr_api.models import SubmissionType
 from btr_api.models import User as UserModel
+from btr_api.models.submission import SubmissionSerializer
 from btr_api.services import SubmissionService
+from btr_api.services.auth import auth_cache
 from btr_api.utils import redact_information
 
 from tests.unit import nested_session
+from tests.unit.models.test_user import sample_user
 from tests.unit.utils import create_header
+from tests.unit.utils.db_helpers import clear_db
 
 mocked_entity_response = {'business': {'adminFreeze': False, 'state': 'ACTIVE', 'legalName': 'Mocked Business', 'identifier': 'BC1234567'}}
 mocked_entity_address_response = {
@@ -28,7 +31,6 @@ mocked_auth_entity_contact_response = {'contacts':[{'email': 'business@email.com
 
 helper_people = [
     {
-        'uuid': '2c5fd9bc-2ff1-4545-86aa-d1c02705f4cd',
         'email': 'test@test.com',
         'names': [{'type': 'individual', 'fullName': 'Test Test'}, {'type': 'alternative', 'fullName': 'tset tset'}],
         'phoneNumber': {'number': '5555555555', 'countryCallingCode': '1', 'countryCode2letterIso': 'CA'},
@@ -56,6 +58,7 @@ helper_people = [
         },
         'birthDate': '1988-01-01',
         'identifiers': [{'id': '999 555 444', 'scheme': 'CAN-TAXID', 'schemeName': 'ITN'}],
+        'statementID': '1'
     }
 ]
 
@@ -107,32 +110,32 @@ def verify_emails_sent(json_data: dict, email_mock) -> dict:
 
 @pytest.mark.parametrize(
     'test_name, submission_type, payload, user_type',
-    [('simple json', SubmissionType.other, {'racoondog': 'red'}, UserType.USER_COMPETENT_AUTHORITY)],
+    [('simple json', SubmissionType.other, {'businessIdentifier': 'identifier0'}, UserType.USER_COMPETENT_AUTHORITY)],
 )
-def test_get_plots(app, client, session, jwt, requests_mock, test_name, submission_type, payload, user_type):
+def test_get_plots(app, client, session, jwt, requests_mock, sample_user, test_name, submission_type, payload, user_type):
     """Get the plot submissions.
     A parameterized set of tests that runs defined scenarios.
     """
     with nested_session(session):
-        session.execute(text('delete from submission'))
+        clear_db(session)
         # Setup
         id = ''
         if payload:
             sub = SubmissionModel()
-            sub.business_identifier = 'identifier0'
-            sub.payload = payload
+            sub.submitted_payload = payload
             sub.type = submission_type
+            sub.submitter = sample_user
             session.add(sub)
             session.commit()
             id = sub.id
 
         requests_mock.get(
-            f'{app.config.get("AUTH_SVC_URL")}/entities/{sub.business_identifier}/authorizations',
+            f"{app.config.get('AUTH_SVC_URL')}/entities/{sub.business_identifier}/authorizations",
             json={'orgMembership': 'COORDINATOR', 'roles': ['edit', 'view']},
         )
 
         requests_mock.get(
-            f'{app.config.get("AUTH_SVC_URL")}/orgs/1/products?include_hidden=true',
+            f"{app.config.get('AUTH_SVC_URL')}/orgs/1/products?include_hidden=true",
             json=[{'code': 'CA_SEARCH', 'subscriptionStatus': 'ACTIVE'}])
         # Test
         rv = client.get(
@@ -172,6 +175,7 @@ def test_get_plots_auth(
     session,
     jwt,
     requests_mock,
+    sample_user,
     test_name,
     business_identifier,
     auth_svc_response,
@@ -180,22 +184,22 @@ def test_get_plots_auth(
 ):
     """Test scenarios connected to authentication on plots endpoint."""
     with nested_session(session):
-        session.execute(text('delete from submission'))
+        clear_db(session)
         # Setup
         sub = SubmissionModel()
-        sub.business_identifier = 'identifier0'
-        sub.payload = {'racoondog': 'red'}
+        sub.submitted_payload = {'businessIdentifier': business_identifier}
         sub.type = SubmissionType.other
+        sub.submitter = sample_user
         session.add(sub)
         session.commit()
         search_id = sub.id
 
         requests_mock.get(
-            f'{app.config.get("AUTH_SVC_URL")}/entities/{business_identifier}/authorizations', json=auth_svc_response
+            f"{app.config.get('AUTH_SVC_URL')}/entities/{business_identifier}/authorizations", json=auth_svc_response
         )
 
         requests_mock.get(
-            f'{app.config.get("AUTH_SVC_URL")}/orgs/1/products?include_hidden=true',
+            f"{app.config.get('AUTH_SVC_URL')}/orgs/1/products?include_hidden=true",
             json=[{'code': 'CA_SEARCH', 'subscriptionStatus': 'ACTIVE'}])
 
         headers = create_header(
@@ -224,6 +228,11 @@ def test_post_plots_db_mocked(app, session, client, jwt, mocker, requests_mock):
     current_dir = os.path.dirname(__file__)
     mock_user_save = mocker.patch.object(UserModel, 'save')
     mock_submission_save = mocker.patch.object(SubmissionModel, 'save')
+
+    def mocked_to_dict(submission: SubmissionModel):
+        return {'id': 123, 'payload': {}}
+    mocker.patch.object(SubmissionSerializer, 'to_dict', mocked_to_dict)
+
     with open(os.path.join(current_dir, '..', '..', 'mocks', 'significantIndividualsFiling', 'valid.json')) as file:
         json_data = json.load(file)
 
@@ -291,15 +300,6 @@ def test_post_plots_db_mocked(app, session, client, jwt, mocker, requests_mock):
              'statementType': 'ownershipOrControlStatement',
              'subject': {'describedByEntityStatement': ''}
             },
-            {'interestedParty': {'describedByPersonStatement': 'ce935e86-f4b9-4938-b12e-29c5e5cc213d', 'addresses': [{'city': 'Longueuil', 'country': 'CA', 'countryName': 'Canada', 'postalCode': 'J4H 3X9', 'region': 'QC', 'street': '433-405 Ch De Chambly', 'streetAdditional': ''}], 'birthDate': '2005-09-13', 'email': 'fake3@email.com', 'hasTaxNumber': False, 'identifiers': [], 'isComponent': False, 'isPermanentResidentCa': False, 'names': [{'fullName': 'Waffles Butter', 'type': 'individual'}], 'nationalities': [{'code': 'US', 'name': 'United States'}], 'personType': 'knownPerson', 'phoneNumber': {'countryCallingCode': '1', 'countryCode2letterIso': 'CA', 'number': '7784467467'}, 'placeOfResidence': {'city': 'Longueuil', 'country': 'CA', 'countryName': 'Canada', 'postalCode': 'J4H 3X9', 'region': 'QC', 'street': '433-405 Ch De Chambly', 'streetAdditional': ''}, 'publicationDetails': {'bodsVersion': '0.3', 'publicationDate': '2024-09-12', 'publisher': {'name': 'BCROS - BC Registries and Online Services', 'url': 'https://www.bcregistry.gov.bc.ca/'}}, 'source': {'assertedBy': [{'name': 'Waffles Butter'}], 'description': 'Using Gov BC - BTR - Web UI', 'type': ['selfDeclaration']}, 'statementDate': '2024-09-12', 'statementID': 'ce935e86-f4b9-4938-b12e-29c5e5cc213d', 'statementType': 'personStatement', 'taxResidencies': [], 'uuid': '839e35b8-d536-42e6-82ba-ba3c5a13582d'},
-             'interests': [{'details': 'controlType.shares.indirectControl', 'directOrIndirect': 'indirect', 'share': {'exclusiveMaximum': True, 'exclusiveMinimum': False, 'maximum': 25, 'minimum': 0}, 'startDate': '2021-09-07', 'type': 'shareholding'}],
-             'isComponent': False,
-             'publicationDetails': {'bodsVersion': '0.3', 'publicationDate': '2024-09-12', 'publisher': {'name': 'BCROS - BC Registries and Online Services', 'url': 'https://www.bcregistry.gov.bc.ca/'}},
-             'source': {'assertedBy': [{'name': 'Waffles Butter'}], 'description': 'Using Gov BC - BTR - Web UI', 'type': ['selfDeclaration']},
-             'statementDate': '2024-09-12',
-             'statementID': 'f4d9f29b-559b-4353-9bd4-89ada5ae5209',
-             'statementType': 'ownershipOrControlStatement',
-             'subject': {'describedByEntityStatement': ''}},
             {'interestedParty': {'describedByPersonStatement': '4b7863a1-4fbf-42a5-afe8-8f4a4f3ca049', 'addresses': [{'city': 'Vancouver', 'country': 'CA', 'countryName': 'Canada', 'postalCode': 'V6H 2T8', 'region': 'BC', 'street': 'Th-3023 Birch St', 'streetAdditional': ''}], 'birthDate': '2000-02-02', 'email': 'fake2@email.com', 'hasTaxNumber': True, 'identifiers': [{'id': '402 931 299', 'scheme': 'CAN-TAXID', 'schemeName': 'ITN'}], 'isComponent': False, 'isPermanentResidentCa': True, 'names': [{'fullName': 'Wallaby Willow', 'type': 'individual'}], 'nationalities': [{'code': 'AL', 'name': 'Albania'}, {'code': 'BZ', 'name': 'Belize'}], 'personType': 'knownPerson', 'phoneNumber': {'countryCallingCode': '1', 'countryCode2letterIso': 'CA', 'number': '2508747772'}, 'placeOfResidence': {'city': 'Vancouver', 'country': 'CA', 'countryName': 'Canada', 'postalCode': 'V6H 2T8', 'region': 'BC', 'street': 'Th-3023 Birch St', 'streetAdditional': ''}, 'publicationDetails': {'bodsVersion': '0.3', 'publicationDate': '2024-09-16', 'publisher': {'name': 'BCROS - BC Registries and Online Services', 'url': 'https://www.bcregistry.gov.bc.ca/'}}, 'source': {'assertedBy': [{'name': 'Wallaby Willow'}], 'description': 'Using Gov BC - BTR - Web UI', 'type': ['selfDeclaration']}, 'statementDate': '2024-09-16', 'statementID': '4b7863a1-4fbf-42a5-afe8-8f4a4f3ca049', 'statementType': 'personStatement', 'taxResidencies': [{'code': 'CA', 'name': 'Canada'}], 'uuid': '1a825cce-a3fa-47b2-b8c3-e2fae40ac7df'},
              'interests': [{'details': 'controlType.shares.indirectControl', 'directOrIndirect': 'indirect', 'share': {'exclusiveMaximum': False, 'exclusiveMinimum': False, 'maximum': 50, 'minimum': 25}, 'startDate': '2019-09-19', 'type': 'shareholding'}, {'details': 'controlType.votes.registeredOwner', 'directOrIndirect': 'direct', 'share': {'exclusiveMaximum': False, 'exclusiveMinimum': False, 'maximum': 50, 'minimum': 25}, 'startDate': '2019-09-19', 'type': 'votingRights'}],
              'isComponent': False,
@@ -307,6 +307,15 @@ def test_post_plots_db_mocked(app, session, client, jwt, mocker, requests_mock):
              'source': {'assertedBy': [{'name': 'Wallaby Willow'}], 'description': 'Using Gov BC - BTR - Web UI', 'type': ['selfDeclaration']},
              'statementDate': '2024-09-16',
              'statementID': 'aef71bd1-8c64-4fff-a2d5-9a25b450745d',
+             'statementType': 'ownershipOrControlStatement',
+             'subject': {'describedByEntityStatement': ''}},
+            {'interestedParty': {'describedByPersonStatement': 'ce935e86-f4b9-4938-b12e-29c5e5cc213d', 'addresses': [{'city': 'Longueuil', 'country': 'CA', 'countryName': 'Canada', 'postalCode': 'J4H 3X9', 'region': 'QC', 'street': '433-405 Ch De Chambly', 'streetAdditional': ''}], 'birthDate': '2005-09-13', 'email': 'fake3@email.com', 'hasTaxNumber': False, 'identifiers': [], 'isComponent': False, 'isPermanentResidentCa': False, 'names': [{'fullName': 'Waffles Butter', 'type': 'individual'}], 'nationalities': [{'code': 'US', 'name': 'United States'}], 'personType': 'knownPerson', 'phoneNumber': {'countryCallingCode': '1', 'countryCode2letterIso': 'CA', 'number': '7784467467'}, 'placeOfResidence': {'city': 'Longueuil', 'country': 'CA', 'countryName': 'Canada', 'postalCode': 'J4H 3X9', 'region': 'QC', 'street': '433-405 Ch De Chambly', 'streetAdditional': ''}, 'publicationDetails': {'bodsVersion': '0.3', 'publicationDate': '2024-09-12', 'publisher': {'name': 'BCROS - BC Registries and Online Services', 'url': 'https://www.bcregistry.gov.bc.ca/'}}, 'source': {'assertedBy': [{'name': 'Waffles Butter'}], 'description': 'Using Gov BC - BTR - Web UI', 'type': ['selfDeclaration']}, 'statementDate': '2024-09-12', 'statementID': 'ce935e86-f4b9-4938-b12e-29c5e5cc213d', 'statementType': 'personStatement', 'taxResidencies': [], 'uuid': '839e35b8-d536-42e6-82ba-ba3c5a13582d'},
+             'interests': [{'details': 'controlType.shares.indirectControl', 'directOrIndirect': 'indirect', 'share': {'exclusiveMaximum': True, 'exclusiveMinimum': False, 'maximum': 25, 'minimum': 0}, 'startDate': '2021-09-07', 'type': 'shareholding'}],
+             'isComponent': False,
+             'publicationDetails': {'bodsVersion': '0.3', 'publicationDate': '2024-09-12', 'publisher': {'name': 'BCROS - BC Registries and Online Services', 'url': 'https://www.bcregistry.gov.bc.ca/'}},
+             'source': {'assertedBy': [{'name': 'Waffles Butter'}], 'description': 'Using Gov BC - BTR - Web UI', 'type': ['selfDeclaration']},
+             'statementDate': '2024-09-12',
+             'statementID': 'f4d9f29b-559b-4353-9bd4-89ada5ae5209',
              'statementType': 'ownershipOrControlStatement',
              'subject': {'describedByEntityStatement': ''}},
             {'interestedParty': {'describedByPersonStatement': 'e935e86-f4b9-4938-b12e-29c5e5cc213e', 'addresses': [{'city': 'Longueuil', 'country': 'CA', 'countryName': 'Canada', 'postalCode': 'J4H 3X9', 'region': 'QC', 'street': '433-405 Ch De Chambly', 'streetAdditional': ''}], 'email': 'fake4@email.com', 'hasTaxNumber': False, 'identifiers': [], 'isComponent': False, 'isPermanentResidentCa': False, 'missingInfoReason': 'Test person with no birth date', 'names': [{'fullName': 'Tester MissingInfoBday', 'type': 'individual'}], 'personType': 'knownPerson', 'placeOfResidence': {'city': 'Longueuil', 'country': 'CA', 'countryName': 'Canada', 'postalCode': 'J4H 3X9', 'region': 'QC', 'street': '433-405 Ch De Chambly', 'streetAdditional': ''}, 'publicationDetails': {'bodsVersion': '0.3', 'publicationDate': '2024-09-12', 'publisher': {'name': 'BCROS - BC Registries and Online Services', 'url': 'https://www.bcregistry.gov.bc.ca/'}}, 'source': {'assertedBy': [{'name': 'Waffles Butter'}], 'description': 'Using Gov BC - BTR - Web UI', 'type': ['selfDeclaration']}, 'statementDate': '2024-09-12', 'statementID': 'e935e86-f4b9-4938-b12e-29c5e5cc213e', 'statementType': 'personStatement', 'taxResidencies': [], 'uuid': '939e35b8-d536-42e6-82ba-ba3c5a13582z'},
@@ -364,6 +373,8 @@ def test_post_plots(app, client, session, jwt, requests_mock):
         )
 
         with nested_session(session):
+            auth_cache.clear()
+            clear_db(session)
             mocked_username = 'wibbly wabble'
             rv = client.post(
                 '/plots',
@@ -433,7 +444,10 @@ def test_put_plots(app, client, session, jwt, requests_mock):
         )
 
         with nested_session(session):
+            auth_cache.clear()
+            clear_db(session)
             mocked_username = 'wibbly wabble'
+            print(json_data['businessIdentifier'])
             rv = client.post(
                 '/plots',
                 json=json_data,
@@ -448,20 +462,61 @@ def test_put_plots(app, client, session, jwt, requests_mock):
             assert rv.status_code == HTTPStatus.CREATED
             submission_id = rv.json.get('id')
             assert submission_id
-            url = f"/plots/{submission_id}"
+            assert rv.json.get('payload')
+            assert rv.json['payload'].get('personStatements')
+            assert rv.json['payload'].get('ownershipOrControlStatements')
+            # need to get api generated statement ids
+            url = f'/plots/{submission_id}'
+            person_stmnt_id = rv.json['payload']['personStatements'][0]['statementID']
+            ownership_stmnt_id = rv.json['payload']['ownershipOrControlStatements'][0]['statementID']
             put_data = {
+                'businessIdentifier': identifier,
+                'effectiveDate': '2024-09-23',
+                'entityStatement': {
+                    'entityType': 'legalEntity',
+                    'identifiers': [],
+                    'isComponent': False,
+                    'name': '1230113 B.C. LTD.',
+                    'publicationDetails': {
+                        'bodsVersion': '0.3',
+                        'publicationDate': '2024-09-19',
+                        'publisher': {
+                            'name': 'BCROS - BC Registries and Online Services',
+                            'url': 'https://www.bcregistry.gov.bc.ca/'
+                        }
+                    },
+                    'source': {
+                        'assertedBy': [
+                            {
+                                'name': 'BCROS - BC Registries and Online Services',
+                                'uri': 'https://www.bcregistry.gov.bc.ca/'
+                            }
+                        ],
+                        'retrievedAt': '2024-09-19T13:59:55.310Z',
+                        'type': [
+                            'officialRegister',
+                            'verified'
+                        ]
+                    },
+                    'statementDate': '2024-09-19',
+                    'statementID': '0df55746-4d87-4500-ba14-f16e4a91bda6',
+                    'statementType': 'entityStatement'
+                },
+                'noSignificantIndividualsExist': False,
+                'ownershipOrControlStatements': [{
+                    'statementID': ownership_stmnt_id,
+                    'interestedParty': {'describedByPersonStatement': person_stmnt_id}
+                }],
                 'personStatements': [{
-                    'uuid': json_data['personStatements'][0]['uuid'],
-                    'statementID': json_data['personStatements'][0]['statementID'],
+                    'statementID': person_stmnt_id,
                     'names': [
                         {
-                            "type": "individual",
-                            "fullName": "Full2 Name2"
+                            'type': 'individual',
+                            'fullName': 'Full2 Name2'
                         }
                     ]
                 }]
             }
-            
             rv = client.put(
               url,
               json=put_data,
@@ -483,9 +538,8 @@ def test_put_plots(app, client, session, jwt, requests_mock):
             # check pay link
             assert updated_submission.invoice_id == mocked_invoice_id
             
-            #Check name changed
-            assert updated_submission.payload['personStatements'][0]['names'][0]['fullName'] == json_data['personStatements'][0]['names'][0]['fullName']
-            assert updated_submission.payload['entityStatement'] == json_data['entityStatement']
+            # Check name changed
+            assert updated_submission.person_statements_json[0]['names'][0]['fullName'] == json_data['personStatements'][0]['names'][0]['fullName']
 
             # post submission things all triggered
             assert legal_api_entity_mock.called == True
@@ -532,6 +586,8 @@ def test_post_plots_pay_error(app, client, session, jwt, requests_mock):
         )
 
         with nested_session(session):
+            auth_cache.clear()
+            clear_db(session)
             rv = client.post(
                 '/plots',
                 json=json_data,
@@ -560,7 +616,7 @@ def test_post_plots_pay_error(app, client, session, jwt, requests_mock):
 
 
 def test_post_plots_auth_error(app, client, session, jwt, requests_mock):
-    """Assure post submission works (auth get token error)."""
+    """Assure post submission fails with (auth get token error)."""
     pay_api_mock = requests_mock.post(f"{app.config.get('PAYMENT_SVC_URL')}/payment-requests", json={'id': 1234})
     auth_mock = requests_mock.post(app.config.get('SSO_SVC_TOKEN_URL'), exc=requests.exceptions.ConnectTimeout)
     bor_api_mock = requests_mock.put(f"{app.config.get('BOR_SVC_URL')}/internal/solr/update", json={})
@@ -588,6 +644,8 @@ def test_post_plots_auth_error(app, client, session, jwt, requests_mock):
         )
 
         with nested_session(session):
+            auth_cache.clear()
+            clear_db(session)
             rv = client.post(
                 '/plots',
                 json=json_data,
@@ -644,6 +702,8 @@ def test_post_plots_bor_error(app, client, session, jwt, requests_mock):
         )
 
         with nested_session(session):
+            auth_cache.clear()
+            clear_db(session)
             rv = client.post(
                 '/plots',
                 json=json_data,
@@ -700,6 +760,8 @@ def test_post_plots_email_error(app, client, session, jwt, requests_mock):
         )
 
         with nested_session(session):
+            auth_cache.clear()
+            clear_db(session)
             rv = client.post(
                 '/plots',
                 json=json_data,
@@ -770,6 +832,7 @@ def test_post_plots_invalid_entity(
         )
 
         with nested_session(session):
+            clear_db(session)
             rv = client.post(
                 '/plots',
                 json=json_data,
@@ -790,33 +853,55 @@ def test_post_plots_invalid_entity(
             assert email_mock.called == False
 
 
-def test_get_latest_for_entity(app, client, session, jwt, requests_mock):
-    """Assure latest submission details are returned."""
-    """However, there is redaction here based on jwt"""
+def test_get_latest_for_entity(app, client, session, jwt, requests_mock, sample_user):
+    """Assure latest submission details are returned. However, there is redaction here based on jwt"""
+    requests_mock.post(app.config.get('SSO_SVC_TOKEN_URL'), json={'access_token': 'token'})
+    requests_mock.post(f"{app.config.get('NOTIFY_SVC_URL')}", json={})
     with nested_session(session):
         # Setup
-        user = UserModel()
-        user.save()
+        clear_db(session)
+        sample_user.save()
         test_identifier = 'id0'
+        requests_mock.get(f"{app.config.get('LEGAL_SVC_URL')}/businesses/{test_identifier}",
+                          json=mocked_entity_response)
+        requests_mock.get(
+            f"{app.config.get('LEGAL_SVC_URL')}/businesses/{test_identifier}/addresses?addressType=deliveryAddress",
+            json=mocked_entity_address_response
+        )
         s1_dict = {
             'businessIdentifier': test_identifier,
             'effectiveDate': '2020-01-13',
-            'ownershipOrControlStatements': {'details': 's1'},
+            'ownershipOrControlStatements': [{
+                'details': 's1',
+                'interestedParty': {'describedByPersonStatement': helper_people[0]['statementID']}
+            }],
+            'personStatements': helper_people
         }
+        s1 = SubmissionService.create_submission(s1_dict, sample_user.id)
+        s1.save()
         s2_dict = {
             'businessIdentifier': test_identifier,
             'effectiveDate': '2021-01-13',
-            'ownershipOrControlStatements': {'details': 's2'},
-            'personStatements': helper_people,
+            'ownershipOrControlStatements': [{
+                'details': 's2',
+                'interestedParty': {'describedByPersonStatement': s1.person_statements_json[0]['statementID']},
+                'statementID': s1.ownership_statements[0].ownership_json['statementID']
+            }],
+            'personStatements': s1.person_statements_json
         }
         s3_dict = {
             'businessIdentifier': test_identifier + 's3',
             'effectiveDate': '2024-04-22',
-            'ownershipOrControlStatements': {'details': 's3'},
+            'ownershipOrControlStatements': [{
+                'details': 's3',
+                'interestedParty': {'describedByPersonStatement': s1.person_statements_json[0]['statementID']},
+                'statementID': s1.ownership_statements[0].ownership_json['statementID']
+            }],
+            'personStatements': s1.person_statements_json
         }
-        (SubmissionService.create_submission(s1_dict, user.id)).save()
-        (SubmissionService.create_submission(s2_dict, user.id)).save()
-        (SubmissionService.create_submission(s3_dict, user.id)).save()
+        
+        (SubmissionService.create_submission(s2_dict, sample_user.id)).save()
+        (SubmissionService.create_submission(s3_dict, sample_user.id)).save()
         mock_account_id = 1
 
         requests_mock.get(
@@ -830,7 +915,7 @@ def test_get_latest_for_entity(app, client, session, jwt, requests_mock):
         )
         # Test
         rv = client.get(
-            f"/plots/entity/{test_identifier}?account_id={mock_account_id}",
+            f'/plots/entity/{test_identifier}?account_id={mock_account_id}',
             headers=create_header(
                 jwt_manager=jwt,
                 roles=['basic'],
@@ -845,21 +930,31 @@ def test_get_latest_for_entity(app, client, session, jwt, requests_mock):
         assert s2_dict['effectiveDate'] == rv.json['payload'].get('effectiveDate')
 
 
-def test_get_redacted_for_entity(app, client, session, jwt, requests_mock):
-    """Assure latest submission details are returned."""
-    """However, there is redaction here based on jwt"""
+def test_get_redacted_for_entity(app, client, session, jwt, requests_mock, sample_user):
+    """Assure latest submission details are returned. However, there is redaction here based on jwt"""
+    requests_mock.post(app.config.get('SSO_SVC_TOKEN_URL'), json={'access_token': 'token'})
+    requests_mock.post(f"{app.config.get('NOTIFY_SVC_URL')}", json={})
     with nested_session(session):
         # Setup
-        user = UserModel()
-        user.save()
+        clear_db(session)
+        sample_user.save()
         test_identifier = 'id0'
+        requests_mock.get(f"{app.config.get('LEGAL_SVC_URL')}/businesses/{test_identifier}",
+                          json=mocked_entity_response)
+        requests_mock.get(
+            f"{app.config.get('LEGAL_SVC_URL')}/businesses/{test_identifier}/addresses?addressType=deliveryAddress",
+            json=mocked_entity_address_response
+        )
         s1_dict = {
             'businessIdentifier': test_identifier,
             'effectiveDate': '2021-01-13',
-            'ownershipOrControlStatements': {'details': 's2'},
+            'ownershipOrControlStatements': [{
+                'details': 's2',
+                'interestedParty': {'describedByPersonStatement': helper_people[0]['statementID']}
+            }],
             'personStatements': helper_people,
         }
-        (SubmissionService.create_submission(s1_dict, user.id)).save()
+        (SubmissionService.create_submission(s1_dict, sample_user.id)).save()
 
         mock_account_id = 1
 
@@ -874,7 +969,7 @@ def test_get_redacted_for_entity(app, client, session, jwt, requests_mock):
         )
         # Test
         rv = client.get(
-            f"/plots/entity/{test_identifier}?account_id={mock_account_id}",
+            f'/plots/entity/{test_identifier}?account_id={mock_account_id}',
             headers=create_header(
                 jwt_manager=jwt,
                 roles=['basic'],
@@ -882,10 +977,19 @@ def test_get_redacted_for_entity(app, client, session, jwt, requests_mock):
             ),
         )
 
+        # Confirm outcome
+        assert rv.status_code == HTTPStatus.OK
+
         expected_dict = {
             'businessIdentifier': 'id0',
             'effectiveDate': '2021-01-13',
-            'ownershipOrControlStatements': {'details': 's2'},
+            'ownershipOrControlStatements': [{
+                'details': 's2',
+                'interestedParty': {
+                    'describedByPersonStatement': rv.json['payload']['personStatements'][0]['statementID']
+                },
+                'statementID': rv.json['payload']['ownershipOrControlStatements'][0]['statementID']
+            }],
             'personStatements': [
                 {
                     'addresses': [
@@ -918,14 +1022,12 @@ def test_get_redacted_for_entity(app, client, session, jwt, requests_mock):
                         'street': ' ',
                         'streetAdditional': ' ',
                     },
-                    'uuid': '2c5fd9bc-2ff1-4545-86aa-d1c02705f4cd',
+                    'statementID': rv.json['payload']['personStatements'][0]['statementID']
                 }
             ],
         }
 
-        # Confirm outcome
-        assert rv.status_code == HTTPStatus.OK
-
+        # validate
         assert expected_dict == rv.json.get('payload')
         assert test_identifier == rv.json['payload'].get('businessIdentifier')
         assert s1_dict['effectiveDate'] == rv.json['payload'].get('effectiveDate')

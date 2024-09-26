@@ -69,7 +69,7 @@ class RegSearchService:
             business_identifier = business['business']['identifier']
             # collect current parties
             parties = []
-            for person in submission.payload.get('personStatements', []):
+            for person in submission.person_statements_json:
                 party_name = ''
                 for name in person.get('names'):
                     if name.get('type') == 'individual':  # expecting this to be 'individual' or 'alternative'
@@ -80,7 +80,7 @@ class RegSearchService:
                     self.app.logger.error('Error parsing SI name for %s', business_identifier)
 
                 parties.append({
-                    'id': f"{business_identifier}_{person['uuid']}",
+                    'id': f"{business_identifier}_{person['statementID']}",
                     'partyName': party_name,
                     'partyRoles': ['significant individual'],
                     'partyType': 'person'

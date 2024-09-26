@@ -611,7 +611,8 @@ export const expectedSisOutput: SiSchemaType[] = [
         startDate: ''
       }
     ],
-    uuid: undefined,
+    ownershipStatementId: 'ea7e5edb-8d2c-4970-b90a-2e3a237fd67b',
+    uuid: 'b0882814-34e2-42e9-b065-a550d94c9df1',
     ui: {
       newOrUpdatedFields: []
     }
@@ -686,7 +687,8 @@ export const expectedSisOutput: SiSchemaType[] = [
         startDate: ''
       }
     ],
-    uuid: undefined,
+    ownershipStatementId: 'bee007d7-0520-4f2d-b6f0-a74a999d956f',
+    uuid: 'b04ce8de-cd95-4fa2-991d-3a06fe34deb0',
     ui: {
       newOrUpdatedFields: []
     }
@@ -758,7 +760,8 @@ export const expectedSisOutput: SiSchemaType[] = [
         startDate: '2024-01-05'
       }
     ],
-    uuid: undefined,
+    ownershipStatementId: 'c41ede1d-4502-4711-aebd-833642e98ff7',
+    uuid: '0a9d4f95-ca72-42b4-8906-05d889e4bb52',
     ui: {
       newOrUpdatedFields: []
     }
