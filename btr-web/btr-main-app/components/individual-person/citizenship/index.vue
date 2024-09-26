@@ -9,7 +9,7 @@ const emit = defineEmits<(e: 'citizenship-updated') => void>()
 
 const formBus = inject<UseEventBusReturn<any, string> | undefined>('form-events', undefined)
 
-enum CitizenshipSelector {
+enum CitizenshipSelectorE {
   OTHER = 'OTHER',
   CITIZEN = 'CITIZEN',
   PERMANENT_RESIDENT = 'PERMANENT_RESIDENT'
@@ -19,28 +19,28 @@ const isCitizen = citizenships.value.findIndex((country: BtrCountryI) => country
 const isPr = citizenships.value.findIndex((country: BtrCountryI) => country.alpha_2 === 'CA_PR') !== -1
 const isOther = !isCitizen && !isPr && citizenships.value.length > 0
 
-let prepopulated: CitizenshipSelector | undefined
+let prepopulated: CitizenshipSelectorE | undefined
 if (isCitizen) {
-  prepopulated = CitizenshipSelector.CITIZEN
+  prepopulated = CitizenshipSelectorE.CITIZEN
 } else if (isPr) {
-  prepopulated = CitizenshipSelector.PERMANENT_RESIDENT
+  prepopulated = CitizenshipSelectorE.PERMANENT_RESIDENT
 } else if (isOther) {
-  prepopulated = CitizenshipSelector.OTHER
+  prepopulated = CitizenshipSelectorE.OTHER
 }
 
-const citizenshipSelector: Ref<undefined | CitizenshipSelector> = ref(prepopulated)
+const citizenshipSelector: Ref<undefined | CitizenshipSelectorE> = ref(prepopulated)
 const otherCitizenships: Ref<BtrCountryI[]> = ref(isOther ? structuredClone(toRaw(citizenships.value)) : [])
 
 const updateCitizenship = () => {
   switch (citizenshipSelector.value) {
-    case CitizenshipSelector.OTHER:
+    case CitizenshipSelectorE.OTHER:
       citizenships.value = otherCitizenships.value
       break
-    case CitizenshipSelector.CITIZEN:
+    case CitizenshipSelectorE.CITIZEN:
       otherCitizenships.value = []
       citizenships.value = [{ name: 'Canada (Citizen)', alpha_2: 'CA' }]
       break
-    case CitizenshipSelector.PERMANENT_RESIDENT:
+    case CitizenshipSelectorE.PERMANENT_RESIDENT:
       otherCitizenships.value = []
       citizenships.value = [{ name: 'Canada (Permanent Resident)', alpha_2: 'CA_PR' }]
       break
@@ -60,7 +60,7 @@ const updateCitizenship = () => {
       <URadio
         id="citizenships-ca-citizen"
         v-model="citizenshipSelector"
-        :value="CitizenshipSelector.CITIZEN"
+        :value="CitizenshipSelectorE.CITIZEN"
         :variant="error ? 'error' : variant"
         data-cy="citizenships-ca-citizen-radio"
         @change="updateCitizenship"
@@ -73,7 +73,7 @@ const updateCitizenship = () => {
       <URadio
         id="citizenships-ca-pr"
         v-model="citizenshipSelector"
-        :value="CitizenshipSelector.PERMANENT_RESIDENT"
+        :value="CitizenshipSelectorE.PERMANENT_RESIDENT"
         :variant="error ? 'error' : variant"
         data-cy="citizenships-ca-pr-radio"
         @change="updateCitizenship"
@@ -88,7 +88,7 @@ const updateCitizenship = () => {
         v-model="citizenshipSelector"
         :aria-label="$t('labels.countryOfCitizenship.others')"
         class="mt-3"
-        :value="CitizenshipSelector.OTHER"
+        :value="CitizenshipSelectorE.OTHER"
         data-cy="citizenships-other-radio"
         @change="updateCitizenship"
       />
@@ -105,7 +105,7 @@ const updateCitizenship = () => {
         key-attribute="alpha_2"
         :search-attributes="['name', 'alpha_2']"
         class="grow"
-        @click="citizenshipSelector = CitizenshipSelector.OTHER"
+        @click="citizenshipSelector = CitizenshipSelectorE.OTHER"
         @value-changed="citizenships = otherCitizenships"
       />
     </div>

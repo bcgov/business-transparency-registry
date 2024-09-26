@@ -137,6 +137,7 @@ Cypress.Commands.add('addSingleTestSi', (profile: any) => {
   cy.get('[data-cy=usePreferredName').check()
   cy.get('#individual-person-preferred-name').type(profile.preferredName)
   cy.get('#individual-person-email').type(profile.email)
+  // todo: fixme: cleanup ticket #23553
   // todo: fixme: update on #20758
   // cy.get('[data-cy=testPercentOfShares]').click()
   // cy.get('[data-cy=testPercentOfShares]').find('li').first().click()
