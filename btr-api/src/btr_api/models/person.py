@@ -100,7 +100,8 @@ class Person(Versioned, Base):
             return str(person.statement_id) if person else None
         except TypeError as err:
             current_app.logger.debug(err.with_traceback(None))
-            current_app.logger.error(f'Error multiple uuids on person json for uuid={orig_uuid}')
+            current_app.logger.error(f'Error multiple uuids on person json for uuid={orig_uuid}. Needs manual update.')
+            return None
 
 
 @event.listens_for(Person, 'before_insert')

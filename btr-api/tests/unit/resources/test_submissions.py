@@ -832,6 +832,7 @@ def test_post_plots_invalid_entity(
         )
 
         with nested_session(session):
+            auth_cache.clear()
             clear_db(session)
             rv = client.post(
                 '/plots',
