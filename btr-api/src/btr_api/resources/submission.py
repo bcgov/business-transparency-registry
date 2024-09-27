@@ -197,6 +197,7 @@ def update_submission(sub_id: int):
             btr_auth.product_authorizations(request=request, account_id=account_id)
 
             # get entity
+            token = btr_auth.get_bearer_token()
             entity: dict = btr_entity.get_entity_info(jwt, business_identifier).json()
 
             # validate entity; return FORBIDDEN for historial and frozen companies
@@ -232,9 +233,8 @@ def update_submission(sub_id: int):
             try:
                 # NOTE: this will be moved out of this api once lear filings are linked
                 # update record in BOR (search)
-                token = btr_auth.get_bearer_token()
                 address = btr_entity.get_entity_info(
-                    jwt, f'{business_identifier}/addresses?addressType=deliveryAddress').json()
+                    None, f'{business_identifier}/addresses?addressType=deliveryAddress', token).json()
                 entity['business']['addresses'] = [address['deliveryAddress']]
                 btr_bor.update_owners(submission, entity, token)
                 # update record in REG Search
