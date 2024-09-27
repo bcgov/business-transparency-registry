@@ -1,0 +1,6 @@
+export enum InfoToOmitE {
+  ALL = 'ALL',
+  FULL_NAME = 'FULL_NAME',
+  BIRTH_YEAR = 'BIRTH_YEAR',
+  CITIZENSHIP_PR = 'CITIZENSHIP_PR'
+}

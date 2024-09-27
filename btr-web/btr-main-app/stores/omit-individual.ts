@@ -1,10 +1,12 @@
-import { CompletingPartySchemaType } from '~/utils/omit-schema/definitions'
-import { getDefaultInputFormCompletingParty } from '~/utils/omit-schema/defaults'
+import { CompletingPartySchemaType, OmitObscureSchemaType } from '~/utils/omit-schema/definitions'
+import { getDefaultInputFormCompletingParty, getDefaultInputFormOmitObscure } from '~/utils/omit-schema/defaults'
 
 export const useOmitIndividual = defineStore('bcros/omitIndividual', () => {
   const completingParty: CompletingPartySchemaType = ref(getDefaultInputFormCompletingParty())
   const errors: Ref<ErrorI[]> = ref([])
   const completingPartyRef = ref()
+  const omitObscureRef = ref()
+  const omitObscure: OmitObscureSchemaType = ref(getDefaultInputFormOmitObscure())
 
   /** Load the omit individuals for the business into the store */
   function loadSavedOmitIndividual () {
@@ -22,7 +24,12 @@ export const useOmitIndividual = defineStore('bcros/omitIndividual', () => {
       console.error('Completing Party Ref missing')
       return
     }
+    if (!omitObscureRef.value) {
+      console.error('Omit Obscure Ref missing')
+      return
+    }
     await completingPartyRef.value.validate()
+    await omitObscureRef.value.validate()
     errors.value = [...completingPartyRef.value.completingPartyForm.errors]
     if (errors.value.length === 0) {
       // eslint-disable-next-line no-console
@@ -38,6 +45,8 @@ export const useOmitIndividual = defineStore('bcros/omitIndividual', () => {
     errors,
     completingParty,
     completingPartyRef,
-    submitOmit
+    submitOmit,
+    omitObscure,
+    omitObscureRef
   }
 })
