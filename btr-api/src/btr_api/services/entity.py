@@ -69,7 +69,7 @@ class EntityService:
         """Return the cache key for the given args."""
         if not token:
             token = jwt.get_token_auth_header()
-        return token + path
+        return 'entity' + token + path
 
     @entity_cache.cached(timeout=600, make_cache_key=get_cache_key)
     def get_entity_info(self, user_jwt: JwtManager, path: str, token: str = None) -> requests.Response:

@@ -198,7 +198,7 @@ def update_submission(sub_id: int):
 
             # get entity
             token = btr_auth.get_bearer_token()
-            entity: dict = btr_entity.get_entity_info(jwt, business_identifier).json()
+            entity: dict = btr_entity.get_entity_info(None, business_identifier, token).json()
 
             # validate entity; return FORBIDDEN for historial and frozen companies
             if entity_errors := validate_entity(entity):

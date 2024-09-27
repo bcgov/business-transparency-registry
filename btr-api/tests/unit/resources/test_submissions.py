@@ -225,7 +225,6 @@ def test_post_plots_db_mocked(app, session, client, jwt, mocker, requests_mock):
     )
     
     email_mock = requests_mock.post(f"{app.config.get('NOTIFY_SVC_URL')}", json={})
-    current_dir = os.path.dirname(__file__)
     mock_user_save = mocker.patch.object(UserModel, 'save')
     mock_submission_save = mocker.patch.object(SubmissionModel, 'save')
 
@@ -233,6 +232,9 @@ def test_post_plots_db_mocked(app, session, client, jwt, mocker, requests_mock):
         return {'id': 123, 'payload': {}}
     mocker.patch.object(SubmissionSerializer, 'to_dict', mocked_to_dict)
 
+    auth_cache.clear()
+
+    current_dir = os.path.dirname(__file__)
     with open(os.path.join(current_dir, '..', '..', 'mocks', 'significantIndividualsFiling', 'valid.json')) as file:
         json_data = json.load(file)
 
@@ -655,20 +657,16 @@ def test_post_plots_auth_error(app, client, session, jwt, requests_mock):
                     **{'Accept-Version': 'v1', 'content-type': 'application/json', 'Account-Id': 1},
                 ),
             )
-            assert rv.status_code == HTTPStatus.CREATED
+            assert rv.status_code == HTTPStatus.SERVICE_UNAVAILABLE
             submission_id = rv.json.get('id')
-            assert submission_id
-            assert legal_api_entity_mock.called == True
-            assert pay_api_mock.called == True
+            assert not submission_id
             assert auth_mock.called == True
+            assert legal_api_entity_mock.called == False
+            assert pay_api_mock.called == False
             assert legal_api_delivery_address_mock.called == False
             assert bor_api_mock.called == False
             assert auth_api_entity_contact_mock.called == False
             assert email_mock.called == False
-            # check submission details
-            created_submission = SubmissionModel.find_by_id(submission_id)
-            assert created_submission
-            assert created_submission.business_identifier == json_data['businessIdentifier']
 
 
 def test_post_plots_bor_error(app, client, session, jwt, requests_mock):
@@ -845,9 +843,9 @@ def test_post_plots_invalid_entity(
             )
             assert rv.status_code == expected_response
             assert rv.json.get('details') == errors
+            assert auth_mock.called == True
             assert legal_api_entity_mock.called == True
             assert pay_api_mock.called == False
-            assert auth_mock.called == False
             assert legal_api_delivery_address_mock.called == False
             assert bor_api_mock.called == False
             assert auth_api_entity_contact_mock.called == False

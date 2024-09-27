@@ -82,7 +82,7 @@ class AuthService:
                 auth_arg = self.get_authorization_header(auth_arg)
             except AuthException:
                 return None
-        return auth_arg + str(key)
+        return 'auth' + auth_arg + str(key)
 
     def get_user_type(self):
         """

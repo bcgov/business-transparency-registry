@@ -1,5 +1,6 @@
 from datetime import date
 
+from btr_api.services.auth import auth_cache
 from btr_api.services.submission import SubmissionService
 
 from tests.unit import nested_session
@@ -23,6 +24,7 @@ def test_create_submission(session, app, requests_mock, sample_user):
     requests_mock.get(f"{app.config.get('AUTH_SVC_URL')}/entities/{business_identifier}",
                       json={'contacts': [{'email': 'test', 'phone': '123'}]})
     with nested_session(session):
+        auth_cache.clear()
         clear_db(session)
         sample_user.save()
         submission = SubmissionService.create_submission(submission_dict=SUBMISSION_DICT,
