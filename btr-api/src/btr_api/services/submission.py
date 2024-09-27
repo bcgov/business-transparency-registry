@@ -46,7 +46,6 @@ import uuid
 
 from flask import current_app
 
-from btr_api.common.auth import jwt
 from btr_api.exceptions import BusinessException, ExternalServiceException
 from btr_api.models import Ownership, Person, Submission as SubmissionModel
 from btr_api.utils import deep_spread
@@ -99,7 +98,7 @@ class SubmissionService:  # pylint: disable=too-few-public-methods
                     auth = AuthService(current_app)
                     entity = EntityService(current_app)
                     token = auth.get_bearer_token()
-                    business = entity.get_entity_info(jwt, business_identifier).json()
+                    business = entity.get_entity_info(None, business_identifier, token).json()
                     delivery_address = EntityService(current_app).get_entity_info(
                         None, f'{business_identifier}/addresses?addressType=deliveryAddress', token).json()
                     business_contact = auth.get_business_contact(token, business_identifier)
