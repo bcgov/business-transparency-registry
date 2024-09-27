@@ -36,9 +36,13 @@ from http import HTTPStatus
 
 import requests
 from flask import Flask
+from flask_caching import Cache
 from flask_jwt_oidc import JwtManager
 
 from btr_api.exceptions import ExternalServiceException
+
+
+entity_cache = Cache()
 
 
 class EntityService:
@@ -49,12 +53,25 @@ class EntityService:
     svc_url: str = None
     timeout: int = None
 
+    def __init__(self, app: Flask = None):
+        """Initialize the entity service."""
+        if app:
+            self.init_app(app)
+
     def init_app(self, app: Flask):
         """Initialize app dependent variables."""
         self.app = app
         self.svc_url = app.config.get('LEGAL_SVC_URL')
         self.timeout = app.config.get('LEGAL_SVC_TIMEOUT', 20)
+        entity_cache.init_app(app)
 
+    def get_cache_key(self, jwt: JwtManager, path: str, token: str = None):
+        """Return the cache key for the given args."""
+        if not token:
+            token = jwt.get_token_auth_header()
+        return 'entity' + token + path
+
+    @entity_cache.cached(timeout=600, make_cache_key=get_cache_key)
     def get_entity_info(self, user_jwt: JwtManager, path: str, token: str = None) -> requests.Response:
         """Get the entity info for the given path.
 

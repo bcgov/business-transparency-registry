@@ -47,22 +47,23 @@ from flask import request
 from flask_cors import cross_origin
 
 from btr_api.common.auth import jwt
-from btr_api.exceptions import AuthException, BusinessException, ExternalServiceException
+from btr_api.exceptions import AuthException, ExternalServiceException
 from btr_api.exceptions import error_request_response
 from btr_api.exceptions import exception_response
 from btr_api.models import Submission as SubmissionModel
 from btr_api.models import User as UserModel
 from btr_api.models.submission import SubmissionSerializer
-from btr_api.services import btr_auth, btr_bor, btr_email, btr_entity, btr_pay, btr_reg_search
+from btr_api.services import btr_auth, btr_bor, btr_entity, btr_pay, btr_reg_search
 from btr_api.services import SchemaService
 from btr_api.services import SubmissionService
 from btr_api.services.validator import validate_entity
-from btr_api.utils import redact_information, deep_spread
+from btr_api.utils import redact_information
 
 bp = Blueprint('submission', __name__)
 
 
 @bp.route('/<id>', methods=('GET',))
+@jwt.requires_auth
 def registers(id: int | None = None):  # pylint: disable=redefined-builtin
     """Get the submissions, or specific submission by id."""
     try:
@@ -82,6 +83,7 @@ def registers(id: int | None = None):  # pylint: disable=redefined-builtin
 
 
 @bp.route('/entity/<business_identifier>', methods=('GET',))
+@jwt.requires_auth
 def get_entity_submission(business_identifier: str):
     """Get the current submission for specified business identifier."""
 
@@ -129,7 +131,8 @@ def create_register():
         btr_auth.is_authorized(request=request, business_identifier=business_identifier)
 
         # get entity
-        entity: dict = btr_entity.get_entity_info(jwt, business_identifier).json()
+        token = btr_auth.get_bearer_token()
+        entity: dict = btr_entity.get_entity_info(None, business_identifier, token).json()
 
         # validate entity; return FORBIDDEN for historial and frozen companies
         if entity_errors := validate_entity(entity):
@@ -137,8 +140,6 @@ def create_register():
 
         # create submission
         submission = SubmissionService.create_submission(json_input, user.id)
-        # save before attempting invoice creation so that we can log the id for ops if there's an error
-        submission.save_to_session()
         try:
             # NOTE: this will be moved out of this api once lear filings are linked
             # create invoice in pay system
@@ -153,9 +154,8 @@ def create_register():
         try:
             # NOTE: this will be moved out of this api once lear filings are linked
             # update record in BOR (search)
-            token = btr_auth.get_bearer_token()
             address = btr_entity.get_entity_info(
-                jwt, f'{business_identifier}/addresses?addressType=deliveryAddress').json()
+                None, f'{business_identifier}/addresses?addressType=deliveryAddress', token).json()
             entity['business']['addresses'] = [address['deliveryAddress']]
             btr_bor.update_owners(submission, entity, token)
             # update record in REG Search
@@ -166,30 +166,12 @@ def create_register():
             current_app.logger.info(err.error)
             current_app.logger.error('Error updating search record for submission: %s', submission.id)
 
-        try:
-            # NOTE: will be moved to person or ownership table @event.listens_for after_insert #23291
-            # send emails out to newly added people
-            token = btr_auth.get_bearer_token()
-            delivery_address = btr_entity.get_entity_info(
-                None, f'{business_identifier}/addresses?addressType=deliveryAddress', token).json()
-            business_contact = btr_auth.get_business_contact(business_identifier, token)
-            business_info = {**entity, **delivery_address, 'contact': {**business_contact}}
-
-            for person in submission.payload['personStatements']:
-                # NOTE: unable to confirm information people may not have an email entered
-                if person.get('email'):
-                    btr_email.send_added_to_btr_email(person, business_info, submission.effective_date, token)
-
-        except (BusinessException, ExternalServiceException) as err:
-            # Log error and continue to return successfully (does NOT block the submission)
-            current_app.logger.info(err.error)
-            current_app.logger.error('Error sending emails for business: %s', business_identifier)
-
-        return jsonify(id=submission.id), HTTPStatus.CREATED
+        return jsonify(SubmissionSerializer.to_dict(submission)), HTTPStatus.CREATED
 
     except AuthException as aex:
         return exception_response(aex)
     except Exception as exception:  # noqa: B902
+        current_app.logger.error(exception.with_traceback(None))
         return exception_response(exception)
 
 
@@ -215,26 +197,26 @@ def update_submission(sub_id: int):
             btr_auth.product_authorizations(request=request, account_id=account_id)
 
             # get entity
-            entity: dict = btr_entity.get_entity_info(jwt, business_identifier).json()
+            token = btr_auth.get_bearer_token()
+            entity: dict = btr_entity.get_entity_info(None, business_identifier, token).json()
 
             # validate entity; return FORBIDDEN for historial and frozen companies
             if entity_errors := validate_entity(entity):
                 return error_request_response('Invalid entity', HTTPStatus.FORBIDDEN, entity_errors)
 
             submitted_json = request.get_json()
-            prev_submission_dict = SubmissionSerializer.to_dict(submission)
-            new_payload = deep_spread(prev_submission_dict['payload'], submitted_json)
+            submission = SubmissionService.update_submission(submission,
+                                                             submitted_json,
+                                                             user.id)
 
-            # validate payload; TODO: implement business rules validations
+            submission.save_to_session()
+            new_full_submission = SubmissionSerializer.to_dict(submission)['payload']
+            # validate resulting full submission
             schema_name = 'btr-filing.schema.json'
             schema_service = SchemaService()
-            [valid, errors] = schema_service.validate(schema_name, new_payload)
+            [valid, errors] = schema_service.validate(schema_name, new_full_submission)
             if not valid:
                 return error_request_response('Invalid schema', HTTPStatus.BAD_REQUEST, errors)
-
-            submission = SubmissionService.update_submission(submission, new_payload, user.id, submitted_json)
-
-            submission.save()
 
             try:
                 # NOTE: this will be moved out of this api once lear filings are linked
@@ -246,12 +228,13 @@ def update_submission(sub_id: int):
                 current_app.logger.info(err.error)
                 current_app.logger.error('Error creating invoice for submission: %s', submission.id)
 
+            submission.save()
+
             try:
                 # NOTE: this will be moved out of this api once lear filings are linked
                 # update record in BOR (search)
-                token = btr_auth.get_bearer_token()
                 address = btr_entity.get_entity_info(
-                    jwt, f'{business_identifier}/addresses?addressType=deliveryAddress').json()
+                    None, f'{business_identifier}/addresses?addressType=deliveryAddress', token).json()
                 entity['business']['addresses'] = [address['deliveryAddress']]
                 btr_bor.update_owners(submission, entity, token)
                 # update record in REG Search
@@ -262,27 +245,7 @@ def update_submission(sub_id: int):
                 current_app.logger.info(err.error)
                 current_app.logger.error('Error updating search records for submission: %s', submission.id)
 
-            try:
-                # NOTE: will be moved to person or ownership table @event.listens_for after_insert #23291
-                # send emails out to newly added people
-                token = btr_auth.get_bearer_token()
-                delivery_address = btr_entity.get_entity_info(
-                    None, f'{business_identifier}/addresses?addressType=deliveryAddress', token).json()
-                business_contact = btr_auth.get_business_contact(business_identifier, token)
-                business_info = {**entity, **delivery_address, 'contact': {**business_contact}}
-
-                existing_people = [person['uuid'] for person in prev_submission_dict['payload']['personStatements']]
-                for person in submission.payload['personStatements']:
-                    # NOTE: unable to confirm information people may not have an email entered
-                    if person['uuid'] not in existing_people and person.get('email'):
-                        btr_email.send_added_to_btr_email(person, business_info, submission.effective_date, token)
-
-            except (BusinessException, ExternalServiceException) as err:
-                # Log error and continue to return successfully (does NOT block the submission)
-                current_app.logger.info(err.error)
-                current_app.logger.error('Error sending emails for business: %s', business_identifier)
-
-            return jsonify(redact_information(SubmissionSerializer.to_dict(submission),
+            return jsonify(redact_information(new_full_submission,
                                               btr_auth.get_user_type())), HTTPStatus.OK
 
         return {}, HTTPStatus.NOT_FOUND
@@ -290,4 +253,5 @@ def update_submission(sub_id: int):
     except AuthException as aex:
         return exception_response(aex)
     except Exception as exception:  # noqa: B902
+        current_app.logger.error(exception.with_traceback(None))
         return exception_response(exception)

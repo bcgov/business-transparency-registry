@@ -219,7 +219,8 @@ const _getSi = (
 
     effectiveDates: _getEffectiveDates(oocs),
 
-    uuid: person.uuid,
+    uuid: person.statementID,
+    ownershipStatementId: oocs.statementID,
 
     ui: {
       newOrUpdatedFields: []
@@ -231,6 +232,8 @@ export const getSIsFromBtrBodsSubmission = (submission: BtrFilingI): SiSchemaTyp
   const sis: SiSchemaType[] = []
   const businessIdentifier = submission.businessIdentifier
   for (const person of submission.personStatements) {
+    // update person uuid to be the statementID generated from the backend
+    person.uuid = person.statementID
     const oocs = _findOwnershipOrControlStatement(submission, person.statementID)
     if (person && oocs) {
       const si = _getSi(person, oocs, businessIdentifier)

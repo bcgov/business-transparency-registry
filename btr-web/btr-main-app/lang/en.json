@@ -117,6 +117,7 @@
   "texts": {
     "requestOmitText": "You can request to have some or all of your information publicly omitted from the BC Business Transparency Registry by completing the request below. Ensure that you provide sufficient information to support your request.",
     "significantIndividuals": "List all of the individual who have significant control of this company. Significant control is determined by control of shares or votes at general meetings, control of directors, or other interests or rights that allow the individual to control the company.",
+    "collectionNotice": "Any personal information or content is being collected for the purposes of administering the Registrar’s Transparency Registry, under the legislative authority of FOIPPA secs. 26(a), and 26(c). Questions about the collection of any information through this program can be directed to the Manager of Registries Operations at 1 877-526-1526.",
     "noSignificantIndividualsExistExplain": "By checking this checkbox, you confirm that, as per Business Corporations Act 119.2(3), there are no individuals considered significant individuals in relation to the company. This action ensures compliance with legislation, requiring the transparency register to include a statement indicating the absence of significant individuals.",
     "isYourOwnInformation": "Select this option if you are a significant individual and you are entering information for yourself.",
     "note": "Note: ",

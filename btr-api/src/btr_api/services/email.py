@@ -34,7 +34,7 @@
 """
 This module contains the services necessary for handling email notifications.
 """
-from datetime import date, timedelta
+from datetime import timedelta
 from http import HTTPStatus
 from pathlib import Path
 
@@ -115,10 +115,10 @@ class EmailService:
             'content': {'subject': subject, 'body': f'{html_out}'},
         }
 
-    def _compose_added_email(self, person: dict, business_info: dict, effective_date: date) -> dict:
+    def _compose_added_email(self, person: dict, business_info: dict, effective_date: str) -> dict:
         """Return email data for EmailType.ADDING_ADULT or EmailType.ADDING_MINOR"""
         email_type = EmailType.ADDING_ADULT
-        effective_datetime = LegislationDatetime.as_legislation_timezone_from_date(effective_date)
+        effective_datetime = LegislationDatetime.as_legislation_timezone_from_date_str(effective_date)
         # dates
         start_date_label = 'Registered Date'
         start_date_desc = 'registration date'
@@ -237,7 +237,7 @@ class EmailService:
     def send_added_to_btr_email(self,
                                 person_statement: dict,
                                 business_info: dict,
-                                effective_date: date,
+                                effective_date: str,
                                 token: str):
         """Send 'added person to btr' email via notify api."""
         try:

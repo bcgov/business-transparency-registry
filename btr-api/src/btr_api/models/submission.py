@@ -31,17 +31,25 @@
 # CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
-"""Sample submission class."""
+"""Manages submission data for the BTR filing."""
 from __future__ import annotations
 
-from sqlalchemy import desc, func
+from datetime import date, datetime
+from typing import TYPE_CHECKING
+
+from sqlalchemy import Column, ForeignKey, desc, event
 from sqlalchemy.dialects.postgresql import JSONB
-from sqlalchemy.orm import backref
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sql_versioning import Versioned
 
-from .db import db
+from .base import Base
 from ..common.enum import auto
 from ..common.enum import BaseEnum
+
+if TYPE_CHECKING:
+    # https://mypy.readthedocs.io/en/stable/runtime_troubles.html#import-cycles
+    from .ownership import Ownership
+    from .user import User
 
 
 class SubmissionType(BaseEnum):
@@ -51,38 +59,30 @@ class SubmissionType(BaseEnum):
     standard = auto()  # pylint: disable=invalid-name
 
 
-class Submission(Versioned, db.Model):
+class Submission(Versioned, Base):
     """Stores a submission of JSON data."""
 
-    __tablename__ = "submission"
+    __tablename__ = 'submission'
 
-    id = db.Column(db.Integer, primary_key=True)
-    type = db.Column(db.Enum(SubmissionType), default=SubmissionType.other)
-    effective_date = db.Column(db.Date(), nullable=True)
-    submitted_datetime = (
-        db.Column("submitted_datetime", db.DateTime(timezone=True),
-                  server_default=func.now()))  # pylint:disable=not-callable
-    payload = db.Column("payload", JSONB)
-    business_identifier = db.Column(db.String(255), nullable=False, unique=True, index=True)
+    id: Mapped[int] = mapped_column(primary_key=True)
+    type: Mapped[SubmissionType] = mapped_column(default=SubmissionType.other)
+    effective_date: Mapped[date] = mapped_column(nullable=True)
+    submitted_datetime: Mapped[datetime] = mapped_column()
+    submitted_payload = Column(JSONB, nullable=False)
+    business_identifier: Mapped[str] = mapped_column(nullable=False, unique=True, index=True)
     # maps to invoice id created by the pay-api (used for getting receipt)
-    invoice_id = db.Column(db.Integer, nullable=True)
-    submitted_payload = db.Column("submitted_payload", JSONB)
+    invoice_id: Mapped[int] = mapped_column(nullable=True)
 
     # Relationships
-    submitter_id = db.Column('submitter_id', db.Integer, db.ForeignKey('users.id'))
+    ownership_statements: Mapped[list['Ownership']] = relationship(back_populates='submission')
 
-    submitter = db.relationship('User',
-                                backref=backref('filing_submitter', uselist=False),
-                                foreign_keys=[submitter_id])
+    submitter_id: Mapped[int] = mapped_column(ForeignKey('users.id'))
+    submitter: Mapped['User'] = relationship(back_populates='submissions')
 
-    def save(self):
-        """Save and commit immediately."""
-        db.session.add(self)
-        db.session.commit()
-
-    def save_to_session(self):
-        """Save toThe session, do not commit immediately."""
-        db.session.add(self)
+    @property
+    def person_statements_json(self):
+        """Return the person statements json linked through this submission's ownership statements."""
+        return [ownership.person.person_json for ownership in self.ownership_statements]
 
     @classmethod
     def find_by_id(cls, submission_id) -> Submission | None:
@@ -101,6 +101,16 @@ class Submission(Versioned, db.Model):
         return query.all()
 
 
+@event.listens_for(Submission, 'before_insert')
+@event.listens_for(Submission, 'before_update')
+def receive_before_change(mapper, connection, target: Submission):  # pylint: disable=unused-argument
+    """Update the submitted value, effective date, and business identifier."""
+    target.submitted_datetime = datetime.now()
+    target.business_identifier = target.submitted_payload.get('businessIdentifier')
+    if effective_date := target.submitted_payload.get('effectiveDate'):
+        target.effective_date = date.fromisoformat(effective_date)
+
+
 class SubmissionSerializer:
     """Serializer for submissions. Can convert to dict, string from submission model. """
 
@@ -117,6 +127,11 @@ class SubmissionSerializer:
             'id': submission.id,
             'type': submission.type.value,
             'submittedDatetime': submission.submitted_datetime.isoformat(),
-            'payload': submission.payload,
             'submitterId': submission.submitter_id,
+            'payload': {
+                **submission.submitted_payload,
+                'ownershipOrControlStatements': [
+                    ownership.ownership_json for ownership in submission.ownership_statements],
+                'personStatements': submission.person_statements_json
+            },
         }

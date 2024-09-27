@@ -33,14 +33,19 @@
 # POSSIBILITY OF SUCH DAMAGE.
 """Manages auth service interactions."""
 from http import HTTPStatus
-from flask import Flask
+
 import requests
-from requests import exceptions
+from requests import Request, exceptions
+from flask import Flask
+from flask_caching import Cache
 
 from btr_api.exceptions import AuthException
 from btr_api.exceptions import ExternalServiceException
 from btr_api.common.auth import jwt
 from btr_api.enums import UserType
+
+
+auth_cache = Cache()
 
 
 class AuthService:
@@ -68,6 +73,16 @@ class AuthService:
         self.sso_svc_timeout = app.config.get('SSO_SVC_TIMEOUT', 20)
         self.svc_acc_id = app.config.get('SVC_ACC_CLIENT_ID')
         self.svc_acc_secret = app.config.get('SVC_ACC_CLIENT_SECRET')
+        auth_cache.init_app(app)
+
+    def get_cache_key(self, auth_arg: str | Request, key: str | int):
+        """Return the cache key for the given args."""
+        if isinstance(auth_arg, Request):
+            try:
+                auth_arg = self.get_authorization_header(auth_arg)
+            except AuthException:
+                return None
+        return 'auth' + auth_arg + str(key)
 
     def get_user_type(self):
         """
@@ -93,6 +108,7 @@ class AuthService:
         self.app.logger.info('Get User Type: ' + UserType.USER_PUBLIC)
         return UserType.USER_PUBLIC
 
+    @auth_cache.cached(timeout=300, key_prefix='view/token')
     def get_bearer_token(self):
         """Get a valid Bearer token for the service to use."""
         data = 'grant_type=client_credentials'
@@ -120,7 +136,7 @@ class AuthService:
                 [{'message': 'Unable to get service account token.', 'reason': err.with_traceback(None)}],
             ) from err
 
-    def get_authorization_header(self, request) -> str:
+    def get_authorization_header(self, request: Request) -> str:
         """Gets authorization header from request."""
         authorization_header = request.headers.get('Authorization', None)
         if not authorization_header:
@@ -130,7 +146,7 @@ class AuthService:
 
         return authorization_header
 
-    # TODO: Add caching
+    @auth_cache.cached(timeout=600, make_cache_key=get_cache_key, cache_none=False)
     def product_authorizations(self, request, account_id: str) -> None:
         """Get the products associated with the user and account_id."""
         if not account_id:
@@ -159,8 +175,8 @@ class AuthService:
             self.app.logger.debug(err)
             return
 
-    # TODO: Add caching
-    def is_authorized(self, request, business_identifier: str) -> bool:
+    @auth_cache.cached(timeout=600, make_cache_key=get_cache_key, cache_none=False)
+    def is_authorized(self, request: Request, business_identifier: str) -> bool:
         """Authorize the user for access to the service."""
         try:
             auth_token = self.get_authorization_header(request)
@@ -194,7 +210,8 @@ class AuthService:
             self.app.logger.debug('Generic Auth verification failure:', repr(err))
             raise ExternalServiceException(error=repr(err), status_code=HTTPStatus.SERVICE_UNAVAILABLE) from err
 
-    def get_business_contact(self, business_identifier: str, token: str) -> bool:
+    @auth_cache.cached(timeout=600, make_cache_key=get_cache_key)
+    def get_business_contact(self, token: str, business_identifier: str) -> bool:
         """Get the business contact information from auth."""
         try:
             headers = {'Authorization': 'Bearer ' + token}

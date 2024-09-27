@@ -9,12 +9,20 @@
       "country": "Canada",
       "streetAddress": "111 test street",
       "city": "Vancouver",
-      "province": ["British Columbia", "BC"],
+      "province": [
+        "British Columbia",
+        "BC"
+      ],
       "postalCode": "V0E 1H5"
     },
     "taxNumber": "107 676 942",
     "taxResidency": "true",
-    "citizenships": [{ "name": "Canada (Citizen)", "alpha_2": "CA" }],
+    "citizenships": [
+      {
+        "name": "Canada (Citizen)",
+        "alpha_2": "CA"
+      }
+    ],
     "summaryTable": {
       "citizenship": "Citizenship(s):Canada",
       "taxResidency": "Canada",
@@ -32,14 +40,53 @@
       "country": "Canada",
       "streetAddress": "111 test street",
       "city": "Vancouver",
-      "province": ["British Columbia", "BC"],
+      "province": [
+        "British Columbia",
+        "BC"
+      ],
       "postalCode": "V0E 1H5"
     },
     "taxNumber": "301 166 476",
     "taxResidency": "true",
-    "citizenships": [{ "name": "Canada (Citizen)", "alpha_2": "CA" }],
+    "citizenships": [
+      {
+        "name": "Canada (Citizen)",
+        "alpha_2": "CA"
+      }
+    ],
     "summaryTable": {
       "citizenship": "Citizenship(s):Canada",
+      "taxResidency": "Canada",
+      "shareControl": "Registered owner: More than 75% of shares; More than 75% of votes",
+      "directorControl": "Direct control of the majority of directors"
+    }
+  },
+  "profile3": {
+    "fullName": "John US Doe",
+    "preferredName": "John from US",
+    "email": "testus@testemail.com",
+    "percentOfShares": "moreThan75",
+    "percentOfVotes": "moreThan75",
+    "address": {
+      "country": "Canada",
+      "streetAddress": "111 test street",
+      "city": "Vancouver",
+      "province": [
+        "British Columbia",
+        "BC"
+      ],
+      "postalCode": "V0E 1H5"
+    },
+    "taxNumber": "301 166 476",
+    "taxResidency": "true",
+    "citizenships": [
+      {
+        "name": "United States",
+        "alpha_2": "US"
+      }
+    ],
+    "summaryTable": {
+      "citizenship": "Citizenship(s):United States",
       "taxResidency": "Canada",
       "shareControl": "Registered owner: More than 75% of shares; More than 75% of votes",
       "directorControl": "Direct control of the majority of directors"

@@ -1,6 +1,5 @@
 <template>
   <UFormGroup
-    v-slot="{ error }"
     :name="name"
     :help="help"
     class="flex flex-col min-h-fit"
@@ -71,7 +70,7 @@ import { type UseEventBusReturn } from '@vueuse/core'
 
 const formBus = inject<UseEventBusReturn<any, string> | undefined>('form-events', undefined)
 
-defineEmits<{(e: 'value-changed', value: any): void}>()
+defineEmits<{(e: 'value-changed', value: any): void }>()
 const model = defineModel({ type: Array as PropType<any[]>, required: true })
 const props = defineProps({
   name: { type: String, default: 'name' },

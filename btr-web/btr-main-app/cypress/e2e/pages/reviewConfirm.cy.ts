@@ -143,8 +143,9 @@ describe('pages -> Review and Confirm', () => {
     // click 'back' to go back to non review page
     cy.get('[data-cy=button-control-right-button]').eq(0).should('have.text', 'Back')
     cy.get('[data-cy=button-control-right-button]').eq(0).click()
-
-    cy.get('[data-cy="noSignificantIndividualsExist-checkbox"]').click().should('be.checked')
+    cy.wait(2000) // needs to wait for page hydration or it will fail sometimes (no calls to wait for)
+    cy.get('[data-cy="noSignificantIndividualsExist-checkbox"]').click()
+    cy.get('[data-cy="noSignificantIndividualsExist-checkbox"]').should('be.checked')
 
     // click 'Review and Confirm' button to go back to review the summary
     cy.get('[data-cy="button-control-right-button"]').click()

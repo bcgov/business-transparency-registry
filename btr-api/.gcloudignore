@@ -4,6 +4,7 @@
 .pytest_cache
 .venv
 .vscode
+cache
 devops
 migrations
 sample_data
