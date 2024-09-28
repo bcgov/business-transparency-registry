@@ -144,7 +144,6 @@ const formSchema: OmitObscureSchemaType = OmitObscureSchema
                   <br></br>
                   <!--TODO: fill in with the existing info-->
                   <span class="font-bold">{{ infoPlaceholders[index] }}</span>
-                  &nbsp;
                 </div>
               </div>
             </template>
