@@ -35,9 +35,8 @@ const infoToOmitSelected = ref([false])
 const d = new Date()
 const infoPlaceholders = ['First Last', d.getFullYear(), 'Canada Citizen']
 for (const key in InfoToOmitE) {
-  const width = key === 'CITIZENSHIP_PR' ? '307px' : '159px'
   if (key !== 'ALL') {
-    infoToOmitOptions.push({ value: key, label: t('labels.requestOmit.omitInfoOpt.' + key), width })
+    infoToOmitOptions.push({ value: key, label: t('labels.requestOmit.omitInfoOpt.' + key) })
     infoToOmitSelected.value.push(false)
   }
 }
@@ -117,34 +116,30 @@ const formSchema: OmitObscureSchemaType = OmitObscureSchema
         <div class="flex-col w-full">
           <UFormGroup name="infoToOmit">
             <template #default>
-              <div class="block w-[159px] text-base mb-5">
+              <div class="block text-base mb-5">
                 <UCheckbox
                   v-model="infoToOmitSelected[0]"
                   name="omitAll"
-                  class="inline-block"
-                />
-                <div class="inline-block mr-2">
-                  {{ $t('labels.requestOmit.omitInfoOpt.ALL') }}
-                </div>
+                >
+                  <template #label>
+                    {{ $t('labels.requestOmit.omitInfoOpt.ALL') }}
+                  </template>
+                </UCheckbox>
               </div>
-              <div
-                v-for="option, index in infoToOmitOptions"
-                :key="`omit${option.value}`"
-                class="inline-block mr-1 text-base"
-                :class="`w-[${option.width}]`"
-              >
+              <div class="flex flex-row gap-1 text-base">
                 <UCheckbox
+                  v-for="(option, index) in infoToOmitOptions"
                   :id="`omit${option.value}`"
+                  :key="`omit${option.value}`"
                   v-model="infoToOmitSelected[index+1]"
                   :name="`omit${option.value}`"
-                  class="inline-block height-[48px] align-super"
-                />
-                <div class="inline-block mr-2">
-                  {{ option.label }}
-                  <br></br>
-                  <!--TODO: fill in with the existing info-->
-                  <span class="font-bold">{{ infoPlaceholders[index] }}</span>
-                </div>
+                >
+                  <template #label>
+                    <p>{{ option.label }}</p>
+                    <!--TODO: fill in with the existing info-->
+                    <span class="font-bold">{{ infoPlaceholders[index] }}</span>
+                  </template>
+                </UCheckbox>
               </div>
             </template>
           </UFormGroup>
