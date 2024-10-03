@@ -1,5 +1,5 @@
 import { v4 as UUIDv4 } from 'uuid'
-import { OmitSchemaType, CompletingPartySchemaType } from '~/utils/omit-schema/definitions'
+import { OmitSchemaType, CompletingPartySchemaType, OmitObscureSchemaType } from '~/utils/omit-schema/definitions'
 import { CompletingIndividualTypeE } from '~/enums/omit/completing-individual-type-e'
 
 export function getDefaultInputFormCompletingParty (): CompletingPartySchemaType {
@@ -11,9 +11,18 @@ export function getDefaultInputFormCompletingParty (): CompletingPartySchemaType
   }
 }
 
+export function getDefaultInputFormOmitObscure (): OmitObscureSchemaType {
+  return {
+    infoToOmit: [],
+    individualsAtRisk: [],
+    reasons: ''
+  }
+}
+
 export function getDefaultInputFormOmit (): OmitSchemaType {
   return {
     uuid: UUIDv4(),
-    completingParty: getDefaultInputFormCompletingParty()
+    completingParty: getDefaultInputFormCompletingParty(),
+    omitObscure: getDefaultInputFormOmitObscure()
   }
 }

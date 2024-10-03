@@ -3,7 +3,7 @@
 import { useOmitIndividual } from '@/stores/omit-individual'
 
 const omitIndividual = useOmitIndividual()
-const { completingPartyRef } = storeToRefs(omitIndividual)
+const { completingPartyRef, omitObscureRef } = storeToRefs(omitIndividual)
 </script>
 
 <template>
@@ -28,6 +28,18 @@ const { completingPartyRef } = storeToRefs(omitIndividual)
           </template>
         </BcrosHelpTip>
       </div>
+
+      <BcrosSection
+        data-cy="requestToOmit"
+        :section-title="$t('labels.requestOmit.omitObscure')"
+        section-title-icon="i-mdi-account-cog-outline"
+        rounded-bot
+        rounded-top
+        :padded-top="true"
+        class="mb-10"
+      >
+        <BcrosRequestToOmitObscure ref="omitObscureRef" v-model="omitIndividual.omitObscure" />
+      </BcrosSection>
 
       <BcrosSection
         data-cy="completing-party"

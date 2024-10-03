@@ -11,7 +11,25 @@
       "completingPartyIntro": "Provide information about the individual completing this request:",
       "significantIndividual": "Significant Individual | Significant Individuals",
       "representative": "Representative for significant individual",
-      "certifyPart2": ", am requesting to have the above significant individual’s information publicly omitted from the BC Business Transparency Registry for the above business. I certify that I have relevant knowledge of this significant individual and that I am authorized to make this filing."
+      "certifyPart2": ", am requesting to have the above significant individual’s information publicly omitted from the BC Business Transparency Registry for the above business. I certify that I have relevant knowledge of this significant individual and that I am authorized to make this filing.",
+      "omitObscure": "Request to Omit",
+      "omitObscureIntro": "Indicate the information you are requesting to omit from public search, the individuals whose safety or mental or physical health is threatened, and the reasons for omitting the information for",
+      "omitInfo": "Information to Omit",
+      "reasons": "Reasons",
+      "reasonsIntro": "Enter all of the reasons the significant individual’s information should be omitted (provide sufficient facts and all material information to enable an informed decision on the omission sought):",
+      "omitInfoOpt": {
+        "ALL": "Omit All",
+        "FULL_NAME": "Full name",
+        "BIRTH_YEAR": "Birth year",
+        "CITIZENSHIP_PR": "Citizenship / Permanent Residency"
+      },
+      "atRisk": "Individual at Risk",
+      "reasonsPlaceholder": "Reasons to omit information from a public search",
+      "individualAtRisk": {
+        "SI": "Significant Individual",
+        "HOUSEHOLD": "Members of the significant individual’s household"
+      },
+      "businessPlaceholder": "the above business."
     },
     "addEndDate": "Add end date",
     "cessationDate": "Cessation Date",
