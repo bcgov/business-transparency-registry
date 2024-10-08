@@ -1,0 +1,76 @@
+{
+  "$id": "https://btr.gov.bc.ca/.well_known/schemas/btr-bods-request.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "version": "0.1",
+  "type": "object",
+  "title": "Request (to omit)",
+  "description": "A request to omit data from public search.",
+  "properties": {
+    "fullName": {
+      "title": "Names",
+      "description": "One or more known names for this individual.",
+      "type": "string"
+    },
+    "birthdate": {
+      "title": "Date of birth",
+      "description": "The date of birth for this individual. Please provide as precise a date as possible in ISO 8601 format. When only the year or year and month is known, these can be given as YYYY or YYYY-MM.",
+      "type": "string",
+      "format": "date",
+      "propertyOrder": 35
+    },
+    "email": {
+      "type": "string",
+      "format": "email"
+    },
+    "businessIdentifier": {
+      "type": "string"
+    },
+    "informationToOmit": {
+      "type": "string",
+      "enum": [
+        "ALL",
+        "FULL_NAME",
+        "BIRTH_YEAR",
+        "CITIZENSHIP_PR"
+      ]
+    },
+    "individualAtRisk": {
+      "type": "string",
+      "enum": [
+        "SI",
+        "HOUSEHOLD"
+      ]
+    },
+    "reasons": {
+      "type": "string"
+    },
+    "completingParty": {
+      "type": "string",
+      "enum": [
+        "SI",
+        "REPRESENTATIVE"
+      ]
+    },
+    "completingName": {
+      "title": "Names",
+      "description": "Name for the completing individual.",
+      "type": "string"
+    },
+    "completingEmail": {
+      "type": "string",
+      "format": "email"
+    }
+  },
+  "required": [
+    "fullName",
+    "birthdate",
+    "email",
+    "businessIdentifier",
+    "informationToOmit",
+    "individualAtRisk",
+    "reasons",
+    "completingParty",
+    "completingName",
+    "completingEmail"
+  ]
+}
