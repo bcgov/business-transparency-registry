@@ -82,7 +82,7 @@ class Request(Versioned, Base):
     def find_by_id(cls, request_id: int) -> Request | None:
         """Return the person by id."""
         return cls.query.filter_by(id=request_id).one_or_none()
-    
+
     @classmethod
     def __setitem__(cls, key, value):
         match key:
