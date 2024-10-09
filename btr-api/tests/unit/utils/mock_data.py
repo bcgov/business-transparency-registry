@@ -444,3 +444,16 @@ SUBMISSION_DICT = {
         }
     ]
 }
+
+REQUEST_DICT = {
+    'fullName': 'John Doe',
+    'email': 'jdoe@gmail.com',
+    'birthdate': '1970-03-31',
+    'businessIdentifier': 'BUSID',
+    'informationToOmit': 'ALL',
+    'individualAtRisk': 'SI',
+    'reasons': 'I have some',
+    'completingParty': 'SI',
+    'completingName': 'John Doe',
+    'completingEmail': 'jdoe@gmail.com'
+}

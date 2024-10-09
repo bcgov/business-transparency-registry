@@ -17,3 +17,6 @@ from .email_type import EmailType
 from .log_level import LogLevel
 from .redaction_types import RedactionType
 from .user_types import UserType
+from .completing_party import CompletingParty
+from .individual_at_risk import IndividualAtRisk
+from .information_to_omit_type import InformationToOmitType

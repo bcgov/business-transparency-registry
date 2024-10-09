@@ -39,6 +39,7 @@ from .submission import Submission
 from .submission import SubmissionType
 from .user import User
 from .user import UserRoles
+from .request import Request
 
 
 __all__ = (
@@ -49,4 +50,5 @@ __all__ = (
     "SubmissionType",
     "User",
     "UserRoles",
+    "Request",
 )

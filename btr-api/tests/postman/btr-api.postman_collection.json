@@ -410,6 +410,147 @@
 					"response": []
 				}
 			]
+		},
+		{
+			"name": "Request  (to omit)",
+			"item": [
+				{
+					"name": "create",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();",
+									"pm.environment.set(\"request_id\", jsonData.uuid);",
+									"pm.environment.set(\"request_birthdate\", jsonData.birthate);",
+									"pm.environment.set(\"request_completingEmail\", jsonData.completingEmail);",
+									"pm.environment.set(\"request_completingParty\", jsonData.completingParty);",
+									"pm.environment.set(\"request_createdAt\", jsonData.createdAt);",
+									"pm.environment.set(\"request_email\", jsonData.email);",
+									"pm.environment.set(\"request_full_name\", jsonData.fullName);",
+									"pm.environment.set(\"request_atRisk\", jsonData.individualAtRisk);",
+									"pm.environment.set(\"request_omit\", jsonData.informationToOmit);",
+									"pm.environment.set(\"request_reasons\", jsonData.reasons);",
+									"pm.environment.set(\"request_updated\", jsonData.updatedAt);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"fullName\": \"John Doe\",\n    \"email\": \"jdoe@gmail.com\",\n    \"birthdate\": \"1970-03-31\",\n    \"businessIdentifier\": \"BUSID\",\n    \"informationToOmit\": \"ALL\",\n    \"individualAtRisk\": \"SI\",\n    \"reasons\": \"I have some\",\n    \"completingParty\": \"SI\",\n    \"completingName\": \"John Doe\",\n    \"completingEmail\": \"jdoe@gmail.com\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{internal_url}}/requests",
+							"host": [
+								"{{internal_url}}"
+							],
+							"path": [
+								"requests"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "fetch",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{internal_url}}/requests/{{request_id}}",
+							"host": [
+								"{{internal_url}}"
+							],
+							"path": [
+								"requests",
+								"{{request_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();",
+									"pm.expect(jsonData.uuid).to.eql(pm.collectionVariables.get(\"request_id\"));",
+									"pm.expect(jsonData.birthate).to.eql(pm.collectionVariables.get(\"request_birthdate\"));",
+									"pm.expect(jsonData.completingEmail).to.eql(pm.collectionVariables.get(\"request_completingEmail\"));",
+									"pm.expect(jsonData.completingParty).to.eql(pm.collectionVariables.get(\"request_completingParty\"));",
+									"pm.expect(jsonData.createdAt).to.eql(pm.collectionVariables.get(\"request_createdAt\"));",
+									"pm.expect(jsonData.email).to.eql(pm.collectionVariables.get(\"request_email\"));",
+									"pm.expect(jsonData.request_full_name).to.not.eql(pm.collectionVariables.get(\"fullName\"));",
+									"pm.expect(jsonData.request_full_name).to.eql(\"John Doe2\");",
+									"pm.expect(jsonData.individualAtRisk).to.eql(pm.collectionVariables.get(\"request_atRisk\"));",
+									"pm.expect(jsonData.informationToOmit).to.eql(pm.collectionVariables.get(\"request_omit\"));",
+									"pm.expect(jsonData.reasons).to.eql(pm.collectionVariables.get(\"request_reasons\"));",
+									"pm.expect(jsonData.updatedAt).to.not.eql(pm.collectionVariables.get(\"request_updated\"));"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"fullName\": \"John Doe2\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{internal_url}}/requests/{{request_id}}",
+							"host": [
+								"{{internal_url}}"
+							],
+							"path": [
+								"requests",
+								"{{request_id}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
 		}
 	]
 }
