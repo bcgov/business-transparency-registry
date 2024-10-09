@@ -62,8 +62,8 @@ class Request(Versioned, Base):
     completing_party: Mapped[CompletingParty] = mapped_column(nullable=False)
     completing_name: Mapped[str] = mapped_column(nullable=False)
     completing_email: Mapped[str] = mapped_column(nullable=False)
-    created_at: Mapped[datetime] = mapped_column(nullable=False)
-    updated_at: Mapped[datetime] = mapped_column(nullable=False)
+    created_at: Mapped[datetime] = mapped_column(nullable=False, default=datetime.now())
+    updated_at: Mapped[datetime] = mapped_column(nullable=False, default=datetime.now())
 
     def __init__(self, data):
         self.id = uuid.uuid4()
@@ -82,6 +82,40 @@ class Request(Versioned, Base):
     def find_by_id(cls, request_id: int) -> Request | None:
         """Return the person by id."""
         return cls.query.filter_by(id=request_id).one_or_none()
+    
+    @classmethod
+    def __setitem__(cls, key, value):
+        match key:
+            case 'id':
+                cls.id = value
+            case 'email':
+                cls.email = value
+            case 'birthdate':
+                cls.birthdate = value
+            case 'reasons':
+                cls.reasons = value
+            case 'fullName':
+                print('hi')
+                print(value)
+                print(cls.full_name)
+                cls.full_name = value
+                print('hi2 ' + value + " " + cls.full_name)
+            case 'businessIdentifier':
+                cls.business_identifier = value
+            case 'informationToOmit':
+                cls.information_to_omit = value
+            case 'individualAtRisk':
+                cls.individual_at_risk = value
+            case 'completingParty':
+                cls.completing_party = value
+            case 'completingEmail':
+                cls.completing_email = value
+            case 'completingName':
+                cls.completing_name = value
+            case 'createdAt':
+                cls.created_at = value
+            case 'updatedAt':
+                cls.updated_at = value
 
 
 class RequestSerializer:
