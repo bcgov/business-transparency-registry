@@ -42,7 +42,7 @@ def test_get(app, client, session, jwt, requests_mock, sample_user, test_name, u
         req = RequestModel(REQUEST_DICT)
         session.add(req)
         session.commit()
-        id = req.id
+        id = req.uuid
 
         requests_mock.get(
             f"{app.config.get('AUTH_SVC_URL')}/orgs/1/products?include_hidden=true",
@@ -73,7 +73,7 @@ def test_get_fail_no_auth(app, client, session, jwt, requests_mock, sample_user,
         req = RequestModel(REQUEST_DICT)
         session.add(req)
         session.commit()
-        id = req.id
+        id = req.uuid
 
         # Test
         rv = client.get(
@@ -148,7 +148,7 @@ def test_put(app, client, session, jwt, requests_mock, sample_user, test_name, u
             f'/requests',
             json=REQUEST_DICT,
         )
-        id = rv.json['id']
+        id = rv.json['uuid']
         # Test
         rv = client.put(
             f'/requests/{id}',
@@ -176,7 +176,7 @@ def test_put_no_auth(app, client, session, jwt, requests_mock, sample_user, test
             f'/requests',
             json=REQUEST_DICT,
         )
-        id = rv.json['id']
+        id = rv.json['uuid']
         # Test
         rv = client.put(
             f'/requests/{id}',

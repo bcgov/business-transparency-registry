@@ -422,7 +422,7 @@
 							"script": {
 								"exec": [
 									"var jsonData = pm.response.json();",
-									"pm.environment.set(\"request_id\", jsonData.id);",
+									"pm.environment.set(\"request_id\", jsonData.uuid);",
 									"pm.environment.set(\"request_birthdate\", jsonData.birthate);",
 									"pm.environment.set(\"request_completingEmail\", jsonData.completingEmail);",
 									"pm.environment.set(\"request_completingParty\", jsonData.completingParty);",
@@ -498,7 +498,7 @@
 							"script": {
 								"exec": [
 									"var jsonData = pm.response.json();",
-									"pm.expect(jsonData.id).to.eql(pm.collectionVariables.get(\"request_id\"));",
+									"pm.expect(jsonData.uuid).to.eql(pm.collectionVariables.get(\"request_id\"));",
 									"pm.expect(jsonData.birthate).to.eql(pm.collectionVariables.get(\"request_birthdate\"));",
 									"pm.expect(jsonData.completingEmail).to.eql(pm.collectionVariables.get(\"request_completingEmail\"));",
 									"pm.expect(jsonData.completingParty).to.eql(pm.collectionVariables.get(\"request_completingParty\"));",

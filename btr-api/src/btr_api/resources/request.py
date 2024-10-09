@@ -66,7 +66,7 @@ bp = Blueprint('request', __name__)
 def get_request(id: uuid.UUID | None = None):  # pylint: disable=redefined-builtin
     """Get the request by id."""
     # try:
-    if req := RequestModel.find_by_id(id):
+    if req := RequestModel.find_by_uuid(id):
         account_id = request.headers.get('Account-Id', None)
         btr_auth.product_authorizations(request=request, account_id=account_id)
         # if btr_auth.get_user_type() == UserType.USER_STAFF:
@@ -128,7 +128,7 @@ def update_request(req_id: str):
     # try:
     UserModel.get_or_create_user_by_jwt(g.jwt_oidc_token_info)
     account_id = request.headers.get('Account-Id', None)
-    req = RequestModel.find_by_id(req_id)
+    req = RequestModel.find_by_uuid(req_id)
     if req:
         btr_auth.product_authorizations(request, account_id)
 

@@ -51,7 +51,8 @@ class Request(Versioned, Base):
     """Stores request (to omit) data."""
 
     __tablename__ = 'request'
-    id: Mapped[uuid.UUID] = mapped_column(primary_key=True)
+    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
+    uuid: Mapped[uuid.UUID] = mapped_column(index=True)
     full_name: Mapped[str] = mapped_column(nullable=False)
     email: Mapped[str] = mapped_column(nullable=False)
     birthdate: Mapped[date] = mapped_column(nullable=False)
@@ -66,7 +67,7 @@ class Request(Versioned, Base):
     updated_at: Mapped[datetime] = mapped_column(nullable=False, default=datetime.now())
 
     def __init__(self, data):
-        self.id = uuid.uuid4()
+        self.uuid = uuid.uuid4()
         self.full_name = data['fullName']
         self.email = data['email']
         self.birthdate = data['birthdate']
@@ -79,15 +80,17 @@ class Request(Versioned, Base):
         self.completing_email = data['completingEmail']
 
     @classmethod
-    def find_by_id(cls, request_id: int) -> Request | None:
+    def find_by_uuid(cls, request_id: int) -> Request | None:
         """Return the person by id."""
-        return cls.query.filter_by(id=request_id).one_or_none()
+        return cls.query.filter_by(uuid=request_id).one_or_none()
 
     @classmethod
     def __setitem__(cls, key, value):
         match key:
             case 'id':
                 cls.id = value
+            case 'uuid':
+                cls.uuid = value
             case 'email':
                 cls.email = value
             case 'birthdate':
@@ -131,6 +134,7 @@ class RequestSerializer:
         """Return the request class as a dict for response purposes."""
         return {
             'id': request.id,
+            'uuid': request.uuid,
             'fullName': request.full_name,
             'email': request.email,
             'birthdate': request.birthdate,
