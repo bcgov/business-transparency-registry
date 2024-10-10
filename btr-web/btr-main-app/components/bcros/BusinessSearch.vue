@@ -86,7 +86,9 @@ async function search (q: string) {
     >
       <template #label>
         <span class="truncate">
-          {{ selected && selected.identifier && selected.name ? `${selected.identifier} - ${selected.name}` : placeholder }}
+          {{ selected && selected.identifier && selected.name
+            ? `${selected.identifier} - ${selected.name}`
+            : placeholder }}
         </span>
       </template>
     </USelectMenu>
