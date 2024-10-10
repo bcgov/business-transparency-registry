@@ -1,5 +1,9 @@
-import { CompletingPartySchemaType, OmitObscureSchemaType } from '~/utils/omit-schema/definitions'
-import { getDefaultInputFormCompletingParty, getDefaultInputFormOmitObscure } from '~/utils/omit-schema/defaults'
+import { CompletingPartySchemaType, OmitObscureSchemaType, SiBizInfoSchemaType } from '~/utils/omit-schema/definitions'
+import {
+  getDefaultInputFormCompletingParty,
+  getDefaultInputFormOmitObscure,
+  getDefaultInputFormSiBiz
+} from '~/utils/omit-schema/defaults'
 
 export const useOmitIndividual = defineStore('bcros/omitIndividual', () => {
   const completingParty: CompletingPartySchemaType = ref(getDefaultInputFormCompletingParty())
@@ -7,6 +11,9 @@ export const useOmitIndividual = defineStore('bcros/omitIndividual', () => {
   const completingPartyRef = ref()
   const omitObscureRef = ref()
   const omitObscure: OmitObscureSchemaType = ref(getDefaultInputFormOmitObscure())
+  const siBizRef = ref()
+  const siBiz: SiBizInfoSchemaType = ref(getDefaultInputFormSiBiz())
+  const siBizName = ref('')
 
   /** Load the omit individuals for the business into the store */
   function loadSavedOmitIndividual () {
@@ -28,14 +35,22 @@ export const useOmitIndividual = defineStore('bcros/omitIndividual', () => {
       console.error('Omit Obscure Ref missing')
       return
     }
+    if (!siBizRef.value) {
+      console.error('Si Biz Ref missing')
+      return
+    }
     await completingPartyRef.value.validate()
     await omitObscureRef.value.validate()
-    errors.value = [...completingPartyRef.value.completingPartyForm.errors]
+    await siBizRef.value.validate()
+    errors.value = [
+      ...completingPartyRef.value.completingPartyForm.errors,
+      ...omitObscureRef.value.omitObscureForm.errors,
+      ...siBizRef.value.siBizForm.errors]
     if (errors.value.length === 0) {
       // eslint-disable-next-line no-console
       console.log('ok to submit')
     } else {
-      console.error('Fix errors before submitting, ', completingPartyRef.value.completingPartyForm.errors)
+      console.error('Fix errors before submitting, ', errors.value)
     }
   }
 
@@ -47,6 +62,9 @@ export const useOmitIndividual = defineStore('bcros/omitIndividual', () => {
     completingPartyRef,
     submitOmit,
     omitObscure,
-    omitObscureRef
+    omitObscureRef,
+    siBiz,
+    siBizRef,
+    siBizName
   }
 })

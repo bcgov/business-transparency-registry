@@ -29,7 +29,11 @@
         "SI": "Significant Individual",
         "HOUSEHOLD": "Members of the significant individual’s household"
       },
-      "businessPlaceholder": "the above business."
+      "businessPlaceholder": "the above business.",
+      "siBizDetails": "Significant Individual and Business Details",
+      "siBizIntro": "Enter the information about the significant individual as it was entered in the Business Transparency Registry:",
+      "businessName": "Business Name",
+      "businessNamePlaceholder": "Find or enter the full legal name or incorporation number of the business"
     },
     "addEndDate": "Add end date",
     "cessationDate": "Cessation Date",
@@ -269,7 +273,9 @@
         "required": "Please indicate at least one type of control"
       },
       "birthDate": {
-        "required": "Please enter a birth date"
+        "required": "Please enter a birth date",
+        "invalid": "Please enter in form of YYYY-MM-DD",
+        "incorrect": "You entered an invalid year, month or day please enter in form of YYYY-MM-DD"
       },
       "citizenship": {
         "required": "Please indicate citizenship/permanent residency",
@@ -298,7 +304,10 @@
         "maxLengthExceeded": "The Folio or Reference number should be up to 30 characters",
         "specialCharacter": "The Folio or Reference number should contain only alpha numeric characters"
       },
-      "certify": "You must certify that you are the individual completing this filing."
+      "certify": "You must certify that you are the individual completing this filing.",
+      "businessId": {
+        "required": "Business Name is required"
+      }
     }
   },
   "helpTitles": {

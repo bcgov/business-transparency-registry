@@ -1,5 +1,10 @@
 import { v4 as UUIDv4 } from 'uuid'
-import { OmitSchemaType, CompletingPartySchemaType, OmitObscureSchemaType } from '~/utils/omit-schema/definitions'
+import {
+  OmitSchemaType,
+  CompletingPartySchemaType,
+  OmitObscureSchemaType,
+  SiBizInfoSchemaType
+} from '~/utils/omit-schema/definitions'
 import { CompletingIndividualTypeE } from '~/enums/omit/completing-individual-type-e'
 
 export function getDefaultInputFormCompletingParty (): CompletingPartySchemaType {
@@ -19,10 +24,20 @@ export function getDefaultInputFormOmitObscure (): OmitObscureSchemaType {
   }
 }
 
+export function getDefaultInputFormSiBiz (): SiBizInfoSchemaType {
+  return {
+    name: '',
+    birthdate: '',
+    email: '',
+    businessId: ''
+  }
+}
+
 export function getDefaultInputFormOmit (): OmitSchemaType {
   return {
     uuid: UUIDv4(),
     completingParty: getDefaultInputFormCompletingParty(),
-    omitObscure: getDefaultInputFormOmitObscure()
+    omitObscure: getDefaultInputFormOmitObscure(),
+    siBizInfo: getDefaultInputFormSiBiz()
   }
 }
