@@ -55,7 +55,12 @@
           }"
         >
           <span class="font-bold min-w-[190px] mt-3" :class="showSectionHasErrors ? 'text-red-500' : ''">
-            <UIcon v-if="sectionTitleIcon" class="text-2xl align-bottom" :name="sectionTitleIcon" />
+            <UIcon
+              v-if="sectionTitleIcon"
+              class="text-2xl align-bottom"
+              :name="sectionTitleIcon"
+              :class="iconColor ? iconColor : ''"
+            />
             {{ sectionTitle }}
           </span>
         </div>
@@ -71,6 +76,7 @@ const props = defineProps({
   showSectionHasErrors: { type: Boolean, required: false, default: false },
   sectionTitle: { type: String, required: false, default: undefined },
   sectionTitleIcon: { type: String, required: false, default: undefined },
+  iconColor: { type: String, required: false, default: '' },
 
   headerIconName: { type: String, required: false, default: undefined },
   headerTitle: { type: String, required: false, default: undefined },

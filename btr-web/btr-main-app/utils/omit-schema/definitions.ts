@@ -35,6 +35,44 @@ const certifySchema = z.boolean().superRefine((certify: boolean, ctx: Refinement
   return z.NEVER
 })
 
+const birthdateSchema = z.string().superRefine((bday: string, ctx: RefinementCtx): never => {
+  if (!bday || bday.trim() === '') {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      translate: 'errors.validation.birthDate.required'
+    })
+    return z.NEVER
+  }
+
+  const result = bday.replace(/\d{4}-\d{2}-\d{2}/i, '')
+  if (result.length !== 0) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      translate: 'errors.validation.birthDate.invalid'
+    })
+    return z.NEVER
+  }
+
+  if (Number.isNaN(new Date(bday).getFullYear())) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      translate: 'errors.validation.birthDate.incorrect'
+    })
+    return z.NEVER
+  }
+  return z.NEVER
+})
+
+const businessIdSchema = z.string().superRefine((id: string, ctx: RefinementCtx): never => {
+  if (!id || id.trim() === '') {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      translate: 'errors.validation.businessId.required'
+    })
+  }
+  return z.NEVER
+})
+
 export const CompletingPartySchema = z.object({
   email: emailSchema,
   name: nameSchema,
@@ -54,17 +92,26 @@ export const OmitObscureSchema = z.object({
   })
 })
 
+export const SiBizInfoSchema = z.object({
+  name: nameSchema,
+  birthdate: birthdateSchema,
+  email: emailSchema,
+  businessId: businessIdSchema
+})
+
 export const OmitSchema = z.object({
   uuid: z.string().min(1),
   completingParty: CompletingPartySchema,
-  omitObscure: OmitObscureSchema
+  omitObscure: OmitObscureSchema,
+  siBizInfo: SiBizInfoSchema
 })
 
 export type OmitSchemaType = z.infer<typeof OmitSchema>
 export type CompletingPartySchemaType = z.infer<typeof CompletingPartySchema>
 export type OmitObscureSchemaType = z.infer<typeof OmitObscureSchema>
+export type SiBizInfoSchemaType = z.infer<typeof SiBizInfoSchema>
 
-export const CompletingPartyErrorMap: z.ZodErrorMap = (issue: z.ZodIssueOptionalMessage, ctx: z.ErrorMapCtx) => {
+export const UseTranslateErrorMap: z.ZodErrorMap = (issue: z.ZodIssueOptionalMessage, ctx: z.ErrorMapCtx) => {
   const t = useNuxtApp().$i18n.t
   if (issue.translate) {
     return { message: t(issue.translate) }
