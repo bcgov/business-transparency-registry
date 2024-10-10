@@ -51,7 +51,9 @@ export default defineNuxtConfig({
       legalApiURL: `${process.env.VUE_APP_LEGAL_API_URL || ''}${process.env.VUE_APP_LEGAL_API_VERSION_2 || ''}`,
       payApiURL: `${process.env.VUE_APP_PAY_API_URL || ''}${process.env.VUE_APP_PAY_API_VERSION || ''}`,
       btrApiURL: `${process.env.VUE_APP_BTR_API_URL || ''}${process.env.VUE_APP_BTR_API_VERSION || ''}`,
-      searchApiURL: `${process.env.VUE_APP_REGISTRIES_SEARCH_API_URL || ''}${process.env.VUE_APP_REGISTRIES_SEARCH_API_VERSION_2 || ''}`,
+      searchApiURL:
+      `${process.env.VUE_APP_REGISTRIES_SEARCH_API_URL || ''}${process.env.VUE_APP_REGISTRIES_SEARCH_API_VERSION_2 ||
+        ''}`,
       searchApiKey: `${process.env.VUE_APP_REGISTRIES_SEARCH_API_KEY}`,
       registryHomeURL: process.env.VUE_APP_REGISTRY_HOME_URL || '',
       appEnv: `${process.env.VUE_APP_POD_NAMESPACE || 'unknown'}`
