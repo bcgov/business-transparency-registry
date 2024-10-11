@@ -69,7 +69,8 @@ def get_all():  # pylint: disable=redefined-builtin
     try:
         account_id = request.headers.get('Account-Id', None)
         btr_auth.product_authorizations(request=request, account_id=account_id)
-        if btr_auth.get_user_type() == UserType.USER_STAFF or btr_auth.get_user_type() == UserType.USER_COMPETENT_AUTHORITY:
+        userType = btr_auth.get_user_type()
+        if userType != UserType.USER_STAFF and userType != UserType.USER_COMPETENT_AUTHORITY:
             resp = []
             results = RequestModel.query.filter_by().all()
             for result in results:
@@ -81,6 +82,7 @@ def get_all():  # pylint: disable=redefined-builtin
     except Exception as exception:  # noqa: B902
         return exception_response(exception)
 
+
 @bp.route('/<id>', methods=('GET',))
 @jwt.requires_auth
 def get_request(id: uuid.UUID | None = None):  # pylint: disable=redefined-builtin
@@ -89,7 +91,8 @@ def get_request(id: uuid.UUID | None = None):  # pylint: disable=redefined-built
         if req := RequestModel.find_by_uuid(id):
             account_id = request.headers.get('Account-Id', None)
             btr_auth.product_authorizations(request=request, account_id=account_id)
-            if btr_auth.get_user_type() == UserType.USER_STAFF or btr_auth.get_user_type() == UserType.USER_COMPETENT_AUTHORITY:
+            userType = btr_auth.get_user_type()
+            if userType != UserType.USER_STAFF and userType != UserType.USER_COMPETENT_AUTHORITY:
                 return jsonify(RequestSerializer.to_dict(req)), HTTPStatus.OK
 
         return {}, HTTPStatus.NOT_FOUND
@@ -151,7 +154,8 @@ def update_request(req_id: str):
         req = RequestModel.find_by_uuid(req_id)
         if req:
             btr_auth.product_authorizations(request, account_id)
-            if btr_auth.get_user_type() != UserType.USER_STAFF and btr_auth.get_user_type() != UserType.USER_COMPETENT_AUTHORITY:
+            userType = btr_auth.get_user_type()
+            if userType != UserType.USER_STAFF and userType != UserType.USER_COMPETENT_AUTHORITY:
                 return {}, HTTPStatus.NOT_FOUND
 
             req_json = request.get_json()
