@@ -69,8 +69,8 @@ def get_all():  # pylint: disable=redefined-builtin
     try:
         account_id = request.headers.get('Account-Id', None)
         btr_auth.product_authorizations(request=request, account_id=account_id)
-        userType = btr_auth.get_user_type()
-        if userType != UserType.USER_STAFF and userType != UserType.USER_COMPETENT_AUTHORITY:
+        user_type = btr_auth.get_user_type()
+        if user_type in (UserType.USER_STAFF, UserType.USER_COMPETENT_AUTHORITY):
             resp = []
             results = RequestModel.query.filter_by().all()
             for result in results:
@@ -91,8 +91,8 @@ def get_request(id: uuid.UUID | None = None):  # pylint: disable=redefined-built
         if req := RequestModel.find_by_uuid(id):
             account_id = request.headers.get('Account-Id', None)
             btr_auth.product_authorizations(request=request, account_id=account_id)
-            userType = btr_auth.get_user_type()
-            if userType != UserType.USER_STAFF and userType != UserType.USER_COMPETENT_AUTHORITY:
+            user_type = btr_auth.get_user_type()
+            if user_type in (UserType.USER_STAFF, UserType.USER_COMPETENT_AUTHORITY):
                 return jsonify(RequestSerializer.to_dict(req)), HTTPStatus.OK
 
         return {}, HTTPStatus.NOT_FOUND
@@ -154,8 +154,8 @@ def update_request(req_id: str):
         req = RequestModel.find_by_uuid(req_id)
         if req:
             btr_auth.product_authorizations(request, account_id)
-            userType = btr_auth.get_user_type()
-            if userType != UserType.USER_STAFF and userType != UserType.USER_COMPETENT_AUTHORITY:
+            user_type = btr_auth.get_user_type()
+            if user_type not in (UserType.USER_STAFF, UserType.USER_COMPETENT_AUTHORITY):
                 return {}, HTTPStatus.NOT_FOUND
 
             req_json = request.get_json()
