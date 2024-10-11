@@ -65,15 +65,17 @@ bp = Blueprint('request', __name__)
 @bp.route('/', methods=('GET',))
 @jwt.requires_auth
 def get_all():  # pylint: disable=redefined-builtin
+    """Get all requests"""
     try:
-      account_id = request.headers.get('Account-Id', None)
-      btr_auth.product_authorizations(request=request, account_id=account_id)
-      if btr_auth.get_user_type() == UserType.USER_STAFF:
-          resp = []
-          results = RequestModel.query.filter_by().all()
-          for result in results:
-              resp.append(RequestSerializer.to_dict(result))
-          return jsonify(resp), HTTPStatus.OK
+        account_id = request.headers.get('Account-Id', None)
+        btr_auth.product_authorizations(request=request, account_id=account_id)
+        if btr_auth.get_user_type() == UserType.USER_STAFF or btr_auth.get_user_type() == UserType.USER_COMPETENT_AUTHORITY:
+            resp = []
+            results = RequestModel.query.filter_by().all()
+            for result in results:
+                resp.append(RequestSerializer.to_dict(result))
+            return jsonify(resp), HTTPStatus.OK
+        return {}, HTTPStatus.NOT_FOUND
     except AuthException as aex:
         return exception_response(aex)
     except Exception as exception:  # noqa: B902
@@ -84,13 +86,13 @@ def get_all():  # pylint: disable=redefined-builtin
 def get_request(id: uuid.UUID | None = None):  # pylint: disable=redefined-builtin
     """Get the request by id."""
     try:
-      if req := RequestModel.find_by_uuid(id):
-          account_id = request.headers.get('Account-Id', None)
-          btr_auth.product_authorizations(request=request, account_id=account_id)
-          if btr_auth.get_user_type() == UserType.USER_STAFF:
-            return jsonify(RequestSerializer.to_dict(req)), HTTPStatus.OK
+        if req := RequestModel.find_by_uuid(id):
+            account_id = request.headers.get('Account-Id', None)
+            btr_auth.product_authorizations(request=request, account_id=account_id)
+            if btr_auth.get_user_type() == UserType.USER_STAFF or btr_auth.get_user_type() == UserType.USER_COMPETENT_AUTHORITY:
+                return jsonify(RequestSerializer.to_dict(req)), HTTPStatus.OK
 
-      return {}, HTTPStatus.NOT_FOUND
+        return {}, HTTPStatus.NOT_FOUND
 
     except AuthException as aex:
         return exception_response(aex)
@@ -149,7 +151,7 @@ def update_request(req_id: str):
         req = RequestModel.find_by_uuid(req_id)
         if req:
             btr_auth.product_authorizations(request, account_id)
-            if btr_auth.get_user_type() != UserType.USER_STAFF:
+            if btr_auth.get_user_type() != UserType.USER_STAFF and btr_auth.get_user_type() != UserType.USER_COMPETENT_AUTHORITY:
                 return {}, HTTPStatus.NOT_FOUND
 
             req_json = request.get_json()
