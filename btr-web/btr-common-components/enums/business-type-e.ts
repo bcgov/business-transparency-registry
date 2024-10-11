@@ -10,7 +10,7 @@ export enum BusinessTypeE {
   SP = 'SP',
   // Other
   CP = 'CP',
-  //UNKOWN -- Added Oct 11 2024
+  // UNKOWN -- Added Oct 11 2024
   CBEN = 'CBEN',
   C = 'C',
   CC = 'CC',

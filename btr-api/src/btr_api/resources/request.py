@@ -126,33 +126,33 @@ def update_request(req_id: str):
         A tuple containing the response JSON and the HTTP status code.
     """
     try:
-      UserModel.get_or_create_user_by_jwt(g.jwt_oidc_token_info)
-      account_id = request.headers.get('Account-Id', None)
-      req = RequestModel.find_by_uuid(req_id)
-      if req:
-          btr_auth.product_authorizations(request, account_id)
+        UserModel.get_or_create_user_by_jwt(g.jwt_oidc_token_info)
+        account_id = request.headers.get('Account-Id', None)
+        req = RequestModel.find_by_uuid(req_id)
+        if req:
+            btr_auth.product_authorizations(request, account_id)
 
-          req_json = request.get_json()
-          req = RequestService.update_request(req, req_json)
+            req_json = request.get_json()
+            req = RequestService.update_request(req, req_json)
 
-          req_d = RequestSerializer.to_dict(req)
-          try:
-              req_d['birthdate'] = req_d['birthdate'].strftime('%Y-%m-%d')
-          except Exception:
-              pass
+            req_d = RequestSerializer.to_dict(req)
+            try:
+                req_d['birthdate'] = req_d['birthdate'].strftime('%Y-%m-%d')
+            except Exception:
+                pass
 
-          # validate resulting full request
-          schema_name = 'btr-bods-request.json'
-          schema_service = SchemaService()
-          [valid, errors] = schema_service.validate(schema_name, req_d)
-          if not valid:
-              return error_request_response('Invalid schema', HTTPStatus.BAD_REQUEST, errors)
+            # validate resulting full request
+            schema_name = 'btr-bods-request.json'
+            schema_service = SchemaService()
+            [valid, errors] = schema_service.validate(schema_name, req_d)
+            if not valid:
+                return error_request_response('Invalid schema', HTTPStatus.BAD_REQUEST, errors)
 
-          req.save()
+            req.save()
 
-          return jsonify(RequestSerializer.to_dict(req)), HTTPStatus.OK
+            return jsonify(RequestSerializer.to_dict(req)), HTTPStatus.OK
 
-      return {}, HTTPStatus.NOT_FOUND
+        return {}, HTTPStatus.NOT_FOUND
 
     except AuthException as aex:
         return exception_response(aex)

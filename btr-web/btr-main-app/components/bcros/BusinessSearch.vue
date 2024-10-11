@@ -34,9 +34,9 @@ function updateModel (event) {
   siBizName.value = event.name
 }
 
-//note the component has a debounce of 200ms on it (by default)
+// note the component has a debounce of 200ms on it (by default)
 async function search (q: string) {
-  //only search when 3 or more characters entered
+  // only search when 3 or more characters entered
   if (q.length < 3) {
     return []
   }
