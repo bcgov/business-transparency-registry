@@ -38,6 +38,8 @@ import uuid
 from datetime import date, datetime
 
 from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.types import String
+from sqlalchemy.dialects.postgresql import ARRAY
 from sql_versioning import Versioned
 
 from btr_api.enums import InformationToOmitType
@@ -57,8 +59,8 @@ class Request(Versioned, Base):
     email: Mapped[str] = mapped_column(nullable=False)
     birthdate: Mapped[date] = mapped_column(nullable=False)
     business_identifier: Mapped[str] = mapped_column(nullable=False, index=True)
-    information_to_omit: Mapped[InformationToOmitType] = mapped_column(nullable=False)
-    individual_at_risk: Mapped[IndividualAtRisk] = mapped_column(nullable=False)
+    information_to_omit: Mapped[list(InformationToOmitType)] = mapped_column(ARRAY(String), nullable=False)
+    individual_at_risk: Mapped[list[IndividualAtRisk]] = mapped_column(ARRAY(String), nullable=False)
     reasons: Mapped[str] = mapped_column(nullable=False)
     completing_party: Mapped[CompletingParty] = mapped_column(nullable=False)
     completing_name: Mapped[str] = mapped_column(nullable=False)

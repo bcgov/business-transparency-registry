@@ -5,14 +5,14 @@ const omitIndividual = useOmitIndividual()
 const { siBizName } = storeToRefs(omitIndividual)
 
 const ALLOWED_LEGAL_TYPES = [
-  'BC',
-  'BEN',
-  'CBEN',
-  'C',
-  'CC',
-  'CCC',
-  'ULC',
-  'CUL'
+  BusinessTypeE.BC,
+  BusinessTypeE.BEN,
+  BusinessTypeE.CBEN,
+  BusinessTypeE.C,
+  BusinessTypeE.CC,
+  BusinessTypeE.CCC,
+  BusinessTypeE.ULC,
+  BusinessTypeE.CU
 ]
 const selected = ref({})
 const model = defineModel({ type: String, default: '' })
@@ -34,8 +34,10 @@ function updateModel (event) {
   siBizName.value = event.name
 }
 
+//note the component has a debounce of 200ms on it (by default)
 async function search (q: string) {
-  if (q === '') {
+  //only search when 3 or more characters entered
+  if (q.length < 3) {
     return []
   }
 

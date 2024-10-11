@@ -33,7 +33,7 @@ const { completingPartyRef, omitObscureRef, siBizRef } = storeToRefs(omitIndivid
         data-cy="siBizInfo"
         :section-title="$t('labels.requestOmit.siBizDetails')"
         section-title-icon="i-mdi-account-circle"
-        icon-color="text-bcGovColor-footer"
+        section-icon-color="text-bcGovColor-footer"
         rounded-bot
         rounded-top
         :padded-top="true"

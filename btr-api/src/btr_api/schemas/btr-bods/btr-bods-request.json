@@ -26,20 +26,26 @@
       "type": "string"
     },
     "informationToOmit": {
-      "type": "string",
-      "enum": [
-        "ALL",
-        "FULL_NAME",
-        "BIRTH_YEAR",
-        "CITIZENSHIP_PR"
-      ]
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "ALL",
+          "FULL_NAME",
+          "BIRTH_YEAR",
+          "CITIZENSHIP_PR"
+        ]
+      }
     },
     "individualAtRisk": {
-      "type": "string",
-      "enum": [
-        "SI",
-        "HOUSEHOLD"
-      ]
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "SI",
+          "HOUSEHOLD"
+        ]
+      }
     },
     "reasons": {
       "type": "string"
