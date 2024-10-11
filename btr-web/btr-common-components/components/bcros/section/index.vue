@@ -59,7 +59,7 @@
               v-if="sectionTitleIcon"
               class="text-2xl align-bottom"
               :name="sectionTitleIcon"
-              :class="iconColor ? iconColor : ''"
+              :class="sectionIconColor ? sectionIconColor : ''"
             />
             {{ sectionTitle }}
           </span>
@@ -76,7 +76,7 @@ const props = defineProps({
   showSectionHasErrors: { type: Boolean, required: false, default: false },
   sectionTitle: { type: String, required: false, default: undefined },
   sectionTitleIcon: { type: String, required: false, default: undefined },
-  iconColor: { type: String, required: false, default: '' },
+  sectionIconColor: { type: String, required: false, default: '' },
 
   headerIconName: { type: String, required: false, default: undefined },
   headerTitle: { type: String, required: false, default: undefined },
