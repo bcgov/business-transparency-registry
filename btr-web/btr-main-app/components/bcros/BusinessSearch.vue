@@ -22,7 +22,8 @@ defineProps({
   placeholder: { type: [String], default: '' },
   id: { type: String, required: true },
   modelValue: { type: String, default: '' },
-  variant: { type: String, default: 'bcGov' }
+  variant: { type: String, default: 'bcGov' },
+  isDisabled: { type: Boolean, default: false }
 })
 
 const loading = ref(false)
@@ -80,6 +81,7 @@ async function search (q: string) {
       variant="outline"
       :placeholder="placeholder"
       option-attribute="name"
+      :disabled="isDisabled"
       color="gray"
       :class="{ 'text-red-500': !!error}"
       trailing

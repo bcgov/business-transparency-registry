@@ -57,27 +57,45 @@ from btr_api.models.request import RequestSerializer
 from btr_api.services import btr_auth
 from btr_api.services import SchemaService
 from btr_api.services import RequestService
+from btr_api.enums import UserType
 
 bp = Blueprint('request', __name__)
 
+
+@bp.route('/', methods=('GET',))
+@jwt.requires_auth
+def get_all():  # pylint: disable=redefined-builtin
+    try:
+      account_id = request.headers.get('Account-Id', None)
+      btr_auth.product_authorizations(request=request, account_id=account_id)
+      if btr_auth.get_user_type() == UserType.USER_STAFF:
+          resp = []
+          results = RequestModel.query.filter_by().all()
+          for result in results:
+              resp.append(RequestSerializer.to_dict(result))
+          return jsonify(resp), HTTPStatus.OK
+    except AuthException as aex:
+        return exception_response(aex)
+    except Exception as exception:  # noqa: B902
+        return exception_response(exception)
 
 @bp.route('/<id>', methods=('GET',))
 @jwt.requires_auth
 def get_request(id: uuid.UUID | None = None):  # pylint: disable=redefined-builtin
     """Get the request by id."""
-    # try:
-    if req := RequestModel.find_by_uuid(id):
-        account_id = request.headers.get('Account-Id', None)
-        btr_auth.product_authorizations(request=request, account_id=account_id)
-        # if btr_auth.get_user_type() == UserType.USER_STAFF:
-        return jsonify(RequestSerializer.to_dict(req)), HTTPStatus.OK
+    try:
+      if req := RequestModel.find_by_uuid(id):
+          account_id = request.headers.get('Account-Id', None)
+          btr_auth.product_authorizations(request=request, account_id=account_id)
+          if btr_auth.get_user_type() == UserType.USER_STAFF:
+            return jsonify(RequestSerializer.to_dict(req)), HTTPStatus.OK
 
-    return {}, HTTPStatus.NOT_FOUND
+      return {}, HTTPStatus.NOT_FOUND
 
-    # except AuthException as aex:
-    #     return exception_response(aex)
-    # except Exception as exception:  # noqa: B902
-    #     return exception_response(exception)
+    except AuthException as aex:
+        return exception_response(aex)
+    except Exception as exception:  # noqa: B902
+        return exception_response(exception)
 
 
 @bp.route('/', methods=('POST',))
@@ -131,6 +149,8 @@ def update_request(req_id: str):
         req = RequestModel.find_by_uuid(req_id)
         if req:
             btr_auth.product_authorizations(request, account_id)
+            if btr_auth.get_user_type() != UserType.USER_STAFF:
+                return {}, HTTPStatus.NOT_FOUND
 
             req_json = request.get_json()
             req = RequestService.update_request(req, req_json)

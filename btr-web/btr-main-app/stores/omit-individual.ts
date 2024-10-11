@@ -4,39 +4,116 @@ import {
   getDefaultInputFormOmitObscure,
   getDefaultInputFormSiBiz
 } from '~/utils/omit-schema/defaults'
+import { BtrBodsRequestGetI, BtrBodsRequestI } from '~/interfaces/btr-bods/btr-bods-request-i'
 
 export const useOmitIndividual = defineStore('bcros/omitIndividual', () => {
-  const completingParty: CompletingPartySchemaType = ref(getDefaultInputFormCompletingParty())
+  const completingParty: Ref<CompletingPartySchemaType> = ref(getDefaultInputFormCompletingParty())
   const errors: Ref<ErrorI[]> = ref([])
   const completingPartyRef = ref()
   const omitObscureRef = ref()
-  const omitObscure: OmitObscureSchemaType = ref(getDefaultInputFormOmitObscure())
+  const omitObscure: Ref<OmitObscureSchemaType> = ref(getDefaultInputFormOmitObscure())
   const siBizRef = ref()
-  const siBiz: SiBizInfoSchemaType = ref(getDefaultInputFormSiBiz())
+  const siBiz: Ref<SiBizInfoSchemaType> = ref(getDefaultInputFormSiBiz())
   const siBizName = ref('')
+  const submitting = ref(false)
+  const submitted = ref(false)
+  const allRequests = ref([])
+  const activeId = ref(-1)
+  const activeUUID = ref('')
+
+  const constructBtrApiURL = () => {
+    const runtimeConfig = useRuntimeConfig()
+    const btrApiURL = runtimeConfig.public.btrApiURL
+    return `${btrApiURL}`
+  }
+
+  function assembleSubmitData (): BtrBodsRequestI {
+    return {
+      fullName: siBiz.value.name,
+      birthdate: siBiz.value.birthdate,
+      email: siBiz.value.email,
+      businessIdentifier: siBiz.value.businessId,
+      informationToOmit: omitObscure.value.infoToOmit,
+      individualAtRisk: omitObscure.value.individualsAtRisk,
+      reasons: omitObscure.value.reasons,
+      completingParty: completingParty.value.invididualType,
+      completingName: completingParty.value.name,
+      completingEmail: completingParty.value.email
+    }
+  }
+
+  function loadData (jsonResp: BtrBodsRequestGetI) {
+    siBiz.value.name = jsonResp.fullName
+    siBiz.value.birthdate = jsonResp.birthdate
+    siBiz.value.email = jsonResp.email
+    siBiz.value.businessId = jsonResp.businessIdentifier
+    omitObscure.value.infoToOmit = jsonResp.informationToOmit
+    omitObscure.value.individualsAtRisk = jsonResp.individualAtRisk
+    omitObscure.value.reasons = jsonResp.reasons
+    completingParty.value.invididualType = jsonResp.completingParty
+    completingParty.value.name = jsonResp.completingName
+    completingParty.value.email = jsonResp.completingEmail
+    activeId.value = jsonResp.id
+    activeUUID.value = jsonResp.uuid
+  }
+
+  /** Load all requests **/
+  async function loadAllRequests () {
+    const url = constructBtrApiURL() + `/requests/${uuid}`
+    const method = 'GET'
+    const { data, error } = await useFetchBcros<[BtrBodsRequestGetI]>(url,
+      {
+        method
+      })
+    if (error && error.value) {
+      return error
+    }
+    allRequests.value = data
+  }
 
   /** Load the omit individuals for the business into the store */
-  function loadSavedOmitIndividual () {
-    // TODO: #22111 Add when api for get implemented
+  async function loadSavedOmitIndividual (uuid: string) {
+    const url = constructBtrApiURL() + `/requests/${uuid}`
+    const method = 'GET'
+    const { data, error } = await useFetchBcros<BtrBodsRequestGetI>(url,
+      {
+        method
+      })
+    return { data, error }
   }
 
   /** Create the omit individuals in the api */
-  function createSavedOmitIndividual () {
-    // TODO: #22111 Add when api for get implemented
+  async function createSavedOmitIndividual () {
+    const url = constructBtrApiURL() + '/requests'
+    const method = 'POST'
+    const submitData = assembleSubmitData()
+    const { data, error } = await useFetchBcros<BtrBodsRequestGetI>(url,
+      {
+        method,
+        body: submitData,
+        headers: { 'Content-Type': 'application/json' }
+      })
+    return { data, error }
   }
 
   async function submitOmit () {
-    // TODO: #22111 Add logic when API is added
+    if (submitting.value) {
+      return
+    }
+    submitting.value = true
     if (!completingPartyRef.value) {
       console.error('Completing Party Ref missing')
+      submitting.value = false
       return
     }
     if (!omitObscureRef.value) {
       console.error('Omit Obscure Ref missing')
+      submitting.value = false
       return
     }
     if (!siBizRef.value) {
       console.error('Si Biz Ref missing')
+      submitting.value = false
       return
     }
     await completingPartyRef.value.validate()
@@ -47,15 +124,24 @@ export const useOmitIndividual = defineStore('bcros/omitIndividual', () => {
       ...omitObscureRef.value.omitObscureForm.errors,
       ...siBizRef.value.siBizForm.errors]
     if (errors.value.length === 0) {
-      // eslint-disable-next-line no-console
-      console.log('ok to submit')
+      const { error } = await createSavedOmitIndividual()
+      if (error && error.value) {
+        console.error('Error submitting: ', error.value)
+        submitting.value = false
+        return
+      }
+      submitted.value = true
+      submitting.value = false
     } else {
+      submitting.value = false
       console.error('Fix errors before submitting, ', errors.value)
     }
   }
 
   return {
     loadSavedOmitIndividual,
+    loadData,
+    loadAllRequests,
     createSavedOmitIndividual,
     errors,
     completingParty,
@@ -65,6 +151,11 @@ export const useOmitIndividual = defineStore('bcros/omitIndividual', () => {
     omitObscureRef,
     siBiz,
     siBizRef,
-    siBizName
+    siBizName,
+    submitting,
+    submitted,
+    allRequests,
+    activeId,
+    activeUUID
   }
 })

@@ -7,6 +7,10 @@ import {
   UseTranslateErrorMap
 } from '~/utils/omit-schema/definitions'
 import { CompletingIndividualTypeE, CompletingIndividualTranslationsE } from '~/enums/omit/completing-individual-type-e'
+import { useOmitIndividual } from '@/stores/omit-individual'
+const omitIndividual = useOmitIndividual()
+const { submitting } = storeToRefs(omitIndividual)
+
 const t = useNuxtApp().$i18n.t
 
 const model = defineModel({ type: Object, default: getDefaultInputFormCompletingParty() })
@@ -86,6 +90,7 @@ z.setErrorMap(UseTranslateErrorMap)
                 v-model="model.invididualType"
                 name="invididualType"
                 class="inline-block"
+                :disabled="submitting"
                 :options="individualTypeOptions"
                 :ui-radio="{wrapper: 'relative flex items-start mb-4'}"
               />
@@ -107,6 +112,7 @@ z.setErrorMap(UseTranslateErrorMap)
             id="completing-party-full-name"
             v-model="model.name"
             name="name"
+            :is-disabled="submitting"
             :placeholder="$t('placeholders.fullName')"
           />
         </div>
@@ -125,6 +131,7 @@ z.setErrorMap(UseTranslateErrorMap)
             id="completing-party-email"
             v-model="model.email"
             name="email"
+            :is-disabled="submitting"
             :placeholder="$t('registriesDetailsLabels.emailAddressLC')"
           />
         </div>
@@ -149,6 +156,7 @@ z.setErrorMap(UseTranslateErrorMap)
                 :class="error ? 'text-red-500 dark:text-red-400' : ''"
                 :show-label="false"
                 :alt-note="true"
+                :is-disabled="submitting"
               />
             </template>
           </UFormGroup>

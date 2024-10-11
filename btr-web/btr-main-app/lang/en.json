@@ -2,11 +2,13 @@
   "general": {
     "optional": "Optional",
     "regName": "BC Business Transparency Registry",
-    "submit": "Submit Request"
+    "submit": "Submit Request",
+    "submittedOn": "Submitted on"
   },
   "labels": {
     "requestOmit": {
       "header": "Request to Omit Information",
+      "submittedHeader": "Request to Omit Information Received",
       "completingParty": "Completing Party",
       "completingPartyIntro": "Provide information about the individual completing this request:",
       "significantIndividual": "Significant Individual | Significant Individuals",
@@ -33,7 +35,10 @@
       "siBizDetails": "Significant Individual and Business Details",
       "siBizIntro": "Enter the information about the significant individual as it was entered in the Business Transparency Registry:",
       "businessName": "Business Name",
-      "businessNamePlaceholder": "Find or enter the full legal name or incorporation number of the business"
+      "businessNamePlaceholder": "Find or enter the full legal name or incorporation number of the business",
+      "submittedp1": "Your request to have information omitted from a public search has been received by the BC Business Transparency Registry. You will receive email updates regarding the status of your request.",
+      "submittedp2": "Please note that during the review of the request your information will be omitted until the decision is made.",
+      "submittedp3": "Print a copy of this page for your records."
     },
     "addEndDate": "Add end date",
     "cessationDate": "Cessation Date",

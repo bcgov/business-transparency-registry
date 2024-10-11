@@ -7,6 +7,7 @@
           v-model="certified"
           name="certification"
           variant="bcGov"
+          :disabled="isDisabled"
           data-cy="certify-section-checkbox"
           @change="$emit('update:modelValue', certified)"
         >
@@ -41,7 +42,8 @@ defineProps({
   modelValue: { type: Boolean, required: true, default: false },
   part2Text: { type: String, required: false, default: '' },
   showLabel: { type: Boolean, required: false, default: true },
-  altNote: { type: Boolean, required: false, default: false }
+  altNote: { type: Boolean, required: false, default: false },
+  isDisabled: { type: Boolean, required: false, default: false }
 })
 
 let date = ''

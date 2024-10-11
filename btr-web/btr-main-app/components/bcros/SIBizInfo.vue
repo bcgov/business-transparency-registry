@@ -6,6 +6,9 @@ import {
   SiBizInfoSchema,
   UseTranslateErrorMap
 } from '~/utils/omit-schema/definitions'
+import { useOmitIndividual } from '@/stores/omit-individual'
+const omitIndividual = useOmitIndividual()
+const { submitting } = storeToRefs(omitIndividual)
 
 const model = defineModel({ type: Object, default: getDefaultInputFormSiBiz() })
 
@@ -76,6 +79,7 @@ z.setErrorMap(UseTranslateErrorMap)
             id="si-biz-info-full-name"
             v-model="model.name"
             name="name"
+            :is-disabled="submitting"
             :placeholder="$t('placeholders.fullName')"
           />
         </div>
@@ -96,6 +100,7 @@ z.setErrorMap(UseTranslateErrorMap)
             :max-date="new Date()"
             :placeholder="$t('placeholders.dateSelect.birthdate')"
             :is-editing="editMode"
+            :is-disabled="submitting"
             @selection="model.birthdate = dateToString($event, 'YYYY-MM-DD')"
           />
         </div>
@@ -114,6 +119,7 @@ z.setErrorMap(UseTranslateErrorMap)
             id="si-biz-info-email"
             v-model="model.email"
             name="email"
+            :is-disabled="submitting"
             :placeholder="$t('registriesDetailsLabels.emailAddressLC')"
           />
         </div>
@@ -132,6 +138,7 @@ z.setErrorMap(UseTranslateErrorMap)
             id="si-biz-info-businessId"
             v-model="model.businessId"
             name="businessId"
+            :is-disabled="submitting"
             :placeholder="$t('labels.requestOmit.businessNamePlaceholder')"
           />
         </div>
