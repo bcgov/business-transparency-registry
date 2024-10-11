@@ -4,7 +4,7 @@ import { getDefaultInputFormCompletingParty } from '~/utils/omit-schema/defaults
 import {
   CompletingPartySchemaType,
   CompletingPartySchema,
-  CompletingPartyErrorMap
+  UseTranslateErrorMap
 } from '~/utils/omit-schema/definitions'
 import { CompletingIndividualTypeE, CompletingIndividualTranslationsE } from '~/enums/omit/completing-individual-type-e'
 const t = useNuxtApp().$i18n.t
@@ -55,7 +55,7 @@ function hasErrors (sectionErrorPaths: string[]): boolean {
 }
 
 const formSchema: CompletingPartySchemaType = CompletingPartySchema
-z.setErrorMap(CompletingPartyErrorMap)
+z.setErrorMap(UseTranslateErrorMap)
 
 </script>
 

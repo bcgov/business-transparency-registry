@@ -6,7 +6,12 @@ import {
 } from '~/utils/omit-schema/definitions'
 import { InfoToOmitE } from '~/enums/omit/info-to-omit-e'
 import { IndividualsAtRiskE } from '~/enums/omit/individuals-at-risk-e'
+import { useOmitIndividual } from '@/stores/omit-individual'
+
 const t = useNuxtApp().$i18n.t
+
+const omitIndividual = useOmitIndividual()
+const { siBizName, siBiz } = storeToRefs(omitIndividual)
 
 const model = defineModel({ type: Object, default: getDefaultInputFormOmitObscure() })
 
@@ -33,7 +38,10 @@ defineExpose({
 const infoToOmitOptions: { value: string, label: string }[] = []
 const infoToOmitSelected = ref([false])
 const d = new Date()
-const infoPlaceholders = ['First Last', d.getFullYear(), 'Canada Citizen']
+const nameP = 'First Last'
+const dateP = d.getFullYear()
+const citizenP = ''
+const infoPlaceholders = ref([nameP, dateP, citizenP])
 for (const key in InfoToOmitE) {
   if (key !== 'ALL') {
     infoToOmitOptions.push({ value: key, label: t('labels.requestOmit.omitInfoOpt.' + key) })
@@ -49,6 +57,20 @@ watch(infoToOmitSelected, () => {
     }
   }
   model.value.infoToOmit = rv
+}, { deep: true })
+
+watch(siBiz, () => {
+  if (siBiz.value.name === '') {
+    infoPlaceholders.value[0] = nameP
+  } else {
+    infoPlaceholders.value[0] = siBiz.value.name
+  }
+
+  const fYear = new Date(siBiz.value.birthdate).getFullYear()
+  infoPlaceholders.value[1] = fYear + ''
+  if (Number.isNaN(fYear)) {
+    infoPlaceholders.value[1] = dateP
+  }
 }, { deep: true })
 
 const individualsAtRiskOptions: { value: string, label: string } = []
@@ -103,10 +125,13 @@ const formSchema: OmitObscureSchemaType = OmitObscureSchema
   >
     <div class="mt-2 w-full border-t border-solid pt-4 space-y-2">
       <p>
-        {{ $t('labels.requestOmit.omitObscureIntro') }} <span class="font-bold">{{ businessPlaceholder }}</span>
+        {{ $t('labels.requestOmit.omitObscureIntro') }}
+        <span class="font-bold">
+          {{ siBizName ? ` ${siBizName} (${siBiz.businessId})` : ` ${businessPlaceholder}` }}
+        </span>
       </p>
       <BcrosSection
-        :show-section-has-errors="hasErrors(['omitInfo'])"
+        :show-section-has-errors="hasErrors(['infoToOmit'])"
         :section-title="$t('labels.requestOmit.omitInfo')"
         :border="false"
         :padded-x="false"
@@ -133,6 +158,7 @@ const formSchema: OmitObscureSchemaType = OmitObscureSchema
                   :key="`omit${option.value}`"
                   v-model="infoToOmitSelected[index+1]"
                   :name="`omit${option.value}`"
+                  class="mr-3"
                 >
                   <template #label>
                     <p>{{ option.label }}</p>
@@ -184,7 +210,11 @@ const formSchema: OmitObscureSchemaType = OmitObscureSchema
               :placeholder="$t('labels.requestOmit.reasonsPlaceholder')"
               variant="none"
               class="border-b-1 bg-gray-200"
-              :ui="{ variant: { none: 'bg-gray-200 focus:ring-0 focus:shadow-none' }}"
+              :ui="{
+                variant: {
+                  none: 'bg-gray-200 focus:ring-0 focus:shadow-none dark:placeholder-gray-700 placeholder-gray-700'
+                }
+              }"
             />
           </template>
         </UFormGroup>

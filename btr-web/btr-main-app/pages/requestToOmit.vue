@@ -3,12 +3,12 @@
 import { useOmitIndividual } from '@/stores/omit-individual'
 
 const omitIndividual = useOmitIndividual()
-const { completingPartyRef, omitObscureRef } = storeToRefs(omitIndividual)
+const { completingPartyRef, omitObscureRef, siBizRef } = storeToRefs(omitIndividual)
 </script>
 
 <template>
   <div class="w-full">
-    <div class="max-w-[787px]">
+    <div class="max-w-[987px]">
       <div data-cy="request-to-omit-header">
         <h3 class="text-xl font-bold mb-2.5">
           {{ $t('general.regName') }}
@@ -28,6 +28,19 @@ const { completingPartyRef, omitObscureRef } = storeToRefs(omitIndividual)
           </template>
         </BcrosHelpTip>
       </div>
+
+      <BcrosSection
+        data-cy="siBizInfo"
+        :section-title="$t('labels.requestOmit.siBizDetails')"
+        section-title-icon="i-mdi-account-circle"
+        section-icon-color="text-bcGovColor-footer"
+        rounded-bot
+        rounded-top
+        :padded-top="true"
+        class="mb-10"
+      >
+        <BcrosSIBizInfo ref="siBizRef" v-model="omitIndividual.siBiz" />
+      </BcrosSection>
 
       <BcrosSection
         data-cy="requestToOmit"
