@@ -28,7 +28,7 @@ watch(submitted, () => {
         <h3 class="text-xl font-bold mb-2.5">
           {{ $t('general.regName') }}
         </h3>
-        <span v-if="showSubmission">
+        <template v-if="showSubmission">
           <h1 class="text-2xl font-bold mb-4" data-cy="request-to-omit-title">
             {{ $t('labels.requestOmit.header') }}
           </h1>
@@ -43,8 +43,8 @@ watch(submitted, () => {
               <BcrosI18HelperLink translation-path="helpTexts.requestOmit.detail" />
             </template>
           </BcrosHelpTip>
-        </span>
-        <span v-if="!showSubmission">
+        </template>
+        <template v-if="!showSubmission">
           <h1 class="text-2xl font-bold mb-4" data-cy="request-to-omit-title">
             {{ $t('labels.requestOmit.submittedHeader') }}
           </h1>
@@ -69,10 +69,10 @@ watch(submitted, () => {
           <p>
             {{ $t('labels.requestOmit.submittedp3') }}
           </p>
-        </span>
+        </template>
       </div>
 
-      <span v-if="showSubmission">
+      <template v-if="showSubmission">
         <BcrosSection
           data-cy="siBizInfo"
           :section-title="$t('labels.requestOmit.siBizDetails')"
@@ -109,7 +109,7 @@ watch(submitted, () => {
         >
           <BcrosCompletingParty ref="completingPartyRef" v-model="omitIndividual.completingParty" />
         </BcrosSection>
-      </span>
+      </template>
     </div>
   </div>
 </template>
