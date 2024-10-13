@@ -10,6 +10,7 @@
       type="text"
       :variant="!!error ? 'error' : variant || 'bcGov'"
       data-cy="date-select"
+      :disabled="isDisabled"
       @click="showDatePicker = true"
       @keydown.enter="showDatePicker = true"
       @update:model-value="handleManualDateEntry($event)"
@@ -61,7 +62,8 @@ const props = defineProps<{
   placeholder?: string,
   variant?: string
   removable?: boolean,
-  isEditing: boolean
+  isEditing: boolean,
+  isDisabled?: boolean
 }>()
 
 /* eslint-disable func-call-spacing */

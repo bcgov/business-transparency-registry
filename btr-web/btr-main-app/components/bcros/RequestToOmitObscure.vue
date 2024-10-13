@@ -11,7 +11,7 @@ import { useOmitIndividual } from '@/stores/omit-individual'
 const t = useNuxtApp().$i18n.t
 
 const omitIndividual = useOmitIndividual()
-const { siBizName, siBiz } = storeToRefs(omitIndividual)
+const { siBizName, siBiz, submitting } = storeToRefs(omitIndividual)
 
 const model = defineModel({ type: Object, default: getDefaultInputFormOmitObscure() })
 
@@ -144,6 +144,7 @@ const formSchema: OmitObscureSchemaType = OmitObscureSchema
               <div class="block text-base mb-5">
                 <UCheckbox
                   v-model="infoToOmitSelected[0]"
+                  :disabled="submitting"
                   name="omitAll"
                 >
                   <template #label>
@@ -158,6 +159,7 @@ const formSchema: OmitObscureSchemaType = OmitObscureSchema
                   :key="`omit${option.value}`"
                   v-model="infoToOmitSelected[index+1]"
                   :name="`omit${option.value}`"
+                  :disabled="submitting"
                   class="mr-3"
                 >
                   <template #label>
@@ -187,6 +189,7 @@ const formSchema: OmitObscureSchemaType = OmitObscureSchema
               :id="`omit${option.value}`"
               :key="`atRisk${option.value}`"
               v-model="individualAtRiskSelected[index]"
+              :disabled="submitting"
               :name="`atRisk${option.value}`"
               :label="option.label"
             />
@@ -209,6 +212,7 @@ const formSchema: OmitObscureSchemaType = OmitObscureSchema
               v-model="model.reasons"
               :placeholder="$t('labels.requestOmit.reasonsPlaceholder')"
               variant="none"
+              :disabled="submitting"
               class="border-b-1 bg-gray-200"
               :ui="{
                 variant: {

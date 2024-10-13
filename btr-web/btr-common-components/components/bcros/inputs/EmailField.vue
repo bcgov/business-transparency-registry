@@ -8,6 +8,7 @@
       :variant="!!error ? 'error' : variant || 'bcGov'"
       :placeholder="placeholder"
       :class="{ 'text-red-500': !!error}"
+      :disabled="isDisabled"
       @input="$emit('update:modelValue', $event.target.value)"
     />
   </UFormGroup>
@@ -21,6 +22,7 @@ defineProps({
   placeholder: { type: [String], default: '' },
   id: { type: String, required: true },
   modelValue: { type: String, default: '' },
-  variant: { type: String, default: 'bcGov' }
+  variant: { type: String, default: 'bcGov' },
+  isDisabled: { type: Boolean, default: false }
 })
 </script>
