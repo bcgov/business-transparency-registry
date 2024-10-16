@@ -6,15 +6,14 @@ from btr_api.enums import RedactionType, UserType
 # the lack of a rule means it shows fully
 REDACT_RULES = {
     UserType.USER_PUBLIC: {
-        'prefName': RedactionType.REDACT_EMPTY,
-        'email': RedactionType.REDACT_EMPTY,
-        'phone': RedactionType.REDACT_EMPTY,
+        'email': RedactionType.REDACT_EMAIL,
+        'phone': RedactionType.REDACT_PHONE,
         'postal': RedactionType.REDACT_EMPTY,
         'street': RedactionType.REDACT_EMPTY,
         'streetAdditional': RedactionType.REDACT_EMPTY,
         'locationDescription': RedactionType.REDACT_EMPTY,
-        'birthDate': RedactionType.REDACT_EMPTY,
-        'identifiers': RedactionType.REDACT_EMPTY,
+        'birthDate': RedactionType.REDACT_DATE,
+        'identifiers': RedactionType.REDACT_IDENTIFIER,
     },
     UserType.USER_STAFF: {
         'email': RedactionType.REDACT_EMAIL,
@@ -37,13 +36,16 @@ def redact_information(payload, role):
     if role == UserType.USER_COMPETENT_AUTHORITY:
         return payload
     # otherwise PUBLIC or STAFF
-    current_app.logger.info(RedactionType.REDACT_MONONYM)
     redaction_to_use = REDACT_RULES[role]
     current_app.logger.info(redaction_to_use)
     for person in payload['payload']['personStatements']:
-        for name in person['names']:
-            if 'type' in name and 'fullName' in name and name['type'] == 'alternative':
-                name['fullName'] = redact_field(name['fullName'], redaction_to_use.get('prefName'))
+      # I've left this in but commented out because we may need to add it back in if people are omitted.
+      # It does not exist in current redaction rules though.
+      #     for name in person['names']:
+      #         if 'type' in name and 'fullName' in name and name['type'] == 'alternative':
+      #             name['fullName'] = redact_field(name['fullName'], redaction_to_use.get('prefName'))
+      #         elif 'type' in name and 'fullName' in name: # not alernative name
+      #             name['fullName'] = redact_field(name['fullName'], redaction_to_use.get('legalName'))
 
         if 'email' in person:
             person['email'] = redact_field(person['email'], redaction_to_use.get('email'))
@@ -103,6 +105,19 @@ def redact_field(field, redact_type):
             if rv != '':
                 rv += ' '
             rv += word[0:1] + '***'
+        redacted_field = rv
+    elif redact_type == RedactionType.REDACT_MONONYM_LN:
+        rv = ''
+        words = field.split()
+        i = 0
+        for word in words:
+            if rv != '':
+                rv += ' '
+            i = i + 1
+            if i >= (len(words) - 1):
+              rv += word[0:1] + '***'
+            else:
+                rv += word
         redacted_field = rv
     elif redact_type == RedactionType.REDACT_EMAIL:
         redacted_field = field.split('@')[0][0:1] + '***' + '@***.' + field.split('.')[-1]
