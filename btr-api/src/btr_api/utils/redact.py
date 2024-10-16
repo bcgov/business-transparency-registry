@@ -39,13 +39,13 @@ def redact_information(payload, role):
     redaction_to_use = REDACT_RULES[role]
     current_app.logger.info(redaction_to_use)
     for person in payload['payload']['personStatements']:
-      # I've left this in but commented out because we may need to add it back in if people are omitted.
-      # It does not exist in current redaction rules though.
-      #     for name in person['names']:
-      #         if 'type' in name and 'fullName' in name and name['type'] == 'alternative':
-      #             name['fullName'] = redact_field(name['fullName'], redaction_to_use.get('prefName'))
-      #         elif 'type' in name and 'fullName' in name: # not alernative name
-      #             name['fullName'] = redact_field(name['fullName'], redaction_to_use.get('legalName'))
+        # I've left this in but commented out because we may need to add it back in if people are omitted.
+        # It does not exist in current redaction rules though.
+        #     for name in person['names']:
+        #         if 'type' in name and 'fullName' in name and name['type'] == 'alternative':
+        #             name['fullName'] = redact_field(name['fullName'], redaction_to_use.get('prefName'))
+        #         elif 'type' in name and 'fullName' in name: # not alernative name
+        #             name['fullName'] = redact_field(name['fullName'], redaction_to_use.get('legalName'))
 
         if 'email' in person:
             person['email'] = redact_field(person['email'], redaction_to_use.get('email'))
@@ -115,7 +115,7 @@ def redact_field(field, redact_type):
                 rv += ' '
             i = i + 1
             if i >= (len(words) - 1):
-              rv += word[0:1] + '***'
+                rv += word[0:1] + '***'
             else:
                 rv += word
         redacted_field = rv
