@@ -20,6 +20,7 @@ class RedactionType(BaseEnum):
 
     REDACT_MONONYM = 'mono'
     REDACT_MONONYM_FN = 'mono_fn'
+    REDACT_MONONYM_LN = 'mono_ln'
     REDACT_EMAIL = 'mono_email'
     REDACT_PHONE = 'mono_phone'
     REDACT_FULL = 'full'

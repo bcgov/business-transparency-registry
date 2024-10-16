@@ -146,7 +146,7 @@ class AuthService:
 
         return authorization_header
 
-    # @auth_cache.cached(timeout=600, make_cache_key=get_cache_key, cache_none=False)
+    @auth_cache.cached(timeout=600, make_cache_key=get_cache_key, cache_none=False)
     def product_authorizations(self, request, account_id: str) -> None:
         """Get the products associated with the user and account_id."""
         if not account_id:
