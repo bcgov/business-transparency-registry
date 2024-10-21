@@ -113,11 +113,11 @@ def redact_field(field, redact_type):
         for word in words:
             if rv != '':
                 rv += ' '
-            i = i + 1
             if i >= (len(words) - 1):
                 rv += word[0:1] + '***'
             else:
                 rv += word
+            i = i + 1
         redacted_field = rv
     elif redact_type == RedactionType.REDACT_EMAIL:
         redacted_field = field.split('@')[0][0:1] + '***' + '@***.' + field.split('.')[-1]
