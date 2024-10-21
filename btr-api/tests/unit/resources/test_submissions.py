@@ -1003,14 +1003,14 @@ def test_get_redacted_for_entity(app, client, session, jwt, requests_mock, sampl
                             'streetAdditional': ' ',
                         }
                     ],
-                    'birthDate': ' ',
-                    'email': ' ',
-                    'identifiers': [{'id': ' ', 'scheme': 'CAN-TAXID', 'schemeName': 'ITN'}],
+                    'birthDate': '1988',
+                    'email': 't***@***.com',
+                    'identifiers': [{'id': '*** **5 444', 'scheme': 'CAN-TAXID', 'schemeName': 'ITN'}],
                     'names': [
                         {'fullName': 'Test Test', 'type': 'individual'},
-                        {'fullName': ' ', 'type': 'alternative'},
+                        {'fullName': 'tset tset', 'type': 'alternative'},
                     ],
-                    'phoneNumber': {'countryCallingCode': '1', 'countryCode2letterIso': 'CA', 'number': ' '},
+                    'phoneNumber': {'countryCallingCode': '1', 'countryCode2letterIso': 'CA', 'number': '555***'},
                     'placeOfResidence': {
                         'city': 'Victoria',
                         'country': 'CA',
