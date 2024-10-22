@@ -70,6 +70,13 @@ const getPersonAndOwnershipAndControlStatements = (sif: SignificantIndividualFil
     source.assertedBy = [{ name: siSchema.name.fullName }]
     source.description = BtrSourceDescriptionProvidedByBtrGovBC
     const address = SiSchemaToBtrBodsConverters.getBodsAddressFromSi(siSchema)
+    const mailingAddress = SiSchemaToBtrBodsConverters.getBodsMailingAddressFromSi(siSchema)
+    let addresses = address ? [address] : undefined
+    if (mailingAddress && addresses) {
+      addresses.push(mailingAddress)
+    } else if (mailingAddress && !addresses) {
+      addresses = [mailingAddress]
+    }
     const identifiers = SiSchemaToBtrBodsConverters.getBodsIdentifiersFromSi(siSchema)
     const hasTaxNumber = hasFieldChanged(siSchema, InputFieldsE.TAX) ? !!siSchema.tax.hasTaxNumber : undefined
     const names = SiSchemaToBtrBodsConverters.getBodsNamesFromSi(siSchema)
@@ -86,7 +93,7 @@ const getPersonAndOwnershipAndControlStatements = (sif: SignificantIndividualFil
       missingInfoReason:
         hasFieldChanged(siSchema, InputFieldsE.MISSING_INFO_REASON) ? siSchema.missingInfoReason : '',
       placeOfResidence: address,
-      addresses: address ? [address] : undefined,
+      addresses: addresses,
       birthDate: hasFieldChanged(siSchema, InputFieldsE.BIRTH_DATE) ? siSchema.birthDate : undefined,
       phoneNumber: hasFieldChanged(siSchema, InputFieldsE.PHONE_NUMBER) ? siSchema.phoneNumber : undefined,
       email: hasFieldChanged(siSchema, InputFieldsE.EMAIL) ? siSchema.email : undefined,

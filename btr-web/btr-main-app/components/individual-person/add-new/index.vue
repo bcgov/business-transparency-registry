@@ -215,7 +215,7 @@
         </div>
       </BcrosSection>
 
-      <!--  section: individual details address  -->
+      <!--  section: individual details address, mailing address  -->
       <BcrosSection
         :show-section-has-errors="hasErrors(['address.'])"
         :section-title="$t('labels.lastKnownAddress')"
@@ -236,8 +236,34 @@
             @region-change="setNewOrChanged([InputFieldsE.ADDRESS_REGION])"
             @location-description-change="setNewOrChanged([InputFieldsE.ADDRESS_LOCATION_DESCRIPTION])"
           />
+
+          <UFormGroup name="anotherDoNothingJustWatch" class="my-6">
+            <UCheckbox
+              v-model="inputFormSi.mailingAddress.isDifferent"
+              :label="$t('labels.mailingAddressIsDifferent')"
+              data-cy="mailingAddressIsDifferent-checkbox"
+              @change="isMailingAddressIsDifferentCheck()"
+            />
+          </UFormGroup>
+
+          <BcrosInputsAddress
+            v-if="showMailingAddress"
+            id="addNewPersonLastKnownAddress"
+            v-model="inputFormSi.mailingAddress.address"
+            name="mailingAddress.address"
+            :is-editing="isEditing"
+            @country-change="setNewOrChanged([InputFieldsE.MAILING_ADDRESS_COUNTRY])"
+            @postal-code-change="setNewOrChanged([InputFieldsE.MAILING_ADDRESS_POSTAL_CODE])"
+            @line1-change="setNewOrChanged([InputFieldsE.MAILING_ADDRESS_LINE1])"
+            @line2-change="setNewOrChanged([InputFieldsE.MAILING_ADDRESS_LINE2])"
+            @city-change="setNewOrChanged([InputFieldsE.MAILING_ADDRESS_CITY])"
+            @region-change="setNewOrChanged([InputFieldsE.MAILING_ADDRESS_REGION])"
+            @location-description-change="setNewOrChanged([InputFieldsE.MAILING_ADDRESS_LOCATION_DESCRIPTION])"
+          />
         </div>
       </BcrosSection>
+
+      <!--  section: individual details phoneNumber; phone number  -->
       <BcrosSection
         :show-section-has-errors="hasErrors(['phoneNumber'])"
         :section-title="$t('sectionTitles.phoneNumber')"
@@ -423,7 +449,7 @@ import {
   SiSchema, SiSchemaType,
   TaxSchema
 } from '~/utils/si-schema/definitions'
-import { getDefaultInputFormSi } from '~/utils/si-schema/defaults'
+import { getDefaultInputFormSi, getEmptyAddress } from '~/utils/si-schema/defaults'
 import { CustomSiSchemaErrorMap } from '~/utils/si-schema/errorMessagesMap'
 import DeterminationOfIncapacity from '~/components/individual-person/DeterminationOfIncapacity.vue'
 
@@ -482,6 +508,34 @@ const AddressSchemaExtendedEdit = AddressSchemaExtended.extend({
 
 z.setErrorMap(CustomSiSchemaErrorMap)
 
+const MailingAddressSchema = z.discriminatedUnion(
+  'isDifferent',
+  [
+    z.object({
+      isDifferent: z.literal(false),
+      address: AddressSchemaExtended.optional()
+    }),
+    z.object({
+      isDifferent: z.literal(true),
+      address: AddressSchemaExtended
+    })
+  ]
+)
+
+const MailingAddressSchemaEdit = z.discriminatedUnion(
+  'isDifferent',
+  [
+    z.object({
+      isDifferent: z.literal(false),
+      address: AddressSchemaExtendedEdit.optional()
+    }),
+    z.object({
+      isDifferent: z.literal(true),
+      address: AddressSchemaExtendedEdit
+    })
+  ]
+)
+
 const SiSchemaExtended = SiSchema.extend({
   couldNotProvideMissingInfo: z.literal(false),
   name: SiNameExtended,
@@ -491,6 +545,7 @@ const SiSchemaExtended = SiSchema.extend({
     SiControlOfDirectorsSchema.refine(validateControlOfDirectors, getMissingControlOfDirectorsError()),
   email: getEmailValidator(),
   address: AddressSchemaExtended,
+  mailingAddress: MailingAddressSchema,
   tax: TaxSchema.superRefine(validateTaxNumberInfo),
   isTaxResident: z.boolean()
 })
@@ -514,6 +569,7 @@ if (props.editMode) {
     birthDate: z.string().optional(),
     name: SiNameExtended,
     address: AddressSchemaExtendedEdit,
+    mailingAddress: MailingAddressSchemaEdit,
     tax: TaxSchema,
     email: z.string().optional()
   })
@@ -531,7 +587,6 @@ if (props.editMode) {
     SiSchemaExtendedEdit
   ]).superRefine((schema: SiSchemaType, ctx: RefinementCtx): never => {
     // this superRefine is to work out through the redacted data fields and validate them only on change
-
     // birthdate check
     if (schema.ui.newOrUpdatedFields.includes(InputFieldsE.BIRTH_DATE)) {
       if (!schema.birthDate || schema.birthDate.trim() === '') {
@@ -565,6 +620,32 @@ if (props.editMode) {
       }
     }
     // location description // its already optional nothing to do here
+    if (schema.ui.newOrUpdatedFields.includes(InputFieldsE.MAILING_ADDRESS_LINE1)) {
+      if (!schema.mailingAddress.address
+        || !schema.mailingAddress.address.line1
+        || schema.mailingAddress.address.line1.trim() === ''
+      ) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          path: ['mailingAddress', 'address', 'line1'],
+          message: t('errors.validation.address.line1')
+        })
+      }
+    }
+    // postal code
+    if (schema.ui.newOrUpdatedFields.includes(InputFieldsE.MAILING_ADDRESS_POSTAL_CODE)) {
+      if (!schema.mailingAddress.address
+        || !schema.mailingAddress.address.postalCode
+        || schema.mailingAddress.address.postalCode.trim() === ''
+      ) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          path: ['mailingAddress', 'address', 'postalCode'],
+          message: t('errors.validation.address.postalCode')
+        })
+      }
+    }
+
 
     // SIN
     if (schema.ui.newOrUpdatedFields.includes(InputFieldsE.TAX_NUMBER)) {
@@ -618,6 +699,16 @@ const countryChange = () => {
   setNewOrChanged([InputFieldsE.ADDRESS_COUNTRY])
 }
 
+const isMailingAddressIsDifferentCheck = () => {
+  if (!inputFormSi.mailingAddress.isDifferent) {
+    inputFormSi.mailingAddress.address = undefined
+    showMailingAddress.value = false
+  } else {
+    inputFormSi.mailingAddress.address = getEmptyAddress()
+    showMailingAddress.value = true
+  }
+}
+
 function hasErrors (sectionErrorPaths: string[]): boolean {
   if (!addIndividualForm.value?.errors) {
     return false
@@ -665,7 +756,6 @@ const setIsYourOwnInformation = (event: any) => {
 }
 
 const inputFormSi: SiSchemaType = reactive(getDefaultInputFormSi())
-
 const setNewOrChanged = (fieldNames: Array<string>) => {
   inputFormSi.ui.newOrUpdatedFields ??= []
   for (let i = 0; i < fieldNames.length; i++) {
@@ -679,6 +769,7 @@ if (props.setSignificantIndividual) {
   isEditing.value = (props.index !== undefined)
   Object.assign(inputFormSi, props.setSignificantIndividual)
 }
+const showMailingAddress = ref(inputFormSi.mailingAddress.isDifferent)
 
 watch(inputFormSi.controlOfShares, (control) => {
   if (!control.inConcertControl) {

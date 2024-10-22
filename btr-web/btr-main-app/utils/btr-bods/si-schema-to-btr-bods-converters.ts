@@ -1,20 +1,30 @@
 import {
-  BodsCountryI, BodsIdentifierI, BodsInterestI, BodsNameI, BodsBtrAddressI
+  BodsBtrAddressI,
+  BodsBtrAddressTypeE,
+  BodsCountryI,
+  BodsIdentifierI,
+  BodsInterestI,
+  BodsNameI
 } from '~/interfaces/btr-bods/components-i'
 import {
-  ControlOfDirectorsDetailsE,
   BodsInterestDirectOrIndirectE,
   BodsInterestTypeE,
   BodsNameTypeE,
-  BodsPersonTypeE, ControlOfSharesDetailsE, ControlOfVotesDetailsE
+  BodsPersonTypeE,
+  ControlOfDirectorsDetailsE,
+  ControlOfSharesDetailsE,
+  ControlOfVotesDetailsE
 } from '~/enums/btr-bods-e'
 import { PercentageRangeE } from '~/enums/percentage-range-e'
 import {
-  SiControlOfDirectorsSchemaType, SiControlOfSchemaType, ConnectedInvidualSchemaType, SiSchemaType
+  ConnectedInvidualSchemaType,
+  SiControlOfDirectorsSchemaType,
+  SiControlOfSchemaType,
+  SiSchemaType
 } from '~/utils/si-schema/definitions'
 
 const getBodsAddressFromSi = (si: SiSchemaType): BodsBtrAddressI | undefined => {
-  const addr = {} as BodsBtrAddressI
+  const addr = { type: BodsBtrAddressTypeE.RESIDENCE } as BodsBtrAddressI
   if (hasFieldChanged(si, InputFieldsE.ADDRESS_LINE1)) {
     addr.street = si.address.line1
   }
@@ -38,7 +48,39 @@ const getBodsAddressFromSi = (si: SiSchemaType): BodsBtrAddressI | undefined => 
     addr.locationDescription = si.address.locationDescription as string
   }
 
-  return Object.keys(addr).length > 0 ? addr : undefined
+  return Object.keys(addr).length > 1 ? addr : undefined
+}
+
+const getBodsMailingAddressFromSi = (si: SiSchemaType): BodsBtrAddressI | undefined => {
+  const addr = { type: BodsBtrAddressTypeE.REGISTERED } as BodsBtrAddressI
+  if (!si.mailingAddress?.address) {
+    return undefined
+  }
+
+  if (hasFieldChanged(si, InputFieldsE.MAILING_ADDRESS_LINE1)) {
+    addr.street = si.mailingAddress.address.line1
+  }
+  if (hasFieldChanged(si, InputFieldsE.MAILING_ADDRESS_LINE2)) {
+    addr.streetAdditional = si.mailingAddress.address.line2
+  }
+  if (hasFieldChanged(si, InputFieldsE.MAILING_ADDRESS_CITY)) {
+    addr.city = si.mailingAddress.address.city
+  }
+  if (hasFieldChanged(si, InputFieldsE.MAILING_ADDRESS_COUNTRY)) {
+    addr.country = si.mailingAddress.address.country?.alpha_2 || ''
+    addr.countryName = si.mailingAddress.address.country?.name || ''
+  }
+  if (hasFieldChanged(si, InputFieldsE.MAILING_ADDRESS_REGION)) {
+    addr.region = si.mailingAddress.address.region
+  }
+  if (hasFieldChanged(si, InputFieldsE.MAILING_ADDRESS_POSTAL_CODE)) {
+    addr.postalCode = si.mailingAddress.address.postalCode
+  }
+  if (hasFieldChanged(si, InputFieldsE.MAILING_ADDRESS_LOCATION_DESCRIPTION)) {
+    addr.locationDescription = si.mailingAddress.address.locationDescription as string
+  }
+
+  return Object.keys(addr).length > 1 ? addr : undefined
 }
 
 const getBodsNamesFromSi = (si: SiSchemaType) => {
@@ -382,6 +424,7 @@ const getTaxResidenciesFromSi = (si: SiSchemaType): BodsCountryI[] | undefined =
 
 export default {
   getBodsAddressFromSi,
+  getBodsMailingAddressFromSi,
   getBodsNamesFromSi,
   getBodsIdentifiersFromSi,
   getBodsNationalitiesFromSi,

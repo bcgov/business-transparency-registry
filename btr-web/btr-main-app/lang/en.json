@@ -40,6 +40,7 @@
       "submittedp2": "Please note that during the review of the request your information will be omitted until the decision is made.",
       "submittedp3": "Print a copy of this page for your records."
     },
+    "mailingAddressIsDifferent": "Mailing Address is different than Physical Address",
     "addEndDate": "Add end date",
     "cessationDate": "Cessation Date",
     "endDate": "End Date",
