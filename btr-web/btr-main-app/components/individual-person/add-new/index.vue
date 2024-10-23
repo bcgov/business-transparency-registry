@@ -236,8 +236,7 @@
             @region-change="setNewOrChanged([InputFieldsE.ADDRESS_REGION])"
             @location-description-change="setNewOrChanged([InputFieldsE.ADDRESS_LOCATION_DESCRIPTION])"
           />
-
-          <UFormGroup name="anotherDoNothingJustWatch" class="my-6">
+          <UFormGroup name="anotherDoNothingJustWatch" class="mt-6">
             <UCheckbox
               v-model="inputFormSi.mailingAddress.isDifferent"
               :label="$t('labels.mailingAddressIsDifferent')"
@@ -245,13 +244,23 @@
               @change="isMailingAddressIsDifferentCheck()"
             />
           </UFormGroup>
-
+        </div>
+      </BcrosSection>
+      <BcrosSection
+        v-if="showMailingAddress"
+        class="-mt-1 pt-0"
+        :show-section-has-errors="hasErrors(['address.'])"
+        :section-title="$t('labels.mailingAddress')"
+        :border="editMode"
+        no-top-border
+      >
+        <div class="flex-col w-full">
           <BcrosInputsAddress
-            v-if="showMailingAddress"
             id="addNewPersonLastKnownAddress"
             v-model="inputFormSi.mailingAddress.address"
             name="mailingAddress.address"
             :is-editing="isEditing"
+            data-cy="mailingAddress"
             @country-change="setNewOrChanged([InputFieldsE.MAILING_ADDRESS_COUNTRY])"
             @postal-code-change="setNewOrChanged([InputFieldsE.MAILING_ADDRESS_POSTAL_CODE])"
             @line1-change="setNewOrChanged([InputFieldsE.MAILING_ADDRESS_LINE1])"
@@ -621,9 +630,9 @@ if (props.editMode) {
     }
     // location description // its already optional nothing to do here
     if (schema.ui.newOrUpdatedFields.includes(InputFieldsE.MAILING_ADDRESS_LINE1)) {
-      if (!schema.mailingAddress.address
-        || !schema.mailingAddress.address.line1
-        || schema.mailingAddress.address.line1.trim() === ''
+      if (!schema.mailingAddress.address ||
+        !schema.mailingAddress.address.line1 ||
+        schema.mailingAddress.address.line1.trim() === ''
       ) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
@@ -634,9 +643,9 @@ if (props.editMode) {
     }
     // postal code
     if (schema.ui.newOrUpdatedFields.includes(InputFieldsE.MAILING_ADDRESS_POSTAL_CODE)) {
-      if (!schema.mailingAddress.address
-        || !schema.mailingAddress.address.postalCode
-        || schema.mailingAddress.address.postalCode.trim() === ''
+      if (!schema.mailingAddress.address ||
+        !schema.mailingAddress.address.postalCode ||
+        schema.mailingAddress.address.postalCode.trim() === ''
       ) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
@@ -645,7 +654,6 @@ if (props.editMode) {
         })
       }
     }
-
 
     // SIN
     if (schema.ui.newOrUpdatedFields.includes(InputFieldsE.TAX_NUMBER)) {

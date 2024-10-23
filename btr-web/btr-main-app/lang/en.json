@@ -65,6 +65,7 @@
     "significantIndividuals": "Significant Individuals",
     "significantIndividualChangeDate": "Significant Individual Filing Effective Date",
     "lastKnownAddress": "Address",
+    "mailingAddress": "Mailing Address",
     "citizenshipPermanentResidency": "Citizenship / Permanent Residency",
     "taxNumber": "Canada Revenue Agency (CRA) Tax Number",
     "noTaxNumberLabel": "This individual does not have a CRA Tax Number",

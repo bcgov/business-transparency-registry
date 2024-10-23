@@ -93,7 +93,7 @@ const getPersonAndOwnershipAndControlStatements = (sif: SignificantIndividualFil
       missingInfoReason:
         hasFieldChanged(siSchema, InputFieldsE.MISSING_INFO_REASON) ? siSchema.missingInfoReason : '',
       placeOfResidence: address,
-      addresses: addresses,
+      addresses,
       birthDate: hasFieldChanged(siSchema, InputFieldsE.BIRTH_DATE) ? siSchema.birthDate : undefined,
       phoneNumber: hasFieldChanged(siSchema, InputFieldsE.PHONE_NUMBER) ? siSchema.phoneNumber : undefined,
       email: hasFieldChanged(siSchema, InputFieldsE.EMAIL) ? siSchema.email : undefined,
