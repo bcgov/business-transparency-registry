@@ -75,6 +75,10 @@ export const SiSchema = z.object({
   controlOther: z.string().optional(),
   email: z.string(),
   address: AddressSchema,
+  mailingAddress: z.object({
+    isDifferent: z.boolean(),
+    address: AddressSchema.optional()
+  }),
   birthDate: z.string().min(1),
   citizenships: validateCitizenshipValidator(),
   tax: TaxSchema,

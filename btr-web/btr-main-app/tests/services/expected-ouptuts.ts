@@ -97,7 +97,8 @@ export const OwnershipOrControlStatements = {
         postalCode: 'V1A 2B3',
         region: 'BC',
         streetAdditional: '',
-        locationDescription: ''
+        locationDescription: '',
+        type: 'residence'
       },
       addresses: [
         {
@@ -108,7 +109,8 @@ export const OwnershipOrControlStatements = {
           postalCode: 'V1A 2B3',
           region: 'BC',
           streetAdditional: '',
-          locationDescription: ''
+          locationDescription: '',
+          type: 'residence'
         }
       ],
       birthDate: '2000-03-19',
@@ -124,6 +126,7 @@ export const OwnershipOrControlStatements = {
       nationalities: [{ name: 'Canada', code: 'CA' }],
       isPermanentResidentCa: false,
       personType: 'knownPerson',
+      phoneNumber: undefined,
       publicationDetails: {
         bodsVersion: '0.3',
         publicationDate: '2024-01-26',

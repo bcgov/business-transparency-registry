@@ -2,7 +2,7 @@ import { BodsInterestTypeE, BodsNameTypeE, ControlOfSharesDetailsE } from '~/enu
 import { BtrFilingI } from '~/interfaces/btr-bods/btr-filing-i'
 import { BtrBodsOwnershipOrControlI } from '~/interfaces/btr-bods/btr-bods-ownership-or-control-i'
 import { BtrBodsPersonI } from '~/interfaces/btr-bods/btr-bods-person-i'
-import { BodsBtrAddressI, BodsInterestI } from '~/interfaces/btr-bods/components-i'
+import { BodsBtrAddressI, BodsBtrAddressTypeE, BodsInterestI } from '~/interfaces/btr-bods/components-i'
 import { PercentageRangeE } from '~/enums/percentage-range-e'
 import {
   AddressSchemaType,
@@ -59,7 +59,10 @@ const _getCitizenships = (btrBodsPerson: BtrBodsPersonI): CountrySchemaType[] =>
   return citizenships
 }
 
-function _getSIAddress (btrBodsAddress: BodsBtrAddressI): AddressSchemaType {
+function _getSIAddress (btrBodsAddress: BodsBtrAddressI | undefined): AddressSchemaType {
+  if (!btrBodsAddress) {
+    return getEmptyAddress()
+  }
   return {
     line1: btrBodsAddress.street,
     line2: btrBodsAddress.streetAdditional,
@@ -166,12 +169,25 @@ function _getTaxResidency (person: BtrBodsPersonI) {
   return !!(person.taxResidencies.find(country => country.code === 'CA'))
 }
 
+const _getResidentialAddress = (person: BtrBodsPersonI) => {
+  return person.addresses?.find(a => a.type === BodsBtrAddressTypeE.RESIDENCE || a.type === undefined) ||
+    undefined
+}
+
 const _getSi = (
   person: BtrBodsPersonI, oocs: BtrBodsOwnershipOrControlI, businessIdentifier: string
 ): SiSchemaType => {
   const preferredName = _getSiName(person, BodsNameTypeE.ALTERNATIVE)
+
+  const bodsAddress = _getResidentialAddress(person)
+  const bodsMailingAddress = person.addresses?.find(a => a.type === BodsBtrAddressTypeE.REGISTERED)
+
   return {
-    address: person.addresses ? _getSIAddress(person.addresses[0]) : getEmptyAddress(),
+    address: _getSIAddress(bodsAddress),
+    mailingAddress: {
+      isDifferent: !!bodsMailingAddress,
+      address: bodsMailingAddress ? _getSIAddress(bodsMailingAddress) : undefined
+    },
     controlOfDirectors: {
       directControl: isControlType(oocs, ControlOfDirectorsDetailsE.DIRECT_CONTROL),
       significantInfluence: isControlType(oocs, ControlOfDirectorsDetailsE.SIGNIFICANT_INFLUENCE),

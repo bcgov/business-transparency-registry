@@ -33,7 +33,16 @@ export interface BodsIdentifierI {
   uri?: string
 }
 
+export enum BodsBtrAddressTypeE {
+  /** residence address */
+  RESIDENCE = 'residence',
+
+  /** mailing address */
+  REGISTERED = 'registered'
+}
+
 export interface BodsBtrAddressI {
+  type: BodsBtrAddressTypeE
   street: string
   streetAdditional?: string
   city: string

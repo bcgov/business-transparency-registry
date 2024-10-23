@@ -53,6 +53,10 @@ export function getDefaultInputFormSi (): SiSchemaType {
     controlOther: undefined,
     email: '',
     address: getEmptyAddress(),
+    mailingAddress: {
+      isDifferent: false,
+      address: undefined
+    },
     birthDate: '',
     citizenships: [],
     tax: {
