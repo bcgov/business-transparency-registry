@@ -27,8 +27,6 @@ export enum InputFieldsE {
   MAILING_ADDRESS_COUNTRY = 'mailingAddress.country',
   MAILING_ADDRESS_LOCATION_DESCRIPTION = 'mailingAddress.locationDescription',
 
-
-
   BIRTH_DATE = 'birthDate',
   CITIZENSHIPS = 'citizenships',
   TAX = 'tax',
