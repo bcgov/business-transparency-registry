@@ -98,7 +98,7 @@ export const OwnershipOrControlStatements = {
         region: 'BC',
         streetAdditional: '',
         locationDescription: '',
-        type: "residence",
+        type: 'residence'
       },
       addresses: [
         {
@@ -110,7 +110,7 @@ export const OwnershipOrControlStatements = {
           region: 'BC',
           streetAdditional: '',
           locationDescription: '',
-          type: "residence",
+          type: 'residence'
         }
       ],
       birthDate: '2000-03-19',

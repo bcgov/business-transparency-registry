@@ -82,7 +82,7 @@ const showAddress = computed(() => {
 })
 
 const showMailingAddress = computed(() => {
-  if (!prop.item.mailingAddress.address) {
+  if (!prop.item.mailingAddress?.address) {
     return false
   }
   let rv = prop.item.mailingAddress.address.country &&
