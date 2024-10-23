@@ -601,6 +601,10 @@ export const expectedSisOutput: SiSchemaType[] = [
       taxNumber: undefined
     },
     isTaxResident: false,
+    mailingAddress: {
+      address: undefined,
+      isDifferent: false
+    },
     effectiveDates: [
       {
         endDate: undefined,
@@ -677,6 +681,10 @@ export const expectedSisOutput: SiSchemaType[] = [
       hasTaxNumber: true
     },
     isTaxResident: true,
+    mailingAddress: {
+      address: undefined,
+      isDifferent: false
+    },
     effectiveDates: [
       {
         endDate: undefined,
@@ -754,6 +762,10 @@ export const expectedSisOutput: SiSchemaType[] = [
       extension: '33'
     },
     isTaxResident: true,
+    mailingAddress: {
+      address: undefined,
+      isDifferent: false
+    },
     effectiveDates: [
       {
         endDate: undefined,
