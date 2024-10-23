@@ -11,18 +11,25 @@
     </div>
     <div v-if="showAddress" class="flex">
       <div>
-        <UIcon class="text-[20px]" name="i-mdi-email-outline" />
+        <UIcon class="text-[20px]" name="i-mdi-map-marker-outline" />
       </div>
       <BcrosAddressDisplay class="ml-1" :address="item.address" />
+    </div>
+    <div v-if="showMailingAddress" class="flex">
+      <div>
+        <UIcon class="text-[20px]" name="i-mdi-email-outline" />
+      </div>
+      <BcrosAddressDisplay class="ml-1" :address="item.mailingAddress.address" />
     </div>
     <div v-if="item.phoneNumber && item.phoneNumber.number" class="flex">
       <div>
         <UIcon class="text-[20px]" name="i-mdi-phone" />
       </div>
       <div class="ml-1">
-        {{ item.phoneNumber.countryCallingCode ?
-          '+ ' + item.phoneNumber.countryCallingCode
-          : ''
+        {{
+          item.phoneNumber.countryCallingCode ?
+            '+ ' + item.phoneNumber.countryCallingCode
+            : ''
         }}
         {{ displayPhoneNumber(item.phoneNumber.number) }}
       </div>
@@ -47,24 +54,9 @@
 </template>
 
 <script setup lang="ts">
-type PhoneNumberT = {
-  countryCallingCode?: string,
-  number?: string
-}
+import { SiSchemaType } from '~/utils/si-schema/definitions'
 
-type TaxT = {
-  taxNumber?: string
-}
-
-type SearchResultI = {
-  email?: string,
-  address?: object,
-  phoneNumber?: PhoneNumberT,
-  tax?: TaxT,
-  isTaxResident?: boolean
-}
-
-const prop = defineProps<{ item: SearchResultI }>()
+const prop = defineProps<{ item: SiSchemaType }>()
 
 const t = useNuxtApp().$i18n.t
 
@@ -89,12 +81,27 @@ const showAddress = computed(() => {
   return rv
 })
 
+const showMailingAddress = computed(() => {
+  if (!prop.item.mailingAddress.address) {
+    return false
+  }
+  let rv = prop.item.mailingAddress.address.country &&
+    (prop.item.mailingAddress.address.country.alpha_2 || prop.item.mailingAddress.address.country.name)
+  rv = rv || prop.item.mailingAddress.address.city
+  rv = rv || prop.item.mailingAddress.address.line1
+  rv = rv || prop.item.mailingAddress.address.locationDescription
+  rv = rv || prop.item.mailingAddress.address.postalCode
+  rv = rv || prop.item.mailingAddress.address.region
+  return rv
+})
+
 </script>
 
 <style lang="scss" scoped>
 .information > div:not(:first-child) {
   margin-top: 8px;
 }
+
 .information-icon {
   @apply mr-1 text-[20px]
 }
