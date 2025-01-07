@@ -1,7 +1,7 @@
 <template>
   <div
-    class="w-full"
     :id="id"
+    class="w-full"
     :class="[
       showSectionHasErrors ? 'border-l-[3px] border-red-500' : '',
       border ? 'border border-gray-100' : '',
