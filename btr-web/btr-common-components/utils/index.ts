@@ -1,5 +1,5 @@
 export {
-  validateEmailRfc6532Regex, validateNameCharacters, validatePreferredName, normalizeName,
+  validateEmailRfc6532Regex, normalizeName,
   checkSpecialCharacters, checkTaxNumberLength, validateTaxNumber, validateFolioNumberCharacters
 } from './validation/form_inputs'
 

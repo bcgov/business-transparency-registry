@@ -28,7 +28,7 @@ describe('pages -> Add individual', () => {
 
     cy.get('[data-cy="testFullName"] input').type('TestFirst2')
     cy.get('[data-cy="testFullName"] input').blur()
-    cy.contains(i18nCommon.errors.validation.fullName.specialCharacter).should('exist')
+    cy.contains(i18nCommon.errors.validation.fullName.specialCharacter).should('not exist')
 
     cy.get('[data-cy="isYourOwnInformation-checkbox"]').check()
     cy.contains(i18nCommon.errors.validation.fullName.specialCharacter).should('not.exist')

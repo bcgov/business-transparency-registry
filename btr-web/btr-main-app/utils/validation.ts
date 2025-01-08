@@ -162,16 +162,6 @@ export function validateFullNameSuperRefine (form: any, ctx: RefinementCtx): nev
       })
       return z.NEVER
     }
-
-    if (!validateNameCharacters(normalizedFullName)) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        path: ['fullName'],
-        message: t('errors.validation.fullName.specialCharacter'),
-        fatal: true
-      })
-      return z.NEVER
-    }
   } else {
     ctx.addIssue({
       path: ['fullName'],
@@ -201,15 +191,6 @@ export function validateNameSuperRefine (nameVal: string, ctx: RefinementCtx): n
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
         translate: 'errors.validation.fullName.maxLengthExceeded',
-        fatal: true
-      })
-      return z.NEVER
-    }
-
-    if (!validateNameCharacters(normalizedFullName)) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        translate: 'errors.validation.fullName.specialCharacter',
         fatal: true
       })
       return z.NEVER

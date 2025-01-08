@@ -104,12 +104,10 @@ const schema = z.object({
     z.string()
       .min(minNameLength, t('errors.validation.fullName.empty'))
       .max(maxNameLength, t('errors.validation.fullName.maxLengthExceeded'))
-      .refine(validateNameCharacters, t('errors.validation.fullName.specialCharacter'))
   ),
   preferredName: z.preprocess(normalizeName,
     z.string()
       .max(maxNameLength, t('errors.validation.preferredName.maxLengthExceeded'))
-      .refine(validatePreferredName, t('errors.validation.preferredName.specialCharacter'))
   ),
   email: z.string()
     .max(254, 'errors.validation.email.maxLengthExceeded')
