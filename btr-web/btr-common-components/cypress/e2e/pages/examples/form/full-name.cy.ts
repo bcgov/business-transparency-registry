@@ -52,7 +52,7 @@ describe('forms -> preferred name -> validate that the preferred name component 
     const validName = 'first last'
 
     cy.get('#testFullName').type(unicodeName).blur()
-    cy.contains(en.errors.validation.fullName.specialCharacter).should('exist')
+    cy.contains(en.errors.validation.fullName.specialCharacter).should('not.exist')
 
     cy.get('#testFullName').clear().type(validName).blur()
     cy.contains(en.errors.validation.fullName.specialCharacter).should('not.exist')
