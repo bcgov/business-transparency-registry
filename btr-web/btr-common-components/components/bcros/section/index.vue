@@ -1,5 +1,6 @@
 <template>
   <div
+    :id="id"
     class="w-full"
     :class="[
       showSectionHasErrors ? 'border-l-[3px] border-red-500' : '',
@@ -73,6 +74,7 @@
 <script setup lang="ts">
 const slots = useSlots()
 const props = defineProps({
+  id: { type: String, required: false, default: undefined },
   showSectionHasErrors: { type: Boolean, required: false, default: false },
   sectionTitle: { type: String, required: false, default: undefined },
   sectionTitleIcon: { type: String, required: false, default: undefined },

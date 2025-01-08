@@ -1,5 +1,8 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
+  modules: [
+    'nuxt-anchorscroll'
+  ],
   extends: [
     '../btr-layouts',
     '../btr-common-components'

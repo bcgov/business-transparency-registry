@@ -93,6 +93,7 @@
 
       <!--  section: type of interest or control of shares -->
       <BcrosSection
+        id="control-of-shares"
         :show-section-has-errors="false"
         :section-title="$t('sectionTitles.controlOfShares')"
         :border="editMode"
@@ -107,6 +108,7 @@
 
       <!--  section: type of interest or control of votes -->
       <BcrosSection
+        id="control-of-votes"
         :show-section-has-errors="false"
         :section-title="$t('sectionTitles.controlOfVotes')"
         :border="editMode"
@@ -121,6 +123,7 @@
 
       <!--  section: control of majority of directors  -->
       <BcrosSection
+        id="control-of-directors"
         :show-section-has-errors="false"
         :section-title="$t('sectionTitles.controlOfMajorityOfDirectors')"
         :border="editMode"
@@ -135,6 +138,7 @@
 
       <!--  section: other reasons  -->
       <BcrosSection
+        id="control-other"
         :show-section-has-errors="hasErrors(['otherReasons'])"
         :section-title="$t('sectionTitles.otherReasons')"
         rounded-bot
@@ -166,6 +170,7 @@
 
       <!--  section: effective dates -->
       <BcrosSection
+        id="effective-dates"
         :show-section-has-errors="hasErrors(['effectiveDates'])"
         :section-title="$t('sectionTitles.effectiveDates')"
         rounded-bot
@@ -217,6 +222,7 @@
 
       <!--  section: individual details address, mailing address  -->
       <BcrosSection
+        id="address"
         :show-section-has-errors="hasErrors(['address.'])"
         :section-title="$t('labels.lastKnownAddress')"
         :border="editMode"
@@ -224,7 +230,6 @@
       >
         <div class="flex-col w-full">
           <BcrosInputsAddress
-            id="addNewPersonLastKnownAddress"
             v-model="inputFormSi.address"
             name="address"
             :is-editing="isEditing"
@@ -248,6 +253,7 @@
       </BcrosSection>
       <BcrosSection
         v-if="showMailingAddress"
+        id="mailing-address"
         class="-mt-1 pt-0"
         :show-section-has-errors="hasErrors(['address.'])"
         :section-title="$t('labels.mailingAddress')"
@@ -256,7 +262,6 @@
       >
         <div class="flex-col w-full">
           <BcrosInputsAddress
-            id="addNewPersonLastKnownAddress"
             v-model="inputFormSi.mailingAddress.address"
             name="mailingAddress.address"
             :is-editing="isEditing"
@@ -274,6 +279,7 @@
 
       <!--  section: individual details phoneNumber; phone number  -->
       <BcrosSection
+        id="phone-number"
         :show-section-has-errors="hasErrors(['phoneNumber'])"
         :section-title="$t('sectionTitles.phoneNumber')"
         :border="editMode"
@@ -288,6 +294,7 @@
         />
       </BcrosSection>
       <BcrosSection
+        id="birth-date"
         :show-section-has-errors="hasErrors([InputFieldsE.BIRTH_DATE])"
         :section-title="$t('labels.birthdate')"
         :border="editMode"
@@ -311,6 +318,7 @@
 
       <!--  section: citizenship or PR  -->
       <BcrosSection
+        id="citizenships"
         :show-section-has-errors="hasErrors(['citizenships'])"
         :section-title="$t('sectionTitles.citizenshipOrPR')"
         :border="editMode"
@@ -327,6 +335,7 @@
 
       <!--  section: tax details  -->
       <BcrosSection
+        id="tax-details"
         :show-section-has-errors="hasErrors(['tax.'])"
         :section-title="$t('sectionTitles.taxDetails')"
         :border="editMode"
@@ -351,6 +360,7 @@
         </div>
       </BcrosSection>
       <bcrosSection
+        id="tax-residency"
         :show-section-has-errors="hasErrors(['isTaxResident'])"
         :section-title="$t('labels.taxResidency')"
         :border="editMode"
@@ -388,6 +398,7 @@
 
       <!--  section: unable to obtain or confirm  -->
       <BcrosSection
+        id="missing-info"
         :show-section-has-errors="hasErrors(['missingInfo'])"
         :section-title="$t('sectionTitles.unableToObtainOrConfirmInformation')"
         rounded-top
@@ -478,6 +489,16 @@ const props = defineProps<{
 
 const t = useNuxtApp().$i18n.t
 const bcrosAccount = useBcrosAccount()
+
+const { scrollToAnchor } = useAnchorScroll({
+  toAnchor: {
+    target: document.documentElement,
+    scrollOptions: {
+      behavior: 'smooth',
+      offsetTop: -20 // Add extra space above the anchor
+    }
+  }
+})
 
 const isEditing = ref(false)
 
@@ -747,6 +768,27 @@ function handleDoneButtonClick () {
     errors = res.error.issues.map(issue => ({ message: issue.message, path: issue.path.join('.') }))
     console.error(errors)
     addIndividualForm.value.setErrors(errors)
+
+    // find the top section with error
+    const topErrorSection = errors.reduce((topSection, error) => {
+      const path = error.path.split('.')
+      let section: string = path[0]
+      if (section === 'name') {
+        section += '.' + path[1]
+      }
+      if (!topSection) {
+        return section
+      }
+
+      return errorSectionMap[topSection]?.position < errorSectionMap[section]?.position ? topSection : section
+    }, null as string | null)
+
+    // autoscroll to the top error
+    const topId = errorSectionMap[topErrorSection as string]?.sectionId
+
+    if (topId) {
+      scrollToAnchor(topId)
+    }
   } else if (isEditing.value) {
     emits('update', { index: props.index, updatedSI: inputFormSi })
   } else {
