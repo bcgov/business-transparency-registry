@@ -584,8 +584,7 @@ let formSchema: any = z.discriminatedUnion('couldNotProvideMissingInfo', [
   z.object({
     couldNotProvideMissingInfo: z.literal(true),
     missingInfoReason: z.string().transform(s => s.trim()).pipe(z.string().min(1)),
-    name: SiNameSchema,
-
+    name: SiNameExtended,
     ui: z.object({
       newOrUpdatedFields: z.array(z.string())
     })

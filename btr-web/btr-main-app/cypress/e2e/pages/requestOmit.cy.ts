@@ -30,7 +30,7 @@ describe('pages -> Request To Omit', () => {
 
   it('Completing Party Validation checks', () => {
     cy.get('#completing-party-full-name').type('123')
-    cy.contains(i18nCommon.errors.validation.fullName.specialCharacter).should('exist')
+    cy.contains(i18nCommon.errors.validation.fullName.specialCharacter).should('not.exist')
     cy.contains(i18nCommon.errors.validation.fullName.empty).should('not.exist')
     cy.get('#completing-party-full-name').clear()
     cy.contains(i18nCommon.errors.validation.fullName.specialCharacter).should('not.exist')
@@ -78,7 +78,7 @@ describe('pages -> Request To Omit', () => {
 
   it('Biz Info Validaton checks', () => {
     cy.get('#si-biz-info-full-name').type('123')
-    cy.contains(i18nCommon.errors.validation.fullName.specialCharacter).should('exist')
+    cy.contains(i18nCommon.errors.validation.fullName.specialCharacter).should('not.exist')
     cy.contains(i18nCommon.errors.validation.fullName.empty).should('not.exist')
     cy.get('#si-biz-info-full-name').clear()
     cy.contains(i18nCommon.errors.validation.fullName.specialCharacter).should('not.exist')

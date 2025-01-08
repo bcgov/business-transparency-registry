@@ -80,6 +80,16 @@
       "items": {
         "$ref": "https://btr.gov.bc.ca/.well_known/schemas/components.json#/definitions/Name"
       },
+      "minItems": 1,
+      "contains": {
+        "type": "object",
+        "properties": {
+          "Type": {
+            "type": "string",
+            "pattern": "^individual$"
+          }
+        }
+      },
       "propertyOrder": 10
     },
     "identifiers": {
@@ -166,7 +176,7 @@
       "anyOf": [
         { "type": "string", "minLength": 1 },
         { "type": "null" }
-      ] 
+      ]
     }
   },
   "oneOf": [

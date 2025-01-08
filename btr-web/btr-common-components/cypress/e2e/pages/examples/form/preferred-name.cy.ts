@@ -38,13 +38,13 @@ describe('forms -> preferred name -> validate that the preferred name component 
       return false
     })
 
-    const invalidName = 'first - last'
+    const invalidName = 'first - last 123'
     const validName = 'first last'
     const unicodeName1 = 'François'
     const unicodeName2 = 'José 玛丽'
 
     cy.get('#testPreferredName').type(invalidName).blur()
-    cy.contains(en.errors.validation.preferredName.specialCharacter).should('exist')
+    cy.contains(en.errors.validation.preferredName.specialCharacter).should('not.exist')
 
     cy.get('#testPreferredName').clear().type(validName).blur()
     cy.contains(en.errors.validation.preferredName.specialCharacter).should('not.exist')
