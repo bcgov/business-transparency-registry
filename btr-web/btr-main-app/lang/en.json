@@ -269,6 +269,9 @@
   },
   "errors": {
     "validation": {
+      "phoneNumber": {
+        "required": "Enter phone number (numbers only)"
+      },
       "controlPercentage": {
         "empty": "Please enter a percentage of shares and/or votes",
         "specialCharacter": "Numbers only",
@@ -350,8 +353,8 @@
   },
   "helpTexts": {
     "phoneNumber": {
-      "mustBe10DigitsLongTooltip": "Please double check your records and if you cannot match the info please check the section below: Unable to obtain information and detail steps taken.",
-      "mustBe10DigitsLong": "Number must be 10 digits long"
+      "tooltip": "Please double check your records and if you cannot match the info please check the section below: Unable to obtain information and detail steps taken.",
+      "hint": "Enter phone number (numbers only)"
     },
     "requestOmit": {
       "detail": "LOREM IPSUM TODO"

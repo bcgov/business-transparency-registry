@@ -9,8 +9,12 @@
       />
     </UFormGroup>
     <UFormGroup :name="name + '.number'" class="w-1/2">
-      <template #help>
+      <template #help="{ error }">
+        <span v-if="error">
+          {{ error }}
+        </span>
         <BcrosTooltip
+          v-else
           :popper="{
             placement: 'bottom',
             arrow: true,
@@ -19,25 +23,27 @@
         >
           <template #tooltip-text>
             <span class="whitespace-normal place-content: center">
-              {{ $t('helpTexts.phoneNumber.mustBe10DigitsLongTooltip') }}
+              {{ $t('helpTexts.phoneNumber.tooltip') }}
             </span>
           </template>
           <span class="text-xs">
-            {{ $t('helpTexts.phoneNumber.mustBe10DigitsLong') }}
+            {{ $t('helpTexts.phoneNumber.hint') }}
           </span>
         </BcrosTooltip>
       </template>
-      <UInput
-        v-model="maskedPhoneNumber"
-        v-maska:unmaskedvalue.unmasked
-        variant="bcGov"
-        data-cy="phoneNumber.number"
-        :data-maska="inputMask"
-        :placeholder="$t('placeholder.phoneNumber.number')"
-        @focus="clearPhoneNumberOnEdit"
-        @change="phoneNumberUpdated=true"
-        @blur="revertUnchangedPhoneNumber"
-      />
+      <template #default="{ error }">
+        <UInput
+          v-model="maskedPhoneNumber"
+          v-maska:unmaskedvalue.unmasked
+          data-cy="phoneNumber.number"
+          :data-maska="inputMask"
+          :placeholder="$t('placeholder.phoneNumber.number')"
+          :variant="error ? 'error' : 'bcGov'"
+          @focus="clearPhoneNumberOnEdit"
+          @change="phoneNumberUpdated=true"
+          @blur="revertUnchangedPhoneNumber"
+        />
+      </template>
     </UFormGroup>
     <UFormGroup :name="name + '.extension'" class="w-1/4">
       <UInput

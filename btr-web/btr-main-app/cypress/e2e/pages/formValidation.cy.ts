@@ -27,6 +27,7 @@ describe('pages -> Form Validation', () => {
     cy.contains(i18n.errors.validation.address.city).should('exist')
     cy.contains(i18n.errors.validation.address.region).should('exist')
     cy.contains(i18n.errors.validation.address.postalCode).should('exist')
+    cy.contains(i18n.errors.validation.phoneNumber.required).should('exist')
     cy.contains(i18n.errors.validation.taxNumber.required).should('exist')
     cy.contains(i18n.errors.validation.taxResidency.required).should('exist')
     cy.contains(i18n.errors.validation.missingInfoReason.required).should('not.exist')

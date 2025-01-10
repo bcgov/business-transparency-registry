@@ -1,4 +1,5 @@
 import { z } from 'zod'
+import { PhoneSchema } from '../../btr-common-components/interfaces/zod-schemas-t'
 
 export function getEmailValidator () {
   const t = useNuxtApp().$i18n.t
@@ -38,5 +39,11 @@ export function getPreferredNameValidator () {
 export function validateCitizenshipValidator () {
   return z.array(z.object({ name: z.string(), alpha_2: z.string() })).superRefine(
     validateCitizenshipSuperRefine
+  )
+}
+
+export function getPhoneNumberValidator () {
+  return PhoneSchema.superRefine(
+    validatePhoneNumberSuperRefine
   )
 }

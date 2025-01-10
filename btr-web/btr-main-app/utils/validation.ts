@@ -233,3 +233,16 @@ export function validateCitizenshipSuperRefine (citizenships: BtrCountryI[], ctx
   }
   return z.NEVER
 }
+
+export function validatePhoneNumberSuperRefine (phoneNumber: PhoneSchemaType, ctx: RefinementCtx): never {
+  const t = useNuxtApp().$i18n.t
+  if (!phoneNumber.number || phoneNumber.number.length === 0) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      message: t('errors.validation.phoneNumber.required'),
+      path: ['number'],
+      fatal: true
+    })
+  }
+  return z.NEVER
+}

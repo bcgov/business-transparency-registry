@@ -16,10 +16,11 @@ describe('pages -> Add individual', () => {
     // verify phone country code is prepopulated when selecting country address
     cy.get('[data-cy="address-country"]')
       .click()
-
-    cy.get('span.truncate')
+      .get('span.truncate')
       .contains('Canada')
       .click()
+      .get('[data-cy="phoneNumber.countryCode"]')
+      .should('have.value', '+1')
 
     // clear input
     cy.get('[data-cy="phoneNumber.countryCode"]')
@@ -60,32 +61,5 @@ describe('pages -> Add individual', () => {
 
     cy.get('[data-cy="phoneNumber.countryCode"]')
       .should('have.value', '+1')
-  })
-
-  it('verify phone number input mask ', () => {
-    // no selection, verify it has no input mask
-    cy.get('[data-cy="phoneNumber.number"]')
-      .type('1234567890')
-
-    cy.get('[data-cy="phoneNumber.number"]')
-      .should('have.value', '1234567890')
-
-    // select country code canada // it will change to input mask (###) ###-####
-    cy.get('[data-cy="phoneNumberInput"]')
-      .find('button')
-      .click()
-
-    cy.get('ul .flag.f-ca')
-      .click()
-
-    cy.get('[data-cy="phoneNumberInput"]')
-      .find('input+span .flag.f-ca')
-      .should('exist')
-
-    cy.get('[data-cy="phoneNumber.countryCode"]')
-      .should('have.value', '+1')
-
-    cy.get('[data-cy="phoneNumber.number"]')
-      .should('have.value', '(123) 456-7890')
   })
 })

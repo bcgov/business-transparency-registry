@@ -158,6 +158,7 @@ Cypress.Commands.add('addSingleTestSi', (profile: any) => {
   cy.get('[data-cy="address-region-select"]').click()
   cy.get('[data-cy="address-region-select"]').get('li').contains(profile.address.province[0]).click()
   cy.get('[data-cy="address-postal-code"]').type(profile.address.postalCode)
+  cy.get('[data-cy="phoneNumber.number"]').type(profile.phoneNumber.number)
 
   cy.siSelectCitizenship(profile.citizenships)
 
