@@ -257,6 +257,7 @@
   },
   "placeholders": {
     "fullName": "Full Name",
+    "individualsFullName": "Individual's Full Name",
     "preferredName": "Preferred Name Information",
     "dateSelect": {
       "birthdate": "Birthdate",
