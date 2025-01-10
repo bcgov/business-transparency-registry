@@ -35,6 +35,9 @@ Cypress.Commands.add('fillOutForm', (siDataToEnter) => {
   cy.get('[data-cy="address-region-select"]').get('li').contains(siDataToEnter.address.province[0]).click()
   cy.get('[data-cy="address-postal-code"]').type(siDataToEnter.address.postalCode)
 
+  // phone number
+  cy.get('[data-cy="phoneNumber.number"]').type(siDataToEnter.phoneNumber.number)
+
   // select the citizenship info
   cy.get('[data-cy="citizenshipsComboboxButton"]').click()
   cy.get('[id^="headlessui-combobox-options"]').find('li').first().click({ force: true })
