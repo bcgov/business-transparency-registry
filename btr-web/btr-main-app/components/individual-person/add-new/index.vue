@@ -46,7 +46,7 @@
             id="individual-person-full-name"
             v-model="inputFormSi.name.fullName"
             name="name.fullName"
-            :placeholder="$t('placeholders.fullName')"
+            :placeholder="$t('placeholders.individualsFullName')"
             data-cy="testFullName"
             :is-disabled="inputFormSi.name.isYourOwnInformation"
             @change="setNewOrChanged([InputFieldsE.FULL_NAME])"
