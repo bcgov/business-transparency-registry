@@ -1,5 +1,5 @@
 import { z } from 'zod'
-import { PhoneSchema, PhoneSchemaType } from '../../btr-common-components/interfaces/zod-schemas-t'
+import { PhoneSchema } from '../../btr-common-components/interfaces/zod-schemas-t'
 
 export function getEmailValidator () {
   const t = useNuxtApp().$i18n.t
@@ -43,8 +43,7 @@ export function validateCitizenshipValidator () {
 }
 
 export function getPhoneNumberValidator () {
-  return PhoneSchema.refine(
-    (phoneNumber: PhoneSchemaType) => phoneNumber.number && phoneNumber.number.length > 0,
-    { message: 'Enter phone number (numbers only)', path: ['number'] }
+  return PhoneSchema.superRefine(
+    validatePhoneNumberSuperRefine
   )
 }
