@@ -152,6 +152,12 @@
       },
       "propertyOrder": 60
     },
+    "phoneNumber": {
+      "title": "Phone number",
+      "description": "A phone number for this individual.",
+      "$ref": "https://btr.gov.bc.ca/.well_known/schemas/components.json#/definitions/PhoneNumber",
+      "propertyOrder": 70
+    },
     "publicationDetails": {
       "title": "Publication details",
       "description": "Information concerning the original publication of this statement.",
@@ -188,6 +194,7 @@
         "isComponent",
         "publicationDetails",
         "hasTaxNumber",
+        "phoneNumber",
         "email",
         "nationalities",
         "names"
