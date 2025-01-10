@@ -719,7 +719,7 @@ const countryChange = () => {
   if (
     undefined === inputFormSi.phoneNumber.countryCallingCode &&
     undefined === inputFormSi.phoneNumber.countryCode2letterIso &&
-    undefined === inputFormSi.phoneNumber.number &&
+    !inputFormSi.phoneNumber.number &&
     undefined !== inputFormSi.address?.country?.alpha_2
   ) {
     inputFormSi.phoneNumber.countryCode2letterIso = inputFormSi.address.country.alpha_2
@@ -775,7 +775,10 @@ function handleDoneButtonClick () {
       let section: string = path[0]
       if (section === 'name') {
         section += '.' + path[1]
+      } else if (section === 'phoneNumber') {
+        section += '.' + path[1]
       }
+
       if (!topSection) {
         return section
       }
