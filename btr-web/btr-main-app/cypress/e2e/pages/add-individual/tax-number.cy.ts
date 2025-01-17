@@ -16,6 +16,19 @@ describe('pages -> Add individual', () => {
     // ensure the input box and the checkbox are visible
     cy.get('[data-cy="tax-number-input"]').should('exist')
     cy.get('[data-cy="no-tax-number-checkbox"]').should('exist')
+
+    // check the no-tax-number checkbox
+    cy.get('[data-cy="no-tax-number-checkbox"]').check()
+    cy.get('[data-cy="no-tax-number-checkbox"]').should('be.checked')
+
+    // when some value is entered in the tax number input box, the checkbox should be unchecked
+    cy.get('[data-cy="tax-number-input"]').type('000').blur()
+    cy.get('[data-cy="no-tax-number-checkbox"]').should('not.be.checked')
+
+    // checking the checkbox again should clear the input box
+    cy.get('[data-cy="no-tax-number-checkbox"]').check()
+    cy.get('[data-cy="no-tax-number-checkbox"]').should('be.checked')
+    cy.get('[data-cy="tax-number-input"]').should('have.value', '')
   })
 
   it('test the error message for tax number length', () => {
@@ -47,7 +60,6 @@ describe('pages -> Add individual', () => {
     })
 
     cy.get('[data-cy=add-new-btn]').trigger('click')
-    // cy.get('[data-cy="showAddIndividualPersonManually"]').trigger('click')
     cy.get('[data-cy="tax-number-input"]').type('111222333').blur()
     cy.contains(en.errors.validation.taxNumber.invalidNumber).should('exist')
   })

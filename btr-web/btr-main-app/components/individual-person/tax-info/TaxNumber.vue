@@ -5,7 +5,6 @@
         ref="taxNumberInputGroupRef"
         v-slot="{ error }"
         :name="name+'.taxNumber'"
-        class="ml-5"
       >
         <UInput
           v-model="taxNumber"
