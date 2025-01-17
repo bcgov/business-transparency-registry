@@ -1,16 +1,6 @@
 <template>
   <div class="flex flex-col py-5">
     <div class="flex flex-row mb-2 py-1">
-      <UFormGroup name="doNothingJustWatch">
-        <URadio
-          id="taxNumberRadioButton4"
-          v-model="hasTaxNumber"
-          class="mt-3"
-          :value="true"
-          :aria-label="$t('placeholders.taxNumber')"
-          @change="emit('has-tax-number-changed')"
-        />
-      </UFormGroup>
       <UFormGroup
         ref="taxNumberInputGroupRef"
         v-slot="{ error }"
@@ -25,7 +15,7 @@
           :placeholder="$t('placeholders.taxNumber')"
           class="w-80"
           @focusout="formatInput"
-          @change="taxNumberChanged=true; emit('tax-number-changed', taxNumber)"
+          @change="handleInput"
           @focus="focusTaxNumber"
           @blur="revertUnchangedTaxNumber"
         />
@@ -34,12 +24,13 @@
 
     <UFormGroup v-slot="{ error }" :name="name + '.hasTaxNumber'">
       <div class="flex flex-row items-center mb-2 py-2">
-        <URadio
+        <UCheckbox
           id="noTaxNumberRadioButton"
-          v-model="hasTaxNumber"
+          v-model="noTaxNumber"
+          data-cy="no-tax-number-checkbox"
           :value="false"
           :variant="error ? 'error' : variant"
-          @change="clearTaxNumber; emit('has-tax-number-changed')"
+          @change="toggleCheckbox"
         />
         <label for="noTaxNumberRadioButton" class="ml-5" :class="{ 'text-red-500': error}">
           {{ $t('labels.noTaxNumberLabel') }}
@@ -70,9 +61,12 @@ const formatInput = () => {
 const taxNumberFieldUuid = getRandomUuid()
 const taxNumberChanged = ref(false)
 
+const noTaxNumber = ref(hasTaxNumber.value === false)
+
 const focusTaxNumber = () => {
   emit('clear-errors', props.name + '.hasTaxNumber')
   hasTaxNumber.value = true
+  noTaxNumber.value = false
   if (props.isEditing) {
     setFieldOriginalValue(taxNumberFieldUuid, taxNumber.value)
     taxNumber.value = ''
@@ -116,5 +110,16 @@ const formatTaxNumber = (taxNumber: string | undefined): string | undefined => {
   }
 
   return formattedNumber
+}
+
+const handleInput = () => {
+  taxNumberChanged.value = true
+  emit('tax-number-changed', taxNumber.value)
+}
+
+const toggleCheckbox = () => {
+  hasTaxNumber.value = !noTaxNumber.value
+  clearTaxNumber()
+  emit('has-tax-number-changed')
 }
 </script>
