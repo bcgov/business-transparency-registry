@@ -21,27 +21,14 @@ export function reviewConfirm () {
 }
 
 export async function siChangeSubmit () {
-  const FilingSchema = z.discriminatedUnion(
-    'noSignificantIndividualsExist',
-    [
-      FilingSchemaBase.extend({
-        noSignificantIndividualsExist: z.literal(true),
-        significantIndividuals: z.object({}).array(),
-        folioNumber: getFolioValidator()
-      }),
-      FilingSchemaBase.extend({
-        noSignificantIndividualsExist: z.literal(false),
-        significantIndividuals: z.object({}).array().nonempty(),
-        folioNumber: getFolioValidator()
-      })
-    ]
-  )
-
+  const { validateConfirmReviewPage } = useConfirmReviewStore()
+  const { confirmReviewPageErrors } = storeToRefs(useConfirmReviewStore())
   const significantIndividuals = useSignificantIndividuals()
   significantIndividuals.currentSIFiling.significantIndividuals = significantIndividuals.allActiveSIs
-  const result = FilingSchema.safeParse(significantIndividuals.currentSIFiling)
+
+  const result = validateConfirmReviewPage()
   if (!result.success) {
-    console.warn('<> remove this line when validation errors are displayed on page', result.error.issues)
+    confirmReviewPageErrors.value = result.error.issues
     significantIndividuals.showErrors = true
   } else {
     await significantIndividuals.filingSubmit()

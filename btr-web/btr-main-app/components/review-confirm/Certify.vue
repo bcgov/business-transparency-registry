@@ -13,7 +13,7 @@
         >
           <template #label>
             <div class="text-sm">
-              <div>
+              <div :class="{ 'text-red-500': hasError }">
                 <span>{{ $t('texts.certify.part1') }}</span>
                 <span class="font-bold">{{ name.toUpperCase() }}</span>
                 <span>{{ part2Text ? part2Text : $t('texts.certify.part2') }}</span>
@@ -43,7 +43,8 @@ defineProps({
   part2Text: { type: String, required: false, default: '' },
   showLabel: { type: Boolean, required: false, default: true },
   altNote: { type: Boolean, required: false, default: false },
-  isDisabled: { type: Boolean, required: false, default: false }
+  isDisabled: { type: Boolean, required: false, default: false },
+  hasError: { type: Boolean, required: true }
 })
 
 let date = ''

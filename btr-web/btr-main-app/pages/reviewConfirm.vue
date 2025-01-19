@@ -1,5 +1,6 @@
 <template>
   <div data-cy="review-confirm">
+    {{ certifiedErrors }}
     <h1 class="font-bold text-3xl" data-cy="page-header">
       {{ $t('pageHeadings.significantIndividualChange') }}
     </h1>
@@ -41,6 +42,7 @@
       2. {{ $t('labels.certifySection') }}
     </h2>
     <BcrosSection
+      :show-section-has-errors="certifiedErrors.length > 0"
       :section-title="$t('texts.certify.certification')"
       rounded-bot
       :border="false"
@@ -49,9 +51,11 @@
         <UFormGroup name="certified">
           <ReviewConfirmCertify
             v-model="currentSIFiling.certified"
+            :has-error="certifiedErrors.length > 0"
             :name="userFullName"
             data-cy="certify-section"
             :show-label="false"
+            @update:model-value="reValidateConfirmReviewPage"
           />
         </UFormGroup>
       </div>
@@ -64,6 +68,8 @@ import { storeToRefs } from 'pinia'
 import { z } from 'zod'
 import { SiSchemaType } from '~/utils/si-schema/definitions'
 
+const { confirmReviewPageErrors } = storeToRefs(useConfirmReviewStore())
+
 const significantIndividuals = useSignificantIndividuals()
 const { currentSIFiling, allSIs }: {
   currentSIFiling: SignificantIndividualFilingI,
@@ -72,6 +78,17 @@ const { currentSIFiling, allSIs }: {
 
 const maxFolioNumberLength = 30
 
+const reValidateConfirmReviewPage = () => {
+  const { validateConfirmReviewPage } = useConfirmReviewStore()
+  const { confirmReviewPageErrors } = storeToRefs(useConfirmReviewStore())
+
+  const result = validateConfirmReviewPage()
+  if (!result.success) {
+    console.warn('<> remove this line when validation errors are displayed on page', result.error.issues)
+    confirmReviewPageErrors.value = result.error.issues
+  }
+}
+
 const schemaFolioNumber = z.object({
   folioNumber: getFolioValidator()
 })
@@ -79,6 +96,13 @@ const schemaFolioNumber = z.object({
 onBeforeMount(() => {
   currentSIFiling.value.certified = false
 })
+
+const certifiedErrors = computed(
+  () => {
+    const certErrors = confirmReviewPageErrors.value.filter((err: z.ZodIssue) => err.path.includes("certified"))
+    return certErrors || []
+  }
+)
 
 const { userFullName } = storeToRefs(useBcrosAccount())
 </script>
