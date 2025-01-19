@@ -9,7 +9,7 @@ export const errorSectionMap = {
   email: { sectionId: 'individual-person-email', position: 8 },
   address: { sectionId: 'address', position: 9 },
   mailingAddress: { sectionId: 'mailing-address', position: 10 },
-  // reserve position 11 for the phone number section
+  'phoneNumber.number': { sectionId: 'phone-number', position: 11 },
   birthDate: { sectionId: 'birth-date', position: 12 },
   citizenships: { sectionId: 'citizenships', position: 13 },
   tax: { sectionId: 'tax-details', position: 14 },

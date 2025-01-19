@@ -15,6 +15,11 @@
       ],
       "postalCode": "V0E 1H5"
     },
+    "phoneNumber": {
+      "countryCallingCode": "+1",
+      "countryCode2letterIso": "CA",
+      "number": "7780001111"
+    },
     "taxNumber": "107 676 942",
     "taxResidency": "true",
     "citizenships": [
@@ -46,6 +51,11 @@
       ],
       "postalCode": "V0E 1H5"
     },
+    "phoneNumber": {
+      "countryCallingCode": "+1",
+      "countryCode2letterIso": "CA",
+      "number": "6041112222"
+    },
     "taxNumber": "301 166 476",
     "taxResidency": "true",
     "citizenships": [
@@ -76,6 +86,11 @@
         "BC"
       ],
       "postalCode": "V0E 1H5"
+    },
+    "phoneNumber": {
+      "countryCallingCode": "+1",
+      "countryCode2letterIso": "CA",
+      "number": "6040001111"
     },
     "taxNumber": "301 166 476",
     "taxResidency": "true",

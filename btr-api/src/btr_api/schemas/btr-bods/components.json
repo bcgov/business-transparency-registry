@@ -223,6 +223,33 @@
         "fullName"
       ]
     },
+    "PhoneNumber": {
+      "title": "Phone Number",
+      "description": "A phone number for this individual.",
+      "type": "object",
+      "properties": {
+        "countryCallingCode": {
+          "type": "string",
+          "description": "Country code number (e.g., +1) for the phone number."
+        },
+        "countryCode2letterIso": {
+          "type": "string",
+          "description": "2-letter country code (ISO 3166-1) for the phone number."
+        },
+        "number": {
+          "type": "string",
+          "description": "The phone number.",
+          "minLength": 1
+        },
+        "extension": {
+          "type": "string",
+          "description": "The optional phone number extension"
+        }
+      },
+      "required": [
+        "number"
+      ]
+    },
     "Interest": {
       "title": "Interest",
       "description": "A description of the interest held by an interestedParty in another entity.",

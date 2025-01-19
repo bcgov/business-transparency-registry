@@ -106,7 +106,7 @@ watch(
 watch(
   () => countryCode2letterIso.value,
   () => {
-    if (selectedCountry.value === undefined && countryCode2letterIso.value !== undefined) {
+    if (countryCode2letterIso.value !== undefined) {
       selectCountry(countryCode2letterIso.value)
     }
   }
