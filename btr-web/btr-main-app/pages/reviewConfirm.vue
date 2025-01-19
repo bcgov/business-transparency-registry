@@ -99,7 +99,7 @@ onBeforeMount(() => {
 
 const certifiedErrors = computed(
   () => {
-    const certErrors = confirmReviewPageErrors.value.filter((err: z.ZodIssue) => err.path.includes("certified"))
+    const certErrors = confirmReviewPageErrors.value.filter((err: z.ZodIssue) => err.path.includes('certified'))
     return certErrors || []
   }
 )

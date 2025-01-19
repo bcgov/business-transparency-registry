@@ -30,7 +30,6 @@ export const useConfirmReviewStore = defineStore('confirmOrReview', () => {
     return result
   }
 
-
   return {
     confirmReviewPageErrors,
     validateConfirmReviewPage
