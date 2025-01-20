@@ -79,11 +79,9 @@ const maxFolioNumberLength = 30
 
 const reValidateConfirmReviewPage = () => {
   const { validateConfirmReviewPage } = useConfirmReviewStore()
-  const { confirmReviewPageErrors } = storeToRefs(useConfirmReviewStore())
 
   const result = validateConfirmReviewPage()
   if (!result.success) {
-    console.warn('<> remove this line when validation errors are displayed on page', result.error.issues)
     confirmReviewPageErrors.value = result.error.issues
   } else {
     confirmReviewPageErrors.value = []
