@@ -11,12 +11,24 @@ describe('pages -> Add individual', () => {
   })
 
   it('verify Tax Number component is working', () => {
-    cy.get('[data-cy=add-new-btn]').trigger('click')
-    // cy.get('[data-cy="showAddIndividualPersonManually"]').trigger('click')
+    cy.get('[data-cy="add-new-btn"]').trigger('click')
 
-    const radioGroup = cy.get('[data-cy="testTaxNumber"]').should('exist')
+    // ensure the input box and the checkbox are visible
+    cy.get('[data-cy="tax-number-input"]').should('exist')
+    cy.get('[data-cy="no-tax-number-checkbox"]').should('exist')
 
-    radioGroup.get('[type="radio"][value="false"]').check().should('be.checked')
+    // check the no-tax-number checkbox
+    cy.get('[data-cy="no-tax-number-checkbox"]').check()
+    cy.get('[data-cy="no-tax-number-checkbox"]').should('be.checked')
+
+    // when some value is entered in the tax number input box, the checkbox should be unchecked
+    cy.get('[data-cy="tax-number-input"]').type('000').blur()
+    cy.get('[data-cy="no-tax-number-checkbox"]').should('not.be.checked')
+
+    // checking the checkbox again should clear the input box
+    cy.get('[data-cy="no-tax-number-checkbox"]').check()
+    cy.get('[data-cy="no-tax-number-checkbox"]').should('be.checked')
+    cy.get('[data-cy="tax-number-input"]').should('have.value', '')
   })
 
   it('test the error message for tax number length', () => {
@@ -25,11 +37,9 @@ describe('pages -> Add individual', () => {
       return false
     })
 
-    cy.get('[data-cy=add-new-btn]').trigger('click')
-    // cy.get('[data-cy="showAddIndividualPersonManually"]').trigger('click')
+    cy.get('[data-cy="add-new-btn"]').trigger('click')
     cy.get('[data-cy="tax-number-input"]').type('00').blur()
     cy.contains(en.errors.validation.taxNumber.invalidLength).should('exist')
-    cy.get('[type="radio"][value="true"]').should('be.checked')
   })
 
   it('test the error message for special characters in tax number', () => {
@@ -38,11 +48,9 @@ describe('pages -> Add individual', () => {
       return false
     })
 
-    cy.get('[data-cy=add-new-btn]').trigger('click')
-    // cy.get('[data-cy="showAddIndividualPersonManually"]').trigger('click')
+    cy.get('[data-cy="add-new-btn"]').trigger('click')
     cy.get('[data-cy="tax-number-input"]').type('a').blur()
     cy.contains(en.errors.validation.taxNumber.specialCharacter).should('exist')
-    cy.get('[type="radio"][value="true"]').should('be.checked')
   })
 
   it('test the error message for invalid tax number', () => {
@@ -52,9 +60,7 @@ describe('pages -> Add individual', () => {
     })
 
     cy.get('[data-cy=add-new-btn]').trigger('click')
-    // cy.get('[data-cy="showAddIndividualPersonManually"]').trigger('click')
     cy.get('[data-cy="tax-number-input"]').type('111222333').blur()
     cy.contains(en.errors.validation.taxNumber.invalidNumber).should('exist')
-    cy.get('[type="radio"][value="true"]').should('be.checked')
   })
 })

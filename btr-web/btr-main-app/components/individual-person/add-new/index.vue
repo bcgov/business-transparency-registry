@@ -347,8 +347,8 @@
           </p>
           <IndividualPersonTaxInfoTaxNumber
             id="addNewPersonTaxNumber"
-            v-model:hasTaxNumber="inputFormSi.tax.hasTaxNumber"
-            v-model:taxNumber="inputFormSi.tax.taxNumber"
+            v-model:has-tax-number="inputFormSi.tax.hasTaxNumber"
+            v-model:tax-number="inputFormSi.tax.taxNumber"
             name="tax"
             variant="bcGov"
             :is-editing="isEditing"
