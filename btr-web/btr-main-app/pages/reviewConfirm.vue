@@ -1,6 +1,5 @@
 <template>
   <div data-cy="review-confirm">
-    {{ certifiedErrors }}
     <h1 class="font-bold text-3xl" data-cy="page-header">
       {{ $t('pageHeadings.significantIndividualChange') }}
     </h1>
@@ -86,6 +85,8 @@ const reValidateConfirmReviewPage = () => {
   if (!result.success) {
     console.warn('<> remove this line when validation errors are displayed on page', result.error.issues)
     confirmReviewPageErrors.value = result.error.issues
+  } else {
+    confirmReviewPageErrors.value = []
   }
 }
 
