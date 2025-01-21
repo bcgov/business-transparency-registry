@@ -291,7 +291,6 @@
           data-cy="phoneNumberInput"
           :is-editing="isEditing"
           @country-change="() => {
-            console.log('country change')
             countryCallingCodeSelected = inputFormSi.phoneNumber.countryCallingCode !== undefined
           }"
           @change="setNewOrChanged([InputFieldsE.PHONE_NUMBER])"
