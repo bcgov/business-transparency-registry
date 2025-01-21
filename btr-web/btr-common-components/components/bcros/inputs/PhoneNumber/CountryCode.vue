@@ -1,6 +1,7 @@
 <template>
   <UInputMenu
     v-model="selectedCountry"
+    v-model:query="query"
     :options="countryListOptions"
     variant="bcGov"
     size="sm"
@@ -10,13 +11,14 @@
       icon: {
         leading: {
           padding: {
-            sm: 'ps-1.5 pb-2'
+            sm: 'ps-1.5 pe-1.5 pb-2'
           }
         }
       }
     }"
     padded
     @input="manualInput($event)"
+    @blur="onBlur"
   >
     <template v-if="!!selectedCountry?.countryCode2letterIso" #leading>
       <BcrosCountryFlag
@@ -27,15 +29,27 @@
     </template>
 
     <template #trailing>
-      <UIcon name="i-mdi-chevron-down" />
+      <UIcon
+        v-if="!!selectedCountry"
+        name="i-mdi-close"
+        data-cy="clearCountryCode"
+        @click.prevent="selectedCountry = undefined"
+      />
+      <UIcon name="i-mdi-chevron-down" data-cy="expandCountryCodeDropdown" />
     </template>
 
     <template #option="{ option: optionItem }">
-      <BcrosCountryFlag
-        :tooltip-text="optionItem.countryNameLocal"
-        :country-code-iso2letter="optionItem.countryCode2letterIso"
-      />
-      <span class="truncate h-5">{{ optionItem.label }}</span>
+      <div
+        class="w-full flex items-center gap-1"
+        data-cy="countryCodeOption"
+        @click.prevent="onSelect(optionItem)"
+      >
+        <BcrosCountryFlag
+          :tooltip-text="optionItem.countryNameLocal"
+          :country-code-iso2letter="optionItem.countryCode2letterIso"
+        />
+        <span class="truncate h-5">{{ optionItem.label }}</span>
+      </div>
     </template>
   </UInputMenu>
 </template>
@@ -50,13 +64,21 @@ const countryCallingCode = defineModel<string | undefined>('countryCallingCode',
 const countryCode2letterIso = defineModel<string | undefined>('countryCode2letterIso', { required: false })
 
 const selectedCountry = ref<CountryListItemI | undefined>(undefined)
+const query = ref('')
 
 const _countryListOptions =
   countryList.customList('countryCode', '{countryCallingCode},{countryNameEn},{countryNameLocal}')
 
-const manualInput = (event) => {
-  selectedCountry.value = {
-    countryCallingCode: event.target.value
+const manualInput = (event: InputEvent) => {
+  if ((event.target as HTMLInputElement).value === '') {
+    // clear the selected country if the input value is empty
+    selectedCountry.value = undefined
+  } else {
+    const filteredOptions = search((event.target as HTMLInputElement).value)
+    if (filteredOptions.length === 0) {
+      // clear the selected country if the filtered options are empty (no match)
+      selectedCountry.value = undefined
+    }
   }
 }
 
@@ -79,6 +101,23 @@ const search = (q: string) => countryListOptions.filter((lo) => {
     lo.label?.includes(q)
 })
 
+const onBlur = () => {
+  // clear the query input if no country is matched
+  if (selectedCountry.value === undefined) {
+    query.value = ''
+  }
+}
+
+const onSelect = (option: CountryListItemI) => {
+  if (selectedCountry.value !== undefined &&
+    selectedCountry.value.countryCode2letterIso === option.countryCode2letterIso) {
+    selectedCountry.value = undefined
+  } else {
+    selectedCountry.value = option
+    query.value = ''
+  }
+}
+
 const selectCountry = (countryCode2letterIso: string) => {
   selectedCountry.value = countryListOptions.find(item => item.countryCode2letterIso === countryCode2letterIso)
 }
@@ -94,6 +133,11 @@ if (countryCode2letterIso.value !== undefined) {
 watch(
   selectedCountry,
   (newVal) => {
+    if (newVal === undefined) {
+      countryCallingCode.value = undefined
+      countryCode2letterIso.value = undefined
+      return
+    }
     if (newVal?.countryCallingCode !== countryCallingCode.value) {
       countryCallingCode.value = newVal?.countryCallingCode
     }
