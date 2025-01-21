@@ -278,12 +278,6 @@
       </BcrosSection>
 
       <!--  section: individual details phoneNumber; phone number  -->
-      <div>
-        countryCallingCodeSelected: {{ countryCallingCodeSelected }}<br>
-        countryCallingCode: {{ inputFormSi.phoneNumber.countryCallingCode }}<br>
-        countryCallingCode2letterIso: {{ inputFormSi.phoneNumber.countryCode2letterIso }}<br>
-        phoneNumber {{ inputFormSi.phoneNumber }}
-      </div>
       <BcrosSection
         id="phone-number"
         :show-section-has-errors="hasErrors(['phoneNumber'])"
