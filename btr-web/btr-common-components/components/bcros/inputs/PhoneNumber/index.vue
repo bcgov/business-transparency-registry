@@ -6,6 +6,7 @@
         v-model:country-code2letter-iso="phoneNumber.countryCode2letterIso"
         data-cy="phoneNumber.countryCode"
         :placeholder="$t('placeholder.phoneNumber.countryCode')"
+        @update:country-code2letter-iso="$emit('country-change')"
       />
     </UFormGroup>
     <UFormGroup :name="name + '.number'" class="w-1/2">
@@ -67,6 +68,8 @@ import { Mask } from 'maska'
 
 import { PhoneSchemaType } from '~/interfaces/zod-schemas-t'
 
+const emit = defineEmits<{(e: 'country-change'): void }>()
+
 const phoneNumber = defineModel<PhoneSchemaType>({ required: true })
 
 const props = defineProps({
@@ -102,4 +105,10 @@ const revertUnchangedPhoneNumber = () => {
     maskedPhoneNumber.value = originalValue
   }
 }
+
+onMounted(() => {
+  if (phoneNumber.value.countryCallingCode !== undefined) {
+    emit('country-change')
+  }
+})
 </script>

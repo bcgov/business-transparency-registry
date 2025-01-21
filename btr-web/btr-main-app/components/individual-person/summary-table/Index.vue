@@ -145,7 +145,6 @@ function capFirstLetterInName (fullName: string) {
     icon="i-mdi-account-multiple-outline"
     :headers="headers"
     :items="individuals"
-    :empty-state="$t('texts.tables.emptyTexts.individualsSummaryTable')"
   >
     <!-- To-Do:
       the v-if is set to false for now; it will be update in ticket #21656 so the

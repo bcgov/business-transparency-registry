@@ -13,7 +13,7 @@ describe('pages -> Add individual', () => {
   })
 
   it('verify country code combobox behaviour', () => {
-    // verify phone country code is prepopulated when selecting country address
+    // Case 1: phone country code is prepopulated when selecting country address
     cy.get('[data-cy="address-country"]')
       .click()
       .get('span.truncate')
@@ -22,44 +22,64 @@ describe('pages -> Add individual', () => {
       .get('[data-cy="phoneNumber.countryCode"]')
       .should('have.value', '+1')
 
-    // clear input
-    cy.get('[data-cy="phoneNumber.countryCode"]')
-      .clear()
-      .type('{esc}')
-      .blur()
-
-    // verify you can enter any data in the combo box
-    cy.get('[data-cy="phoneNumber.countryCode"]')
-      .type('23a')
-      .type('{esc}')
-      .blur()
-
-    cy.get('[data-cy="phoneNumber.countryCode"]')
-      .should('have.value', '23a')
-
-    cy.get('[data-cy="phoneNumberInput"]')
-      .find('ul .flag.f-ca')
-      .should('not.exist')
-
-    // clear input
-    cy.get('[data-cy="phoneNumber.countryCode"]')
-      .clear()
-      .type('{esc}')
-      .blur()
-
-    // verify you can select canada flag from the dropdown
-    cy.get('[data-cy="phoneNumberInput"]')
-      .find('button')
+    // Case 2: changing the country in the address section should change the country calling code as well
+    cy.get('[data-cy="address-country"]')
       .click()
-
-    cy.get('ul .flag.f-ca')
+      .get('span.truncate')
+      .contains('New Zealand')
       .click()
+      .get('[data-cy="phoneNumber.countryCode"]')
+      .should('have.value', '+64')
 
-    cy.get('[data-cy="phoneNumberInput"]')
+    cy.get('[data-cy="phoneNumber.countryCode"]')
+      .clear({ force: true })
+      .type('{esc}')
+      .blur()
+
+    // Case 3: select a country from the dropdown
+    cy.get('[data-cy="expandCountryCodeDropdown"]')
+      .click()
+      .get('[data-cy="countryCodeOption"]')
+      .should('exist')
+      .get('[data-cy="countryCodeOption"]').eq(0) // select Canada
+      .click()
+      .get('[data-cy="phoneNumber.countryCode"]')
+      .should('have.value', '+1')
+      .get('[data-cy="phoneNumberInput"]')
       .find('input+span .flag.f-ca')
       .should('exist')
+      .get('[data-cy="countryCodeOption"]').eq(3) // select the US
+      .click()
+      .get('[data-cy="phoneNumberInput"]')
+      .find('input+span .flag.f-us')
+      .should('exist')
 
+    // Case 4: unselect a country by clicking on the option again
+    cy.get('[data-cy="countryCodeOption"]').eq(3)
+      .click()
+      .get('[data-cy="phoneNumber.countryCode"]')
+      .should('have.value', '')
+      .get('[data-cy="phoneNumberInput"]')
+      .find('input+span .flag.f-us')
+      .should('not.exist')
+
+    // Case 5: delete the country by clicking the delete button
+    cy.get('[data-cy="countryCodeOption"]').eq(0) // select Canada
+      .click()
+      .get('[data-cy="clearCountryCode"]') // click the 'X' button
+      .click()
+      .get('[data-cy="phoneNumberInput"]')
+      .find('input+span .flag.f-ca')
+      .should('not.exist')
+
+    // Case 6: free typing to narrow down the options
     cy.get('[data-cy="phoneNumber.countryCode"]')
-      .should('have.value', '+1')
+      .type('88')
+      .get('[data-cy="countryCodeOption"]')
+      .should('have.length', 3)
+      .get('[data-cy="phoneNumber.countryCode"]')
+      .type('0')
+      .get('[data-cy="countryCodeOption"]')
+      .should('have.length', 1)
   })
 })

@@ -92,6 +92,11 @@ export default defineAppConfig({
         ring: 'before:ring-0',
         background: 'before:bg-gray-700'
       }
+    },
+    inputMenu: {
+      option: {
+        base: 'relative block'
+      }
     }
   }
 })

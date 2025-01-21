@@ -290,6 +290,9 @@
           name="phoneNumber"
           data-cy="phoneNumberInput"
           :is-editing="isEditing"
+          @country-change="() => {
+            countryCallingCodeSelected = inputFormSi.phoneNumber.countryCallingCode !== undefined
+          }"
           @change="setNewOrChanged([InputFieldsE.PHONE_NUMBER])"
         />
       </BcrosSection>
@@ -489,7 +492,7 @@ const props = defineProps<{
 
 const t = useNuxtApp().$i18n.t
 const bcrosAccount = useBcrosAccount()
-
+const inputFormSi: SiSchemaType = reactive(getDefaultInputFormSi())
 const { scrollToAnchor } = useAnchorScroll({
   toAnchor: {
     target: document.documentElement,
@@ -715,10 +718,11 @@ const formChange = async () => {
   await addBtrPayFees()
 }
 
+const countryCallingCodeSelected = ref(inputFormSi.phoneNumber.countryCallingCode !== undefined)
+
 const countryChange = () => {
   if (
-    undefined === inputFormSi.phoneNumber.countryCallingCode &&
-    undefined === inputFormSi.phoneNumber.countryCode2letterIso &&
+    !countryCallingCodeSelected.value &&
     !inputFormSi.phoneNumber.number &&
     undefined !== inputFormSi.address?.country?.alpha_2
   ) {
@@ -807,7 +811,6 @@ const setIsYourOwnInformation = (event: any) => {
   }
 }
 
-const inputFormSi: SiSchemaType = reactive(getDefaultInputFormSi())
 const setNewOrChanged = (fieldNames: Array<string>) => {
   inputFormSi.ui.newOrUpdatedFields ??= []
   for (let i = 0; i < fieldNames.length; i++) {
