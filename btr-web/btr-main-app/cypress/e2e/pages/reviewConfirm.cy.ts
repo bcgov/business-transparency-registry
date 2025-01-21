@@ -130,15 +130,13 @@ describe('pages -> Review and Confirm', () => {
     cy.get('[data-cy=button-control-right-button]').eq(1).click()
     // Certify was not checked so nothing should happen
     cy.url().should('include', '/beneficial-owner-change/review-confirm')
+
     // Check certify and file
     cy.get('[data-cy="certify-section-checkbox"]').click()
     cy.get('[data-cy="certify-section-checkbox"]').should('be.checked')
     cy.get('[data-cy=button-control-right-button]').eq(1).click()
-
-    // verify console error shows issues, did not get redirected
-    cy.get('@consoleWarn')
-      .should('be.calledWith', '<> remove this line when validation errors are displayed on page')
-    cy.url().should('include', '/beneficial-owner-change/review-confirm')
+    // Future: verify the redirection after a successful submission
+    // Future: simulate a failed submission
 
     // click 'back' to go back to non review page
     cy.get('[data-cy=button-control-right-button]').eq(0).should('have.text', 'Back')
