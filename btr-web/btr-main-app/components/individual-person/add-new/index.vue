@@ -461,7 +461,7 @@ import { BtrCountryI } from '../../../../btr-common-components/interfaces/btr-ad
 import { validateEmailRfc6532Regex } from '../../../../btr-common-components/utils'
 import {
   validateControlSelectionForSharesAndVotes,
-  validateFullNameSuperRefine,
+  validateNameSuperRefineAddForm,
   validateTaxNumberInfo
 } from '~/utils/validation'
 import {
@@ -521,9 +521,7 @@ const revertUnchangedEmailField = () => {
 
 // extend existing schema with
 const SiControlOfExtended = SiControlOfSchema.superRefine(validateControlSelectionForSharesAndVotes)
-const SiNameExtended = SiNameSchema
-  .extend({ preferredName: getPreferredNameValidator() })
-  .superRefine(validateFullNameSuperRefine)
+const SiNameExtended = SiNameSchema.superRefine(validateNameSuperRefineAddForm)
 
 const AddressSchemaExtended = AddressSchema.extend({
   country: CountrySchema

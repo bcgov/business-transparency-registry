@@ -110,6 +110,7 @@
         "specialCharacter": "The legal name should not contain special characters"
       },
       "preferredName": {
+        "empty": "Enter the individual’s preferred name information",
         "maxLengthExceeded": "The preferred name must not exceed 150 characters",
         "specialCharacter": "The preferred name should not contain special characters"
       }
