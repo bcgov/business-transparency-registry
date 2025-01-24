@@ -19,6 +19,5 @@ describe('pages -> Add individual -- preferred name', () => {
     cy.contains(i18nCommon.errors.validation.nameChangeReason.empty).should('exist')
     cy.get('[data-cy="name-change-reason-radio-other"]').check()
     cy.contains(i18nCommon.errors.validation.nameChangeReason.empty).should('not.exist')
-
   })
 })
