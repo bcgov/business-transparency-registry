@@ -42,15 +42,67 @@
         no-top-border
       >
         <div class="flex-col w-full">
-          <BcrosInputsNameField
-            id="individual-person-full-name"
-            v-model="inputFormSi.name.fullName"
-            name="name.fullName"
-            :placeholder="$t('placeholders.individualsFullName')"
-            data-cy="testFullName"
-            :is-disabled="inputFormSi.name.isYourOwnInformation"
-            @change="setNewOrChanged([InputFieldsE.FULL_NAME])"
-          />
+          <div
+            class="flex-col w-full"
+            :class="{['bg-bcGovColor-gray2 rounded']:isShowReasonForChange}"
+          >
+            <BcrosInputsNameField
+              id="individual-person-full-name"
+              v-model="inputFormSi.name.fullName"
+              name="name.fullName"
+              :placeholder="$t('placeholders.individualsFullName')"
+              data-cy="testFullName"
+              :is-disabled="inputFormSi.name.isYourOwnInformation"
+              :class="{['p-2']:isShowReasonForChange}"
+              @focus="onNameFocus"
+              @change="setNewOrChanged([InputFieldsE.FULL_NAME])"
+            />
+            <div v-if="isShowReasonForChange" class="w-full flex-wrap p-4">
+              <p class="font-bold py-2">
+                {{ $t('labels.nameChangeReason.title') }}
+              </p>
+              <UFormGroup name="name.nameChangeReason" class="pb-2" />
+              <UFormGroup name="name.nameChangeReason">
+                <template #error>
+                  <!-- could not move the error above the items-->
+                </template>
+                <template #default="{ error }">
+                  <div class="flex items-center mb-2">
+                    <URadio
+                      id="nameChangeReason-legalChange"
+                      v-model="inputFormSi.name.nameChangeReason"
+                      :value="NameChangeReasonE.LEGAL_CHANGE"
+                      name="name-change-reason-radio"
+                      data-cy="name-change-reason-radio-other"
+                    />
+                    <label for="nameChangeReason-legalChange" class="px-2" :class="{['text-red-500']:error}">
+                      {{ $t('labels.nameChangeReason.legalChange') }}
+                    </label>
+                    <URadio
+                      id="nameChangeReason-other"
+                      v-model="inputFormSi.name.nameChangeReason"
+                      :value="NameChangeReasonE.OTHER"
+                      name="name-change-reason-radio"
+                      data-cy="name-change-reason-radio-other"
+                    />
+                    <label for="nameChangeReason-other" class="px-2" :class="{['text-red-500']:error}">
+                      {{ $t('labels.nameChangeReason.other') }}
+                    </label>
+                    <UButton
+                      class="px-10 order:99 ml-auto"
+                      icon="i-mdi-close"
+                      :trailing="true"
+                      :label="t('buttons.cancel')"
+                      color="primary"
+                      variant="ghost"
+                      data-cy="cancel-name-change-btn"
+                      @click="cancelNameChange"
+                    />
+                  </div>
+                </template>
+              </UFormGroup>
+            </div>
+          </div>
           <div class="pt-5" />
           <UFormGroup name="doNothing">
             <UCheckbox
@@ -475,6 +527,7 @@ import {
 import { getDefaultInputFormSi, getEmptyAddress } from '~/utils/si-schema/defaults'
 import { CustomSiSchemaErrorMap } from '~/utils/si-schema/errorMessagesMap'
 import DeterminationOfIncapacity from '~/components/individual-person/DeterminationOfIncapacity.vue'
+import { NameChangeReasonE } from '~/enums/significant-individual/name-change-reason-e'
 
 const emits = defineEmits<{
   add: [value: SiSchemaType],
@@ -503,6 +556,8 @@ const { scrollToAnchor } = useAnchorScroll({
   }
 })
 
+const siStore = useSignificantIndividuals()
+
 const isEditing = ref(false)
 
 const emailFieldUuid = getRandomUuid()
@@ -516,6 +571,31 @@ const revertUnchangedEmailField = () => {
   const originalValue = getFieldOriginalValue(emailFieldUuid)
   if (isEditing && !hasFieldChanged(inputFormSi, InputFieldsE.EMAIL) && originalValue) {
     inputFormSi.email = originalValue
+  }
+}
+
+const isNameChanging = ref(false)
+const isShowReasonForChange = computed(() => {
+  return props.editMode && isNameChanging.value && !inputFormSi.ui?.actions?.includes(FilingActionE.ADD)
+})
+
+const cancelNameChange = () => {
+  isNameChanging.value = false
+
+  if (props.index !== undefined) {
+    inputFormSi.name.fullName = siStore.savedSIs[props.index]?.name?.fullName || ''
+  }
+  const index = inputFormSi.ui?.newOrUpdatedFields?.indexOf(InputFieldsE.FULL_NAME) || -1 // || -1 covers undefined
+  if (index > -1) { // only splice array when item is found
+    inputFormSi.ui.newOrUpdatedFields.splice(index, 1)
+  }
+  inputFormSi.name.isNameChanged = false
+  clearErrors('name.nameChangeReason')
+}
+const onNameFocus = () => {
+  isNameChanging.value = true
+  if (isShowReasonForChange.value) {
+    inputFormSi.name.isNameChanged = true
   }
 }
 

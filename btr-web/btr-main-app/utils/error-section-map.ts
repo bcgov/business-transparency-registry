@@ -1,5 +1,6 @@
 export const errorSectionMap = {
   'name.fullName': { sectionId: 'individual-person-full-name', position: 1 },
+  'name.nameChangeReason': { sectionId: 'individual-person-full-name', position: 1 },
   'name.preferredName': { sectionId: 'individual-person-preferred-name', position: 2 },
   controlOfShares: { sectionId: 'control-of-shares', position: 3 },
   controlOfVotes: { sectionId: 'control-of-votes', position: 4 },

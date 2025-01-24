@@ -23,6 +23,8 @@ export function getDefaultInputFormSi (): SiSchemaType {
       isYourOwnInformation: false,
       isUsePreferredName: false,
       fullName: '',
+      isNameChanged: false,
+      nameChangeReason: undefined,
       preferredName: ''
     },
     controlOfShares: {
