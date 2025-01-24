@@ -135,46 +135,71 @@ export function validateControlSelectionForSharesAndVotes (form: any, ctx: Refin
   return z.NEVER
 }
 
-export function validateFullNameSuperRefine (form: any, ctx: RefinementCtx): never {
+export function validateNameSuperRefineAddForm (form: any, ctx: RefinementCtx): never {
   const t = useNuxtApp().$i18n.t
-  if (form.isYourOwnInformation) {
-    return z.NEVER
-  }
 
-  if (form.fullName) {
-    const normalizedFullName = normalizeName(form.fullName)
-    if (normalizedFullName.length < 1) {
+  // validate the fullname; skip the check if isYourOwnInformation is true
+  if (!form.isYourOwnInformation) {
+    if (form.fullName) {
+      const normalizedFullName = normalizeName(form.fullName)
+      if (normalizedFullName.length < 1) {
+        ctx.addIssue({
+          path: ['fullName'],
+          code: z.ZodIssueCode.custom,
+          message: t('errors.validation.fullName.empty'),
+          fatal: true
+        })
+      } else if (normalizedFullName.length > 150) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          path: ['fullName'],
+          message: t('errors.validation.fullName.maxLengthExceeded'),
+          fatal: true
+        })
+      }
+    } else {
       ctx.addIssue({
         path: ['fullName'],
         code: z.ZodIssueCode.custom,
         message: t('errors.validation.fullName.empty'),
         fatal: true
       })
-      return z.NEVER
     }
+  }
 
-    if (normalizedFullName.length > 150) {
+  // validate the preferred name if isUsePreferredName is true
+  if (form.isUsePreferredName) {
+    if (form.preferredName) {
+      const normalizedPreferredName = normalizeName(form.preferredName)
+      if (normalizedPreferredName.length < 1) {
+        ctx.addIssue({
+          path: ['preferredName'],
+          code: z.ZodIssueCode.custom,
+          message: t('errors.validation.preferredName.empty'),
+          fatal: true
+        })
+      } else if (normalizedPreferredName.length > 150) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          path: ['preferredName'],
+          message: t('errors.validation.preferredName.maxLengthExceeded'),
+          fatal: true
+        })
+      }
+    } else {
       ctx.addIssue({
+        path: ['preferredName'],
         code: z.ZodIssueCode.custom,
-        path: ['fullName'],
-        message: t('errors.validation.fullName.maxLengthExceeded'),
+        message: t('errors.validation.preferredName.empty'),
         fatal: true
       })
-      return z.NEVER
     }
-  } else {
-    ctx.addIssue({
-      path: ['fullName'],
-      code: z.ZodIssueCode.custom,
-      message: t('errors.validation.fullName.empty'),
-      fatal: true
-    })
-    return z.NEVER
   }
+
   return z.NEVER
 }
 
-export function validateNameSuperRefine (nameVal: string, ctx: RefinementCtx): never {
+export function validateNameSuperRefineOmitForm (nameVal: string, ctx: RefinementCtx): never {
   // name
   if (nameVal) {
     const normalizedFullName = normalizeName(nameVal)

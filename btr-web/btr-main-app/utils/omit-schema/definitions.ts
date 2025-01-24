@@ -2,7 +2,7 @@ import { z, RefinementCtx } from 'zod'
 import { CompletingIndividualTypeE } from '~/enums/omit/completing-individual-type-e'
 import { InfoToOmitE } from '~/enums/omit/info-to-omit-e'
 import { IndividualsAtRiskE } from '~/enums/omit/individuals-at-risk-e'
-import { validateNameSuperRefine } from '~/utils/validation'
+import { validateNameSuperRefineOmitForm } from '~/utils/validation'
 
 // I'm using translate instead of message as it doesn't work with message
 const emailSchema = z.string().superRefine((email: string, ctx: RefinementCtx): never => {
@@ -23,7 +23,7 @@ const emailSchema = z.string().superRefine((email: string, ctx: RefinementCtx): 
   return z.NEVER
 })
 
-const nameSchema = z.string().superRefine(validateNameSuperRefine)
+const nameSchema = z.string().superRefine(validateNameSuperRefineOmitForm)
 
 const certifySchema = z.boolean().superRefine((certify: boolean, ctx: RefinementCtx): never => {
   if (!certify) {
