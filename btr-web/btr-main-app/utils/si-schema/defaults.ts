@@ -52,7 +52,6 @@ export function getDefaultInputFormSi (): SiSchemaType {
       inConcertControl: false,
       actingJointly: false
     },
-    controlOther: undefined,
     email: '',
     address: getEmptyAddress(),
     mailingAddress: {

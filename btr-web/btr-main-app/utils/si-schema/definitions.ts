@@ -75,7 +75,6 @@ export const SiSchema = z.object({
   controlOfShares: SiControlOfSchema,
   controlOfVotes: SiControlOfSchema,
   controlOfDirectors: SiControlOfDirectorsSchema,
-  controlOther: z.string().optional(),
   email: z.string(),
   address: AddressSchema,
   mailingAddress: z.object({

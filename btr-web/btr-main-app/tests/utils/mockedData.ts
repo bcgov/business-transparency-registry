@@ -51,7 +51,6 @@ export const testSI: SiSchemaType = {
     significantInfluence: false,
     inConcertControl: false
   },
-  controlOther: '',
   missingInfoReason: '',
   effectiveDates: [{
     startDate: SI_EXAMPLE_DATE,
@@ -113,7 +112,6 @@ export const testSI2: SiSchemaType = {
     significantInfluence: false,
     inConcertControl: false
   },
-  controlOther: '',
   missingInfoReason: '',
   effectiveDates: [{
     startDate: SI_EXAMPLE_DATE,

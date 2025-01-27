@@ -4,7 +4,6 @@ export enum SignificantIndividualAddNewSectionsE {
   TypeOfInterestOrControl = 'typeOfInterestOrControl',
   InterestOrRightsJointlyOrInConcert = 'interestOrRightsJointlyOrInConcert',
   ControlOfMajorityOfDirectors = 'controlOfMajorityOfDirectors',
-  OtherReasons = 'otherReasons',
   EffectiveDates = 'effectiveDates',
   EmailAddress = 'emailAddress',
   IndividualDetails = 'individualDetails',

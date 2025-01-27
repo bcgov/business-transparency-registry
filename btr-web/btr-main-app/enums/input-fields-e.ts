@@ -7,7 +7,6 @@ export enum InputFieldsE {
   CONTROL_OF_SHARES = 'controlOfShares',
   CONTROL_OF_VOTES = 'controlOfVotes',
   CONTROL_OF_DIRECTORS = 'controlOfDirectors',
-  CONTROL_OTHER = 'controlOther',
   EMAIL = 'email',
   ADDRESS = 'address',
   ADDRESS_LINE1 = 'address.line1',

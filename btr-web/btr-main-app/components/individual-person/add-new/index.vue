@@ -188,26 +188,6 @@
         />
       </BcrosSection>
 
-      <!--  section: other reasons  -->
-      <BcrosSection
-        id="control-other"
-        :show-section-has-errors="hasErrors(['otherReasons'])"
-        :section-title="$t('sectionTitles.otherReasons')"
-        rounded-bot
-        :border="editMode"
-        no-top-border
-      >
-        <div class="w-full">
-          <IndividualPersonControlOtherReasons
-            id="otherReasons"
-            v-model="inputFormSi.controlOther"
-            name="otherReasons"
-            data-cy="otherReasons"
-            @change="setNewOrChanged([InputFieldsE.CONTROL_OTHER])"
-          />
-        </div>
-      </BcrosSection>
-
       <BcrosSectionDivider />
 
       <!--  section-header: effective dates -->
