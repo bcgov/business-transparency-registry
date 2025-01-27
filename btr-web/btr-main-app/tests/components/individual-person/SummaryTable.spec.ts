@@ -81,7 +81,6 @@ describe('AddIndividualPersonSummaryTable tests', () => {
     si.controlOfDirectors.indirectControl = false
     si.controlOfDirectors.significantInfluence = false
     si.controlOfDirectors.inConcertControl = false
-    si.controlOther = ''
     await wrapper.setProps({ individuals: [si] })
     const controls = wrapper.find('[data-cy=summary-table-controls]')
     expect(controls.text()).toContain('Shares')

@@ -541,7 +541,6 @@ export const btrSubmissionExampleMock = {
 
 export const expectedSisOutput: SiSchemaType[] = [
   {
-    controlOther: 'everything',
     couldNotProvideMissingInfo: false,
     determinationOfIncapacity: false,
     missingInfoReason: '',
@@ -663,7 +662,6 @@ export const expectedSisOutput: SiSchemaType[] = [
       actingJointly: false,
       percentage: PercentageRangeE.AT_LEAST_25_TO_50
     },
-    controlOther: 'This is something tottaly else',
     birthDate: '1991-01-24',
     citizenships:
       [{ alpha_2: 'CA_PR', name: 'Canada (Permanent Resident)' }],
@@ -728,7 +726,6 @@ export const expectedSisOutput: SiSchemaType[] = [
       inConcertControl: false,
       percentage: PercentageRangeE.NO_SELECTION
     },
-    controlOther: '',
     couldNotProvideMissingInfo: false,
     determinationOfIncapacity: false,
     missingInfoReason: undefined,

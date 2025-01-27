@@ -141,11 +141,6 @@ const getConnectedIndividuals = (oocs: BtrBodsOwnershipOrControlI, details: stri
   return (interest && interest.connectedIndividuals) ? interest.connectedIndividuals : []
 }
 
-function _getControlOther (oocs: BtrBodsOwnershipOrControlI) {
-  const other = oocs.interests.find(interest => interest.type === BodsInterestTypeE.OTHER_INFLUENCE_OR_CONTROL)
-  return other?.details || ''
-}
-
 function _getEffectiveDates (oocs: BtrBodsOwnershipOrControlI) {
   const effectiveDates: StartEndDateGroupSchemaType[] = []
   for (const interest of oocs.interests) {
@@ -213,7 +208,6 @@ const _getSi = (
       inConcertControl: isControlType(oocs, ControlOfVotesDetailsE.IN_CONCERT_CONTROL),
       actingJointly: isControlType(oocs, ControlOfVotesDetailsE.ACTING_JOINTLY) // either keep it in details or
     },
-    controlOther: _getControlOther(oocs),
     citizenships: _getCitizenships(person),
     missingInfoReason: person.missingInfoReason,
     couldNotProvideMissingInfo: person.missingInfoReason ? !!person.missingInfoReason.trim() : false,

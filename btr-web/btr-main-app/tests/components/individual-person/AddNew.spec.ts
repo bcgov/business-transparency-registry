@@ -10,7 +10,6 @@ import {
   IndividualPersonTaxInfoTaxNumber,
   IndividualPersonTaxInfoTaxResidency,
   IndividualPersonControlOfDirectors,
-  IndividualPersonControlOtherReasons,
   IndividualPersonControlOfSharesVotes
 } from '#components'
 
@@ -69,12 +68,6 @@ describe('AddIndividualPerson tests', () => {
     // await wrapper.find('#add-person-manually-toggle').trigger('click')
     // await flushPromises()
     expect(wrapper.findComponent(IndividualPersonControlOfDirectors).exists()).toBe(true)
-  })
-
-  it('renders the text area for Other Reasons for Individual Significance', () => {
-    // await wrapper.find('#add-person-manually-toggle').trigger('click')
-    // await flushPromises()
-    expect(wrapper.findComponent(IndividualPersonControlOtherReasons).exists()).toBe(true)
   })
 
   it('renders the tax number component', () => {

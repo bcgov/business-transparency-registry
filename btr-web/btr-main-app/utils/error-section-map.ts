@@ -5,7 +5,6 @@ export const errorSectionMap = {
   controlOfShares: { sectionId: 'control-of-shares', position: 3 },
   controlOfVotes: { sectionId: 'control-of-votes', position: 4 },
   controlOfDirectors: { sectionId: 'control-of-directors', position: 5 },
-  controlOther: { sectionId: 'control-other', position: 6 },
   effectiveDates: { sectionId: 'effective-dates', position: 7 },
   email: { sectionId: 'individual-person-email', position: 8 },
   address: { sectionId: 'address', position: 9 },
