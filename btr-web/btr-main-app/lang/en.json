@@ -231,10 +231,6 @@
         "inConcert": "Control of directors exercised in concert"
       }
     },
-    "otherReasons": {
-      "description": "Enter any other reason(s) this individual is a significant individual.",
-      "textAreaPlaceholder": "Other reasons for individual significance (Optional)"
-    },
     "citizenshipPermanentResidency": "Indicate if this person is a citizen or permanent resident of Canada, or list all of the non-Canadian citizenship(s) of this person. If this person is a Citizen or Permanent resident of Canada, listing of multiple citizenships is not required.",
     "isCompetent": "I am able to manage my own financial affairs.",
     "isTaxResident": "Tax Resident of Canada",
@@ -433,7 +429,6 @@
     "typeOfInterestOrControl": "Type of Interest or Control",
     "interestOrRightsJointlyOrInConcert": "Interests or Rights exercised in concert or held jointly",
     "controlOfMajorityOfDirectors": "Control of Majority of Directors",
-    "otherReasons": "Other reasons",
     "effectiveDates": "Effective Date(s)",
     "emailAddress": "Email Address",
     "individualDetails": "Individual Details",
