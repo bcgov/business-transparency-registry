@@ -1,5 +1,6 @@
 import { RefinementCtx, z } from 'zod'
 import { PercentageRangeE } from '~/enums/percentage-range-e'
+import { SiNameSchemaType } from '~/utils/si-schema/definitions'
 
 /**
  * Validate the Type of Director Control checkboxes.
@@ -135,8 +136,17 @@ export function validateControlSelectionForSharesAndVotes (form: any, ctx: Refin
   return z.NEVER
 }
 
-export function validateNameSuperRefineAddForm (form: any, ctx: RefinementCtx): never {
+export function validateNameSuperRefineAddForm (form: SiNameSchemaType, ctx: RefinementCtx): never {
   const t = useNuxtApp().$i18n.t
+
+  if (form.isNameChanged && !form.nameChangeReason) {
+    ctx.addIssue({
+      path: ['nameChangeReason'],
+      code: z.ZodIssueCode.custom,
+      message: t('errors.validation.nameChangeReason.empty'),
+      fatal: true
+    })
+  }
 
   // validate the fullname; skip the check if isYourOwnInformation is true
   if (!form.isYourOwnInformation) {

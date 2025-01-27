@@ -42,8 +42,12 @@ export const SiNameSchema = z.object({
   isYourOwnInformation: z.boolean(),
   isUsePreferredName: z.boolean(),
   fullName: z.string(),
+  isNameChanged: z.boolean().optional(),
+  nameChangeReason: z.string().optional(),
   preferredName: z.string()
 })
+
+export type SiNameSchemaType = z.infer<typeof SiNameSchema>
 
 export const TaxSchema = z.object({
   hasTaxNumber: z.boolean().optional(),

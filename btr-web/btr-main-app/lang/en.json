@@ -6,6 +6,11 @@
     "submittedOn": "Submitted on"
   },
   "labels": {
+    "nameChangeReason": {
+      "legalChange": "Legal name change",
+      "other": "Other update",
+      "title": "Reason for change"
+    },
     "requestOmit": {
       "header": "Request to Omit Information",
       "submittedHeader": "Request to Omit Information Received",
@@ -269,6 +274,9 @@
   },
   "errors": {
     "validation": {
+      "nameChangeReason": {
+        "empty": "Select a reason for the change"
+      },
       "phoneNumber": {
         "required": "Enter phone number (numbers only)"
       },
