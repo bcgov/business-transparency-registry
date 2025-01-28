@@ -55,15 +55,28 @@
             'w-full': sectionTitleFull
           }"
         >
-          <span class="font-bold min-w-[190px] mt-3" :class="showSectionHasErrors ? 'text-red-500' : ''">
+          <div class="font-bold min-w-[190px] mt-3" :class="showSectionHasErrors ? 'text-red-500' : ''">
             <UIcon
               v-if="sectionTitleIcon"
               class="text-2xl align-bottom"
               :name="sectionTitleIcon"
               :class="sectionIconColor ? sectionIconColor : ''"
             />
-            {{ sectionTitle }}
-          </span>
+            <BcrosTooltip
+              v-if="sectionTitleTooltip"
+              :text="sectionTitleTooltip"
+              :popper="{
+                placement: 'bottom',
+                arrow: true,
+                resize: true
+              }"
+            >
+              <span class="underline decoration-dotted">{{ sectionTitle }}</span>
+            </BcrosTooltip>
+            <span v-else>
+              {{ sectionTitle }}
+            </span>
+          </div>
         </div>
       </slot>
       <slot name="default" />
@@ -79,6 +92,7 @@ const props = defineProps({
   sectionTitle: { type: String, required: false, default: undefined },
   sectionTitleIcon: { type: String, required: false, default: undefined },
   sectionIconColor: { type: String, required: false, default: '' },
+  sectionTitleTooltip: { type: String, required: false, default: undefined },
 
   headerIconName: { type: String, required: false, default: undefined },
   headerTitle: { type: String, required: false, default: undefined },
