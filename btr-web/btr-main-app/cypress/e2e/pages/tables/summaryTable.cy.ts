@@ -382,6 +382,7 @@ describe('pages -> Summary Table', () => {
 
       // When CANCEL button is clicked, the profile will not be changed
       cy.get('#individual-person-full-name').clear().type('NEW NAME')
+      cy.get('input[data-cy="name-change-reason-radio-other"]').check()
       cy.get('[data-cy=new-si-cancel-btn]').click()
       cy.get('[data-cy=summary-table-name]').contains(testData.profile1.fullName)
       cy.get('[data-cy=summary-table-name]').should('not.contain', 'NEW NAME')
@@ -406,6 +407,7 @@ describe('pages -> Summary Table', () => {
 
       const textEntered = 'NEW NAME'
       cy.get('#individual-person-full-name').clear().type(textEntered)
+      cy.get('input[data-cy="name-change-reason-radio-other"]').check()
       cy.get('[data-cy=new-si-done-btn]').click()
       cy.get('[data-cy=summary-table-name]').first().invoke('text').should((textNew) => {
         expect(textNew).to.contain(textEntered)
