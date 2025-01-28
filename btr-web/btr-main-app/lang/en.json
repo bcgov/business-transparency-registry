@@ -69,7 +69,7 @@
     "effectiveDates": "Effective Dates",
     "significantIndividuals": "Significant Individuals",
     "significantIndividualChangeDate": "Significant Individual Filing Effective Date",
-    "lastKnownAddress": "Address",
+    "physicalAddress": "Physical Address",
     "mailingAddress": "Mailing Address",
     "citizenshipPermanentResidency": "Citizenship / Permanent Residency",
     "taxNumber": "Canada Revenue Agency (CRA) Tax Number",
@@ -356,6 +356,9 @@
     }
   },
   "helpTexts": {
+    "physicalAddress": {
+      "tooltip": "This is the address at which the individual can be found or served with documents in-person during regular business hours."
+    },
     "phoneNumber": {
       "tooltip": "Please double check your records and if you cannot match the info please check the section below: Unable to obtain information and detail steps taken.",
       "hint": "Enter phone number (numbers only)"

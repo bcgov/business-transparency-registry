@@ -256,8 +256,9 @@
       <BcrosSection
         id="address"
         :show-section-has-errors="hasErrors(['address.'])"
-        :section-title="$t('labels.lastKnownAddress')"
+        :section-title="$t('labels.physicalAddress')"
         :border="editMode"
+        :section-title-tooltip="$t('helpTexts.physicalAddress.tooltip')"
         no-top-border
       >
         <div class="flex-col w-full">
