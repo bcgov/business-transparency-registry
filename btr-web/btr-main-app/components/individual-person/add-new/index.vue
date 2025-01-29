@@ -56,6 +56,7 @@
               :class="{['p-2']:isShowReasonForChange}"
               @focus="onNameFocus"
               @change="setNewOrChanged([InputFieldsE.FULL_NAME])"
+              @blur="onBlurFullNameHandler"
             />
             <div v-if="isShowReasonForChange" class="w-full flex-wrap p-4">
               <p class="font-bold py-2">
@@ -88,8 +89,9 @@
                     <label for="nameChangeReason-other" class="px-2" :class="{['text-red-500']:error}">
                       {{ $t('labels.nameChangeReason.other') }}
                     </label>
+
                     <UButton
-                      class="px-10 order:99 ml-auto"
+                      class="order:99 ml-auto pl-10 pr-0"
                       icon="i-mdi-close"
                       :trailing="true"
                       :label="t('buttons.cancel')"
@@ -509,6 +511,7 @@ import { getDefaultInputFormSi, getEmptyAddress } from '~/utils/si-schema/defaul
 import { CustomSiSchemaErrorMap } from '~/utils/si-schema/errorMessagesMap'
 import DeterminationOfIncapacity from '~/components/individual-person/DeterminationOfIncapacity.vue'
 import { NameChangeReasonE } from '~/enums/significant-individual/name-change-reason-e'
+import { InputFieldsE } from '#imports'
 
 const emits = defineEmits<{
   add: [value: SiSchemaType],
@@ -557,7 +560,7 @@ const revertUnchangedEmailField = () => {
 
 const isNameChanging = ref(false)
 const isShowReasonForChange = computed(() => {
-  return props.editMode && isNameChanging.value && !inputFormSi.ui?.actions?.includes(FilingActionE.ADD)
+  return props.editMode && isNameChanging.value && !inputFormSi.ui?.actions?.includes(FilingActionE.EDIT)
 })
 
 const cancelNameChange = () => {
@@ -566,11 +569,12 @@ const cancelNameChange = () => {
   if (props.index !== undefined) {
     inputFormSi.name.fullName = siStore.savedSIs[props.index]?.name?.fullName || ''
   }
-  const index = inputFormSi.ui?.newOrUpdatedFields?.indexOf(InputFieldsE.FULL_NAME) || -1 // || -1 covers undefined
+  const index = inputFormSi.ui?.newOrUpdatedFields?.indexOf(InputFieldsE.FULL_NAME)
   if (index > -1) { // only splice array when item is found
     inputFormSi.ui.newOrUpdatedFields.splice(index, 1)
   }
   inputFormSi.name.isNameChanged = false
+  inputFormSi.name.nameChangeReason = undefined
   clearErrors('name.nameChangeReason')
 }
 const onNameFocus = () => {
@@ -867,6 +871,15 @@ const setIsYourOwnInformation = (event: any) => {
     inputFormSi.name.fullName = bcrosAccount.userFullName
   } else {
     inputFormSi.name.fullName = ''
+  }
+}
+
+const onBlurFullNameHandler = () => {
+  if (!inputFormSi.ui.newOrUpdatedFields.includes(InputFieldsE.FULL_NAME)) {
+    isNameChanging.value = false
+    inputFormSi.name.isNameChanged = false
+    inputFormSi.name.nameChangeReason = undefined
+    clearErrors('name.nameChangeReason')
   }
 }
 
