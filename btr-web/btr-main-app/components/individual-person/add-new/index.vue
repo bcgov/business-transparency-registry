@@ -91,7 +91,7 @@
                     </label>
 
                     <UButton
-                      class="px-10 order:99 ml-auto"
+                      class="order:99 ml-auto pl-10 pr-0"
                       icon="i-mdi-close"
                       :trailing="true"
                       :label="t('buttons.cancel')"
@@ -574,6 +574,7 @@ const cancelNameChange = () => {
     inputFormSi.ui.newOrUpdatedFields.splice(index, 1)
   }
   inputFormSi.name.isNameChanged = false
+  inputFormSi.name.nameChangeReason = undefined
   clearErrors('name.nameChangeReason')
 }
 const onNameFocus = () => {
