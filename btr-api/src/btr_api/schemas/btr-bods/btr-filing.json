@@ -5,6 +5,18 @@
   "description": "This is object describing significant individual filing.",
   "type": "object",
   "properties": {
+    "arFilingForYear": {
+      "type": "integer"
+    },
+    "filingType": {
+      "type": "string",
+      "default": "INITIAL_FILING",
+      "enum": [
+        "INITIAL_FILING",
+        "ANNUAL_FILING",
+        "CHANGE_FILING"
+      ]
+    },
     "businessIdentifier": {
       "type": "string"
     },
@@ -41,42 +53,61 @@
     "noSignificantIndividualsExist",
     "entityStatement",
     "personStatements",
-    "ownershipOrControlStatements"
+    "ownershipOrControlStatements",
+    "filingType"
   ],
-  "oneOf": [
+  "allOf": [
     {
-      "properties": {
-        "noSignificantIndividualsExist": {
-          "const": true
-        },
-        "personStatements": {
-          "maxItems": 0
-        },
-        "ownershipOrControlStatements": {
-          "maxItems": 0
+      "if": {
+        "properties": {
+          "filingType": {
+            "const": "ANNUAL_FILING"
+          }
         }
       },
-      "required": [
-        "businessIdentifier",
-        "effectiveDate",
-        "noSignificantIndividualsExist",
-        "entityStatement",
-        "personStatements",
-        "ownershipOrControlStatements"
-      ]
+      "then": {
+        "required": [
+          "arFilingForYear"
+        ]
+      }
     },
     {
-      "properties": {
-        "noSignificantIndividualsExist": {
-          "const": false
+      "oneOf": [
+        {
+          "properties": {
+            "noSignificantIndividualsExist": {
+              "const": true
+            },
+            "personStatements": {
+              "maxItems": 0
+            },
+            "ownershipOrControlStatements": {
+              "maxItems": 0
+            }
+          },
+          "required": [
+            "businessIdentifier",
+            "effectiveDate",
+            "noSignificantIndividualsExist",
+            "entityStatement",
+            "personStatements",
+            "ownershipOrControlStatements"
+          ]
         },
-        "personStatements": {
-          "minItems": 1
-        },
-        "ownershipOrControlStatements": {
-          "minItems": 1
+        {
+          "properties": {
+            "noSignificantIndividualsExist": {
+              "const": false
+            },
+            "personStatements": {
+              "minItems": 1
+            },
+            "ownershipOrControlStatements": {
+              "minItems": 1
+            }
+          }
         }
-      }
+      ]
     }
   ]
 }
