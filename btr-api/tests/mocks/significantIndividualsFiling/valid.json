@@ -1,6 +1,7 @@
 {
     "businessIdentifier": "BC1230113",
     "effectiveDate": "2024-09-16",
+    "filingType": "INITIAL_FILING",
     "entityStatement": {
         "entityType": "legalEntity",
         "identifiers": [],

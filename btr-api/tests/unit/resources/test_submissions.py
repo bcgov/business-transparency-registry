@@ -104,8 +104,8 @@ def verify_emails_sent(json_data: dict, email_mock) -> dict:
                 email_verified = True
                 break
         assert email_verified
-                
-    
+
+
 
 
 @pytest.mark.parametrize(
@@ -223,7 +223,7 @@ def test_post_plots_db_mocked(app, session, client, jwt, mocker, requests_mock):
     bor_api_mock = requests_mock.put(
         f"{app.config.get('BOR_SVC_URL')}/internal/solr/update", json={'message': 'Update accepted'}
     )
-    
+
     email_mock = requests_mock.post(f"{app.config.get('NOTIFY_SVC_URL')}", json={})
     mock_user_save = mocker.patch.object(UserModel, 'save')
     mock_submission_save = mocker.patch.object(SubmissionModel, 'save')
@@ -280,12 +280,19 @@ def test_post_plots_db_mocked(app, session, client, jwt, mocker, requests_mock):
     assert bor_api_mock.called == True
     assert auth_api_entity_contact_mock.called == True
     assert email_mock.called == True
+    print('*' * 80)
+    print('*' * 80)
+    print('*' * 80)
+    print(pay_api_mock.request_history[0].json)
+    print('*' * 80)
+    print('*' * 80)
+    print('*' * 80)
     assert pay_api_mock.request_history[0].json() == {
         'filingInfo': {'filingTypes': [{'filingTypeCode': 'REGSIGIN'}]},
         'businessInfo': {'corpType': 'BTR', 'businessIdentifier': json_data['businessIdentifier']},
         'details': [{'label': 'Incorporation Number: ', 'value': json_data['businessIdentifier']}],
     }
-    
+
     assert bor_api_mock.request_history[0].json() == {
         'business': {
             'addresses': [mocked_entity_address_response['deliveryAddress']],
@@ -474,6 +481,7 @@ def test_put_plots(app, client, session, jwt, requests_mock):
             put_data = {
                 'businessIdentifier': identifier,
                 'effectiveDate': '2024-09-23',
+                'filingType': 'INITIAL_FILING',
                 'entityStatement': {
                     'entityType': 'legalEntity',
                     'identifiers': [],
@@ -539,7 +547,7 @@ def test_put_plots(app, client, session, jwt, requests_mock):
             assert updated_submission.business_identifier == json_data['businessIdentifier']
             # check pay link
             assert updated_submission.invoice_id == mocked_invoice_id
-            
+
             # Check name changed
             assert updated_submission.person_statements_json[0]['names'][0]['fullName'] == json_data['personStatements'][0]['names'][0]['fullName']
 
@@ -551,7 +559,7 @@ def test_put_plots(app, client, session, jwt, requests_mock):
             assert bor_api_mock.called == True
             assert auth_api_entity_contact_mock.called == True
             assert email_mock.called == True
-            
+
 
 
 
@@ -898,7 +906,7 @@ def test_get_latest_for_entity(app, client, session, jwt, requests_mock, sample_
             }],
             'personStatements': s1.person_statements_json
         }
-        
+
         (SubmissionService.create_submission(s2_dict, sample_user.id)).save()
         (SubmissionService.create_submission(s3_dict, sample_user.id)).save()
         mock_account_id = 1
