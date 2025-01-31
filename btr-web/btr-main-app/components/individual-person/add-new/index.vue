@@ -111,7 +111,7 @@
               v-model="inputFormSi.name.isUsePreferredName"
               :label="$t('texts.preferredName.checkbox')"
               data-cy="usePreferredName"
-              @click="inputFormSi.name.preferredName = ''"
+              @click="usePreferredNameCheckboxClickHandler"
             />
           </UFormGroup>
           <div v-if="inputFormSi.name.isUsePreferredName" class="pt-3 w-full">
@@ -557,10 +557,14 @@ const revertUnchangedEmailField = () => {
     inputFormSi.email = originalValue
   }
 }
+const usePreferredNameCheckboxClickHandler = () => {
+  inputFormSi.name.preferredName = ''
+  clearErrors('name.preferredName')
+}
 
 const isNameChanging = ref(false)
 const isShowReasonForChange = computed(() => {
-  return props.editMode && isNameChanging.value && !inputFormSi.ui?.actions?.includes(FilingActionE.EDIT)
+  return props.editMode && isNameChanging.value && !inputFormSi.ui?.actions?.includes(FilingActionE.ADD)
 })
 
 const cancelNameChange = () => {
