@@ -564,7 +564,7 @@ const usePreferredNameCheckboxClickHandler = () => {
 
 const isNameChanging = ref(false)
 const isShowReasonForChange = computed(() => {
-  return props.editMode && isNameChanging.value && !inputFormSi.ui?.actions?.includes(FilingActionE.EDIT)
+  return props.editMode && isNameChanging.value && !inputFormSi.ui?.actions?.includes(FilingActionE.ADD)
 })
 
 const cancelNameChange = () => {
