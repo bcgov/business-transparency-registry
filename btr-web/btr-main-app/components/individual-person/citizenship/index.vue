@@ -52,6 +52,11 @@ const updateCitizenship = () => {
   formBus?.emit({ type: 'change', path: props.name })
 }
 
+watch(otherCitizenships, () => {
+  if (citizenshipSelector.value === CitizenshipSelectorE.OTHER) {
+    updateCitizenship()
+  }
+})
 </script>
 
 <template>
