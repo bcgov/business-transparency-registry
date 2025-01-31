@@ -280,13 +280,6 @@ def test_post_plots_db_mocked(app, session, client, jwt, mocker, requests_mock):
     assert bor_api_mock.called == True
     assert auth_api_entity_contact_mock.called == True
     assert email_mock.called == True
-    print('*' * 80)
-    print('*' * 80)
-    print('*' * 80)
-    print(pay_api_mock.request_history[0].json)
-    print('*' * 80)
-    print('*' * 80)
-    print('*' * 80)
     assert pay_api_mock.request_history[0].json() == {
         'filingInfo': {'filingTypes': [{'filingTypeCode': 'REGSIGIN'}]},
         'businessInfo': {'corpType': 'BTR', 'businessIdentifier': json_data['businessIdentifier']},
