@@ -6,6 +6,7 @@ import { IdAsNumberI } from '~/interfaces/common-ids-i'
 import { BtrBodsEntityI } from '~/interfaces/btr-bods/btr-bods-entity-i'
 import { BtrFilingI } from '~/interfaces/btr-bods/btr-filing-i'
 import { BodsEntityTypesE, BodsStatementTypeE } from '~/enums/btr-bods-e'
+import { FilingTypeE } from '~/enums/filing-type-e'
 import {
   BtrBodsBcrosPublicationDetails,
   BtrBodsPublishers,
@@ -165,7 +166,9 @@ const convertToBtrBodsForSubmit = (sif: SignificantIndividualFilingI): BtrFiling
   }
 }
 
-const submitSignificantIndividualFiling = async (sif: SignificantIndividualFilingI, previousSubmissionId?: number) => {
+const submitSignificantIndividualFiling = async (
+  sif: SignificantIndividualFilingI, filingType: FilingTypeE, previousSubmissionId?: number, arFilingForYear?: number
+) => {
   const submitSif: SignificantIndividualFilingI = {
     certified: sif.certified,
     noSignificantIndividualsExist: sif.noSignificantIndividualsExist,
@@ -179,6 +182,11 @@ const submitSignificantIndividualFiling = async (sif: SignificantIndividualFilin
     folioNumber: sif.folioNumber
   }
   const submitData = convertToBtrBodsForSubmit(submitSif)
+
+  submitData.filingType = filingType
+  if (arFilingForYear) {
+    submitData.arFilingForYear = arFilingForYear
+  }
 
   let url = constructBtrApiURL() + '/plots'
   let method = 'POST'
