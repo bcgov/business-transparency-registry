@@ -160,8 +160,15 @@ export const useSignificantIndividuals = defineStore('significantIndividuals', (
   async function filingSubmit () {
     submitting.value = true
     currentSIFiling.value.significantIndividuals = allEditableSIs.value
+
+    // if there is a previous filing submission id, then this is a change fi
+    // this will be updated in #25669, so the UI can handle the Annual Report Filing flow
+    const filingType = previousFilingSubmissionId.value ? FilingTypeE.CHANGE_FILING : FilingTypeE.INITIAL_FILING
+
     const { error } =
-      await fileSIApi.submitSignificantIndividualFiling(currentSIFiling.value, previousFilingSubmissionId.value)
+      await fileSIApi.submitSignificantIndividualFiling(
+        currentSIFiling.value, filingType, previousFilingSubmissionId.value
+      )
     if (error) {
       console.error(error)
       const err = {
