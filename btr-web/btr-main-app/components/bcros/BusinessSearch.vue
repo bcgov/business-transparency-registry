@@ -64,6 +64,9 @@ async function search (q: string) {
   )
   loading.value = false
   if (error && error.value) {
+    if (error?.value?.statusCode && error.value.statusCode >= 500) {
+      useGlobalErrorsStore().addGlobalError(SomethingWentWrongError())
+    }
     return []
   }
 

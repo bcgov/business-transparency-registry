@@ -121,6 +121,7 @@
     },
     "cancel": "Cancel",
     "cease": "Cease",
+    "close": "Close",
     "done": "Done",
     "remove": "Remove",
     "edit": "Edit",
@@ -269,6 +270,8 @@
     "taxNumber": "CRA Tax Number (SIN, ITN, or TTN)"
   },
   "errors": {
+    "somethingWentWrong": "Something went wrong",
+    "anErrorHasOccurred": "An error has occurred, please try again later. If the error persists, contact us for more information.",
     "validation": {
       "nameChangeReason": {
         "empty": "Select a reason for the change"
@@ -453,7 +456,7 @@
   "alerts": {
     "determinationOfIncapacity": {
       "omitted": "{boldStart}Important:{boldEnd} This individual’s information will be omitted from, or obscured in, publicly accessible information.",
-      "proof":"{boldStart}Attention:{boldEnd} The Registrar may request proof of the determination of incapacity. The company must retain proof of the determination of incapacity made by a court, health authority designate or prescribed individual as long as this individual is incapable of managing their own affairs."
+      "proof": "{boldStart}Attention:{boldEnd} The Registrar may request proof of the determination of incapacity. The company must retain proof of the determination of incapacity made by a court, health authority designate or prescribed individual as long as this individual is incapable of managing their own affairs."
     }
   },
   "controlTable": {

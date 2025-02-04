@@ -66,6 +66,9 @@ export const useOmitIndividual = defineStore('bcros/omitIndividual', () => {
         method
       })
     if (error && error.value) {
+      if (error?.value?.statusCode && error.value.statusCode >= 500) {
+        useGlobalErrorsStore().addGlobalError(SomethingWentWrongError())
+      }
       return error
     }
     allRequests.value = data
@@ -79,6 +82,9 @@ export const useOmitIndividual = defineStore('bcros/omitIndividual', () => {
       {
         method
       })
+    if (error?.value?.statusCode && error.value.statusCode >= 500) {
+      useGlobalErrorsStore().addGlobalError(SomethingWentWrongError())
+    }
     return { data, error }
   }
 
@@ -93,6 +99,9 @@ export const useOmitIndividual = defineStore('bcros/omitIndividual', () => {
         body: submitData,
         headers: { 'Content-Type': 'application/json' }
       })
+    if (error?.value?.statusCode && error.value.statusCode >= 500) {
+      useGlobalErrorsStore().addGlobalError(SomethingWentWrongError())
+    }
     return { data, error }
   }
 
