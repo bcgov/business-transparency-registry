@@ -18,7 +18,7 @@ const onErrorModalClose = () => {
 </script>
 
 <template>
-  <div>
+  <div class="bg-gray-100">
     <BcrosDialog
       v-model="showModal"
       :title="displayedError.title"
@@ -35,8 +35,6 @@ const onErrorModalClose = () => {
         />
       </div>
     </BcrosDialog>
-  </div>
-  <div class="bg-gray-100">
     <NuxtLayout>
       <NuxtPage class="my-10 text-gray-900 text-left" />
     </NuxtLayout>

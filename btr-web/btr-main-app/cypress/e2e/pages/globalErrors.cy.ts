@@ -1,9 +1,4 @@
-import json from '../../../../btr-main-app/lang/en.json'
-
-
 describe('Displaying global errors', () => {
-  const i18nMain = json
-
   it('Show Error modal on 500', () => {
     cy.intercept(
       'GET',
