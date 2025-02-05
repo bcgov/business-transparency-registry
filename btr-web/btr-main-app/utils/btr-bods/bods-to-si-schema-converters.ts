@@ -165,7 +165,7 @@ function _getTaxResidency (person: BtrBodsPersonI) {
 }
 
 const _getResidentialAddress = (person: BtrBodsPersonI) => {
-  return person.addresses?.find(a => a.type === BodsBtrAddressTypeE.RESIDENCE || a.type === undefined) ||
+  return person.addresses?.find(a => a.type === BodsBtrAddressTypeE.PHYSICAL_ADDRESS || a.type === undefined) ||
     undefined
 }
 
@@ -175,7 +175,7 @@ const _getSi = (
   const preferredName = _getSiName(person, BodsNameTypeE.ALTERNATIVE)
 
   const bodsAddress = _getResidentialAddress(person)
-  const bodsMailingAddress = person.addresses?.find(a => a.type === BodsBtrAddressTypeE.REGISTERED)
+  const bodsMailingAddress = person.addresses?.find(a => a.type === BodsBtrAddressTypeE.MAILING_ADDRESS)
 
   return {
     address: _getSIAddress(bodsAddress),

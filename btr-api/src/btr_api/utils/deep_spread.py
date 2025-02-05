@@ -1,5 +1,5 @@
 """Functions to marge nested dictionaries and lists, supporting merging the payload into existing submission data."""
-
+from btr_api.enums import AddressType
 
 def deep_spread(dict1, dict2, path=''):
     """
@@ -57,10 +57,12 @@ def deep_spread(dict1, dict2, path=''):
                     use_default = False
                     merged_addresses = merge_list_on_field(value, dict2.get(key, []), 'type')
 
-                    # if 'hasMailingAddress' has been updated (i.e., dict2 contain 'hasMailingAddress')
+                    # if 'hasMailingAddress' has been updated (i.e., dict2 contains 'hasMailingAddress')
                     # and its value is False, remove mailing addresses from the list
                     if dict2.get('hasMailingAddress', None) is False:
-                        return_dict[key] = [i for i in merged_addresses if i.get('type', '') != 'registered']
+                        return_dict[key] = [
+                            i for i in merged_addresses if i.get('type', '') != AddressType.MAILING_ADDRESS
+                        ]
                     else:
                         return_dict[key] = merged_addresses
 

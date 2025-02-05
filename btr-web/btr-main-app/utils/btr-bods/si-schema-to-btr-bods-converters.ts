@@ -24,7 +24,7 @@ import {
 } from '~/utils/si-schema/definitions'
 
 const getBodsAddressFromSi = (si: SiSchemaType): BodsBtrAddressI | undefined => {
-  const addr = { type: BodsBtrAddressTypeE.RESIDENCE } as BodsBtrAddressI
+  const addr = { type: BodsBtrAddressTypeE.PHYSICAL_ADDRESS } as BodsBtrAddressI
   if (hasFieldChanged(si, InputFieldsE.ADDRESS_LINE1)) {
     addr.street = si.address.line1
   }
@@ -52,7 +52,7 @@ const getBodsAddressFromSi = (si: SiSchemaType): BodsBtrAddressI | undefined => 
 }
 
 const getBodsMailingAddressFromSi = (si: SiSchemaType): BodsBtrAddressI | undefined => {
-  const addr = { type: BodsBtrAddressTypeE.REGISTERED } as BodsBtrAddressI
+  const addr = { type: BodsBtrAddressTypeE.MAILING_ADDRESS } as BodsBtrAddressI
   if (!si.mailingAddress?.address) {
     return undefined
   }
