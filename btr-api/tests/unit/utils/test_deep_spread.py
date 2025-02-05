@@ -1,5 +1,5 @@
 import pytest
-from btr_api.utils.deep_spread import deep_spread
+from btr_api.utils.deep_spread import deep_spread, merge_list_on_field
 """
 e.g.
 dict1 = { 'a': 1, 'b': 2, 'c': 3 }
@@ -115,3 +115,85 @@ def test_array():
 
     # Verify result
     assert deep_spread(dict1, dict2) == expected
+
+
+def test_merge_list_on_field_partial():
+    existing_addresses = [
+        {
+            'city': 'Pitt Meadows',
+            'type': 'residence',
+            'region': 'BC',
+            'street': '2-19032 Advent Rd',
+            'country': 'CA',
+            'postalCode': 'V3Y 1S9',
+            'countryName': 'Canada',
+            'streetAdditional': ''
+        },
+        {
+            'city': 'Albany',
+            'type': 'registered',
+            'region': 'NY',
+            'street': '23 Central Ave',
+            'country': 'US',
+            'postalCode': '12210-1396',
+            'countryName': 'United States',
+            'streetAdditional': 'additional'
+        }
+    ]
+
+    # add streetAdditional to residence address, and update the country of the registered address
+    new_values = [
+        {
+            'type': 'residence',
+            'streetAdditional': 'some text'
+        },
+        {
+            'type': 'registered',
+            'country': 'UG',
+            'countryName': 'Uganda'
+        }
+    ]
+
+    merged_addresses = merge_list_on_field(existing_addresses, new_values, 'type')
+
+    expected_addresses = [
+        {
+            'city': 'Pitt Meadows',
+            'type': 'residence',
+            'region': 'BC',
+            'street': '2-19032 Advent Rd',
+            'country': 'CA',
+            'postalCode': 'V3Y 1S9',
+            'countryName': 'Canada',
+            'streetAdditional': 'some text'
+        },
+        {
+            'city': 'Albany',
+            'type': 'registered',
+            'region': 'NY',
+            'street': '23 Central Ave',
+            'country': 'UG',
+            'postalCode': '12210-1396',
+            'countryName': 'Uganda',
+            'streetAdditional': 'additional'
+        }
+    ]
+
+    assert merged_addresses == expected_addresses
+
+def test_merge_interests():
+    pass
+
+
+# SI has only physical address -- update the entire physical address
+# SI has only physical address -- partial update: update the postal code and clear the rest
+# SI has only physical address -- add mailing address
+# SI has only physical address -- update both physical and mailing address
+
+# SI has both physical and mailing address -- update physical address
+# SI has both physical and mailing address -- update mailing address
+# SI has both physical and mailing address -- update both physical and mailing address
+# SI has both physical and mailing address -- remove mailing address
+
+# Interest update: update share percentage, add vote control, director control remains unchanged
+# Interest update: remove control of director

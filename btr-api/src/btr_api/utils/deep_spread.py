@@ -1,4 +1,4 @@
-"""Function to redact fields and or a submission based on roles with a variety of options"""
+"""Functions to marge nested dictionaries and lists, supporting merging the payload into existing submission data."""
 
 
 def deep_spread(dict1, dict2, path=''):
@@ -15,8 +15,10 @@ def deep_spread(dict1, dict2, path=''):
     dict2 = { 'a': {'x': [2], 'z': {'b': 2}}, 'b': 4, 'd': 7 }
     deep_spread(dict1, dict2) --> { 'a': {'x': [2], z: {'a': 1, 'b': 2}}, 'b': 4, 'c': 3, 'd': 7 }
 
-    lists are replace with a few exceptions, lists of objects with a UUID field a statementID field will
-    be updated based on that field, personStatements --> name is a special case that matches on type
+    lists are replaced with a few exceptions:
+    - lists of objects with a UUID field a statementID field will be updated based on that field;
+    -
+
     """
     # pylint: disable=too-many-branches
     return_dict = {}
@@ -44,9 +46,24 @@ def deep_spread(dict1, dict2, path=''):
                 elif 'statementID' in value[0]:
                     use_default = False
                     return_dict[key] = merge_list_on_field(value, dict2.get(key, []), 'statementID')
-                elif 'type' in value[0] and path == 'personStatements.names':
+                elif key == 'interests' and path == '':
                     use_default = False
-                    return_dict[key] = merge_list_on_field(value, dict2.get(key, []), 'type')
+                    merged_interests = merge_interests(value, dict2.get(key, []))
+
+                    # only keep interests that are in the interestTypes list
+                    interest_types = dict2.get('interestTypes', [])
+                    return_dict[key] = [interest for interest in merged_interests if interest['type'] in interest_types]
+                elif key == 'addresses' and path == '':
+                    use_default = False
+                    merged_addresses = merge_list_on_field(value, dict2.get(key, []), 'type')
+
+                    # if 'hasMailingAddress' has been updated (i.e., dict2 contain 'hasMailingAddress')
+                    # and its value is False, remove mailing addresses from the list
+                    if dict2.get('hasMailingAddress', None) is False:
+                        return_dict[key] = [i for i in merged_addresses if i.get('type', '') != 'registered']
+                    else:
+                        return_dict[key] = merged_addresses
+
         if use_default:
             return_dict[key] = value
             if dict2.get(key, '') is None:
@@ -103,3 +120,17 @@ def merge_list_on_field(l1, l2, field_name):
             return_list.append(val)
 
     return return_list
+
+
+def merge_interests(existing_interests, updated_interests):
+    """
+    merge a list containing updated interests into the existing interests list
+
+    This function replaces interests of
+    the same 'type' in `existing_interests`, while preserving other existing interests that are not updated.
+    """
+    updated_types = {interest['type'] for interest in updated_interests}
+
+    untouched_interests = [interest for interest in existing_interests if interest['type'] not in updated_types]
+
+    return updated_interests + untouched_interests

@@ -339,7 +339,7 @@ const getInterests = (si: SiSchemaType) => {
     const startDate = dateGroup.startDate
     const endDate = dateGroup.endDate
 
-    if (si.controlOfShares.percentage !== PercentageRangeE.NO_SELECTION) {
+    if (hasFieldChanged(si, InputFieldsE.CONTROL_OF_SHARES)) {
       const newInterests =
         _getInterestsOfSharesOrVotes(
           si.controlOfShares,
@@ -352,7 +352,7 @@ const getInterests = (si: SiSchemaType) => {
       interests = interests.concat(newInterests)
     }
 
-    if (si.controlOfVotes.percentage !== PercentageRangeE.NO_SELECTION) {
+    if (hasFieldChanged(si, InputFieldsE.CONTROL_OF_VOTES)) {
       const newInterests =
         _getInterestsOfSharesOrVotes(
           si.controlOfVotes,
@@ -364,13 +364,7 @@ const getInterests = (si: SiSchemaType) => {
       interests = interests.concat(newInterests)
     }
 
-    if (hasFieldChanged(si, InputFieldsE.CONTROL_OF_DIRECTORS) &&
-      (si.controlOfDirectors.indirectControl ||
-        si.controlOfDirectors.inConcertControl ||
-        si.controlOfDirectors.directControl ||
-        si.controlOfDirectors.actingJointly ||
-        si.controlOfDirectors.significantInfluence)
-    ) {
+    if (hasFieldChanged(si, InputFieldsE.CONTROL_OF_DIRECTORS)) {
       const newInterests =
         _getDirectorsInterests(
           si.controlOfDirectors,
@@ -383,6 +377,27 @@ const getInterests = (si: SiSchemaType) => {
     }
   }
   return interests
+}
+
+const getInterestTypes = (si: SiSchemaType) => {
+  const interestTypes: BodsInterestTypeE[] = []
+  const controlOfShares = si.controlOfShares
+  const controlOfVotes = si.controlOfVotes
+  const controlOfDirectors = si.controlOfDirectors
+  if (controlOfShares.registeredOwner || controlOfShares.beneficialOwner || controlOfShares.indirectControl ||
+    controlOfShares.actingJointly || controlOfShares.inConcertControl) {
+    interestTypes.push(BodsInterestTypeE.SHAREHOLDING)
+  }
+  if (controlOfVotes.registeredOwner || controlOfVotes.beneficialOwner || controlOfVotes.indirectControl ||
+    controlOfVotes.actingJointly || controlOfVotes.inConcertControl) {
+    interestTypes.push(BodsInterestTypeE.VOTING_RIGHTS)
+  }
+  if (controlOfDirectors.directControl || controlOfDirectors.indirectControl ||
+    controlOfDirectors.significantInfluence || controlOfDirectors.actingJointly ||
+    controlOfDirectors.inConcertControl) {
+    interestTypes.push(BodsInterestTypeE.APPOINTMENT_OF_BOARD)
+  }
+  return interestTypes
 }
 
 const getBodsNationalitiesFromSi = (si: SiSchemaType): BodsCountryI[] | undefined => {
@@ -420,6 +435,7 @@ export default {
   getBodsIdentifiersFromSi,
   getBodsNationalitiesFromSi,
   getInterests,
+  getInterestTypes,
   getTaxResidenciesFromSi,
   getPersonType
 }
