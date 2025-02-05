@@ -17,8 +17,8 @@ def deep_spread(dict1, dict2, path=''):
 
     lists are replaced with a few exceptions:
     - lists of objects with a UUID field a statementID field will be updated based on that field;
-    -
-
+    - interests: merge update based on 'type', remove interests that are not in the interestTypes list;
+    - addresses: merge update based on 'type', remove mailing addresses if hasMailingAddress is False
     """
     # pylint: disable=too-many-branches
     return_dict = {}
@@ -126,8 +126,8 @@ def merge_interests(existing_interests, updated_interests):
     """
     merge a list containing updated interests into the existing interests list
 
-    This function replaces interests of
-    the same 'type' in `existing_interests`, while preserving other existing interests that are not updated.
+    This function replaces interests of the same 'type' in 'existing_interests',
+    while preserving other existing interests that are not updated.
     """
     updated_types = {interest['type'] for interest in updated_interests}
 
