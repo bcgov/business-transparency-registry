@@ -30,6 +30,7 @@ export interface BtrBodsPersonI {
   placeOfResidence?: BodsBtrAddressI
   taxResidencies?: BodsCountryI[]
   addresses?: BodsBtrAddressI[]
+  hasMailingAddress?: boolean
   phoneNumber?: PhoneSchemaType
 
   determinationOfIncapacity?: boolean

@@ -1,5 +1,5 @@
 import { BodsInterestI, BodsPublicationDetailsI, BodsSourceI } from '~/interfaces/btr-bods/components-i'
-import { BodsStatementTypeE } from '~/enums/btr-bods-e'
+import { BodsStatementTypeE, BodsInterestTypeE } from '~/enums/btr-bods-e'
 
 export interface BodsInterestedPartyI {
   describedByEntityStatement?: string
@@ -19,6 +19,7 @@ export interface BtrBodsOwnershipOrControlI {
   },
   interestedParty: BodsInterestedPartyI // for now this is naturalized person for our purposes
   interests: BodsInterestI[],
+  interestTypes?: BodsInterestTypeE[], // list of interest types included in 'interests'
   publicationDetails: BodsPublicationDetailsI
   source: BodsSourceI
 }
