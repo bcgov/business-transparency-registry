@@ -76,6 +76,7 @@
                     "type": "votingRights"
                 }
             ],
+            "interestTypes": ["shareholding", "votingRights"],
             "isComponent": false,
             "publicationDetails": {
                 "bodsVersion": "0.3",
@@ -121,6 +122,7 @@
                     "type": "shareholding"
                 }
             ],
+            "interestTypes": ["shareholding"],
             "isComponent": false,
             "publicationDetails": {
                 "bodsVersion": "0.3",
@@ -178,6 +180,7 @@
                     "type": "votingRights"
                 }
             ],
+            "interestTypes": ["shareholding", "votingRights"],
             "isComponent": false,
             "publicationDetails": {
                 "bodsVersion": "0.3",
@@ -210,6 +213,7 @@
                 "describedByPersonStatement": "e935e86-f4b9-4938-b12e-29c5e5cc213e"
             },
             "interests": [],
+            "interestTypes": [],
             "isComponent": false,
             "publicationDetails": {
                 "bodsVersion": "0.3",
@@ -242,6 +246,7 @@
                 "describedByPersonStatement": "d935e86-f4b9-4938-b12e-29c5e5cc213d"
             },
             "interests": [],
+            "interestTypes": [],
             "isComponent": false,
             "publicationDetails": {
                 "bodsVersion": "0.3",
@@ -280,9 +285,11 @@
                     "postalCode": "T6T 1B6",
                     "region": "AB",
                     "street": "4323 33 St NW",
-                    "streetAdditional": ""
+                    "streetAdditional": "",
+                    "type": "residence"
                 }
             ],
+            "hasMailingAddress": false,
             "birthDate": "2023-11-07",
             "email": "fake@email.com",
             "hasTaxNumber": true,
@@ -361,9 +368,11 @@
                     "postalCode": "V6H 2T8",
                     "region": "BC",
                     "street": "Th-3023 Birch St",
-                    "streetAdditional": ""
+                    "streetAdditional": "",
+                    "type": "residence"
                 }
             ],
+            "hasMailingAddress": false,
             "birthDate": "2000-02-02",
             "email": "fake2@email.com",
             "hasTaxNumber": true,
@@ -446,9 +455,11 @@
                     "postalCode": "J4H 3X9",
                     "region": "QC",
                     "street": "433-405 Ch De Chambly",
-                    "streetAdditional": ""
+                    "streetAdditional": "",
+                    "type": "residence"
                 }
             ],
+            "hasMailingAddress": false,
             "birthDate": "2005-09-13",
             "email": "fake3@email.com",
             "hasTaxNumber": false,
@@ -516,9 +527,11 @@
                     "postalCode": "J4H 3X9",
                     "region": "QC",
                     "street": "433-405 Ch De Chambly",
-                    "streetAdditional": ""
+                    "streetAdditional": "",
+                    "type": "residence"
                 }
             ],
+            "hasMailingAddress": false,
             "email": "fake4@email.com",
             "hasTaxNumber": false,
             "identifiers": [],
@@ -575,9 +588,11 @@
                     "postalCode": "J4H 3X9",
                     "region": "QC",
                     "street": "433-405 Ch De Chambly",
-                    "streetAdditional": ""
+                    "streetAdditional": "",
+                    "type": "residence"
                 }
             ],
+            "hasMailingAddress": false,
             "hasTaxNumber": false,
             "identifiers": [],
             "isComponent": false,

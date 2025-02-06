@@ -1,6 +1,7 @@
 """Functions to marge nested dictionaries and lists, supporting merging the payload into existing submission data."""
 from btr_api.enums import AddressType
 
+
 def deep_spread(dict1, dict2, path=''):
     """
     Function to perform the spread operator on nested dicts

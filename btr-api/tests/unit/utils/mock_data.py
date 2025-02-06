@@ -266,7 +266,7 @@ SUBMISSION_DICT = {
                     "type": "residence"
                 }
             ],
-            "hasMailAddress": False,
+            "hasMailingAddress": False,
             "birthDate": "2014-11-07",
             "email": "kial@daxiom.com",
             "hasTaxNumber": True,
@@ -359,7 +359,7 @@ SUBMISSION_DICT = {
                     "type": "service"
                 }
             ],
-            "hasMailAddress": True,
+            "hasMailingAddress": True,
             "birthDate": "2000-02-02",
             "email": "kial@daxiom.com",
             "hasTaxNumber": True,
@@ -445,7 +445,7 @@ SUBMISSION_DICT = {
                     "streetAdditional": ""
                 }
             ],
-            "hasMailAddress": False,
+            "hasMailingAddress": False,
             "birthDate": "2005-09-13",
             "email": "kial@daxiom.com",
             "hasTaxNumber": False,
