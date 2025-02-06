@@ -200,12 +200,18 @@ const submitSignificantIndividualFiling = async (
       body: submitData,
       headers: { 'Content-Type': 'application/json' }
     })
+  if (error?.value?.statusCode && error.value.statusCode >= 500) {
+    useGlobalErrorsStore().addGlobalError(SomethingWentWrongError())
+  }
   return { data: data.value, error: error.value }
 }
 
 const getBtrFiling = async (businessIdentifier: string) => {
   const url = `${constructBtrApiURL()}/plots/entity/${businessIdentifier}`
   const { data, error } = await useFetchBcros<{ payload: BtrFilingI }>(url)
+  if (error?.value?.statusCode && error.value.statusCode >= 500) {
+    useGlobalErrorsStore().addGlobalError(SomethingWentWrongError())
+  }
   return { data: data?.value || null, error }
 }
 

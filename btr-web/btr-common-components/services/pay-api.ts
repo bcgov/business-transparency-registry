@@ -19,7 +19,9 @@ const getFeeInfoRefs = async (filingData: FilingDataI) => {
   const url = constructFeeInfoURL(filingData)
   const queryParams = getPayFeesApiQueryParams(filingData)
   const { data, error } = await useFetchBcros<FeeInfoI>(url, { query: queryParams })
-
+  if (error?.value?.statusCode && error.value.statusCode >= 500) {
+    useGlobalErrorsStore().addGlobalError(SomethingWentWrongError())
+  }
   return { data, error }
 }
 
