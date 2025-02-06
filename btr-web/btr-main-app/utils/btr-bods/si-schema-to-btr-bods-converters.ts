@@ -384,17 +384,14 @@ const getInterestTypes = (si: SiSchemaType) => {
   const controlOfShares = si.controlOfShares
   const controlOfVotes = si.controlOfVotes
   const controlOfDirectors = si.controlOfDirectors
-  if (controlOfShares.registeredOwner || controlOfShares.beneficialOwner || controlOfShares.indirectControl ||
-    controlOfShares.actingJointly || controlOfShares.inConcertControl) {
+  if (controlOfShares.registeredOwner || controlOfShares.beneficialOwner || controlOfShares.indirectControl) {
     interestTypes.push(BodsInterestTypeE.SHAREHOLDING)
   }
-  if (controlOfVotes.registeredOwner || controlOfVotes.beneficialOwner || controlOfVotes.indirectControl ||
-    controlOfVotes.actingJointly || controlOfVotes.inConcertControl) {
+  if (controlOfVotes.registeredOwner || controlOfVotes.beneficialOwner || controlOfVotes.indirectControl) {
     interestTypes.push(BodsInterestTypeE.VOTING_RIGHTS)
   }
   if (controlOfDirectors.directControl || controlOfDirectors.indirectControl ||
-    controlOfDirectors.significantInfluence || controlOfDirectors.actingJointly ||
-    controlOfDirectors.inConcertControl) {
+    controlOfDirectors.significantInfluence) {
     interestTypes.push(BodsInterestTypeE.APPOINTMENT_OF_BOARD)
   }
   return interestTypes

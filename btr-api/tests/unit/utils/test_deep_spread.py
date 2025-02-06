@@ -131,7 +131,7 @@ def test_merge_list_on_field_partial():
         },
         {
             'city': 'Albany',
-            'type': 'registered',
+            'type': 'service',
             'region': 'NY',
             'street': '23 Central Ave',
             'country': 'US',
@@ -141,14 +141,14 @@ def test_merge_list_on_field_partial():
         }
     ]
 
-    # add streetAdditional to residence address, and update the country of the registered address
+    # add streetAdditional to physical address, and update the country of the mailing address
     new_values = [
         {
             'type': 'residence',
             'streetAdditional': 'some text'
         },
         {
-            'type': 'registered',
+            'type': 'service',
             'country': 'UG',
             'countryName': 'Uganda'
         }
@@ -169,7 +169,7 @@ def test_merge_list_on_field_partial():
         },
         {
             'city': 'Albany',
-            'type': 'registered',
+            'type': 'service',
             'region': 'NY',
             'street': '23 Central Ave',
             'country': 'UG',
@@ -181,8 +181,54 @@ def test_merge_list_on_field_partial():
 
     assert merged_addresses == expected_addresses
 
+
 def test_merge_interests():
     pass
+    # existing_interests = [
+    #     {
+    #         'type': 'ownership',
+    #         'sharePercentage': 50,
+    #         'voteControl': False,
+    #         'directorControl': True
+    #     },
+    #     {
+    #         'type': 'ownership',
+    #         'sharePercentage': 50,
+    #         'voteControl': False,
+    #         'directorControl': True
+    #     }
+    # ]
+
+    # # update the share percentage of the first interest, add vote control to the second interest
+    # new_values = [
+    #     {
+    #         'type': 'ownership',
+    #         'sharePercentage': 40
+    #     },
+    #     {
+    #         'type': 'ownership',
+    #         'voteControl': True
+    #     }
+    # ]
+
+    # merged_interests = merge_interests(existing_interests, new_values)
+
+    # expected_interests = [
+    #     {
+    #         'type': 'ownership',
+    #         'sharePercentage': 40,
+    #         'voteControl': False,
+    #         'directorControl': True
+    #     },
+    #     {
+    #         'type': 'ownership',
+    #         'sharePercentage': 50,
+    #         'voteControl': True,
+    #         'directorControl': True
+    #     }
+    # ]
+
+    # assert merged_interests == expected_interests
 
 
 # SI has only physical address -- update the entire physical address
