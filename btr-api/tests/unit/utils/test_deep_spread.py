@@ -187,8 +187,6 @@ def test_merge_list_on_field():
 
 
 def test_merge_interests():
-    # existing_interests = SUBMISSION_DICT['ownershipOrControlStatements'][0]
-
     existing_interests = [
         {'type': 'shareholding', 'details': 'controlType.shares.beneficialOwner', 'directOrIndirect': 'direct', 'share': {'exclusiveMaximum': False, 'exclusiveMinimum': False, 'maximum': 50, 'minimum': 25}, 'startDate': '2014-11-07'},
         {'type': 'shareholding', 'details': 'controlType.shares.registeredOwner', 'directOrIndirect': 'direct', 'share': {'exclusiveMaximum': False, 'exclusiveMinimum': False, 'maximum': 50, 'minimum': 25}, 'startDate': '2014-11-07'},
@@ -271,9 +269,6 @@ def test_deep_spread_address_update(
     assert updated_person_statement == expected_person_statement
 
 
-# Interest update: update share percentage, add vote control, director control remains unchanged
-# Interest update: remove control of director
-# Submission with no interest update: interests = []
 @pytest.mark.parametrize('test_name, partially_updated_fields, interestTypes, updated_interests', [
     (
         'update share percentage',
