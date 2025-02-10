@@ -1,4 +1,4 @@
-export enum FilingTypeE {
+export enum SubmissionTypeE {
   INITIAL_FILING = 'INITIAL_FILING',
   ANNUAL_FILING = 'ANNUAL_FILING',
   CHANGE_FILING = 'CHANGE_FILING'

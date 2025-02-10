@@ -273,6 +273,11 @@
     "somethingWentWrong": "Something went wrong",
     "anErrorHasOccurred": "An error has occurred, please try again later. If the error persists, contact us for more information.",
     "validation": {
+      "report": {
+        "noSIsOrAddSI": "You have to make a selection OR add a Significant Individual in order to continue",
+        "addOrUpdateSIs": "You have to make an edit to the list in order to continue",
+        "makeSelectionOrEditList": "You have to make a selection OR edit the list in order to continue"
+      },
       "nameChangeReason": {
         "empty": "Select a reason for the change"
       },

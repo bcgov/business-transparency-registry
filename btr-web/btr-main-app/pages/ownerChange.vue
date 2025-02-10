@@ -5,7 +5,7 @@ import { SiSchemaType } from '~/utils/si-schema/definitions'
 import fileSIApi from '~/services/file-significant-individual'
 
 const significantIndividuals = useSignificantIndividuals()
-const { currentSIFiling, allActiveSIs, allEditableSIs } = storeToRefs(significantIndividuals)
+const { currentSIFiling, allActiveSIs, allEditableSIs, filingErrors } = storeToRefs(significantIndividuals)
 
 const expandNewSI = ref(false)
 const showNoSignificantIndividuals = computed(
@@ -26,6 +26,7 @@ const toggleEditingMode = () => {
 function handleAddNewButtonClick () {
   expandNewSI.value = true
   isAddingNewSI.value = true
+  clearNoSignificantIndividualsExistError()
 }
 
 function addNewSI (si: SiSchemaType) {
@@ -37,6 +38,18 @@ function addNewSI (si: SiSchemaType) {
 function cancelAddNewSI () {
   expandNewSI.value = false
   isAddingNewSI.value = false
+}
+
+const noSignificantIndividualsExistError = computed(() => {
+  const issue = filingErrors.value.find(zi => zi.path.includes('noSignificantIndividualsExist'))
+  return issue?.message
+})
+
+const clearNoSignificantIndividualsExistError = () => {
+  const index = filingErrors?.value?.findIndex(zi => zi.path.includes('noSignificantIndividualsExist'))
+  if (index > -1) {
+    filingErrors.value.splice(index, 1)
+  }
 }
 
 onBeforeMount(async () => {
@@ -90,13 +103,21 @@ onBeforeMount(async () => {
           <BcrosI18HelperLink translation-path="helpTexts.significantIndividuals.detail" />
         </template>
       </BcrosHelpTip>
+      <UFormGroup :error="noSignificantIndividualsExistError" />
       <div v-if="showNoSignificantIndividuals" class="p-5">
         <UCheckbox
           v-model="currentSIFiling.noSignificantIndividualsExist"
           name="noSignificantIndividualsExist"
           data-cy="noSignificantIndividualsExist-checkbox"
-          :label="$t('labels.noSignificantIndividualsExist')"
-        />
+          @click="clearNoSignificantIndividualsExistError"
+        >
+          <template #label>
+            <span :class="{'text-red-500':noSignificantIndividualsExistError}">
+              {{ $t('labels.noSignificantIndividualsExist') }}
+            </span>
+          </template>
+        </UCheckbox>
+
         <template v-if="currentSIFiling.noSignificantIndividualsExist">
           <div class="mt-5">
             <p data-cy="noSignificantIndividualsExistExplain">

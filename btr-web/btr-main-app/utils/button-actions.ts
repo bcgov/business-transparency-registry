@@ -1,13 +1,63 @@
+import { RefinementCtx, z } from 'zod'
+import { FilingSchemaBase } from '~/interfaces/significant-individual-filing-i'
+
 /** Go to the review/confirm page for the current filing
  * - assumes there is a currentSIFiling
  * - checks if there is an open SI before navigating
  */
 export function reviewConfirm () {
-  const { currentSIFiling } = storeToRefs(useSignificantIndividuals())
+  const { currentSIFiling, filingErrors } = storeToRefs(useSignificantIndividuals())
+  filingErrors.value = []
   // FUTURE: change to check if SI being edited? Design needs to be flushed out. Temporary log filing data for devs.
   if (!currentSIFiling.value) {
     return
   }
+  const filingSchema =
+    FilingSchemaBase
+      .extend({ certified: z.boolean() })
+      .superRefine((schema, ctx: RefinementCtx) => {
+        const t = useNuxtApp().$i18n.t
+        if (!schema.noSignificantIndividualsExist &&
+          schema.submissionType === SubmissionTypeE.INITIAL_FILING) {
+          // schema
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            message: t('errors.validation.report.noSIsOrAddSI'),
+            path: ['noSignificantIndividualsExist']
+          })
+        }
+
+        if (schema.submissionType === SubmissionTypeE.CHANGE_FILING &&
+          !schema.significantIndividuals.find(si => si.ui?.newOrUpdatedFields?.length > 0)
+        ) {
+          // schema
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            message: t('errors.validation.report.addOrUpdateSIs'),
+            path: ['noSignificantIndividualsExist']
+          })
+        }
+
+        if (schema.submissionType === SubmissionTypeE.ANNUAL_FILING &&
+          !schema.annualReportNoChanges &&
+          !schema.significantIndividuals.find(si => si.ui?.newOrUpdatedFields?.length > 0)
+        ) {
+          // schema
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            message: t('errors.validation.report.makeSelectionOrEditList'),
+            path: ['noSignificantIndividualsExist']
+          })
+        }
+        // todo: add year verification
+      })
+
+  const result = filingSchema.safeParse(currentSIFiling.value)
+  if (result?.error?.issues.length > 0) {
+    filingErrors.value = filingErrors.value.concat(result.error.issues)
+    return
+  }
+
   // NOTE: filing validation only needs to happen before submission -- reviewConfirm can still have validation issues
   // navigate to reviewConfirm page
   useRouter().push({

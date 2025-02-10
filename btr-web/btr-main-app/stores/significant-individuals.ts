@@ -1,4 +1,5 @@
 import { StatusCodes } from 'http-status-codes'
+import { ZodIssue } from 'zod'
 import { dateToString } from '../../btr-common-components/utils/date'
 import fileSIApi from '@/services/file-significant-individual'
 import { SiSchemaType } from '~/utils/si-schema/definitions'
@@ -23,6 +24,7 @@ export const useSignificantIndividuals = defineStore('significantIndividuals', (
   const showErrors = ref(false) // show submit error validations
   const submitting = ref(false)
   const errors: Ref<ErrorI[]> = ref([])
+  const filingErrors: Ref<ZodIssue[]> = ref([])
 
   const allActiveSIs = computed(
     (): SiSchemaType[] => allEditableSIs.value.filter(
@@ -139,15 +141,11 @@ export const useSignificantIndividuals = defineStore('significantIndividuals', (
       loadSavedSIs(btrFiling)
     }
 
-    const folioNum = _getFolioNumber()
-    currentSIFiling.value = {
-      noSignificantIndividualsExist: false,
-      businessIdentifier,
-      significantIndividuals: [], // only updated during submit
-      effectiveDate: dateToString(new Date(), 'YYYY-MM-DD'),
-      certified: false,
-      folioNumber: folioNum
-    }
+    currentSIFiling.value = getEmptySiFiling()
+    currentSIFiling.value.businessIdentifier = businessIdentifier
+    currentSIFiling.value.effectiveDate = dateToString(new Date(), 'YYYY-MM-DD')
+    currentSIFiling.value.folioNumber = _getFolioNumber()
+    _updateFilingTypeFromRoute()
   }
 
   /** Save the current significant individual filing */
@@ -197,6 +195,32 @@ export const useSignificantIndividuals = defineStore('significantIndividuals', (
     }
   }
 
+  function _updateFilingTypeFromRoute () {
+    // set submission (filing) type for the current submisssion
+    const route = useRoute()
+    if (route) {
+      const submissionParam = route.query?.submissionType?.toString() || undefined
+      const submissionForYearParam = route.query?.submissionForYear?.toString() || undefined
+
+      if (submissionParam?.toUpperCase() === SubmissionTypeE.ANNUAL_FILING) {
+        if (submissionForYearParam && !Number.isNaN(submissionForYearParam)) {
+          currentSIFiling.value.submissionType = SubmissionTypeE.ANNUAL_FILING
+          currentSIFiling.value.submissionForYear = +submissionForYearParam
+        } else {
+          // todo: do we need error here  We would need design for this.
+        }
+      } else if (submissionParam?.toUpperCase() === SubmissionTypeE.INITIAL_FILING ||
+        submissionParam?.toUpperCase() === SubmissionTypeE.CHANGE_FILING) {
+        currentSIFiling.value.submissionType = submissionParam.toUpperCase()
+      } else {
+        // todo: do we need error for this ?
+        // currently default filing is initial filing, maybe it can be updated ?
+        // e.g. with logic that checks if filings already exist, and if its not annual, make it change filing
+        // if its not annual filing and no current filing, make it initial filing ?
+      }
+    }
+  }
+
   function reset () {
     const { currentBusinessIdentifier } = storeToRefs(useBcrosBusiness())
     currentSIFiling.value = getEmptySiFiling()
@@ -205,6 +229,7 @@ export const useSignificantIndividuals = defineStore('significantIndividuals', (
     allEditableSIs.value = []
     showErrors.value = false
     submitting.value = false
+    _updateFilingTypeFromRoute()
   }
 
   return {
@@ -214,6 +239,7 @@ export const useSignificantIndividuals = defineStore('significantIndividuals', (
     previousFilingSubmissionId,
     currentSIFiling,
     savedSIs,
+    filingErrors,
     errors,
     showErrors,
     submitting,

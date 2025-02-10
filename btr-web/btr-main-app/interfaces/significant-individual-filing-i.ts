@@ -2,6 +2,9 @@ import { z } from 'zod'
 import { SiSchemaType } from '~/utils/si-schema/definitions'
 
 export const FilingSchemaBase = z.object({
+  submissionType: z.string(),
+  submissionForYear: z.number().optional(),
+  annualReportNoChanges: z.boolean().optional(),
   effectiveDate: z.string().min(1),
   noSignificantIndividualsExist: z.boolean().default(false),
   businessIdentifier: z.string(),
