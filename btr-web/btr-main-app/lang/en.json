@@ -50,7 +50,7 @@
     "cessationDate": "Cessation Date",
     "endDate": "End Date",
     "determinationOfIncapacity": "This individual is incapable of managing their own affairs",
-    "noSignificantIndividualsExist": "There are no current significant individuals for this company.",
+    "noSignificantIndividualsExist": "There are no current significant individuals for this company",
     "importLegacySIList": "Import your legacy SI list",
     "isYourOwnInformation": "I am adding my own information",
     "addIndividual": "Add an Individual",
@@ -134,7 +134,7 @@
   "texts": {
     "requestOmitText": "You can request to have some or all of your information publicly omitted from the BC Business Transparency Registry by completing the request below. Ensure that you provide sufficient information to support your request.",
     "significantIndividuals": "List all individuals who are significant individuals of the private company in accordance with the criteria contained in section 119.11 of the Business Corporations Act. Examples of when an individual is a significant individual include but are not limited to: where the individual owns 25% or more of registered shares; where an individual is the beneficial owner of 25% or more of shares; or where the individual has the right or ability to elect, appoint, or remove the majority of the company’s directors.",
-    "collectionNotice": "Update second paragraph text to: Personal information is being collected for the purposes of administering the Registrar’s Transparency Register under the authority of the Business Corporations Act and in accordance with the Freedom of Information and Protection of Privacy Act.",
+    "collectionNotice": "Personal information is being collected for the purposes of administering the Registrar’s Transparency Register under the authority of the Business Corporations Act and in accordance with the Freedom of Information and Protection of Privacy Act.",
     "noSignificantIndividualsExistExplain": "By checking this checkbox, you confirm that, as per Business Corporations Act 119.2(3), there are no individuals considered significant individuals in relation to the company. This action ensures compliance with legislation, requiring the transparency register to include a statement indicating the absence of significant individuals.",
     "isYourOwnInformation": "Select this option if you are a significant individual and you are entering information for yourself.",
     "note": "Note: ",

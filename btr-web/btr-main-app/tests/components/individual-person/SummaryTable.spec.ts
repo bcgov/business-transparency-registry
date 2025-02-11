@@ -26,7 +26,7 @@ describe('AddIndividualPersonSummaryTable tests', () => {
     expect(summaryTable.findAll('th').length).toBe(4)
     expect(summaryTable.findAll('th').at(0)?.text()).toBe('Name')
     expect(summaryTable.findAll('th').at(1)?.text()).toBe('Details')
-    expect(summaryTable.findAll('th').at(2)?.text()).toBe('Control')
+    expect(summaryTable.findAll('th').at(2)?.text()).toBe('Significance Details')
     expect(summaryTable.findAll('th').at(3)?.text()).toBe('Effective Dates')
     expect(summaryTable.findAll('td').length).toBe(1)
     expect(summaryTable.find('td').text()).toBe('You have no Significant individuals listed')
