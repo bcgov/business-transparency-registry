@@ -39,7 +39,7 @@ Cypress.Commands.add('fillOutForm', (siDataToEnter) => {
   cy.get('[data-cy="phoneNumber.number"]').type(siDataToEnter.phoneNumber.number)
 
   // select the citizenship info
-  cy.get('[data-cy="citizenshipsComboboxButton"]').click()
+  cy.get('[data-cy="citizenships.otherComboboxButton"]').click()
   cy.get('[id^="headlessui-combobox-options"]').find('li').first().click({ force: true })
 
   // enter tax number and select tax residency
