@@ -37,6 +37,7 @@ SUBMISSION_DICT = {
             "interestedParty": {
                 "describedByPersonStatement": "1199dc30-6cd8-47fa-be79-f057348ab36b"
             },
+            "interestTypes": ['shareholding', 'votingRights'],
             "interests": [
                 {
                     "details": "controlType.shares.beneficialOwner",
@@ -106,18 +107,44 @@ SUBMISSION_DICT = {
             "interestedParty": {
                 "describedByPersonStatement": "ce935e86-f4b9-4938-b12e-29c5e5cc213d"
             },
+            "interestTypes": ['shareholding', 'appointmentOfBoard'],
             "interests": [
                 {
                     "details": "controlType.shares.indirectControl",
                     "directOrIndirect": "indirect",
                     "share": {
-                        "exclusiveMaximum": True,
-                        "exclusiveMinimum": False,
-                        "maximum": 25,
-                        "minimum": 0
+                        "exclusiveMaximum": False,
+                        "exclusiveMinimum": True,
+                        "maximum": 100,
+                        "minimum": 75
                     },
                     "startDate": "2021-09-07",
                     "type": "shareholding"
+                },
+                {
+                    "connectedIndividuals": [
+                        {
+                            "legalName": "Wallaby Willow",
+                            "preferredName": "",
+                            "uuid": "1a825cce-a3fa-47b2-b8c3-e2fae40ac7df"
+                        }
+                    ],
+                    "details": "controlType.shares.actingJointly",
+                    "directOrIndirect": "unknown",
+                    "share": {
+                        "exclusiveMaximum": False,
+                        "exclusiveMinimum": True,
+                        "maximum": 100,
+                        "minimum": 75
+                    },
+                    "startDate": "2021-09-07",
+                    "type": "shareholding"
+                },
+                {
+                    "directOrIndirect": "indirect",
+                    "details": "controlType.directors.indirectControl",
+                    "type": "appointmentOfBoard",
+                    "startDate": "2021-09-07"
                 }
             ],
             "isComponent": False,
@@ -151,17 +178,37 @@ SUBMISSION_DICT = {
             "interestedParty": {
                 "describedByPersonStatement": "4b7863a1-4fbf-42a5-afe8-8f4a4f3ca049"
             },
+            "interestTypes": ['shareholding', 'votingRights', ''],
             "interests": [
                 {
                     "details": "controlType.shares.indirectControl",
                     "directOrIndirect": "indirect",
                     "share": {
                         "exclusiveMaximum": False,
-                        "exclusiveMinimum": False,
-                        "maximum": 50,
-                        "minimum": 25
+                        "exclusiveMinimum": True,
+                        "maximum": 100,
+                        "minimum": 75
                     },
-                    "startDate": "2019-09-19",
+                    "startDate": "2021-09-07",
+                    "type": "shareholding"
+                },
+                {
+                    "connectedIndividuals": [
+                        {
+                            "legalName": "Waffles Butter",
+                            "preferredName": "",
+                            "uuid": "839e35b8-d536-42e6-82ba-ba3c5a13582d"
+                        }
+                    ],
+                    "details": "controlType.shares.actingJointly",
+                    "directOrIndirect": "unknown",
+                    "share": {
+                        "exclusiveMaximum": False,
+                        "exclusiveMinimum": True,
+                        "maximum": 100,
+                        "minimum": 75
+                    },
+                    "startDate": "2021-09-07",
                     "type": "shareholding"
                 },
                 {
@@ -215,9 +262,11 @@ SUBMISSION_DICT = {
                     "postalCode": "T6T 1B6",
                     "region": "AB",
                     "street": "4323 33 St NW",
-                    "streetAdditional": ""
+                    "streetAdditional": "",
+                    "type": "residence"
                 }
             ],
+            "hasMailingAddress": False,
             "birthDate": "2014-11-07",
             "email": "kial@daxiom.com",
             "hasTaxNumber": True,
@@ -296,9 +345,21 @@ SUBMISSION_DICT = {
                     "postalCode": "V6H 2T8",
                     "region": "BC",
                     "street": "Th-3023 Birch St",
-                    "streetAdditional": ""
+                    "streetAdditional": "",
+                    "type": "residence"
+                },
+                {
+                    "city": "Vancouver",
+                    "country": "CA",
+                    "countryName": "Canada",
+                    "postalCode": "V2T 2X2",
+                    "region": "BC",
+                    "street": "1234 Some Street",
+                    "streetAdditional": "PO-Box 567",
+                    "type": "service"
                 }
             ],
+            "hasMailingAddress": True,
             "birthDate": "2000-02-02",
             "email": "kial@daxiom.com",
             "hasTaxNumber": True,
@@ -384,6 +445,7 @@ SUBMISSION_DICT = {
                     "streetAdditional": ""
                 }
             ],
+            "hasMailingAddress": False,
             "birthDate": "2005-09-13",
             "email": "kial@daxiom.com",
             "hasTaxNumber": False,

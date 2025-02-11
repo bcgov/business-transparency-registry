@@ -95,6 +95,9 @@ const getPersonAndOwnershipAndControlStatements = (sif: SignificantIndividualFil
         hasFieldChanged(siSchema, InputFieldsE.MISSING_INFO_REASON) ? siSchema.missingInfoReason : '',
       placeOfResidence: address,
       addresses,
+      hasMailingAddress: hasFieldChanged(siSchema, InputFieldsE.MAILING_ADDRESS_IS_DIFFERENT)
+        ? siSchema.mailingAddress?.isDifferent
+        : undefined,
       birthDate: hasFieldChanged(siSchema, InputFieldsE.BIRTH_DATE) ? siSchema.birthDate : undefined,
       phoneNumber: hasFieldChanged(siSchema, InputFieldsE.PHONE_NUMBER) ? siSchema.phoneNumber : undefined,
       email: hasFieldChanged(siSchema, InputFieldsE.EMAIL) ? siSchema.email : undefined,
@@ -124,6 +127,7 @@ const getPersonAndOwnershipAndControlStatements = (sif: SignificantIndividualFil
     const oocs: BtrBodsOwnershipOrControlI = {
       statementID: siSchema.ownershipStatementId || UUIDv4(),
       interests: SiSchemaToBtrBodsConverters.getInterests(siSchema),
+      interestTypes: SiSchemaToBtrBodsConverters.getInterestTypes(siSchema),
       interestedParty: { describedByPersonStatement: personStatement.statementID },
       isComponent: false,
       publicationDetails: BtrBodsBcrosPublicationDetails(),

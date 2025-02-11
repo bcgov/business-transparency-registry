@@ -35,10 +35,10 @@ export interface BodsIdentifierI {
 
 export enum BodsBtrAddressTypeE {
   /** residence address */
-  RESIDENCE = 'residence',
+  PHYSICAL_ADDRESS = 'residence',
 
   /** mailing address */
-  REGISTERED = 'registered'
+  MAILING_ADDRESS = 'service'
 }
 
 export interface BodsBtrAddressI {

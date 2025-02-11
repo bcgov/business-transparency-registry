@@ -281,7 +281,10 @@
               v-model="inputFormSi.mailingAddress.isDifferent"
               :label="$t('labels.mailingAddressIsDifferent')"
               data-cy="mailingAddressIsDifferent-checkbox"
-              @change="isMailingAddressIsDifferentCheck()"
+              @change="() => {
+                setNewOrChanged([InputFieldsE.MAILING_ADDRESS_IS_DIFFERENT]);
+                isMailingAddressIsDifferentCheck()
+              }"
             />
           </UFormGroup>
         </div>

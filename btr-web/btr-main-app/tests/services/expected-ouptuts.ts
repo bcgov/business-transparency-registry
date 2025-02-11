@@ -67,6 +67,9 @@ export const OwnershipOrControlStatements = {
           connectedIndividuals: undefined
         }
       ],
+      interestTypes: [
+        'shareholding', 'votingRights', 'appointmentOfBoard'
+      ],
       isComponent: false,
       publicationDetails: {
         bodsVersion: '0.3',
@@ -113,6 +116,7 @@ export const OwnershipOrControlStatements = {
           type: 'residence'
         }
       ],
+      hasMailingAddress: false,
       birthDate: '2000-03-19',
       email: '1@1.com',
       hasTaxNumber: true,
@@ -126,7 +130,7 @@ export const OwnershipOrControlStatements = {
       nationalities: [{ name: 'Canada', code: 'CA' }],
       isPermanentResidentCa: false,
       personType: 'knownPerson',
-      phoneNumber: undefined,
+      phoneNumber: { countryCallingCode: '1', countryCode2letterIso: 'CA', extension: '99', number: '7780002222' },
       publicationDetails: {
         bodsVersion: '0.3',
         publicationDate: '2024-01-26',

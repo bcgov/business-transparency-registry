@@ -1,4 +1,4 @@
-# Copyright © 2023 Province of British Columbia
+# Copyright © 2024 Province of British Columbia
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -11,13 +11,15 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+"""Enum for user types."""
+from btr_api.common.enum import BaseEnum
 
-"""This exports all of the enums used by the application."""
-from .email_type import EmailType
-from .log_level import LogLevel
-from .redaction_types import RedactionType
-from .user_types import UserType
-from .completing_party import CompletingParty
-from .individual_at_risk import IndividualAtRisk
-from .information_to_omit_type import InformationToOmitType
-from .address_types import AddressType
+
+class AddressType(BaseEnum):
+    """
+    Enum for the address types in line with BODS standard.
+    https://standard.openownership.org/en/0.4.0/standard/reference.html#address-type
+    """
+
+    PHYSICAL_ADDRESS = 'residence'
+    MAILING_ADDRESS = 'service'

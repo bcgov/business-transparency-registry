@@ -18,6 +18,7 @@ export enum InputFieldsE {
   ADDRESS_LOCATION_DESCRIPTION = 'address.locationDescription',
 
   MAILING_ADDRESS = 'mailingAddress',
+  MAILING_ADDRESS_IS_DIFFERENT = 'mailingAddress.isDifferent',
   MAILING_ADDRESS_LINE1 = 'mailingAddress.line1',
   MAILING_ADDRESS_LINE2 = 'mailingAddress.line2',
   MAILING_ADDRESS_POSTAL_CODE = 'mailingAddress.postalCode',
