@@ -45,9 +45,7 @@ const updateCitizenship = () => {
   formBus?.emit({ type: 'change', path: props.name })
 }
 
-watch(citizenshipSelector, () => {
-  updateCitizenship()
-})
+watch(citizenshipSelector, updateCitizenship)
 </script>
 
 <template>
