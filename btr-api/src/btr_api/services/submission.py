@@ -76,7 +76,7 @@ class SubmissionService:  # pylint: disable=too-few-public-methods
             'Invalid payload. All submitted person statements must be linked to an ownership statement.',
             f'Person statement id: {person_stmnt_id}',
             HTTPStatus.BAD_REQUEST)
-    
+
     @staticmethod
     def _get_submission_type_from_filing_type(filing_type: str) -> SubmissionType:
         """Return the submission type enum that maps to the filing type from the filing."""
@@ -150,7 +150,8 @@ class SubmissionService:  # pylint: disable=too-few-public-methods
         submission = SubmissionModel(submitter_id=submitter_id,
                                      submitted_datetime=datetime.now(ZoneInfo('America/Vancouver')),
                                      submitted_payload=submission_dict,
-                                     type=SubmissionService._get_submission_type_from_filing_type(submission_dict.get('filingType', '')))
+                                     type=SubmissionService._get_submission_type_from_filing_type(
+                                         submission_dict.get('filingType', '')))
         submission.save_to_session()
         # add ownership / person records to session
         SubmissionService.add_statements(submission,

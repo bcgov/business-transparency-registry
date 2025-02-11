@@ -110,7 +110,7 @@ class EntityService:
             self.app.logger.debug('Legal-api integration failure:', repr(err))
             raise ExternalServiceException(error=repr(err), status_code=HTTPStatus.INTERNAL_SERVER_ERROR) from err
 
-    def submitFiling(self, submission: Submission, user: User, user_jwt: JwtManager, account_id: str):
+    def submit_filing(self, submission: Submission, user: User, user_jwt: JwtManager, account_id: str):
         """Submit a BTR filing to the LEAR filing ledger for the business."""
         submission.ledger_reference_number = uuid.uuid4()
         payload = {
@@ -123,7 +123,7 @@ class EntityService:
                     'source': 'BTR'
                 },
                 'business': {
-                    'identifier': submission.business_identifier   
+                    'identifier': submission.business_identifier
                 },
                 'transparencyRegister': {
                     'type': submission.type.lower(),
@@ -131,7 +131,7 @@ class EntityService:
                 }
             }
         }
-        
+
         token = user_jwt.get_token_auth_header()
         headers = {
             'Authorization': 'Bearer ' + token,
@@ -156,7 +156,7 @@ class EntityService:
                                                message=('Ledger update error: %s, %s',
                                                         submission.business_identifier,
                                                         submission.ledger_reference_number))
-        
+
             submission.ledger_updated = True
 
         except (requests.exceptions.ConnectionError, requests.exceptions.Timeout) as err:

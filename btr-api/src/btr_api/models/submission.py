@@ -56,9 +56,9 @@ if TYPE_CHECKING:
 class SubmissionType(BaseEnum):
     """Enum of the roles used across the domain."""
 
-    annual = auto()
-    change = auto()
-    initial = auto()
+    annual = auto()  # pylint: disable=invalid-name; Keeping consistent with LEAR filing sub type
+    change = auto()  # pylint: disable=invalid-name; Keeping consistent with LEAR filing sub type
+    initial = auto()  # pylint: disable=invalid-name; Keeping consistent with LEAR filing sub type
 
 
 class Submission(Versioned, Base):

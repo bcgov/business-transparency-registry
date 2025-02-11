@@ -1,4 +1,5 @@
-from datetime import date
+from datetime import date, datetime
+from zoneinfo import ZoneInfo
 
 from btr_api.services.auth import auth_cache
 from btr_api.services.submission import SubmissionService
@@ -31,7 +32,6 @@ def test_create_submission(session, app, requests_mock, sample_user):
                                                          submitter_id=sample_user.id)
         submission.save()
         # Assert the properties of the resulting SubmissionModel instance
-        assert submission.effective_date == date.fromisoformat(SUBMISSION_DICT['effectiveDate'])
         assert submission.business_identifier == SUBMISSION_DICT['businessIdentifier']
         assert submission.submitter == sample_user
         assert submission.submitted_payload == SUBMISSION_DICT

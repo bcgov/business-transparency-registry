@@ -4,6 +4,7 @@ import json
 import os
 from datetime import datetime
 from http import HTTPStatus
+from zoneinfo import ZoneInfo
 
 import pytest
 import requests
@@ -112,7 +113,7 @@ def verify_emails_sent(json_data: dict, email_mock) -> dict:
 
 @pytest.mark.parametrize(
     'test_name, submission_type, payload, user_type',
-    [('simple json', SubmissionType.other, {'businessIdentifier': 'identifier0'}, UserType.USER_COMPETENT_AUTHORITY)],
+    [('simple json', SubmissionType.initial, {'businessIdentifier': 'identifier0'}, UserType.USER_COMPETENT_AUTHORITY)],
 )
 def test_get_plots(app, client, session, jwt, requests_mock, sample_user, test_name, submission_type, payload, user_type):
     """Get the plot submissions.
@@ -190,7 +191,8 @@ def test_get_plots_auth(
         # Setup
         sub = SubmissionModel()
         sub.submitted_payload = {'businessIdentifier': business_identifier}
-        sub.type = SubmissionType.other
+        sub.submitted_datetime = datetime.now(ZoneInfo('America/Vancouver'))
+        sub.type = SubmissionType.initial
         sub.submitter = sample_user
         session.add(sub)
         session.commit()
@@ -220,7 +222,6 @@ def test_get_plots_auth(
 
 def test_post_plots_db_mocked(app, session, client, jwt, mocker, requests_mock):
     """Assure post submission works (db mocked)."""
-    pay_api_mock = requests_mock.post(f"{app.config.get('PAYMENT_SVC_URL')}/payment-requests", json={'id': 978})
     auth_mock = requests_mock.post(app.config.get('SSO_SVC_TOKEN_URL'), json={'access_token': 'token'})
     bor_api_mock = requests_mock.put(
         f"{app.config.get('BOR_SVC_URL')}/internal/solr/update", json={'message': 'Update accepted'}
@@ -276,17 +277,11 @@ def test_post_plots_db_mocked(app, session, client, jwt, mocker, requests_mock):
     mock_user_save.assert_called_once()
     mock_submission_save.assert_called()
     assert legal_api_entity_mock.called == True
-    assert pay_api_mock.called == True
     assert auth_mock.called == True
     assert legal_api_delivery_address_mock.called == True
     assert bor_api_mock.called == True
     assert auth_api_entity_contact_mock.called == True
     assert email_mock.called == True
-    assert pay_api_mock.request_history[0].json() == {
-        'filingInfo': {'filingTypes': [{'filingTypeCode': 'REGSIGIN'}]},
-        'businessInfo': {'corpType': 'BTR', 'businessIdentifier': json_data['businessIdentifier']},
-        'details': [{'label': 'Incorporation Number: ', 'value': json_data['businessIdentifier']}],
-    }
 
     assert bor_api_mock.request_history[0].json() == {
         'business': {
@@ -350,10 +345,6 @@ def test_post_plots_db_mocked(app, session, client, jwt, mocker, requests_mock):
 
 def test_post_plots(app, client, session, jwt, requests_mock):
     """Assure post submission works."""
-    mocked_invoice_id = 9876
-    pay_api_mock = requests_mock.post(
-        f"{app.config.get('PAYMENT_SVC_URL')}/payment-requests", json={'id': mocked_invoice_id}
-    )
     auth_mock = requests_mock.post(app.config.get('SSO_SVC_TOKEN_URL'), json={'access_token': 'token'})
     bor_api_mock = requests_mock.put(
         f"{app.config.get('BOR_SVC_URL')}/internal/solr/update", json={'message': 'Update accepted'}
@@ -403,15 +394,12 @@ def test_post_plots(app, client, session, jwt, requests_mock):
             created_submission = SubmissionModel.find_by_id(submission_id)
             assert created_submission
             assert created_submission.business_identifier == json_data['businessIdentifier']
-            # check pay link
-            assert created_submission.invoice_id == mocked_invoice_id
             # check user link
             assert created_submission.submitter_id
             user = UserModel.find_by_id(created_submission.submitter_id)
             assert user.username == mocked_username
             # post submission things all triggered
             assert legal_api_entity_mock.called == True
-            assert pay_api_mock.called == True
             assert auth_mock.called == True
             assert legal_api_delivery_address_mock.called == True
             assert bor_api_mock.called == True
@@ -421,10 +409,6 @@ def test_post_plots(app, client, session, jwt, requests_mock):
 
 def test_put_plots(app, client, session, jwt, requests_mock):
     """Assure put submission works."""
-    mocked_invoice_id = 9876
-    pay_api_mock = requests_mock.post(
-        f"{app.config.get('PAYMENT_SVC_URL')}/payment-requests", json={'id': mocked_invoice_id}
-    )
     auth_mock = requests_mock.post(app.config.get('SSO_SVC_TOKEN_URL'), json={'access_token': 'token'})
     bor_api_mock = requests_mock.put(
         f"{app.config.get('BOR_SVC_URL')}/internal/solr/update", json={'message': 'Update accepted'}
@@ -547,88 +531,21 @@ def test_put_plots(app, client, session, jwt, requests_mock):
             updated_submission = SubmissionModel.find_by_id(submission_id)
             assert updated_submission
             assert updated_submission.business_identifier == json_data['businessIdentifier']
-            # check pay link
-            assert updated_submission.invoice_id == mocked_invoice_id
 
             # Check name changed
             assert updated_submission.person_statements_json[0]['names'][0]['fullName'] == json_data['personStatements'][0]['names'][0]['fullName']
 
             # post submission things all triggered
             assert legal_api_entity_mock.called == True
-            assert pay_api_mock.called == True
             assert auth_mock.called == True
             assert legal_api_delivery_address_mock.called == True
             assert bor_api_mock.called == True
             assert auth_api_entity_contact_mock.called == True
             assert email_mock.called == True
-
-
-
-def test_post_plots_pay_error(app, client, session, jwt, requests_mock):
-    """Assure post submission works (pay error)."""
-    pay_api_mock = requests_mock.post(
-        f"{app.config.get('PAYMENT_SVC_URL')}/payment-requests", exc=requests.exceptions.ConnectTimeout
-    )
-    auth_mock = requests_mock.post(app.config.get('SSO_SVC_TOKEN_URL'), json={'access_token': 'token'})
-    bor_api_mock = requests_mock.put(
-        f"{app.config.get('BOR_SVC_URL')}/internal/solr/update", json={'message': 'Update accepted'}
-    )
-    email_mock = requests_mock.post(f"{app.config.get('NOTIFY_SVC_URL')}", json={})
-
-    current_dir = os.path.dirname(__file__)
-    with open(os.path.join(current_dir, '..', '..', 'mocks', 'significantIndividualsFiling', 'valid.json')) as file:
-        json_data = json.load(file)
-
-        identifier = json_data['businessIdentifier']
-        requests_mock.get(
-            f"{app.config.get('AUTH_SVC_URL')}/entities/{identifier}/authorizations",
-            json={'orgMembership': 'COORDINATOR', 'roles': ['edit', 'view']},
-        )
-        legal_api_entity_mock = requests_mock.get(
-            f"{app.config.get('LEGAL_SVC_URL')}/businesses/{identifier}", json=mocked_entity_response
-        )
-        legal_api_delivery_address_mock = requests_mock.get(
-            f"{app.config.get('LEGAL_SVC_URL')}/businesses/{identifier}/addresses?addressType=deliveryAddress",
-            json=mocked_entity_address_response
-        )
-        auth_api_entity_contact_mock = requests_mock.get(
-            f"{app.config.get('AUTH_SVC_URL')}/entities/{identifier}",
-            json=mocked_auth_entity_contact_response
-        )
-
-        with nested_session(session):
-            auth_cache.clear()
-            clear_db(session)
-            rv = client.post(
-                '/plots',
-                json=json_data,
-                headers=create_header(
-                    jwt_manager=jwt,
-                    roles=['basic'],
-                    **{'Accept-Version': 'v1', 'content-type': 'application/json', 'Account-Id': 1},
-                ),
-            )
-            assert rv.status_code == HTTPStatus.CREATED
-            submission_id = rv.json.get('id')
-            assert submission_id
-            assert legal_api_entity_mock.called == True
-            assert pay_api_mock.called == True
-            assert auth_mock.called == True
-            assert legal_api_delivery_address_mock.called == True
-            assert bor_api_mock.called == True
-            assert auth_api_entity_contact_mock.called == True
-            assert email_mock.called == True
-            # check submission details
-            created_submission = SubmissionModel.find_by_id(submission_id)
-            assert created_submission
-            assert created_submission.business_identifier == json_data['businessIdentifier']
-            # no pay link
-            assert not created_submission.invoice_id
 
 
 def test_post_plots_auth_error(app, client, session, jwt, requests_mock):
     """Assure post submission fails with (auth get token error)."""
-    pay_api_mock = requests_mock.post(f"{app.config.get('PAYMENT_SVC_URL')}/payment-requests", json={'id': 1234})
     auth_mock = requests_mock.post(app.config.get('SSO_SVC_TOKEN_URL'), exc=requests.exceptions.ConnectTimeout)
     bor_api_mock = requests_mock.put(f"{app.config.get('BOR_SVC_URL')}/internal/solr/update", json={})
     email_mock = requests_mock.post(f"{app.config.get('NOTIFY_SVC_URL')}", json={})
@@ -671,7 +588,6 @@ def test_post_plots_auth_error(app, client, session, jwt, requests_mock):
             assert not submission_id
             assert auth_mock.called == True
             assert legal_api_entity_mock.called == False
-            assert pay_api_mock.called == False
             assert legal_api_delivery_address_mock.called == False
             assert bor_api_mock.called == False
             assert auth_api_entity_contact_mock.called == False
@@ -680,7 +596,6 @@ def test_post_plots_auth_error(app, client, session, jwt, requests_mock):
 
 def test_post_plots_bor_error(app, client, session, jwt, requests_mock):
     """Assure post submission works (bor error)."""
-    pay_api_mock = requests_mock.post(f"{app.config.get('PAYMENT_SVC_URL')}/payment-requests", json={'id': 1234})
     auth_mock = requests_mock.post(app.config.get('SSO_SVC_TOKEN_URL'), json={'access_token': 'token'})
     bor_api_mock = requests_mock.put(
         f"{app.config.get('BOR_SVC_URL')}/internal/solr/update", exc=requests.exceptions.ConnectTimeout
@@ -724,7 +639,6 @@ def test_post_plots_bor_error(app, client, session, jwt, requests_mock):
             submission_id = rv.json.get('id')
             assert submission_id
             assert legal_api_entity_mock.called == True
-            assert pay_api_mock.called == True
             assert auth_mock.called == True
             assert legal_api_delivery_address_mock.called == True
             assert bor_api_mock.called == True
@@ -738,7 +652,6 @@ def test_post_plots_bor_error(app, client, session, jwt, requests_mock):
 
 def test_post_plots_email_error(app, client, session, jwt, requests_mock):
     """Assure post submission works (email error)."""
-    pay_api_mock = requests_mock.post(f"{app.config.get('PAYMENT_SVC_URL')}/payment-requests", json={'id': 1234})
     auth_mock = requests_mock.post(app.config.get('SSO_SVC_TOKEN_URL'), json={'access_token': 'token'})
     bor_api_mock = requests_mock.put(
         f"{app.config.get('BOR_SVC_URL')}/internal/solr/update", json={}
@@ -783,7 +696,6 @@ def test_post_plots_email_error(app, client, session, jwt, requests_mock):
             submission_id = rv.json.get('id')
             assert submission_id
             assert legal_api_entity_mock.called == True
-            assert pay_api_mock.called == True
             assert auth_mock.called == True
             assert legal_api_delivery_address_mock.called == True
             assert bor_api_mock.called == True
@@ -806,10 +718,6 @@ def test_post_plots_invalid_entity(
     app, client, session, jwt, requests_mock, test_name, admin_freeze, state, expected_response, errors
 ):
     """Assure no submission is created for frozen and historical entities."""
-    mocked_invoice_id = 9876
-    pay_api_mock = requests_mock.post(
-        f"{app.config.get('PAYMENT_SVC_URL')}/payment-requests", json={'id': mocked_invoice_id}
-    )
     auth_mock = requests_mock.post(app.config.get('SSO_SVC_TOKEN_URL'), json={'access_token': 'token'})
     bor_api_mock = requests_mock.put(
         f"{app.config.get('BOR_SVC_URL')}/internal/solr/update", json={'message': 'Update accepted'}
@@ -854,7 +762,6 @@ def test_post_plots_invalid_entity(
             assert rv.json.get('details') == errors
             assert auth_mock.called == True
             assert legal_api_entity_mock.called == True
-            assert pay_api_mock.called == False
             assert legal_api_delivery_address_mock.called == False
             assert bor_api_mock.called == False
             assert auth_api_entity_contact_mock.called == False
