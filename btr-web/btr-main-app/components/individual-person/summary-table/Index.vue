@@ -28,7 +28,7 @@ const t = useNuxtApp().$i18n.t
 const headers = [
   { content: t('labels.name'), width: '25%' },
   { content: t('labels.details'), width: '30%' },
-  { content: t('labels.control'), width: '25%' },
+  { content: t('labels.significanceDetails'), width: '25%' },
   { content: t('labels.effectiveDates'), width: '20%' }
 ]
 
