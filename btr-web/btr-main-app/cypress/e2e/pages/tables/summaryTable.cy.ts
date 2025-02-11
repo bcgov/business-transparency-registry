@@ -12,7 +12,7 @@ describe('pages -> Summary Table', () => {
     summaryTableHeaders
       .should('contain', 'Name')
       .and('contain', 'Details')
-      .and('contain', 'Control')
+      .and('contain', 'Significance Details')
       .and('contain', 'Effective Dates')
   })
 

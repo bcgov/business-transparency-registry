@@ -128,7 +128,7 @@ describe('pages -> Beneficial Owner Change - no preloaded data in tables', () =>
       .should('contain', 'Name')
       .and('contain', 'Details')
       .and('contain', 'Effective Dates')
-      .and('contain', 'Control')
+      .and('contain', 'Significance Details')
     // body should contain correct empty text
     cy.get('[data-cy="individualsSummaryTable"]').get('td')
       .should('contain.text', 'You have no Significant individuals listed')
