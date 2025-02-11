@@ -401,9 +401,8 @@ const getBodsNationalitiesFromSi = (si: SiSchemaType): BodsCountryI[] | undefine
   if (!hasFieldChanged(si, InputFieldsE.CITIZENSHIPS)) {
     return undefined
   }
-
   const citizenships: BodsCountryI[] = []
-  for (const btrCountry of si.citizenships) {
+  for (const btrCountry of si.citizenships.nationalities) {
     if (btrCountry.alpha_2 !== 'CA_PR') {
       const code = btrCountry.alpha_2
       const name = code === 'CA' ? 'Canada' : btrCountry.name

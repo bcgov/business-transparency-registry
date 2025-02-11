@@ -56,6 +56,11 @@ export const TaxSchema = z.object({
 
 export const CountrySchema = z.object({ name: z.string(), alpha_2: z.string() })
 export type CountrySchemaType = z.infer<typeof CountrySchema>
+export const CitizenshipSchema = z.object({
+  nationalities: z.array(CountrySchema),
+  citizenshipType: z.nativeEnum(CitizenshipTypeE).optional()
+})
+export type CitizenshipSchemaType = z.infer<typeof CitizenshipSchema>
 
 export const AddressSchema = z.object({
   country: CountrySchema.optional(),
@@ -82,7 +87,7 @@ export const SiSchema = z.object({
     address: AddressSchema.optional()
   }),
   birthDate: z.string().min(1),
-  citizenships: validateCitizenshipValidator(),
+  citizenships: CitizenshipSchema,
   tax: TaxSchema,
   isTaxResident: z.boolean().optional(),
   determinationOfIncapacity: z.boolean(),

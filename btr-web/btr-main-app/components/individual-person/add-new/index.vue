@@ -368,8 +368,8 @@
         <div class="flex flex-col w-full">
           <IndividualPersonCitizenship
             v-model="inputFormSi.citizenships"
-            name="citizenships"
             @citizenship-updated="setNewOrChanged([InputFieldsE.CITIZENSHIPS])"
+            @clear-errors="clearErrors($event)"
           />
         </div>
       </BcrosSection>
@@ -500,13 +500,15 @@ import { validateEmailRfc6532Regex } from '../../../../btr-common-components/uti
 import {
   validateControlSelectionForSharesAndVotes,
   validateNameSuperRefineAddForm,
-  validateTaxNumberInfo
+  validateTaxNumberInfo,
+  validateCitizenshipSuperRefine
 } from '~/utils/validation'
 import {
   AddressSchema,
   SiControlOfDirectorsSchema, CountrySchema,
   SiControlOfSchema,
   SiNameSchema,
+  CitizenshipSchema,
   SiSchema, SiSchemaType,
   TaxSchema
 } from '~/utils/si-schema/definitions'
@@ -648,6 +650,7 @@ const SiSchemaExtended = SiSchema.extend({
     SiControlOfDirectorsSchema.refine(validateControlOfDirectors, getMissingControlOfDirectorsError()),
   email: getEmailValidator(),
   address: AddressSchemaExtended,
+  citizenships: CitizenshipSchema.superRefine(validateCitizenshipSuperRefine),
   mailingAddress: MailingAddressSchema,
   tax: TaxSchema.superRefine(validateTaxNumberInfo),
   isTaxResident: z.boolean()

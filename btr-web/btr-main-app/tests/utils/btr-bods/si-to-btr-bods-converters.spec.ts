@@ -108,10 +108,13 @@ describe('Btr to Bods util converters Tests', () => {
     expect(result).toEqual(expectedOutput)
 
     const input2 = { ...input }
-    input2.citizenships = [
-      { name: 'Antigua and Barbuda', alpha_2: 'AG' },
-      { name: 'Bonaire, Sint Eustatius and Saba', alpha_2: 'BQ' }
-    ]
+    input2.citizenships = {
+      nationalities: [
+        { name: 'Antigua and Barbuda', alpha_2: 'AG' },
+        { name: 'Bonaire, Sint Eustatius and Saba', alpha_2: 'BQ' }
+      ],
+      citizenshipType: CitizenshipTypeE.OTHER
+    }
 
     const expectedOutput2 = [
       { name: 'Antigua and Barbuda', code: 'AG' },

@@ -3,10 +3,10 @@ import { BtrFilingI } from '~/interfaces/btr-bods/btr-filing-i'
 import { BtrBodsOwnershipOrControlI } from '~/interfaces/btr-bods/btr-bods-ownership-or-control-i'
 import { BtrBodsPersonI } from '~/interfaces/btr-bods/btr-bods-person-i'
 import { BodsBtrAddressI, BodsBtrAddressTypeE, BodsInterestI } from '~/interfaces/btr-bods/components-i'
-import { PercentageRangeE } from '~/enums/percentage-range-e'
 import {
   AddressSchemaType,
   CountrySchemaType,
+  CitizenshipSchemaType,
   SiSchemaType, StartEndDateGroupSchemaType, ConnectedInvidualSchemaType
 } from '~/utils/si-schema/definitions'
 import { getEmptyAddress } from '~/utils/si-schema/defaults'
@@ -31,32 +31,34 @@ const _getSiName = (btrBodsPerson: BtrBodsPersonI, nameType: BodsNameTypeE): str
   return retVal
 }
 
-const _getCitizenships = (btrBodsPerson: BtrBodsPersonI): CountrySchemaType[] => {
-  const citizenships: CountrySchemaType[] = []
+const _getCitizenships = (btrBodsPerson: BtrBodsPersonI): CitizenshipSchemaType => {
+  const nationalities: CountrySchemaType[] = []
+  let citizenshipType: CitizenshipTypeE
 
   // add PR info to the array since it is not included in btrBodsPerson.nationalities
   if (btrBodsPerson.isPermanentResidentCa) {
-    citizenships.push({
+    nationalities.push({
       name: 'Canada (Permanent Resident)',
       alpha_2: 'CA_PR'
     })
-  }
-
-  for (const country of btrBodsPerson.nationalities || []) {
-    const countryCode: string = country.code
-    let countryName: string = country.name
-
-    if (country.code === 'CA') {
-      countryName = 'Canada (Citizen)'
-    }
-
-    citizenships.push({
-      name: countryName,
-      alpha_2: countryCode
+    citizenshipType = CitizenshipTypeE.PERMANENT_RESIDENT
+  } else if (btrBodsPerson.nationalities?.find(country => country.code === 'CA')) {
+    nationalities.push({
+      name: 'Canada (Citizen)',
+      alpha_2: 'CA'
     })
+    citizenshipType = CitizenshipTypeE.CITIZEN
+  } else {
+    for (const country of btrBodsPerson.nationalities || []) {
+      nationalities.push({
+        name: country.name,
+        alpha_2: country.code
+      })
+    }
+    citizenshipType = CitizenshipTypeE.OTHER
   }
 
-  return citizenships
+  return { nationalities, citizenshipType }
 }
 
 function _getSIAddress (btrBodsAddress: BodsBtrAddressI | undefined): AddressSchemaType {
