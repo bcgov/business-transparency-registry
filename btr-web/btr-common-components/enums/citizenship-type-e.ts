@@ -1,5 +1,5 @@
 export enum CitizenshipTypeE {
   CITIZEN = 'citizen',
-  PR = 'permanentResident',
+  PERMANENT_RESIDENT = 'permanentResident',
   OTHER = 'other'
 }

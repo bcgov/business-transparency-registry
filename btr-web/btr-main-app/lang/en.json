@@ -71,7 +71,6 @@
     "significantIndividualChangeDate": "Significant Individual Filing Effective Date",
     "physicalAddress": "Physical Address",
     "mailingAddress": "Mailing Address",
-    "citizenshipPermanentResidency": "Citizenship / Permanent Residency",
     "taxNumber": "Canada Revenue Agency (CRA) Tax Number",
     "noTaxNumberLabel": "This individual does not have a CRA Tax Number",
     "taxResidency": "Tax Residency",
@@ -232,7 +231,10 @@
         "inConcert": "Control of directors exercised in concert"
       }
     },
-    "citizenshipPermanentResidency": "Indicate if this person is a citizen or permanent resident of Canada, or list all of the non-Canadian citizenship(s) of this person. If this person is a Citizen or Permanent resident of Canada, listing of multiple citizenships is not required.",
+    "citizenship": {
+      "citizenOrPR": "Are you a Canadian citizen or permanent resident?",
+      "other": "If not, select all that apply:"
+    },
     "isCompetent": "I am able to manage my own financial affairs.",
     "isTaxResident": "Tax Resident of Canada",
     "isNotTaxResident": "Not a Tax Resident of Canada",
@@ -301,8 +303,8 @@
         "incorrect": "You entered an invalid year, month or day please enter in form of YYYY-MM-DD"
       },
       "citizenship": {
-        "required": "Please indicate citizenship/permanent residency",
-        "prCitizen": "An individual cannot be both a citizen and a permanent resident of Canada. Please remove one option."
+        "required": "Indicate what type of citizenship or permanent residency this individual has.",
+        "other": "Indicate all other citizenships that apply"
       },
       "address": {
         "country": "Please select a country",

@@ -86,7 +86,7 @@ const getPersonAndOwnershipAndControlStatements = (sif: SignificantIndividualFil
     const nationalities = SiSchemaToBtrBodsConverters.getBodsNationalitiesFromSi(siSchema)
     const isPermanentResidentCa =
       hasFieldChanged(siSchema, InputFieldsE.CITIZENSHIPS)
-        ? siSchema.citizenships.findIndex(country => country.alpha_2 === 'CA_PR') !== -1
+        ? siSchema.citizenships.nationalities.findIndex(country => country.alpha_2 === 'CA_PR') !== -1
         : undefined
     const taxResidencies = SiSchemaToBtrBodsConverters.getTaxResidenciesFromSi(siSchema)
 

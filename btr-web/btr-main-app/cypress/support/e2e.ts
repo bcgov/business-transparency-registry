@@ -138,7 +138,7 @@ Cypress.Commands.add('siSelectCitizenship', (citizenships: Array<BtrCountryI>) =
     cy.get('input[data-cy="citizenships-ca-pr-radio"]').check()
   } else {
     cy.get('input[data-cy="citizenships-other-radio"]').check()
-    cy.get('[data-cy="citizenshipsComboboxButton"]').click().then(
+    cy.get('[data-cy="citizenships.otherComboboxButton"]').click().then(
       () => {
         for (const country of citizenships) {
           cy.get('[id^="headlessui-combobox-options"]').contains(`${country.name}`).first().click({ force: true })

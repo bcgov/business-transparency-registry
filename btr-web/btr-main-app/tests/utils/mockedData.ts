@@ -22,7 +22,10 @@ export const testSI: SiSchemaType = {
   },
   mailingAddress: { isDifferent: false, address: undefined },
   birthDate: '2000-03-19',
-  citizenships: [{ name: 'Canada (Citizen)', alpha_2: 'CA' }],
+  citizenships: {
+    nationalities: [{ name: 'Canada (Citizen)', alpha_2: 'CA' }],
+    citizenshipType: CitizenshipTypeE.CITIZEN
+  },
   email: '1@1.com',
   phoneNumber: { countryCallingCode: '1', countryCode2letterIso: 'CA', extension: '99', number: '7780002222' },
   tax: {

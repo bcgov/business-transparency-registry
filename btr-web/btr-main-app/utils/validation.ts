@@ -1,6 +1,6 @@
 import { RefinementCtx, z } from 'zod'
 import { PercentageRangeE } from '~/enums/percentage-range-e'
-import { SiNameSchemaType } from '~/utils/si-schema/definitions'
+import { CitizenshipSchemaType, SiNameSchemaType } from '~/utils/si-schema/definitions'
 
 /**
  * Validate the Type of Director Control checkboxes.
@@ -242,14 +242,14 @@ export function validateNameSuperRefineOmitForm (nameVal: string, ctx: Refinemen
 }
 
 /**
- * Validate the citizenship selection:
- * Rule 1: at least one country has been selected for citizenship
- * Rule 2: a person cannot be a Canadian citizen and permenant resident at the same time
- * @param formData the form data
+ * Validate the citizenship schema
+ * Rule 1: One of the radio buttons must be selected (citizenships.citizenshipType cannot be undefined)
+ * Rule 2: If the 'Other Citizenship' radio button is selected, at least one foreign country must be selected
  */
-export function validateCitizenshipSuperRefine (citizenships: BtrCountryI[], ctx: RefinementCtx): never {
+export function validateCitizenshipSuperRefine (citizenships: CitizenshipSchemaType, ctx: RefinementCtx): never {
   const t = useNuxtApp().$i18n.t
-  if (citizenships.length === 0) {
+  // no radio button selected
+  if (!citizenships.citizenshipType) {
     ctx.addIssue({
       code: z.ZodIssueCode.custom,
       message: t('errors.validation.citizenship.required'),
@@ -257,15 +257,21 @@ export function validateCitizenshipSuperRefine (citizenships: BtrCountryI[], ctx
     })
     return z.NEVER
   }
-  const isCanadianCitizen: boolean = citizenships.filter(country => country.alpha_2 === 'CA').length > 0
-  const isCanadianPR: boolean = citizenships.filter(country => country.alpha_2 === 'CA_PR').length > 0
-  if (isCanadianCitizen && isCanadianPR) {
+
+  // the 'Other Citizenship' radio button is checked but no country is selected
+  const otherNationalities = citizenships.nationalities.filter(
+    country => country.alpha_2 !== 'CA' && country.alpha_2 !== 'CA_PR'
+  )
+  if (otherNationalities.length === 0 && citizenships.citizenshipType === CitizenshipTypeE.OTHER) {
     ctx.addIssue({
+      path: ['other'],
       code: z.ZodIssueCode.custom,
-      message: t('errors.validation.citizenship.prCitizen'),
+      message: t('errors.validation.citizenship.other'),
       fatal: true
     })
+    return z.NEVER
   }
+
   return z.NEVER
 }
 
