@@ -40,14 +40,17 @@ which accepts a dictionary as an input and returns a SubmissionModel object.
 
 The individual services can be invoked as per the requirements.
 """
-from copy import deepcopy
-from http import HTTPStatus
 import uuid
+from copy import deepcopy
+from datetime import datetime
+from http import HTTPStatus
+from zoneinfo import ZoneInfo
 
 from flask import current_app
 
 from btr_api.exceptions import BusinessException, ExternalServiceException
 from btr_api.models import Ownership, Person, Submission as SubmissionModel
+from btr_api.models.submission import SubmissionType
 from btr_api.utils import deep_spread
 
 from .auth import AuthService
@@ -73,6 +76,17 @@ class SubmissionService:  # pylint: disable=too-few-public-methods
             'Invalid payload. All submitted person statements must be linked to an ownership statement.',
             f'Person statement id: {person_stmnt_id}',
             HTTPStatus.BAD_REQUEST)
+    
+    @staticmethod
+    def _get_submission_type_from_filing_type(filing_type: str) -> SubmissionType:
+        """Return the submission type enum that maps to the filing type from the filing."""
+        mapping = {
+            'ANNUAL_FILING': SubmissionType.annual,
+            'CHANGE_FILING': SubmissionType.change,
+            'INITIAL_FILING': SubmissionType.initial
+        }
+        # default to change since we don't know what it is and initial/annual have specific meaning
+        return mapping.get(filing_type, SubmissionType.change)
 
     @staticmethod
     def add_statements(submission: SubmissionModel,
@@ -134,8 +148,9 @@ class SubmissionService:  # pylint: disable=too-few-public-methods
 
         # init submission
         submission = SubmissionModel(submitter_id=submitter_id,
-                                     invoice_id=None,
-                                     submitted_payload=submission_dict)
+                                     submitted_datetime=datetime.now(ZoneInfo('America/Vancouver')),
+                                     submitted_payload=submission_dict,
+                                     type=SubmissionService._get_submission_type_from_filing_type(submission_dict.get('filingType', '')))
         submission.save_to_session()
         # add ownership / person records to session
         SubmissionService.add_statements(submission,
@@ -162,6 +177,8 @@ class SubmissionService:  # pylint: disable=too-few-public-methods
         """
         submission.submitted_payload = submission_dict
         submission.submitter_id = submitter_id
+        submission.submitted_datetime = datetime.now(ZoneInfo('America/Vancouver'))
+        submission.type = SubmissionService._get_submission_type_from_filing_type(submission_dict.get('filingType', ''))
         # update ownership statements
         new_person_stmnts = []
         new_ownership_stmnts = []

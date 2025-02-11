@@ -32,6 +32,7 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 """Manages entity service interactions."""
+import uuid
 from http import HTTPStatus
 
 import requests
@@ -40,6 +41,8 @@ from flask_caching import Cache
 from flask_jwt_oidc import JwtManager
 
 from btr_api.exceptions import ExternalServiceException
+from btr_api.models import Submission, User
+from btr_api.utils.legislation_datetime import LegislationDatetime
 
 
 entity_cache = Cache()
@@ -106,3 +109,65 @@ class EntityService:
         except Exception as err:
             self.app.logger.debug('Legal-api integration failure:', repr(err))
             raise ExternalServiceException(error=repr(err), status_code=HTTPStatus.INTERNAL_SERVER_ERROR) from err
+
+    def submitFiling(self, submission: Submission, user: User, user_jwt: JwtManager, account_id: str):
+        """Submit a BTR filing to the LEAR filing ledger for the business."""
+        submission.ledger_reference_number = uuid.uuid4()
+        payload = {
+            'filing': {
+                'header': {
+                    'name': 'transparencyRegister',
+                    'certifiedBy': user.display_name,
+                    'date': LegislationDatetime.format_as_legislation_date(submission.submitted_datetime),
+                    'effectiveDate': submission.submitted_datetime.isoformat(),
+                    'source': 'BTR'
+                },
+                'business': {
+                    'identifier': submission.business_identifier   
+                },
+                'transparencyRegister': {
+                    'type': submission.type.lower(),
+                    'ledgerReferenceNumber': str(submission.ledger_reference_number)
+                }
+            }
+        }
+        
+        token = user_jwt.get_token_auth_header()
+        headers = {
+            'Authorization': 'Bearer ' + token,
+            'Account-Id': account_id,
+            'Content-Type': 'application/json'
+        }
+
+        self.app.logger.debug('Submitting filing to legal-api: %s, %s',
+                              submission.business_identifier,
+                              submission.ledger_reference_number)
+
+        try:
+            resp = requests.post(url=f'{self.svc_url}/businesses/{submission.business_identifier}/filings',
+                                 json=payload,
+                                 headers=headers,
+                                 timeout=self.timeout)
+
+            if resp.status_code not in [HTTPStatus.OK, HTTPStatus.CREATED, HTTPStatus.ACCEPTED]:
+                error = f'{resp.status_code} - {str(resp.json())}'
+                self.app.logger.debug('Error response from legal-api: %s', error)
+                raise ExternalServiceException(error=error,
+                                               message=('Ledger update error: %s, %s',
+                                                        submission.business_identifier,
+                                                        submission.ledger_reference_number))
+        
+            submission.ledger_updated = True
+
+        except (requests.exceptions.ConnectionError, requests.exceptions.Timeout) as err:
+            self.app.logger.debug('Legal-api connection failure:', repr(err))
+            raise ExternalServiceException(error=repr(err),
+                                           message=('Ledger update error: %s, %s',
+                                                    submission.business_identifier,
+                                                    submission.ledger_reference_number)) from err
+        except Exception as err:
+            self.app.logger.debug('Legal-api submit filing failure:', repr(err))
+            raise ExternalServiceException(error=repr(err),
+                                           message=('Ledger update error: %s, %s',
+                                                    submission.business_identifier,
+                                                    submission.ledger_reference_number)) from err

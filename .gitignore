@@ -157,4 +157,5 @@ htmlcov/
 
 # cache dir
 btr-api/cache/*
+btr-api/sample_data/cache/*
 btr-api/tests/cache*

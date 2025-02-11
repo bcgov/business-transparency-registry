@@ -59,7 +59,7 @@ class Request(Versioned, Base):
     email: Mapped[str] = mapped_column(nullable=False)
     birthdate: Mapped[date] = mapped_column(nullable=False)
     business_identifier: Mapped[str] = mapped_column(nullable=False, index=True)
-    information_to_omit: Mapped[list(InformationToOmitType)] = mapped_column(ARRAY(String), nullable=False)
+    information_to_omit: Mapped[list[InformationToOmitType]] = mapped_column(ARRAY(String), nullable=False)
     individual_at_risk: Mapped[list[IndividualAtRisk]] = mapped_column(ARRAY(String), nullable=False)
     reasons: Mapped[str] = mapped_column(nullable=False)
     completing_party: Mapped[CompletingParty] = mapped_column(nullable=False)
@@ -100,11 +100,7 @@ class Request(Versioned, Base):
             case 'reasons':
                 cls.reasons = value
             case 'fullName':
-                print('hi')
-                print(value)
-                print(cls.full_name)
                 cls.full_name = value
-                print('hi2 ' + value + " " + cls.full_name)
             case 'businessIdentifier':
                 cls.business_identifier = value
             case 'informationToOmit':
