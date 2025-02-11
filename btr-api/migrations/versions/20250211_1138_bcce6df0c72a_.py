@@ -6,6 +6,7 @@ Create Date: 2025-02-11 11:38:09.362521
 
 """
 from alembic import op
+from sqlalchemy.orm import Session
 import sqlalchemy as sa
 
 
@@ -42,6 +43,9 @@ def upgrade():
         batch_op.drop_column('invoice_id')
         batch_op.drop_column('effective_date')
 
+    op.execute("UPDATE submission SET ledger_updated = false")
+    op.alter_column('submission', 'ledger_updated', nullable=False)
+
     with op.batch_alter_table('submission_history', schema=None) as batch_op:
         # batch_op.drop_column('type')
         batch_op.add_column(sa.Column('type', new_submissiontype_enum, nullable=True))
@@ -49,6 +53,9 @@ def upgrade():
         batch_op.add_column(sa.Column('ledger_updated', sa.Boolean(), autoincrement=False, nullable=True))
         batch_op.drop_column('invoice_id')
         batch_op.drop_column('effective_date')
+    
+    op.execute("UPDATE submission_history SET ledger_updated = false")
+    op.alter_column('submission_history', 'ledger_updated', nullable=False)
 
     # ### end Alembic commands ###
 

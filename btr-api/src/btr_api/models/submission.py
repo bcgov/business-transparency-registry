@@ -67,13 +67,13 @@ class Submission(Versioned, Base):
     __tablename__ = 'submission'
 
     id: Mapped[int] = mapped_column(primary_key=True)
-    type: Mapped[SubmissionType] = mapped_column(default=SubmissionType.CHANGE_FILING, nullable=True)
+    type: Mapped[SubmissionType] = mapped_column(nullable=True)
     submitted_datetime: Mapped[datetime] = mapped_column()
     submitted_payload = Column(JSONB, nullable=False)
     business_identifier: Mapped[str] = mapped_column(nullable=False, unique=True, index=True)
     # Sync number + status for LEAR filing ledger
-    ledger_reference_number: Mapped[uuid.UUID] = mapped_column(nullable=False, unique=True)
-    ledger_updated: Mapped[bool] = mapped_column(default=False)
+    ledger_reference_number: Mapped[uuid.UUID] = mapped_column(nullable=True, unique=True)
+    ledger_updated: Mapped[bool] = mapped_column(nullable=False, default=False)
 
     # Relationships
     ownership_statements: Mapped[list['Ownership']] = relationship(back_populates='submission')
@@ -117,10 +117,10 @@ class SubmissionSerializer:
 
         return {
             'id': submission.id,
-            'type': submission.type.value,
+            'type': submission.type.value if submission.type else None,
             'submittedDatetime': submission.submitted_datetime.isoformat(),
             'submitterId': submission.submitter_id,
-            'ledgerReferenceNumber': submission.ledger_reference_number,
+            'ledgerReferenceNumber': str(submission.ledger_reference_number) if submission.ledger_reference_number else None,
             'ledgerUpdated': submission.ledger_updated,
             'payload': {
                 **submission.submitted_payload,

@@ -482,7 +482,7 @@ def test_put_plots(app, client, session, jwt, requests_mock):
             put_data = {
                 'businessIdentifier': identifier,
                 'effectiveDate': '2024-09-23',
-                'filingType': 'INITIAL_FILING',
+                'filingType': 'CHANGE_FILING',
                 'entityStatement': {
                     'entityType': 'legalEntity',
                     'identifiers': [],
