@@ -49,7 +49,7 @@ from .config import Config, Production
 from .logging import set_log_level_by_flag, setup_logging
 from .models import db
 from .resources import register_endpoints
-from .services import btr_auth, btr_email, btr_entity
+from .services import btr_auth, btr_bor, btr_email, btr_entity, btr_reg_search
 from .translations import babel
 
 setup_logging(os.path.join(os.path.abspath(os.path.dirname(__file__)), 'logging.conf'))  # important to do this first
@@ -73,8 +73,10 @@ def create_app(environment: Config = Production, **kwargs) -> Flask:
 
     db.init_app(app)
     btr_auth.init_app(app)
+    btr_bor.init_app(app)
     btr_email.init_app(app)
     btr_entity.init_app(app)
+    btr_reg_search.init_app(app)
     # td is testData instance passed in to support testing
     td = kwargs.get('ld_test_data', None)
     Flags().init_app(app, td)

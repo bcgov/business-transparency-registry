@@ -148,6 +148,7 @@ class SubmissionService:  # pylint: disable=too-few-public-methods
 
         # init submission
         submission = SubmissionModel(submitter_id=submitter_id,
+                                     business_identifier=submission_dict['businessIdentifier'],
                                      submitted_datetime=datetime.now(ZoneInfo('America/Vancouver')),
                                      submitted_payload=submission_dict,
                                      type=SubmissionService._get_submission_type_from_filing_type(

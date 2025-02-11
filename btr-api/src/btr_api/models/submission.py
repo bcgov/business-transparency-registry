@@ -38,7 +38,7 @@ import uuid
 from datetime import datetime
 from typing import TYPE_CHECKING
 
-from sqlalchemy import Column, ForeignKey, desc, event
+from sqlalchemy import Column, ForeignKey, desc
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sql_versioning import Versioned
@@ -101,13 +101,6 @@ class Submission(Versioned, Base):
         """Return the submissions."""
         query = cls.query.order_by(desc(Submission.submitted_datetime))
         return query.all()
-
-
-@event.listens_for(Submission, 'before_insert')
-@event.listens_for(Submission, 'before_update')
-def receive_before_change(mapper, connection, target: Submission):  # pylint: disable=unused-argument
-    """Update the submitted value, effective date, and business identifier."""
-    target.business_identifier = target.submitted_payload.get('businessIdentifier')
 
 
 class SubmissionSerializer:

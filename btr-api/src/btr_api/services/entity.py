@@ -144,6 +144,7 @@ class EntityService:
                               submission.ledger_reference_number)
 
         try:
+            print(f'{self.svc_url}/businesses/{submission.business_identifier}/filings')
             resp = requests.post(url=f'{self.svc_url}/businesses/{submission.business_identifier}/filings',
                                  json=payload,
                                  headers=headers,

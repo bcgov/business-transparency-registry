@@ -126,6 +126,8 @@ def test_get_plots(app, client, session, jwt, requests_mock, sample_user, test_n
         if payload:
             sub = SubmissionModel()
             sub.submitted_payload = payload
+            sub.business_identifier = payload['businessIdentifier']
+            sub.submitted_datetime = datetime.now(ZoneInfo('America/Vancouver'))
             sub.type = submission_type
             sub.submitter = sample_user
             session.add(sub)
@@ -191,6 +193,7 @@ def test_get_plots_auth(
         # Setup
         sub = SubmissionModel()
         sub.submitted_payload = {'businessIdentifier': business_identifier}
+        sub.business_identifier = business_identifier
         sub.submitted_datetime = datetime.now(ZoneInfo('America/Vancouver'))
         sub.type = SubmissionType.initial
         sub.submitter = sample_user
@@ -249,6 +252,9 @@ def test_post_plots_db_mocked(app, session, client, jwt, mocker, requests_mock):
         legal_api_entity_mock = requests_mock.get(
             f"{app.config.get('LEGAL_SVC_URL')}/businesses/{identifier}", json=mocked_entity_response
         )
+        legal_api_ledger_mock = requests_mock.post(
+            f"{app.config.get('LEGAL_SVC_URL')}/businesses/{identifier}/filings", json={'message': 'Success'}
+        )
         legal_api_delivery_address_mock = requests_mock.get(
             f"{app.config.get('LEGAL_SVC_URL')}/businesses/{identifier}/addresses?addressType=deliveryAddress",
             json=mocked_entity_address_response
@@ -281,6 +287,7 @@ def test_post_plots_db_mocked(app, session, client, jwt, mocker, requests_mock):
     assert legal_api_delivery_address_mock.called == True
     assert bor_api_mock.called == True
     assert auth_api_entity_contact_mock.called == True
+    assert legal_api_ledger_mock.called == True
     assert email_mock.called == True
 
     assert bor_api_mock.request_history[0].json() == {
@@ -363,6 +370,9 @@ def test_post_plots(app, client, session, jwt, requests_mock):
         legal_api_entity_mock = requests_mock.get(
             f"{app.config.get('LEGAL_SVC_URL')}/businesses/{identifier}", json=mocked_entity_response
         )
+        legal_api_ledger_mock = requests_mock.post(
+            f"{app.config.get('LEGAL_SVC_URL')}/businesses/{identifier}/filings", json={'message': 'Success'}
+        )
         legal_api_delivery_address_mock = requests_mock.get(
             f"{app.config.get('LEGAL_SVC_URL')}/businesses/{identifier}/addresses?addressType=deliveryAddress",
             json=mocked_entity_address_response
@@ -405,6 +415,10 @@ def test_post_plots(app, client, session, jwt, requests_mock):
             assert bor_api_mock.called == True
             assert auth_api_entity_contact_mock.called == True
             assert email_mock.called == True
+            assert legal_api_ledger_mock.called == True
+            assert created_submission.ledger_updated
+            assert created_submission.ledger_reference_number
+            assert legal_api_ledger_mock.request_history[0].json()['filing']['transparencyRegister']['ledgerReferenceNumber'] == str(created_submission.ledger_reference_number)
             verify_emails_sent(json_data, email_mock)
 
 def test_put_plots(app, client, session, jwt, requests_mock):
@@ -426,6 +440,9 @@ def test_put_plots(app, client, session, jwt, requests_mock):
         )
         legal_api_entity_mock = requests_mock.get(
             f"{app.config.get('LEGAL_SVC_URL')}/businesses/{identifier}", json=mocked_entity_response
+        )
+        legal_api_ledger_mock = requests_mock.post(
+            f"{app.config.get('LEGAL_SVC_URL')}/businesses/{identifier}/filings", json={'message': 'Success'}
         )
         legal_api_delivery_address_mock = requests_mock.get(
             f"{app.config.get('LEGAL_SVC_URL')}/businesses/{identifier}/addresses?addressType=deliveryAddress",
@@ -542,6 +559,7 @@ def test_put_plots(app, client, session, jwt, requests_mock):
             assert bor_api_mock.called == True
             assert auth_api_entity_contact_mock.called == True
             assert email_mock.called == True
+            assert legal_api_ledger_mock.called == True
 
 
 def test_post_plots_auth_error(app, client, session, jwt, requests_mock):
@@ -611,6 +629,9 @@ def test_post_plots_bor_error(app, client, session, jwt, requests_mock):
             f"{app.config.get('AUTH_SVC_URL')}/entities/{identifier}/authorizations",
             json={'orgMembership': 'COORDINATOR', 'roles': ['edit', 'view']},
         )
+        legal_api_ledger_mock = requests_mock.post(
+            f"{app.config.get('LEGAL_SVC_URL')}/businesses/{identifier}/filings", json={'message': 'Success'}
+        )
         legal_api_entity_mock = requests_mock.get(
             f"{app.config.get('LEGAL_SVC_URL')}/businesses/{identifier}", json=mocked_entity_response
         )
@@ -644,6 +665,7 @@ def test_post_plots_bor_error(app, client, session, jwt, requests_mock):
             assert bor_api_mock.called == True
             assert auth_api_entity_contact_mock.called == True
             assert email_mock.called == True
+            assert legal_api_ledger_mock.called == True
             # check submission details
             created_submission = SubmissionModel.find_by_id(submission_id)
             assert created_submission
@@ -669,6 +691,9 @@ def test_post_plots_email_error(app, client, session, jwt, requests_mock):
         )
         legal_api_entity_mock = requests_mock.get(
             f"{app.config.get('LEGAL_SVC_URL')}/businesses/{identifier}", json=mocked_entity_response
+        )
+        legal_api_ledger_mock = requests_mock.post(
+            f"{app.config.get('LEGAL_SVC_URL')}/businesses/{identifier}/filings", json={'message': 'Success'}
         )
         legal_api_delivery_address_mock = requests_mock.get(
             f"{app.config.get('LEGAL_SVC_URL')}/businesses/{identifier}/addresses?addressType=deliveryAddress",
@@ -701,6 +726,7 @@ def test_post_plots_email_error(app, client, session, jwt, requests_mock):
             assert bor_api_mock.called == True
             assert auth_api_entity_contact_mock.called == True
             assert email_mock.called == True
+            assert legal_api_ledger_mock.called == True
             # check submission details
             created_submission = SubmissionModel.find_by_id(submission_id)
             assert created_submission

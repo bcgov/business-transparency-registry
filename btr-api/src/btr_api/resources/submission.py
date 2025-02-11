@@ -142,9 +142,12 @@ def create_register():
         submission = SubmissionService.create_submission(json_input, user.id)
         # create ledger record in LEAR
         try:
+            print(1)
             btr_entity.submit_filing(submission, user, jwt, account_id)
         except ExternalServiceException as err:
             # Failed to update ledger, log for ops
+            print(2)
+            print(err)
             current_app.logger.error(err.with_traceback(None))
 
         submission.save()
