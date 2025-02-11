@@ -120,7 +120,9 @@ class SubmissionSerializer:
             'type': submission.type.value if submission.type else None,
             'submittedDatetime': submission.submitted_datetime.isoformat(),
             'submitterId': submission.submitter_id,
-            'ledgerReferenceNumber': str(submission.ledger_reference_number) if submission.ledger_reference_number else None,
+            'ledgerReferenceNumber': (str(submission.ledger_reference_number)
+                                      if submission.ledger_reference_number
+                                      else None),
             'ledgerUpdated': submission.ledger_updated,
             'payload': {
                 **submission.submitted_payload,

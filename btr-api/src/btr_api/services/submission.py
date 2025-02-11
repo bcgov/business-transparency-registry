@@ -140,7 +140,8 @@ class SubmissionService:  # pylint: disable=too-few-public-methods
                                      business_identifier=submission_dict['businessIdentifier'],
                                      submitted_datetime=datetime.now(ZoneInfo('America/Vancouver')),
                                      submitted_payload=submission_dict,
-                                     type=SubmissionType(submission_dict.get('filingType', SubmissionType.CHANGE_FILING.value)))
+                                     type=SubmissionType(submission_dict.get('filingType',
+                                                                             SubmissionType.CHANGE_FILING.value)))
         submission.save_to_session()
         # add ownership / person records to session
         SubmissionService.add_statements(submission,

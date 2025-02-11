@@ -248,5 +248,4 @@ def update_submission(sub_id: int):
     except AuthException as aex:
         return exception_response(aex)
     except Exception as exception:  # noqa: B902
-        print(exception)
         return exception_response(exception)
