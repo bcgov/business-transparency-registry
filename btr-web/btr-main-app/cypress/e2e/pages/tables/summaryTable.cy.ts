@@ -162,7 +162,7 @@ describe('pages -> Summary Table', () => {
     cy.get('[data-cy=add-new-btn]').should('have.attr', 'disabled')
 
     // update citizenships
-    cy.get('[data-cy="citizenshipsComboboxButton"]').click()
+    cy.get('[data-cy="citizenships.otherComboboxButton"]').click()
     // select bangladesh
     cy.get('[id^="headlessui-combobox-options"]').find('li').eq(18).click({ force: true })
     // click 'Done'
@@ -328,17 +328,17 @@ describe('pages -> Summary Table', () => {
     // open the edit form for the first SI and ensure it has one citizenship selected,
     // remove the citizenship by clicking on the selected item in the dropdown, and the SI should have no citizenship
     cy.get('[data-cy=action-button]').eq(0).click()
-    cy.get('[data-cy="citizenshipsComboboxChip"]').should('have.length', 1)
-    cy.get('[data-cy="citizenshipsComboboxButton"]').click()
+    cy.get('[data-cy="citizenships.otherComboboxChip"]').should('have.length', 1)
+    cy.get('[data-cy="citizenships.otherComboboxButton"]').click()
     cy.get('[id^="headlessui-combobox-options"]').find('li').first().click({ force: true })
-    cy.get('[data-cy="citizenshipsComboboxChip"]').should('have.length', 0)
+    cy.get('[data-cy="citizenships.otherComboboxChip"]').should('have.length', 0)
     cy.get('[data-cy=new-si-cancel-btn]').click()
     // open the edit form for the second SI and ensure it has one citizenship selected,
     // remove the citizenship by clicking on the selected citizenship tag, and the SI should have no citizenship
     cy.get('[data-cy=action-button]').eq(0).click()
-    cy.get('[data-cy="citizenshipsComboboxChip"]').should('have.length', 1)
-    cy.get('[data-cy="citizenshipsComboboxChip"]').eq(0).get('[data-cy="close-icon"]').click()
-    cy.get('[data-cy="citizenshipsComboboxChip"]').should('have.length', 0)
+    cy.get('[data-cy="citizenships.otherComboboxChip"]').should('have.length', 1)
+    cy.get('[data-cy="citizenships.otherComboboxChip"]').eq(0).get('[data-cy="close-icon"]').click()
+    cy.get('[data-cy="citizenships.otherComboboxChip"]').should('have.length', 0)
   })
 
   it('the edit form contains all information in the profile', () => {
@@ -368,7 +368,7 @@ describe('pages -> Summary Table', () => {
       cy.get('[data-cy="address-city"]').should('have.value', testData.profile3.address.city)
       cy.get('[data-cy="address-region-select"]').contains(testData.profile3.address.province[0])
       cy.get('[data-cy="address-postal-code"]').should('have.value', testData.profile3.address.postalCode)
-      cy.get('[data-cy="citizenshipsComboboxButton"]').contains(testData.profile3.citizenships[0].name)
+      cy.get('[data-cy="citizenships.otherComboboxButton"]').contains(testData.profile3.citizenships[0].name)
     })
   })
 

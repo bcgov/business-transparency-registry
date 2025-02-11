@@ -556,10 +556,6 @@
                 ],
                 "nationalities": [
                     {
-                        "code": "CA",
-                        "name": "Canada"
-                    },
-                    {
                         "code": "AF",
                         "name": "Afghanistan"
                     },

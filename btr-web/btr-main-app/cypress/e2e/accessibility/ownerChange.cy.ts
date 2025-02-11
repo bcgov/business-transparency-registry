@@ -51,7 +51,7 @@ describe('accessibility -> Beneficial Owner Change', () => {
       cy.get('[data-cy=address-region-select]').click()
       cy.get('[data-cy=address-region-select]').get('li').contains(testData.profile1.address.province[0]).click()
       cy.get('[data-cy=address-postal-code]').type(testData.profile1.address.postalCode)
-      cy.get('[data-cy="citizenshipsComboboxButton"]').click()
+      cy.get('[data-cy="citizenships.otherComboboxButton"]').click()
       cy.get('[id^="headlessui-combobox-options"]').find('li').eq(0).click({ force: true })
       cy.get('[data-cy="tax-number-input"]').type(testData.profile1.taxNumber)
       cy.get('[data-cy=testTaxResidency]').get('[type=radio][value=true]').check()
@@ -85,11 +85,11 @@ describe('accessibility -> Beneficial Owner Change', () => {
     cy.get('[data-cy=address-line1-autocomplete]').type('123')
     cy.checkA11y('[data-cy=address-street-options]')
     // countries of citizenship dropdown
-    cy.checkA11y('[data-cy="citizenships.select"]', { rules: { 'nested-interactive': { enabled: false } } })
-    cy.get('[data-cy="citizenshipsComboboxButton"]').click()
+    cy.checkA11y('[data-cy="citizenships.other.select"]', { rules: { 'nested-interactive': { enabled: false } } })
+    cy.get('[data-cy="citizenships.otherComboboxButton"]').click()
     cy.get('[id^="headlessui-combobox-options"]').find('li').eq(0).click({ force: true })
     cy.get('[id^="headlessui-combobox-options"]').find('li').eq(4).click({ force: true })
-    cy.checkA11y('[data-cy="citizenships.select"]', {
+    cy.checkA11y('[data-cy="citizenships.other.select"]', {
       rules: {
         'nested-interactive': { enabled: false },
         'aria-required-children': { enabled: false }, // <ul role="listbox"> contains <input role="combobox">

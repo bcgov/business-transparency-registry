@@ -68,7 +68,7 @@ const opacityClass = computed(() => {
       />
       <PersonInfoCitizenship
         :class="opacityClass"
-        :nationalities="si.citizenships"
+        :nationalities="si.citizenships.nationalities"
       />
     </td>
     <td class="align-top" :class="opacityClass" data-cy="summary-table-details">

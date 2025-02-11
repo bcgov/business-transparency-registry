@@ -21,12 +21,6 @@ export function getFolioValidator () {
   ]).optional()
 }
 
-export function validateCitizenshipValidator () {
-  return z.array(z.object({ name: z.string(), alpha_2: z.string() })).superRefine(
-    validateCitizenshipSuperRefine
-  )
-}
-
 export function getPhoneNumberValidator () {
   return PhoneSchema.superRefine(
     validatePhoneNumberSuperRefine

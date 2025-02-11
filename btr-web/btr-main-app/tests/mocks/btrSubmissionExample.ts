@@ -585,9 +585,14 @@ export const expectedSisOutput: SiSchemaType[] = [
       percentage: PercentageRangeE.NO_SELECTION
     },
     birthDate: '1901-01-01',
-    citizenships: [{ name: 'Argentina', alpha_2: 'AR' },
-      { name: 'British Indian Ocean Territory', alpha_2: 'IO' },
-      { name: 'Cocos (Keeling) Islands', alpha_2: 'CC' }],
+    citizenships: {
+      nationalities: [
+        { name: 'Argentina', alpha_2: 'AR' },
+        { name: 'British Indian Ocean Territory', alpha_2: 'IO' },
+        { name: 'Cocos (Keeling) Islands', alpha_2: 'CC' }
+      ],
+      citizenshipType: CitizenshipTypeE.OTHER
+    },
     email: 'hrvoje.fekete+1@gmail.com',
     phoneNumber: {
       countryCallingCode: '1',
@@ -663,8 +668,10 @@ export const expectedSisOutput: SiSchemaType[] = [
       percentage: PercentageRangeE.AT_LEAST_25_TO_50
     },
     birthDate: '1991-01-24',
-    citizenships:
-      [{ alpha_2: 'CA_PR', name: 'Canada (Permanent Resident)' }],
+    citizenships: {
+      nationalities: [{ alpha_2: 'CA_PR', name: 'Canada (Permanent Resident)' }],
+      citizenshipType: CitizenshipTypeE.PERMANENT_RESIDENT
+    },
     email: 'hrvoje.fekete@gmail.com',
     phoneNumber: {
       countryCallingCode: '1',
@@ -749,8 +756,10 @@ export const expectedSisOutput: SiSchemaType[] = [
       region: 'BC'
     },
     birthDate: '',
-    citizenships:
-      [{ name: 'Canada (Citizen)', alpha_2: 'CA' }],
+    citizenships: {
+      nationalities: [{ name: 'Canada (Citizen)', alpha_2: 'CA' }],
+      citizenshipType: CitizenshipTypeE.CITIZEN
+    },
     email: 'hrvoje.fekete@gmail.com',
     phoneNumber: {
       countryCallingCode: '1',

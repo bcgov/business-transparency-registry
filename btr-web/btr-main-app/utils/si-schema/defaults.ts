@@ -59,7 +59,10 @@ export function getDefaultInputFormSi (): SiSchemaType {
       address: undefined
     },
     birthDate: '',
-    citizenships: [],
+    citizenships: {
+      nationalities: [],
+      citizenshipType: undefined
+    },
     tax: {
       hasTaxNumber: undefined,
       taxNumber: undefined
