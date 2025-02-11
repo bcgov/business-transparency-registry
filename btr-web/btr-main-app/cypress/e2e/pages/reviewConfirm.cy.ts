@@ -117,33 +117,13 @@ describe('pages -> Review and Confirm', () => {
     // click 'Review and Confirm' button to review the summary'
     cy.get('[data-cy="button-control-right-button"]').click()
 
-    // verify the url changes to /review-confirm
-    cy.url().should('include', '/review-confirm')
+    // verify error pops ups saying need to add SI or select no SIs
+    cy.get('[data-cy=noSignificantIndividualsExist-section]')
+      .should('contain.text',
+        'You have to make a selection OR add a Significant Individual in order to continue'
+      )
 
-    // go back to review and file now, FUTURE: check certify / folio
-    // cy.get('[data-cy=button-control-right-button]').eq(0).should('have.text', 'Review and Confirm')
-    // cy.get('[data-cy=button-control-right-button]').eq(0).click()
-    // cy.url().should('include', '/beneficial-owner-change/review-confirm')
-    cy.get('[data-cy=button-control-right-button]').eq(1).should('have.text', 'File Now (no fee)')
-    // validate certify is not checked yet
-    cy.get('[data-cy="certify-section-checkbox"]').should('not.be.checked')
-    cy.get('[data-cy=button-control-right-button]').eq(1).click()
-    // Certify was not checked so nothing should happen
-    cy.url().should('include', '/beneficial-owner-change/review-confirm')
-
-    // Check certify and file
-    cy.get('[data-cy="certify-section-checkbox"]').click()
-    cy.get('[data-cy="certify-section-checkbox"]').should('be.checked')
-    cy.get('[data-cy=button-control-right-button]').eq(1).click()
-    // Future: verify the redirection after a successful submission
-    // Future: simulate a failed submission
-
-    // click 'back' to go back to non review page
-    cy.get('[data-cy=button-control-right-button]').eq(0).should('have.text', 'Back')
-    cy.get('[data-cy=button-control-right-button]').eq(0).click()
-    cy.wait(2000) // needs to wait for page hydration or it will fail sometimes (no calls to wait for)
-    cy.get('[data-cy="noSignificantIndividualsExist-checkbox"]').click()
-    cy.get('[data-cy="noSignificantIndividualsExist-checkbox"]').should('be.checked')
+    cy.get('[data-cy="noSignificantIndividualsExist-checkbox"]').check()
 
     // click 'Review and Confirm' button to go back to review the summary
     cy.get('[data-cy="button-control-right-button"]').click()

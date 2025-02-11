@@ -6,7 +6,7 @@ import { IdAsNumberI } from '~/interfaces/common-ids-i'
 import { BtrBodsEntityI } from '~/interfaces/btr-bods/btr-bods-entity-i'
 import { BtrFilingI } from '~/interfaces/btr-bods/btr-filing-i'
 import { BodsEntityTypesE, BodsStatementTypeE } from '~/enums/btr-bods-e'
-import { FilingTypeE } from '~/enums/filing-type-e'
+import { SubmissionTypeE } from '~/enums/submission-type-e'
 import {
   BtrBodsBcrosPublicationDetails,
   BtrBodsPublishers,
@@ -171,7 +171,10 @@ const convertToBtrBodsForSubmit = (sif: SignificantIndividualFilingI): BtrFiling
 }
 
 const submitSignificantIndividualFiling = async (
-  sif: SignificantIndividualFilingI, filingType: FilingTypeE, previousSubmissionId?: number, arFilingForYear?: number
+  sif: SignificantIndividualFilingI,
+  filingType: SubmissionTypeE,
+  previousSubmissionId?: number,
+  arFilingForYear?: number
 ) => {
   const submitSif: SignificantIndividualFilingI = {
     certified: sif.certified,

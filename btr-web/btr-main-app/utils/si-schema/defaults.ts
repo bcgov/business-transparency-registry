@@ -3,6 +3,7 @@ import { todayIsoDateString } from '../../../btr-common-components/utils/date'
 import { AddressSchemaType, SiSchemaType } from '~/utils/si-schema/definitions'
 import { PercentageRangeE } from '~/enums/percentage-range-e'
 import { SignificantIndividualFilingI } from '~/interfaces/significant-individual-filing-i'
+import { SubmissionTypeE } from '~/enums/submission-type-e'
 
 export function getEmptyAddress (): AddressSchemaType {
   return {
@@ -93,6 +94,8 @@ export function getDefaultInputFormSi (): SiSchemaType {
 
 export function getEmptySiFiling (): SignificantIndividualFilingI {
   return {
+    submissionType: SubmissionTypeE.INITIAL_FILING,
+    submissionForYear: undefined,
     effectiveDate: todayIsoDateString(),
     noSignificantIndividualsExist: false,
     significantIndividuals: [],

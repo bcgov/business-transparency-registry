@@ -1,5 +1,6 @@
 import 'cypress-axe'
 import './ownerChangeFormHelper'
+import { SubmissionTypeE } from '../../enums/submission-type-e'
 
 Cypress.Commands.add('interceptPostsBtrApi', () => {
   cy.fixture('plotsEntityExistingSiResponse').then((plotsEntityExistingSiResponse) => {
@@ -80,37 +81,53 @@ Cypress.Commands.add('interceptBusinessContact', () => {
   })
 })
 
-Cypress.Commands.add('visitHomePageNoPreviousSiSubmissions', () => {
+Cypress.Commands.add('visitHomePageNoPreviousSiSubmissions', (businessIdentifier?: string) => {
+  if (!businessIdentifier) {
+    businessIdentifier = 'BC0871427'
+  }
   cy.interceptPostsBtrApiNoPreviousSubmissions().as('noSubmissionsSi')
   cy.interceptPayFeeApi().as('payFeeApi')
   cy.interceptBusinessContact().as('businessContact')
   cy.interceptBusinessSlim().as('businessApiCall')
-  cy.visit('/')
+  cy.visit(`/${businessIdentifier}/beneficial-owner-change?submissionType=${SubmissionTypeE.INITIAL_FILING}`)
   cy.wait(['@noSubmissionsSi', '@businessApiCall', '@payFeeApi', '@businessContact'])
 })
 
-Cypress.Commands.add('visitHomePageNoFakeData', () => {
+Cypress.Commands.add('visitHomePageNoFakeData', (businessIdentifier?: string, submissionType?: SubmissionTypeE) => {
+  if (!businessIdentifier) {
+    businessIdentifier = 'BC0871427'
+  }
+  if (!submissionType) {
+    submissionType = SubmissionTypeE.INITIAL_FILING
+  }
   cy.interceptPostsBtrApiNoSis().as('existingSIs')
   cy.interceptPayFeeApi().as('payFeeApi')
   cy.interceptBusinessContact().as('businessContact')
   cy.interceptBusinessSlim().as('businessApiCall')
-  cy.visit('/')
+  cy.visit(`/${businessIdentifier}/beneficial-owner-change?submissionType=` + submissionType)
   cy.wait(['@existingSIs', '@businessApiCall', '@payFeeApi', '@businessContact'])
 })
 
-Cypress.Commands.add('visitHomePageWithFakeData', () => {
+Cypress.Commands.add('visitHomePageWithFakeData', (businessIdentifier?: string, submissionType?: SubmissionTypeE) => {
+  if (!businessIdentifier) {
+    businessIdentifier = 'BC0871427'
+  }
+  if (!submissionType) {
+    submissionType = SubmissionTypeE.CHANGE_FILING
+  }
   cy.interceptPostsBtrApi().as('existingSIs')
   cy.interceptPayFeeApi().as('payFeeApi')
   cy.interceptBusinessContact().as('businessContact')
   cy.interceptBusinessSlim().as('businessApiCall')
-  cy.visit('/')
+  cy.visit(`/${businessIdentifier}/beneficial-owner-change?submissionType=` + submissionType)
   cy.wait(['@existingSIs', '@businessApiCall', '@payFeeApi', '@businessContact'])
 })
 
-Cypress.Commands.add('visitHomePageWithFakeDataAndAxeInject', () => {
-  cy.visitHomePageWithFakeData()
-  cy.injectAxe()
-})
+Cypress.Commands.add('visitHomePageWithFakeDataAndAxeInject',
+  (businessIdentifier?: string, submissionType?: SubmissionTypeE.CHANGE_FILING) => {
+    cy.visitHomePageWithFakeData(businessIdentifier, submissionType)
+    cy.injectAxe()
+  })
 
 Cypress.Commands.add('siSelectCitizenship', (citizenships: Array<BtrCountryI>) => {
   const isCitizen = citizenships.findIndex((country: BtrCountryI) => country.alpha_2 === 'CA') !== -1
