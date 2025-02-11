@@ -38,7 +38,7 @@ describe('pages -> Beneficial Owner Change', () => {
     cy.get('[data-cy=add-new-btn]').trigger('click')
     cy.get('[data-cy=addIndividualPerson]').should('exist')
     cy.get('[data-cy=testFullName]').should('exist')
-    cy.get('[data-cy=usePreferredName').should('exist')
+    cy.get('[data-cy=usePreferredName]').should('exist')
     cy.get('[data-cy=testEmail]').should('exist')
     // cy.get('[data-cy=showAddIndividualPersonManually]')
     //   .should('have.text', ' Add transparency register information manually')
@@ -51,13 +51,13 @@ describe('pages -> Beneficial Owner Change', () => {
 
   it('click the checkbox to hide or show preferred name section', () => {
     cy.get('[data-cy=add-new-btn]').trigger('click')
-    cy.get('[data-cy=usePreferredName').should('exist')
-    cy.get('[data-cy=testPreferredName').should('not.exist')
-    cy.get('[data-cy=usePreferredName').check()
-    cy.get('[data-cy=testPreferredName').should('exist')
+    cy.get('[data-cy=usePreferredName]').should('exist')
+    cy.get('[data-cy=testPreferredName]').should('not.exist')
+    cy.get('[data-cy=usePreferredName]').check()
+    cy.get('[data-cy=testPreferredName]').should('exist')
     cy.get('#individual-person-preferred-name').type('test preferred name')
-    cy.get('[data-cy=usePreferredName').uncheck()
-    cy.get('[data-cy=usePreferredName').check()
+    cy.get('[data-cy=usePreferredName]').uncheck()
+    cy.get('[data-cy=usePreferredName]').check()
     cy.get('#individual-person-preferred-name').should('not.have.value', 'test preferred name')
   })
 
@@ -93,6 +93,21 @@ describe('pages -> Beneficial Owner Change', () => {
   it('goes to review confirm page when review confirm is clicked', () => {
     cy.get('[data-cy=button-control-right-button]').eq(0).should('have.text', 'Review and Confirm')
     cy.get('[data-cy=button-control-right-button]').eq(0).click()
+
+    cy.get('[data-cy=noSignificantIndividualsExist-section]')
+      .should('contain.text', 'You have to make an edit to the list in order to continue')
+
+    // edit name so we can continue
+    cy.get('[data-cy="action-button"]').first().click()
+    cy.get('[data-cy="name-change-reason-radio-other"]').should('not.exist')
+    cy.get('input[data-cy="testFullName"]').focus()
+    cy.get('input[data-cy="testFullName"]').type(' 123')
+    cy.get('input[data-cy="name-change-reason-radio-other"]').check()
+    cy.get('button[data-cy=new-si-done-btn]').focus().click()
+
+    cy.get('[data-cy=button-control-right-button]').eq(0).should('have.text', 'Review and Confirm')
+    cy.get('[data-cy=button-control-right-button]').eq(0).click()
+
     cy.url().should('include', '/review-confirm')
   })
 })

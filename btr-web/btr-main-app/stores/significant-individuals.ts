@@ -5,7 +5,7 @@ import fileSIApi from '@/services/file-significant-individual'
 import { SiSchemaType } from '~/utils/si-schema/definitions'
 import { getEmptySiFiling } from '~/utils/si-schema/defaults'
 import { BtrFilingI } from '~/interfaces/btr-bods/btr-filing-i'
-import { ErrorI, FilingActionE, SignificantIndividualFilingI } from '#imports'
+import { ErrorI, FilingActionE, SignificantIndividualFilingI, SubmissionTypeE } from '#imports'
 
 /** Manages Significant */
 export const useSignificantIndividuals = defineStore('significantIndividuals', () => {
@@ -161,7 +161,7 @@ export const useSignificantIndividuals = defineStore('significantIndividuals', (
 
     // if there is a previous filing submission id, then this is a CHANGE_FILING. Otherwise, it is an INITIAL_FILING
     // this will be updated in #25669, so the UI can handle the Annual Report Filing flow
-    const filingType = previousFilingSubmissionId.value ? FilingTypeE.CHANGE_FILING : FilingTypeE.INITIAL_FILING
+    const filingType = previousFilingSubmissionId.value ? SubmissionTypeE.CHANGE_FILING : SubmissionTypeE.INITIAL_FILING
 
     const { error } =
       await fileSIApi.submitSignificantIndividualFiling(

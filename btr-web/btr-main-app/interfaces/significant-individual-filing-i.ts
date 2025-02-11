@@ -9,7 +9,12 @@ export const FilingSchemaBase = z.object({
   noSignificantIndividualsExist: z.boolean().default(false),
   businessIdentifier: z.string(),
   folioNumber: z.string().optional(),
-  significantIndividuals: z.object({}).array(), // SignificantIndividualI[]
+  significantIndividuals: z.object({
+    ui: z.object({
+      newOrUpdatedFields: z.array(z.string()),
+      actions: z.array(z.nativeEnum(FilingActionE)).optional()
+    })
+  }).array(), // SignificantIndividualI[]
   certified: z.literal<boolean>(true)
 })
 

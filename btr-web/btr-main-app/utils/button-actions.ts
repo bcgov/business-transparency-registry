@@ -1,5 +1,15 @@
 import { RefinementCtx, z } from 'zod'
 import { FilingSchemaBase } from '~/interfaces/significant-individual-filing-i'
+import { FilingActionE } from '#imports'
+
+const _getSIsToSubmit = () => {
+  const { allEditableSIs } = storeToRefs(useSignificantIndividuals())
+  const sisToSubmit = []
+  for (const si of allEditableSIs.value) {
+    sisToSubmit.push(toRaw(si))
+  }
+  return sisToSubmit
+}
 
 /** Go to the review/confirm page for the current filing
  * - assumes there is a currentSIFiling
@@ -17,8 +27,10 @@ export function reviewConfirm () {
       .extend({ certified: z.boolean() })
       .superRefine((schema, ctx: RefinementCtx) => {
         const t = useNuxtApp().$i18n.t
-        if (!schema.noSignificantIndividualsExist &&
-          schema.submissionType === SubmissionTypeE.INITIAL_FILING) {
+        if (schema.submissionType === SubmissionTypeE.INITIAL_FILING &&
+          !schema.noSignificantIndividualsExist &&
+          !schema.significantIndividuals?.find(si => si.ui?.actions?.includes(FilingActionE.ADD))
+        ) {
           // schema
           ctx.addIssue({
             code: z.ZodIssueCode.custom,
@@ -28,7 +40,8 @@ export function reviewConfirm () {
         }
 
         if (schema.submissionType === SubmissionTypeE.CHANGE_FILING &&
-          !schema.significantIndividuals.find(si => si.ui?.newOrUpdatedFields?.length > 0)
+          !(schema.significantIndividuals.find(si => si.ui?.newOrUpdatedFields?.length > 0) ||
+          schema.significantIndividuals.find(si => si.ui?.newOrUpdatedFields?.length > 0))
         ) {
           // schema
           ctx.addIssue({
@@ -52,7 +65,8 @@ export function reviewConfirm () {
         // todo: add year verification
       })
 
-  const result = filingSchema.safeParse(currentSIFiling.value)
+  currentSIFiling.value.significantIndividuals = _getSIsToSubmit()
+  const result = filingSchema.safeParse(toRaw(currentSIFiling.value))
   if (result?.error?.issues.length > 0) {
     filingErrors.value = filingErrors.value.concat(result.error.issues)
     return
@@ -70,7 +84,7 @@ export async function siChangeSubmit () {
   const { validateConfirmReviewPage } = useConfirmReviewStore()
   const { confirmReviewPageErrors } = storeToRefs(useConfirmReviewStore())
   const significantIndividuals = useSignificantIndividuals()
-  significantIndividuals.currentSIFiling.significantIndividuals = significantIndividuals.allActiveSIs
+  significantIndividuals.currentSIFiling.significantIndividuals = _getSIsToSubmit()
 
   const result = validateConfirmReviewPage()
   if (!result.success) {
