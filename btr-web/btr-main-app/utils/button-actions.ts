@@ -62,7 +62,7 @@ export function reviewConfirm () {
             path: ['noSignificantIndividualsExist']
           })
         }
-        // todo: add year verification
+        // todo: add year verification; ticket: #25669
       })
 
   currentSIFiling.value.significantIndividuals = _getSIsToSubmit()

@@ -207,13 +207,13 @@ export const useSignificantIndividuals = defineStore('significantIndividuals', (
           currentSIFiling.value.submissionType = SubmissionTypeE.ANNUAL_FILING
           currentSIFiling.value.submissionForYear = +submissionForYearParam
         } else {
-          // todo: do we need error here  We would need design for this.
+          // todo: do we need error here  We would need design for this. ticket: #25931
         }
       } else if (submissionParam?.toUpperCase() === SubmissionTypeE.INITIAL_FILING ||
         submissionParam?.toUpperCase() === SubmissionTypeE.CHANGE_FILING) {
         currentSIFiling.value.submissionType = submissionParam.toUpperCase()
       } else {
-        // todo: do we need error for this ?
+        // todo: do we need error for this ? # ticket #25931
         // currently default filing is initial filing, maybe it can be updated ?
         // e.g. with logic that checks if filings already exist, and if its not annual, make it change filing
         // if its not annual filing and no current filing, make it initial filing ?
