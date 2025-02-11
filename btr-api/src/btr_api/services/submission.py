@@ -50,7 +50,6 @@ from flask import current_app
 
 from btr_api.exceptions import BusinessException, ExternalServiceException
 from btr_api.models import Ownership, Person, Submission as SubmissionModel
-from btr_api.models.submission import SubmissionType
 from btr_api.utils import deep_spread
 
 from .auth import AuthService
@@ -76,17 +75,6 @@ class SubmissionService:  # pylint: disable=too-few-public-methods
             'Invalid payload. All submitted person statements must be linked to an ownership statement.',
             f'Person statement id: {person_stmnt_id}',
             HTTPStatus.BAD_REQUEST)
-
-    @staticmethod
-    def _get_submission_type_from_filing_type(filing_type: str) -> SubmissionType:
-        """Return the submission type enum that maps to the filing type from the filing."""
-        mapping = {
-            'ANNUAL_FILING': SubmissionType.annual,
-            'CHANGE_FILING': SubmissionType.change,
-            'INITIAL_FILING': SubmissionType.initial
-        }
-        # default to change since we don't know what it is and initial/annual have specific meaning
-        return mapping.get(filing_type, SubmissionType.change)
 
     @staticmethod
     def add_statements(submission: SubmissionModel,

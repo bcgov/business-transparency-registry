@@ -54,11 +54,11 @@ if TYPE_CHECKING:
 
 
 class SubmissionType(BaseEnum):
-    """Enum of the roles used across the domain."""
+    """Enum of the submission type for a transparency register filing."""
 
-    annual = auto()  # pylint: disable=invalid-name; Keeping consistent with LEAR filing sub type
-    change = auto()  # pylint: disable=invalid-name; Keeping consistent with LEAR filing sub type
-    initial = auto()  # pylint: disable=invalid-name; Keeping consistent with LEAR filing sub type
+    ANNUAL_FILING = auto()
+    CHANGE_FILING = auto()
+    INITIAL_FILING = auto()
 
 
 class Submission(Versioned, Base):
@@ -67,7 +67,7 @@ class Submission(Versioned, Base):
     __tablename__ = 'submission'
 
     id: Mapped[int] = mapped_column(primary_key=True)
-    type: Mapped[SubmissionType] = mapped_column(default=SubmissionType.change, nullable=True)
+    type: Mapped[SubmissionType] = mapped_column(default=SubmissionType.CHANGE_FILING, nullable=True)
     submitted_datetime: Mapped[datetime] = mapped_column()
     submitted_payload = Column(JSONB, nullable=False)
     business_identifier: Mapped[str] = mapped_column(nullable=False, unique=True, index=True)

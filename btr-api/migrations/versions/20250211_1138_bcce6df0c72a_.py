@@ -15,7 +15,7 @@ down_revision = 'f812f2754dd5'
 branch_labels = None
 depends_on = None
 
-new_submissiontype_options = ('annual', 'change', 'initial')
+new_submissiontype_options = ('ANNUAL_FILING', 'CHANGE_FILING', 'INITIAL_FILING')
 old_submissiontype_options = ('other', 'standard')
 
 new_submissiontype_enum = sa.Enum(*new_submissiontype_options, name='submissiontype')

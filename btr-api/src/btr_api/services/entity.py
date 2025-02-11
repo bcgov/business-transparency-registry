@@ -42,6 +42,7 @@ from flask_jwt_oidc import JwtManager
 
 from btr_api.exceptions import ExternalServiceException
 from btr_api.models import Submission, User
+from btr_api.models.submission import SubmissionType
 from btr_api.utils.legislation_datetime import LegislationDatetime
 
 
@@ -126,7 +127,7 @@ class EntityService:
                     'identifier': submission.business_identifier
                 },
                 'transparencyRegister': {
-                    'type': submission.type.lower(),
+                    'type': EntityService.get_sub_filing_type(submission),
                     'ledgerReferenceNumber': str(submission.ledger_reference_number)
                 }
             }
@@ -144,7 +145,6 @@ class EntityService:
                               submission.ledger_reference_number)
 
         try:
-            print(f'{self.svc_url}/businesses/{submission.business_identifier}/filings')
             resp = requests.post(url=f'{self.svc_url}/businesses/{submission.business_identifier}/filings',
                                  json=payload,
                                  headers=headers,
@@ -172,3 +172,14 @@ class EntityService:
                                            message=('Ledger update error: %s, %s',
                                                     submission.business_identifier,
                                                     submission.ledger_reference_number)) from err
+
+    @staticmethod
+    def get_sub_filing_type(submission: Submission) -> str:
+        """Return the submission type enum that maps to the filing type from the filing."""
+        mapping = {
+            SubmissionType.ANNUAL_FILING: 'annual',
+            SubmissionType.CHANGE_FILING: 'change',
+            SubmissionType.INITIAL_FILING: 'initial'
+        }
+        # default to change since we don't know what it is and initial/annual have specific meaning
+        return mapping.get(submission.type, 'change')

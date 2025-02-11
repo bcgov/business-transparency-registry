@@ -1,10 +1,6 @@
-import pytest
 from datetime import datetime
 from zoneinfo import ZoneInfo
 
-from sqlalchemy import text
-
-from btr_api.models import User
 from btr_api.models.submission import Submission, SubmissionType
 
 from tests.unit.models.test_user import sample_user
@@ -14,7 +10,7 @@ from tests.unit.utils.db_helpers import clear_db
 def test_find_by_id(session, sample_user):
     # Prepare data
     clear_db(session)
-    submission = Submission(type=SubmissionType.initial,
+    submission = Submission(type=SubmissionType.INITIAL_FILING,
                             submitted_payload={
                                 'businessIdentifier': 'BC1234567',
                                 'personStatements': [],
@@ -36,7 +32,7 @@ def test_find_by_id(session, sample_user):
 def test_get_filtered_submissions(session, sample_user):
     # Prepare data
     clear_db(session)
-    session.add_all([Submission(type=SubmissionType.initial,
+    session.add_all([Submission(type=SubmissionType.INITIAL_FILING,
                                 submitted_payload={
                                     'businessIdentifier': 'Test identifier',
                                     'personStatements': [],
@@ -45,7 +41,7 @@ def test_get_filtered_submissions(session, sample_user):
                                 business_identifier='Test identifier',
                                 submitted_datetime=datetime.now(ZoneInfo('America/Vancouver')),
                                 submitter=sample_user),
-                     Submission(type=SubmissionType.initial,
+                     Submission(type=SubmissionType.INITIAL_FILING,
                                 submitted_payload={
                                     'businessIdentifier': 'Another identifier',
                                     'personStatements': [],
@@ -67,7 +63,7 @@ def test_get_filtered_submissions(session, sample_user):
 def test_save_to_session(session, sample_user):
     # Prepare data
     clear_db(session)
-    submission = Submission(type=SubmissionType.initial,
+    submission = Submission(type=SubmissionType.INITIAL_FILING,
                             submitted_payload={
                                 'businessIdentifier': 'BC1234567',
                                 'personStatements': [],

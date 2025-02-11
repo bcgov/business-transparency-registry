@@ -113,7 +113,7 @@ def verify_emails_sent(json_data: dict, email_mock) -> dict:
 
 @pytest.mark.parametrize(
     'test_name, submission_type, payload, user_type',
-    [('simple json', SubmissionType.initial, {'businessIdentifier': 'identifier0'}, UserType.USER_COMPETENT_AUTHORITY)],
+    [('simple json', SubmissionType.INITIAL_FILING, {'businessIdentifier': 'identifier0'}, UserType.USER_COMPETENT_AUTHORITY)],
 )
 def test_get_plots(app, client, session, jwt, requests_mock, sample_user, test_name, submission_type, payload, user_type):
     """Get the plot submissions.
@@ -195,7 +195,7 @@ def test_get_plots_auth(
         sub.submitted_payload = {'businessIdentifier': business_identifier}
         sub.business_identifier = business_identifier
         sub.submitted_datetime = datetime.now(ZoneInfo('America/Vancouver'))
-        sub.type = SubmissionType.initial
+        sub.type = SubmissionType.INITIAL_FILING
         sub.submitter = sample_user
         session.add(sub)
         session.commit()
