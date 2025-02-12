@@ -53,7 +53,7 @@ from btr_api.exceptions import exception_response
 from btr_api.models import Submission as SubmissionModel
 from btr_api.models import User as UserModel
 from btr_api.models.submission import SubmissionSerializer
-from btr_api.services import btr_auth, btr_bor, btr_entity, btr_pay, btr_reg_search
+from btr_api.services import btr_auth, btr_bor, btr_entity, btr_reg_search
 from btr_api.services import SchemaService
 from btr_api.services import SubmissionService
 from btr_api.services.validator import validate_entity
@@ -140,19 +140,16 @@ def create_register():
 
         # create submission
         submission = SubmissionService.create_submission(json_input, user.id)
+        # create ledger record in LEAR
         try:
-            # NOTE: this will be moved out of this api once lear filings are linked
-            # create invoice in pay system
-            invoice_resp = btr_pay.create_invoice(account_id, jwt, json_input)
-            submission.invoice_id = invoice_resp.json()['id']
+            btr_entity.submit_filing(submission, user, jwt, account_id)
         except ExternalServiceException as err:
-            # Log error and continue to return successfully (does NOT block the submission)
-            current_app.logger.info(err.error)
-            current_app.logger.error('Error creating invoice for submission: %s', submission.id)
+            # Failed to update ledger, log for ops
+            current_app.logger.error(err.with_traceback(None))
 
         submission.save()
         try:
-            # NOTE: this will be moved out of this api once lear filings are linked
+            # TODO: remove as part of #25913
             # update record in BOR (search)
             address = btr_entity.get_entity_info(
                 None, f'{business_identifier}/addresses?addressType=deliveryAddress', token).json()
@@ -170,8 +167,9 @@ def create_register():
 
     except AuthException as aex:
         return exception_response(aex)
+    except ExternalServiceException as err:
+        return exception_response(err)
     except Exception as exception:  # noqa: B902
-        current_app.logger.error(exception.with_traceback(None))
         return exception_response(exception)
 
 
@@ -218,20 +216,17 @@ def update_submission(sub_id: int):
             if not valid:
                 return error_request_response('Invalid schema', HTTPStatus.BAD_REQUEST, errors)
 
+            # create ledger record in LEAR
             try:
-                # NOTE: this will be moved out of this api once lear filings are linked
-                # create invoice in pay system
-                invoice_resp = btr_pay.create_invoice(account_id, jwt, submitted_json)
-                submission.invoice_id = invoice_resp.json()['id']
+                btr_entity.submit_filing(submission, user, jwt, account_id)
             except ExternalServiceException as err:
-                # Log error and continue to return successfully (does NOT block the submission)
-                current_app.logger.info(err.error)
-                current_app.logger.error('Error creating invoice for submission: %s', submission.id)
+                # Failed to update ledger, log for ops
+                current_app.logger.error(err.with_traceback(None))
 
             submission.save()
 
             try:
-                # NOTE: this will be moved out of this api once lear filings are linked
+                # TODO: remove as part of #25913
                 # update record in BOR (search)
                 address = btr_entity.get_entity_info(
                     None, f'{business_identifier}/addresses?addressType=deliveryAddress', token).json()
@@ -253,5 +248,4 @@ def update_submission(sub_id: int):
     except AuthException as aex:
         return exception_response(aex)
     except Exception as exception:  # noqa: B902
-        current_app.logger.error(exception.with_traceback(None))
         return exception_response(exception)

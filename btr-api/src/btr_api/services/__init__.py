@@ -37,7 +37,6 @@ from .bor import BorService
 from .email import EmailService
 from .entity import EntityService
 from .json_schema import SchemaService
-from .pay import PayService
 from .registries_search import RegSearchService
 from .submission import SubmissionService
 from .request import RequestService
@@ -46,8 +45,6 @@ PAYMENT_REQUEST_TEMPLATE = {
     'filingInfo': {'filingTypes': [{'filingTypeCode': 'REGSIGIN'}]},
     'businessInfo': {'corpType': 'BTR'}
 }
-btr_pay = PayService(default_invoice_payload={'filingInfo': {'filingTypes': [{'filingTypeCode': 'REGSIGIN'}]},
-                                              'businessInfo': {'corpType': 'BTR'}})
 
 btr_auth = AuthService()
 btr_bor = BorService()

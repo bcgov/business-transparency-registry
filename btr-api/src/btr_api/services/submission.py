@@ -40,14 +40,17 @@ which accepts a dictionary as an input and returns a SubmissionModel object.
 
 The individual services can be invoked as per the requirements.
 """
-from copy import deepcopy
-from http import HTTPStatus
 import uuid
+from copy import deepcopy
+from datetime import datetime
+from http import HTTPStatus
+from zoneinfo import ZoneInfo
 
 from flask import current_app
 
 from btr_api.exceptions import BusinessException, ExternalServiceException
 from btr_api.models import Ownership, Person, Submission as SubmissionModel
+from btr_api.models.submission import SubmissionType
 from btr_api.utils import deep_spread
 
 from .auth import AuthService
@@ -134,8 +137,11 @@ class SubmissionService:  # pylint: disable=too-few-public-methods
 
         # init submission
         submission = SubmissionModel(submitter_id=submitter_id,
-                                     invoice_id=None,
-                                     submitted_payload=submission_dict)
+                                     business_identifier=submission_dict['businessIdentifier'],
+                                     submitted_datetime=datetime.now(ZoneInfo('America/Vancouver')),
+                                     submitted_payload=submission_dict,
+                                     type=SubmissionType(submission_dict.get('filingType',
+                                                                             SubmissionType.CHANGE_FILING.value)))
         submission.save_to_session()
         # add ownership / person records to session
         SubmissionService.add_statements(submission,
@@ -162,6 +168,9 @@ class SubmissionService:  # pylint: disable=too-few-public-methods
         """
         submission.submitted_payload = submission_dict
         submission.submitter_id = submitter_id
+        submission.submitted_datetime = datetime.now(ZoneInfo('America/Vancouver'))
+        submission.type = SubmissionType(submission_dict.get('filingType', SubmissionType.CHANGE_FILING.value))
+
         # update ownership statements
         new_person_stmnts = []
         new_ownership_stmnts = []

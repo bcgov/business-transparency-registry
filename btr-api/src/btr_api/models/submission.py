@@ -34,10 +34,11 @@
 """Manages submission data for the BTR filing."""
 from __future__ import annotations
 
-from datetime import date, datetime
+import uuid
+from datetime import datetime
 from typing import TYPE_CHECKING
 
-from sqlalchemy import Column, ForeignKey, desc, event
+from sqlalchemy import Column, ForeignKey, desc
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sql_versioning import Versioned
@@ -53,10 +54,11 @@ if TYPE_CHECKING:
 
 
 class SubmissionType(BaseEnum):
-    """Enum of the roles used across the domain."""
+    """Enum of the submission type for a transparency register filing."""
 
-    other = auto()  # pylint: disable=invalid-name
-    standard = auto()  # pylint: disable=invalid-name
+    ANNUAL_FILING = auto()
+    CHANGE_FILING = auto()
+    INITIAL_FILING = auto()
 
 
 class Submission(Versioned, Base):
@@ -65,13 +67,13 @@ class Submission(Versioned, Base):
     __tablename__ = 'submission'
 
     id: Mapped[int] = mapped_column(primary_key=True)
-    type: Mapped[SubmissionType] = mapped_column(default=SubmissionType.other)
-    effective_date: Mapped[date] = mapped_column(nullable=True)
+    type: Mapped[SubmissionType] = mapped_column(nullable=True)
     submitted_datetime: Mapped[datetime] = mapped_column()
     submitted_payload = Column(JSONB, nullable=False)
     business_identifier: Mapped[str] = mapped_column(nullable=False, unique=True, index=True)
-    # maps to invoice id created by the pay-api (used for getting receipt)
-    invoice_id: Mapped[int] = mapped_column(nullable=True)
+    # Sync number + status for LEAR filing ledger
+    ledger_reference_number: Mapped[uuid.UUID] = mapped_column(nullable=True, unique=True)
+    ledger_updated: Mapped[bool] = mapped_column(nullable=False, default=False)
 
     # Relationships
     ownership_statements: Mapped[list['Ownership']] = relationship(back_populates='submission')
@@ -101,16 +103,6 @@ class Submission(Versioned, Base):
         return query.all()
 
 
-@event.listens_for(Submission, 'before_insert')
-@event.listens_for(Submission, 'before_update')
-def receive_before_change(mapper, connection, target: Submission):  # pylint: disable=unused-argument
-    """Update the submitted value, effective date, and business identifier."""
-    target.submitted_datetime = datetime.now()
-    target.business_identifier = target.submitted_payload.get('businessIdentifier')
-    if effective_date := target.submitted_payload.get('effectiveDate'):
-        target.effective_date = date.fromisoformat(effective_date)
-
-
 class SubmissionSerializer:
     """Serializer for submissions. Can convert to dict, string from submission model. """
 
@@ -125,9 +117,13 @@ class SubmissionSerializer:
 
         return {
             'id': submission.id,
-            'type': submission.type.value,
+            'type': submission.type.value if submission.type else None,
             'submittedDatetime': submission.submitted_datetime.isoformat(),
             'submitterId': submission.submitter_id,
+            'ledgerReferenceNumber': (str(submission.ledger_reference_number)
+                                      if submission.ledger_reference_number
+                                      else None),
+            'ledgerUpdated': submission.ledger_updated,
             'payload': {
                 **submission.submitted_payload,
                 'ownershipOrControlStatements': [
