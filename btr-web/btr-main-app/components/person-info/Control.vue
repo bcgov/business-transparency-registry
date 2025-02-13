@@ -127,13 +127,6 @@
         </template>
       </UAccordion>
     </div>
-
-    <div v-if="item.controlOther" class="mt-3">
-      <span class="font-bold italic">
-        {{ $t('labels.other') }}
-      </span>
-      <p>{{ item.controlOther }}</p>
-    </div>
   </div>
 </template>
 
@@ -146,31 +139,39 @@ const t = useNuxtApp().$i18n.t
 
 type IconType = { src: string; alt: string }
 
-const prop = defineProps<{ item: SiSchemaType }>()
-const interests = SiSchemaToBtrBodsConverters.getInterests(prop.item)
+const prop = defineProps({
+  item: { type: Object as () => SiSchemaType, required: true },
+  accordionExpanded: { type: Boolean, default: false }
+})
+
+const interests = computed(() => {
+  return SiSchemaToBtrBodsConverters.getInterests(prop.item, true)
+})
 
 const sharesJointly = computed(() => {
-  return interests.find(i => i.details === ControlOfSharesDetailsE.ACTING_JOINTLY)?.connectedIndividuals || []
+  return interests.value.find(i => i.details === ControlOfSharesDetailsE.ACTING_JOINTLY)?.connectedIndividuals || []
 })
 
 const sharesInConcert = computed(() => {
-  return interests.find(i => i.details === ControlOfSharesDetailsE.IN_CONCERT_CONTROL)?.connectedIndividuals || []
+  return interests.value.find(i => i.details === ControlOfSharesDetailsE.IN_CONCERT_CONTROL)?.connectedIndividuals || []
 })
 
 const votesJointly = computed(() => {
-  return interests.find(i => i.details === ControlOfVotesDetailsE.ACTING_JOINTLY)?.connectedIndividuals || []
+  return interests.value.find(i => i.details === ControlOfVotesDetailsE.ACTING_JOINTLY)?.connectedIndividuals || []
 })
 
 const votesInConcert = computed(() => {
-  return interests.find(i => i.details === ControlOfVotesDetailsE.IN_CONCERT_CONTROL)?.connectedIndividuals || []
+  return interests.value.find(i => i.details === ControlOfVotesDetailsE.IN_CONCERT_CONTROL)?.connectedIndividuals || []
 })
 
 const directorsJointly = computed(() => {
-  return interests.find(i => i.details === ControlOfDirectorsDetailsE.ACTING_JOINTLY)?.connectedIndividuals || []
+  return interests.value.find(i => i.details === ControlOfDirectorsDetailsE.ACTING_JOINTLY)?.connectedIndividuals || []
 })
 
 const directorsInConcert = computed(() => {
-  return interests.find(i => i.details === ControlOfDirectorsDetailsE.IN_CONCERT_CONTROL)?.connectedIndividuals || []
+  return interests.value.find(
+    i => i.details === ControlOfDirectorsDetailsE.IN_CONCERT_CONTROL
+  )?.connectedIndividuals || []
 })
 
 const sharesAccordionItems = computed(() => {
@@ -181,7 +182,8 @@ const sharesAccordionItems = computed(() => {
     rv.push({
       label: `Acting jointly (${jointly.value.length})`,
       content: jointly.value.map(i => i.legalName).join('<br>'),
-      padded: false
+      padded: false,
+      defaultOpen: prop.accordionExpanded
     })
   }
 
@@ -189,7 +191,8 @@ const sharesAccordionItems = computed(() => {
     rv.push({
       label: `Acting in concert(${inconcert.value.length})`,
       content: inconcert.value.map(i => i.legalName).join('<br>'),
-      padded: false
+      padded: false,
+      defaultOpen: prop.accordionExpanded
     })
   }
   return rv
@@ -203,7 +206,8 @@ const votesAccordionItems = computed(() => {
     rv.push({
       label: `Acting jointly (${jointly.value.length})`,
       content: jointly.value.map(i => i.legalName).join('<br>'),
-      padded: false
+      padded: false,
+      defaultOpen: prop.accordionExpanded
     })
   }
 
@@ -211,7 +215,8 @@ const votesAccordionItems = computed(() => {
     rv.push({
       label: `Acting in concert(${inconcert.value.length})`,
       content: inconcert.value.map(i => i.legalName).join('<br>'),
-      padded: false
+      padded: false,
+      defaultOpen: prop.accordionExpanded
     })
   }
   return rv
@@ -226,7 +231,8 @@ const directorsAccordionItems = computed(() => {
     rv.push({
       label: `Acting jointly (${jointly.value.length})`,
       content: jointly.value.map(i => i.legalName).join('<br>'),
-      padded: false
+      padded: false,
+      defaultOpen: prop.accordionExpanded
     })
   }
 
@@ -234,7 +240,8 @@ const directorsAccordionItems = computed(() => {
     rv.push({
       label: `Acting in concert(${inconcert.value.length})`,
       content: inconcert.value.map(i => i.legalName).join('<br>'),
-      padded: false
+      padded: false,
+      defaultOpen: prop.accordionExpanded
     })
   }
   return rv

@@ -18,6 +18,10 @@ const props = defineProps({
   editingDisabled: {
     type: Boolean,
     default: false
+  },
+  accordionExpanded: {
+    type: Boolean,
+    default: false
   }
 })
 
@@ -171,6 +175,7 @@ function capFirstLetterInName (fullName: string) {
         :index="index"
         :action-btn="edit ? getActionButton(item, index) : undefined"
         :action-dropdown-btns="getActionDropDownItems(item, index)"
+        :accordion-expanded="accordionExpanded"
       />
       <tr
         v-else-if="isEditing && editingIndex === index"

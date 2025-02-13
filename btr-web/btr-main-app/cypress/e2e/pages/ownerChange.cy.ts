@@ -1,4 +1,5 @@
 import moment from 'moment'
+import { SubmissionTypeE } from '../../../enums/submission-type-e'
 
 describe('pages -> Beneficial Owner Change', () => {
   beforeEach(() => {
@@ -11,10 +12,15 @@ describe('pages -> Beneficial Owner Change', () => {
   })
 
   it('rendered expected information', () => {
-    cy.get('[data-cy="significantIndividuals-heading"]').should('have.text', 'Significant Individuals')
+    cy.get('[data-cy="page-header"]').should('have.text', 'File Transparency Register')
     cy.get('[data-cy=add-new-btn]').should('have.text', 'Add an Individual')
     cy.get('[data-cy=addIndividualPerson]').should('not.exist')
     cy.get('[data-cy="individualsSummaryTable"]').should('exist')
+  })
+
+  it('rendered expected page title for annual filing', () => {
+    cy.visitHomePageWithFakeData('BC0871427', SubmissionTypeE.ANNUAL_FILING, '2023')
+    cy.get('[data-cy="page-header"]').should('have.text', 'File Transparency Register - Annual Filing 2023')
   })
 
   it('allows selection of the effective date', () => {

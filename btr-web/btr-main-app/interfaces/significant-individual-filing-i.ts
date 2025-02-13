@@ -2,7 +2,7 @@ import { z } from 'zod'
 import { SiSchemaType } from '~/utils/si-schema/definitions'
 
 export const FilingSchemaBase = z.object({
-  submissionType: z.string(),
+  submissionType: z.nativeEnum(SubmissionTypeE),
   submissionForYear: z.number().optional(),
   annualReportNoChanges: z.boolean().optional(),
   effectiveDate: z.string().min(1),

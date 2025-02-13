@@ -331,7 +331,7 @@ const _getInterestsOfSharesOrVotes = (
   return interests
 }
 
-const getInterests = (si: SiSchemaType) => {
+const getInterests = (si: SiSchemaType, includeAll: boolean = false) => {
   let interests: BodsInterestI[] = []
 
   for (const dateGroup of si.effectiveDates) {
@@ -339,7 +339,7 @@ const getInterests = (si: SiSchemaType) => {
     const startDate = dateGroup.startDate
     const endDate = dateGroup.endDate
 
-    if (hasFieldChanged(si, InputFieldsE.CONTROL_OF_SHARES)) {
+    if (hasFieldChanged(si, InputFieldsE.CONTROL_OF_SHARES) || includeAll) {
       const newInterests =
         _getInterestsOfSharesOrVotes(
           si.controlOfShares,
@@ -352,7 +352,7 @@ const getInterests = (si: SiSchemaType) => {
       interests = interests.concat(newInterests)
     }
 
-    if (hasFieldChanged(si, InputFieldsE.CONTROL_OF_VOTES)) {
+    if (hasFieldChanged(si, InputFieldsE.CONTROL_OF_VOTES) || includeAll) {
       const newInterests =
         _getInterestsOfSharesOrVotes(
           si.controlOfVotes,
@@ -364,7 +364,7 @@ const getInterests = (si: SiSchemaType) => {
       interests = interests.concat(newInterests)
     }
 
-    if (hasFieldChanged(si, InputFieldsE.CONTROL_OF_DIRECTORS)) {
+    if (hasFieldChanged(si, InputFieldsE.CONTROL_OF_DIRECTORS) || includeAll) {
       const newInterests =
         _getDirectorsInterests(
           si.controlOfDirectors,

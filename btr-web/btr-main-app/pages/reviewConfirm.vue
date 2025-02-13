@@ -1,44 +1,30 @@
 <template>
-  <div data-cy="review-confirm">
-    <h1 class="font-bold text-3xl" data-cy="page-header">
-      {{ $t('pageHeadings.significantIndividualChange') }}
-    </h1>
-    <h2 class="font-bold text-lg mt-5" data-cy="review-confirm-section-heading">
+  <div class="flex flex-col gap-5" data-cy="review-confirm">
+    <BtrPageTitle />
+
+    <h2 class="font-bold text-lg" data-cy="review-confirm-section-heading">
       {{ $t('sectionTitles.reviewConfirm') }}
     </h2>
-    <p class="mt-5" data-cy="page-info-text">
+    <p data-cy="page-info-text">
       {{ $t('texts.reviewConfirm') }}
     </p>
-    <div class="mt-10 p-10 bg-white rounded flex" data-cy="effective-date-select">
-      <label class="font-bold text-lg w-[200px]">{{ $t('labels.significantIndividualChangeDate') }}</label>
-      <div class="ml-10 text-lg">
-        {{ currentSIFiling.effectiveDate }}
-      </div>
-    </div>
-    <div class="bg-white rounded-[5px] mt-10">
+
+    <BcrosAlertsMessage :flavour="AlertsFlavourE.INFO">
+      <p class="py-2">
+        <BcrosI18HelperBold translation-path="texts.reviewConfirmAlert" />
+      </p>
+    </BcrosAlertsMessage>
+
+    <div class="bg-white rounded-[5px]">
       <IndividualPersonSummaryTable
         :individuals="allSIs || []"
         :edit="false"
+        :accordion-expanded="true"
       />
     </div>
-    <h2 class="font-bold text-lg mt-16" data-cy="review-confirm-section-heading">
-      1. {{ $t('texts.folioNumber.reviewAndConfirm.title') }}
-    </h2>
-    <p class="mt-5 text-justify" data-cy="folioNumber-reviewAndConfirm-description-text">
-      {{ $t('texts.folioNumber.reviewAndConfirm.description') }}
-    </p>
-    <UForm
-      :schema="schemaFolioNumber"
-      :state="currentSIFiling"
-    >
-      <BtrFolioNumber
-        v-model="currentSIFiling.folioNumber"
-        :max-folio-number-length="maxFolioNumberLength"
-        @change="addBtrPayFees"
-      />
-    </UForm>
-    <h2 class="font-bold text-lg mt-16" data-cy="certify-section-label">
-      2. {{ $t('labels.certifySection') }}
+
+    <h2 class="font-bold text-lg" data-cy="certify-section-label">
+      {{ $t('labels.authorize') }}
     </h2>
     <BcrosSection
       :show-section-has-errors="certifiedErrors.length > 0"
@@ -75,8 +61,6 @@ const { currentSIFiling, allSIs }: {
   allSIs: SiSchemaType[]
 } = storeToRefs(significantIndividuals)
 
-const maxFolioNumberLength = 30
-
 const reValidateConfirmReviewPage = () => {
   const { validateConfirmReviewPage } = useConfirmReviewStore()
 
@@ -87,10 +71,6 @@ const reValidateConfirmReviewPage = () => {
     confirmReviewPageErrors.value = []
   }
 }
-
-const schemaFolioNumber = z.object({
-  folioNumber: getFolioValidator()
-})
 
 onBeforeMount(() => {
   currentSIFiling.value.certified = false
