@@ -75,14 +75,33 @@ class AuthService:
         self.svc_acc_secret = app.config.get('SVC_ACC_CLIENT_SECRET')
         auth_cache.init_app(app)
 
-    def get_cache_key(self, auth_arg: str | Request, key: str | int):
-        """Return the cache key for the given args."""
-        if isinstance(auth_arg, Request):
-            try:
-                auth_arg = self.get_authorization_header(auth_arg)
-            except AuthException:
+    def get_cache_key(self, *args, **kwargs):
+        """Return the cache key for the given args.
+
+        Expects all values as args OR all values as kwargs.
+        """
+
+        request: Request = kwargs.get('request')
+        token: str = kwargs.get('token')
+        key: str | int = kwargs.get('account_id', kwargs.get('business_identifier'))
+
+        if not (request or token) or not key:
+            # attempt to set via *args
+            if len(args) < 2:
                 return None
-        return 'auth' + auth_arg + str(key)
+
+            request_or_token: str | Request = args[0]
+            key: str | int = args[1]
+
+            if isinstance(request_or_token, Request):
+                try:
+                    token = self.get_authorization_header(request_or_token)
+                except AuthException:
+                    return None
+            else:
+                token = request_or_token
+
+        return 'auth' + token + str(key)
 
     def get_user_type(self):
         """
