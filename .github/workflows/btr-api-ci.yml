@@ -76,6 +76,7 @@ jobs:
       
       - name: Update db
         run: |
+          poetry shell
           ./update_db.sh upgrade
 
       - name: Run tests
