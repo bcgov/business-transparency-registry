@@ -83,7 +83,7 @@
       "checkboxText": "It is not possible to obtain or confirm some information about this individual",
       "description": "Enter the steps taken, including corresponding dates, to obtain or confirm the required information about this individual.",
       "stepsTaken": "Steps taken",
-      "textAreaPlaceholder": "Steps and efforts taken to obtain or confirm required information",
+      "textAreaPlaceholder": "Steps taken to obtain or confirm required information",
       "alert": {
         "important": "Important:",
         "sentence1": "You MUST complete all required information about this individual that you can obtain and confirm.",
@@ -91,7 +91,8 @@
       }
     },
     "unknown": "Unknown",
-    "certifySection": "Certify"
+    "certifySection": "Certify",
+    "authorize": "Authorize"
   },
   "registriesDetailsLabels": {
     "fullName": "Full Legal Name",
@@ -243,6 +244,7 @@
     "taxNumber": "A 9-digit Social Insurance Number (SIN), an Individual Tax Number (ITN), or a Temporary Taxation Number (TTN) is required if this individual has one.",
     "taxResidency": "Indicate if this person is a resident of Canada for Income Tax purposes.",
     "reviewConfirm": "Review the information in your registration. If you need to change anything, return to the previous step to make the necessary change.",
+    "reviewConfirmAlert": "{boldStart}Important:{boldEnd} This information needs to match what is in the company’s internal transparency register.",
     "certify": {
       "certification": "Certification",
       "part1": "I, ",
@@ -428,7 +430,8 @@
   },
   "pageHeadings": {
     "myRegDetails": "My BC Registries Details",
-    "significantIndividualChange": "Significant Individual Change",
+    "fileTransparencyRegister": "File Transparency Register",
+    "annualFiling": "Annual Filing",
     "significantIndividuals": "Significant Individuals"
   },
   "sectionTitles": {

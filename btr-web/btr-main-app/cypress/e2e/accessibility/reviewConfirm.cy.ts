@@ -28,8 +28,7 @@ describe('accessibility -> Review and Confirm', () => {
       cy.get('[data-cy="start-date-select"]').click().then(() => {
         cy.get('.bcros-date-picker__calendar__day.dp__today').parent().click()
       })
-      // todo: fixme update with #20756
-      // cy.get('[data-cy=testControlOfDirectors]').get('[name=directControl]').check()
+      cy.get('[data-cy="controlOfDirectors.directControl"]').check()
       cy.get('#addNewPersonBirthdate').trigger('click')
       cy.get('[data-cy=date-picker]').get('.bcros-date-picker__calendar__day.dp__today').trigger('click')
       cy.get('[data-cy=address-country]').click()
@@ -48,9 +47,7 @@ describe('accessibility -> Review and Confirm', () => {
     })
     // // go to review / confirm page
     cy.get('[data-cy=button-control-right-button]').click().then(() => {
-      // // enter folio
-      cy.get('[data-cy="significantIndividualChangeFolioNumberTextArea"]').type('123123')
-      // // check certify
+      // check certify
       cy.get('[data-cy="certify-section-checkbox"]').check()
     })
     // check AA

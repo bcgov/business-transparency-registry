@@ -108,18 +108,26 @@ Cypress.Commands.add('visitHomePageNoFakeData', (businessIdentifier?: string, su
   cy.wait(['@existingSIs', '@businessApiCall', '@payFeeApi', '@businessContact'])
 })
 
-Cypress.Commands.add('visitHomePageWithFakeData', (businessIdentifier?: string, submissionType?: SubmissionTypeE) => {
+Cypress.Commands.add('visitHomePageWithFakeData', (
+  businessIdentifier?: string,
+  submissionType?: SubmissionTypeE,
+  submissionForYear?: string
+) => {
   if (!businessIdentifier) {
     businessIdentifier = 'BC0871427'
   }
   if (!submissionType) {
     submissionType = SubmissionTypeE.CHANGE_FILING
   }
+  let url = `/${businessIdentifier}/beneficial-owner-change?submissionType=` + submissionType
+  if (submissionForYear) {
+    url += `&submissionForYear=${submissionForYear}`
+  }
   cy.interceptPostsBtrApi().as('existingSIs')
   cy.interceptPayFeeApi().as('payFeeApi')
   cy.interceptBusinessContact().as('businessContact')
   cy.interceptBusinessSlim().as('businessApiCall')
-  cy.visit(`/${businessIdentifier}/beneficial-owner-change?submissionType=` + submissionType)
+  cy.visit(url)
   cy.wait(['@existingSIs', '@businessApiCall', '@payFeeApi', '@businessContact'])
 })
 

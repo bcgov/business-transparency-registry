@@ -13,7 +13,7 @@ describe('Tests for owner change page', () => {
   afterEach(() => { wrapper.unmount() })
 
   test('header and footer initialized', () => {
-    expect(wrapper.find('[data-cy="significantIndividuals-heading"]').exists()).toBe(true)
+    expect(wrapper.find('[data-cy="page-header"]').exists()).toBe(true)
     expect(wrapper.find('[data-cy="page-info-text"]').exists()).toBe(true)
     expect(wrapper.find('[data-cy=add-new-btn]').exists()).toBe(true)
     expect(wrapper.find('[data-cy="individualsSummaryTable"]').exists()).toBe(true)

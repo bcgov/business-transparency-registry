@@ -7,7 +7,7 @@ describe('accessibility -> Beneficial Owner Change', () => {
 
   it('checks page passes accessibility', () => {
     // For now, this is an example of passing checks
-    cy.checkA11y('[data-cy="significantIndividuals-heading"]')
+    cy.checkA11y('[data-cy="page-header"]')
     cy.checkA11y('[data-cy=page-info-text]')
     cy.checkA11y('[data-cy=add-new-btn]')
 

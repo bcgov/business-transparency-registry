@@ -33,7 +33,6 @@ describe('pages -> Review and Confirm', () => {
 
       // click 'Add an Individual' button and expand the form
       cy.get('[data-cy=add-new-btn]').click()
-      // cy.get('[data-cy=showAddIndividualPersonManually]').click()
 
       cy.fillOutForm(testData.profile1)
 
@@ -46,11 +45,6 @@ describe('pages -> Review and Confirm', () => {
       // verify the url changes to /review-confirm
       cy.url().should('include', '/review-confirm')
 
-      // check the Significant Individual Filing Effective Date is correct
-      const today = new Date()
-      const expectedDate = dateToString(today, 'YYYY-MM-DD')
-      cy.get('[data-cy=effective-date-select]').contains(expectedDate)
-
       // check if the summary table contain the correct data
       const summaryTable = cy.get('[data-cy="individualsSummaryTable"]')
       summaryTable.get('[data-cy=summary-table-name]').contains(testData.profile1.fullName)
@@ -62,7 +56,7 @@ describe('pages -> Review and Confirm', () => {
       summaryTable.get('[data-cy=summary-table-details]').contains(testData.profile1.address.postalCode)
       summaryTable.get('[data-cy=summary-table-details]').contains(testData.profile1.address.country)
       summaryTable.get('[data-cy=summary-table-details]').contains(testData.profile1.taxNumber)
-
+      const expectedDate = dateToString(new Date(), 'YYYY-MM-DD')
       summaryTable.get('[data-cy=summary-table-dates]').contains(expectedDate)
 
       // To-Do: add tests for control column in the new summary table in #21656
@@ -91,8 +85,7 @@ describe('pages -> Review and Confirm', () => {
       cy.get('[data-cy=button-control-right-button]').eq(1).click()
 
       // check redirect to change
-      // The following line is commented out. Validation is not passed (no )
-      // cy.url().should('not.include', '/beneficial-owner-change/review-confirm')
+      cy.url().should('not.include', '/beneficial-owner-change/review-confirm')
       cy.url().should('include', '/beneficial-owner-change')
     })
   })
