@@ -173,7 +173,7 @@ const convertToBtrBodsForSubmit = (sif: SignificantIndividualFilingI): BtrFiling
 const submitSignificantIndividualFiling = async (
   sif: SignificantIndividualFilingI,
   filingType: SubmissionTypeE,
-  previousSubmissionId?: number,
+  previousSubmissionId?: string,
   arFilingForYear?: number
 ) => {
   const submitSif: SignificantIndividualFilingI = {

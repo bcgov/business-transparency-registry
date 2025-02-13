@@ -15,6 +15,7 @@ type ActionBtnT = {
 const props = defineProps<{
   si: SiSchemaType,
   index: number,
+  accordionExpanded?: boolean,
   actionBtn?: ActionBtnT,
   actionDropdownBtns?: ActionBtnT[]
 }>()
@@ -76,7 +77,7 @@ const opacityClass = computed(() => {
     </td>
 
     <td :class="opacityClass" data-cy="summary-table-controls">
-      <PersonInfoControl :item="si" />
+      <PersonInfoControl :item="si" :accordion-expanded="accordionExpanded" />
     </td>
 
     <td :class="opacityClass" data-cy="summary-table-dates">
