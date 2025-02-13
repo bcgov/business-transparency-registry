@@ -223,10 +223,10 @@ class AuthService:
             # pass along
             raise exc
         except (requests.exceptions.ConnectionError, requests.exceptions.Timeout) as err:
-            self.app.logger.debug('Auth connection failure:', repr(err))
+            self.app.logger.debug('Auth connection failure: %s', repr(err))
             raise ExternalServiceException(error=repr(err), status_code=HTTPStatus.SERVICE_UNAVAILABLE) from err
         except Exception as err:
-            self.app.logger.debug('Generic Auth verification failure:', repr(err))
+            self.app.logger.debug('Generic Auth verification failure: %s', repr(err))
             raise ExternalServiceException(error=repr(err), status_code=HTTPStatus.SERVICE_UNAVAILABLE) from err
 
     @auth_cache.cached(timeout=600, make_cache_key=get_cache_key)
@@ -260,8 +260,8 @@ class AuthService:
             # pass along
             raise exc
         except (requests.exceptions.ConnectionError, requests.exceptions.Timeout) as err:
-            self.app.logger.debug('Auth connection failure:', repr(err))
+            self.app.logger.debug('Auth connection failure: %s', repr(err))
             raise ExternalServiceException(error=repr(err), status_code=HTTPStatus.SERVICE_UNAVAILABLE) from err
         except Exception as err:
-            self.app.logger.debug('Generic Auth verification failure:', repr(err))
+            self.app.logger.debug('Generic Auth verification failure: %s', repr(err))
             raise ExternalServiceException(error=repr(err), status_code=HTTPStatus.SERVICE_UNAVAILABLE) from err

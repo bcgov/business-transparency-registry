@@ -36,7 +36,6 @@
 This module is the API for the Legal Entity system.
 """
 import os
-from logging import Logger
 
 from flask import Flask
 from flask_cors import CORS
@@ -53,7 +52,7 @@ from .resources import register_endpoints
 from .services import btr_auth, btr_bor, btr_email, btr_entity, btr_reg_search
 from .translations import babel
 
-logger: Logger = StructuredLogging().get_logger()
+logger = StructuredLogging().get_logger()
 
 CONFIG_MAP = {
     'development': Development,
