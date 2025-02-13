@@ -64,10 +64,10 @@ CONFIG_MAP = {
 def create_app(environment=os.getenv('DEPLOYMENT_ENV', 'production'), **kwargs) -> Flask:
     """Return a configured Flask App using the Factory method."""
     app = Flask(__name__)
+    app.logger = StructuredLogging().get_logger()
     app.config.from_object(CONFIG_MAP.get(environment, Production))
 
     CORS(app)
-    app.logger = StructuredLogging().get_logger()
     db.init_app(app)
 
     if environment == 'migration':
