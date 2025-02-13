@@ -76,8 +76,7 @@ jobs:
       
       - name: Update db
         run: |
-          poetry run flask db upgrade
-          poetry run flask db migrate
+          ./update_db.sh upgrade
 
       - name: Run tests
         run: poetry run pytest --cov=./src --cov-report=xml
