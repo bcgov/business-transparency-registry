@@ -52,8 +52,6 @@ from .resources import register_endpoints
 from .services import btr_auth, btr_bor, btr_email, btr_entity, btr_reg_search
 from .translations import babel
 
-logger = StructuredLogging().get_logger()
-
 CONFIG_MAP = {
     'development': Development,
     'testing': Testing,
@@ -69,7 +67,7 @@ def create_app(environment=os.getenv('DEPLOYMENT_ENV', 'production'), **kwargs) 
     app.config.from_object(CONFIG_MAP.get(environment, Production))
 
     CORS(app)
-    app.logger = logger
+    app.logger = StructuredLogging().get_logger()
     db.init_app(app)
 
     if environment == 'migration':
