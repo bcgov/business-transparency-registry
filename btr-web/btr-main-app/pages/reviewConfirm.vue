@@ -5,7 +5,7 @@
     <h2 class="font-bold text-lg" data-cy="review-confirm-section-heading">
       {{ $t('sectionTitles.reviewConfirm') }}
     </h2>
-    <p class="" data-cy="page-info-text">
+    <p data-cy="page-info-text">
       {{ $t('texts.reviewConfirm') }}
     </p>
 
