@@ -112,8 +112,8 @@ class RegSearchService:
             # pass along
             raise exc
         except (requests.exceptions.ConnectionError, requests.exceptions.Timeout) as err:
-            self.app.logger.debug('search-api connection failure:', repr(err))
+            self.app.logger.debug('search-api connection failure: %s', repr(err))
             raise ExternalServiceException(error=repr(err), status_code=HTTPStatus.SERVICE_UNAVAILABLE) from err
         except Exception as err:
-            self.app.logger.debug('search-api integration (update businesses) failure:', repr(err))
+            self.app.logger.debug('search-api integration (update businesses) failure: %s', repr(err))
             raise ExternalServiceException(error=repr(err), status_code=HTTPStatus.SERVICE_UNAVAILABLE) from err

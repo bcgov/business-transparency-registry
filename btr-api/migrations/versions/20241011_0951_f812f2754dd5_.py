@@ -80,4 +80,5 @@ def downgrade():
         batch_op.drop_index(batch_op.f('ix_request_business_identifier'))
 
     op.drop_table('request')
+    op.execute('DROP TYPE completingparty')
     # ### end Alembic commands ###

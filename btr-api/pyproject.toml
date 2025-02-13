@@ -16,7 +16,6 @@ flask-sqlalchemy = "^3.0.5"
 flask-migrate = "^4.0.4"
 psycopg2 = "^2.9.5"
 sql-versioning = { git = "https://github.com/bcgov/lear.git", subdirectory = "python/common/sql-versioning", branch = "feature-legal-name" }
-sentry-sdk = "^1.24.0"
 flask-babel = "^4.0.0"
 flask-cors = "^4.0.0"
 flask-jwt-oidc = "^0.3.0"
@@ -24,6 +23,7 @@ gunicorn = "^21.2.0"
 jsonschema = {extras = ["format"], version = "^4.20.0"}
 pycountry = "^23.12.11"
 flask-caching = "^2.3.0"
+structured-logging = { git = "https://github.com/bcgov/sbc-connect-common.git", subdirectory = "python/structured-logging", branch = "main" }
 
 [tool.poetry.group.test.dependencies]
 freezegun = "^1.2.2"

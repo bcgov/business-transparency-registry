@@ -100,8 +100,8 @@ class BorService:
             # pass along
             raise exc
         except (requests.exceptions.ConnectionError, requests.exceptions.Timeout) as err:
-            self.app.logger.debug('bor-api connection failure:', repr(err))
+            self.app.logger.debug('bor-api connection failure: %s', repr(err))
             raise ExternalServiceException(error=repr(err), status_code=HTTPStatus.SERVICE_UNAVAILABLE) from err
         except Exception as err:
-            self.app.logger.debug('bor-api integration (update owners) failure:', repr(err))
+            self.app.logger.debug('bor-api integration (update owners) failure: %s', repr(err))
             raise ExternalServiceException(error=repr(err), status_code=HTTPStatus.SERVICE_UNAVAILABLE) from err

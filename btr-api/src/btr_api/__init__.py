@@ -37,56 +37,55 @@ This module is the API for the Legal Entity system.
 """
 import os
 
-import sentry_sdk
-from flask_cors import CORS
-from sentry_sdk.integrations.flask import FlaskIntegration
 from flask import Flask
+from flask_cors import CORS
+from flask_migrate import Migrate
+from structured_logging import StructuredLogging
 
+from .common import error
 from .common.auth import jwt
 from .common.flags import Flags
 from .common.run_version import get_run_version
-from .config import Config, Production
-from .logging import set_log_level_by_flag, setup_logging
+from .config import Development, Migration, Production, Sandbox, Testing
 from .models import db
 from .resources import register_endpoints
 from .services import btr_auth, btr_bor, btr_email, btr_entity, btr_reg_search
 from .translations import babel
 
-setup_logging(os.path.join(os.path.abspath(os.path.dirname(__file__)), 'logging.conf'))  # important to do this first
+CONFIG_MAP = {
+    'development': Development,
+    'testing': Testing,
+    'migration': Migration,
+    'sandbox': Sandbox,
+    'production': Production
+}
 
 
-def create_app(environment: Config = Production, **kwargs) -> Flask:
+def create_app(environment=os.getenv('DEPLOYMENT_ENV', 'production'), **kwargs) -> Flask:
     """Return a configured Flask App using the Factory method."""
     app = Flask(__name__)
+    app.logger = StructuredLogging().get_logger()
+    app.config.from_object(CONFIG_MAP.get(environment, Production))
+
     CORS(app)
-    app.config.from_object(environment)
-
-    # Configure Sentry
-    if dsn := app.config.get('SENTRY_DSN', None):
-        sentry_sdk.init(
-            dsn=dsn,
-            integrations=[FlaskIntegration()],
-            release=f'btr-api@{get_run_version()}',
-            send_default_pii=False,
-            environment=app.config.get('POD_NAMESPACE', 'unknown')
-        )
-
     db.init_app(app)
-    btr_auth.init_app(app)
-    btr_bor.init_app(app)
-    btr_email.init_app(app)
-    btr_entity.init_app(app)
-    btr_reg_search.init_app(app)
-    # td is testData instance passed in to support testing
-    td = kwargs.get('ld_test_data', None)
-    Flags().init_app(app, td)
-    babel.init_app(app)
-    register_endpoints(app)
-    setup_jwt_manager(app, jwt)
 
-    @app.before_request
-    def before_request():  # pylint: disable=unused-variable
-        set_log_level_by_flag()
+    if environment == 'migration':
+        Migrate(app, db)
+
+    else:
+        btr_auth.init_app(app)
+        btr_bor.init_app(app)
+        btr_email.init_app(app)
+        btr_entity.init_app(app)
+        btr_reg_search.init_app(app)
+        # td is testData instance passed in to support testing
+        td = kwargs.get('ld_test_data', None)
+        Flags().init_app(app, td)
+        babel.init_app(app)
+        register_endpoints(app)
+        setup_jwt_manager(app, jwt)
+        error.init_app(app)
 
     @app.after_request
     def add_version(response):  # pylint: disable=unused-variable

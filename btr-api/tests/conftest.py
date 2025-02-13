@@ -117,7 +117,7 @@ def ld():
 @pytest.fixture(scope='session')
 def app(ld):
     """Return a session-wide application configured in TEST mode."""
-    _app = create_app(Testing, **{'ld_test_data': ld})
+    _app = create_app('testing', **{'ld_test_data': ld})
 
     return _app
 
