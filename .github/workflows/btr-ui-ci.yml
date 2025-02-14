@@ -83,6 +83,7 @@ jobs:
         run: pnpm install
 
       - name: Set basic env
+        working-directory: btr-web/${{ matrix.project }}
         run: |
           cp .env.example .env
 
@@ -91,8 +92,8 @@ jobs:
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v3
-        with: 
-          files: ./btr-web/btr-main-app/coverage/clover.xml
+        with:
+          files: ./btr-web/${{ matrix.project }}/coverage/clover.xml
           flags: btr-ui
           name: codecov-btr-ui
           fail_ci_if_error: false
