@@ -38,10 +38,11 @@ export function reviewConfirm () {
             path: ['noSignificantIndividualsExist']
           })
         }
-
         if (schema.submissionType === SubmissionTypeE.CHANGE_FILING &&
-          !(schema.significantIndividuals.find(si => si.ui?.newOrUpdatedFields?.length > 0) ||
-          schema.significantIndividuals.find(si => si.ui?.newOrUpdatedFields?.length > 0))
+          !(
+            schema.significantIndividuals.find(si => si.ui?.newOrUpdatedFields?.length > 0) ||
+            schema.significantIndividuals.find(si => si.ui?.actions?.length > 0)
+          )
         ) {
           // schema
           ctx.addIssue({
