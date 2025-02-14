@@ -42,41 +42,34 @@ describe('Layout -> Header (logged out)', () => {
   })
 
   it('redirects to services card login when clicked', () => {
+    cy.intercept('GET', 'https://**.bcregistry.gov.bc.ca/signin/bcsc', {}).as('LOGIN_BCSC')
     Cypress.config('defaultCommandTimeout', 30000)
     cy.get('[data-cy=logged-out-menu]').click()
     cy.get('[data-cy="menu-item"]').eq(0).click()
-    cy.wait(['@DARKLY', '@LOGIN_PROXY'])
-    cy.origin('https://idtest.gov.bc.ca', () => {
-      cy.url().should('include', 'login/entry#start')
-    })
+    cy.wait(['@LOGIN_BCSC']) // if it does not expire it means clicking button calls expected link
   })
 
   it('redirects to bceid login when clicked', () => {
+    cy.intercept('GET', 'https://**.bcregistry.gov.bc.ca/signin/bceid', {}).as('LOGIN_BCEID')
     Cypress.config('defaultCommandTimeout', 30000)
     cy.get('[data-cy=logged-out-menu]').click()
     cy.get('[data-cy="menu-item"]').eq(1).click()
-    cy.wait(['@DARKLY', '@LOGIN_PROXY'])
-    cy.origin('https://logontest7.gov.bc.ca', () => {
-      cy.url().should('include', 'clp-cgi/capBceid/logon.cgi')
-    })
+    cy.wait(['@LOGIN_BCEID']) // if it does not expire it means clicking button calls expected link
   })
 
   it('redirects to idir login when clicked', () => {
+    cy.intercept('GET', 'https://**.bcregistry.gov.bc.ca/signin/idir', {}).as('LOGIN_IDIR')
     Cypress.config('defaultCommandTimeout', 30000)
     cy.get('[data-cy=logged-out-menu]').click()
     cy.get('[data-cy="menu-item"]').eq(2).click()
-    cy.wait(['@DARKLY', '@LOGIN_PROXY'])
-    cy.origin('https://logontest7.gov.bc.ca', () => {
-      cy.url().should('include', 'clp-cgi/int/logon.cgi')
-    })
+    cy.wait(['@LOGIN_IDIR']) // if it does not expire it means clicking button calls expected link
   })
 
   it('redirects to create account when clicked', () => {
+    cy.intercept('GET', 'https://**.account.bcregistry.gov.bc.ca/choose-authentication-method ', {})
+      .as('CREATE_ACCOUNT')
     Cypress.config('defaultCommandTimeout', 30000)
     cy.get('[data-cy=logged-out-create-accnt]').click()
-    cy.wait(['@DARKLY', '@LOGIN_PROXY'])
-    cy.origin('https://dev.account.bcregistry.gov.bc.ca', () => {
-      cy.url().should('include', 'choose-authentication-method')
-    })
+    cy.wait(['@CREATE_ACCOUNT']) // if it does not expire it means clicking button calls expected link
   })
 })

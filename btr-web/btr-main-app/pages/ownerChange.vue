@@ -119,7 +119,6 @@ watch(() => allEditableSIs, () => {
             </span>
           </template>
         </UCheckbox>
-
         <template v-if="currentSIFiling.noSignificantIndividualsExist">
           <div class="mt-5">
             <p data-cy="noSignificantIndividualsExistExplain">

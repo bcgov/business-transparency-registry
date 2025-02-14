@@ -91,7 +91,7 @@ jobs:
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v3
-        with: 
+        with:
           files: ./btr-web/btr-main-app/coverage/clover.xml
           flags: btr-ui
           name: codecov-btr-ui
