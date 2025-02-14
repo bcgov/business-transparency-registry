@@ -43,24 +43,24 @@ switch (props.flavour) {
   case AlertsFlavourE.ALERT:
     flavourIcon.value = 'i-mdi-alert'
     flavourIconClass.value = 'text-red-500'
-    flavourContainerClass.value = 'border-2 border-red-500 bg-red-100'
+    flavourContainerClass.value = 'border border-red-500 bg-red-100'
     flavourRole.value = 'alert'
     break
   case AlertsFlavourE.SUCCESS:
     flavourIcon.value = 'i-mdi-success-circle'
-    flavourContainerClass.value = 'border-2 border-green-500 bg-green-100'
+    flavourContainerClass.value = 'border border-green-500 bg-green-100'
     flavourRole.value = 'alert'
     break
   case AlertsFlavourE.WARNING:
     flavourIcon.value = 'i-mdi-alert'
     flavourIconClass.value = 'text-orange-500'
-    flavourContainerClass.value = 'border-2 border-orange-500 bg-orange-100'
+    flavourContainerClass.value = 'border border-orange-500 bg-orange-100'
     flavourRole.value = 'alert'
     break
   case AlertsFlavourE.INFO:
     flavourIcon.value = 'i-mdi-alert'
     flavourIconClass.value = 'text-orange-500'
-    flavourContainerClass.value = 'border-2 border-yellow-500 bg-yellow-50'
+    flavourContainerClass.value = 'border border-yellow-500 bg-yellow-50'
     flavourRole.value = 'note'
     break
   case AlertsFlavourE.MESSAGE:
