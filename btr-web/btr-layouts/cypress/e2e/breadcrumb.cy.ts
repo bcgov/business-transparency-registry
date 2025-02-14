@@ -19,17 +19,16 @@ describe('Layout -> Breadcrumb', () => {
   })
 
   it('redirects to breadcrumb link', () => {
+    cy.intercept('GET', 'https://**.bcregistry.gov.bc.ca/**/login', {}).as('REDIRECT_LOGIN')
     cy.get('[data-cy="crumb-link"]').eq(0).click()
-    cy.origin('https://dev.bcregistry.gov.bc.ca', () => {
-      cy.url().should('include', '/login')
-    })
+    cy.wait(['@REDIRECT_LOGIN']) // if it does not expire it means clicking button calls expected link
   })
 
   it('triggers expected back button functionality', () => {
+    cy.intercept('GET', 'https://**.bcregistry.gov.bc.ca/**/decide-business', {})
+      .as('DECIDE_BUSINESS')
     cy.get('[data-cy="crumb-back"]').click()
     // should've gone to previous breadcrumb in the list
-    cy.origin('https://dev.account.bcregistry.gov.bc.ca', () => {
-      cy.url().should('include', '/decide-business')
-    })
+    cy.wait(['@DECIDE_BUSINESS']) // if it does not expire it means clicking button calls expected link
   })
 })
