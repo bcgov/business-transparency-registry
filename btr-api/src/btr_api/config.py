@@ -63,7 +63,6 @@ class Config:  # pylint: disable=too-few-public-methods
     CSRF_ENABLED = True
     SECRET_KEY = "this-really-needs-to-be-changed"
     PROJECT_ROOT = os.path.abspath(os.path.dirname(__file__))
-    POD_NAMESPACE = os.getenv("POD_NAMESPACE", None)
 
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
@@ -81,8 +80,6 @@ class Config:  # pylint: disable=too-few-public-methods
     GCP_AUTH_KEY = os.getenv("GCP_AUTH_KEY", None)
 
     LD_SDK_KEY = os.getenv("LD_SDK_KEY", None)
-
-    SENTRY_DSN = os.getenv("SENTRY_DSN", None)
 
     # JWT_OIDC Settings
     JWT_OIDC_WELL_KNOWN_CONFIG = os.getenv('JWT_OIDC_WELL_KNOWN_CONFIG')
@@ -146,6 +143,24 @@ class Sandbox(Config):  # pylint: disable=too-few-public-methods
 
     DEVELOPMENT = True
     DEBUG = True
+
+
+class Migration:  # pylint: disable=too-few-public-methods
+    """Config for db migration."""
+
+    TESTING = False
+    DEBUG = True
+
+    DB_USER = os.getenv("DATABASE_USERNAME", "")
+    DB_PASSWORD = os.getenv("DATABASE_PASSWORD", "")
+    DB_NAME = os.getenv("DATABASE_NAME", "")
+    DB_HOST = os.getenv("DATABASE_HOST", "")
+    DB_PORT = int(os.getenv("DATABASE_PORT", "5432"))  # POSTGRESQL
+    # POSTGRESQL
+    if DB_UNIX_SOCKET := os.getenv("DATABASE_UNIX_SOCKET", None):
+        SQLALCHEMY_DATABASE_URI = f"postgresql+psycopg2://{DB_USER}:{DB_PASSWORD}@/{DB_NAME}?host={DB_UNIX_SOCKET}"
+    else:
+        SQLALCHEMY_DATABASE_URI = f"postgresql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
 
 
 class Development(Config):  # pylint: disable=too-few-public-methods

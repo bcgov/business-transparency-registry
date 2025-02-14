@@ -15,11 +15,9 @@
 """
 import os
 
-from btr_api import create_app, db
-from flask_migrate import Migrate
+from btr_api import create_app
 
 app = create_app() # pylint: disable=invalid-name
-migrate = Migrate(app, db)
 
 if __name__ == "__main__":
     server_port = os.environ.get('PORT', '8080')

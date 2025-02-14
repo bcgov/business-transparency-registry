@@ -105,10 +105,10 @@ class EntityService:
         except ExternalServiceException as exc:
             raise exc
         except (requests.exceptions.ConnectionError, requests.exceptions.Timeout) as err:
-            self.app.logger.debug('Legal-api connection failure:', repr(err))
+            self.app.logger.debug('Legal-api connection failure: %s', repr(err))
             raise ExternalServiceException(error=repr(err), status_code=HTTPStatus.SERVICE_UNAVAILABLE) from err
         except Exception as err:
-            self.app.logger.debug('Legal-api integration failure:', repr(err))
+            self.app.logger.debug('Legal-api integration failure: %s', repr(err))
             raise ExternalServiceException(error=repr(err), status_code=HTTPStatus.INTERNAL_SERVER_ERROR) from err
 
     def submit_filing(self, submission: Submission, user: User, user_jwt: JwtManager, account_id: str):

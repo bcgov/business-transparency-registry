@@ -75,9 +75,10 @@ jobs:
         run: poetry install
       
       - name: Update db
+        env:
+          DEPLOYMENT_ENV: migration
         run: |
           poetry run flask db upgrade
-          poetry run flask db migrate
 
       - name: Run tests
         run: poetry run pytest --cov=./src --cov-report=xml
