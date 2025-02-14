@@ -81,6 +81,10 @@ onBeforeMount(async () => {
 
   currentSIFiling.value.certified = false
 })
+
+watch(() => allEditableSIs, () => {
+  filingErrors.value = []
+}, { deep: true })
 </script>
 
 <template>
