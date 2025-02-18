@@ -175,6 +175,8 @@ export const useSignificantIndividuals = defineStore('significantIndividuals', (
       }
       errors.value.push(err)
     }
+    // redirect to business dashboard
+    useBcrosNavigate().redirect(useRuntimeConfig().public.businessWebURL + currentBusinessIdentifier.value)
     submitting.value = false
   }
 
@@ -208,9 +210,10 @@ export const useSignificantIndividuals = defineStore('significantIndividuals', (
         } else {
           // todo: do we need error here  We would need design for this. ticket: #25931
         }
-      } else if (submissionParam?.toUpperCase() === SubmissionTypeE.INITIAL_FILING ||
-        submissionParam?.toUpperCase() === SubmissionTypeE.CHANGE_FILING) {
-        currentSIFiling.value.submissionType = submissionParam.toUpperCase()
+      } else if (
+        [SubmissionTypeE.INITIAL_FILING, SubmissionTypeE.CHANGE_FILING].includes(submissionParam?.toUpperCase())
+      ) {
+        currentSIFiling.value.submissionType = submissionParam?.toUpperCase()
       } else {
         // todo: do we need error for this ? # ticket #25931
         // currently default filing is initial filing, maybe it can be updated ?

@@ -38,7 +38,7 @@ def redact_information(payload, role):
     # otherwise PUBLIC or STAFF
     redaction_to_use = REDACT_RULES[role]
     current_app.logger.info(redaction_to_use)
-    for person in payload['payload']['personStatements']:
+    for person in (payload.get('payload', {}).get('personStatements') or payload.get('personStatements', [])):
         # I've left this in but commented out because we may need to add it back in if people are omitted.
         # It does not exist in current redaction rules though.
         #     for name in person['names']:

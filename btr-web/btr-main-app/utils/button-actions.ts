@@ -70,6 +70,7 @@ export function reviewConfirm () {
   const result = filingSchema.safeParse(toRaw(currentSIFiling.value))
   if (result?.error?.issues.length > 0) {
     filingErrors.value = filingErrors.value.concat(result.error.issues)
+    // TODO: shouldn't this still go to review page? See comment below
     return
   }
 
@@ -85,6 +86,8 @@ export async function siChangeSubmit () {
   const { validateConfirmReviewPage } = useConfirmReviewStore()
   const { confirmReviewPageErrors } = storeToRefs(useConfirmReviewStore())
   const significantIndividuals = useSignificantIndividuals()
+  // TODO: below is not doing anything?
+  // 'currentSIFiling' gets overwritten within 'validateConfirmReviewPage' and 'filingSubmit'
   significantIndividuals.currentSIFiling.significantIndividuals = _getSIsToSubmit()
 
   const result = validateConfirmReviewPage()
@@ -93,12 +96,6 @@ export async function siChangeSubmit () {
     significantIndividuals.showErrors = true
   } else {
     await significantIndividuals.filingSubmit()
-    const businessIdentifier = useBcrosBusiness().currentBusinessIdentifier
-    significantIndividuals.reset()
-    useRouter().push({
-      name: RouteNameE.BEN_OWNR_CHNG,
-      params: { identifier: businessIdentifier }
-    })
   }
 }
 
