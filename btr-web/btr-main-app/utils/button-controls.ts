@@ -60,7 +60,7 @@ export function getSIChangeSubmit (): ButtonControlI {
     class: 'font-bold',
     icon: 'i-mdi-chevron-right',
     label: t('labels.buttons.fileNowNoFee'),
-    loading: submitting.value,
+    loading: !!submitting.value,
     trailing: true
   }
 }

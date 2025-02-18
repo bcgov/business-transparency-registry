@@ -84,8 +84,14 @@ class AuthService:
         request: Request = kwargs.get('request')
         token: str = kwargs.get('token')
         key: str | int = kwargs.get('account_id', kwargs.get('business_identifier'))
-
-        if not (request or token) or not key:
+        if (request or token) and key:
+            if request and not token:
+                # set token by auth header
+                try:
+                    token = self.get_authorization_header(request)
+                except AuthException:
+                    return None
+        else:
             # attempt to set via *args
             if len(args) < 2:
                 return None
