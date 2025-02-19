@@ -3,10 +3,10 @@
     :id="id"
     class="w-full"
     :class="[
-      showSectionHasErrors ? 'border-l-[3px] border-red-500' : '',
+      showSectionHasErrors ? 'border-l-[3px] border-l-red-500' : '',
       border ? 'border border-gray-100' : '',
       noTopBorder ? 'border-t-0' : '',
-      noBotBorder ? 'border-b-0' : 'b',
+      noBotBorder ? 'border-b-0' : '',
       roundedTop ? 'rounded-t' : '',
       roundedBot ? 'rounded-b' : ''
     ]"
@@ -36,7 +36,7 @@
     </div>
     <div
       v-if="showContent"
-      class="mb-0.5 bg-white flex w-full"
+      class="bg-white flex w-full"
       :class="{
         'rounded-t': roundedTop && !showHeader,
         'rounded-b': roundedBot,
@@ -44,7 +44,8 @@
         'flex-row': !sectionTitleFull,
         'px-8': paddedX,
         'py-10': paddedY && !paddedTop,
-        'pt-10': paddedTop
+        'pt-10': paddedTop,
+        'mb-0.5': marginBot
       }"
     >
       <slot name="section-title">
@@ -106,7 +107,9 @@ const props = defineProps({
   noBotBorder: { type: Boolean, required: false, default: false },
   paddedX: { type: Boolean, required: false, default: true },
   paddedY: { type: Boolean, required: false, default: true },
-  paddedTop: { type: Boolean, required: false, default: false }
+  paddedTop: { type: Boolean, required: false, default: false },
+
+  marginBot: { type: Boolean, required: false, default: true }
 })
 
 const sectionTitleFull = computed(
