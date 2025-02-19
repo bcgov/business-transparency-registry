@@ -50,8 +50,8 @@ export const btrSubmissionExampleMock = {
             type: 'appointmentOfBoard'
           },
           {
-            details: 'controlType.directors.inConcertControl',
-            directOrIndirect: 'indirect',
+            details: 'controlType.directors.directControl',
+            directOrIndirect: 'direct',
             startDate: '2024-01-04',
             type: 'appointmentOfBoard'
           },
@@ -92,18 +92,6 @@ export const btrSubmissionExampleMock = {
             type: 'shareholding'
           },
           {
-            details: 'controlType.shares.inConcertControl',
-            directOrIndirect: 'indirect',
-            share: {
-              exclusiveMaximum: false,
-              exclusiveMinimum: false,
-              maximum: 50,
-              minimum: 25
-            },
-            startDate: '2024-01-04',
-            type: 'shareholding'
-          },
-          {
             details: 'controlType.shares.beneficialOwner',
             directOrIndirect: 'indirect',
             share: {
@@ -114,12 +102,9 @@ export const btrSubmissionExampleMock = {
             },
             startDate: '2024-01-04',
             type: 'shareholding'
-          },
-          {
-            details: 'everything',
-            type: 'otherInfluenceOrControl'
           }
         ],
+        interestTypes: [BodsInterestTypeE.APPOINTMENT_OF_BOARD, BodsInterestTypeE.SHAREHOLDING],
         isComponent: false,
         publicationDetails: {
           bodsVersion: '0.3',
@@ -153,8 +138,8 @@ export const btrSubmissionExampleMock = {
         },
         interests: [
           {
-            details: 'controlType.directors.inConcertControl',
-            directOrIndirect: 'indirect',
+            details: 'controlType.directors.directControl',
+            directOrIndirect: 'direct',
             startDate: '2024-01-05',
             type: 'appointmentOfBoard'
           },
@@ -168,7 +153,7 @@ export const btrSubmissionExampleMock = {
               minimum: 25
             },
             startDate: '2024-01-05',
-            type: 'votingRights'
+            type: 'shareholding'
           },
           {
             details: 'controlType.votes.registeredOwner',
@@ -180,7 +165,7 @@ export const btrSubmissionExampleMock = {
               minimum: 50
             },
             startDate: '2024-01-05',
-            type: 'shareholding'
+            type: 'votingRights'
           },
           {
             details: 'controlType.shares.indirectControl',
@@ -192,7 +177,7 @@ export const btrSubmissionExampleMock = {
               minimum: 25
             },
             startDate: '2024-01-05',
-            type: 'votingRights'
+            type: 'shareholding'
           },
           {
             details: 'controlType.votes.indirectControl',
@@ -204,12 +189,11 @@ export const btrSubmissionExampleMock = {
               minimum: 50
             },
             startDate: '2024-01-05',
-            type: 'shareholding'
-          },
-          {
-            details: 'This is something tottaly else',
-            type: 'otherInfluenceOrControl'
+            type: 'votingRights'
           }
+        ],
+        interestTypes: [
+          BodsInterestTypeE.APPOINTMENT_OF_BOARD, BodsInterestTypeE.SHAREHOLDING, BodsInterestTypeE.VOTING_RIGHTS
         ],
         isComponent: false,
         publicationDetails: {
@@ -256,6 +240,7 @@ export const btrSubmissionExampleMock = {
             type: 'appointmentOfBoard'
           }
         ],
+        interestTypes: [BodsInterestTypeE.APPOINTMENT_OF_BOARD],
         isComponent: false,
         publicationDetails: {
           bodsVersion: '0.3',
@@ -562,7 +547,7 @@ export const expectedSisOutput: SiSchemaType[] = [
     controlOfDirectors: {
       actingJointly: false,
       directControl: true,
-      inConcertControl: true,
+      inConcertControl: false,
       indirectControl: true,
       significantInfluence: true
     },
@@ -570,7 +555,7 @@ export const expectedSisOutput: SiSchemaType[] = [
       controlName: 'controlOfShares',
       percentage: PercentageRangeE.AT_LEAST_25_TO_50,
       beneficialOwner: true,
-      inConcertControl: true,
+      inConcertControl: false,
       indirectControl: true,
       registeredOwner: true,
       actingJointly: false
@@ -584,6 +569,7 @@ export const expectedSisOutput: SiSchemaType[] = [
       inConcertControl: false,
       percentage: PercentageRangeE.NO_SELECTION
     },
+    isControlSelected: true,
     birthDate: '1901-01-01',
     citizenships: {
       nationalities: [
@@ -613,10 +599,6 @@ export const expectedSisOutput: SiSchemaType[] = [
       {
         endDate: undefined,
         startDate: '2024-01-04'
-      },
-      {
-        endDate: undefined,
-        startDate: ''
       }
     ],
     ownershipStatementId: 'ea7e5edb-8d2c-4970-b90a-2e3a237fd67b',
@@ -644,14 +626,14 @@ export const expectedSisOutput: SiSchemaType[] = [
     },
     controlOfDirectors: {
       actingJointly: false,
-      directControl: false,
-      inConcertControl: true,
+      directControl: true,
+      inConcertControl: false,
       indirectControl: false,
       significantInfluence: false
     },
     controlOfShares: {
       controlName: 'controlOfShares',
-      percentage: PercentageRangeE.MORE_THAN_50_TO_75,
+      percentage: PercentageRangeE.AT_LEAST_25_TO_50,
       beneficialOwner: false,
       inConcertControl: false,
       indirectControl: true,
@@ -665,8 +647,9 @@ export const expectedSisOutput: SiSchemaType[] = [
       indirectControl: true,
       inConcertControl: false,
       actingJointly: false,
-      percentage: PercentageRangeE.AT_LEAST_25_TO_50
+      percentage: PercentageRangeE.MORE_THAN_50_TO_75
     },
+    isControlSelected: true,
     birthDate: '1991-01-24',
     citizenships: {
       nationalities: [{ alpha_2: 'CA_PR', name: 'Canada (Permanent Resident)' }],
@@ -694,10 +677,6 @@ export const expectedSisOutput: SiSchemaType[] = [
       {
         endDate: undefined,
         startDate: '2024-01-05'
-      },
-      {
-        endDate: undefined,
-        startDate: ''
       }
     ],
     ownershipStatementId: 'bee007d7-0520-4f2d-b6f0-a74a999d956f',
@@ -733,6 +712,7 @@ export const expectedSisOutput: SiSchemaType[] = [
       inConcertControl: false,
       percentage: PercentageRangeE.NO_SELECTION
     },
+    isControlSelected: true,
     couldNotProvideMissingInfo: false,
     determinationOfIncapacity: false,
     missingInfoReason: undefined,

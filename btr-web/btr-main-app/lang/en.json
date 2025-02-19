@@ -288,6 +288,7 @@
       "phoneNumber": {
         "required": "Enter phone number (numbers only)"
       },
+      "control": "Indicate if this individual has Control of Shares, Votes, and/or Majority of Directors",
       "controlPercentage": {
         "empty": "Please enter a percentage of shares and/or votes",
         "specialCharacter": "Numbers only",

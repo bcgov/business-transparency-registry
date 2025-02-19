@@ -1,6 +1,7 @@
 import 'cypress-axe'
 import './ownerChangeFormHelper'
 import { SubmissionTypeE } from '../../enums/submission-type-e'
+import { PercentageRangeE } from '../../enums/percentage-range-e'
 
 Cypress.Commands.add('interceptPostsBtrApi', () => {
   cy.fixture('plotsEntityExistingSiResponse').then((plotsEntityExistingSiResponse) => {
@@ -162,15 +163,29 @@ Cypress.Commands.add('addSingleTestSi', (profile: any) => {
   cy.get('[data-cy=usePreferredName').check()
   cy.get('#individual-person-preferred-name').type(profile.preferredName)
   cy.get('#individual-person-email').type(profile.email)
-  // todo: fixme: cleanup ticket #23553
-  // todo: fixme: update on #20758
-  // cy.get('[data-cy=testPercentOfShares]').click()
-  // cy.get('[data-cy=testPercentOfShares]').find('li').first().click()
-  // cy.get('[data-cy=testPercentOfVotes]').click()
-  // cy.get('[data-cy=testPercentOfVotes]').find('li').first().click()
-  // todo: fixme: update on #20756
-  // cy.get('[data-cy="testTypeOfControl"]').get('[name="registeredOwner"]').check()
-  // cy.get('[data-cy="testControlOfDirectors"]').get('[name="directControl"]').check()
+
+  const controls = ['controlOfShares', 'controlOfVotes', 'controlOfDirectors']
+  const percentageIndexMap = {
+    [PercentageRangeE.LESS_THAN_25]: 0,
+    [PercentageRangeE.AT_LEAST_25_TO_50]: 1,
+    [PercentageRangeE.MORE_THAN_50_TO_75]: 2,
+    [PercentageRangeE.MORE_THAN_75]: 3
+  }
+
+  for (const control of controls) {
+    if (!profile[control]) {
+      continue
+    }
+    Object.keys(profile[control]).forEach((key) => {
+      const val = profile[control][key]
+      if (typeof val === 'boolean' && val) {
+        cy.get(`[data-cy="${control}.${key}"]`).check()
+      } else if (typeof val === 'string') {
+        cy.get(`[data-cy="${control}.percentage.${percentageIndexMap[val as PercentageRangeE]}"]`).click()
+      }
+    })
+  }
+
   cy.get('[data-cy="start-date-select"]').click().then(() => {
     cy.get('.bcros-date-picker__calendar__day.dp__today').parent().click()
   })

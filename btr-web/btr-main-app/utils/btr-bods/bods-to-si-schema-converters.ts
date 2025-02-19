@@ -171,6 +171,16 @@ const _getResidentialAddress = (person: BtrBodsPersonI) => {
     undefined
 }
 
+const _isControlSelected = (interestTypes: BodsInterestTypeE[]): boolean => {
+  const keyInterests = [
+    BodsInterestTypeE.SHAREHOLDING,
+    BodsInterestTypeE.VOTING_RIGHTS,
+    BodsInterestTypeE.APPOINTMENT_OF_BOARD
+  ]
+
+  return interestTypes.some(type => keyInterests.includes(type))
+}
+
 const _getSi = (
   person: BtrBodsPersonI, oocs: BtrBodsOwnershipOrControlI, businessIdentifier: string
 ): SiSchemaType => {
@@ -185,6 +195,7 @@ const _getSi = (
       isDifferent: !!bodsMailingAddress,
       address: bodsMailingAddress ? _getSIAddress(bodsMailingAddress) : undefined
     },
+    isControlSelected: _isControlSelected(oocs.interestTypes || []),
     controlOfDirectors: {
       directControl: isControlType(oocs, ControlOfDirectorsDetailsE.DIRECT_CONTROL),
       significantInfluence: isControlType(oocs, ControlOfDirectorsDetailsE.SIGNIFICANT_INFLUENCE),

@@ -47,6 +47,7 @@
       "title": "Interests",
       "description": "A description of the interests held by the interestedParty covered by this statement in the entity covered by this statement.",
       "type": "array",
+      "minItems": 1,
       "items": {
         "$ref": "https://btr.gov.bc.ca/.well_known/schemas/components.json#/definitions/Interest"
       }
@@ -67,6 +68,7 @@
     "statementType",
     "isComponent",
     "subject",
+    "interests",
     "interestedParty",
     "publicationDetails"
   ],

@@ -28,6 +28,7 @@ export function getDefaultInputFormSi (): SiSchemaType {
       nameChangeReason: undefined,
       preferredName: ''
     },
+    isControlSelected: false,
     controlOfShares: {
       controlName: 'controlOfShares',
       registeredOwner: false,

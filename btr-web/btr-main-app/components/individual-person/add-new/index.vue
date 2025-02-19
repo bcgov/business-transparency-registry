@@ -137,6 +137,7 @@
 
       <!--  section-header: type of interest or control of shares/votes-->
       <BcrosSection
+        id="control"
         header-icon-name="i-mdi-plus-circle-multiple-outline"
         :header-title="$t('sectionHeaders.controlOf')"
         :header-text="$t('sectionIntroText.controlOf')"
@@ -144,11 +145,19 @@
         :border="editMode"
         no-bot-border
       />
+      <BcrosSection
+        :show-section-has-errors="hasErrors(['isControlSelected'])"
+        :padded-y="false"
+        :margin-bot="false"
+      >
+        <template #section-title>
+          <UFormGroup class="-ml-1" name="isControlSelected" />
+        </template>
+      </BcrosSection>
 
-      <!--  section: type of interest or control of shares -->
       <BcrosSection
         id="control-of-shares"
-        :show-section-has-errors="false"
+        :show-section-has-errors="hasErrors(['isControlSelected', 'controlOfShares.'])"
         :section-title="$t('sectionTitles.controlOfShares')"
         :border="editMode"
         no-top-border
@@ -163,7 +172,7 @@
       <!--  section: type of interest or control of votes -->
       <BcrosSection
         id="control-of-votes"
-        :show-section-has-errors="false"
+        :show-section-has-errors="hasErrors(['isControlSelected', 'controlOfVotes.'])"
         :section-title="$t('sectionTitles.controlOfVotes')"
         :border="editMode"
         no-top-border
@@ -178,7 +187,7 @@
       <!--  section: control of majority of directors  -->
       <BcrosSection
         id="control-of-directors"
-        :show-section-has-errors="false"
+        :show-section-has-errors="hasErrors(['isControlSelected', 'controlOfDirectors'])"
         :section-title="$t('sectionTitles.controlOfMajorityOfDirectors')"
         :border="editMode"
         no-top-border
@@ -191,7 +200,6 @@
       </BcrosSection>
 
       <BcrosSectionDivider />
-
       <!--  section-header: effective dates -->
       <BcrosSection
         header-icon-name="i-mdi-calendar"
@@ -644,6 +652,7 @@ const MailingAddressSchemaEdit = z.discriminatedUnion(
 const SiSchemaExtended = SiSchema.extend({
   couldNotProvideMissingInfo: z.literal(false),
   name: SiNameExtended,
+  isControlSelected: z.boolean().refine(val => val, t('errors.validation.control')),
   controlOfShares: SiControlOfExtended,
   controlOfVotes: SiControlOfExtended,
   controlOfDirectors:
@@ -654,6 +663,37 @@ const SiSchemaExtended = SiSchema.extend({
   mailingAddress: MailingAddressSchema,
   tax: TaxSchema.superRefine(validateTaxNumberInfo),
   isTaxResident: z.boolean()
+})
+
+const isControlSelected = computed(() => {
+  const isSelected = (control: any) => {
+    for (const key in control) {
+      if (key === 'controlName') {
+        continue
+      }
+      if (key === 'percentage' && control[key] !== PercentageRangeE.NO_SELECTION) {
+        return true
+      } else if (control[key] === true) {
+        return true
+      }
+    }
+    return false
+  }
+  return isSelected(inputFormSi.controlOfShares) ||
+    isSelected(inputFormSi.controlOfVotes) ||
+    isSelected(inputFormSi.controlOfDirectors)
+})
+
+watch(isControlSelected, (newValue) => {
+  inputFormSi.isControlSelected = newValue
+  if (!newValue) {
+    addIndividualForm.value?.setErrors([{
+      message: t('errors.validation.control'),
+      path: 'isControlSelected'
+    }], 'isControlSelected')
+  } else {
+    addIndividualForm.value?.clear('isControlSelected')
+  }
 })
 
 let formSchema: any = z.discriminatedUnion('couldNotProvideMissingInfo', [
