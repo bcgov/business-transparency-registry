@@ -79,14 +79,18 @@ describe('pages -> Review and Confirm', () => {
       cy.get('[data-cy=button-control-right-button]').eq(1).click()
       // Certify was not checked so nothing should happen
       cy.url().should('include', '/beneficial-owner-change/review-confirm')
-      // Check certify and file
+      // Check certify
       cy.get('[data-cy="certify-section-checkbox"]').click()
       cy.get('[data-cy="certify-section-checkbox"]').should('be.checked')
-      cy.get('[data-cy=button-control-right-button]').eq(1).click()
 
-      // check redirect to change
-      cy.url().should('not.include', '/beneficial-owner-change/review-confirm')
-      cy.url().should('include', '/beneficial-owner-change')
+      // submit the filing and check redirection
+      cy.intercept(
+        'GET',
+        'https://dev.business.bcregistry.gov.bc.ca/**'
+      ).as('redirect')
+
+      cy.get('[data-cy=button-control-right-button]').eq(1).click()
+      cy.wait('@redirect')
     })
   })
 
@@ -124,11 +128,13 @@ describe('pages -> Review and Confirm', () => {
     // reselect the certify checkbox
     cy.get('[data-cy="certify-section-checkbox"]').click()
 
-    // click file now
-    cy.get('[data-cy=button-control-right-button]').eq(1).click()
+    // submit the filing and check redirection
+    cy.intercept(
+      'GET',
+      'https://dev.business.bcregistry.gov.bc.ca/**'
+    ).as('redirect')
 
-    // check redirect to change
-    cy.url().should('not.include', '/review-confirm')
-    cy.url().should('include', '/beneficial-owner-change')
+    cy.get('[data-cy=button-control-right-button]').eq(1).click()
+    cy.wait('@redirect')
   })
 })
