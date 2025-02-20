@@ -86,7 +86,8 @@ describe('pages -> Review and Confirm', () => {
       // submit the filing and check redirection
       cy.intercept(
         'GET',
-        'https://dev.business.bcregistry.gov.bc.ca/**'
+        'https://dev.business.bcregistry.gov.bc.ca/**',
+        { statusCode: 200 }
       ).as('redirect')
 
       cy.get('[data-cy=button-control-right-button]').eq(1).click()
@@ -131,7 +132,8 @@ describe('pages -> Review and Confirm', () => {
     // submit the filing and check redirection
     cy.intercept(
       'GET',
-      'https://dev.business.bcregistry.gov.bc.ca/**'
+      'https://dev.business.bcregistry.gov.bc.ca/**',
+      { statusCode: 200 }
     ).as('redirect')
 
     cy.get('[data-cy=button-control-right-button]').eq(1).click()
