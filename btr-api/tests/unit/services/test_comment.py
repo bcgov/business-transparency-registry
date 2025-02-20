@@ -20,13 +20,15 @@ def test_create_comment(session, app, requests_mock, sample_user):
         clear_db(session)
         session.add(sample_user)
         session.commit()
-        comment = CommentService.create_comment(COMMENT_DICT)
+        c = COMMENT_DICT.copy()
+        c['submitter_id'] = sample_user.id
+        comment = CommentService.create_comment(c)
         comment.save()
         # Assert the properties of the resulting SubmissionModel instance
-        assert comment.text == COMMENT_DICT['text']
-        assert comment.type == COMMENT_DICT['type']
-        assert comment.submitter_id == COMMENT_DICT['submitter_id']
-        assert str(comment.related_uuid) == COMMENT_DICT['related_uuid']
+        assert comment.text == c['text']
+        assert comment.type == c['type']
+        assert comment.submitter_id == c['submitter_id']
+        assert str(comment.related_uuid) == c['related_uuid']
 
 def test_update_comment(session, app, requests_mock, sample_user):
     """Assure the create request works as expected."""
@@ -41,11 +43,13 @@ def test_update_comment(session, app, requests_mock, sample_user):
         comment_dict2={
             'text': 'edited',
         }
-        comment = Comment(COMMENT_DICT)
+        c = COMMENT_DICT.copy()
+        c['submitter_id'] = sample_user.id
+        comment = Comment(c)
         comment = CommentService.update_comment(comment, comment_dict2)
         comment.save()
         # Assert the properties of the resulting SubmissionModel instance
         assert comment.text == comment_dict2['text']
-        assert comment.type == COMMENT_DICT['type']
-        assert comment.submitter_id == COMMENT_DICT['submitter_id']
-        assert str(comment.related_uuid) == COMMENT_DICT['related_uuid']
+        assert comment.type == c['type']
+        assert comment.submitter_id == c['submitter_id']
+        assert str(comment.related_uuid) == c['related_uuid']
