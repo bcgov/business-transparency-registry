@@ -80,17 +80,18 @@ def get_all():  # pylint: disable=redefined-builtin
             sort = request.args.get('sort')
             order = request.args.get('order')
             query = RequestModel.query
+            s = RequestModel.status
             if sort and sort != '':
-                s = RequestModel.status
                 if sort.lower() == 'created_at' or sort.lower() == 'createdat':
                     s = RequestModel.created_at
                 elif sort.lower() == 'status':
                     s = RequestModel.status
-                if order and order.lower() == 'desc':
-                    s = s.desc()
-                else:
-                    s = s.asc()
-                query = query.order_by(s)
+
+            if order and order.lower() == 'desc':
+                s = s.desc()
+            else:
+                s = s.asc()
+            query = query.order_by(s)
                 
             if request.args.get('full_name'):
                 query = query.filter(RequestModel.full_name.ilike(f"%{request.args.get('full_name')}%"))
