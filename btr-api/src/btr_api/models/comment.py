@@ -35,11 +35,11 @@
 from __future__ import annotations
 
 import uuid
-from datetime import date, datetime
+from datetime import datetime
 from typing import TYPE_CHECKING
 
 from sqlalchemy import ForeignKey
-from sqlalchemy.orm import Mapped, mapped_column, relationship
+from sqlalchemy.orm import Mapped, mapped_column
 from sql_versioning import Versioned
 
 from btr_api.enums import CommentTypes
@@ -90,7 +90,7 @@ class Comment(Versioned, Base):
             case 'uuid':
                 cls.uuid = value
             case 'submitter_id':
-                cls.submitter_id = submitter_id
+                cls.submitter_id = value
             case 'createdAt':
                 cls.created_at = value
             case 'updatedAt':

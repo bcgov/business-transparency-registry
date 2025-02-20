@@ -17,6 +17,7 @@ def test_create_comment(session, app, requests_mock, sample_user):
 
     with nested_session(session):
         auth_cache.clear()
+        clear_db()
         session.add(sample_user)
         session.commit()
         comment = CommentService.create_comment(COMMENT_DICT)
@@ -34,6 +35,9 @@ def test_update_comment(session, app, requests_mock, sample_user):
 
     with nested_session(session):
         auth_cache.clear()
+        clear_db()
+        session.add(sample_user)
+        session.commit()
         comment_dict2={
             'text': 'edited',
         }

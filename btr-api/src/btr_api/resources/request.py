@@ -92,12 +92,12 @@ def get_all():  # pylint: disable=redefined-builtin
             else:
                 s = s.asc()
             query = query.order_by(s)
-                
+
             if request.args.get('full_name'):
                 query = query.filter(RequestModel.full_name.ilike(f"%{request.args.get('full_name')}%"))
             if request.args.get('status'):
                 query = query.filter(RequestModel.status.equals(request.args.get('status')))
-            
+
             results = query.all()
             for result in results:
                 resp.append(RequestSerializer.to_dict(result))
@@ -245,13 +245,13 @@ def add_comment(req_id: str):
             if not valid:
                 return error_request_response('Invalid schema', HTTPStatus.BAD_REQUEST, errors)
 
-            commentJson = {
+            comment_json = {
                 'text': req_json.get('text'),
                 'type': CommentTypes.REQUEST,
                 'related_uuid': req_id,
                 'submitter_id': user.id
             }
-            comment = CommentService.create_comment(commentJson)
+            comment = CommentService.create_comment(comment_json)
 
             comment.save()
 

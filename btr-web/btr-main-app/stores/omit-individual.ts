@@ -157,8 +157,8 @@ export const useOmitIndividual = defineStore('bcros/omitIndividual', () => {
     }
   }
 
-  async function createComment (related_uuid: string, comment: string) {
-    const url = constructBtrApiURL() + `/requests/${related_uuid}/comment`
+  async function createComment (relatedUuid: string, comment: string) {
+    const url = constructBtrApiURL() + `/requests/${relatedUuid}/comment`
     const method = 'POST'
     const submitData = {
       text: comment
@@ -175,8 +175,8 @@ export const useOmitIndividual = defineStore('bcros/omitIndividual', () => {
     return { data }
   }
 
-  async function getCommentsForRequest (request_uuid: string) {
-    const url = constructBtrApiURL() + `/requests/${request_uuid}/comment`
+  async function getCommentsForRequest (requestUuid: string) {
+    const url = constructBtrApiURL() + `/requests/${requestUuid}/comment`
     const method = 'GET'
     const { data, error } = await useFetchBcros(url,
       {
