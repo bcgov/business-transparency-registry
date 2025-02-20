@@ -217,6 +217,7 @@ def update_request(req_id: str):
         current_app.logger.error(exception.with_traceback(None))
         return exception_response(exception)
 
+
 @bp.route('/<req_id>/comment', methods=('POST',))
 @cross_origin(origin='*')
 @jwt.requires_auth
@@ -264,6 +265,7 @@ def add_comment(req_id: str):
     except Exception as exception:  # noqa: B902
         current_app.logger.error(exception.with_traceback(None))
         return exception_response(exception)
+
 
 @bp.route('/<req_uuid>/comment', methods=('GET',))
 @jwt.requires_auth

@@ -46,10 +46,6 @@ from btr_api.enums import CommentTypes
 
 from .base import Base
 
-if TYPE_CHECKING:
-    # https://mypy.readthedocs.io/en/stable/runtime_troubles.html#import-cycles
-    from .user import User
-
 
 class Comment(Versioned, Base):
     """Stores comment data"""
@@ -70,7 +66,6 @@ class Comment(Versioned, Base):
         self.text = data['text']
         self.submitter_id = data['submitter_id']
         self.related_uuid = data['related_uuid']
-
 
     @classmethod
     def find_by_uuid(cls, comment_id: uuid.UUID) -> Comment | None:
