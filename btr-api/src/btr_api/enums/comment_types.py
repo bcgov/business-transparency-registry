@@ -1,4 +1,4 @@
-# Copyright © 2024 Province of British Columbia
+# Copyright © 2025 Province of British Columbia
 #
 # Licensed under the BSD 3 Clause License, (the "License");
 # you may not use this file except in compliance with the License.
@@ -31,22 +31,11 @@
 # CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
-"""DB tests helper methods."""
-from sqlalchemy import text
-
-from btr_api.models import User
+"""Enum for request status type."""
+from btr_api.common.enum import BaseEnum, auto
 
 
-def clear_db(session):
-    """Clear db of all data."""
-    session.execute(text('delete from ownership'))
-    session.execute(text('delete from ownership_history'))
-    session.execute(text('delete from person'))
-    session.execute(text('delete from person_history'))
-    session.execute(text('delete from submission'))
-    session.execute(text('delete from submission_history'))
-    session.execute(text('delete from request'))
-    session.execute(text('delete from request_history'))
-    session.execute(text('delete from comment'))
-    session.execute(text('delete from comment_history'))
-    session.execute(text('delete from users'))
+class CommentTypes(BaseEnum):
+    """Enum for the email type."""
+
+    REQUEST = auto()

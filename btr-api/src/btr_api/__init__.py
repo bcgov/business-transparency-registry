@@ -69,6 +69,7 @@ def create_app(environment=os.getenv('DEPLOYMENT_ENV', 'production'), **kwargs) 
 
     CORS(app)
     db.init_app(app)
+    Migrate(app, db)
 
     if environment == 'migration':
         Migrate(app, db)

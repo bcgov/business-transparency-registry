@@ -40,6 +40,7 @@ from .json_schema import SchemaService
 from .registries_search import RegSearchService
 from .submission import SubmissionService
 from .request import RequestService
+from .comment import CommentService
 
 PAYMENT_REQUEST_TEMPLATE = {
     'filingInfo': {'filingTypes': [{'filingTypeCode': 'REGSIGIN'}]},

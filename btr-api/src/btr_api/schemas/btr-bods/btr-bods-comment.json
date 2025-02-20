@@ -1,0 +1,18 @@
+{
+  "$id": "https://btr.gov.bc.ca/.well_known/schemas/btr-bods-comment.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "version": "0.1",
+  "type": "object",
+  "title": "Comments",
+  "description": "A comment pertaining to something in system",
+  "properties": {
+    "text": {
+      "title": "Comment Text",
+      "description": "The actual body of the text",
+      "type": "string"
+    }
+  },
+  "required": [
+    "text"
+  ]
+}

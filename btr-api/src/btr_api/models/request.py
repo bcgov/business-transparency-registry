@@ -45,6 +45,7 @@ from sql_versioning import Versioned
 from btr_api.enums import InformationToOmitType
 from btr_api.enums import IndividualAtRisk
 from btr_api.enums import CompletingParty
+from btr_api.enums import RequestStatus
 
 from .base import Base
 
@@ -67,6 +68,7 @@ class Request(Versioned, Base):
     completing_email: Mapped[str] = mapped_column(nullable=False)
     created_at: Mapped[datetime] = mapped_column(nullable=False, default=datetime.now())
     updated_at: Mapped[datetime] = mapped_column(nullable=False, default=datetime.now())
+    status: Mapped[RequestStatus] = mapped_column(nullable=False, default=RequestStatus.AWAITING_REVIEW)
 
     def __init__(self, data):
         self.uuid = uuid.uuid4()
@@ -80,10 +82,11 @@ class Request(Versioned, Base):
         self.completing_party = data['completingParty']
         self.completing_name = data['completingName']
         self.completing_email = data['completingEmail']
+        self.status = data['status']
 
     @classmethod
-    def find_by_uuid(cls, request_id: int) -> Request | None:
-        """Return the person by id."""
+    def find_by_uuid(cls, request_id: uuid.UUID) -> Request | None:
+        """Return the request by id."""
         return cls.query.filter_by(uuid=request_id).one_or_none()
 
     @classmethod
@@ -117,6 +120,8 @@ class Request(Versioned, Base):
                 cls.created_at = value
             case 'updatedAt':
                 cls.updated_at = value
+            case 'status':
+                cls.status = value
 
 
 class RequestSerializer:
@@ -145,4 +150,5 @@ class RequestSerializer:
             'completingName': request.completing_name,
             'createdAt': request.created_at.isoformat(),
             'updatedAt': request.updated_at.isoformat(),
+            'status': request.status,
         }

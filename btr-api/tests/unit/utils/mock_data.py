@@ -517,5 +517,13 @@ REQUEST_DICT = {
     'reasons': 'I have some',
     'completingParty': 'SI',
     'completingName': 'John Doe',
-    'completingEmail': 'jdoe@gmail.com'
+    'completingEmail': 'jdoe@gmail.com',
+    'status': "AWAITING_REVIEW"
+}
+
+COMMENT_DICT = {
+  'text': 'This is a comment',
+  'type': 'REQUEST',
+  'submitter_id': 1,
+  'related_uuid': '123e4567-e89b-12d3-a456-426614174000'
 }

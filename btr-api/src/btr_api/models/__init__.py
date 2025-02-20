@@ -40,6 +40,7 @@ from .submission import SubmissionType
 from .user import User
 from .user import UserRoles
 from .request import Request
+from .comment import Comment
 
 
 __all__ = (
@@ -51,4 +52,5 @@ __all__ = (
     "User",
     "UserRoles",
     "Request",
+    "Comment"
 )

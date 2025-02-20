@@ -58,8 +58,18 @@ export const useOmitIndividual = defineStore('bcros/omitIndividual', () => {
   }
 
   /** Load all requests **/
-  async function loadAllRequests () {
-    const url = constructBtrApiURL() + `/requests/${uuid}`
+  async function loadAllRequests (sort?: string, filter?: BtrBodsRequestQueryI, order?: string) {
+    let url = constructBtrApiURL() + '/requests' +
+      `${sort ? '?sort=' + encodeURIComponent(sort) : ''}` +
+      `${sort && order ? '&' : ''}${order && !sort ? '?' : ''}` +
+      `${order ? 'order=' + encodeURIComponent(order) : ''}`
+
+    for (const key in filter) {
+      if (filter[key]) {
+        url += `${url.includes('?') ? '&' : '?'}${key}=${filter[key]}`
+      }
+    }
+
     const method = 'GET'
     const { data, error } = await useFetchBcros<[BtrBodsRequestGetI]>(url,
       {
@@ -147,6 +157,38 @@ export const useOmitIndividual = defineStore('bcros/omitIndividual', () => {
     }
   }
 
+  async function createComment (related_uuid: string, comment: string) {
+    const url = constructBtrApiURL() + `/requests/${related_uuid}/comment`
+    const method = 'POST'
+    const submitData = {
+      text: comment
+    }
+    const { data, error } = await useFetchBcros(url,
+      {
+        method,
+        body: submitData,
+        headers: { 'Content-Type': 'application/json' }
+      })
+    if (error?.value?.statusCode && error.value.statusCode >= 500) {
+      useGlobalErrorsStore().addGlobalError(SomethingWentWrongError())
+    }
+    return { data }
+  }
+
+  async function getCommentsForRequest (request_uuid: string) {
+    const url = constructBtrApiURL() + `/requests/${request_uuid}/comment`
+    const method = 'GET'
+    const { data, error } = await useFetchBcros(url,
+      {
+        method,
+        headers: { 'Content-Type': 'application/json' }
+      })
+    if (error?.value?.statusCode && error.value.statusCode >= 500) {
+      useGlobalErrorsStore().addGlobalError(SomethingWentWrongError())
+    }
+    return { data }
+  }
+
   return {
     loadSavedOmitIndividual,
     loadData,
@@ -165,6 +207,8 @@ export const useOmitIndividual = defineStore('bcros/omitIndividual', () => {
     submitted,
     allRequests,
     activeId,
-    activeUUID
+    activeUUID,
+    createComment,
+    getCommentsForRequest
   }
 })

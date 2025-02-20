@@ -53,11 +53,15 @@ from btr_api.exceptions import error_request_response
 from btr_api.exceptions import exception_response
 from btr_api.models import Request as RequestModel
 from btr_api.models import User as UserModel
+from btr_api.models import Comment as CommentModel
 from btr_api.models.request import RequestSerializer
+from btr_api.models.comment import CommentSerializer
 from btr_api.services import btr_auth
 from btr_api.services import SchemaService
 from btr_api.services import RequestService
+from btr_api.services import CommentService
 from btr_api.enums import UserType
+from btr_api.enums import CommentTypes
 
 bp = Blueprint('request', __name__)
 
@@ -72,7 +76,28 @@ def get_all():  # pylint: disable=redefined-builtin
         user_type = btr_auth.get_user_type()
         if user_type in (UserType.USER_STAFF, UserType.USER_COMPETENT_AUTHORITY):
             resp = []
-            results = RequestModel.query.filter_by().all()
+            results = []
+            sort = request.args.get('sort')
+            order = request.args.get('order')
+            query = RequestModel.query
+            if sort and sort != '':
+                s = RequestModel.status
+                if sort.lower() == 'created_at' or sort.lower() == 'createdat':
+                    s = RequestModel.created_at
+                elif sort.lower() == 'status':
+                    s = RequestModel.status
+                if order and order.lower() == 'desc':
+                    s = s.desc()
+                else:
+                    s = s.asc()
+                query = query.order_by(s)
+                
+            if request.args.get('full_name'):
+                query = query.filter(RequestModel.full_name.ilike(f"%{request.args.get('full_name')}%"))
+            if request.args.get('status'):
+                query = query.filter(RequestModel.status.equals(request.args.get('status')))
+            
+            results = query.all()
             for result in results:
                 resp.append(RequestSerializer.to_dict(result))
             return jsonify(resp), HTTPStatus.OK
@@ -159,7 +184,12 @@ def update_request(req_id: str):
                 return {}, HTTPStatus.NOT_FOUND
 
             req_json = request.get_json()
-            req = RequestService.update_request(req, req_json)
+            # This would allow update of full request we only want to allow status
+            # req = RequestService.update_request(req, req_json)
+            allowable_json = {
+                'status': req_json.get('status')
+            }
+            req = RequestService.update_request(req, allowable_json)
 
             req_d = RequestSerializer.to_dict(req)
             try:
@@ -184,4 +214,72 @@ def update_request(req_id: str):
         return exception_response(aex)
     except Exception as exception:  # noqa: B902
         current_app.logger.error(exception.with_traceback(None))
+        return exception_response(exception)
+
+@bp.route('/<req_id>/comment', methods=('POST',))
+@cross_origin(origin='*')
+@jwt.requires_auth
+def add_comment(req_id: str):
+    """
+    Add a comment to an existing request.
+
+    Returns:
+        A tuple containing the response JSON and the HTTP status code.
+    """
+    try:
+        user = UserModel.get_or_create_user_by_jwt(g.jwt_oidc_token_info)
+        account_id = request.headers.get('Account-Id', None)
+        req = RequestModel.find_by_uuid(req_id)
+        if req:
+            btr_auth.product_authorizations(request=request, account_id=account_id)
+            user_type = btr_auth.get_user_type()
+            if user_type not in (UserType.USER_STAFF, UserType.USER_COMPETENT_AUTHORITY):
+                return {}, HTTPStatus.NOT_FOUND
+
+            # validate payload
+            req_json = request.get_json()
+            schema_name = 'btr-bods-comment.json'
+            schema_service = SchemaService()
+            [valid, errors] = schema_service.validate(schema_name, req_json)
+            if not valid:
+                return error_request_response('Invalid schema', HTTPStatus.BAD_REQUEST, errors)
+
+            commentJson = {
+                'text': req_json.get('text'),
+                'type': CommentTypes.REQUEST,
+                'related_uuid': req_id,
+                'submitter_id': user.id
+            }
+            comment = CommentService.create_comment(commentJson)
+
+            comment.save()
+
+            return jsonify(CommentSerializer.to_dict(comment)), HTTPStatus.OK
+
+        return {}, HTTPStatus.NOT_FOUND
+
+    except AuthException as aex:
+        return exception_response(aex)
+    except Exception as exception:  # noqa: B902
+        current_app.logger.error(exception.with_traceback(None))
+        return exception_response(exception)
+
+@bp.route('/<req_uuid>/comment', methods=('GET',))
+@jwt.requires_auth
+def get_all_comments(req_uuid: str):  # pylint: disable=redefined-builtin
+    """Get all comments for a request"""
+    try:
+        account_id = request.headers.get('Account-Id', None)
+        btr_auth.product_authorizations(request=request, account_id=account_id)
+        user_type = btr_auth.get_user_type()
+        if user_type in (UserType.USER_STAFF, UserType.USER_COMPETENT_AUTHORITY):
+            results = CommentModel.find_by_related_uuid(req_uuid)
+            resp = []
+            for result in results:
+                resp.append(CommentSerializer.to_dict(result))
+            return jsonify(resp), HTTPStatus.OK
+        return {}, HTTPStatus.NOT_FOUND
+    except AuthException as aex:
+        return exception_response(aex)
+    except Exception as exception:  # noqa: B902
         return exception_response(exception)
