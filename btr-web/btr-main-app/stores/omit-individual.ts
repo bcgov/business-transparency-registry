@@ -63,8 +63,8 @@ export const useOmitIndividual = defineStore('bcros/omitIndividual', () => {
 
     const params = {
       ...filter,
-      sort: sort,
-      order: order
+      sort,
+      order,
     }
 
     const method = 'GET'
