@@ -17,7 +17,8 @@ depends_on = None
 
 
 def upgrade():
-    status_type = sa.Enum('PASSED', 'REJECTED', 'AWAITING_REVIEW', name='requeststatus')
+
+    status_type = sa.Enum('PASSED', 'REJECTED', 'AWAITING_REVIEW', 'IN_REVIEW', 'INFO_REQUESTED', 'UNDER_APPEAL', name='requeststatus')
     status_type.create(op.get_bind())
 
     with op.batch_alter_table('request', schema=None) as batch_op:

@@ -41,3 +41,6 @@ class RequestStatus(BaseEnum):
     PASSED = auto()
     REJECTED = auto()
     AWAITING_REVIEW = auto()
+    IN_REVIEW = auto()
+    INFO_REQUESTED = auto()
+    UNDER_APPEAL = auto()

@@ -71,8 +71,6 @@ class CommentService:  # pylint: disable=too-few-public-methods
 
         # init request
         comment = CommentModel(comment_dict)
-        comment.created_at = datetime.today().strftime('%Y-%m-%dT%H:%M:%S')
-        comment.updated_at = datetime.today().strftime('%Y-%m-%dT%H:%M:%S')
         comment.save_to_session()
         return comment
 
@@ -96,6 +94,6 @@ class CommentService:  # pylint: disable=too-few-public-methods
             updated = True
 
         if updated:
-            comment.updated_at = datetime.today().strftime('%Y-%m-%dT%H:%M:%S')
+            comment.updated_at = datetime.now()
 
         return comment

@@ -59,21 +59,19 @@ export const useOmitIndividual = defineStore('bcros/omitIndividual', () => {
 
   /** Load all requests **/
   async function loadAllRequests (sort?: string, filter?: BtrBodsRequestQueryI, order?: string) {
-    let url = constructBtrApiURL() + '/requests' +
-      `${sort ? '?sort=' + encodeURIComponent(sort) : ''}` +
-      `${sort && order ? '&' : ''}${order && !sort ? '?' : ''}` +
-      `${order ? 'order=' + encodeURIComponent(order) : ''}`
+    const url = constructBtrApiURL() + '/requests'
 
-    for (const key in filter) {
-      if (filter[key]) {
-        url += `${url.includes('?') ? '&' : '?'}${key}=${filter[key]}`
-      }
+    const params = {
+      ...filter,
+      sort: sort,
+      order: order
     }
 
     const method = 'GET'
     const { data, error } = await useFetchBcros<[BtrBodsRequestGetI]>(url,
       {
-        method
+        method,
+        query: params
       })
     if (error && error.value) {
       if (error?.value?.statusCode && error.value.statusCode >= 500) {
