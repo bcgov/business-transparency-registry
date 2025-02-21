@@ -16,13 +16,13 @@ describe('pages -> Form Validation', () => {
     // Check for all the error messages
     cy.contains(i18nCommon.errors.validation.fullName.empty).should('exist')
     cy.contains(i18nCommon.errors.validation.email.empty).should('exist')
+    cy.contains(i18n.errors.validation.control).should('exist')
     cy.contains(i18n.errors.validation.controlPercentage.empty).should('not.exist')
     cy.contains(i18n.errors.validation.sharesAndVotes.required).should('not.exist')
     cy.contains(i18n.errors.validation.controlOfDirectors.required).should('not.exist')
     cy.contains(i18n.errors.validation.birthDate.required).should('exist')
     cy.contains(i18n.errors.validation.citizenship.required).should('exist')
-    // todo: fix with 21137
-    // cy.contains(i18n.errors.validation.address.country).should('exist')
+    cy.contains(i18n.errors.validation.address.country).should('exist')
     cy.contains(i18n.errors.validation.address.line1).should('exist')
     cy.contains(i18n.errors.validation.address.city).should('exist')
     cy.contains(i18n.errors.validation.address.region).should('exist')
@@ -92,6 +92,7 @@ describe('pages -> Form Validation', () => {
     cy.get('[data-cy="controlOfShares.registeredOwner"]').check()
     cy.contains(i18n.errors.validation.sharesAndVotes.required).should('not.exist')
   })
+
   it('Form validation for Control of Votes ', () => {
     cy.get('[data-cy=add-new-btn]').click()
     cy.get('[data-cy=new-si-done-btn]').click()
