@@ -31,22 +31,16 @@
 # CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
-"""DB tests helper methods."""
-from sqlalchemy import text
-
-from btr_api.models import User
+"""Enum for request status type."""
+from btr_api.common.enum import BaseEnum, auto
 
 
-def clear_db(session):
-    """Clear db of all data."""
-    session.execute(text('delete from ownership'))
-    session.execute(text('delete from ownership_history'))
-    session.execute(text('delete from person'))
-    session.execute(text('delete from person_history'))
-    session.execute(text('delete from submission'))
-    session.execute(text('delete from submission_history'))
-    session.execute(text('delete from request'))
-    session.execute(text('delete from request_history'))
-    session.execute(text('delete from comment'))
-    session.execute(text('delete from comment_history'))
-    session.execute(text('delete from users'))
+class RequestStatus(BaseEnum):
+    """Enum for the email type."""
+
+    PASSED = auto()
+    REJECTED = auto()
+    AWAITING_REVIEW = auto()
+    IN_REVIEW = auto()
+    INFO_REQUESTED = auto()
+    UNDER_APPEAL = auto()

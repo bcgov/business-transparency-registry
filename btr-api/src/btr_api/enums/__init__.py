@@ -21,3 +21,5 @@ from .completing_party import CompletingParty
 from .individual_at_risk import IndividualAtRisk
 from .information_to_omit_type import InformationToOmitType
 from .address_types import AddressType
+from .request_status import RequestStatus
+from .comment_types import CommentTypes

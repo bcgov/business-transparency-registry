@@ -42,5 +42,24 @@ export interface BtrBodsRequestGetI {
   completingName: string,
   completingEmail: string,
   created_at: string,
-  updated_at: string
+  updated_at: string,
+  status: string
+}
+
+export interface BtrBodsRequestQueryI {
+  id?: number,
+  uuid?: string,
+  fullName?: string,
+  birthdate?: string,
+  email?: string,
+  businessIdentifier?: string,
+  informationToOmit?: [InfoToOmitE],
+  individualAtRisk?: [IndividualsAtRiskE],
+  reasons?: string,
+  completingParty?: CompletingIndividualTypeE,
+  completingName?: string,
+  completingEmail?: string,
+  created_at?: string,
+  updated_at?: string,
+  status?: string
 }
