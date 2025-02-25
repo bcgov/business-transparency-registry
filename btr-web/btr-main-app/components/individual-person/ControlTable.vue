@@ -5,6 +5,7 @@
     data-cy="individualsControlTable"
     :headers="headers"
     :items="siControlStore.allActiveAndHaveControlSis"
+    :has-error="hasError"
   >
     <template #warning>
       <tr v-if="numberOfRows === 1">
@@ -44,6 +45,7 @@
             class="pt-0 pl-2"
             :control-type-width="String(controlTypeWidthPercentage)"
             :individual-connection-width="String(100-controlTypeWidthPercentage)"
+            :editing-disabled="editingDisabled"
           />
         </td>
       </tr>
@@ -66,7 +68,9 @@ import { useSiControlStore } from '~/stores/si-control-store'
 const siControlStore = useSiControlStore()
 
 defineProps({
-  numberOfRows: { type: Number, required: true }
+  numberOfRows: { type: Number, required: true },
+  hasError: { type: Boolean, required: false },
+  editingDisabled: { type: Boolean, default: false }
 })
 
 const t = useNuxtApp().$i18n.t

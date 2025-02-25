@@ -100,7 +100,7 @@ describe('pages -> Beneficial Owner Change', () => {
     cy.get('[data-cy=button-control-right-button]').eq(0).should('have.text', 'Review and Confirm')
     cy.get('[data-cy=button-control-right-button]').eq(0).click()
 
-    cy.get('[data-cy=noSignificantIndividualsExist-section]')
+    cy.get('[data-cy=info-section]')
       .should('contain.text', 'You have to make an edit to the list in order to continue')
 
     // edit name so we can continue

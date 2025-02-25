@@ -116,7 +116,7 @@ describe('pages -> Review and Confirm', () => {
     cy.get('[data-cy="button-control-right-button"]').click()
 
     // verify error pops ups saying need to add SI or select no SIs
-    cy.get('[data-cy=noSignificantIndividualsExist-section]')
+    cy.get('[data-cy=info-section]')
       .should('contain.text',
         'You have to make a selection OR add a Significant Individual in order to continue'
       )

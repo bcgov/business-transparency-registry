@@ -5,7 +5,18 @@ import { SiSchemaType } from '~/utils/si-schema/definitions'
 import fileSIApi from '~/services/file-significant-individual'
 
 const significantIndividuals = useSignificantIndividuals()
-const { currentSIFiling, allActiveSIs, allEditableSIs, filingErrors } = storeToRefs(significantIndividuals)
+const { currentSIFiling, allActiveSIs, allEditableSIs, filingErrors, isAnnualFiling } =
+  storeToRefs(significantIndividuals)
+
+const { scrollToAnchor } = useAnchorScroll({
+  toAnchor: {
+    target: document.documentElement,
+    scrollOptions: {
+      behavior: 'smooth',
+      offsetTop: -20
+    }
+  }
+})
 
 const expandNewSI = ref(false)
 const showNoSignificantIndividuals = computed(
@@ -40,13 +51,18 @@ function cancelAddNewSI () {
   isAddingNewSI.value = false
 }
 
-const noSignificantIndividualsExistError = computed(() => {
-  const issue = filingErrors.value.find(zi => zi.path.includes('noSignificantIndividualsExist'))
+const incompleteFilingError = computed(() => {
+  const issue = filingErrors.value.find(zi => zi.path.includes('incompleteFiling'))
   return issue?.message
 })
 
-const clearNoSignificantIndividualsExistError = () => {
-  const index = filingErrors?.value?.findIndex(zi => zi.path.includes('noSignificantIndividualsExist'))
+const infoChanged = computed(() => {
+  return !!(allEditableSIs.value.find(si => si.ui?.newOrUpdatedFields?.length > 0) ||
+    allEditableSIs.value.find(si => si.ui?.actions?.length > 0))
+})
+
+const clearIncompleteFilingError = () => {
+  const index = filingErrors?.value?.findIndex(zi => zi.path.includes('incompleteFiling'))
   if (index > -1) {
     filingErrors.value.splice(index, 1)
   }
@@ -57,6 +73,7 @@ onBeforeMount(async () => {
   // FUTURE: put in a loading page or something while this happens in case network is slow
   await useBcrosBusiness().loadBusiness(identifier)
   const siControlStore = useSiControlStore()
+  significantIndividuals.updateFilingTypeFromRoute()
   const { data, error } = await fileSIApi.getBtrFiling(identifier)
 
   if (error?.value?.statusCode) {
@@ -85,11 +102,17 @@ onBeforeMount(async () => {
 watch(() => allEditableSIs, () => {
   filingErrors.value = []
 }, { deep: true })
+
+watch(() => filingErrors, () => {
+  if (filingErrors.value.length > 0) {
+    scrollToAnchor('info-section')
+  }
+}, { deep: true })
 </script>
 
 <template>
   <div data-cy="owner-change">
-    <div class="my-5" data-cy="noSignificantIndividualsExist-section">
+    <div id="info-section" class="my-5" data-cy="info-section">
       <BtrPageTitle />
       <p class="mt-5" data-cy="page-info-text">
         {{ $t('texts.significantIndividuals') }}
@@ -105,16 +128,19 @@ watch(() => allEditableSIs, () => {
           <BcrosI18HelperLink translation-path="helpTexts.significantIndividuals.detail" />
         </template>
       </BcrosHelpTip>
-      <UFormGroup :error="noSignificantIndividualsExistError" />
+
+      <UFormGroup :error="incompleteFilingError" />
+
       <div v-if="showNoSignificantIndividuals" class="p-5">
         <UCheckbox
           v-model="currentSIFiling.noSignificantIndividualsExist"
           name="noSignificantIndividualsExist"
           data-cy="noSignificantIndividualsExist-checkbox"
-          @click="clearNoSignificantIndividualsExistError"
+          :disabled="currentSIFiling.annualFilingNoChanges"
+          @click="clearIncompleteFilingError"
         >
           <template #label>
-            <span :class="{'text-red-500':noSignificantIndividualsExistError}">
+            <span :class="{'text-red-500': incompleteFilingError}">
               {{ $t('labels.noSignificantIndividualsExist') }}
             </span>
           </template>
@@ -127,12 +153,49 @@ watch(() => allEditableSIs, () => {
           </div>
         </template>
       </div>
+
+      <BcrosSection
+        v-if="isAnnualFiling"
+        class="mt-5"
+        :section-title="$t('sectionTitles.annualFiling')"
+        :show-section-has-errors="incompleteFilingError"
+        rounded-top
+        rounded-bot
+      >
+        <UCheckbox
+          v-model="currentSIFiling.annualFilingNoChanges"
+          name="annualFilingNoChanges"
+          data-cy="annualFilingNoChanges-checkbox"
+          :disabled="expandNewSI || infoChanged"
+          @click="clearIncompleteFilingError"
+        >
+          <template #label>
+            <BcrosTooltip
+              v-if="infoChanged"
+              :text="$t('texts.annualFilingChanged')"
+              :popper="{ placement: 'top', arrow: true, resize: true }"
+            >
+              <span>
+                {{ $t('texts.annualFilingNoChanges') }}
+              </span>
+            </BcrosTooltip>
+            <span v-else :class="{'text-red-500': incompleteFilingError}">
+              {{ $t('texts.annualFilingNoChanges') }}
+            </span>
+          </template>
+        </UCheckbox>
+      </BcrosSection>
     </div>
+
     <div data-cy="significantIndividuals-section">
       <UButton
         class="px-4 py-3"
         color="primary"
-        :disabled="isEditing || expandNewSI || currentSIFiling.noSignificantIndividualsExist"
+        :disabled="isEditing ||
+          expandNewSI ||
+          currentSIFiling.noSignificantIndividualsExist ||
+          currentSIFiling.annualFilingNoChanges
+        "
         icon="i-mdi-account-plus"
         :label="$t('labels.addIndividual')"
         data-cy="add-new-btn"
@@ -160,12 +223,15 @@ watch(() => allEditableSIs, () => {
         :individuals="allEditableSIs || []"
         :edit="true"
         :is-editing="isEditing"
-        :editing-disabled="isAddingNewSI"
+        :editing-disabled="isAddingNewSI || currentSIFiling.annualFilingNoChanges"
+        :has-error="incompleteFilingError"
         @toggle-editing-mode="toggleEditingMode"
       />
       <IndividualPersonControlTable
         v-if="numOfIndividualsWithSharedControl > 0"
         :number-of-rows="numOfIndividualsWithSharedControl"
+        :has-error="incompleteFilingError"
+        :editing-disabled="currentSIFiling.annualFilingNoChanges"
         class="mt-10"
       />
     </div>

@@ -22,6 +22,10 @@ const props = defineProps({
   accordionExpanded: {
     type: Boolean,
     default: false
+  },
+  hasError: {
+    type: Boolean,
+    default: false
   }
 })
 
@@ -149,6 +153,7 @@ function capFirstLetterInName (fullName: string) {
     icon="i-mdi-account-multiple-outline"
     :headers="headers"
     :items="individuals"
+    :has-error="hasError"
   >
     <!-- To-Do:
       the v-if is set to false for now; it will be update in ticket #21656 so the

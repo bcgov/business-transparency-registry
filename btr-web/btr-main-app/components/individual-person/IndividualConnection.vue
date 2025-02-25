@@ -13,7 +13,8 @@ const props = defineProps({
   si: { type: Object as PropType<SiSchemaType>, required: true },
   name: { type: String, default: 'name' },
   controlTypeWidth: { type: String, required: true },
-  individualConnectionWidth: { type: String, required: true }
+  individualConnectionWidth: { type: String, required: true },
+  editingDisabled: { type: Boolean, default: false }
 })
 
 const allActiveSisExceptMe = computed(() =>
@@ -48,6 +49,7 @@ const siControl = computed(() => actingJointlyAndInConcert.value.get(props.si.uu
         key-attribute="uuid"
         :search-attributes="['name']"
         :style="`width: ${individualConnectionWidth}%`"
+        :editing-disabled="editingDisabled"
       />
     </div>
 
@@ -69,6 +71,7 @@ const siControl = computed(() => actingJointlyAndInConcert.value.get(props.si.uu
         key-attribute="uuid"
         :search-attributes="['name']"
         :style="`width: ${individualConnectionWidth}%`"
+        :editing-disabled="editingDisabled"
       />
     </div>
 
@@ -90,6 +93,7 @@ const siControl = computed(() => actingJointlyAndInConcert.value.get(props.si.uu
         key-attribute="uuid"
         :search-attributes="['name']"
         :style="`width: ${individualConnectionWidth}%`"
+        :editing-disabled="editingDisabled"
       />
     </div>
 
@@ -111,6 +115,7 @@ const siControl = computed(() => actingJointlyAndInConcert.value.get(props.si.uu
         key-attribute="uuid"
         :search-attributes="['name']"
         :style="`width: ${individualConnectionWidth}%`"
+        :editing-disabled="editingDisabled"
       />
     </div>
 
@@ -132,6 +137,7 @@ const siControl = computed(() => actingJointlyAndInConcert.value.get(props.si.uu
         key-attribute="uuid"
         :search-attributes="['name']"
         :style="`width: ${individualConnectionWidth}%`"
+        :editing-disabled="editingDisabled"
       />
     </div>
 
@@ -153,6 +159,7 @@ const siControl = computed(() => actingJointlyAndInConcert.value.get(props.si.uu
         key-attribute="uuid"
         :search-attributes="['name']"
         :style="`width: ${individualConnectionWidth}%`"
+        :editing-disabled="editingDisabled"
       />
     </div>
   </div>
