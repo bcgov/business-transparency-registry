@@ -82,7 +82,9 @@ export const useBcrosKeycloak = defineStore('bcros/keycloak', () => {
       refreshToken: refreshToken || undefined,
       idToken: idToken || undefined,
       pkceMethod: 'S256',
-      responseMode: 'query'
+      responseMode: 'query',
+      // NB: Unsure why, but btr keycloak init fails nonce check
+      useNonce: false
     }
     return await kc.value.init(kcOptions)
   }
