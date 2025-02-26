@@ -101,7 +101,7 @@ describe('pages -> Beneficial Owner Change', () => {
     cy.get('[data-cy=button-control-right-button]').eq(0).click()
 
     cy.get('[data-cy=info-section]')
-      .should('contain.text', 'You have to make an edit to the list in order to continue')
+      .should('contain.text', 'You have to make an edit to the page in order to continue')
 
     // edit name so we can continue
     cy.get('[data-cy="action-button"]').first().click()
@@ -119,17 +119,10 @@ describe('pages -> Beneficial Owner Change', () => {
 })
 
 describe('pages -> Beneficial Owner Change - no preloaded data in tables', () => {
-  beforeEach(() => {
-    cy.interceptPostsBtrApiEmpty().as('existingSIs')
-    cy.interceptPayFeeApi().as('payFeeApi')
-    cy.interceptBusinessContact().as('businessContact')
-    cy.interceptBusinessSlim().as('businessApiCall')
-    cy.visit('/')
-    cy.wait(['@existingSIs', '@businessApiCall', '@payFeeApi', '@businessContact'])
-  })
-
   it('verify summary table is rendered as expected', () => {
+    cy.visitHomePageWithFakeData('BC0871427', SubmissionTypeE.INITIAL_FILING, undefined, true)
     const summaryTableHeaders = cy.get('[data-cy="individualsSummaryTable"]').get('th')
+
     summaryTableHeaders
       .should('contain', 'Name')
       .and('contain', 'Details')

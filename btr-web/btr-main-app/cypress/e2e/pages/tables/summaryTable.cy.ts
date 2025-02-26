@@ -337,7 +337,7 @@ describe('pages -> Summary Table', () => {
     // remove the citizenship by clicking on the selected citizenship tag, and the SI should have no citizenship
     cy.get('[data-cy=action-button]').eq(0).click()
     cy.get('[data-cy="citizenships.otherComboboxChip"]').should('have.length', 1)
-    cy.get('[data-cy="citizenships.otherComboboxChip"]').eq(0).get('[data-cy="close-icon"]').click()
+    cy.get('[data-cy="citizenships.otherComboboxChip"]').eq(0).find('[data-cy="close-icon"]').click()
     cy.get('[data-cy="citizenships.otherComboboxChip"]').should('have.length', 0)
   })
 

@@ -8,7 +8,7 @@
       {{ $t('texts.reviewConfirm') }}
     </p>
 
-    <BcrosAlertsMessage :flavour="AlertsFlavourE.INFO">
+    <BcrosAlertsMessage :flavour="AlertsFlavourE.INFO" data-cy="review-confirm-alert">
       <p v-if="currentSIFiling.annualFilingNoChanges" class="py-2">
         <span class="font-bold">{{ $t('general.important') }}</span>
         <ul class="list-disc list-inside">

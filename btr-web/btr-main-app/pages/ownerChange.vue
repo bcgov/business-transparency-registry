@@ -155,8 +155,9 @@ watch(() => filingErrors, () => {
       </div>
 
       <BcrosSection
-        v-if="isAnnualFiling"
+        v-if="isAnnualFiling && !currentSIFiling.noPreviousFiling"
         class="mt-5"
+        data-cy="annualFilingNoChanges-section"
         :section-title="$t('sectionTitles.annualFiling')"
         :show-section-has-errors="incompleteFilingError"
         rounded-top
@@ -166,7 +167,7 @@ watch(() => filingErrors, () => {
           v-model="currentSIFiling.annualFilingNoChanges"
           name="annualFilingNoChanges"
           data-cy="annualFilingNoChanges-checkbox"
-          :disabled="expandNewSI || infoChanged"
+          :disabled="expandNewSI || infoChanged || isEditing"
           @click="clearIncompleteFilingError"
         >
           <template #label>
