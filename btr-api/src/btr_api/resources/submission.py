@@ -69,7 +69,7 @@ def registers(id: int | None = None):  # pylint: disable=redefined-builtin
     try:
         if submission := SubmissionModel.find_by_id(id):
             account_id = request.headers.get('Account-Id', None)
-            btr_auth.is_authorized(request=request, business_identifier=submission.business_identifier)
+            btr_auth.is_authorized(request=request, business_identifier=submission.business_identifier, action='view')
             btr_auth.product_authorizations(request=request, account_id=account_id)
             redacted = redact_information(SubmissionSerializer.to_dict(submission), btr_auth.get_user_type())
             return jsonify(type=submission.type, submission=redacted['payload'])
@@ -88,7 +88,7 @@ def get_entity_submission(business_identifier: str):
     """Get the current submission for specified business identifier."""
 
     try:
-        btr_auth.is_authorized(request=request, business_identifier=business_identifier)
+        btr_auth.is_authorized(request=request, business_identifier=business_identifier, action='view')
         account_id = request.headers.get('Account-Id', None)
         btr_auth.product_authorizations(request=request, account_id=account_id)
 
@@ -128,8 +128,7 @@ def create_register():
             return error_request_response('Invalid schema', HTTPStatus.BAD_REQUEST, errors)
 
         business_identifier = json_input.get('businessIdentifier')
-        btr_auth.is_authorized(request=request, business_identifier=business_identifier)
-
+        btr_auth.is_authorized(request=request, business_identifier=business_identifier, action='edit')
         # get entity
         token = btr_auth.get_bearer_token()
         entity: dict = btr_entity.get_entity_info(None, business_identifier, token).json()
@@ -191,7 +190,7 @@ def update_submission(sub_id: int):
         submission = SubmissionModel.find_by_id(sub_id)
         if submission:
             business_identifier = submission.business_identifier
-            btr_auth.is_authorized(request=request, business_identifier=business_identifier)
+            btr_auth.is_authorized(request=request, business_identifier=business_identifier, action='edit')
             btr_auth.product_authorizations(request=request, account_id=account_id)
 
             # get entity
