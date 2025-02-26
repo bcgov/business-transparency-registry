@@ -160,19 +160,20 @@ def test_get_plots(app, client, session, jwt, requests_mock, sample_user, test_n
                 assert value in rv.text
 
 
-_valid_auth_response = {'orgMembership': 'COORDINATOR', 'roles': ['edit', 'view']}
-_forbidden_auth_response2 = {'orgMembership': 'COORDINATOR', 'roles': ['no_edit_role', 'view']}
-_forbidden_auth_response = {}
+_valid_auth_view_response = {'orgMembership': 'COORDINATOR', 'roles': ['view']}
+_valid_auth_edit_response = {'orgMembership': 'COORDINATOR', 'roles': ['edit', 'view']}
+_forbidden_auth_response_missing_view_role = {'orgMembership': 'COORDINATOR', 'roles': ['no_view_role']}
+_forbidden_auth_response_missing_edit_role = {'orgMembership': 'COORDINATOR', 'roles': ['no_edit_role', 'view']}
+_forbidden_auth_response_empty = {}
 
 
 @pytest.mark.parametrize(
     'test_name, business_identifier, auth_svc_response, has_auth_header, expected_http_status',
     [
-        ('Good path', 'identifier0', _valid_auth_response, True, HTTPStatus.OK),
-        ('Bad path, no auth header', 'identifier0', _valid_auth_response, False, HTTPStatus.UNAUTHORIZED),
-        # TODO: we don't check for these roles in the get? Will rework this to pull allowed actions from legal-api
-        # ('Bad path, no edit role', 'identifier0', _forbidden_auth_response2, True, HTTPStatus.FORBIDDEN),
-        # ('Bad path, not allowed', 'identifier0', _forbidden_auth_response, True, HTTPStatus.FORBIDDEN),
+        ('Good path', 'BC1234567', _valid_auth_view_response, True, HTTPStatus.OK),
+        ('Bad path, no auth header', 'BC1234566', _valid_auth_view_response, False, HTTPStatus.UNAUTHORIZED),
+        ('Bad path, no view role', 'BC1234565', _forbidden_auth_response_missing_view_role, True, HTTPStatus.FORBIDDEN),
+        ('Bad path, no roles', 'BC1234564', _forbidden_auth_response_empty, True, HTTPStatus.FORBIDDEN)
     ],
 )
 def test_get_plots_auth(
@@ -190,8 +191,9 @@ def test_get_plots_auth(
 ):
     """Test scenarios connected to authentication on plots endpoint."""
     with nested_session(session):
-        clear_db(session)
         # Setup
+        auth_cache.clear()
+        clear_db(session)
         sub = SubmissionModel()
         sub.submitted_payload = {'businessIdentifier': business_identifier}
         sub.business_identifier = business_identifier
@@ -201,7 +203,6 @@ def test_get_plots_auth(
         session.add(sub)
         session.commit()
         search_id = sub.id
-
         requests_mock.get(
             f"{app.config.get('AUTH_SVC_URL')}/entities/{business_identifier}/authorizations", json=auth_svc_response
         )
@@ -224,8 +225,72 @@ def test_get_plots_auth(
     assert rv.status_code == expected_http_status
 
 
+@pytest.mark.parametrize(
+    'test_name, auth_svc_response, has_auth_header, expected_http_status',
+    [
+        ('Good path', _valid_auth_edit_response, True, HTTPStatus.CREATED),
+        ('Bad path, no auth header', _valid_auth_edit_response, False, HTTPStatus.UNAUTHORIZED),
+        ('Bad path, no edit role', _forbidden_auth_response_missing_edit_role, True, HTTPStatus.FORBIDDEN),
+        ('Bad path, no roles', _forbidden_auth_response_empty, True, HTTPStatus.FORBIDDEN)
+    ],
+)
+def test_create_update_plots_auth(
+    app,
+    client,
+    session,
+    jwt,
+    requests_mock,
+    test_name,
+    auth_svc_response,
+    has_auth_header,
+    expected_http_status,
+):
+    """Test scenarios connected to authentication on plots endpoint."""
+    with nested_session(session):
+        # Setup
+        auth_cache.clear()
+        clear_db(session)
+        current_dir = os.path.dirname(__file__)
+        with open(os.path.join(current_dir, '..', '..', 'mocks', 'significantIndividualsFiling', 'valid.json')) as file:
+            json_data = json.load(file)
+            identifier = json_data['businessIdentifier']
+            requests_mock.get(
+                f"{app.config.get('AUTH_SVC_URL')}/entities/{identifier}/authorizations", json=auth_svc_response
+            )
+            requests_mock.post(app.config.get('SSO_SVC_TOKEN_URL'), json={'access_token': 'token'})
+            requests_mock.get(
+                f"{app.config.get('LEGAL_SVC_URL')}/businesses/{identifier}", json=mocked_entity_response
+            )
+            requests_mock.post(
+                f"{app.config.get('LEGAL_SVC_URL')}/businesses/{identifier}/filings", json={'message': 'Success'}
+            )
+            requests_mock.get(
+                f"{app.config.get('LEGAL_SVC_URL')}/businesses/{identifier}/addresses?addressType=deliveryAddress",
+                json=mocked_entity_address_response
+            )
+            requests_mock.get(
+                f"{app.config.get('AUTH_SVC_URL')}/entities/{identifier}",
+                json=mocked_auth_entity_contact_response
+            )
+
+            headers = create_header(
+                jwt, ['basic'], **{'Accept-Version': 'v1', 'content-type': 'application/json', 'Account-Id': 1}
+            )
+
+            if not has_auth_header:
+                headers = {'Accept-Version': 'v1', 'content-type': 'application/json', 'Account-Id': 1}
+
+            # Test
+            rv = client.post('/plots', json=json_data, headers=headers)
+
+    # Confirm outcome
+    assert rv.status_code == expected_http_status
+
+
 def test_post_plots_db_mocked(app, session, client, jwt, mocker, requests_mock):
     """Assure post submission works (db mocked)."""
+    auth_cache.clear()
+    clear_db(session)
     auth_mock = requests_mock.post(app.config.get('SSO_SVC_TOKEN_URL'), json={'access_token': 'token'})
     bor_api_mock = requests_mock.put(
         f"{app.config.get('BOR_SVC_URL')}/internal/solr/update", json={'message': 'Update accepted'}
