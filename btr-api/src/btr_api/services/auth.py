@@ -201,7 +201,7 @@ class AuthService:
             return
 
     @auth_cache.cached(timeout=600, make_cache_key=get_cache_key, cache_none=False)
-    def is_authorized(self, request: Request, business_identifier: str) -> bool:
+    def is_authorized(self, request: Request, business_identifier: str, action: str) -> bool:
         """Authorize the user for access to the service."""
         try:
             auth_token = self.get_authorization_header(request)
@@ -216,7 +216,7 @@ class AuthService:
                 self.app.logger.debug('Invalid response from auth-api: %s', error)
                 raise ExternalServiceException(error=error, status_code=HTTPStatus.SERVICE_UNAVAILABLE)
 
-            if resp.status_code != HTTPStatus.OK or 'edit' not in resp.json().get('roles', []):
+            if resp.status_code != HTTPStatus.OK or action not in resp.json().get('roles', []):
                 error = f'Unauthorized access to business: {business_identifier}'
                 self.app.logger.debug(error)
                 raise AuthException(error=error, status_code=HTTPStatus.FORBIDDEN)

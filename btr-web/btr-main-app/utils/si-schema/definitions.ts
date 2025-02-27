@@ -77,6 +77,7 @@ export const SiSchema = z.object({
   couldNotProvideMissingInfo: z.boolean(),
   missingInfoReason: z.string().optional(),
   name: SiNameSchema,
+  isControlSelected: z.boolean(),
   controlOfShares: SiControlOfSchema,
   controlOfVotes: SiControlOfSchema,
   controlOfDirectors: SiControlOfDirectorsSchema,
