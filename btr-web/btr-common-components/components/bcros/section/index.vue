@@ -56,7 +56,7 @@
             'w-full': sectionTitleFull
           }"
         >
-          <div class="font-bold min-w-[190px] mt-3" :class="showSectionHasErrors ? 'text-red-500' : ''">
+          <div class="font-bold min-w-[190px]" :class="showSectionHasErrors ? 'text-red-500' : ''">
             <UIcon
               v-if="sectionTitleIcon"
               class="text-2xl align-bottom"

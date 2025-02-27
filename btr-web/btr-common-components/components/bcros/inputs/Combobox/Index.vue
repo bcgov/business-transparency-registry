@@ -15,6 +15,7 @@
         multiple
         :by="keyAttribute"
         :search-attributes="searchAttributes"
+        :disabled="editingDisabled"
         @change="$emit('value-changed', model)"
       >
         <UButton
@@ -36,6 +37,7 @@
               <BcrosChips
                 v-for="(item, index) in model"
                 :key="index"
+                :class="{ 'pointer-events-none': editingDisabled }"
                 :label="labelFunction(item)"
                 class="float-left z-20"
                 :has-close="true"
@@ -89,7 +91,8 @@ const props = defineProps({
   labelPlaceholder: { type: String, default: '' },
   floatingLabel: { type: String, default: '' },
   keyAttribute: { type: String, required: true },
-  searchAttributes: { type: Array<String>, required: true }
+  searchAttributes: { type: Array<String>, required: true },
+  editingDisabled: { type: Boolean, default: false }
 })
 watch(model, () => {
   formBus?.emit({ type: 'blur', path: props.name })

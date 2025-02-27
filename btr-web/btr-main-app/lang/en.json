@@ -3,7 +3,8 @@
     "optional": "Optional",
     "regName": "BC Business Transparency Registry",
     "submit": "Submit Request",
-    "submittedOn": "Submitted on"
+    "submittedOn": "Submitted on",
+    "important": "Important:"
   },
   "labels": {
     "nameChangeReason": {
@@ -136,6 +137,8 @@
     "significantIndividuals": "List all individuals who are significant individuals of the private company in accordance with the criteria contained in section 119.11 of the Business Corporations Act. Examples of when an individual is a significant individual include but are not limited to: where the individual owns 25% or more of registered shares; where an individual is the beneficial owner of 25% or more of shares; or where the individual has the right or ability to elect, appoint, or remove the majority of the company’s directors.",
     "collectionNotice": "Personal information is being collected for the purposes of administering the Registrar’s Transparency Register under the authority of the Business Corporations Act and in accordance with the Freedom of Information and Protection of Privacy Act.",
     "noSignificantIndividualsExistExplain": "By checking this checkbox, you confirm that, as per Business Corporations Act 119.2(3), there are no individuals considered significant individuals in relation to the company. This action ensures compliance with legislation, requiring the transparency register to include a statement indicating the absence of significant individuals.",
+    "annualFilingNoChanges": "There are no changes to the company transparency register information",
+    "annualFilingChanged": "You have already made changes to your list. Undo the changes to select this checkbox.",
     "isYourOwnInformation": "Select this option if you are a significant individual and you are entering information for yourself.",
     "note": "Note: ",
     "preferredName": {
@@ -244,7 +247,13 @@
     "taxNumber": "A 9-digit Social Insurance Number (SIN), an Individual Tax Number (ITN), or a Temporary Taxation Number (TTN) is required if this individual has one.",
     "taxResidency": "Indicate if this person is a resident of Canada for Income Tax purposes.",
     "reviewConfirm": "Review the information in your registration. If you need to change anything, return to the previous step to make the necessary change.",
-    "reviewConfirmAlert": "{boldStart}Important:{boldEnd} This information needs to match what is in the company’s internal transparency register.",
+    "reviewConfirmAlert": {
+      "general": "{boldStart}Important:{boldEnd} This information needs to match what is in the company’s internal transparency register.",
+      "noChanges": {
+        "text1": "You are indicating there are no changes to the company’s transparency register information.",
+        "text2": "This information needs to match what is in the company’s internal transparency register."
+      }
+    },
     "certify": {
       "certification": "Certification",
       "part1": "I, ",
@@ -279,8 +288,8 @@
     "validation": {
       "report": {
         "noSIsOrAddSI": "You have to make a selection OR add a Significant Individual in order to continue",
-        "addOrUpdateSIs": "You have to make an edit to the list in order to continue",
-        "makeSelectionOrEditList": "You have to make a selection OR edit the list in order to continue"
+        "addOrUpdateSIs": "You have to make an edit to the page in order to continue",
+        "makeSelectionOrEditPage": "You have to make a selection OR edit the page in order to continue"
       },
       "nameChangeReason": {
         "empty": "Select a reason for the change"
@@ -436,6 +445,7 @@
     "significantIndividuals": "Significant Individuals"
   },
   "sectionTitles": {
+    "annualFiling": "Annual Filing",
     "phoneNumber": "Phone number",
     "profileDetails": "Your Details",
     "reviewConfirm": "Review and Confirm",

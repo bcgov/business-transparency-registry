@@ -4,7 +4,8 @@ defineProps({
   icon: { type: String, default: '' },
   headers: { type: Array<any>, required: true },
   items: { type: Array<any>, required: true },
-  emptyState: { type: String, default: 'No data available' }
+  emptyState: { type: String, default: 'No data available' },
+  hasError: { type: Boolean, default: false }
 })
 </script>
 
@@ -17,7 +18,10 @@ defineProps({
       </span>
       <slot name="header-warning" />
     </div>
-    <div class="bg-white px-2 pb-5 rounded-b-[5px] relative overflow-visible">
+    <div
+      class="bg-white px-2 pb-5 rounded-b-[5px] relative overflow-visible"
+      :class="{'border-l-[3px] border-l-red-500': hasError}"
+    >
       <table class="min-w-full table-fixed divide-y divide-gray-300">
         <thead>
           <tr>

@@ -7,7 +7,7 @@ Cypress.Commands.add('interceptPostsBtrApi', () => {
   cy.fixture('plotsEntityExistingSiResponse').then((plotsEntityExistingSiResponse) => {
     cy.intercept(
       'GET',
-      '/plots/entity/BC0871427',
+      '/plots/entity/**',
       plotsEntityExistingSiResponse)
   })
 })
@@ -16,7 +16,7 @@ Cypress.Commands.add('interceptPostsBtrApiNoSis', () => {
   cy.fixture('plotsEntityExistingSiResponseNoSis').then((plotsEntityExistingSiResponseNoSis) => {
     cy.intercept(
       'GET',
-      '/plots/entity/BC0871427',
+      '/plots/entity/**',
       plotsEntityExistingSiResponseNoSis)
   })
 })
@@ -24,14 +24,14 @@ Cypress.Commands.add('interceptPostsBtrApiNoSis', () => {
 Cypress.Commands.add('interceptPostsBtrApiNoPreviousSubmissions', () => {
   cy.intercept(
     'GET',
-    '/plots/entity/BC0871427',
+    '/plots/entity/**',
     { statusCode: 404, headers: { 'x-not-found': 'true' } })
 })
 
 Cypress.Commands.add('interceptPostsBtrApiEmpty', () => {
   cy.intercept(
     'GET',
-    '/plots/entity/BC0871427',
+    '/plots/entity/**',
     {})
 })
 
@@ -112,7 +112,9 @@ Cypress.Commands.add('visitHomePageNoFakeData', (businessIdentifier?: string, su
 Cypress.Commands.add('visitHomePageWithFakeData', (
   businessIdentifier?: string,
   submissionType?: SubmissionTypeE,
-  submissionForYear?: string
+  submissionForYear?: string,
+  noPreviousSubmisions?: boolean,
+  noSI?: boolean
 ) => {
   if (!businessIdentifier) {
     businessIdentifier = 'BC0871427'
@@ -124,12 +126,20 @@ Cypress.Commands.add('visitHomePageWithFakeData', (
   if (submissionForYear) {
     url += `&submissionForYear=${submissionForYear}`
   }
-  cy.interceptPostsBtrApi().as('existingSIs')
+
+  if (noPreviousSubmisions) {
+    cy.interceptPostsBtrApiNoPreviousSubmissions().as('getSI')
+  } else if (noSI) {
+    cy.interceptPostsBtrApiEmpty().as('getSI')
+  } else {
+    cy.interceptPostsBtrApi().as('getSI')
+  }
+
   cy.interceptPayFeeApi().as('payFeeApi')
   cy.interceptBusinessContact().as('businessContact')
   cy.interceptBusinessSlim().as('businessApiCall')
   cy.visit(url)
-  cy.wait(['@existingSIs', '@businessApiCall', '@payFeeApi', '@businessContact'])
+  cy.wait(['@getSI', '@businessApiCall', '@payFeeApi', '@businessContact'])
 })
 
 Cypress.Commands.add('visitHomePageWithFakeDataAndAxeInject',
