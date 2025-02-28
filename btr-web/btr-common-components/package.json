@@ -41,7 +41,7 @@
   "dependencies": {
     "@vuepic/vue-datepicker": "^8.0.0",
     "country-codes-list": "^1.6.11",
-    "keycloak-js": "^22.0.5",
+    "keycloak-js": "24.0.4",
     "maska": "3.0.0-beta2",
     "uuid": "^9.0.1",
     "vue-country-flag-next": "^2.3.2"
