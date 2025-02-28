@@ -1,7 +1,6 @@
 <template>
   <div class="flex flex-col gap-5" data-cy="review-confirm">
     <BtrPageTitle />
-
     <h2 class="font-bold text-lg" data-cy="review-confirm-section-heading">
       {{ $t('sectionTitles.reviewConfirm') }}
     </h2>
@@ -9,9 +8,20 @@
       {{ $t('texts.reviewConfirm') }}
     </p>
 
-    <BcrosAlertsMessage :flavour="AlertsFlavourE.INFO">
-      <p class="py-2">
-        <BcrosI18HelperBold translation-path="texts.reviewConfirmAlert" />
+    <BcrosAlertsMessage :flavour="AlertsFlavourE.INFO" data-cy="review-confirm-alert">
+      <p v-if="currentSIFiling.annualFilingNoChanges" class="py-2">
+        <span class="font-bold">{{ $t('general.important') }}</span>
+        <ul class="list-disc list-inside">
+          <li>
+            {{ $t('texts.reviewConfirmAlert.noChanges.text1') }}
+          </li>
+          <li>
+            {{ $t('texts.reviewConfirmAlert.noChanges.text2') }}
+          </li>
+        </ul>
+      </p>
+      <p v-else class="py-2">
+        <BcrosI18HelperBold translation-path="texts.reviewConfirmAlert.general" />
       </p>
     </BcrosAlertsMessage>
 

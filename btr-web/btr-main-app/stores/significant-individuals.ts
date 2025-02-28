@@ -16,9 +16,14 @@ export const useSignificantIndividuals = defineStore('significantIndividuals', (
    * otherwise is will be left at undefined
    * */
   const previousFilingSubmissionId: Ref<string | undefined | null> = ref(undefined)
-  const currentSIFiling: Ref<SignificantIndividualFilingI> = ref(getEmptySiFiling()) // current significant individual change filing
+
+  // current significant individual change filing; the default value is created by getEmptySiFiling()
+  // with undefined submissionType and submissionForYear; noPreviousFiling = true
+  const currentSIFiling: Ref<SignificantIndividualFilingI> = ref(getEmptySiFiling(undefined, undefined, true))
+
   // saved SIs from fetched from the api for this business (includes historicals)
   const savedSIs: Ref<SiSchemaType[]> = ref([])
+
   // editable list of SIs viewed in the edit table
   const allEditableSIs: Ref<SiSchemaType[]> = ref([])
   const showErrors = ref(false) // show submit error validations
@@ -38,6 +43,12 @@ export const useSignificantIndividuals = defineStore('significantIndividuals', (
       currentSIFiling.value.businessIdentifier = currentBusinessIdentifier.value
     }
   })
+
+  const isAnnualFiling = computed(() => {
+    return currentSIFiling.value.submissionType === SubmissionTypeE.ANNUAL_FILING &&
+      !!currentSIFiling.value.submissionForYear
+  })
+
   /**
    * Applies 'updating' to the si record or all si records.
    * Needed for the nuxt/ui table to render changes to si array fields correctly.
@@ -141,11 +152,14 @@ export const useSignificantIndividuals = defineStore('significantIndividuals', (
       loadSavedSIs(btrFiling)
     }
 
-    currentSIFiling.value = getEmptySiFiling()
+    currentSIFiling.value = getEmptySiFiling(
+      currentSIFiling.value.submissionType,
+      currentSIFiling.value.submissionForYear,
+      !previousFilingSubmissionId.value
+    )
     currentSIFiling.value.businessIdentifier = businessIdentifier
     currentSIFiling.value.effectiveDate = dateToString(new Date(), 'YYYY-MM-DD')
     currentSIFiling.value.folioNumber = _getFolioNumber()
-    _updateFilingTypeFromRoute()
   }
 
   /** Save the current significant individual filing */
@@ -174,9 +188,11 @@ export const useSignificantIndividuals = defineStore('significantIndividuals', (
         category: ErrorCategoryE.SIGNIFICANT_INDIVIDUAL
       }
       errors.value.push(err)
+    } else {
+      // redirect to business dashboard
+      useBcrosNavigate().redirect(useRuntimeConfig().public.businessWebURL + currentBusinessIdentifier.value)
     }
-    // redirect to business dashboard
-    useBcrosNavigate().redirect(useRuntimeConfig().public.businessWebURL + currentBusinessIdentifier.value)
+
     submitting.value = false
   }
 
@@ -196,7 +212,7 @@ export const useSignificantIndividuals = defineStore('significantIndividuals', (
     }
   }
 
-  function _updateFilingTypeFromRoute () {
+  function updateFilingTypeFromRoute () {
     // set submission (filing) type for the current submisssion
     const route = useRoute()
     if (route) {
@@ -231,7 +247,7 @@ export const useSignificantIndividuals = defineStore('significantIndividuals', (
     allEditableSIs.value = []
     showErrors.value = false
     submitting.value = false
-    _updateFilingTypeFromRoute()
+    updateFilingTypeFromRoute()
   }
 
   return {
@@ -245,6 +261,7 @@ export const useSignificantIndividuals = defineStore('significantIndividuals', (
     errors,
     showErrors,
     submitting,
+    isAnnualFiling,
     filingCeaseSI,
     filingUpdateSI,
     filingRemoveSI,
@@ -252,6 +269,7 @@ export const useSignificantIndividuals = defineStore('significantIndividuals', (
     filingSave,
     filingSubmit,
     reset,
-    undoSIChanges
+    undoSIChanges,
+    updateFilingTypeFromRoute
   }
 })

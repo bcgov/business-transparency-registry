@@ -93,10 +93,15 @@ export function getDefaultInputFormSi (): SiSchemaType {
   }
 }
 
-export function getEmptySiFiling (): SignificantIndividualFilingI {
+export function getEmptySiFiling (
+  submissionType: SubmissionTypeE = SubmissionTypeE.INITIAL_FILING,
+  submissionForYear?: number,
+  noPreviousFiling?: boolean
+): SignificantIndividualFilingI {
   return {
-    submissionType: SubmissionTypeE.INITIAL_FILING,
-    submissionForYear: undefined,
+    submissionType,
+    submissionForYear,
+    noPreviousFiling,
     effectiveDate: todayIsoDateString(),
     noSignificantIndividualsExist: false,
     significantIndividuals: [],

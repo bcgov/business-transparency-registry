@@ -1,12 +1,5 @@
 <script setup lang="ts">
-import { SubmissionTypeE } from '#imports'
-
-const { currentSIFiling } = storeToRefs(useSignificantIndividuals())
-
-const isAnnualFiling = computed(() => {
-  return currentSIFiling.value.submissionType === SubmissionTypeE.ANNUAL_FILING &&
-    !!currentSIFiling.value.submissionForYear
-})
+const { currentSIFiling, isAnnualFiling } = storeToRefs(useSignificantIndividuals())
 </script>
 
 <template>

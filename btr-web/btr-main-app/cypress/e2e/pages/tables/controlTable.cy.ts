@@ -6,12 +6,24 @@ describe('pages -> Control Table', () => {
   })
 
   it('The control table is hidden if no significant individual has claimed a shared control or interest', () => {
+    // the mock data has SI with shared control so the Control Table should present
+    cy.get('[data-cy=individualsControlTable]').should('exist')
+
+    // update SIs to remove the shared control
+    cy.get('[data-cy=action-button]').eq(0).click()
+    cy.get('[data-cy="controlOfShares.jointlyOrInConcert.hasJointlyOrInConcert"]').uncheck()
+    cy.get('[data-cy=new-si-done-btn]').click()
+    cy.get('[data-cy=action-button]').eq(2).click()
+    cy.get('[data-cy="controlOfShares.jointlyOrInConcert.hasJointlyOrInConcert"]').uncheck()
+    cy.get('[data-cy=new-si-done-btn]').click()
+
+    // now the Control Table should be hidden
     cy.get('[data-cy=individualsControlTable]').should('not.exist')
   })
 
   // test a 'happy-path' scenario:
-  // 1) the first SI has shares in concert with the second SI
-  // 2) the first SI has shares held jointly with the third SI
+  // 1) the first SI has shares in concert with the second SI (new connection to add)
+  // 2) the first SI has shares held jointly with the third SI (existing connection from previous submission)
   it('The control table is working as expected', () => {
     cy.fixture('plotsEntityExistingSiResponse').then((siData: { payload: BtrFilingI }) => {
       // should only display records for current active SIs
@@ -29,7 +41,7 @@ describe('pages -> Control Table', () => {
       const name3 = personStmnt3?.names[0].fullName.toUpperCase()
       const numOfSI = viewableOwnrStmnts.length
 
-      // update the first SI to add control of shares held in concert and jointly
+      // Add new connection: the first and second SI have control of shares in concert
       cy.get('[data-cy=action-button]').eq(0).click()
       cy.get('[data-cy="controlOfShares.jointlyOrInConcert.hasJointlyOrInConcert"]').check()
       cy.get('[data-cy="controlOfShares.jointlyOrInConcert.actingJointly"]').check()
@@ -37,19 +49,9 @@ describe('pages -> Control Table', () => {
       cy.get('[data-cy=new-si-done-btn]').click()
       // wait 1 second for updating row
       cy.wait(1000)
-
-      // update the second SI to add control of shares in concert
       cy.get('[data-cy=action-button]').eq(1).click()
       cy.get('[data-cy="controlOfShares.jointlyOrInConcert.hasJointlyOrInConcert"]').check()
       cy.get('[data-cy="controlOfShares.jointlyOrInConcert.inConcertControl"]').check()
-      cy.get('[data-cy=new-si-done-btn]').click()
-      // wait 1 second for updating row
-      cy.wait(1000)
-
-      // update the third SI to add control of shares held jointly
-      cy.get('[data-cy=action-button]').eq(2).click()
-      cy.get('[data-cy="controlOfShares.jointlyOrInConcert.hasJointlyOrInConcert"]').check()
-      cy.get('[data-cy="controlOfShares.jointlyOrInConcert.actingJointly"]').check()
       cy.get('[data-cy=new-si-done-btn]').click()
       // wait 1 second for updating row
       cy.wait(1000)
@@ -75,12 +77,11 @@ describe('pages -> Control Table', () => {
 
       // For each combobox dropdown:
       // 1) verify that the dropdown menus of an SI should include all individuals except for the SI
-      // 2) make a selection based on the scenario
+      // 2) make a selection for the newly-added connection
 
       cy.get('[data-cy="individualConnection0.shares.jointlyComboboxButton"]').click({ force: true })
       cy.get('[id^="headlessui-combobox-options"]').find('li').should('have.length', numOfSI - 1)
         .and('not.contain', name1)
-      cy.get('[id^="headlessui-combobox-options"]').find('li').eq(1).click({ force: true })
 
       cy.get('[data-cy="individualConnection0.shares.inConcertComboboxButton"]').click({ force: true })
       cy.get('[id^="headlessui-combobox-options"]').find('li').should('have.length', numOfSI - 1)
@@ -95,7 +96,6 @@ describe('pages -> Control Table', () => {
       cy.get('[data-cy="individualConnection2.shares.jointlyComboboxButton"]').click({ force: true })
       cy.get('[id^="headlessui-combobox-options"]').find('li').should('have.length', numOfSI - 1)
         .and('not.contain', name3)
-      cy.get('[id^="headlessui-combobox-options"]').find('li').eq(0).click({ force: true })
 
       // Verify that individuals are selected correctly
       cy.get('[data-cy="individualConnection0.shares.jointlyComboboxChip"]').should('have.text', name3)
@@ -106,11 +106,9 @@ describe('pages -> Control Table', () => {
   })
 
   it('A warning message is displayed when only one siginiciant individual has shared control', () => {
-    // update the first SI to add control of votes in concert
+    // remove the shared control in the first SI
     cy.get('[data-cy=action-button]').eq(0).click()
-    cy.get('[data-cy="controlOfShares.jointlyOrInConcert.hasJointlyOrInConcert"]').check()
-    cy.get('[data-cy="controlOfShares.jointlyOrInConcert.actingJointly"]').check()
-    cy.get('[data-cy="controlOfShares.jointlyOrInConcert.inConcertControl"]').check()
+    cy.get('[data-cy="controlOfShares.jointlyOrInConcert.hasJointlyOrInConcert"]').uncheck()
     cy.get('[data-cy=new-si-done-btn]').click()
     // wait 1 second for updating row
     cy.wait(1000)
@@ -118,11 +116,8 @@ describe('pages -> Control Table', () => {
     // the warning message should be rendered
     cy.get('[data-cy="alertsMessage:alert"]').should('exist')
 
-    // add another SI to the table
-    cy.get('[data-cy=action-button]').eq(1).click()
-    cy.get('[data-cy="controlOfVotes.jointlyOrInConcert.hasJointlyOrInConcert"]').check()
-    cy.get('[data-cy="controlOfVotes.jointlyOrInConcert.inConcertControl"]').check()
-    cy.get('[data-cy=new-si-done-btn]').click()
+    // undo changes and the warning
+    cy.get('[data-cy=action-button]').eq(0).click()
     // wait 1 second for updating row
     cy.wait(1000)
 

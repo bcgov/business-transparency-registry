@@ -83,14 +83,19 @@ describe('pages -> Review and Confirm', () => {
       cy.get('[data-cy="certify-section-checkbox"]').click()
       cy.get('[data-cy="certify-section-checkbox"]').should('be.checked')
 
-      // submit the filing and check redirection
+      // submit the filing
+      cy.intercept(
+        'PUT',
+        'https://**/plots/**',
+        { statusCode: 200 }
+      ).as('submit')
+      cy.get('[data-cy=button-control-right-button]').eq(1).click()
+      // check redirection
       cy.intercept(
         'GET',
         'https://dev.business-dashboard.bcregistry.gov.bc.ca/**',
         { statusCode: 200 }
       ).as('redirect')
-
-      cy.get('[data-cy=button-control-right-button]').eq(1).click()
       cy.wait('@redirect')
     })
   })
@@ -116,7 +121,7 @@ describe('pages -> Review and Confirm', () => {
     cy.get('[data-cy="button-control-right-button"]').click()
 
     // verify error pops ups saying need to add SI or select no SIs
-    cy.get('[data-cy=noSignificantIndividualsExist-section]')
+    cy.get('[data-cy=info-section]')
       .should('contain.text',
         'You have to make a selection OR add a Significant Individual in order to continue'
       )
@@ -129,14 +134,19 @@ describe('pages -> Review and Confirm', () => {
     // reselect the certify checkbox
     cy.get('[data-cy="certify-section-checkbox"]').click()
 
-    // submit the filing and check redirection
+    // submit the filing
+    cy.intercept(
+      'PUT',
+      'https://**/plots/**',
+      { statusCode: 200 }
+    ).as('submit')
+    cy.get('[data-cy=button-control-right-button]').eq(1).click()
+    // check redirection
     cy.intercept(
       'GET',
       'https://dev.business-dashboard.bcregistry.gov.bc.ca/**',
       { statusCode: 200 }
     ).as('redirect')
-
-    cy.get('[data-cy=button-control-right-button]').eq(1).click()
     cy.wait('@redirect')
   })
 })
