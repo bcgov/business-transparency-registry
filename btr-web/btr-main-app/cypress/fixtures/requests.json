@@ -1,0 +1,70 @@
+{
+  "count": 3,
+  "results": [
+    {
+      "birthdate": "Tue, 01 Oct 2024 00:00:00 GMT",
+      "businessIdentifier": "BC0870381",
+      "completingEmail": "j@doe.ca",
+      "completingName": "jane",
+      "completingParty": "SI",
+      "createdAt": "2024-10-11T10:40:53",
+      "email": "j@gmail.com",
+      "fullName": "JDoe",
+      "id": 1,
+      "individualAtRisk": [
+        "SI"
+      ],
+      "informationToOmit": [
+        "ALL"
+      ],
+      "reasons": "reasons",
+      "status": "AWAITING_REVIEW",
+      "updatedAt": "2024-10-11T10:40:53",
+      "uuid": "f13f554a-de04-49a4-8014-23efb9665236"
+    },
+    {
+      "birthdate": "Fri, 11 Oct 2024 00:00:00 GMT",
+      "businessIdentifier": "BC0871427",
+      "completingEmail": "jane@gmail.com",
+      "completingName": "jane",
+      "completingParty": "REPRESENTATIVE",
+      "createdAt": "2024-10-11T14:15:20",
+      "email": "test@gmail.com",
+      "fullName": "test",
+      "id": 2,
+      "individualAtRisk": [
+        "SI",
+        "HOUSEHOLD"
+      ],
+      "informationToOmit": [
+        "FULL_NAME",
+        "BIRTH_YEAR"
+      ],
+      "reasons": "reasons",
+      "status": "AWAITING_REVIEW",
+      "updatedAt": "2024-10-11T14:15:20",
+      "uuid": "087904ae-d130-4137-a5fd-a79de4dbe4c0"
+    },
+    {
+      "birthdate": "Tue, 18 Feb 2025 00:00:00 GMT",
+      "businessIdentifier": "BC0870317",
+      "completingEmail": "b@d.com",
+      "completingName": "B S",
+      "completingParty": "SI",
+      "createdAt": "2025-02-18T13:02:06",
+      "email": "b@d.com",
+      "fullName": "B S",
+      "id": 3,
+      "individualAtRisk": [
+        "SI"
+      ],
+      "informationToOmit": [
+        "ALL"
+      ],
+      "reasons": "reasons",
+      "status": "UNDER_APPEAL",
+      "updatedAt": "2025-02-18T13:02:06",
+      "uuid": "1486d726-286c-4f62-91a8-24c818032ddd"
+    }
+  ]
+}

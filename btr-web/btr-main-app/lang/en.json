@@ -261,7 +261,8 @@
       "date": "Date: ",
       "note": "Note: It is an offence to make a false or misleading statement in respect of a material fact in a record submitted to the Corporate Registry for filing. See section 427 of the Business Corporations Act.",
       "noteAlt": "Note: It is an offence to make a false or misleading statement in respect of a material fact in a record submitted to the Transparency Registry Filing. See section 427 of the Business Corporations Act."
-    }
+    },
+    "staffSIDashText": "Search for businesses and manage BC Registries accounts"
   },
   "placeholder": {
     "phoneNumber": {
@@ -442,7 +443,8 @@
     "myRegDetails": "My BC Registries Details",
     "fileTransparencyRegister": "File Transparency Register",
     "annualFiling": "Annual Filing",
-    "significantIndividuals": "Significant Individuals"
+    "significantIndividuals": "Significant Individuals",
+    "siManagement": "Significant Individual Management",
   },
   "sectionTitles": {
     "annualFiling": "Annual Filing",
@@ -462,7 +464,8 @@
     "citizenshipOrPR": "Citizenship / Permanent Residency",
     "taxDetails": "Canada Revenue Agency (CRA) Tax Number",
     "unableToObtainOrConfirmInformation": "Unable to Obtain or Confirm Information",
-    "determinationOfIncapacity": "Determination of Incapacity"
+    "determinationOfIncapacity": "Determination of Incapacity",
+    "staffSiTableHeader": "Request to Omit Significant Individual Information"
   },
   "sectionHeaders": {
     "controlOf": "Control",
@@ -538,6 +541,28 @@
     "alert": {
       "note": "Note",
       "hiddenInfo": "Some information is not shown due to privacy reasons"
+    }
+  },
+  "staffSiTable": {
+    "days": "Days In Queue",
+    "si": "Significant Individual",
+    "business": "Business Name/#",
+    "completingParty": "Completing Party",
+    "status": "Status",
+    "actions": "Actions",
+    "clearFilters": "Clear Filters",
+    "statuses": {
+      "PASSED": "Approved",
+      "REJECTED": "Rejected",
+      "AWAITING_REVIEW": "Awaiting Review",
+      "IN_REVIEW": "In Review",
+      "INFO_REQUESTED": "Info Requested",
+      "UNDER_APPEAL": "Under Appeal"
+    },
+    "noResults": "No Results",
+    "actionLabels": {
+      "review": "Review",
+      "open": "Open"
     }
   }
 }

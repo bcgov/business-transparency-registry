@@ -67,6 +67,7 @@ bp = Blueprint('request', __name__)
 
 
 @bp.route('/', methods=('GET',))
+@cross_origin(origin='*')
 @jwt.requires_auth
 def get_all():  # pylint: disable=redefined-builtin
     """Get all requests"""
@@ -74,7 +75,7 @@ def get_all():  # pylint: disable=redefined-builtin
         account_id = request.headers.get('Account-Id', None)
         btr_auth.product_authorizations(request=request, account_id=account_id)
         user_type = btr_auth.get_user_type()
-        if user_type in (UserType.USER_STAFF, UserType.USER_COMPETENT_AUTHORITY):
+        if user_type in (UserType.USER_STAFF):
             resp = []
             results = []
             sort = request.args.get('sort')
@@ -95,21 +96,43 @@ def get_all():  # pylint: disable=redefined-builtin
 
             if request.args.get('full_name'):
                 query = query.filter(RequestModel.full_name.ilike(f"%{request.args.get('full_name')}%"))
-            if request.args.get('status'):
-                query = query.filter(RequestModel.status.equals(request.args.get('status')))
+            elif request.args.get('fullName'):
+                query = query.filter(RequestModel.full_name.ilike(f"%{request.args.get('fullName')}%"))
 
-            results = query.all()
+            if request.args.get('status'):
+                query = query.filter(RequestModel.status==request.args.get('status'))
+
+            page = 1
+            per_page = 10
+            if request.args.get('page'):
+                page = int(request.args.get('page'))
+                if page < 1:
+                    page = 1
+            if request.args.get('limit'):
+                per_page = int(request.args.get('limit'))
+                if per_page < 1:
+                    per_page = 10
+                if per_page > 100:
+                    per_page = 100
+
+            paginated = query.paginate(page=page, per_page=per_page, error_out=False)
+            total = paginated.total
+            results = paginated.items
+
             for result in results:
                 resp.append(RequestSerializer.to_dict(result))
-            return jsonify(resp), HTTPStatus.OK
+            return jsonify({ 'count': total, 'results': resp }), HTTPStatus.OK
         return {}, HTTPStatus.NOT_FOUND
     except AuthException as aex:
+        print("AEX")
         return exception_response(aex)
     except Exception as exception:  # noqa: B902
+        print('EX')
         return exception_response(exception)
 
 
 @bp.route('/<id>', methods=('GET',))
+@cross_origin(origin='*')
 @jwt.requires_auth
 def get_request(id: uuid.UUID | None = None):  # pylint: disable=redefined-builtin
     """Get the request by id."""
@@ -118,7 +141,7 @@ def get_request(id: uuid.UUID | None = None):  # pylint: disable=redefined-built
             account_id = request.headers.get('Account-Id', None)
             btr_auth.product_authorizations(request=request, account_id=account_id)
             user_type = btr_auth.get_user_type()
-            if user_type in (UserType.USER_STAFF, UserType.USER_COMPETENT_AUTHORITY):
+            if user_type in (UserType.USER_STAFF):
                 return jsonify(RequestSerializer.to_dict(req)), HTTPStatus.OK
 
         return {}, HTTPStatus.NOT_FOUND
@@ -181,7 +204,7 @@ def update_request(req_id: str):
         if req:
             btr_auth.product_authorizations(request, account_id)
             user_type = btr_auth.get_user_type()
-            if user_type not in (UserType.USER_STAFF, UserType.USER_COMPETENT_AUTHORITY):
+            if user_type not in (UserType.USER_STAFF):
                 return {}, HTTPStatus.NOT_FOUND
 
             req_json = request.get_json()
@@ -235,7 +258,7 @@ def add_comment(req_id: str):
         if req:
             btr_auth.product_authorizations(request=request, account_id=account_id)
             user_type = btr_auth.get_user_type()
-            if user_type not in (UserType.USER_STAFF, UserType.USER_COMPETENT_AUTHORITY):
+            if user_type not in (UserType.USER_STAFF):
                 return {}, HTTPStatus.NOT_FOUND
 
             # validate payload
@@ -275,7 +298,7 @@ def get_all_comments(req_uuid: str):  # pylint: disable=redefined-builtin
         account_id = request.headers.get('Account-Id', None)
         btr_auth.product_authorizations(request=request, account_id=account_id)
         user_type = btr_auth.get_user_type()
-        if user_type in (UserType.USER_STAFF, UserType.USER_COMPETENT_AUTHORITY):
+        if user_type in (UserType.USER_STAFF):
             results = CommentModel.find_by_related_uuid(req_uuid)
             resp = []
             for result in results:

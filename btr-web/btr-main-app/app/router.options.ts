@@ -71,6 +71,20 @@ export default <RouterConfig> {
         layout: 'person',
         title: 'My BC Registries Details'
       }
+    },
+    {
+      name: RouteNameE.STAFF_SI_DASH,
+      path: '/staff-si-dashboard',
+      component: () => import('~/pages/staffRequestDash.vue').then(r => r.default || r),
+      meta: {
+        breadcrumbs: [getBcrosHomeDashboardCrumb, getRequestOmitCrumb],
+        layout: 'omit',
+        title: 'Staff Dashboard',
+        buttonControl: {
+          leftButtons: [],
+          rightButtons: []
+        }
+      }
     }
   ]
 }
