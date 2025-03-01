@@ -100,7 +100,7 @@ def get_all():  # pylint: disable=redefined-builtin,too-many-branches
                 query = query.filter(RequestModel.full_name.ilike(f"%{request.args.get('fullName')}%"))
 
             if request.args.get('status'):
-                query = query.filter(RequestModel.status==request.args.get('status'))
+                query = query.filter(RequestModel.status == request.args.get('status'))
 
             page = 1
             per_page = 10
@@ -118,7 +118,7 @@ def get_all():  # pylint: disable=redefined-builtin,too-many-branches
 
             for result in results:
                 resp.append(RequestSerializer.to_dict(result))
-            return jsonify({ 'count': total, 'results': resp }), HTTPStatus.OK
+            return jsonify({'count': total, 'results': resp}), HTTPStatus.OK
         return {}, HTTPStatus.NOT_FOUND
     except AuthException as aex:
         print("AEX")
