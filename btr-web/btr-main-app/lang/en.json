@@ -138,7 +138,7 @@
     "collectionNotice": "Personal information is being collected for the purposes of administering the Registrar’s Transparency Register under the authority of the Business Corporations Act and in accordance with the Freedom of Information and Protection of Privacy Act.",
     "noSignificantIndividualsExistExplain": "By checking this checkbox, you confirm that, as per Business Corporations Act 119.2(3), there are no individuals considered significant individuals in relation to the company. This action ensures compliance with legislation, requiring the transparency register to include a statement indicating the absence of significant individuals.",
     "annualFilingNoChanges": "There are no changes to the company transparency register information",
-    "annualFilingChanged": "You have already made changes to your list. Undo the changes to select this checkbox.",
+    "annualFilingChanged": "You have already made changes. Undo or cancel the changes to select this checkbox.",
     "isYourOwnInformation": "Select this option if you are a significant individual and you are entering information for yourself.",
     "note": "Note: ",
     "preferredName": {

@@ -61,6 +61,10 @@ const infoChanged = computed(() => {
     allEditableSIs.value.find(si => si.ui?.actions?.length > 0))
 })
 
+const annualFilingNoChangesInactive = computed(() => {
+  return expandNewSI.value || infoChanged.value || isEditing.value
+})
+
 const clearIncompleteFilingError = () => {
   const index = filingErrors?.value?.findIndex(zi => zi.path.includes('incompleteFiling'))
   if (index > -1) {
@@ -160,6 +164,7 @@ watch(() => filingErrors, () => {
         data-cy="annualFilingNoChanges-section"
         :section-title="$t('sectionTitles.annualFiling')"
         :show-section-has-errors="incompleteFilingError"
+        :dim-section-title="annualFilingNoChangesInactive"
         rounded-top
         rounded-bot
       >
@@ -167,16 +172,16 @@ watch(() => filingErrors, () => {
           v-model="currentSIFiling.annualFilingNoChanges"
           name="annualFilingNoChanges"
           data-cy="annualFilingNoChanges-checkbox"
-          :disabled="expandNewSI || infoChanged || isEditing"
+          :disabled="annualFilingNoChangesInactive"
           @click="clearIncompleteFilingError"
         >
           <template #label>
             <BcrosTooltip
-              v-if="infoChanged"
+              v-if="annualFilingNoChangesInactive"
               :text="$t('texts.annualFilingChanged')"
               :popper="{ placement: 'top', arrow: true, resize: true }"
             >
-              <span>
+              <span class="opacity-50">
                 {{ $t('texts.annualFilingNoChanges') }}
               </span>
             </BcrosTooltip>
