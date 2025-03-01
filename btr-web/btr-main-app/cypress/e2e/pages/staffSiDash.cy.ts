@@ -1,11 +1,5 @@
-import * as i18nCommon from '../../../../btr-common-components/lang/en.json'
-import * as i18n from '../../../lang/en.json'
 describe('pages -> Staff SI Dashboard', () => {
-  // let i18nCommon: any
-  // let i18n: any
   beforeEach(() => {
-    // cy.readFile('../btr-common-components/lang/en.json').then((json) => { i18nCommon = json })
-    // cy.readFile('lang/en.json').then((json) => { i18n = json })
     cy.visit('/staff-si-dashboard')
     cy.interceptBusinessSlim().as('businessApiCall')
   })
@@ -45,7 +39,6 @@ describe('pages -> Staff SI Dashboard', () => {
         'Actions'
       )
     })
-
   })
 
   it('Sort columns are clickable', () => {
@@ -59,7 +52,6 @@ describe('pages -> Staff SI Dashboard', () => {
 
       cy.get('[data-cy="header-item-button-status"]').should('exist')
       cy.get('[data-cy="header-item-button-status"]').click()
-      
     })
   })
 
@@ -72,7 +64,6 @@ describe('pages -> Staff SI Dashboard', () => {
       cy.get('input[placeholder="Significant Individual"]').should('exist')
 
       cy.get('tr').eq(1).find('button').should('exist')
-      
     })
   })
 
@@ -80,7 +71,7 @@ describe('pages -> Staff SI Dashboard', () => {
     cy.intercept(
       'GET',
       '**/requests**',
-      { count: 0, results:[] })
+      { count: 0, results: [] })
     cy.get('tbody').should('contain', 'No Results')
   })
 })
