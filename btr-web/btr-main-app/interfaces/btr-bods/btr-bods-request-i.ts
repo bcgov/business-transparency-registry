@@ -28,11 +28,6 @@ export interface BtrBodsRequestPutI {
   completingEmail?: string
 }
 
-export interface BtrBodsRequestGetAllI{
-  count: number,
-  reslts: [BtrBodsRequestGetI]
-}
-
 export interface BtrBodsRequestGetI {
   id: number,
   uuid: string,
@@ -49,6 +44,10 @@ export interface BtrBodsRequestGetI {
   created_at: string,
   updated_at: string,
   status: string
+}
+export interface BtrBodsRequestGetAllI{
+  count: number,
+  results: [BtrBodsRequestGetI]
 }
 
 export interface BtrBodsRequestQueryI {
