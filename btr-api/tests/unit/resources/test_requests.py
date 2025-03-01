@@ -30,7 +30,7 @@ UPDATE_R_DICT = {
 
 @pytest.mark.parametrize(
     'test_name, user_type',
-    [('test_get', UserType.USER_COMPETENT_AUTHORITY)],
+    [('test_get', UserType.STAFF_ROLE)],
 )
 def test_get(app, client, session, jwt, requests_mock, sample_user, test_name, user_type):
     """Get the plot submissions.
@@ -38,6 +38,8 @@ def test_get(app, client, session, jwt, requests_mock, sample_user, test_name, u
     """
     with nested_session(session):
         clear_db(session)
+        session.add(sample_user)
+        session.commit()
         # Setup
         id = ''
         req = RequestModel(REQUEST_DICT)
@@ -47,12 +49,13 @@ def test_get(app, client, session, jwt, requests_mock, sample_user, test_name, u
 
         requests_mock.get(
             f"{app.config.get('AUTH_SVC_URL')}/orgs/1/products?include_hidden=true",
-            json=[{'code': 'CA_SEARCH', 'subscriptionStatus': 'ACTIVE'}])
+            json=[{'code': 'STAFF', 'subscriptionStatus': 'ACTIVE'}])
+
         # Test
         rv = client.get(
             f'/requests/{id}',
             headers=create_header(
-                jwt, ['basic'], **{'Accept-Version': 'v1', 'content-type': 'application/json', 'Account-Id': 1}
+                jwt, ['staff'], **{'Accept-Version': 'v1', 'content-type': 'application/json', 'Account-Id': 1}
             ),
         )
 
@@ -61,7 +64,7 @@ def test_get(app, client, session, jwt, requests_mock, sample_user, test_name, u
 
 @pytest.mark.parametrize(
     'test_name, user_type',
-    [('test_get_no_auth', UserType.USER_COMPETENT_AUTHORITY)],
+    [('test_get_no_auth', UserType.USER_PUBLIC)],
 )
 def test_get_fail_no_auth(app, client, session, jwt, requests_mock, sample_user, test_name, user_type):
     """Get the plot submissions.
@@ -87,7 +90,7 @@ def test_get_fail_no_auth(app, client, session, jwt, requests_mock, sample_user,
 
 @pytest.mark.parametrize(
     'test_name, user_type',
-    [('test_post', UserType.USER_COMPETENT_AUTHORITY)],
+    [('test_post', UserType.STAFF_ROLE)],
 )
 def test_post(app, client, session, jwt, requests_mock, sample_user, test_name, user_type):
     """Get the plot submissions.
@@ -95,16 +98,19 @@ def test_post(app, client, session, jwt, requests_mock, sample_user, test_name, 
     """
     with nested_session(session):
         clear_db(session)
-        # Setup
+        session.add(sample_user)
+        session.commit()
+
         requests_mock.get(
             f"{app.config.get('AUTH_SVC_URL')}/orgs/1/products?include_hidden=true",
-            json=[{'code': 'CA_SEARCH', 'subscriptionStatus': 'ACTIVE'}])
+            json=[{'code': 'STAFF', 'subscriptionStatus': 'ACTIVE'}])
+        
         # Test
         rv = client.post(
             f'/requests',
             json=REQUEST_DICT,
             headers=create_header(
-                jwt, ['basic'], **{'Accept-Version': 'v1', 'content-type': 'application/json', 'Account-Id': 1}
+                jwt, ['staff'], **{'Accept-Version': 'v1', 'content-type': 'application/json', 'Account-Id': 1}
             ),
         )
 
@@ -114,7 +120,7 @@ def test_post(app, client, session, jwt, requests_mock, sample_user, test_name, 
 
 @pytest.mark.parametrize(
     'test_name, user_type',
-    [('test_post_unauthorized', UserType.USER_COMPETENT_AUTHORITY)],
+    [('test_post_unauthorized', UserType.USER_PUBLIC)],
 )
 def test_post_unauth(app, client, session, jwt, requests_mock, sample_user, test_name, user_type):
     """Get the plot submissions.
@@ -133,7 +139,7 @@ def test_post_unauth(app, client, session, jwt, requests_mock, sample_user, test
 
 @pytest.mark.parametrize(
     'test_name, user_type',
-    [('test_put', UserType.USER_COMPETENT_AUTHORITY)],
+    [('test_put', UserType.STAFF_ROLE)],
 )
 def test_put(app, client, session, jwt, requests_mock, sample_user, test_name, user_type):
     """Get the plot submissions.
@@ -141,21 +147,24 @@ def test_put(app, client, session, jwt, requests_mock, sample_user, test_name, u
     """
     with nested_session(session):
         clear_db(session)
-        # Setup
-        requests_mock.get(
-            f"{app.config.get('AUTH_SVC_URL')}/orgs/1/products?include_hidden=true",
-            json=[{'code': 'CA_SEARCH', 'subscriptionStatus': 'ACTIVE'}])
+        session.add(sample_user)
+        session.commit()
+        
         rv = client.post(
             f'/requests',
             json=REQUEST_DICT,
         )
         id = rv.json['uuid']
+
+        requests_mock.get(
+            f"{app.config.get('AUTH_SVC_URL')}/orgs/1/products?include_hidden=true",
+            json=[{'code': 'STAFF', 'subscriptionStatus': 'ACTIVE'}])
         # Test
         rv = client.put(
             f'/requests/{id}',
             json=UPDATE_R_DICT,
             headers=create_header(
-                jwt, ['basic'], **{'Accept-Version': 'v1', 'content-type': 'application/json', 'Account-Id': 1}
+                jwt, ['staff'], **{'Accept-Version': 'v1', 'content-type': 'application/json', 'Account-Id': 1}
             ),
         )
 
@@ -164,7 +173,7 @@ def test_put(app, client, session, jwt, requests_mock, sample_user, test_name, u
 
 @pytest.mark.parametrize(
     'test_name, user_type',
-    [('test_put_no_auth', UserType.USER_COMPETENT_AUTHORITY)],
+    [('test_put_no_auth', UserType.USER_PUBLIC)],
 )
 def test_put_no_auth(app, client, session, jwt, requests_mock, sample_user, test_name, user_type):
     """Get the plot submissions.
@@ -189,7 +198,7 @@ def test_put_no_auth(app, client, session, jwt, requests_mock, sample_user, test
 
 @pytest.mark.parametrize(
     'test_name, user_type',
-    [('test_get_comment', UserType.USER_COMPETENT_AUTHORITY)],
+    [('test_get_comment', UserType.STAFF_ROLE)],
 )
 def test_get_comment(app, client, session, jwt, requests_mock, sample_user, test_name, user_type):
     """Get the comments.
@@ -217,12 +226,13 @@ def test_get_comment(app, client, session, jwt, requests_mock, sample_user, test
 
         requests_mock.get(
             f"{app.config.get('AUTH_SVC_URL')}/orgs/1/products?include_hidden=true",
-            json=[{'code': 'CA_SEARCH', 'subscriptionStatus': 'ACTIVE'}])
+            json=[{'code': 'STAFF', 'subscriptionStatus': 'ACTIVE'}])
+
         # Test
         rv = client.get(
             f'/requests/{id}/comment',
             headers=create_header(
-                jwt, ['basic'], **{'Accept-Version': 'v1', 'content-type': 'application/json', 'Account-Id': 1}
+                jwt, ['staff'], **{'Accept-Version': 'v1', 'content-type': 'application/json', 'Account-Id': 1}
             ),
         )
 
@@ -231,7 +241,7 @@ def test_get_comment(app, client, session, jwt, requests_mock, sample_user, test
 
 @pytest.mark.parametrize(
     'test_name, user_type',
-    [('test_get_comment_no_auth', UserType.USER_COMPETENT_AUTHORITY)],
+    [('test_get_comment_no_auth', UserType.USER_PUBLIC)],
 )
 def test_get_comment_fail_no_auth(app, client, session, jwt, requests_mock, sample_user, test_name, user_type):
     """Get the plot submissions.
@@ -266,7 +276,7 @@ def test_get_comment_fail_no_auth(app, client, session, jwt, requests_mock, samp
 
 @pytest.mark.parametrize(
     'test_name, user_type',
-    [('test_post_comment', UserType.USER_COMPETENT_AUTHORITY)],
+    [('test_post_comment', UserType.STAFF_ROLE)],
 )
 def test_post_comment(app, client, session, jwt, requests_mock, sample_user, test_name, user_type):
     """Get the comments.
@@ -286,13 +296,14 @@ def test_post_comment(app, client, session, jwt, requests_mock, sample_user, tes
 
         requests_mock.get(
             f"{app.config.get('AUTH_SVC_URL')}/orgs/1/products?include_hidden=true",
-            json=[{'code': 'CA_SEARCH', 'subscriptionStatus': 'ACTIVE'}])
+            json=[{'code': 'STAFF', 'subscriptionStatus': 'ACTIVE'}])
+
         # Test
         rv = client.post(
             f'/requests/{id}/comment',
             json=COMMENT_DICT,
             headers=create_header(
-                jwt, ['basic'], **{'Accept-Version': 'v1', 'content-type': 'application/json', 'Account-Id': 1}
+                jwt, ['staff'], **{'Accept-Version': 'v1', 'content-type': 'application/json', 'Account-Id': 1}
             ),
         )
 
@@ -301,7 +312,7 @@ def test_post_comment(app, client, session, jwt, requests_mock, sample_user, tes
 
 @pytest.mark.parametrize(
     'test_name, user_type',
-    [('test_post_comment_no_auth', UserType.USER_COMPETENT_AUTHORITY)],
+    [('test_post_comment_no_auth', UserType.USER_PUBLIC)],
 )
 def test_post_comment_fail_no_auth(app, client, session, jwt, requests_mock, sample_user, test_name, user_type):
     """Get the plot submissions.

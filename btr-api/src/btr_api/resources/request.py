@@ -69,7 +69,7 @@ bp = Blueprint('request', __name__)
 @bp.route('/', methods=('GET',))
 @cross_origin(origin='*')
 @jwt.requires_auth
-def get_all():  # pylint: disable=redefined-builtin
+def get_all():  # pylint: disable=redefined-builtin,too-many-branches
     """Get all requests"""
     try:
         account_id = request.headers.get('Account-Id', None)
@@ -105,15 +105,14 @@ def get_all():  # pylint: disable=redefined-builtin
             page = 1
             per_page = 10
             if request.args.get('page'):
-                page = int(request.args.get('page'))
+                page = max(int(request.args.get('page')), 1)
                 if page < 1:
                     page = 1
             if request.args.get('limit'):
                 per_page = int(request.args.get('limit'))
                 if per_page < 1:
                     per_page = 10
-                if per_page > 100:
-                    per_page = 100
+                per_page = min(per_page, 100)
 
             paginated = query.paginate(page=page, per_page=per_page, error_out=False)
             total = paginated.total
