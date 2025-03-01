@@ -106,8 +106,6 @@ def get_all():  # pylint: disable=redefined-builtin,too-many-branches
             per_page = 10
             if request.args.get('page'):
                 page = max(int(request.args.get('page')), 1)
-                if page < 1:
-                    page = 1
             if request.args.get('limit'):
                 per_page = int(request.args.get('limit'))
                 if per_page < 1:
