@@ -355,7 +355,7 @@
             name="birthDate"
             :initial-date="!!inputFormSi.birthDate ? dateStringToDate(inputFormSi.birthDate) || undefined : undefined"
             :max-date="new Date()"
-            :placeholder="$t('placeholders.dateSelect.birthdate')"
+            :placeholder="$t('placeholders.dateSelect.birthdate') + ' (YYYY-MM-DD)'"
             :is-editing="isEditing"
             @selection="
               inputFormSi.birthDate = dateToString($event, 'YYYY-MM-DD');
