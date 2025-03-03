@@ -23,12 +23,12 @@
             'rounded-b': roundedBot && !showContent,
           }"
         >
-          <div class="flex flex-row w-full pt-4 items-center">
+          <div class="flex flex-row w-full pt-4 items-center" :class="{'opacity-50': dimHeader}">
             <UIcon :name="headerIconName" class="text-bcGovColor-footer text-xl" />
             <span :class="`pl-2.5 font-bold min-w-[190px] text-${headerSize}`">{{ headerTitle }}</span>
           </div>
           <div class="border-b-[1px] pt-4 border-solid border-bcgovColor-specialityDottedLines" />
-          <p class="pt-4">
+          <p class="pt-4" :class="{'opacity-50': dimHeader}">
             {{ headerText }}
           </p>
         </div>
@@ -53,7 +53,8 @@
           class="flex-none mr-7"
           :class="{
             'w-40': !sectionTitleFull,
-            'w-full': sectionTitleFull
+            'w-full': sectionTitleFull,
+            'opacity-50': dimSectionTitle,
           }"
         >
           <div class="font-bold min-w-[190px]" :class="showSectionHasErrors ? 'text-red-500' : ''">
@@ -109,8 +110,10 @@ const props = defineProps({
   paddedX: { type: Boolean, required: false, default: true },
   paddedY: { type: Boolean, required: false, default: true },
   paddedTop: { type: Boolean, required: false, default: false },
+  marginBot: { type: Boolean, required: false, default: true },
 
-  marginBot: { type: Boolean, required: false, default: true }
+  dimHeader: { type: Boolean, required: false, default: false },
+  dimSectionTitle: { type: Boolean, required: false, default: false }
 })
 
 const sectionTitleFull = computed(
