@@ -70,7 +70,7 @@ bp = Blueprint('request', __name__)
 @jwt.requires_auth
 @jwt.requires_roles([UserType.USER_STAFF])
 def get_all():  # pylint: disable=redefined-builtin,too-many-branches
-    #Pylint is disabled here because getting and setting safe defaults for all params goes quite deep
+    # Pylint is disabled here because getting and setting safe defaults for all params goes quite deep
     """Get all requests"""
     try:
         resp = []
