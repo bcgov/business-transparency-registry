@@ -82,7 +82,7 @@ class Request(Versioned, Base):
         self.completing_party = data['completingParty']
         self.completing_name = data['completingName']
         self.completing_email = data['completingEmail']
-        self.status = data['status']
+        # self.status = data['status']
 
     @classmethod
     def find_by_uuid(cls, request_id: uuid.UUID) -> Request | None:
