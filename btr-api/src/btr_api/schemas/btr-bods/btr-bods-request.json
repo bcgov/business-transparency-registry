@@ -65,6 +65,17 @@
     "completingEmail": {
       "type": "string",
       "format": "email"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "PASSED",
+        "REJECTED",
+        "AWAITING_REVIEW",
+        "IN_REVIEW",
+        "INFO_REQUESTED",
+        "UNDER_APPEAL"
+      ]
     }
   },
   "required": [
