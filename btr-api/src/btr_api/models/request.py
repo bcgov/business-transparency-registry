@@ -84,7 +84,7 @@ class Request(Versioned, Base):
         self.completing_email = data['completingEmail']
         self.status = RequestStatus.AWAITING_REVIEW
         if 'status' in data:
-          self.status = data['status']
+            self.status = data['status']
 
     @classmethod
     def find_by_uuid(cls, request_id: uuid.UUID) -> Request | None:
