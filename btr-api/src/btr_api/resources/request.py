@@ -56,7 +56,6 @@ from btr_api.models import User as UserModel
 from btr_api.models import Comment as CommentModel
 from btr_api.models.request import RequestSerializer
 from btr_api.models.comment import CommentSerializer
-from btr_api.services import btr_auth
 from btr_api.services import SchemaService
 from btr_api.services import RequestService
 from btr_api.services import CommentService
@@ -95,7 +94,7 @@ def get_all():  # pylint: disable=redefined-builtin,too-many-branches
         if full_name := (request.args.get('full_name') or request.args.get('fullName')):
             query = query.filter(RequestModel.full_name.ilike(f"%{full_name}%"))
 
-        if status := (request.args.get('status')):
+        if status := request.args.get('status'):
             query = query.filter(RequestModel.status == status)
 
         page = 1
