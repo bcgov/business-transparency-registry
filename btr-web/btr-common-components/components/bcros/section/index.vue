@@ -25,7 +25,7 @@
         >
           <div class="flex flex-row w-full pt-4 items-center">
             <UIcon :name="headerIconName" class="text-bcGovColor-footer text-xl" />
-            <span class="pl-2.5 font-bold min-w-[190px] text-l">{{ headerTitle }}</span>
+            <span :class="`pl-2.5 font-bold min-w-[190px] text-${headerSize}`">{{ headerTitle }}</span>
           </div>
           <div class="border-b-[1px] pt-4 border-solid border-bcgovColor-specialityDottedLines" />
           <p class="pt-4">
@@ -98,6 +98,7 @@ const props = defineProps({
   headerIconName: { type: String, required: false, default: undefined },
   headerTitle: { type: String, required: false, default: undefined },
   headerText: { type: String, required: false, default: undefined },
+  headerSize: { type: String, required: false, default: 'lg' },
 
   roundedTop: { type: Boolean, required: false, default: false },
   roundedBot: { type: Boolean, required: false, default: false },

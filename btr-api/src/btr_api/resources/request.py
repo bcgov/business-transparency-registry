@@ -56,7 +56,6 @@ from btr_api.models import User as UserModel
 from btr_api.models import Comment as CommentModel
 from btr_api.models.request import RequestSerializer
 from btr_api.models.comment import CommentSerializer
-from btr_api.services import btr_auth
 from btr_api.services import SchemaService
 from btr_api.services import RequestService
 from btr_api.services import CommentService
@@ -67,42 +66,54 @@ bp = Blueprint('request', __name__)
 
 
 @bp.route('/', methods=('GET',))
+@cross_origin(origin='*')
 @jwt.requires_auth
-def get_all():  # pylint: disable=redefined-builtin
+@jwt.requires_roles([UserType.USER_STAFF])
+def get_all():  # pylint: disable=redefined-builtin,too-many-branches
+    # Pylint is disabled here because getting and setting safe defaults for all params goes quite deep
     """Get all requests"""
     try:
-        account_id = request.headers.get('Account-Id', None)
-        btr_auth.product_authorizations(request=request, account_id=account_id)
-        user_type = btr_auth.get_user_type()
-        if user_type in (UserType.USER_STAFF, UserType.USER_COMPETENT_AUTHORITY):
-            resp = []
-            results = []
-            sort = request.args.get('sort')
-            order = request.args.get('order')
-            query = RequestModel.query
-            s = RequestModel.status
-            if sort and sort != '':
-                if sort.lower() == 'created_at' or sort.lower() == 'createdat':
-                    s = RequestModel.created_at
-                elif sort.lower() == 'status':
-                    s = RequestModel.status
+        resp = []
+        results = []
+        sort = request.args.get('sort')
+        order = request.args.get('order')
+        query = RequestModel.query
+        s = RequestModel.status
+        if sort and sort != '':
+            if sort.lower() == 'created_at' or sort.lower() == 'createdat':
+                s = RequestModel.created_at
+            elif sort.lower() == 'status':
+                s = RequestModel.status
 
-            if order and order.lower() == 'desc':
-                s = s.desc()
-            else:
-                s = s.asc()
-            query = query.order_by(s)
+        if order and order.lower() == 'desc':
+            s = s.desc()
+        else:
+            s = s.asc()
+        query = query.order_by(s)
 
-            if request.args.get('full_name'):
-                query = query.filter(RequestModel.full_name.ilike(f"%{request.args.get('full_name')}%"))
-            if request.args.get('status'):
-                query = query.filter(RequestModel.status.equals(request.args.get('status')))
+        if full_name := (request.args.get('full_name') or request.args.get('fullName')):
+            query = query.filter(RequestModel.full_name.ilike(f"%{full_name}%"))
 
-            results = query.all()
-            for result in results:
-                resp.append(RequestSerializer.to_dict(result))
-            return jsonify(resp), HTTPStatus.OK
-        return {}, HTTPStatus.NOT_FOUND
+        if status := request.args.get('status'):
+            query = query.filter(RequestModel.status == status)
+
+        page = 1
+        per_page = 10
+        if request.args.get('page'):
+            page = max(int(request.args.get('page')), 1)
+        if request.args.get('limit'):
+            per_page = int(request.args.get('limit'))
+            if per_page < 1:
+                per_page = 10
+            per_page = min(per_page, 100)
+
+        paginated = query.paginate(page=page, per_page=per_page, error_out=False)
+        total = paginated.total
+        results = paginated.items
+
+        for result in results:
+            resp.append(RequestSerializer.to_dict(result))
+        return jsonify({'count': total, 'results': resp}), HTTPStatus.OK
     except AuthException as aex:
         return exception_response(aex)
     except Exception as exception:  # noqa: B902
@@ -110,17 +121,14 @@ def get_all():  # pylint: disable=redefined-builtin
 
 
 @bp.route('/<id>', methods=('GET',))
+@cross_origin(origin='*')
 @jwt.requires_auth
+@jwt.requires_roles([UserType.USER_STAFF])
 def get_request(id: uuid.UUID | None = None):  # pylint: disable=redefined-builtin
     """Get the request by id."""
     try:
         if req := RequestModel.find_by_uuid(id):
-            account_id = request.headers.get('Account-Id', None)
-            btr_auth.product_authorizations(request=request, account_id=account_id)
-            user_type = btr_auth.get_user_type()
-            if user_type in (UserType.USER_STAFF, UserType.USER_COMPETENT_AUTHORITY):
-                return jsonify(RequestSerializer.to_dict(req)), HTTPStatus.OK
-
+            return jsonify(RequestSerializer.to_dict(req)), HTTPStatus.OK
         return {}, HTTPStatus.NOT_FOUND
 
     except AuthException as aex:
@@ -165,6 +173,7 @@ def create_request():
 @bp.route('/<req_id>', methods=('PUT',))
 @cross_origin(origin='*')
 @jwt.requires_auth
+@jwt.requires_roles([UserType.USER_STAFF])
 def update_request(req_id: str):
     """
     Update an existing request.
@@ -176,14 +185,8 @@ def update_request(req_id: str):
     """
     try:
         UserModel.get_or_create_user_by_jwt(g.jwt_oidc_token_info)
-        account_id = request.headers.get('Account-Id', None)
         req = RequestModel.find_by_uuid(req_id)
         if req:
-            btr_auth.product_authorizations(request, account_id)
-            user_type = btr_auth.get_user_type()
-            if user_type not in (UserType.USER_STAFF, UserType.USER_COMPETENT_AUTHORITY):
-                return {}, HTTPStatus.NOT_FOUND
-
             req_json = request.get_json()
             # This would allow update of full request we only want to allow status
             # req = RequestService.update_request(req, req_json)
@@ -221,6 +224,7 @@ def update_request(req_id: str):
 @bp.route('/<req_id>/comment', methods=('POST',))
 @cross_origin(origin='*')
 @jwt.requires_auth
+@jwt.requires_roles([UserType.USER_STAFF])
 def add_comment(req_id: str):
     """
     Add a comment to an existing request.
@@ -230,14 +234,8 @@ def add_comment(req_id: str):
     """
     try:
         user = UserModel.get_or_create_user_by_jwt(g.jwt_oidc_token_info)
-        account_id = request.headers.get('Account-Id', None)
         req = RequestModel.find_by_uuid(req_id)
         if req:
-            btr_auth.product_authorizations(request=request, account_id=account_id)
-            user_type = btr_auth.get_user_type()
-            if user_type not in (UserType.USER_STAFF, UserType.USER_COMPETENT_AUTHORITY):
-                return {}, HTTPStatus.NOT_FOUND
-
             # validate payload
             req_json = request.get_json()
             schema_name = 'btr-bods-comment.json'
@@ -269,19 +267,15 @@ def add_comment(req_id: str):
 
 @bp.route('/<req_uuid>/comment', methods=('GET',))
 @jwt.requires_auth
+@jwt.requires_roles([UserType.USER_STAFF])
 def get_all_comments(req_uuid: str):  # pylint: disable=redefined-builtin
     """Get all comments for a request"""
     try:
-        account_id = request.headers.get('Account-Id', None)
-        btr_auth.product_authorizations(request=request, account_id=account_id)
-        user_type = btr_auth.get_user_type()
-        if user_type in (UserType.USER_STAFF, UserType.USER_COMPETENT_AUTHORITY):
-            results = CommentModel.find_by_related_uuid(req_uuid)
-            resp = []
-            for result in results:
-                resp.append(CommentSerializer.to_dict(result))
-            return jsonify(resp), HTTPStatus.OK
-        return {}, HTTPStatus.NOT_FOUND
+        results = CommentModel.find_by_related_uuid(req_uuid)
+        resp = []
+        for result in results:
+            resp.append(CommentSerializer.to_dict(result))
+        return jsonify(resp), HTTPStatus.OK
     except AuthException as aex:
         return exception_response(aex)
     except Exception as exception:  # noqa: B902

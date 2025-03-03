@@ -4,7 +4,12 @@ import {
   getDefaultInputFormOmitObscure,
   getDefaultInputFormSiBiz
 } from '~/utils/omit-schema/defaults'
-import { BtrBodsRequestGetI, BtrBodsRequestI } from '~/interfaces/btr-bods/btr-bods-request-i'
+import {
+  BtrBodsRequestGetI,
+  BtrBodsRequestGetAllI,
+  BtrBodsRequestI,
+  BtrBodsRequestQueryI
+} from '~/interfaces/btr-bods/btr-bods-request-i'
 
 export const useOmitIndividual = defineStore('bcros/omitIndividual', () => {
   const completingParty: Ref<CompletingPartySchemaType> = ref(getDefaultInputFormCompletingParty())
@@ -20,6 +25,8 @@ export const useOmitIndividual = defineStore('bcros/omitIndividual', () => {
   const allRequests = ref([])
   const activeId = ref(-1)
   const activeUUID = ref('')
+  const requestCount = ref(0)
+  const bizInfo = ref({})
 
   const constructBtrApiURL = () => {
     const runtimeConfig = useRuntimeConfig()
@@ -58,17 +65,25 @@ export const useOmitIndividual = defineStore('bcros/omitIndividual', () => {
   }
 
   /** Load all requests **/
-  async function loadAllRequests (sort?: string, filter?: BtrBodsRequestQueryI, order?: string) {
+  async function loadAllRequests (
+    sort?: string,
+    filter?: BtrBodsRequestQueryI,
+    order?: string,
+    page?: Number,
+    limit?: Number
+  ) {
     const url = constructBtrApiURL() + '/requests'
 
     const params = {
       ...filter,
       sort,
-      order
+      order,
+      page,
+      limit
     }
 
     const method = 'GET'
-    const { data, error } = await useFetchBcros<[BtrBodsRequestGetI]>(url,
+    const { data, error } = await useFetchBcros<[BtrBodsRequestGetAllI]>(url,
       {
         method,
         query: params
@@ -79,7 +94,24 @@ export const useOmitIndividual = defineStore('bcros/omitIndividual', () => {
       }
       return error
     }
-    allRequests.value = data
+    allRequests.value = data.value.results
+    requestCount.value = data.value.count
+    for (let i = 0; i < allRequests.value.length; i++) {
+      if (!bizInfo.value[allRequests.value[i].businessIdentifier]) {
+        useBcrosBusiness().getBusinessDetails(allRequests.value[i].businessIdentifier,
+          { slim: true }).then((bizData) => {
+          if (bizData) {
+            const index = allRequests.value.findIndex((req) => {
+              return req.businessIdentifier === bizData.identifier
+            })
+            bizInfo.value[allRequests.value[index].businessIdentifier] = bizData
+            allRequests.value[index].businessInfo = bizData
+          }
+        })
+      } else {
+        allRequests.value[i].businessInfo = bizInfo.value[allRequests.value[i].businessIdentifier]
+      }
+    }
   }
 
   /** Load the omit individuals for the business into the store */
@@ -207,6 +239,8 @@ export const useOmitIndividual = defineStore('bcros/omitIndividual', () => {
     activeId,
     activeUUID,
     createComment,
-    getCommentsForRequest
+    getCommentsForRequest,
+    requestCount,
+    bizInfo
   }
 })

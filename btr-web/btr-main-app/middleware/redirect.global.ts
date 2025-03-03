@@ -5,7 +5,8 @@ export default defineNuxtRouteMiddleware((to) => {
     RouteNameE.BEN_OWNR_CHNG,
     RouteNameE.MY_REG_DETAILS,
     RouteNameE.REVIEW_CONFIRM,
-    RouteNameE.REQUEST_OMIT
+    RouteNameE.REQUEST_OMIT,
+    RouteNameE.STAFF_SI_DASH
   ]
 
   // temporary until there is a launch point for this app

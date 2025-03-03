@@ -45,6 +45,10 @@ export interface BtrBodsRequestGetI {
   updated_at: string,
   status: string
 }
+export interface BtrBodsRequestGetAllI{
+  count: number,
+  results: [BtrBodsRequestGetI]
+}
 
 export interface BtrBodsRequestQueryI {
   id?: number,
