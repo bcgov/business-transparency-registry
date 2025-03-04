@@ -217,6 +217,7 @@ const clearFilters = function () {
         rounded-bot
         rounded-top
         :padded-top="true"
+        :padded-x="false"
         class="mb-10"
       >
         <template #header-content>
@@ -229,7 +230,7 @@ const clearFilters = function () {
         <template #default>
           <div>
             <base-table
-              class="rounded-t border-[1px] border-gray-200 mt-2 mb-10"
+              class="rounded-t border-[1px] border-gray-200 mt-2 mb-10 px-2"
               height="100%"
               item-key="uuid"
               :loading="loading"
