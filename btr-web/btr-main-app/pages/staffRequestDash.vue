@@ -217,6 +217,7 @@ const clearFilters = function () {
         rounded-bot
         rounded-top
         :padded-top="true"
+        :paddedX="false"
         class="mb-10"
       >
         <template #header-content>
