@@ -156,7 +156,7 @@ const headers = [
       const text = item.status.toLowerCase() === 'awaiting_review'
         ? t('staffSiTable.actionLabels.review')
         : t('staffSiTable.actionLabels.open')
-      return buildButton(text, '/' + item.uuid)
+      return buildButton(text, `/staff-request-view/${item.uuid}`)
     }
   }
 ]
@@ -197,74 +197,72 @@ const clearFilters = function () {
 
 <template>
   <div class="w-full">
-    <div class="max-w-[987px]">
-      <div data-cy="staff-si-dash-header">
-        <h2 class="text-2xl font-bold mb-2.5">
-          {{ $t('pageHeadings.siManagement') }}
-        </h2>
-      </div>
+    <div data-cy="staff-si-dash-header">
+      <h2 class="text-2xl font-bold mb-2.5">
+        {{ $t('pageHeadings.siManagement') }}
+      </h2>
+    </div>
 
-      <div class="flex justify-between items-center mb-4">
-        <p data-cy="staff-si-dash-text">
-          {{ $t('texts.staffSIDashText') }}
-        </p>
-      </div>
+    <div class="flex justify-between items-center mb-4">
+      <p data-cy="staff-si-dash-text">
+        {{ $t('texts.staffSIDashText') }}
+      </p>
+    </div>
 
-      <BcrosSection
-        data-cy="siRequestTableSection"
-        section-title-icon="test"
-        section-icon-color=""
-        rounded-bot
-        rounded-top
-        :padded-top="true"
-        :padded-x="false"
-        class="mb-10"
-      >
-        <template #header-content>
-          <div class="flex flex-col w-full bg-white px-8 pt-2.5">
-            <span class="text-xl font-bold">
-              {{ $t('sectionTitles.staffSiTableHeader') }}
-            </span>
-          </div>
-        </template>
-        <template #default>
-          <div>
-            <base-table
-              class="rounded-t border-[1px] border-gray-200 mt-2 mb-10 px-2"
-              height="100%"
-              item-key="uuid"
-              :loading="loading"
-              :no-results-text="t('staffSiTable.noResults')"
-              :reset-filters-trigger="resetFiltersTrigger"
-              :set-headers="headers"
-              :set-items="allRequests"
-              title=""
-              :total-items="allRequests.length"
-              data-cy="staff-si-table"
-            >
-              <template #header-filter-slot-actions>
-                <UButton
-                  v-if="filters.fullName !== '' || filters.status !== ''"
-                  variant="outline"
-                  :label="$t('staffSiTable.clearFilters')"
-                  icon="i-mdi-close"
-                  trailing
-                  @click="clearFilters"
-                />
-              </template>
-            </base-table>
-            <div class="w-full">
-              <div class="float-right">
-                <base-pagination
-                  v-model="pageModel"
-                  :total-results="requestCount"
-                  @page-change="callLoadAllRequests"
-                />
-              </div>
+    <BcrosSection
+      data-cy="siRequestTableSection"
+      section-title-icon="test"
+      section-icon-color=""
+      rounded-bot
+      rounded-top
+      :padded-top="true"
+      :padded-x="false"
+      class="mb-10"
+    >
+      <template #header-content>
+        <div class="flex flex-col w-full bg-white px-8 pt-2.5">
+          <span class="text-xl font-bold">
+            {{ $t('sectionTitles.staffSiTableHeader') }}
+          </span>
+        </div>
+      </template>
+      <template #default>
+        <div>
+          <base-table
+            class="rounded-t border-[1px] border-gray-200 mt-2 mb-10 px-2"
+            height="100%"
+            item-key="uuid"
+            :loading="loading"
+            :no-results-text="t('staffSiTable.noResults')"
+            :reset-filters-trigger="resetFiltersTrigger"
+            :set-headers="headers"
+            :set-items="allRequests"
+            title=""
+            :total-items="allRequests.length"
+            data-cy="staff-si-table"
+          >
+            <template #header-filter-slot-actions>
+              <UButton
+                v-if="filters.fullName !== '' || filters.status !== ''"
+                variant="outline"
+                :label="$t('staffSiTable.clearFilters')"
+                icon="i-mdi-close"
+                trailing
+                @click="clearFilters"
+              />
+            </template>
+          </base-table>
+          <div class="w-full">
+            <div class="float-right">
+              <base-pagination
+                v-model="pageModel"
+                :total-results="requestCount"
+                @page-change="callLoadAllRequests"
+              />
             </div>
           </div>
-        </template>
-      </BcrosSection>
-    </div>
+        </div>
+      </template>
+    </BcrosSection>
   </div>
 </template>
