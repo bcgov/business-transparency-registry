@@ -12,7 +12,7 @@ defaults:
 
 jobs:
   setup-job:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-24.04
 
     steps:
       - uses: actions/checkout@v4
@@ -20,7 +20,7 @@ jobs:
 
   linting:
     needs: setup-job
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-24.04
 
     strategy:
       matrix:
@@ -54,7 +54,7 @@ jobs:
 
   unit-testing:
     needs: setup-job
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-24.04
     
     strategy:
       matrix:
@@ -99,7 +99,7 @@ jobs:
 
   cypress-e2e-test:
     needs: setup-job
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-24.04
     
     strategy:
       matrix:
@@ -142,7 +142,7 @@ jobs:
   
   build-check:
     needs: setup-job
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-24.04
     
     strategy:
       matrix:
@@ -175,7 +175,7 @@ jobs:
 
   build-check-for-deployment:
     needs: setup-job
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-24.04
     
     defaults:
       run:
