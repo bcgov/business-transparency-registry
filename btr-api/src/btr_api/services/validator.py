@@ -88,7 +88,7 @@ def validate_tr_filing_for_type(submission: dict, jwt: JwtManager):
     filing_type = submission['filingType']
     business_identifier = submission['businessIdentifier']
     entity_service = EntityService(current_app)
-    todos = entity_service.get_entity_todos(business_identifier, jwt)
+    todos = (entity_service.get_entity_info(jwt, f'{business_identifier}/tasks')).json().get('tasks', [])
 
     if filing_type == 'INITIAL_FILING':
         return _validate_initial_filing(todos)

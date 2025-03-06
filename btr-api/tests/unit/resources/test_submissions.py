@@ -623,7 +623,7 @@ def test_put_plots(app, client, session, jwt, requests_mock):
             assert legal_api_delivery_address_mock.called == True
             assert bor_api_mock.called == True
             assert auth_api_entity_contact_mock.called == True
-             assert email_mock.called == True
+            assert email_mock.called == True
             assert legal_api_ledger_mock.called == True
 
 
