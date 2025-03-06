@@ -24,6 +24,7 @@ from tests.unit.models.test_user import sample_user
 from tests.unit.utils import create_header
 from tests.unit.utils.db_helpers import clear_db
 from tests.unit.mocks.response.todos_initial_filing import todos_initial_filing
+from unit.mocks.response.todos_annual_filing import todos_annual_filing
 
 mocked_entity_response = {'business': {'adminFreeze': False, 'state': 'ACTIVE', 'legalName': 'Mocked Business', 'identifier': 'BC1234567'}}
 mocked_entity_address_response = {
@@ -329,6 +330,9 @@ def test_post_plots_db_mocked(app, session, client, jwt, mocker, requests_mock):
             f"{app.config.get('LEGAL_SVC_URL')}/businesses/{identifier}/addresses?addressType=deliveryAddress",
             json=mocked_entity_address_response
         )
+        requests_mock.get(
+            f"{app.config.get('LEGAL_SVC_URL')}/businesses/{identifier}/tasks", json=todos_initial_filing
+        )
         auth_api_entity_contact_mock = requests_mock.get(
             f"{app.config.get('AUTH_SVC_URL')}/entities/{identifier}",
             json=mocked_auth_entity_contact_response
@@ -429,6 +433,9 @@ def test_post_plots(app, client, session, jwt, requests_mock):
             f"{app.config.get('LEGAL_SVC_URL')}/businesses/{identifier}/addresses?addressType=deliveryAddress",
             json=mocked_entity_address_response
         )
+        requests_mock.get(
+            f"{app.config.get('LEGAL_SVC_URL')}/businesses/{identifier}/tasks", json=todos_initial_filing
+        )
         auth_api_entity_contact_mock = requests_mock.get(
             f"{app.config.get('AUTH_SVC_URL')}/entities/{identifier}",
             json=mocked_auth_entity_contact_response
@@ -499,6 +506,9 @@ def test_put_plots(app, client, session, jwt, requests_mock):
         legal_api_delivery_address_mock = requests_mock.get(
             f"{app.config.get('LEGAL_SVC_URL')}/businesses/{identifier}/addresses?addressType=deliveryAddress",
             json=mocked_entity_address_response
+        )
+        requests_mock.get(
+            f"{app.config.get('LEGAL_SVC_URL')}/businesses/{identifier}/tasks", json=todos_initial_filing
         )
         auth_api_entity_contact_mock = requests_mock.get(
             f"{app.config.get('AUTH_SVC_URL')}/entities/{identifier}",
@@ -582,6 +592,9 @@ def test_put_plots(app, client, session, jwt, requests_mock):
                     ]
                 }]
             }
+            requests_mock.get(
+                f"{app.config.get('LEGAL_SVC_URL')}/businesses/{identifier}/tasks", json=todos_annual_filing
+            )
             rv = client.put(
               url,
               json=put_data,
@@ -610,7 +623,7 @@ def test_put_plots(app, client, session, jwt, requests_mock):
             assert legal_api_delivery_address_mock.called == True
             assert bor_api_mock.called == True
             assert auth_api_entity_contact_mock.called == True
-            assert email_mock.called == True
+             assert email_mock.called == True
             assert legal_api_ledger_mock.called == True
 
 
@@ -691,6 +704,9 @@ def test_post_plots_bor_error(app, client, session, jwt, requests_mock):
             f"{app.config.get('LEGAL_SVC_URL')}/businesses/{identifier}/addresses?addressType=deliveryAddress",
             json=mocked_entity_address_response
         )
+        requests_mock.get(
+            f"{app.config.get('LEGAL_SVC_URL')}/businesses/{identifier}/tasks", json=todos_initial_filing
+        )
         auth_api_entity_contact_mock = requests_mock.get(
             f"{app.config.get('AUTH_SVC_URL')}/entities/{identifier}",
             json=mocked_auth_entity_contact_response
@@ -750,6 +766,9 @@ def test_post_plots_email_error(app, client, session, jwt, requests_mock):
         legal_api_delivery_address_mock = requests_mock.get(
             f"{app.config.get('LEGAL_SVC_URL')}/businesses/{identifier}/addresses?addressType=deliveryAddress",
             json=mocked_entity_address_response
+        )
+        requests_mock.get(
+            f"{app.config.get('LEGAL_SVC_URL')}/businesses/{identifier}/tasks", json=todos_initial_filing
         )
         auth_api_entity_contact_mock = requests_mock.get(
             f"{app.config.get('AUTH_SVC_URL')}/entities/{identifier}",
@@ -818,6 +837,9 @@ def test_post_plots_invalid_entity(
         legal_api_delivery_address_mock = requests_mock.get(
             f"{app.config.get('LEGAL_SVC_URL')}/businesses/{identifier}/addresses?addressType=deliveryAddress",
             json=mocked_entity_address_response
+        )
+        requests_mock.get(
+            f"{app.config.get('LEGAL_SVC_URL')}/businesses/{identifier}/tasks", json=todos_initial_filing
         )
         auth_api_entity_contact_mock = requests_mock.get(
             f"{app.config.get('AUTH_SVC_URL')}/entities/{identifier}",

@@ -139,13 +139,13 @@ class EntityService:
                                                message='Could not fetch todos for: ' + business_identifier)
             return resp.json().get('tasks', [])
         except (requests.exceptions.ConnectionError, requests.exceptions.Timeout) as err:
-            self.app.logger.debug('Legal-api connection failure:', repr(err))
+            self.app.logger.debug('Legal-api connection failure: %s', repr(err))
             raise ExternalServiceException(error=repr(err),
-                                           message='Could not fetch todos for: ' + business_identifier) from err
+                                       message='Could not fetch todos for: %s' + business_identifier)
         except Exception as err:
-            self.app.logger.debug('Legal-api call generic exception:', repr(err))
+            self.app.logger.debug('Legal-api call generic exception: %s', repr(err))
             raise ExternalServiceException(error="Generic exception, see logs for details",
-                                           message='Could not fetch todos for: ' + business_identifier) from err
+                                           message=('Could not fetch todos for: %s', business_identifier))
 
     def submit_filing(self, submission: Submission, user: User, user_jwt: JwtManager, account_id: str):
         """Submit a BTR filing to the LEAR filing ledger for the business."""
