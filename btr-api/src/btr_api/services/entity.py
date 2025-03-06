@@ -45,7 +45,6 @@ from btr_api.models import Submission, User
 from btr_api.models.submission import SubmissionType
 from btr_api.utils.legislation_datetime import LegislationDatetime
 
-
 entity_cache = Cache()
 
 
@@ -110,6 +109,43 @@ class EntityService:
         except Exception as err:
             self.app.logger.debug('Legal-api integration failure: %s', repr(err))
             raise ExternalServiceException(error=repr(err), status_code=HTTPStatus.INTERNAL_SERVER_ERROR) from err
+
+    def get_entity_todos(self, business_identifier: str, user_jwt: JwtManager):
+        """Retrieve the list of tasks (todos) for a given business.
+
+        Args:
+            business_identifier: The unique identifier of the business (e.g., 'BC1234567').
+            user_jwt: JwtManager containing the user jwt information from the request
+
+        Returns:
+            A list of task objects retrieved from the external service.
+
+        Raises:
+            ExternalServiceException: If the external service throws an error or an invalid response is received.
+        """
+
+        token = user_jwt.get_token_auth_header()
+        headers = {'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json'}
+
+        try:
+            resp = requests.get(url=f'{self.svc_url}/businesses/{business_identifier}/tasks',
+                                headers=headers,
+                                timeout=self.timeout)
+
+            if resp.status_code not in [HTTPStatus.OK]:
+                error = f'{resp.status_code} - {str(resp.json())}'
+                self.app.logger.debug('Error response from legal-api: %s', error)
+                raise ExternalServiceException(error=error,
+                                               message='Could not fetch todos for: ' + business_identifier)
+            return resp.json().get('tasks', [])
+        except (requests.exceptions.ConnectionError, requests.exceptions.Timeout) as err:
+            self.app.logger.debug('Legal-api connection failure:', repr(err))
+            raise ExternalServiceException(error=repr(err),
+                                       message='Could not fetch todos for: ' + business_identifier)
+        except Exception as err:
+            self.app.logger.debug('Legal-api call generic exception:', repr(err))
+            raise ExternalServiceException(error="Generic exception, see logs for details",
+                                           message='Could not fetch todos for: ' + business_identifier)
 
     def submit_filing(self, submission: Submission, user: User, user_jwt: JwtManager, account_id: str):
         """Submit a BTR filing to the LEAR filing ledger for the business."""
