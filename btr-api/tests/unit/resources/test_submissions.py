@@ -23,6 +23,7 @@ from tests.unit import nested_session
 from tests.unit.models.test_user import sample_user
 from tests.unit.utils import create_header
 from tests.unit.utils.db_helpers import clear_db
+from unit.mocks.response.todos_initial_filing import todos_initial_filing
 
 mocked_entity_response = {'business': {'adminFreeze': False, 'state': 'ACTIVE', 'legalName': 'Mocked Business', 'identifier': 'BC1234567'}}
 mocked_entity_address_response = {
@@ -254,6 +255,9 @@ def test_create_update_plots_auth(
         with open(os.path.join(current_dir, '..', '..', 'mocks', 'significantIndividualsFiling', 'valid.json')) as file:
             json_data = json.load(file)
             identifier = json_data['businessIdentifier']
+            requests_mock.get(
+                f"{app.config.get('LEGAL_SVC_URL')}/businesses/{identifier}/tasks", json=todos_initial_filing
+            )
             requests_mock.get(
                 f"{app.config.get('AUTH_SVC_URL')}/entities/{identifier}/authorizations", json=auth_svc_response
             )
