@@ -23,7 +23,7 @@ from tests.unit import nested_session
 from tests.unit.models.test_user import sample_user
 from tests.unit.utils import create_header
 from tests.unit.utils.db_helpers import clear_db
-from unit.mocks.response.todos_initial_filing import todos_initial_filing
+from tests.unit.mocks.response.todos_initial_filing import todos_initial_filing
 
 mocked_entity_response = {'business': {'adminFreeze': False, 'state': 'ACTIVE', 'legalName': 'Mocked Business', 'identifier': 'BC1234567'}}
 mocked_entity_address_response = {

@@ -88,6 +88,7 @@ class ExternalServiceException(BaseExceptionE):
         self.error = f'{repr(self.error)}, {self.status_code}'
         self.status_code = HTTPStatus.SERVICE_UNAVAILABLE
 
+
 @dataclass
 class ValidationException(BaseExceptionE):
     """Validation exception."""

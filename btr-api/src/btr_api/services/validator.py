@@ -26,8 +26,10 @@ def validate_entity(entity: dict) -> list[str]:
 
     return errors
 
+
 def _get_todo_header(todo: dict) -> dict:
     return todo.get('task', {}).get('todo', {}).get('header', {})
+
 
 def _validate_ar_filing(todos: list, submission: dict) -> []:
     filing_year = submission.get('arFilingForYear', None)

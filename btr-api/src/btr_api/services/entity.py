@@ -141,7 +141,7 @@ class EntityService:
         except (requests.exceptions.ConnectionError, requests.exceptions.Timeout) as err:
             self.app.logger.debug('Legal-api connection failure:', repr(err))
             raise ExternalServiceException(error=repr(err),
-                                       message='Could not fetch todos for: ' + business_identifier) from err
+                                           message='Could not fetch todos for: ' + business_identifier) from err
         except Exception as err:
             self.app.logger.debug('Legal-api call generic exception:', repr(err))
             raise ExternalServiceException(error="Generic exception, see logs for details",
