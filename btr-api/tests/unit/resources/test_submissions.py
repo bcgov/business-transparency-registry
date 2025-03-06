@@ -508,7 +508,7 @@ def test_put_plots(app, client, session, jwt, requests_mock):
             json=mocked_entity_address_response
         )
         requests_mock.get(
-            f"{app.config.get('LEGAL_SVC_URL')}/businesses/{identifier}/tasks", json=todos_initial_filing
+            f"{app.config.get('LEGAL_SVC_URL')}/businesses/{identifier}/tasks", json=todos_annual_filing
         )
         auth_api_entity_contact_mock = requests_mock.get(
             f"{app.config.get('AUTH_SVC_URL')}/entities/{identifier}",
@@ -648,6 +648,9 @@ def test_post_plots_auth_error(app, client, session, jwt, requests_mock):
         legal_api_delivery_address_mock = requests_mock.get(
             f"{app.config.get('LEGAL_SVC_URL')}/businesses/{identifier}/addresses?addressType=deliveryAddress",
             json=mocked_entity_address_response
+        )
+        requests_mock.get(
+            f"{app.config.get('LEGAL_SVC_URL')}/businesses/{identifier}/tasks", json=todos_initial_filing
         )
         auth_api_entity_contact_mock = requests_mock.get(
             f"{app.config.get('AUTH_SVC_URL')}/entities/{identifier}",
