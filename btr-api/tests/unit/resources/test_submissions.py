@@ -17,6 +17,7 @@ from btr_api.models import User as UserModel
 from btr_api.models.submission import SubmissionSerializer
 from btr_api.services import SubmissionService
 from btr_api.services.auth import auth_cache
+from btr_api.services.entity import entity_cache
 from btr_api.utils import redact_information
 
 from tests.unit import nested_session
@@ -508,7 +509,7 @@ def test_put_plots(app, client, session, jwt, requests_mock):
             json=mocked_entity_address_response
         )
         requests_mock.get(
-            f"{app.config.get('LEGAL_SVC_URL')}/businesses/{identifier}/tasks", json=todos_annual_filing
+            f"{app.config.get('LEGAL_SVC_URL')}/businesses/{identifier}/tasks", json=todos_initial_filing
         )
         auth_api_entity_contact_mock = requests_mock.get(
             f"{app.config.get('AUTH_SVC_URL')}/entities/{identifier}",
@@ -592,6 +593,7 @@ def test_put_plots(app, client, session, jwt, requests_mock):
                     ]
                 }]
             }
+            entity_cache.clear()
             requests_mock.get(
                 f"{app.config.get('LEGAL_SVC_URL')}/businesses/{identifier}/tasks", json=todos_annual_filing
             )
