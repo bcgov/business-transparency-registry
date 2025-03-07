@@ -4,7 +4,8 @@
     "regName": "BC Business Transparency Registry",
     "submit": "Submit Request",
     "submittedOn": "Submitted on",
-    "important": "Important:"
+    "important": "Important:",
+    "submitArrow": "Submit >"
   },
   "labels": {
     "nameChangeReason": {
@@ -444,7 +445,9 @@
     "fileTransparencyRegister": "File Transparency Register",
     "annualFiling": "Annual Filing",
     "significantIndividuals": "Significant Individuals",
-    "siManagement": "Significant Individual Management"
+    "siManagement": "Significant Individual Management",
+    "siManagementView": "Request to Omit Review",
+    "staffDash": "Staff Dashboard"
   },
   "sectionTitles": {
     "annualFiling": "Annual Filing",
@@ -563,6 +566,35 @@
     "actionLabels": {
       "review": "Review",
       "open": "Open"
+    }
+  },
+  "staffSiView": {
+    "headers": {
+      "bizInfo": "Business Information",
+      "si": "Significant Individual",
+      "completingParty": "Completing Party",
+      "comment": "Comment",
+      "status": "Omit Application Status",
+      "timeline": "Communiation Timeline"
+    },
+    "labels": {
+      "bizName": "Business Name",
+      "corpNo": "Incorporation Number",
+      "siFilingDate": "Significant Individual Filing Date",
+      "fullName": "Full Name",
+      "born": "Born",
+      "citizenship": "Citizenship / Permanent Residency",
+      "informationToOmit": "Information to Omit",
+      "individualAtRisk": "Indiviual at Risk",
+      "reasons": "Reasons",
+      "SI": "Significant Individual",
+      "HOUSEHOLD": "Members of the significant individual's household",
+      "email": "Email",
+      "completingParty": "Completing Party",
+      "REPRESENTATIVE": "Representative",
+      "internalStaffComment": "Internal Staff Comments",
+      "enterComments": "Enter Comments",
+      "changeStatus": "Change Status"
     }
   }
 }

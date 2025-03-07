@@ -77,12 +77,26 @@ export default <RouterConfig> {
       path: '/staff-si-dashboard',
       component: () => import('~/pages/staffRequestDash.vue').then(r => r.default || r),
       meta: {
-        breadcrumbs: [getBcrosHomeDashboardCrumb, getRequestOmitCrumb],
+        breadcrumbs: [getBcrosStaffDashboardCrumb, getBcrosStaffSIDashCrumb],
         layout: 'omit',
         title: 'Staff Dashboard',
         buttonControl: {
           leftButtons: [],
           rightButtons: []
+        }
+      }
+    },
+    {
+      name: RouteNameE.STAFF_REQ_VIEW,
+      path: '/staff-request-view/:identifier',
+      component: () => import('~/pages/staffRequestView.vue').then(r => r.default || r),
+      meta: {
+        breadcrumbs: [getBcrosStaffDashboardCrumb, getBcrosStaffSIDashCrumb, getBcrosStaffReqViewCrumb],
+        layout: 'omit',
+        title: 'Staff Request Review',
+        buttonControl: {
+          leftButtons: [],
+          rightButtons: [getStaffReviewBack, getStaffReviewSubmitButton]
         }
       }
     }

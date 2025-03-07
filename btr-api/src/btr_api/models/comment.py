@@ -37,11 +37,12 @@ from __future__ import annotations
 import uuid
 from datetime import datetime
 
-from sqlalchemy import ForeignKey
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy import ForeignKey, select
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sql_versioning import Versioned
 
 from btr_api.enums import CommentTypes
+from btr_api.models import User as UserModel
 
 from .base import Base
 
@@ -59,6 +60,8 @@ class Comment(Versioned, Base):
     related_uuid: Mapped[uuid.UUID] = mapped_column(nullable=False)
     text: Mapped[str] = mapped_column(nullable=True, default=None)
 
+    submitter: Mapped['User'] = relationship('User', foreign_keys=[submitter_id])
+
     def __init__(self, data):
         self.uuid = uuid.uuid4()
         self.type = data['type']
@@ -74,7 +77,12 @@ class Comment(Versioned, Base):
     @classmethod
     def find_by_related_uuid(cls, related_uuid: uuid.UUID) -> Comment | None:
         """Return the comment by id."""
-        return cls.query.filter_by(related_uuid=related_uuid).all()
+        # return cls.query.filter_by(related_uuid=related_uuid).all()
+        q = cls.query
+        q = q.join(UserModel, Comment.submitter_id == UserModel.id)
+        q = q.add_columns(UserModel.firstname.label('firstname'), UserModel.lastname.label('lastname'))
+        q = q.where(Comment.related_uuid == related_uuid)
+        return q.all()
 
     @classmethod
     def __setitem__(cls, key, value):
@@ -112,8 +120,8 @@ class CommentSerializer:
             'id': comment.id,
             'uuid': comment.uuid,
             'type': comment.type,
-            'createdAt': comment.created_at.isoformat(),
-            'updatedAt': comment.updated_at.isoformat(),
+            'createdAt': comment.created_at,
+            'updatedAt': comment.updated_at,
             'text': comment.text,
             'relatedUuId': comment.related_uuid
         }

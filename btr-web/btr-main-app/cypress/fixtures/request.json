@@ -1,0 +1,23 @@
+{
+  "birthdate": "Fri, 11 Oct 2024 00:00:00 GMT",
+  "businessIdentifier": "BC0871427",
+  "completingEmail": "jane@gmail.com",
+  "completingName": "jane",
+  "completingParty": "REPRESENTATIVE",
+  "createdAt": "2024-10-11T14:15:20+00:00",
+  "email": "test@gmail.com",
+  "fullName": "test",
+  "id": 2,
+  "individualAtRisk": [
+    "SI",
+    "HOUSEHOLD"
+  ],
+  "informationToOmit": [
+    "FULL_NAME",
+    "BIRTH_YEAR"
+  ],
+  "reasons": "reasons",
+  "status": "INFO_REQUESTED",
+  "updatedAt": "2024-10-11T14:15:20+00:00",
+  "uuid": "087904ae-d130-4137-a5fd-a79de4dbe4c0"
+}

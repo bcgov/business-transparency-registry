@@ -122,6 +122,9 @@ class RequestService:  # pylint: disable=too-few-public-methods
         if 'completingName' in request_dict:
             request.completing_name = request_dict['completingName']
 
+        if 'status' in request_dict:
+            request.status = request_dict['status']
+
         # for key in dict_keys:
         #     if key in request_dict:
         #         request[key] = request_dict[key]
