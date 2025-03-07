@@ -38,7 +38,7 @@ import uuid
 from datetime import datetime
 
 from sqlalchemy import ForeignKey
-from sqlalchemy.orm import Mapped, mapped_column, relationship
+from sqlalchemy.orm import Mapped, mapped_column
 from sql_versioning import Versioned
 
 from btr_api.enums import CommentTypes
