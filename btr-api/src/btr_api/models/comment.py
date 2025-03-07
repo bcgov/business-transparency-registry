@@ -60,8 +60,6 @@ class Comment(Versioned, Base):
     related_uuid: Mapped[uuid.UUID] = mapped_column(nullable=False)
     text: Mapped[str] = mapped_column(nullable=True, default=None)
 
-    submitter: Mapped['User'] = relationship('User', foreign_keys=[submitter_id])
-
     def __init__(self, data):
         self.uuid = uuid.uuid4()
         self.type = data['type']
