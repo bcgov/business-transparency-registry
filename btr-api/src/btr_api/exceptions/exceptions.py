@@ -87,3 +87,9 @@ class ExternalServiceException(BaseExceptionE):
         self.message = '3rd party service error while processing request.'
         self.error = f'{repr(self.error)}, {self.status_code}'
         self.status_code = HTTPStatus.SERVICE_UNAVAILABLE
+
+
+@dataclass
+class ValidationException(BaseExceptionE):
+    """Validation exception."""
+    errors: list = None

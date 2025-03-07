@@ -17,12 +17,15 @@ from btr_api.models import User as UserModel
 from btr_api.models.submission import SubmissionSerializer
 from btr_api.services import SubmissionService
 from btr_api.services.auth import auth_cache
+from btr_api.services.entity import entity_cache
 from btr_api.utils import redact_information
 
 from tests.unit import nested_session
 from tests.unit.models.test_user import sample_user
 from tests.unit.utils import create_header
 from tests.unit.utils.db_helpers import clear_db
+from tests.unit.mocks.response.todos_initial_filing import todos_initial_filing
+from tests.unit.mocks.response.todos_annual_filing import todos_annual_filing
 
 mocked_entity_response = {'business': {'adminFreeze': False, 'state': 'ACTIVE', 'legalName': 'Mocked Business', 'identifier': 'BC1234567'}}
 mocked_entity_address_response = {
@@ -255,6 +258,9 @@ def test_create_update_plots_auth(
             json_data = json.load(file)
             identifier = json_data['businessIdentifier']
             requests_mock.get(
+                f"{app.config.get('LEGAL_SVC_URL')}/businesses/{identifier}/tasks", json=todos_initial_filing
+            )
+            requests_mock.get(
                 f"{app.config.get('AUTH_SVC_URL')}/entities/{identifier}/authorizations", json=auth_svc_response
             )
             requests_mock.post(app.config.get('SSO_SVC_TOKEN_URL'), json={'access_token': 'token'})
@@ -324,6 +330,9 @@ def test_post_plots_db_mocked(app, session, client, jwt, mocker, requests_mock):
         legal_api_delivery_address_mock = requests_mock.get(
             f"{app.config.get('LEGAL_SVC_URL')}/businesses/{identifier}/addresses?addressType=deliveryAddress",
             json=mocked_entity_address_response
+        )
+        requests_mock.get(
+            f"{app.config.get('LEGAL_SVC_URL')}/businesses/{identifier}/tasks", json=todos_initial_filing
         )
         auth_api_entity_contact_mock = requests_mock.get(
             f"{app.config.get('AUTH_SVC_URL')}/entities/{identifier}",
@@ -425,6 +434,9 @@ def test_post_plots(app, client, session, jwt, requests_mock):
             f"{app.config.get('LEGAL_SVC_URL')}/businesses/{identifier}/addresses?addressType=deliveryAddress",
             json=mocked_entity_address_response
         )
+        requests_mock.get(
+            f"{app.config.get('LEGAL_SVC_URL')}/businesses/{identifier}/tasks", json=todos_initial_filing
+        )
         auth_api_entity_contact_mock = requests_mock.get(
             f"{app.config.get('AUTH_SVC_URL')}/entities/{identifier}",
             json=mocked_auth_entity_contact_response
@@ -495,6 +507,9 @@ def test_put_plots(app, client, session, jwt, requests_mock):
         legal_api_delivery_address_mock = requests_mock.get(
             f"{app.config.get('LEGAL_SVC_URL')}/businesses/{identifier}/addresses?addressType=deliveryAddress",
             json=mocked_entity_address_response
+        )
+        requests_mock.get(
+            f"{app.config.get('LEGAL_SVC_URL')}/businesses/{identifier}/tasks", json=todos_initial_filing
         )
         auth_api_entity_contact_mock = requests_mock.get(
             f"{app.config.get('AUTH_SVC_URL')}/entities/{identifier}",
@@ -578,6 +593,10 @@ def test_put_plots(app, client, session, jwt, requests_mock):
                     ]
                 }]
             }
+            entity_cache.clear()
+            requests_mock.get(
+                f"{app.config.get('LEGAL_SVC_URL')}/businesses/{identifier}/tasks", json=todos_annual_filing
+            )
             rv = client.put(
               url,
               json=put_data,
@@ -610,6 +629,134 @@ def test_put_plots(app, client, session, jwt, requests_mock):
             assert legal_api_ledger_mock.called == True
 
 
+@pytest.mark.parametrize(
+    'test_name, filing_data, is_change, todos_response, expected_http_status',
+    [
+        ('Good path, initial filing', {'filingType': 'INITIAL_FILING'}, False, todos_initial_filing, HTTPStatus.CREATED),
+
+        ('Good path, annual filing',
+         {'filingType': 'ANNUAL_FILING', 'arFilingForYear': 2024}, True, todos_annual_filing, HTTPStatus.OK),
+
+        ('Good path, annual filing',
+         {'filingType': 'ANNUAL_FILING', 'arFilingForYear': 2024}, False, todos_annual_filing, HTTPStatus.CREATED),
+
+        ('Good path, change filing', {'filingType': 'CHANGE_FILING'}, True, todos_annual_filing, HTTPStatus.OK),
+
+        ('Bad path, initial filing, no initial todo',
+         {'filingType': 'INITIAL_FILING'}, False, todos_annual_filing, HTTPStatus.BAD_REQUEST),
+
+        ('Bad path, annual filing, wrong year',
+         {'filingType': 'ANNUAL_FILING', 'arFilingForYear': 2029}, False, todos_annual_filing, HTTPStatus.BAD_REQUEST),
+
+        ('Bad path, annual filing, no todos',
+         {'filingType': 'ANNUAL_FILING', 'arFilingForYear': 2024}, False, todos_initial_filing, HTTPStatus.BAD_REQUEST),
+
+        ('Bad path, change filing, there is initial todo (cannot do change if initial not done)',
+         {'filingType': 'CHANGE_FILING'}, True, todos_initial_filing, HTTPStatus.BAD_REQUEST),
+
+        ('Bad path, invalid filing type',
+         {'filingType': 'Victoria_Falls'}, False, todos_initial_filing, HTTPStatus.BAD_REQUEST),
+    ],
+)
+def test_filing_type(
+    app, client, session, jwt, requests_mock, test_name, filing_data, is_change, todos_response, expected_http_status
+):
+    """Assure business rules validation around filingType works."""
+    auth_mock = requests_mock.post(app.config.get('SSO_SVC_TOKEN_URL'), json={'access_token': 'token'})
+
+    current_dir = os.path.dirname(__file__)
+    with open(os.path.join(current_dir, '..', '..', 'mocks', 'significantIndividualsFiling', 'valid.json')) as file:
+        json_data = json.load(file)
+
+        identifier = json_data['businessIdentifier']
+        requests_mock.get(
+            f"{app.config.get('AUTH_SVC_URL')}/entities/{identifier}/authorizations",
+            json={'orgMembership': 'COORDINATOR', 'roles': ['edit', 'view']},
+        )
+        requests_mock.get(
+            f"{app.config.get('LEGAL_SVC_URL')}/businesses/{identifier}", json=mocked_entity_response
+        )
+        requests_mock.post(
+            f"{app.config.get('LEGAL_SVC_URL')}/businesses/{identifier}/filings", json={'message': 'Success'}
+        )
+        requests_mock.get(
+            f"{app.config.get('LEGAL_SVC_URL')}/businesses/{identifier}/addresses?addressType=deliveryAddress",
+            json=mocked_entity_address_response
+        )
+        requests_mock.get(
+            f"{app.config.get('AUTH_SVC_URL')}/entities/{identifier}",
+            json=mocked_auth_entity_contact_response
+        )
+
+        # verify post with no filingType put
+        with nested_session(session):
+            auth_cache.clear()
+            entity_cache.clear()
+            clear_db(session)
+            if is_change:
+                requests_mock.get(
+                    f"{app.config.get('LEGAL_SVC_URL')}/businesses/{identifier}/tasks", json=todos_initial_filing
+                )
+                rv = client.post(
+                    '/plots',
+                    json=json_data,
+                    headers=create_header(
+                        jwt_manager=jwt,
+                        roles=['basic'],
+                        **{'Accept-Version': 'v1', 'content-type': 'application/json', 'Account-Id': 1},
+                    ),
+                )
+                assert rv.status_code == HTTPStatus.CREATED
+                submission_id = rv.json.get('id')
+                assert submission_id
+                assert rv.json.get('payload')
+                assert rv.json['payload'].get('personStatements')
+                assert rv.json['payload'].get('ownershipOrControlStatements')
+
+                # need to get api generated statement ids
+                url = f'/plots/{submission_id}'
+                person_stmnt_id = rv.json['payload']['personStatements'][0]['statementID']
+                ownership_stmnt_id = rv.json['payload']['ownershipOrControlStatements'][0]['statementID']
+
+                json_data['ownershipOrControlStatements'][0]['statementID'] = ownership_stmnt_id
+                json_data['ownershipOrControlStatements'][0]['interestedParty']['describedByPersonStatement'] = person_stmnt_id
+                json_data['personStatements'][0]['statementID'] = person_stmnt_id
+
+                for key in filing_data:
+                    json_data[key] = filing_data[key]
+
+                entity_cache.clear()
+                requests_mock.get(
+                    f"{app.config.get('LEGAL_SVC_URL')}/businesses/{identifier}/tasks", json=todos_response
+                )
+
+                rv = client.put(
+                    url,
+                    json=json_data,
+                    headers=create_header(
+                        jwt_manager=jwt,
+                        roles=['basic'],
+                        **{'Accept-Version': 'v1', 'content-type': 'application/json', 'Account-Id': 1},
+                    ),
+                )
+            else:
+                for key in filing_data:
+                    json_data[key] = filing_data[key]
+                requests_mock.get(
+                    f"{app.config.get('LEGAL_SVC_URL')}/businesses/{identifier}/tasks", json=todos_response
+                )
+                rv = client.post(
+                    '/plots',
+                    json=json_data,
+                    headers=create_header(
+                        jwt_manager=jwt,
+                        roles=['basic'],
+                        **{'Accept-Version': 'v1', 'content-type': 'application/json', 'Account-Id': 1},
+                    ),
+                )
+            assert rv.status_code == expected_http_status
+
+
 def test_post_plots_auth_error(app, client, session, jwt, requests_mock):
     """Assure post submission fails with (auth get token error)."""
     auth_mock = requests_mock.post(app.config.get('SSO_SVC_TOKEN_URL'), exc=requests.exceptions.ConnectTimeout)
@@ -631,6 +778,9 @@ def test_post_plots_auth_error(app, client, session, jwt, requests_mock):
         legal_api_delivery_address_mock = requests_mock.get(
             f"{app.config.get('LEGAL_SVC_URL')}/businesses/{identifier}/addresses?addressType=deliveryAddress",
             json=mocked_entity_address_response
+        )
+        requests_mock.get(
+            f"{app.config.get('LEGAL_SVC_URL')}/businesses/{identifier}/tasks", json=todos_initial_filing
         )
         auth_api_entity_contact_mock = requests_mock.get(
             f"{app.config.get('AUTH_SVC_URL')}/entities/{identifier}",
@@ -686,6 +836,9 @@ def test_post_plots_bor_error(app, client, session, jwt, requests_mock):
         legal_api_delivery_address_mock = requests_mock.get(
             f"{app.config.get('LEGAL_SVC_URL')}/businesses/{identifier}/addresses?addressType=deliveryAddress",
             json=mocked_entity_address_response
+        )
+        requests_mock.get(
+            f"{app.config.get('LEGAL_SVC_URL')}/businesses/{identifier}/tasks", json=todos_initial_filing
         )
         auth_api_entity_contact_mock = requests_mock.get(
             f"{app.config.get('AUTH_SVC_URL')}/entities/{identifier}",
@@ -746,6 +899,9 @@ def test_post_plots_email_error(app, client, session, jwt, requests_mock):
         legal_api_delivery_address_mock = requests_mock.get(
             f"{app.config.get('LEGAL_SVC_URL')}/businesses/{identifier}/addresses?addressType=deliveryAddress",
             json=mocked_entity_address_response
+        )
+        requests_mock.get(
+            f"{app.config.get('LEGAL_SVC_URL')}/businesses/{identifier}/tasks", json=todos_initial_filing
         )
         auth_api_entity_contact_mock = requests_mock.get(
             f"{app.config.get('AUTH_SVC_URL')}/entities/{identifier}",
@@ -814,6 +970,9 @@ def test_post_plots_invalid_entity(
         legal_api_delivery_address_mock = requests_mock.get(
             f"{app.config.get('LEGAL_SVC_URL')}/businesses/{identifier}/addresses?addressType=deliveryAddress",
             json=mocked_entity_address_response
+        )
+        requests_mock.get(
+            f"{app.config.get('LEGAL_SVC_URL')}/businesses/{identifier}/tasks", json=todos_initial_filing
         )
         auth_api_entity_contact_mock = requests_mock.get(
             f"{app.config.get('AUTH_SVC_URL')}/entities/{identifier}",

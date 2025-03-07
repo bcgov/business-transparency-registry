@@ -50,13 +50,14 @@ from btr_api.common.auth import jwt
 from btr_api.exceptions import AuthException, ExternalServiceException
 from btr_api.exceptions import error_request_response
 from btr_api.exceptions import exception_response
+from btr_api.exceptions.exceptions import ValidationException
 from btr_api.models import Submission as SubmissionModel
 from btr_api.models import User as UserModel
 from btr_api.models.submission import SubmissionSerializer
 from btr_api.services import btr_auth, btr_bor, btr_entity, btr_reg_search
 from btr_api.services import SchemaService
 from btr_api.services import SubmissionService
-from btr_api.services.validator import validate_entity
+from btr_api.services.validator import validate_entity, validate_tr_filing_for_type
 from btr_api.utils import redact_information
 
 bp = Blueprint('submission', __name__)
@@ -125,7 +126,18 @@ def create_register():
         schema_service = SchemaService()
         [valid, errors] = schema_service.validate(schema_name, json_input)
         if not valid:
-            return error_request_response('Invalid schema', HTTPStatus.BAD_REQUEST, errors)
+            raise ValidationException(error='',
+                                      errors=errors,
+                                      message='Invalid schema',
+                                      status_code=HTTPStatus.BAD_REQUEST)
+
+        # verify that user can file this specific type
+        errors = validate_tr_filing_for_type(json_input, jwt)
+        if errors:
+            raise ValidationException(error='',
+                                      errors=errors,
+                                      message='Invalid filing type',
+                                      status_code=HTTPStatus.BAD_REQUEST)
 
         business_identifier = json_input.get('businessIdentifier')
         btr_auth.is_authorized(request=request, business_identifier=business_identifier, action='edit')
@@ -135,7 +147,10 @@ def create_register():
 
         # validate entity; return FORBIDDEN for historial and frozen companies
         if entity_errors := validate_entity(entity):
-            return error_request_response('Invalid entity', HTTPStatus.FORBIDDEN, entity_errors)
+            raise ValidationException(error='',
+                                      errors=entity_errors,
+                                      message='Invalid entity',
+                                      status_code=HTTPStatus.FORBIDDEN)
 
         # create submission
         submission = SubmissionService.create_submission(json_input, user.id)
@@ -168,6 +183,8 @@ def create_register():
         return exception_response(aex)
     except ExternalServiceException as err:
         return exception_response(err)
+    except ValidationException as err:
+        return error_request_response(err.message, err.status_code, err.errors)
     except Exception as exception:  # noqa: B902
         return exception_response(exception)
 
@@ -199,7 +216,10 @@ def update_submission(sub_id: int):
 
             # validate entity; return FORBIDDEN for historial and frozen companies
             if entity_errors := validate_entity(entity):
-                return error_request_response('Invalid entity', HTTPStatus.FORBIDDEN, entity_errors)
+                raise ValidationException(error='',
+                                          errors=entity_errors,
+                                          message='Invalid entity',
+                                          status_code=HTTPStatus.FORBIDDEN)
 
             submitted_json = request.get_json()
             submission = SubmissionService.update_submission(submission,
@@ -213,7 +233,18 @@ def update_submission(sub_id: int):
             schema_service = SchemaService()
             [valid, errors] = schema_service.validate(schema_name, new_full_submission)
             if not valid:
-                return error_request_response('Invalid schema', HTTPStatus.BAD_REQUEST, errors)
+                raise ValidationException(error='',
+                                          errors=errors,
+                                          message='Invalid schema',
+                                          status_code=HTTPStatus.BAD_REQUEST)
+
+            # verify that user can file this specific type
+            errors = validate_tr_filing_for_type(submitted_json, jwt)
+            if errors:
+                raise ValidationException(error='',
+                                          errors=errors,
+                                          message='Invalid filing type',
+                                          status_code=HTTPStatus.BAD_REQUEST)
 
             # create ledger record in LEAR
             try:
@@ -246,5 +277,7 @@ def update_submission(sub_id: int):
 
     except AuthException as aex:
         return exception_response(aex)
+    except ValidationException as err:
+        return error_request_response(err.message, err.status_code, err.errors)
     except Exception as exception:  # noqa: B902
         return exception_response(exception)

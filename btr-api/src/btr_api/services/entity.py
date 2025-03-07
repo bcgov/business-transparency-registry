@@ -45,7 +45,6 @@ from btr_api.models import Submission, User
 from btr_api.models.submission import SubmissionType
 from btr_api.utils.legislation_datetime import LegislationDatetime
 
-
 entity_cache = Cache()
 
 
