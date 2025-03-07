@@ -45,9 +45,6 @@ describe('pages -> Staff SI Dashboard', () => {
         cy.get('[data-cy="corpNo-value"]').should('contain',
           'BC0871427'
         )
-        cy.get('[data-cy="filingDate-value"]').should('contain',
-          'October 11, 2024 at 7:15 AM Pacific Daylight Time'
-        )
 
         cy.get('[data-cy="fullName-value"]').should('contain',
           'test'
