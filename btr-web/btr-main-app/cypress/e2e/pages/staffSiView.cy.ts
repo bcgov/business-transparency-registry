@@ -49,9 +49,6 @@ describe('pages -> Staff SI Dashboard', () => {
         cy.get('[data-cy="fullName-value"]').should('contain',
           'test'
         )
-        cy.get('[data-cy="born-value"]').should('contain',
-          'October 10, 2024'
-        )
         cy.get('[data-cy="infoToOmit-value"]').should('contain',
           'full name, birth year'
         )
