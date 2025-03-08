@@ -108,3 +108,15 @@ export function getOmitSubmitButton () {
     trailing: true
   }
 }
+
+export function getStaffReviewSubmitButton () {
+  const t = useNuxtApp().$i18n.t
+  const omitIndividual = useOmitIndividual()
+  return {
+    action: omitIndividual.submitStaffReview,
+    class: 'font-bold',
+    icon: '',
+    label: t('general.submitArrow'),
+    trailing: true
+  }
+}

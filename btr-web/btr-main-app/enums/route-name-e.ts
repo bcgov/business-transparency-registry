@@ -3,5 +3,6 @@ export enum RouteNameE {
   MY_REG_DETAILS = 'my-registries-details',
   REVIEW_CONFIRM = 'review-confirm',
   REQUEST_OMIT = 'request-to-omit',
-  STAFF_SI_DASH = 'staff-si-dashboard'
+  STAFF_SI_DASH = 'staff-si-dashboard',
+  STAFF_REQ_VIEW = 'staff-request-view'
 }

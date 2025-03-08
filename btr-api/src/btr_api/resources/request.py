@@ -210,7 +210,7 @@ def update_request(req_id: str):
 
             req.save()
 
-            return jsonify(RequestSerializer.to_dict(req)), HTTPStatus.OK
+            return req_d, HTTPStatus.OK
 
         return {}, HTTPStatus.NOT_FOUND
 
@@ -273,8 +273,13 @@ def get_all_comments(req_uuid: str):  # pylint: disable=redefined-builtin
     try:
         results = CommentModel.find_by_related_uuid(req_uuid)
         resp = []
-        for result in results:
-            resp.append(CommentSerializer.to_dict(result))
+        for result, first, last in results:
+            to_add = CommentSerializer.to_dict(result)
+            to_add['user'] = {
+                'first': first,
+                'last': last
+            }
+            resp.append(to_add)
         return jsonify(resp), HTTPStatus.OK
     except AuthException as aex:
         return exception_response(aex)

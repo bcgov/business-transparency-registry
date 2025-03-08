@@ -37,6 +37,7 @@ from __future__ import annotations
 import uuid
 from datetime import date, datetime
 
+from sqlalchemy import DateTime
 from sqlalchemy.orm import Mapped, mapped_column
 from sqlalchemy.types import String
 from sqlalchemy.dialects.postgresql import ARRAY
@@ -66,8 +67,8 @@ class Request(Versioned, Base):
     completing_party: Mapped[CompletingParty] = mapped_column(nullable=False)
     completing_name: Mapped[str] = mapped_column(nullable=False)
     completing_email: Mapped[str] = mapped_column(nullable=False)
-    created_at: Mapped[datetime] = mapped_column(nullable=False, default=datetime.now())
-    updated_at: Mapped[datetime] = mapped_column(nullable=False, default=datetime.now())
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False, default=datetime.now())
+    updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False, default=datetime.now())
     status: Mapped[RequestStatus] = mapped_column(nullable=False, default=RequestStatus.AWAITING_REVIEW)
 
     def __init__(self, data):

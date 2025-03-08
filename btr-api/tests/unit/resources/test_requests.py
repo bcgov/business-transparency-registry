@@ -25,7 +25,7 @@ from tests.unit.utils.db_helpers import clear_db
 from tests.unit.utils.mock_data import REQUEST_DICT, COMMENT_DICT
 
 UPDATE_R_DICT = {
-    'fullName': 'edited'
+    'status': 'REJECTED'
 }
 
 @pytest.mark.parametrize(

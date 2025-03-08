@@ -23,10 +23,14 @@ export const useOmitIndividual = defineStore('bcros/omitIndividual', () => {
   const submitting = ref(false)
   const submitted = ref(false)
   const allRequests = ref([])
+  const activeRequest = ref({})
+  const activeComments = ref([])
   const activeId = ref(-1)
   const activeUUID = ref('')
   const requestCount = ref(0)
   const bizInfo = ref({})
+  const staffComment = ref('')
+  const changeState = ref('')
 
   const constructBtrApiURL = () => {
     const runtimeConfig = useRuntimeConfig()
@@ -125,6 +129,17 @@ export const useOmitIndividual = defineStore('bcros/omitIndividual', () => {
     if (error?.value?.statusCode && error.value.statusCode >= 500) {
       useGlobalErrorsStore().addGlobalError(SomethingWentWrongError())
     }
+    activeRequest.value = data.value
+    changeState.value = activeRequest?.value?.status
+    activeRequest.value.business = {}
+    useBcrosBusiness().getBusinessDetails(activeRequest.value.businessIdentifier,
+      { slim: true }).then((bizData) => {
+      if (bizData) {
+        activeRequest.value.business = bizData
+      }
+    })
+    getCommentsForRequest(activeRequest.value.uuid)
+
     return { data, error }
   }
 
@@ -143,6 +158,25 @@ export const useOmitIndividual = defineStore('bcros/omitIndividual', () => {
       useGlobalErrorsStore().addGlobalError(SomethingWentWrongError())
     }
     return { data, error }
+  }
+
+  /** Create the omit individuals in the api */
+  async function updateSavedOmitIndividual (uuid: string, status: string): Promise<boolean> {
+    const url = `${constructBtrApiURL()}/requests/${uuid}`
+    const method = 'PUT'
+    const { error } = await useFetchBcros<BtrBodsRequestGetI>(url,
+      {
+        method,
+        body: { status },
+        headers: { 'Content-Type': 'application/json' }
+      })
+    if (error?.value?.statusCode && error.value.statusCode >= 500) {
+      useGlobalErrorsStore().addGlobalError(SomethingWentWrongError())
+    }
+    if (error) {
+      return false
+    }
+    return true
   }
 
   async function submitOmit () {
@@ -187,13 +221,30 @@ export const useOmitIndividual = defineStore('bcros/omitIndividual', () => {
     }
   }
 
-  async function createComment (relatedUuid: string, comment: string) {
+  async function submitStaffReview () {
+    if (!activeRequest || !activeRequest.value || !activeRequest.value.uuid) {
+      return false
+    }
+    let success = true
+    if (staffComment.value && staffComment.value.length > 0) {
+      success = await createComment(activeRequest.value.uuid, staffComment.value)
+    }
+    if (changeState.value && changeState.value.length > 0 && changeState.value !== activeRequest.value.status) {
+      success = success && await updateSavedOmitIndividual(activeRequest.value.uuid, changeState.value)
+    }
+
+    if (success) {
+      useRouter().push({ name: RouteNameE.STAFF_SI_DASH })
+    }
+  }
+
+  async function createComment (relatedUuid: string, comment: string): Promise<boolean> {
     const url = constructBtrApiURL() + `/requests/${relatedUuid}/comment`
     const method = 'POST'
     const submitData = {
       text: comment
     }
-    const { data, error } = await useFetchBcros(url,
+    const { error } = await useFetchBcros(url,
       {
         method,
         body: submitData,
@@ -202,7 +253,10 @@ export const useOmitIndividual = defineStore('bcros/omitIndividual', () => {
     if (error?.value?.statusCode && error.value.statusCode >= 500) {
       useGlobalErrorsStore().addGlobalError(SomethingWentWrongError())
     }
-    return { data }
+    if (error) {
+      return false
+    }
+    return true
   }
 
   async function getCommentsForRequest (requestUuid: string) {
@@ -216,6 +270,7 @@ export const useOmitIndividual = defineStore('bcros/omitIndividual', () => {
     if (error?.value?.statusCode && error.value.statusCode >= 500) {
       useGlobalErrorsStore().addGlobalError(SomethingWentWrongError())
     }
+    activeComments.value = data.value
     return { data }
   }
 
@@ -241,6 +296,12 @@ export const useOmitIndividual = defineStore('bcros/omitIndividual', () => {
     createComment,
     getCommentsForRequest,
     requestCount,
-    bizInfo
+    bizInfo,
+    activeRequest,
+    activeComments,
+    submitStaffReview,
+    staffComment,
+    changeState,
+    updateSavedOmitIndividual
   }
 })
