@@ -79,7 +79,7 @@ import { type UseEventBusReturn } from '@vueuse/core'
 
 const formBus = inject<UseEventBusReturn<any, string> | undefined>('form-events', undefined)
 
-defineEmits<{(e: 'value-changed', value: any): void }>()
+const emit = defineEmits<{(e: 'value-changed', value: any): void }>()
 const model = defineModel({ type: Array as PropType<any[]>, required: true })
 const props = defineProps({
   name: { type: String, default: 'name' },
@@ -107,6 +107,7 @@ const removeItem = (item: any) => {
   if (index > -1) {
     model.value.splice(index, 1)
     model.value = [...model.value]
+    emit('value-changed', model.value)
   }
 }
 </script>
