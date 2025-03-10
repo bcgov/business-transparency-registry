@@ -293,10 +293,10 @@ def get_all_comments(req_uuid: str):  # pylint: disable=redefined-builtin
 @bp.route('/auto_reject', methods=('POST',))
 def auto_reject_requests():
     """Auto reject requests."""
-    DAYS_OF_AWAITING = current_app.config.get('DAYS_TO_AUTO_REJECT_REQUESTS', 60)
+    days_of_awaiting = current_app.config.get('DAYS_TO_AUTO_REJECT_REQUESTS', 60)
     query = RequestModel.query
     query = query.filter(RequestModel.status == RequestStatus.INFO_REQUESTED)
-    query = query.filter(RequestModel.updated_at < (utc_now() - timedelta(days=DAYS_OF_AWAITING)))
+    query = query.filter(RequestModel.updated_at < (utc_now() - timedelta(days=days_of_awaiting)))
     requests = query.all()
     update_dict = {
         'status': RequestStatus.REJECTED
