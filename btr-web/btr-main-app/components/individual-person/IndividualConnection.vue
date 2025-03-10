@@ -9,6 +9,8 @@ const { allActiveSIs, actingJointlyAndInConcert }: {
   actingJointlyAndInConcert: Ref<Map<string, JointlyOrInConcertConnectionsI>>
 } = storeToRefs(siControlStore)
 
+defineEmits(['value-changed'])
+
 const props = defineProps({
   si: { type: Object as PropType<SiSchemaType>, required: true },
   name: { type: String, default: 'name' },
@@ -50,6 +52,7 @@ const siControl = computed(() => actingJointlyAndInConcert.value.get(props.si.uu
         :search-attributes="['name']"
         :style="`width: ${individualConnectionWidth}%`"
         :editing-disabled="editingDisabled"
+        @value-changed="$emit('value-changed', 'controlOfShares')"
       />
     </div>
 
@@ -72,6 +75,7 @@ const siControl = computed(() => actingJointlyAndInConcert.value.get(props.si.uu
         :search-attributes="['name']"
         :style="`width: ${individualConnectionWidth}%`"
         :editing-disabled="editingDisabled"
+        @value-changed="$emit('value-changed', 'controlOfShares')"
       />
     </div>
 
@@ -94,6 +98,7 @@ const siControl = computed(() => actingJointlyAndInConcert.value.get(props.si.uu
         :search-attributes="['name']"
         :style="`width: ${individualConnectionWidth}%`"
         :editing-disabled="editingDisabled"
+        @value-changed="$emit('value-changed', 'controlOfVotes')"
       />
     </div>
 
@@ -116,6 +121,7 @@ const siControl = computed(() => actingJointlyAndInConcert.value.get(props.si.uu
         :search-attributes="['name']"
         :style="`width: ${individualConnectionWidth}%`"
         :editing-disabled="editingDisabled"
+        @value-changed="$emit('value-changed', 'controlOfVotes')"
       />
     </div>
 
@@ -138,6 +144,7 @@ const siControl = computed(() => actingJointlyAndInConcert.value.get(props.si.uu
         :search-attributes="['name']"
         :style="`width: ${individualConnectionWidth}%`"
         :editing-disabled="editingDisabled"
+        @value-changed="$emit('value-changed', 'controlOfDirectors')"
       />
     </div>
 
@@ -160,6 +167,7 @@ const siControl = computed(() => actingJointlyAndInConcert.value.get(props.si.uu
         :search-attributes="['name']"
         :style="`width: ${individualConnectionWidth}%`"
         :editing-disabled="editingDisabled"
+        @value-changed="$emit('value-changed', 'controlOfDirectors')"
       />
     </div>
   </div>

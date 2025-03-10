@@ -46,6 +46,7 @@
             :control-type-width="String(controlTypeWidthPercentage)"
             :individual-connection-width="String(100-controlTypeWidthPercentage)"
             :editing-disabled="editingDisabled"
+            @value-changed="handleConnectionUpdate($event, index)"
           />
         </td>
       </tr>
@@ -83,6 +84,19 @@ const headers = [
 const controlTypeWidth = parseFloat(headers[1].width.replace('%', ''))
 const individualConnectionWidth = parseFloat(headers[2].width.replace('%', ''))
 const controlTypeWidthPercentage = controlTypeWidth / (controlTypeWidth + individualConnectionWidth) * 100
+
+const handleConnectionUpdate = (fieldName: string, index: number) => {
+  const si = siControlStore.allActiveAndHaveControlSis[index]
+  if (!si.ui.actions) {
+    si.ui.actions = [FilingActionE.EDIT]
+  } else if (!si.ui.actions.includes(FilingActionE.EDIT)) {
+    si.ui.actions.push(FilingActionE.EDIT)
+  }
+
+  if (!si.ui.newOrUpdatedFields.includes(fieldName)) {
+    si.ui.newOrUpdatedFields.push(fieldName)
+  }
+}
 </script>
 
 <style scoped>
