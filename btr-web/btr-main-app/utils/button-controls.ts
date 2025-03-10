@@ -64,3 +64,14 @@ export function getSIChangeSubmit (): ButtonControlI {
     trailing: true
   }
 }
+
+export function getStaffReviewBack (): ButtonControlI {
+  const t = useNuxtApp().$i18n.t
+  return {
+    action: () => useRouter().push({ name: RouteNameE.STAFF_SI_DASH }),
+    icon: '',
+    label: t('labels.buttons.cancel'),
+    trailing: false,
+    variant: 'outline'
+  }
+}

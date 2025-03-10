@@ -38,3 +38,29 @@ export function getRequestOmitCrumb (): BreadcrumbI {
   const t = useNuxtApp().$i18n.t
   return { text: t('breadcrumbs.requestOmit') }
 }
+
+export function getBcrosStaffDashboardCrumb (): BreadcrumbI {
+  const config = useRuntimeConfig()
+  const t = useNuxtApp().$i18n.t
+  return {
+    text: t('pageHeadings.staffDash'),
+    href: `${config.public.authWebURL}/staff/dashboard/active`
+  }
+}
+export function getBcrosStaffSIDashCrumb (): BreadcrumbI {
+  const t = useNuxtApp().$i18n.t
+  return {
+    text: t('pageHeadings.siManagement'),
+    to: { name: RouteNameE.STAFF_SI_DASH }
+  }
+}
+export function getBcrosStaffReqViewCrumb (): BreadcrumbI {
+  const omitIndividual = useOmitIndividual()
+  const route = useRoute()
+  return {
+    text: omitIndividual?.activeRequest?.value?.fullName ||
+      omitIndividual?.activeRequest?.fullName ||
+      route?.params?.identifier ||
+      'Loading...'
+  }
+}

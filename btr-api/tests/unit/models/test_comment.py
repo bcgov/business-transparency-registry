@@ -37,7 +37,8 @@ def test_find_by_related_uuid(session,sample_user):
     session.commit()
 
     # Do test
-    result = Comment.find_by_related_uuid(comment.related_uuid)
+    results = Comment.find_by_related_uuid(comment.related_uuid)
 
     # Verify result
-    assert result == [comment]
+    for comm, _, _ in results:
+      assert comm == comment
