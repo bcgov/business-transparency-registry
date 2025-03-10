@@ -1,6 +1,6 @@
 describe('pages -> Add individual -> effective dates', () => {
   beforeEach(() => {
-    cy.visit('/')
+    cy.visitHomePageNoFakeData()
     cy.get('[data-cy=add-new-btn]').trigger('click')
   })
 

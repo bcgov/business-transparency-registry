@@ -1,6 +1,6 @@
 describe('pages -> Add individual', () => {
   beforeEach(() => {
-    cy.visit('/')
+    cy.visitHomePageNoFakeData()
   })
 
   it('verify CountriesOfCitizenship component is working', () => {

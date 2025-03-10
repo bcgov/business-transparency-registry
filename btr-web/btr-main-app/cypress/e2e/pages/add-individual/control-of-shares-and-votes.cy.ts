@@ -1,6 +1,6 @@
 describe('pages -> Add individual', () => {
   beforeEach(() => {
-    cy.visit('/')
+    cy.visitHomePageNoFakeData()
   })
 
   it('verify that the Type of Control checkboxes are working', () => {

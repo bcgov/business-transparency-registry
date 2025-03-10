@@ -43,7 +43,7 @@ def test_get(app, client, session, jwt, requests_mock, sample_user, test_name, u
 
         # Test
         rv = client.get(
-            f'/requests/{id}',
+            f'/api/v1/requests/{id}',
             headers=create_header(
                 jwt, ['staff'], **{'Accept-Version': 'v1', 'content-type': 'application/json', 'Account-Id': 1}
             ),
@@ -77,7 +77,7 @@ def test_get_fail_no_auth(app, client, session, jwt, requests_mock, sample_user,
 
         # Test
         rv = client.get(
-            f'/requests/{id}',
+            f'/api/v1/requests/{id}',
             headers=headers,
         )
 
@@ -100,7 +100,7 @@ def test_post(app, client, session, jwt, requests_mock, sample_user, test_name, 
         
         # Test
         rv = client.post(
-            f'/requests',
+            '/api/v1/requests',
             json=REQUEST_DICT,
             headers=create_header(
                 jwt, ['staff'], **{'Accept-Version': 'v1', 'content-type': 'application/json', 'Account-Id': 1}
@@ -123,7 +123,7 @@ def test_post_unauth(app, client, session, jwt, requests_mock, sample_user, test
         clear_db(session)
         # Test
         rv = client.post(
-            f'/requests',
+            '/api/v1/requests',
             json=REQUEST_DICT,
         )
 
@@ -144,14 +144,14 @@ def test_put(app, client, session, jwt, requests_mock, sample_user, test_name, u
         session.commit()
         
         rv = client.post(
-            f'/requests',
+            '/api/v1/requests',
             json=REQUEST_DICT,
         )
         id = rv.json['uuid']
 
         # Test
         rv = client.put(
-            f'/requests/{id}',
+            f'/api/v1/requests/{id}',
             json=UPDATE_R_DICT,
             headers=create_header(
                 jwt, ['staff'], **{'Accept-Version': 'v1', 'content-type': 'application/json', 'Account-Id': 1}
@@ -173,7 +173,7 @@ def test_put_no_auth(app, client, session, jwt, requests_mock, sample_user, test
         clear_db(session)
         # Setup
         rv = client.post(
-            f'/requests',
+            '/api/v1/requests',
             json=REQUEST_DICT,
         )
         id = rv.json['uuid']
@@ -184,7 +184,7 @@ def test_put_no_auth(app, client, session, jwt, requests_mock, sample_user, test
           )
         # Test
         rv = client.put(
-            f'/requests/{id}',
+            f'/api/v1/requests/{id}',
             json=UPDATE_R_DICT,
             headers=headers,
         )
@@ -222,7 +222,7 @@ def test_get_comment(app, client, session, jwt, requests_mock, sample_user, test
 
         # Test
         rv = client.get(
-            f'/requests/{id}/comment',
+            f'/api/v1/requests/{id}/comment',
             headers=create_header(
                 jwt, ['staff'], **{'Accept-Version': 'v1', 'content-type': 'application/json', 'Account-Id': 1}
             ),
@@ -266,7 +266,7 @@ def test_get_comment_fail_no_auth(app, client, session, jwt, requests_mock, samp
 
         # Test
         rv = client.get(
-            f'/requests/{id}/comment',
+            f'/api/v1/requests/{id}/comment',
             headers=headers,
         )
 
@@ -295,7 +295,7 @@ def test_post_comment(app, client, session, jwt, requests_mock, sample_user, tes
 
         # Test
         rv = client.post(
-            f'/requests/{id}/comment',
+            f'/api/v1/requests/{id}/comment',
             json=COMMENT_DICT,
             headers=create_header(
                 jwt, ['staff'], **{'Accept-Version': 'v1', 'content-type': 'application/json', 'Account-Id': 1}
@@ -333,7 +333,7 @@ def test_post_comment_fail_no_auth(app, client, session, jwt, requests_mock, sam
 
         # Test
         rv = client.post(
-            f'/requests/{id}/comment',
+            f'/api/v1/requests/{id}/comment',
             json=COMMENT_DICT,
             headers=headers,
         )

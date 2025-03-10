@@ -31,29 +31,11 @@
 # CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
+"""Exposes all of the resource endpoints in Flask-Blueprint style."""
 
-"""
-This module provides a simple flask blueprint with a single 'home' route that returns a JSON response.
-"""
-
-from flask import Blueprint
-from flask import jsonify
-from flask import request
-
-
-bp = Blueprint("base", __name__)
-
-
-@bp.route("/", methods=("GET",))
-def home():
-    """
-    Handle GET request to the home route.
-
-    Returns:
-        Union[Response, Tuple[Dict[str, Any], int]]: The JSON response and status code.
-
-    """
-    if request.method == "POST":
-        return {}, 201
-
-    return jsonify(name="world")
+from .base import bp as base_endpoint
+from .notify import bp as notify_endpoint
+from .ops import bp as ops_endpoint
+from .submission import bp as submission_endpoint
+from .json_schema import bp as json_schema_endpoint
+from .request import bp as request_endpoint

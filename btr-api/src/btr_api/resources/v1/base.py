@@ -31,48 +31,29 @@
 # CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
+
 """
-Module Name: Blueprint Ops
-Description: This module contains routes that are used to check the health and readiness of the API.
-The module includes two routes, "/healthz", and "/readyz", which respond with status messages indicating the health and
-readiness of the API respectively.
-Health is determined by the ability to execute a simple SELECT 1 query on the connected database.
+This module provides a simple flask blueprint with a single 'home' route that returns a JSON response.
 """
-from http import HTTPStatus
 
-from flask import Blueprint, current_app
-from sqlalchemy import exc, text
-
-from btr_api.models import db
-
-bp = Blueprint("ops", __name__)
+from flask import Blueprint
+from flask import jsonify
+from flask import request
 
 
-@bp.route("/healthz", methods=("GET",))
-def healthy():
+bp = Blueprint("base", __name__)
+
+
+@bp.route("", methods=("GET",))
+def home():
     """
-    Check the health of the API.
-
-    This method is used to check the health of the API by testing the database connection.
-    It sends a SELECT 1 query to the database and if it executes successfully, the API is considered healthy.
+    Handle GET request to the home route.
 
     Returns:
-        A dictionary with the message 'api is healthy' and the HTTP status code 200 if the API is healthy.
-        A dictionary with the message 'api is down' and the HTTP status code 500 if the database connection fails.
+        Union[Response, Tuple[Dict[str, Any], int]]: The JSON response and status code.
+
     """
-    try:
-        db.session.execute(text('select 1'))
-    except exc.SQLAlchemyError as db_exception:
-        current_app.logger.error('DB connection pool unhealthy:' + repr(db_exception))
-        return {'message': 'api is down'}, HTTPStatus.INTERNAL_SERVER_ERROR
-    except Exception as default_exception:  # noqa: B902; log error
-        current_app.logger.error('DB connection failed:' + repr(default_exception))
-        return {'message': 'api is down'}, 500
+    if request.method == "POST":
+        return {}, 201
 
-    return {'message': 'api is healthy'}, HTTPStatus.OK
-
-
-@bp.route("/readyz", methods=("GET",))
-def ready():
-    """Return a JSON object that identifies if the service is setup and ready to work."""
-    return {'message': 'api is ready'}, HTTPStatus.OK
+    return jsonify(name="world")

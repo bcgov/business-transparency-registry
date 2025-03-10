@@ -31,13 +31,34 @@
 # CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
-"""Exposes the versioned endpoints."""
-from .v1 import (base_endpoint, json_schema_endpoint, notify_endpoint, ops_endpoint,
-                 request_endpoint, submission_endpoint)
-from .version_endpoint import VersionEndpoint
+"""Manage version endpoints."""
+from enum import Enum
+
+from flask import Blueprint, Flask
 
 
-v1_endpoint = VersionEndpoint(
-    name='API_V1',
-    path=VersionEndpoint.EndpointVersionPath.API_V1,
-    bps=[base_endpoint, json_schema_endpoint, notify_endpoint, ops_endpoint, request_endpoint, submission_endpoint])
+class VersionEndpoint:  # pylint: disable=too-few-public-methods
+    """Manage the mounting, traversal and redirects for a versioned enpoint."""
+
+    class EndpointVersionPath(str, Enum):
+        """Enumerate the endpoint mounts used in the system."""
+
+        API_V1 = '/api/v1'
+
+    def __init__(self, name: str, path: EndpointVersionPath, bps: list[Blueprint], app: Flask = None):
+        """Initialize the version endpoint and mount the blueprints to it."""
+        self.app = None
+        self.version_bp = Blueprint(name, __name__, url_prefix=path)
+
+        for blue_print in bps:
+            self.version_bp.register_blueprint(blue_print)
+
+        if app:
+            self.init_app(app)
+
+    def init_app(self, app: Flask):
+        """Add the version endpoint to the app."""
+        if not app:
+            raise Exception('Cannot initialize without a Flask App.')  # pylint: disable=broad-exception-raised
+        self.app = app
+        self.app.register_blueprint(self.version_bp)
