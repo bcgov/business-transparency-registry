@@ -37,12 +37,13 @@ from __future__ import annotations
 import uuid
 from datetime import datetime
 
-from sqlalchemy import ForeignKey
+from sqlalchemy import ForeignKey, DateTime
 from sqlalchemy.orm import Mapped, mapped_column
 from sql_versioning import Versioned
 
 from btr_api.enums import CommentTypes
 from btr_api.models import User as UserModel
+from btr_api.utils import utc_now
 
 from .base import Base
 
@@ -55,8 +56,8 @@ class Comment(Versioned, Base):
     uuid: Mapped[uuid.UUID] = mapped_column(index=True)
     type: Mapped[CommentTypes] = mapped_column(nullable=False, default=CommentTypes.REQUEST)
     submitter_id: Mapped[int] = mapped_column(ForeignKey('users.id'))
-    created_at: Mapped[datetime] = mapped_column(nullable=False, default=datetime.now())
-    updated_at: Mapped[datetime] = mapped_column(nullable=False, default=datetime.now())
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False, default=utc_now)
+    updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False, default=utc_now, onupdate=utc_now)
     related_uuid: Mapped[uuid.UUID] = mapped_column(nullable=False)
     text: Mapped[str] = mapped_column(nullable=True, default=None)
 

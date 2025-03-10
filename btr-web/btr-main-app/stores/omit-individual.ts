@@ -173,7 +173,7 @@ export const useOmitIndividual = defineStore('bcros/omitIndividual', () => {
     if (error?.value?.statusCode && error.value.statusCode >= 500) {
       useGlobalErrorsStore().addGlobalError(SomethingWentWrongError())
     }
-    if (error) {
+    if (error && error.value) {
       return false
     }
     return true
@@ -253,7 +253,7 @@ export const useOmitIndividual = defineStore('bcros/omitIndividual', () => {
     if (error?.value?.statusCode && error.value.statusCode >= 500) {
       useGlobalErrorsStore().addGlobalError(SomethingWentWrongError())
     }
-    if (error) {
+    if (error && error.value) {
       return false
     }
     return true

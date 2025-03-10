@@ -47,6 +47,7 @@ from btr_api.enums import InformationToOmitType
 from btr_api.enums import IndividualAtRisk
 from btr_api.enums import CompletingParty
 from btr_api.enums import RequestStatus
+from btr_api.utils import utc_now
 
 from .base import Base
 
@@ -67,8 +68,8 @@ class Request(Versioned, Base):
     completing_party: Mapped[CompletingParty] = mapped_column(nullable=False)
     completing_name: Mapped[str] = mapped_column(nullable=False)
     completing_email: Mapped[str] = mapped_column(nullable=False)
-    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False, default=datetime.now())
-    updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False, default=datetime.now())
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False, default=utc_now)
+    updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False, default=utc_now, onupdate=utc_now)
     status: Mapped[RequestStatus] = mapped_column(nullable=False, default=RequestStatus.AWAITING_REVIEW)
 
     def __init__(self, data):
