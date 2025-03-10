@@ -1,6 +1,6 @@
 describe('pages -> Add individual', () => {
   beforeEach(() => {
-    cy.visit('/')
+    cy.visitHomePageNoFakeData()
   })
 
   it('verify the control of director component is working', () => {
