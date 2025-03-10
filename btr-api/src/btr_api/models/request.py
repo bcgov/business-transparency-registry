@@ -69,7 +69,8 @@ class Request(Versioned, Base):
     completing_name: Mapped[str] = mapped_column(nullable=False)
     completing_email: Mapped[str] = mapped_column(nullable=False)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False, default=utc_now)
-    updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False, default=utc_now, onupdate=utc_now)
+    updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), 
+                                                 nullable=False, default=utc_now, onupdate=utc_now)
     status: Mapped[RequestStatus] = mapped_column(nullable=False, default=RequestStatus.AWAITING_REVIEW)
 
     def __init__(self, data):

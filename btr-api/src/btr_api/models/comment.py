@@ -57,7 +57,8 @@ class Comment(Versioned, Base):
     type: Mapped[CommentTypes] = mapped_column(nullable=False, default=CommentTypes.REQUEST)
     submitter_id: Mapped[int] = mapped_column(ForeignKey('users.id'))
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False, default=utc_now)
-    updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False, default=utc_now, onupdate=utc_now)
+    updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), 
+                                                 nullable=False, default=utc_now, onupdate=utc_now)
     related_uuid: Mapped[uuid.UUID] = mapped_column(nullable=False)
     text: Mapped[str] = mapped_column(nullable=True, default=None)
 
