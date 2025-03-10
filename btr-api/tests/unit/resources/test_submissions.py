@@ -646,14 +646,14 @@ def test_put_plots(app, client, session, jwt, requests_mock):
         ('Bad path, initial filing, no initial todo',
          {'filingType': 'INITIAL_FILING'}, False, todos_annual_filing, HTTPStatus.BAD_REQUEST),
 
-        # ('Bad path, annual filing, wrong year',
-        #  {'filingType': 'ANNUAL_FILING', 'arFilingForYear': 2029}, False, todos_annual_filing, HTTPStatus.BAD_REQUEST),
+        ('Bad path, annual filing, wrong year',
+         {'filingType': 'ANNUAL_FILING', 'arFilingForYear': 2029}, False, todos_annual_filing, HTTPStatus.BAD_REQUEST),
 
-        # ('Bad path, annual filing, no todos',
-        #  {'filingType': 'ANNUAL_FILING', 'arFilingForYear': 2024}, False, todos_initial_filing, HTTPStatus.BAD_REQUEST),
+        ('Bad path, annual filing, no todos',
+         {'filingType': 'ANNUAL_FILING', 'arFilingForYear': 2024}, False, todos_initial_filing, HTTPStatus.BAD_REQUEST),
 
-        # ('Bad path, change filing, there is initial todo (cannot do change if initial not done)',
-        #  {'filingType': 'CHANGE_FILING'}, True, todos_initial_filing, HTTPStatus.BAD_REQUEST),
+        ('Bad path, change filing, there is initial todo (cannot do change if initial not done)',
+         {'filingType': 'CHANGE_FILING'}, True, todos_initial_filing, HTTPStatus.BAD_REQUEST),
 
         ('Bad path, invalid filing type',
          {'filingType': 'Victoria_Falls'}, False, todos_initial_filing, HTTPStatus.BAD_REQUEST),
