@@ -1,15 +1,8 @@
 <script setup lang='ts'>
 import { watch } from 'vue'
+import { formatDate } from '~/utils/date-utils'
 const props = defineProps<{ comments: [object] }>()
 
-const formatDate = function (date: string) {
-  const options: Intl.DateTimeFormatOptions = {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric'
-  }
-  return new Date(date).toLocaleDateString('en-US', options)
-}
 const displayComments = ref([])
 
 watch(() => props.comments, () => {
@@ -21,7 +14,7 @@ watch(() => props.comments, () => {
     for (const comment of sortedComments) {
       if (!date || new Date(comment.createdAt) < date) {
         date = new Date(comment.createdAt).setHours(0, 0, 0, 0)
-        displayComments.value.push(formatDate(date))
+        displayComments.value.push(formatDate(date, false))
       }
       displayComments.value.push(comment)
     }

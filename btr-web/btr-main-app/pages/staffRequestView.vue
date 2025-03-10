@@ -2,6 +2,7 @@
 
 import { useOmitIndividual } from '@/stores/omit-individual'
 import { RequestStatusesE } from '~/enums/request-statuses-e'
+import { formatDate } from '~/utils/date-utils'
 
 const omitIndividual = useOmitIndividual()
 const MAX_COMMENT_SIZE = 2000
@@ -16,25 +17,6 @@ const statusKeys = Object.keys(RequestStatusesE)
 const statusFilterOptions = []
 for (let i = 0; i < statusKeys.length; i++) {
   statusFilterOptions.push({ value: statusKeys[i], label: RequestStatusesE[statusKeys[i]] })
-}
-
-const formatDate = function (date: string, includeTime?: boolean) {
-  let options: Intl.DateTimeFormatOptions = {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric'
-  }
-  if (typeof includeTime !== 'boolean' || includeTime === true) {
-    options = {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-      hour: 'numeric',
-      minute: 'numeric',
-      timeZoneName: 'long'
-    }
-  }
-  return new Date(date).toLocaleDateString('en-US', options)
 }
 
 onBeforeMount(() => {
@@ -165,10 +147,6 @@ const completingPartyDisplay = computed(() => {
               :label="$t('staffSiView.labels.born')"
               :value="formatDate(activeRequest?.birthdate, false)"
             />
-            <!-- <BcrosInfoLine
-              :label="$t('staffSiView.labels.citizenship')"
-              :value="activeRequest?.birthdate"
-            /> -->
 
             <hr></hr>
 
