@@ -23,6 +23,12 @@ pnpm run dev
 
 ## Testing
 
+### unit
+```bash
+pnpm run test
+```
+
+### e2e
 ```bash
 # build
 pnpm run build:local
