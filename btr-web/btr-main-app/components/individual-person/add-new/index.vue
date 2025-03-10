@@ -111,7 +111,7 @@
               v-model="inputFormSi.name.isUsePreferredName"
               :label="$t('texts.preferredName.checkbox')"
               data-cy="usePreferredName"
-              @change="usePreferredNameCheckboxClickHandler"
+              @change="usePreferredNameCheckboxChangeHandler"
             />
           </UFormGroup>
           <div v-if="inputFormSi.name.isUsePreferredName" class="pt-3 w-full">
@@ -570,7 +570,7 @@ const revertUnchangedEmailField = () => {
     inputFormSi.email = originalValue
   }
 }
-const usePreferredNameCheckboxClickHandler = () => {
+const usePreferredNameCheckboxChangeHandler = () => {
   inputFormSi.name.preferredName = ''
   setNewOrChanged([InputFieldsE.PREFERRED_NAME])
   clearErrors('name.preferredName')
