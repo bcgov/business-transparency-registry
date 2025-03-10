@@ -23,7 +23,7 @@ const formBus = inject<UseEventBusReturn<any, string> | undefined>('form-events'
 const t = useNuxtApp().$i18n.t
 const model = defineModel({ type: String })
 const props = defineProps({ name: { type: String, required: true } })
-
+const emit = defineEmits(['change'])
 const options = [
   {
     range: PercentageRangeE.LESS_THAN_25,
@@ -57,5 +57,6 @@ const selectOption = (index: number) => {
   model.value = options[index].range
   formBus?.emit({ type: 'blur', path: props.name })
   formBus?.emit({ type: 'change', path: props.name })
+  emit('change')
 }
 </script>
