@@ -21,6 +21,25 @@ Start the development server on `http://localhost:3000`:
 pnpm run dev
 ```
 
+## Testing
+
+### unit
+```bash
+pnpm run test
+```
+
+### e2e
+```bash
+# build
+pnpm run build:local
+
+# preview
+pnpm run preview
+
+# test
+pnpm run test:e2e:chrome
+```
+
 ## Production
 
 Build the application for production:
