@@ -371,11 +371,8 @@ def test_auto_reject(app, client, session, jwt, requests_mock, sample_user, test
         id = req.uuid
 
         # Test
-        rv = client.get(
-            f'/requests/auto_reject',
-            headers=create_header(
-                jwt, ['staff'], **{'Accept-Version': 'v1', 'content-type': 'application/json', 'Account-Id': 1}
-            ),
+        rv = client.post(
+            f'/requests/auto_reject'
         )
 
         # Confirm outcome
