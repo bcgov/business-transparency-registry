@@ -354,8 +354,8 @@ def test_auto_reject(app, client, session, jwt, requests_mock, sample_user, test
         session.add(sample_user)
         session.commit()
         # Setup
-        id = ''
-        too_old = utc_now() - timedelta(days=60)
+
+        too_old = utc_now() - timedelta(days=61)
         not_too_old = utc_now() - timedelta(days=59)
         with freeze_time(too_old):
             req = RequestModel(REQUEST_DICT)
@@ -369,7 +369,6 @@ def test_auto_reject(app, client, session, jwt, requests_mock, sample_user, test
 
         with freeze_time(not_too_old):
             req = RequestModel(R3_DICT)
-            req.updatedAt = str(utc_now() - timedelta(days=59))
             session.add(req)
             session.commit()
 
