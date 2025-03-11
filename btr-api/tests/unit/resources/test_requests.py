@@ -4,7 +4,6 @@ import json
 import os
 from datetime import datetime, timedelta
 from http import HTTPStatus
-from freezegun import freeze_time
 
 import pytest
 
@@ -357,28 +356,30 @@ def test_auto_reject(app, client, session, jwt, requests_mock, sample_user, test
 
         too_old = utc_now() - timedelta(days=61)
         not_too_old = utc_now() - timedelta(days=59)
-        now = utc_now()
-        with freeze_time(too_old):
-            req = RequestModel(REQUEST_DICT)
-            session.add(req)
-            session.commit()
+        now = utc_now
+        utc_now = lambda: too_old
+        
+        req = RequestModel(REQUEST_DICT)
+        session.add(req)
+        session.commit()
 
-        with freeze_time(too_old):
-            req = RequestModel(R2_DICT)
-            session.add(req)
-            session.commit()
+        
+        req = RequestModel(R2_DICT)
+        session.add(req)
+        session.commit()
 
-        with freeze_time(not_too_old):
-            req = RequestModel(R3_DICT)
-            session.add(req)
-            session.commit()
+        utc_now = lambda: not_too_old
+        
+        req = RequestModel(R3_DICT)
+        session.add(req)
+        session.commit()
 
+        utc_now = lambda: now
         # Test
-        with freeze_time(now):
-          rv = client.post(
-              f'/requests/auto_reject'
-          )
+        rv = client.post(
+            f'/requests/auto_reject'
+        )
 
           # Confirm outcome
-          assert rv.status_code == HTTPStatus.OK
-          assert '1' in rv.text
+        assert rv.status_code == HTTPStatus.OK
+        assert '1' in rv.text
