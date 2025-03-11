@@ -43,7 +43,7 @@ switch (props.flavour) {
   case AlertsFlavourE.ALERT:
     flavourIcon.value = 'i-mdi-alert'
     flavourIconClass.value = 'text-red-500'
-    flavourContainerClass.value = 'border border-red-500 bg-red-100'
+    flavourContainerClass.value = 'border border-red-500 bg-red-51'
     flavourRole.value = 'alert'
     break
   case AlertsFlavourE.SUCCESS:
