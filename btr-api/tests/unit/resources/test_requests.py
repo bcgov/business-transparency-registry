@@ -4,7 +4,6 @@ import json
 import os
 from datetime import datetime, timedelta
 from http import HTTPStatus
-from freezegun import freeze_time
 
 import pytest
 
@@ -17,7 +16,6 @@ from tests.unit.models.test_user import sample_user
 from tests.unit.utils import create_header
 from tests.unit.utils.db_helpers import clear_db
 from tests.unit.utils.mock_data import REQUEST_DICT, COMMENT_DICT, R2_DICT, R3_DICT
-from btr_api.utils import utc_now
 
 UPDATE_R_DICT = {
     'status': 'REJECTED'
@@ -357,6 +355,7 @@ def test_auto_reject(app, client, session, jwt, requests_mock, sample_user, test
 
         too_old = utc_now() - timedelta(days=61)
         not_too_old = utc_now() - timedelta(days=59)
+        now = utc_now()
         with freeze_time(too_old):
             req = RequestModel(REQUEST_DICT)
             session.add(req)
@@ -373,10 +372,11 @@ def test_auto_reject(app, client, session, jwt, requests_mock, sample_user, test
             session.commit()
 
         # Test
-        rv = client.post(
-            f'/requests/auto_reject'
-        )
+        with freeze_time(now):
+          rv = client.post(
+              f'/requests/auto_reject'
+          )
 
-        # Confirm outcome
-        assert rv.status_code == HTTPStatus.OK
-        assert '1' in rv.text
+          # Confirm outcome
+          assert rv.status_code == HTTPStatus.OK
+          assert '1' in rv.text
