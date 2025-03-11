@@ -355,17 +355,17 @@ def test_auto_reject(app, client, session, jwt, requests_mock, sample_user, test
         # Setup
         id = ''
         req = RequestModel(REQUEST_DICT)
-        req.updated_at = utc_now() - timedelta(days=60)
+        req.updated_at = str(utc_now() - timedelta(days=60))
         session.add(req)
         session.commit()
 
         req = RequestModel(R2_DICT)
-        req.updated_at = utc_now() - timedelta(days=60)
+        req.updated_at = str(utc_now() - timedelta(days=60))
         session.add(req)
         session.commit()
 
         req = RequestModel(R3_DICT)
-        req.updated_at = utc_now() - timedelta(days=59)
+        req.updated_at = str(utc_now() - timedelta(days=59))
         session.add(req)
         session.commit()
         id = req.uuid
