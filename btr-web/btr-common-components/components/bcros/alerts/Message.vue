@@ -1,21 +1,21 @@
 <template>
   <div
-    class="grid grid-cols-12 gap-1 p-4"
+    class="flex gap-1 px-7 py-5"
     :class="flavourContainerClass"
     :role="flavourRole"
     :data-cy="'alertsMessage:' + flavour"
   >
-    <div class="py-3 px-0">
+    <div class="flex">
       <slot name="icon">
         <UIcon
           v-if="flavourIcon"
           :class="flavourIconClass"
-          class="mt-[2px] text-2xl float-right"
+          class="text-xl float-right"
           :name="flavourIcon"
         />
       </slot>
     </div>
-    <div class="p-2 col-span-11 text-sm">
+    <div class="flex-grow text-sm">
       <slot name="default" />
     </div>
   </div>
