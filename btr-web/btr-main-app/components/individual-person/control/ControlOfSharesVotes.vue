@@ -10,6 +10,7 @@
         :data-cy="'test-' + name"
         class="pb-6"
         :name="name + '.percentage'"
+        @change="$emit('change')"
       />
     </UFormGroup>
 
@@ -108,6 +109,8 @@ const model = defineModel({
   type: Object as PropType<SiControlOfSchemaType>,
   required: true
 })
+
+defineEmits(['change'])
 
 const props = defineProps({
   name: { type: String, default: 'name' }
