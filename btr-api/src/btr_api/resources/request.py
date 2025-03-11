@@ -296,7 +296,7 @@ def auto_reject_requests():
     days_of_awaiting = int(current_app.config.get('DAYS_TO_AUTO_REJECT_REQUESTS', 60))
     query = RequestModel.query
     query = query.filter(RequestModel.status == RequestStatus.INFO_REQUESTED)
-    query = query.filter(RequestModel.updated_at < (utc_now() - timedelta(days=days_of_awaiting)))
+    query = query.filter(RequestModel.updated_at < str(utc_now() - timedelta(days=days_of_awaiting)))
     requests = query.all()
     update_dict = {
         'status': RequestStatus.REJECTED
