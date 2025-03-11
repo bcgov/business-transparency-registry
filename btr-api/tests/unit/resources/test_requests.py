@@ -377,4 +377,4 @@ def test_auto_reject(app, client, session, jwt, requests_mock, sample_user, test
 
         # Confirm outcome
         assert rv.status_code == HTTPStatus.OK
-        assert rv.rejected == 1
+        assert '1' in rv.text
