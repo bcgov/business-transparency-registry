@@ -4,6 +4,7 @@ import json
 import os
 from datetime import datetime, timedelta
 from http import HTTPStatus
+from freezegun import freeze_time
 
 import pytest
 
@@ -354,21 +355,23 @@ def test_auto_reject(app, client, session, jwt, requests_mock, sample_user, test
         session.commit()
         # Setup
         id = ''
-        req = RequestModel(REQUEST_DICT)
-        req.updatedAt = str(utc_now() - timedelta(days=60))
-        session.add(req)
-        session.commit()
+        too_old = utc_now() - timedelta(days=60)
+        not_too_old = utc_now() - timedelta(days=59)
+        with freeze_time(too_old):
+            req = RequestModel(REQUEST_DICT)
+            session.add(req)
+            session.commit()
 
-        req = RequestModel(R2_DICT)
-        req.updatedAt = str(utc_now() - timedelta(days=60))
-        session.add(req)
-        session.commit()
+        with freeze_time(too_old):
+            req = RequestModel(R2_DICT)
+            session.add(req)
+            session.commit()
 
-        req = RequestModel(R3_DICT)
-        req.updatedAt = str(utc_now() - timedelta(days=59))
-        session.add(req)
-        session.commit()
-        id = req.uuid
+        with freeze_time(not_too_old):
+            req = RequestModel(R3_DICT)
+            req.updatedAt = str(utc_now() - timedelta(days=59))
+            session.add(req)
+            session.commit()
 
         # Test
         rv = client.post(
