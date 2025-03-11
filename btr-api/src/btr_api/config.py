@@ -121,7 +121,7 @@ class Config:  # pylint: disable=too-few-public-methods
 
     LEGISLATIVE_TIMEZONE = os.getenv('LEGISLATIVE_TIMEZONE', 'America/Vancouver')
 
-    DAYS_TO_AUTO_REJECT_REQUESTS=os.getenv('DAYS_TO_AUTO_REJECT_REQUESTS', 60)
+    DAYS_TO_AUTO_REJECT_REQUESTS=os.getenv('DAYS_TO_AUTO_REJECT_REQUESTS', '60')
 
     # Cache stuff
     CACHE_TYPE = os.getenv('CACHE_TYPE', 'FileSystemCache')
