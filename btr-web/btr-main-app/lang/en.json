@@ -484,7 +484,7 @@
     "important": "Important",
     "siIsMinor": {
       "message": "This individual’s information will be omitted from publicly accessible information until the date they turn 19 years old. At that point, the individual can request for their information to remain omitted by filling out the appropriate form and providing reason for omission.",
-      "summaryAlert": "This individual is a minor and will be omitted from public view until they turn 19 years old."
+      "summaryAlert": "This individual is a minor and will be {boldStart}omitted from public view until they turn 19 years old.{boldEnd}"
     },
     "determinationOfIncapacity": {
       "omitted": "{boldStart}Important:{boldEnd} This individual’s information will be omitted from, or obscured in, publicly accessible information.",
@@ -580,7 +580,7 @@
       "completingParty": "Completing Party",
       "comment": "Comment",
       "status": "Omit Application Status",
-      "timeline": "Communiation Timeline"
+      "timeline": "Communication Timeline"
     },
     "labels": {
       "bizName": "Business Name",
@@ -590,7 +590,7 @@
       "born": "Born",
       "citizenship": "Citizenship / Permanent Residency",
       "informationToOmit": "Information to Omit",
-      "individualAtRisk": "Indiviual at Risk",
+      "individualAtRisk": "Individual at Risk",
       "reasons": "Reasons",
       "SI": "Significant Individual",
       "HOUSEHOLD": "Members of the significant individual's household",

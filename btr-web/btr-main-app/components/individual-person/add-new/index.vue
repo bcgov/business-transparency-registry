@@ -367,6 +367,7 @@
             v-if="isMinor(inputFormSi.birthDate)"
             class="mt-9"
             :flavour="AlertsFlavourE.INFO"
+            data-cy="form-minor-warning"
           >
             <div>{{ $t('alerts.important') }}: {{ $t('alerts.siIsMinor.message') }}</div>
           </BcrosAlertsMessage>

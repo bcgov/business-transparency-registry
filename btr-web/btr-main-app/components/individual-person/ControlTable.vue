@@ -13,7 +13,7 @@
           <BcrosAlertsMessage
             :flavour="AlertsFlavourE.ALERT"
           >
-            <p class="py-2">
+            <p>
               <strong>{{ $t('controlTable.body.alert.important') }}</strong>
               <BcrosI18HelperBold translation-path="controlTable.body.alert.message" />
             </p>

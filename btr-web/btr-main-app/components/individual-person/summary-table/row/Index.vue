@@ -109,14 +109,17 @@ const opacityClass = computed(() => {
     -->
   <tr v-if="isMinor(si.birthDate)" data-cy="summary-table-row-minor">
     <td colspan="5">
-      <BcrosAlertsMessage :flavour="AlertsFlavourE.ALERT">
+      <BcrosAlertsMessage
+        :flavour="AlertsFlavourE.ALERT"
+        data-cy="summary-table-row-minor-alert"
+      >
         <template #icon>
           <UIcon
             class="text-red-500 mt-[2px] text-xl float-right"
             name="i-mdi-circle-off-outline"
           />
         </template>
-        <div>{{ $t('alerts.important') }}: {{ $t('alerts.siIsMinor.summaryAlert') }}</div>
+        <div>{{ $t('alerts.important') }}: <BcrosI18HelperBold translation-path="alerts.siIsMinor.summaryAlert" /></div>
       </BcrosAlertsMessage>
     </td>
   </tr>
