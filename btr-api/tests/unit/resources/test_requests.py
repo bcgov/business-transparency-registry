@@ -16,6 +16,7 @@ from tests.unit.models.test_user import sample_user
 from tests.unit.utils import create_header
 from tests.unit.utils.db_helpers import clear_db
 from tests.unit.utils.mock_data import REQUEST_DICT, COMMENT_DICT, R2_DICT, R3_DICT
+from btr_api.utils import utc_now
 
 UPDATE_R_DICT = {
     'status': 'REJECTED'
