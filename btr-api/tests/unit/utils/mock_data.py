@@ -521,6 +521,34 @@ REQUEST_DICT = {
     'status': "AWAITING_REVIEW"
 }
 
+R2_DICT = {
+    'fullName': 'John Doe',
+    'email': 'jdoe@gmail.com',
+    'birthdate': '1970-03-31',
+    'businessIdentifier': 'BUSID',
+    'informationToOmit': ['ALL'],
+    'individualAtRisk': ['SI'],
+    'reasons': 'I have some',
+    'completingParty': 'SI',
+    'completingName': 'John Doe',
+    'completingEmail': 'jdoe@gmail.com',
+    'status': "INFO_REQUESTED"
+}
+
+R3_DICT = {
+    'fullName': 'John Doe',
+    'email': 'jdoe@gmail.com',
+    'birthdate': '1970-03-31',
+    'businessIdentifier': 'BUSID',
+    'informationToOmit': ['ALL'],
+    'individualAtRisk': ['SI'],
+    'reasons': 'I have some',
+    'completingParty': 'SI',
+    'completingName': 'John Doe',
+    'completingEmail': 'jdoe@gmail.com',
+    'status': "INFO_REQUESTED"
+}
+
 COMMENT_DICT = {
   'text': 'This is a comment',
   'type': 'REQUEST',

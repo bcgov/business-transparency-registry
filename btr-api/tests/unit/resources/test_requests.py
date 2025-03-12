@@ -2,27 +2,21 @@
 """
 import json
 import os
-from datetime import datetime
+from datetime import datetime, timedelta
 from http import HTTPStatus
 
 import pytest
-import requests
-from dateutil.relativedelta import relativedelta
 
 from btr_api.enums import UserType
 from btr_api.models import Request as RequestModel
 from btr_api.models import Comment as CommentModel
-from btr_api.models import User as UserModel
-from btr_api.models.request import RequestSerializer
-from btr_api.services import RequestService
-from btr_api.services.auth import auth_cache
-from btr_api.utils import redact_information
 
 from tests.unit import nested_session
 from tests.unit.models.test_user import sample_user
 from tests.unit.utils import create_header
 from tests.unit.utils.db_helpers import clear_db
-from tests.unit.utils.mock_data import REQUEST_DICT, COMMENT_DICT
+from tests.unit.utils.mock_data import REQUEST_DICT, COMMENT_DICT, R2_DICT, R3_DICT
+# from btr_api.utils import utc_now as actual_utc_now
 
 UPDATE_R_DICT = {
     'status': 'REJECTED'
@@ -346,3 +340,45 @@ def test_post_comment_fail_no_auth(app, client, session, jwt, requests_mock, sam
 
         # Confirm outcome
         assert rv.status_code == HTTPStatus.UNAUTHORIZED
+
+@pytest.mark.parametrize(
+    'test_name',
+    [('test_auto_reject')],
+)
+def test_auto_reject(app, client, session, jwt, requests_mock, sample_user, test_name):
+    """Auto reject requests in info requsted for more than 60 days.
+    """
+    with nested_session(session):
+        clear_db(session)
+        session.add(sample_user)
+        session.commit()
+        # Setup
+
+        # too_old = actual_utc_now() - timedelta(days=61)
+        # not_too_old = actual_utc_now() - timedelta(days=59)
+        # utc_now = lambda: too_old
+        
+        req = RequestModel(REQUEST_DICT)
+        session.add(req)
+        session.commit()
+
+        
+        req = RequestModel(R2_DICT)
+        session.add(req)
+        session.commit()
+
+        # utc_now = lambda: not_too_old
+        
+        req = RequestModel(R3_DICT)
+        session.add(req)
+        session.commit()
+
+        # utc_now = lambda: actual_utc_now()
+        # Test
+        rv = client.post(
+            f'/requests/auto_reject'
+        )
+
+          # Confirm outcome
+        assert rv.status_code == HTTPStatus.OK
+        # assert '1' in rv.text

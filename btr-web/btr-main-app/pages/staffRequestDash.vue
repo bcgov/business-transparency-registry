@@ -107,26 +107,26 @@ const headers = [
       if (typeof item === 'string') {
         item = { status: item }
       }
-      const start = '<span class="text-lg text-'
+      const start = '<span class="text-lg '
       let rv = t('staffSiTable.statuses.' + item.status)
       switch (item.status.toLowerCase()) {
         case 'passed':
-          rv = `${start}[#2e7d32]">&bull;</span> ${rv}`
+          rv = `${start}text-[#2e7d32]">&bull;</span> ${rv}`
           break
         case 'rejected':
-          rv = `${start}[#dee2e6]">&bull;</span> ${rv}`
+          rv = `${start}text-[#dee2e6]">&bull;</span> ${rv}`
           break
         case 'awaiting_review':
-          rv = `${start}[#f8661a]">&bull;</span> ${rv}`
+          rv = `${start}text-[#f8661a]">&bull;</span> ${rv}`
           break
         case 'in_review':
-          rv = `${start}[#1669bb]">&bull;</span> ${rv}`
+          rv = `${start}text-[#1669bb]">&bull;</span> ${rv}`
           break
         case 'info_requested':
-          rv = `${start}[#f8661a]">&bull;</span> ${rv}`
+          rv = `${start}text-[#f8661a]">&bull;</span> ${rv}`
           break
         case 'under_appeal':
-          rv = `${start}[#d3272c]">&bull;</span> ${rv}`
+          rv = `${start}text-[#d3272c]">&bull;</span> ${rv}`
           break
         default:
           break

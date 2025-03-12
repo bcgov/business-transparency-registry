@@ -38,6 +38,7 @@ It provides endpoints to create and retrieve request objects.
 The 'get_request' and 'create_request' functions define the 'GET' and 'POST' methods respectively.
 
 """
+from datetime import timedelta
 import uuid
 from http import HTTPStatus
 from flask import Blueprint
@@ -61,6 +62,8 @@ from btr_api.services import RequestService
 from btr_api.services import CommentService
 from btr_api.enums import UserType
 from btr_api.enums import CommentTypes
+from btr_api.utils import utc_now
+from btr_api.enums import RequestStatus
 
 bp = Blueprint('request', __name__)
 
@@ -285,3 +288,24 @@ def get_all_comments(req_uuid: str):  # pylint: disable=redefined-builtin
         return exception_response(aex)
     except Exception as exception:  # noqa: B902
         return exception_response(exception)
+
+
+@bp.route('/auto_reject', methods=('POST',))
+def auto_reject_requests():
+    """Auto reject requests."""
+    days_of_awaiting = int(current_app.config.get('DAYS_TO_AUTO_REJECT_REQUESTS', 60))
+    query = RequestModel.query
+    query = query.filter(RequestModel.status == RequestStatus.INFO_REQUESTED)
+    query = query.filter(RequestModel.updated_at < str(utc_now() - timedelta(days=days_of_awaiting)))
+    requests = query.all()
+    update_dict = {
+        'status': RequestStatus.REJECTED
+    }
+    num_rejected = 0
+
+    for req in requests:
+        req = RequestService.update_request(req, update_dict)
+        req.save()
+        num_rejected = num_rejected + 1
+
+    return jsonify({'rejected': num_rejected}), HTTPStatus.OK
