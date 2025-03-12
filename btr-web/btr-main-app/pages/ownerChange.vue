@@ -37,7 +37,7 @@ const toggleEditingMode = () => {
 function handleAddNewButtonClick () {
   expandNewSI.value = true
   isAddingNewSI.value = true
-  clearNoSignificantIndividualsExistError()
+  clearIncompleteFilingError()
 }
 
 function addNewSI (si: SiSchemaType) {

@@ -105,6 +105,7 @@ export default <Partial<Config>>{
         red: {
           // generated on http://mcg.mbitson.com/#!?mcgpalette0=%232e8540 using #D3272C as base
           50: '#FAE5E6',
+          51: '#FAE9E9',
           100: '#F2BEC0',
           200: '#E99396',
           300: '#E0686B',

@@ -362,6 +362,15 @@
               setNewOrChanged([InputFieldsE.BIRTH_DATE])"
             @change="setNewOrChanged([InputFieldsE.BIRTH_DATE])"
           />
+
+          <BcrosAlertsMessage
+            v-if="isMinor(inputFormSi.birthDate)"
+            class="mt-9"
+            :flavour="AlertsFlavourE.INFO"
+            data-cy="form-minor-warning"
+          >
+            <div>{{ $t('alerts.important') }}: {{ $t('alerts.siIsMinor.message') }}</div>
+          </BcrosAlertsMessage>
         </div>
       </BcrosSection>
 
@@ -524,7 +533,7 @@ import { getDefaultInputFormSi, getEmptyAddress } from '~/utils/si-schema/defaul
 import { CustomSiSchemaErrorMap } from '~/utils/si-schema/errorMessagesMap'
 import DeterminationOfIncapacity from '~/components/individual-person/DeterminationOfIncapacity.vue'
 import { NameChangeReasonE } from '~/enums/significant-individual/name-change-reason-e'
-import { InputFieldsE } from '#imports'
+import { InputFieldsE, isMinor } from '#imports'
 
 const emits = defineEmits<{
   add: [value: SiSchemaType],

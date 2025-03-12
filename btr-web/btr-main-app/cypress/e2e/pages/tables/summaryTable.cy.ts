@@ -350,6 +350,9 @@ describe('pages -> Summary Table', () => {
 
       cy.get('[data-cy=action-button]').first().click()
 
+      // currently any test SI added is added with date today so they will have minior warning
+      cy.get('[data-cy="summary-table-row-minor-alert"]').should('exist')
+
       cy.get('#individual-person-full-name').should('have.value', testData.profile3.fullName)
       cy.get('#individual-person-preferred-name').should('have.value', testData.profile3.preferredName)
       cy.get('#individual-person-email').should('have.value', testData.profile3.email)

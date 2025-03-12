@@ -1,4 +1,4 @@
-  {
+{
   "general": {
     "optional": "Optional",
     "regName": "BC Business Transparency Registry",
@@ -481,6 +481,11 @@
     "individualsDetails": "Enter as much information about this individual as you can reasonably obtain. If you cannot obtain some information, enter the steps and efforts you took to try and obtain the information at the bottom of this form."
   },
   "alerts": {
+    "important": "Important",
+    "siIsMinor": {
+      "message": "This individual’s information will be omitted from publicly accessible information until the date they turn 19 years old. At that point, the individual can request for their information to remain omitted by filling out the appropriate form and providing reason for omission.",
+      "summaryAlert": "This individual is a minor and will be {boldStart}omitted from public view until they turn 19 years old.{boldEnd}"
+    },
     "determinationOfIncapacity": {
       "omitted": "{boldStart}Important:{boldEnd} This individual’s information will be omitted from, or obscured in, publicly accessible information.",
       "proof": "{boldStart}Attention:{boldEnd} The Registrar may request proof of the determination of incapacity. The company must retain proof of the determination of incapacity made by a court, health authority designate or prescribed individual as long as this individual is incapable of managing their own affairs."
@@ -575,7 +580,7 @@
       "completingParty": "Completing Party",
       "comment": "Comment",
       "status": "Omit Application Status",
-      "timeline": "Communiation Timeline"
+      "timeline": "Communication Timeline"
     },
     "labels": {
       "bizName": "Business Name",
@@ -585,7 +590,7 @@
       "born": "Born",
       "citizenship": "Citizenship / Permanent Residency",
       "informationToOmit": "Information to Omit",
-      "individualAtRisk": "Indiviual at Risk",
+      "individualAtRisk": "Individual at Risk",
       "reasons": "Reasons",
       "SI": "Significant Individual",
       "HOUSEHOLD": "Members of the significant individual's household",

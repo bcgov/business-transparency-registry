@@ -4,6 +4,7 @@ import {
   IndividualPersonSummaryTableRowCessationEntry
 } from '#components'
 import { SiSchemaType } from '~/utils/si-schema/definitions'
+
 type ActionBtnT = {
   action: Function,
   actionArg?: number,
@@ -106,9 +107,20 @@ const opacityClass = computed(() => {
       the v-if is set to false until the feature is implemented;
       rules for minor: #20621
     -->
-  <tr v-if="false" data-cy="summary-table-row-minor">
+  <tr v-if="isMinor(si.birthDate)" data-cy="summary-table-row-minor">
     <td colspan="5">
-      TBD - Message for Minor SI
+      <BcrosAlertsMessage
+        :flavour="AlertsFlavourE.ALERT"
+        data-cy="summary-table-row-minor-alert"
+      >
+        <template #icon>
+          <UIcon
+            class="text-red-500 mt-[2px] text-xl float-right"
+            name="i-mdi-circle-off-outline"
+          />
+        </template>
+        <div>{{ $t('alerts.important') }}: <BcrosI18HelperBold translation-path="alerts.siIsMinor.summaryAlert" /></div>
+      </BcrosAlertsMessage>
     </td>
   </tr>
 
