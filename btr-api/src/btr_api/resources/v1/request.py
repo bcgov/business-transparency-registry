@@ -65,10 +65,10 @@ from btr_api.enums import CommentTypes
 from btr_api.utils import utc_now
 from btr_api.enums import RequestStatus
 
-bp = Blueprint('request', __name__)
+bp = Blueprint('request', __name__, url_prefix="/requests")
 
 
-@bp.route('/', methods=('GET',))
+@bp.route('', methods=('GET',))
 @cross_origin(origin='*')
 @jwt.requires_auth
 @jwt.requires_roles([UserType.USER_STAFF])
@@ -140,7 +140,7 @@ def get_request(id: uuid.UUID | None = None):  # pylint: disable=redefined-built
         return exception_response(exception)
 
 
-@bp.route('/', methods=('POST',))
+@bp.route('', methods=('POST',))
 @cross_origin(origin='*')
 def create_request():
     """

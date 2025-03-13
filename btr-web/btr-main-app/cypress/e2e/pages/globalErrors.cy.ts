@@ -2,7 +2,7 @@ describe('Displaying global errors', () => {
   it('Show Error modal on 500', () => {
     cy.intercept(
       'GET',
-      '/plots/entity/BC0871427',
+      '/api/v1/plots/entity/BC0871427',
       { statusCode: 500, body: { error: 'Something went wrong', message: 'Error fetching data' } }
     ).as('existingSIs')
 

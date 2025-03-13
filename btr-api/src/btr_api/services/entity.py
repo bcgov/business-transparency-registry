@@ -165,6 +165,9 @@ class EntityService:
                                            message=('Ledger update error: %s, %s',
                                                     submission.business_identifier,
                                                     submission.ledger_reference_number)) from err
+        except ExternalServiceException as err:
+            # pass along
+            raise err
         except Exception as err:
             self.app.logger.debug('Legal-api submit filing failure:', repr(err))
             raise ExternalServiceException(error=repr(err),

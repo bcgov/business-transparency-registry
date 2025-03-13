@@ -60,7 +60,7 @@ from btr_api.services import SubmissionService
 from btr_api.services.validator import validate_entity, validate_tr_filing_for_type
 from btr_api.utils import redact_information
 
-bp = Blueprint('submission', __name__)
+bp = Blueprint('submission', __name__, url_prefix='/plots')
 
 
 @bp.route('/<id>', methods=('GET',))
@@ -105,7 +105,7 @@ def get_entity_submission(business_identifier: str):
         return exception_response(exception)
 
 
-@bp.route('/', methods=('POST',))
+@bp.route('', methods=('POST',))
 @cross_origin(origin='*')
 @jwt.requires_auth
 def create_register():

@@ -48,7 +48,9 @@ from .common.flags import Flags
 from .common.run_version import get_run_version
 from .config import Development, Migration, Production, Sandbox, Testing
 from .models import db
-from .resources import register_endpoints
+from .resources import v1_endpoint
+from .resources.base import bp as base_bp
+from .resources.ops import bp as ops_bp
 from .services import btr_auth, btr_bor, btr_email, btr_entity, btr_reg_search
 from .translations import babel
 
@@ -83,7 +85,9 @@ def create_app(environment=os.getenv('DEPLOYMENT_ENV', 'production'), **kwargs) 
         td = kwargs.get('ld_test_data', None)
         Flags().init_app(app, td)
         babel.init_app(app)
-        register_endpoints(app)
+        app.register_blueprint(base_bp)
+        app.register_blueprint(ops_bp)
+        v1_endpoint.init_app(app)
         setup_jwt_manager(app, jwt)
         error.init_app(app)
 

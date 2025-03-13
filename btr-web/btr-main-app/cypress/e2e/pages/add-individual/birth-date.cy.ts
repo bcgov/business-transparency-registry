@@ -2,7 +2,7 @@ import { dateToString } from '../../../../../btr-common-components/utils/date'
 
 describe('pages -> Add individual', () => {
   beforeEach(() => {
-    cy.visit('/')
+    cy.visitHomePageNoFakeData()
   })
 
   it('verify birth date minor warning is there, and goes away if 19+ age is selected', () => {

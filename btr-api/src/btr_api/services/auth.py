@@ -151,14 +151,16 @@ class AuthService:
         except exceptions.Timeout as err:
             self.app.logger.debug('SSO SVC connection timeout: %s', err.with_traceback(None))
             raise ExternalServiceException(
-                HTTPStatus.GATEWAY_TIMEOUT,
-                [{'message': 'Unable to get service account token.', 'reason': err.with_traceback(None)}],
+                status_code=HTTPStatus.GATEWAY_TIMEOUT,
+                error=err.with_traceback(None),
+                message='Unable to get service account token.',
             ) from err
         except Exception as err:  # noqa: B902
             self.app.logger.debug('SSO SVC connection failure: %s', err.with_traceback(None))
             raise ExternalServiceException(
-                HTTPStatus.SERVICE_UNAVAILABLE,
-                [{'message': 'Unable to get service account token.', 'reason': err.with_traceback(None)}],
+                status_code=HTTPStatus.GATEWAY_TIMEOUT,
+                error=err.with_traceback(None),
+                message='Unable to get service account token.',
             ) from err
 
     def get_authorization_header(self, request: Request) -> str:

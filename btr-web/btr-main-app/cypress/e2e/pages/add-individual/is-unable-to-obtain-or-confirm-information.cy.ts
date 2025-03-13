@@ -1,6 +1,6 @@
 describe('pages -> Add individual', () => {
   beforeEach(() => {
-    cy.visit('/')
+    cy.visitHomePageNoFakeData()
   })
 
   it('renders the isUnableToObtainOrConfirmInformation section and all basic boxes show on trigger', () => {
