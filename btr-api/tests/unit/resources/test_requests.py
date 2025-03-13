@@ -376,7 +376,7 @@ def test_auto_reject(app, client, session, jwt, requests_mock, sample_user, test
         # utc_now = lambda: actual_utc_now()
         # Test
         rv = client.post(
-            f'/requests/auto_reject'
+            f'/api/v1/requests/auto_reject'
         )
 
           # Confirm outcome
