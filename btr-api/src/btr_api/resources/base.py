@@ -44,7 +44,7 @@ from flask import request
 bp = Blueprint("base", __name__)
 
 
-@bp.route("", methods=("GET",))
+@bp.route("/", methods=("GET",))
 def home():
     """
     Handle GET request to the home route.

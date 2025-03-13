@@ -32,7 +32,7 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 """Exposes the versioned endpoints."""
-from .v1 import (base_endpoint, json_schema_endpoint, notify_endpoint, ops_endpoint,
+from .v1 import (json_schema_endpoint, notify_endpoint,
                  request_endpoint, submission_endpoint)
 from .version_endpoint import VersionEndpoint
 
@@ -40,4 +40,4 @@ from .version_endpoint import VersionEndpoint
 v1_endpoint = VersionEndpoint(
     name='API_V1',
     path=VersionEndpoint.EndpointVersionPath.API_V1,
-    bps=[base_endpoint, json_schema_endpoint, notify_endpoint, ops_endpoint, request_endpoint, submission_endpoint])
+    bps=[json_schema_endpoint, notify_endpoint, request_endpoint, submission_endpoint])

@@ -84,12 +84,11 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{internal_url}}/{{api_version}}/ops/readyz",
+							"raw": "{{internal_url}}/ops/readyz",
 							"host": [
 								"{{internal_url}}"
 							],
 							"path": [
-								"{{api_version}}",
 								"ops",
 								"readyz"
 							]
@@ -103,12 +102,11 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{internal_url}}/{{api_version}}/ops/healthz",
+							"raw": "{{internal_url}}/ops/healthz",
 							"host": [
 								"{{internal_url}}"
 							],
 							"path": [
-								"{{api_version}}",
 								"ops",
 								"healthz"
 							]
@@ -634,12 +632,9 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{internal_url}}/{{api_version}}",
+					"raw": "{{internal_url}}",
 					"host": [
 						"{{internal_url}}"
-					],
-					"path": [
-						"{{api_version}}"
 					]
 				}
 			},
