@@ -6,6 +6,7 @@ export default defineNuxtRouteMiddleware((to) => {
     RouteNameE.MY_REG_DETAILS,
     RouteNameE.REVIEW_CONFIRM,
     RouteNameE.REQUEST_OMIT,
+    RouteNameE.REQUEST_OMIT_SUBMITTED,
     RouteNameE.STAFF_SI_DASH,
     RouteNameE.STAFF_REQ_VIEW
   ]

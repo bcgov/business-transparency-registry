@@ -51,7 +51,7 @@ export default <RouterConfig> {
     {
       name: RouteNameE.REQUEST_OMIT,
       path: '/request-to-omit',
-      component: () => import('~/pages/requestToOmit.vue').then(r => r.default || r),
+      component: () => import('~/pages/requestToOmit/index.vue').then(r => r.default || r),
       meta: {
         breadcrumbs: [getBcrosHomeDashboardCrumb, getRequestOmitCrumb],
         layout: 'omit',
@@ -60,6 +60,16 @@ export default <RouterConfig> {
           leftButtons: [],
           rightButtons: [getOmitSubmitButton]
         }
+      }
+    },
+    {
+      name: RouteNameE.REQUEST_OMIT_SUBMITTED,
+      path: '/request-to-omit-submitted',
+      component: () => import('~/pages/requestToOmit/Submitted.vue').then(r => r.default || r),
+      meta: {
+        breadcrumbs: [getBcrosHomeDashboardCrumb, getRequestOmitCrumb],
+        layout: 'omit-submitted',
+        title: 'Request to Omit Information Submitted'
       }
     },
     {
