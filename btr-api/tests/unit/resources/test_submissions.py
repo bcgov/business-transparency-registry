@@ -9,6 +9,7 @@ from zoneinfo import ZoneInfo
 import pytest
 import requests
 from dateutil.relativedelta import relativedelta
+from flask import jsonify
 
 from btr_api.enums import UserType
 from btr_api.models import Submission as SubmissionModel
@@ -147,7 +148,7 @@ def test_get_plots(app, client, session, jwt, requests_mock, sample_user, test_n
             json=[{'code': 'CA_SEARCH', 'subscriptionStatus': 'ACTIVE'}])
         # Test
         rv = client.get(
-            f'/plots/{id}',
+            f'/api/v1/plots/{id}',
             headers=create_header(
                 jwt, ['basic'], **{'Accept-Version': 'v1', 'content-type': 'application/json', 'Account-Id': 1}
             ),
@@ -222,7 +223,7 @@ def test_get_plots_auth(
             headers = {'Accept-Version': 'v1', 'content-type': 'application/json', 'Account-Id': 1}
 
         # Test
-        rv = client.get(f'/plots/{search_id}', headers=headers)
+        rv = client.get(f'/api/v1/plots/{search_id}', headers=headers)
 
     # Confirm outcome
     assert rv.status_code == expected_http_status
@@ -287,7 +288,7 @@ def test_create_update_plots_auth(
                 headers = {'Accept-Version': 'v1', 'content-type': 'application/json', 'Account-Id': 1}
 
             # Test
-            rv = client.post('/plots', json=json_data, headers=headers)
+            rv = client.post('/api/v1/plots', json=json_data, headers=headers)
 
     # Confirm outcome
     assert rv.status_code == expected_http_status
@@ -340,7 +341,7 @@ def test_post_plots_db_mocked(app, session, client, jwt, mocker, requests_mock):
         )
 
         rv = client.post(
-            '/plots',
+            '/api/v1/plots',
             json=json_data,
             headers=create_header(
                 jwt,
@@ -447,7 +448,7 @@ def test_post_plots(app, client, session, jwt, requests_mock):
             clear_db(session)
             mocked_username = 'wibbly wabble'
             rv = client.post(
-                '/plots',
+                '/api/v1/plots',
                 json=json_data,
                 headers=create_header(
                     jwt_manager=jwt,
@@ -522,7 +523,7 @@ def test_put_plots(app, client, session, jwt, requests_mock):
             mocked_username = 'wibbly wabble'
             print(json_data['businessIdentifier'])
             rv = client.post(
-                '/plots',
+                '/api/v1/plots',
                 json=json_data,
                 headers=create_header(
                     jwt_manager=jwt,
@@ -539,7 +540,7 @@ def test_put_plots(app, client, session, jwt, requests_mock):
             assert rv.json['payload'].get('personStatements')
             assert rv.json['payload'].get('ownershipOrControlStatements')
             # need to get api generated statement ids
-            url = f'/plots/{submission_id}'
+            url = f'/api/v1/plots/{submission_id}'
             person_stmnt_id = rv.json['payload']['personStatements'][0]['statementID']
             ownership_stmnt_id = rv.json['payload']['ownershipOrControlStatements'][0]['statementID']
             put_data = {
@@ -662,7 +663,7 @@ def test_filing_type(
     app, client, session, jwt, requests_mock, test_name, filing_data, is_change, todos_response, expected_http_status
 ):
     """Assure business rules validation around filingType works."""
-    auth_mock = requests_mock.post(app.config.get('SSO_SVC_TOKEN_URL'), json={'access_token': 'token'})
+    requests_mock.post(app.config.get('SSO_SVC_TOKEN_URL'), json={'access_token': 'token'})
 
     current_dir = os.path.dirname(__file__)
     with open(os.path.join(current_dir, '..', '..', 'mocks', 'significantIndividualsFiling', 'valid.json')) as file:
@@ -698,7 +699,7 @@ def test_filing_type(
                     f"{app.config.get('LEGAL_SVC_URL')}/businesses/{identifier}/tasks", json=todos_initial_filing
                 )
                 rv = client.post(
-                    '/plots',
+                    'api/v1/plots',
                     json=json_data,
                     headers=create_header(
                         jwt_manager=jwt,
@@ -714,7 +715,7 @@ def test_filing_type(
                 assert rv.json['payload'].get('ownershipOrControlStatements')
 
                 # need to get api generated statement ids
-                url = f'/plots/{submission_id}'
+                url = f'api/v1/plots/{submission_id}'
                 person_stmnt_id = rv.json['payload']['personStatements'][0]['statementID']
                 ownership_stmnt_id = rv.json['payload']['ownershipOrControlStatements'][0]['statementID']
 
@@ -746,7 +747,7 @@ def test_filing_type(
                     f"{app.config.get('LEGAL_SVC_URL')}/businesses/{identifier}/tasks", json=todos_response
                 )
                 rv = client.post(
-                    '/plots',
+                    'api/v1/plots',
                     json=json_data,
                     headers=create_header(
                         jwt_manager=jwt,
@@ -791,7 +792,7 @@ def test_post_plots_auth_error(app, client, session, jwt, requests_mock):
             auth_cache.clear()
             clear_db(session)
             rv = client.post(
-                '/plots',
+                '/api/v1/plots',
                 json=json_data,
                 headers=create_header(
                     jwt_manager=jwt,
@@ -849,7 +850,7 @@ def test_post_plots_bor_error(app, client, session, jwt, requests_mock):
             auth_cache.clear()
             clear_db(session)
             rv = client.post(
-                '/plots',
+                '/api/v1/plots',
                 json=json_data,
                 headers=create_header(
                     jwt_manager=jwt,
@@ -912,7 +913,7 @@ def test_post_plots_email_error(app, client, session, jwt, requests_mock):
             auth_cache.clear()
             clear_db(session)
             rv = client.post(
-                '/plots',
+                '/api/v1/plots',
                 json=json_data,
                 headers=create_header(
                     jwt_manager=jwt,
@@ -983,7 +984,7 @@ def test_post_plots_invalid_entity(
             auth_cache.clear()
             clear_db(session)
             rv = client.post(
-                '/plots',
+                '/api/v1/plots',
                 json=json_data,
                 headers=create_header(
                     jwt_manager=jwt,
@@ -1063,7 +1064,7 @@ def test_get_latest_for_entity(app, client, session, jwt, requests_mock, sample_
         )
         # Test
         rv = client.get(
-            f'/plots/entity/{test_identifier}?account_id={mock_account_id}',
+            f'/api/v1/plots/entity/{test_identifier}?account_id={mock_account_id}',
             headers=create_header(
                 jwt_manager=jwt,
                 roles=['basic'],
@@ -1117,7 +1118,7 @@ def test_get_redacted_for_entity(app, client, session, jwt, requests_mock, sampl
         )
         # Test
         rv = client.get(
-            f'/plots/entity/{test_identifier}?account_id={mock_account_id}',
+            f'/api/v1/plots/entity/{test_identifier}?account_id={mock_account_id}',
             headers=create_header(
                 jwt_manager=jwt,
                 roles=['basic'],

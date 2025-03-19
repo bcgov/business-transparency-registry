@@ -39,7 +39,7 @@ from btr_api.exceptions import error_request_response, exception_response
 from btr_api.models import Submission
 from btr_api.services import btr_auth, btr_email, btr_entity
 
-bp = Blueprint('notify', __name__)
+bp = Blueprint('notify', __name__, url_prefix="/notify")
 
 
 @bp.route('', methods=('POST',))

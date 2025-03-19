@@ -45,7 +45,7 @@ from sqlalchemy import exc, text
 
 from btr_api.models import db
 
-bp = Blueprint("ops", __name__)
+bp = Blueprint("ops", __name__, url_prefix="/ops")
 
 
 @bp.route("/healthz", methods=("GET",))

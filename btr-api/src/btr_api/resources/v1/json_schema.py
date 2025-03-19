@@ -42,7 +42,7 @@ from flask import jsonify
 
 from btr_api.services.json_schema import SchemaService
 
-bp = Blueprint("json-schemas", __name__)
+bp = Blueprint("json-schemas", __name__, url_prefix="/json-schemas")
 
 
 @bp.route("/<schema_name>", methods=("GET",))

@@ -86,7 +86,7 @@ describe('pages -> Review and Confirm', () => {
       // submit the filing
       cy.intercept(
         'PUT',
-        'https://**/plots/**',
+        '/api/v1/plots/**',
         { statusCode: 200 }
       ).as('submit')
       cy.get('[data-cy=button-control-right-button]').eq(1).click()
@@ -137,7 +137,7 @@ describe('pages -> Review and Confirm', () => {
     // submit the filing
     cy.intercept(
       'PUT',
-      'https://**/plots/**',
+      '/api/v1/plots/**',
       { statusCode: 200 }
     ).as('submit')
     cy.get('[data-cy=button-control-right-button]').eq(1).click()

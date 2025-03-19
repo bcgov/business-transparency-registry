@@ -1,4 +1,4 @@
-# Copyright © 2025 Province of British Columbia
+# Copyright © 2023 Province of British Columbia
 #
 # Licensed under the BSD 3 Clause License, (the "License");
 # you may not use this file except in compliance with the License.
@@ -31,13 +31,9 @@
 # CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
-"""Exposes the versioned endpoints."""
-from .v1 import (json_schema_endpoint, notify_endpoint,
-                 request_endpoint, submission_endpoint)
-from .version_endpoint import VersionEndpoint
+"""Exposes all of the resource endpoints in Flask-Blueprint style."""
 
-
-v1_endpoint = VersionEndpoint(
-    name='API_V1',
-    path=VersionEndpoint.EndpointVersionPath.API_V1,
-    bps=[json_schema_endpoint, notify_endpoint, request_endpoint, submission_endpoint])
+from .notify import bp as notify_endpoint
+from .submission import bp as submission_endpoint
+from .json_schema import bp as json_schema_endpoint
+from .request import bp as request_endpoint

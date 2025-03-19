@@ -7,7 +7,7 @@ describe('pages -> Add individual', () => {
       en = json
     })
 
-    cy.visit('/')
+    cy.visitHomePageNoFakeData()
   })
 
   it('verify Tax Number component is working', () => {

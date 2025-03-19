@@ -13,5 +13,5 @@ import pytest
     ],
 )
 def test_get_schema(client, session, test_name, schema_name, expected_status):
-    rv = client.get(f'/json-schemas/{schema_name}')
+    rv = client.get(f'/api/v1/json-schemas/{schema_name}')
     assert rv.status_code == expected_status

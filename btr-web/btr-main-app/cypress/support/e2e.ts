@@ -7,7 +7,7 @@ Cypress.Commands.add('interceptPostsBtrApi', () => {
   cy.fixture('plotsEntityExistingSiResponse').then((plotsEntityExistingSiResponse) => {
     cy.intercept(
       'GET',
-      '/plots/entity/**',
+      '/api/v1/plots/entity/**',
       plotsEntityExistingSiResponse)
   })
 })
@@ -16,7 +16,7 @@ Cypress.Commands.add('interceptPostsBtrApiNoSis', () => {
   cy.fixture('plotsEntityExistingSiResponseNoSis').then((plotsEntityExistingSiResponseNoSis) => {
     cy.intercept(
       'GET',
-      '/plots/entity/**',
+      '/api/v1/plots/entity/**',
       plotsEntityExistingSiResponseNoSis)
   })
 })
@@ -24,14 +24,14 @@ Cypress.Commands.add('interceptPostsBtrApiNoSis', () => {
 Cypress.Commands.add('interceptPostsBtrApiNoPreviousSubmissions', () => {
   cy.intercept(
     'GET',
-    '/plots/entity/**',
+    '/api/v1/plots/entity/**',
     { statusCode: 404, headers: { 'x-not-found': 'true' } })
 })
 
 Cypress.Commands.add('interceptPostsBtrApiEmpty', () => {
   cy.intercept(
     'GET',
-    '/plots/entity/**',
+    '/api/v1/plots/entity/**',
     {})
 })
 
