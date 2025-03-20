@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { useOmitIndividual } from '~/stores/omit-individual'
 
-setPageLayout('omit-submitted')
 const { submitted } = storeToRefs(useOmitIndividual())
 const submittedTime = ref(new Date())
 
