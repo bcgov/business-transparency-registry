@@ -1,11 +1,11 @@
 <template>
   <div data-cy="default-layout">
-    <BcrosHeader />
+    <BcrosCustomHeader />
     <BcrosBreadcrumb v-if="crumbConstructors.length > 0" :crumb-constructors="crumbConstructors" />
     <div class="mx-auto px-4 w-full max-w-[1360px]">
       <slot />
     </div>
-    <BcrosFooter :app-version="version" />
+    <BcrosCustomFooter :app-version="version" />
   </div>
 </template>
 

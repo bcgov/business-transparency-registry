@@ -1,9 +1,8 @@
 <template>
-  <div data-cy="person-layout">
-    <BcrosCustomHeader :person-mode="true" />
+  <div class="h-screen flex flex-col" data-cy="omit-layout-submitted">
+    <BcrosCustomHeader />
     <BcrosBreadcrumb v-if="crumbConstructors.length > 0" :crumb-constructors="crumbConstructors" />
-    <BcrosPersonDetails />
-    <div class="mx-auto px-4 w-full max-w-[1360px]">
+    <div class="mx-auto px-4 w-full max-w-bcroslg flex-grow">
       <slot />
     </div>
     <BcrosCustomFooter :app-version="version" />

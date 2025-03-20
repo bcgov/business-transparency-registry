@@ -1,6 +1,6 @@
 <template>
   <div data-cy="omit-layout">
-    <BcrosHeader />
+    <BcrosCustomHeader />
     <BcrosBreadcrumb v-if="crumbConstructors.length > 0" :crumb-constructors="crumbConstructors" />
     <div class="mx-auto px-4 w-full max-w-bcroslg">
       <slot />
@@ -9,7 +9,7 @@
       :left-button-constructors="leftButtonConstructors"
       :right-button-constructors="rightButtonConstructors"
     />
-    <BcrosFooter :app-version="version" />
+    <BcrosCustomFooter :app-version="version" />
   </div>
 </template>
 

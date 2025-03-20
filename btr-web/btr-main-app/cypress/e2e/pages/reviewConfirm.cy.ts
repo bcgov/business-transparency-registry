@@ -105,7 +105,9 @@ describe('pages -> Review and Confirm', () => {
     cy.get('[data-cy="certify-section"]').should('exist')
     cy.get('[data-cy="certify-section-label"]').should('exist')
     cy.get('[data-cy="certify-section-checkbox"]').should('exist')
-    cy.get('[data-cy="certify-section-checkbox"]').check().should('be.checked')
+    cy.get('[data-cy="certify-section-checkbox"]').should('not.be.checked')
+    cy.get('[data-cy="certify-section-checkbox"]').check()
+    cy.get('[data-cy="certify-section-checkbox"]').should('be.checked')
   })
 
   it('verify that you cannot submit without individuals when no checkbox selected', () => {

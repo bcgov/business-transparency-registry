@@ -226,6 +226,7 @@
             data-cy="effectiveDates"
             :is-editing="isEditing"
             @dates-updated="inputFormSi.effectiveDates = $event;
+                            clearErrors(InputFieldsE.EFFECTIVE_DATES);
                             setNewOrChanged([InputFieldsE.EFFECTIVE_DATES])"
           />
         </div>
@@ -884,7 +885,18 @@ function hasErrors (sectionErrorPaths: string[]): boolean {
 }
 
 const clearErrors = (errorPath: string) => {
-  addIndividualForm.value.clear(errorPath)
+  if (errorPath === InputFieldsE.EFFECTIVE_DATES) {
+    setTimeout(() => {
+      if (addIndividualForm.value?.errors) {
+        const clearPaths = addIndividualForm.value.errors
+          .filter(errObj => errObj.path.startsWith('effectiveDates'))
+          .map(errObj => errObj.path)
+        clearPaths.forEach(path => addIndividualForm.value.clear(path))
+      }
+    }, 150)
+  } else {
+    addIndividualForm.value.clear(errorPath)
+  }
 }
 
 function handleDoneButtonClick () {

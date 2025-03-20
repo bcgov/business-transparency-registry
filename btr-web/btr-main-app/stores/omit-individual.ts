@@ -215,6 +215,7 @@ export const useOmitIndividual = defineStore('bcros/omitIndividual', () => {
       }
       submitted.value = true
       submitting.value = false
+      await navigateTo(RouteNameE.REQUEST_OMIT_SUBMITTED)
     } else {
       submitting.value = false
       console.error('Fix errors before submitting, ', errors.value)
