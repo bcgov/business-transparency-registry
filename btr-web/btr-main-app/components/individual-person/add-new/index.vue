@@ -220,9 +220,6 @@
         no-top-border
       >
         <div class="w-full">
-          {{ addIndividualForm ? addIndividualForm.errors : '' }}
-          <br>
-          {{ inputFormSi.effectiveDates }}
           <IndividualPersonEffectiveDates
             :initial-date-groups="inputFormSi.effectiveDates"
             name="effectiveDates"
