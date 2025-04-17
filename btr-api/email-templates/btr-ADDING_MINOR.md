@@ -1,4 +1,4 @@
-# Notification of Registrar’s Transparency Register filing
+# Notification of B.C. Business Transparency Registry Filing
 
 [[btr-registered-details.md]]
 
