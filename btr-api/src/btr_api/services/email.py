@@ -158,13 +158,13 @@ class EmailService:
 
         html_out = jinja_template.render(
             business_name=business_info['business']['legalName'],
-            business_address_street=business_info['deliveryAddress']['streetAddress'],
-            business_contact_email=business_info['contact'].get('email'),
-            business_contact_phone=business_info['contact'].get('phone'),
+            #business_address_street=business_info['deliveryAddress']['streetAddress'],
+            #business_contact_email=business_info['contact'].get('email'),
+            #business_contact_phone=business_info['contact'].get('phone'),
             business_identifier=identifier,
             full_name=full_name,
             birth_year=str(birth_year),
-            citizenship=citizenship,
+            #citizenship=citizenship,
             publication_date=publication_date,
             start_date=start_date,
             start_date_label=start_date_label,

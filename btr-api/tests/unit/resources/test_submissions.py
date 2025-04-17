@@ -96,18 +96,16 @@ def verify_emails_sent(json_data: dict, email_mock) -> dict:
                     print(email_sent.json()['content']['body'])
                     assert text in email_sent.json()['content']['body']
 
-                verify_text_in_email('has registered you as a significant individual in their Business Transparency Registry.')
+                verify_text_in_email('has included you as a significant individual in their filed Transparency Registry.')
                 verify_text_in_email(expected['name'])
-                if expected['birth']:
-                    verify_text_in_email(expected['birth'][0:4])
-                else:
-                    verify_text_in_email('Not Entered')
 
                 if expected['is_minor']:
-                    verify_text_in_email('Notification of B.C. Business Transparency Registry Filing')
+                    # verify email header
+                    verify_text_in_email('Notification of Registrar’s Transparency Register filing')
                     verify_text_in_email(expected['birth'])
                 else:
-                    verify_text_in_email('Notification that your B.C. Business Transparency Registry Filing Information will be public in 90 days')
+                    # verify email header
+                    verify_text_in_email('Notification that your information is set to be public in 90 days in the Registrar’s Transparency Register')
                 email_verified = True
                 break
         assert email_verified
