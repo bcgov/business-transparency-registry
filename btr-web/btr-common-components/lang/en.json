@@ -35,7 +35,8 @@
       "serviceFees": "Service Fees",
       "itemLabels": {
         "TEST": "This is test entry",
-        "REGSIGIN": "Significant Individual Change"
+        "fileTR": "Transparency Register Filing",
+        "fileTR_Annual": "Transparency Register Annual Filing"
       }
     }
   },
