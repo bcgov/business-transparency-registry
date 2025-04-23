@@ -15,9 +15,10 @@
         <slot v-if="hasEmptyFees" name="emptyFees" data-cy="pay-fees-widget-empty-fees" />
         <slot name="default">
           <div
-            v-for="fee in fees"
+            v-for="(fee, index) in fees"
             :key="fee.uiUuid"
             class="bg-white p-3 border-gray-300 text-sm border-b-[1px] flex justify-between items-starts gap-2"
+            :data-cy="'fee-item-' + index"
           >
             <span class="font-bold mr-auto">
               <template v-if="fee.filingTypeCode !== 'REGSIGIN'">

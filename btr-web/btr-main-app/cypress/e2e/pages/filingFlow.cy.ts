@@ -4,6 +4,9 @@ describe('Filing Flow', () => {
   it('Initial Filing', () => {
     cy.visitHomePageWithFakeData('BC0871427', SubmissionTypeE.INITIAL_FILING, undefined, true)
 
+    cy.get('[data-cy="pay-fees-widget-empty-fees"]')
+      .should('have.text', 'Transparency Register Filing - ')
+
     cy.get('[data-cy=button-control-right-button]').eq(0).click()
     cy.get('[data-cy=info-section]')
       .should('contain', 'You have to make a selection OR add a Significant Individual in order to continue')
@@ -30,6 +33,10 @@ describe('Filing Flow', () => {
     // check page title
     cy.get('[data-cy="page-header"]').should('have.text', 'File Transparency Register - Annual Filing 2027')
 
+    // check fee summary widget (empty state)
+    cy.get('[data-cy="pay-fees-widget-empty-fees"]')
+      .should('have.text', 'Transparency Register Annual Filing 2027 - ')
+
     // the no-Change checkbox should exist
     cy.get('[data-cy="annualFilingNoChanges-section"]')
       .should('contain', 'There are no changes to the company transparency register information')
@@ -47,6 +54,11 @@ describe('Filing Flow', () => {
     cy.get('input[data-cy="name-change-reason-radio-other"]').check()
     cy.get('[data-cy="annualFilingNoChanges-checkbox"]').should('be.disabled')
     cy.get('button[data-cy=new-si-done-btn]').focus().click()
+
+    // check fee summary widget
+    cy.get('[data-cy="fee-item-0"]')
+      .should('contain', 'Transparency Register Annual Filing 2027')
+      .should('contain', 'No Fee')
 
     // now we can continue to the Review and Confirm page
     cy.get('[data-cy=button-control-right-button]').eq(0).click()
@@ -91,5 +103,8 @@ describe('Filing Flow', () => {
     cy.get('[data-cy=button-control-right-button]').eq(0).click()
     cy.get('[data-cy=info-section]')
       .should('contain', 'You have to make an edit to the page in order to continue')
+
+    cy.get('[data-cy="pay-fees-widget-empty-fees"]')
+      .should('have.text', 'Transparency Register Filing - ')
   })
 })
