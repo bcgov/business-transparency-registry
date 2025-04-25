@@ -40,7 +40,7 @@ Cypress.Commands.add('interceptPayFeeApi', () => {
     cy.intercept(
       'GET',
       '**/api/v1/fees/BTR/REGSIGIN',
-      { data: payFeesForBtrRegsigin })
+      payFeesForBtrRegsigin)
   })
 })
 
