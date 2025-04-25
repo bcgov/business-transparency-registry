@@ -120,10 +120,10 @@ class EmailService:
         email_type = EmailType.ADDING_ADULT
         effective_datetime = LegislationDatetime.as_legislation_timezone_from_date_str(effective_date)
         # dates
-        start_date_label = 'Registered Date'
+        start_date_label = 'Registration date'
         start_date_desc = 'registration date'
         start_date = LegislationDatetime.format_as_legislation_date(effective_datetime)
-        # Must be at least 90 days after 'registered date'. Since we do it at 12 am it has to be 91 days after
+        # Must be at least 90 days after 'registration date'. Since we do it at 12 am it has to be 91 days after
         publication_date = LegislationDatetime.format_as_report_string(effective_datetime + timedelta(days=91))
 
         # birth
