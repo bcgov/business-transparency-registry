@@ -120,10 +120,10 @@ class EmailService:
         email_type = EmailType.ADDING_ADULT
         effective_datetime = LegislationDatetime.as_legislation_timezone_from_date_str(effective_date)
         # dates
-        start_date_label = 'Registered Date'
+        start_date_label = 'Registration date'
         start_date_desc = 'registration date'
         start_date = LegislationDatetime.format_as_legislation_date(effective_datetime)
-        # Must be at least 90 days after 'registered date'. Since we do it at 12 am it has to be 91 days after
+        # Must be at least 90 days after 'registration date'. Since we do it at 12 am it has to be 91 days after
         publication_date = LegislationDatetime.format_as_report_string(effective_datetime + timedelta(days=91))
 
         # birth
@@ -147,7 +147,6 @@ class EmailService:
                 ))
 
         full_name = get_name(person, 'individual')
-        citizenship = get_citizenship_public_desc(person)
 
         template = Path(f'{self.template_path}/btr-{email_type.value}.md').read_text('utf-8')
         filled_template = self._substitute_template_parts(template)
@@ -158,13 +157,9 @@ class EmailService:
 
         html_out = jinja_template.render(
             business_name=business_info['business']['legalName'],
-            business_address_street=business_info['deliveryAddress']['streetAddress'],
-            business_contact_email=business_info['contact'].get('email'),
-            business_contact_phone=business_info['contact'].get('phone'),
             business_identifier=identifier,
             full_name=full_name,
             birth_year=str(birth_year),
-            citizenship=citizenship,
             publication_date=publication_date,
             start_date=start_date,
             start_date_label=start_date_label,
