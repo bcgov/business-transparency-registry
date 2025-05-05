@@ -1,4 +1,4 @@
-**[{{ business_name }} ({{ business_identifier }})]({{ business_url }}) has registered you as a significant individual in their Business Transparency Registry.**
+**[{{ business_name }} ({{ business_identifier }})]({{ business_url }}) has included you as a significant individual in their filed Transparency Registry.
 
 ---
 

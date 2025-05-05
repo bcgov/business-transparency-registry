@@ -8,14 +8,24 @@
         <slot />
       </div>
       <div class="flex-none ml-8 mt-10">
-        <BcrosWidgetsFee class="sticky top-10" :fees="payFeesWidget.fees" data-cy="pay-fees-widget">
+        <BcrosWidgetsFee
+          class="sticky top-10"
+          :fees="payFeesWidget.fees"
+          :annual-filing-year="currentSIFiling.submissionForYear"
+          data-cy="pay-fees-widget"
+        >
           <template #emptyFees>
             <div
               class="bg-white p-3 border-gray-300 border-b-[1px] flex"
               data-cy="pay-fees-widget-empty-fees"
             >
               <span class="font-bold text-sm mr-auto">
-                {{ $t('widgets.feeSummary.itemLabels.REGSIGIN') }}
+                <template v-if="isAnnualFiling && currentSIFiling.submissionForYear">
+                  {{ $t('widgets.feeSummary.itemLabels.fileTR_Annual') }} {{ currentSIFiling.submissionForYear }}
+                </template>
+                <template v-else>
+                  {{ $t('widgets.feeSummary.itemLabels.fileTR') }}
+                </template>
               </span>
               <span class="font-bold text-2xl float-right ml-2 overflow-hidden whitespace-nowrap">
                 -
@@ -59,6 +69,8 @@ const leftButtonConstructors = computed(() => {
 const rightButtonConstructors = computed(() => {
   return route?.meta?.buttonControl?.rightButtons || [] as (() => ButtonControlI)[]
 })
+
+const { currentSIFiling, isAnnualFiling } = storeToRefs(useSignificantIndividuals())
 
 const version = useRuntimeConfig().public.version
 </script>
