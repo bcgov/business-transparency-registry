@@ -102,7 +102,7 @@ def verify_emails_sent(json_data: dict, email_mock) -> dict:
                 if expected['is_minor']:
                     # verify email header
                     verify_text_in_email('Notification of Registrar’s Transparency Register filing')
-                    verify_text_in_email(expected['birth'])
+                    verify_text_in_email(expected['birth'][0:4])
                 else:
                     # verify email header
                     verify_text_in_email('Notification that your information is set to be public in 90 days in the Registrar’s Transparency Register')

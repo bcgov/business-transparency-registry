@@ -2,6 +2,12 @@
 
 [[btr-registered-details.md]]
 
+**{{ start_date_label }}:**
+{{ start_date }}
+
+**Current publication date:**
+{{ publication_date }}
+
 [[btr-personal-details-text.md]]
 
 ---
