@@ -1,20 +1,18 @@
-import { Page } from '@playwright/test';
-import { expect } from '@playwright/test'
+import { Page, expect } from '@playwright/test'
 import {
   getPlotsEntityNotFound,
   getPlotsEntityWithFilingNoSis,
-  getPlotsEntityWithFilingWithSis,
+  getPlotsEntityWithFilingWithSis
 } from '~/playwright/mocks/handlers/plots/entity'
 import { getFeesBtrRegsigin } from '~/playwright/mocks/handlers/fees'
 import { getBusiness } from '~/playwright/mocks/handlers/business'
 import { SubmissionTypeE } from '~/enums/submission-type-e'
 import { getBusinessContacts } from '~/playwright/mocks/handlers/businessContacts'
 
-
 export const visitBeneficialOwnerChangeWithPreviousSubmissionHasSIs = async (
   page: Page,
   businessIdentifier: string | undefined = undefined,
-  submissionType: SubmissionTypeE | undefined = undefined,
+  submissionType: SubmissionTypeE | undefined = undefined
 ) => {
   if (!businessIdentifier) {
     businessIdentifier = 'BC0871427'
@@ -34,7 +32,7 @@ export const visitBeneficialOwnerChangeWithPreviousSubmissionHasSIs = async (
 export const visitBeneficialOwnerChangeWithPreviousSubmissionNoSIsa = async (
   page: Page,
   businessIdentifier: string | undefined = undefined,
-  submissionType: SubmissionTypeE | undefined = undefined,
+  submissionType: SubmissionTypeE | undefined = undefined
 ) => {
   if (!businessIdentifier) {
     businessIdentifier = 'BC0871427'
@@ -56,7 +54,7 @@ export const visitBeneficialOwnerChangeWithPreviousSubmissionNoSIsa = async (
 export const visitBeneficialOwnerChangeWithoutPreviousSubmission = async (
   page: Page,
   businessIdentifier: string | undefined = undefined,
-  submissionType: SubmissionTypeE | undefined = undefined,
+  submissionType: SubmissionTypeE | undefined = undefined
 ) => {
   if (!businessIdentifier) {
     businessIdentifier = 'BC0871427'
