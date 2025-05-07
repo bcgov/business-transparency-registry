@@ -502,7 +502,9 @@ export const existingSiResponseWithSis = {
         identifiers: [],
         isComponent: false,
         isPermanentResidentCa: false,
-        missingInfoReason: 'this reason is over 200 characters lala jlsnc skjfn kjs nfkjsla n jsnjsflj sljf jksnfjallalkdjlnf jfsjcnshkbch aexb shkcbk skj j sfncjskfnjcnsjkfn  jsdnc kbfskbhsbfhb shd hbchfbsk s fsdlcnjn sfbch sfhbbslkncjslnck k ak csk bckhrb chksbrckjsr cl srjcnsjk rckhbr ckhbrs',
+        missingInfoReason: 'this reason is over 200 characters lala jlsnc skjfn kjs nfkjsla n jsnjsflj sljf' +
+          ' jksnfjallalkdjlnf  jfsjcnshkbch aexb shkcbk skj j sfncjskfnjcnsjkfn  jsdnc kbfskbhsbfhb shd hbchfbsk' +
+          ' s fsdlcnjn sfbch sfhbbslkncjslnck k ak csk bckhrb chksbrckjsr cl srjcnsjk rckhbr ckhbrs',
         names: [
           {
             fullName: 'warble wabbles',

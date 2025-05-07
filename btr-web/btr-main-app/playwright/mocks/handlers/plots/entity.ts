@@ -29,13 +29,14 @@ const _getPlotsEntity =
   }
 
 export const getPlotsEntityWithFilingNoSis = async (page: Page, businessIdentifier: string | undefined = undefined) => {
-  return _getPlotsEntity(page, JSON.stringify(existingSiResponseNoSis), businessIdentifier)
+  return await _getPlotsEntity(page, JSON.stringify(existingSiResponseNoSis), businessIdentifier)
 }
 
-export const getPlotsEntityWithFilingWithSis = async (page: Page, businessIdentifier: string | undefined = undefined) => {
-  return _getPlotsEntity(page, JSON.stringify(existingSiResponseWithSis), businessIdentifier)
-}
+export const getPlotsEntityWithFilingWithSis =
+  async (page: Page, businessIdentifier: string | undefined = undefined) => {
+    return await _getPlotsEntity(page, JSON.stringify(existingSiResponseWithSis), businessIdentifier)
+  }
 
 export const getPlotsEntityNotFound = async (page: Page, businessIdentifier: string | undefined = undefined) => {
-  return _getPlotsEntity(page, undefined, businessIdentifier)
+  return await _getPlotsEntity(page, undefined, businessIdentifier)
 }

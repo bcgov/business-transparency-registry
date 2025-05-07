@@ -1,7 +1,6 @@
 import { test, expect } from '@playwright/test'
 
 import { visitBeneficialOwnerChangeWithPreviousSubmissionHasSIs } from '~/playwright/mocks'
-import { existingSiResponseWithSis } from '~/playwright/mocks/data/plots/entity/hasSis'
 
 test('test it loads the page', async ({ page }) => {
   const businessIdentifier = 'BC0871427'
