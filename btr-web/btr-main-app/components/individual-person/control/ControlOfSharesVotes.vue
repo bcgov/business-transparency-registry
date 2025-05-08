@@ -85,8 +85,8 @@
       </slot>
     </BcrosHelpTip>
     <IndividualPersonControlJointlyOrInConcertControl
-      v-model:actingJointly="model.actingJointly"
-      v-model:inConcertControl="model.inConcertControl"
+      v-model:acting-jointly="model.actingJointly"
+      v-model:in-concert-control="model.inConcertControl"
       :name="name + '.jointlyOrInConcert'"
     >
       <template #inConcertControlHelp>
