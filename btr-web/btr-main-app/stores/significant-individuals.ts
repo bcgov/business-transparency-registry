@@ -1,5 +1,6 @@
 import { StatusCodes } from 'http-status-codes'
 import { ZodIssue } from 'zod'
+import { defineStore } from 'pinia'
 import { dateToString } from '../../btr-common-components/utils/date'
 import fileSIApi from '@/services/file-significant-individual'
 import { SiSchemaType } from '~/utils/si-schema/definitions'

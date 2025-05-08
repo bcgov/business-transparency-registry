@@ -1,3 +1,4 @@
+import { defineStore } from 'pinia'
 import { CompletingPartySchemaType, OmitObscureSchemaType, SiBizInfoSchemaType } from '~/utils/omit-schema/definitions'
 import {
   getDefaultInputFormCompletingParty,
