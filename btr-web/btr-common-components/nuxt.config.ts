@@ -8,8 +8,7 @@ export default defineNuxtConfig({
     preference: 'light'
   },
   typescript: {
-    strict: true,
-    includeWorkspace: true
+    strict: true
   },
   devtools: { enabled: true },
   modules: [
@@ -61,12 +60,5 @@ export default defineNuxtConfig({
   },
   css: ['~/../assets/scss/global.scss'],
   vite: {
-    css: {
-      preprocessorOptions: {
-        scss: {
-          additionalData: '@use "../assets/styles/theme.scss" as *;'
-        }
-      }
-    }
   }
 })

@@ -1,10 +1,11 @@
-import {
+import { BodsBtrAddressTypeE } from '~/interfaces/btr-bods/components-i'
+import type {
   BodsBtrAddressI,
-  BodsBtrAddressTypeE,
+
   BodsCountryI,
   BodsIdentifierI,
   BodsInterestI,
-  BodsNameI
+  BodsNameI,
 } from '~/interfaces/btr-bods/components-i'
 import {
   BodsInterestDirectOrIndirectE,
@@ -13,14 +14,14 @@ import {
   BodsPersonTypeE,
   ControlOfDirectorsDetailsE,
   ControlOfSharesDetailsE,
-  ControlOfVotesDetailsE
+  ControlOfVotesDetailsE,
 } from '~/enums/btr-bods-e'
 import { PercentageRangeE } from '~/enums/percentage-range-e'
-import {
+import type {
   ConnectedInvidualSchemaType,
   SiControlOfDirectorsSchemaType,
   SiControlOfSchemaType,
-  SiSchemaType
+  SiSchemaType,
 } from '~/utils/si-schema/definitions'
 
 const getBodsAddressFromSi = (si: SiSchemaType): BodsBtrAddressI | undefined => {
@@ -87,14 +88,14 @@ const getBodsNamesFromSi = (si: SiSchemaType) => {
   const names: BodsNameI[] = [
     {
       fullName: si.name.fullName,
-      type: BodsNameTypeE.INDIVIDUAL
-    }
+      type: BodsNameTypeE.INDIVIDUAL,
+    },
   ]
 
   if (hasFieldChanged(si, InputFieldsE.PREFERRED_NAME) && si.name.preferredName) {
     names.push({
       fullName: si.name.preferredName,
-      type: BodsNameTypeE.ALTERNATIVE
+      type: BodsNameTypeE.ALTERNATIVE,
     })
   }
   return names
@@ -109,7 +110,7 @@ const getBodsIdentifiersFromSi = (si: SiSchemaType) => {
     identifiers.push({
       id: si.tax.taxNumber,
       scheme: 'CAN-TAXID',
-      schemeName: 'ITN'
+      schemeName: 'ITN',
     })
   }
   return identifiers
@@ -126,7 +127,7 @@ const _getDirectorsInterests = (
   individualsWithInConcertInterest: ConnectedInvidualSchemaType[],
   individualsWithJointInterest: ConnectedInvidualSchemaType[],
   startDate: string,
-  endDate?: string
+  endDate?: string,
 ) => {
   const interests: BodsInterestI[] = []
 
@@ -137,7 +138,7 @@ const _getDirectorsInterests = (
         ControlOfDirectorsDetailsE.DIRECT_CONTROL,
         BodsInterestTypeE.APPOINTMENT_OF_BOARD,
         startDate,
-        endDate
+        endDate,
       )
     interests.push(interest)
   }
@@ -148,7 +149,7 @@ const _getDirectorsInterests = (
         ControlOfDirectorsDetailsE.INDIRECT_CONTROL,
         BodsInterestTypeE.APPOINTMENT_OF_BOARD,
         startDate,
-        endDate
+        endDate,
       )
     interests.push(interest)
   }
@@ -159,7 +160,7 @@ const _getDirectorsInterests = (
         ControlOfDirectorsDetailsE.SIGNIFICANT_INFLUENCE,
         BodsInterestTypeE.APPOINTMENT_OF_BOARD,
         startDate,
-        endDate
+        endDate,
       )
     interests.push(interest)
   }
@@ -171,7 +172,7 @@ const _getDirectorsInterests = (
         BodsInterestTypeE.APPOINTMENT_OF_BOARD,
         startDate,
         endDate,
-        individualsWithInConcertInterest
+        individualsWithInConcertInterest,
       )
     interests.push(interest)
   }
@@ -183,7 +184,7 @@ const _getDirectorsInterests = (
         BodsInterestTypeE.APPOINTMENT_OF_BOARD,
         startDate,
         endDate,
-        individualsWithJointInterest
+        individualsWithJointInterest,
       )
     interests.push(interest)
   }
@@ -197,7 +198,7 @@ const _createInterest = (
   type: BodsInterestTypeE,
   startDate: string,
   endDate?: string,
-  connectedIndividuals?: ConnectedInvidualSchemaType[]
+  connectedIndividuals?: ConnectedInvidualSchemaType[],
 ): BodsInterestI => {
   if (startDate?.trim() === '') {
     startDate = (new Date()).toISOString().substring(0, 10)
@@ -208,7 +209,7 @@ const _createInterest = (
     type,
     startDate,
     endDate: endDate || undefined,
-    connectedIndividuals: connectedIndividuals || undefined
+    connectedIndividuals: connectedIndividuals || undefined,
   }
 }
 
@@ -217,7 +218,7 @@ const _updateInterestWithPercentRange =
     // the default range is (min, max]
     interest.share = {
       exclusiveMinimum: true,
-      exclusiveMaximum: false
+      exclusiveMaximum: false,
     }
 
     switch (range) {
@@ -252,7 +253,7 @@ const _getInterestsOfSharesOrVotes = (
   individualsWithInConcertInterest: ConnectedInvidualSchemaType[],
   individualsWithJointInterest: ConnectedInvidualSchemaType[],
   startDate: string,
-  endDate?: string
+  endDate?: string,
 ): BodsInterestI[] => {
   const interests: BodsInterestI[] = []
   let controlOfDetails: typeof ControlOfSharesDetailsE | typeof ControlOfVotesDetailsE = ControlOfVotesDetailsE
@@ -272,7 +273,7 @@ const _getInterestsOfSharesOrVotes = (
       controlOfDetails.INDIRECT_CONTROL,
       bodsInterestType,
       startDate,
-      endDate
+      endDate,
     )
     _updateInterestWithPercentRange(interest, controlOf.percentage!)
     interests.push(interest)
@@ -284,7 +285,7 @@ const _getInterestsOfSharesOrVotes = (
         controlOfDetails.BENEFICIAL_OWNER,
         bodsInterestType,
         startDate,
-        endDate
+        endDate,
       )
     _updateInterestWithPercentRange(interest, controlOf.percentage!)
     interests.push(interest)
@@ -296,7 +297,7 @@ const _getInterestsOfSharesOrVotes = (
         controlOfDetails.REGISTERED_OWNER,
         bodsInterestType,
         startDate,
-        endDate
+        endDate,
       )
     _updateInterestWithPercentRange(interest, controlOf.percentage!)
     interests.push(interest)
@@ -309,7 +310,7 @@ const _getInterestsOfSharesOrVotes = (
         bodsInterestType,
         startDate,
         endDate,
-        individualsWithJointInterest
+        individualsWithJointInterest,
       )
     _updateInterestWithPercentRange(interest, controlOf.percentage!)
     interests.push(interest)
@@ -322,7 +323,7 @@ const _getInterestsOfSharesOrVotes = (
         bodsInterestType,
         startDate,
         endDate,
-        individualsWithInConcertInterest
+        individualsWithInConcertInterest,
       )
     _updateInterestWithPercentRange(interest, controlOf.percentage!)
     interests.push(interest)
@@ -346,7 +347,7 @@ const getInterests = (si: SiSchemaType, includeAll: boolean = false) => {
           siControlStore.actingJointlyAndInConcert.get(si.uuid)?.sharesInConcert || [],
           siControlStore.actingJointlyAndInConcert.get(si.uuid)?.sharesJointly || [],
           startDate,
-          endDate
+          endDate,
         )
 
       interests = interests.concat(newInterests)
@@ -359,7 +360,7 @@ const getInterests = (si: SiSchemaType, includeAll: boolean = false) => {
           siControlStore.actingJointlyAndInConcert.get(si.uuid)?.votesInConcert || [],
           siControlStore.actingJointlyAndInConcert.get(si.uuid)?.votesJointly || [],
           startDate,
-          endDate
+          endDate,
         )
       interests = interests.concat(newInterests)
     }
@@ -371,7 +372,7 @@ const getInterests = (si: SiSchemaType, includeAll: boolean = false) => {
           siControlStore.actingJointlyAndInConcert.get(si.uuid)?.directorsInConcert || [],
           siControlStore.actingJointlyAndInConcert.get(si.uuid)?.directorsJointly || [],
           startDate,
-          endDate
+          endDate,
         )
       interests = interests.concat(newInterests)
     }
@@ -433,5 +434,5 @@ export default {
   getInterests,
   getInterestTypes,
   getTaxResidenciesFromSi,
-  getPersonType
+  getPersonType,
 }

@@ -1,11 +1,11 @@
 import { StatusCodes } from 'http-status-codes'
-import { ZodIssue } from 'zod'
+import { type ZodIssue } from 'zod'
 import { dateToString } from '../../btr-common-components/utils/date'
 import fileSIApi from '@/services/file-significant-individual'
-import { SiSchemaType } from '~/utils/si-schema/definitions'
+import { type SiSchemaType } from '~/utils/si-schema/definitions'
 import { getEmptySiFiling } from '~/utils/si-schema/defaults'
-import { BtrFilingI } from '~/interfaces/btr-bods/btr-filing-i'
-import { ErrorI, FilingActionE, SignificantIndividualFilingI, SubmissionTypeE } from '#imports'
+import { type BtrFilingI } from '~/interfaces/btr-bods/btr-filing-i'
+import { FilingActionE, type SignificantIndividualFilingI, SubmissionTypeE } from '#imports'
 
 /** Manages Significant */
 export const useSignificantIndividuals = defineStore('significantIndividuals', () => {

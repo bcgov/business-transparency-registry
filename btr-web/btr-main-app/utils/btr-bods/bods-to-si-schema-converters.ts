@@ -1,16 +1,19 @@
 import { BodsInterestTypeE, BodsNameTypeE, ControlOfSharesDetailsE } from '~/enums/btr-bods-e'
-import { BtrFilingI } from '~/interfaces/btr-bods/btr-filing-i'
-import { BtrBodsOwnershipOrControlI } from '~/interfaces/btr-bods/btr-bods-ownership-or-control-i'
-import { BtrBodsPersonI } from '~/interfaces/btr-bods/btr-bods-person-i'
-import { BodsBtrAddressI, BodsBtrAddressTypeE, BodsInterestI } from '~/interfaces/btr-bods/components-i'
-import {
+import { type BtrFilingI } from '~/interfaces/btr-bods/btr-filing-i'
+import { type BtrBodsOwnershipOrControlI } from '~/interfaces/btr-bods/btr-bods-ownership-or-control-i'
+import { type BtrBodsPersonI } from '~/interfaces/btr-bods/btr-bods-person-i'
+import type { BodsBtrAddressI, BodsInterestI } from '~/interfaces/btr-bods/components-i'
+import { BodsBtrAddressTypeE } from '~/interfaces/btr-bods/components-i'
+import type {
   AddressSchemaType,
   CountrySchemaType,
   CitizenshipSchemaType,
-  SiSchemaType, StartEndDateGroupSchemaType, ConnectedInvidualSchemaType
+  SiSchemaType,
+  StartEndDateGroupSchemaType,
+  ConnectedInvidualSchemaType,
 } from '~/utils/si-schema/definitions'
 import { getEmptyAddress } from '~/utils/si-schema/defaults'
-import { JointlyOrInConcertConnectionsI } from '~/interfaces/jointly-or-in-concert'
+import { type JointlyOrInConcertConnectionsI } from '~/interfaces/jointly-or-in-concert'
 
 const _findOwnershipOrControlStatement =
   (submission: BtrFilingI, personStatementId: string): BtrBodsOwnershipOrControlI | null => {
@@ -39,20 +42,20 @@ const _getCitizenships = (btrBodsPerson: BtrBodsPersonI): CitizenshipSchemaType 
   if (btrBodsPerson.isPermanentResidentCa) {
     nationalities.push({
       name: 'Canada (Permanent Resident)',
-      alpha_2: 'CA_PR'
+      alpha_2: 'CA_PR',
     })
     citizenshipType = CitizenshipTypeE.PERMANENT_RESIDENT
   } else if (btrBodsPerson.nationalities?.find(country => country.code === 'CA')) {
     nationalities.push({
       name: 'Canada (Citizen)',
-      alpha_2: 'CA'
+      alpha_2: 'CA',
     })
     citizenshipType = CitizenshipTypeE.CITIZEN
   } else {
     for (const country of btrBodsPerson.nationalities || []) {
       nationalities.push({
         name: country.name,
-        alpha_2: country.code
+        alpha_2: country.code,
       })
     }
     citizenshipType = CitizenshipTypeE.OTHER
@@ -74,8 +77,8 @@ function _getSIAddress (btrBodsAddress: BodsBtrAddressI | undefined): AddressSch
     locationDescription: btrBodsAddress.locationDescription,
     country: {
       name: btrBodsAddress.countryName,
-      alpha_2: btrBodsAddress.country
-    }
+      alpha_2: btrBodsAddress.country,
+    },
   }
 }
 
@@ -83,13 +86,13 @@ function _getTaxNumber (btrBodsPerson: BtrBodsPersonI) {
   const identifiers = btrBodsPerson.identifiers || []
   const taxIdentifierCa =
     identifiers.find(identifier =>
-      identifier.scheme === 'CAN-TAXID' && identifier.schemeName === 'ITN'
+      identifier.scheme === 'CAN-TAXID' && identifier.schemeName === 'ITN',
     )
   return taxIdentifierCa?.id || undefined
 }
 
 const _getPercentageRange = (
-  oocs: BtrBodsOwnershipOrControlI, interestType: BodsInterestTypeE, businessIdentifier: string, person: BtrBodsPersonI
+  oocs: BtrBodsOwnershipOrControlI, interestType: BodsInterestTypeE, businessIdentifier: string, person: BtrBodsPersonI,
 ): PercentageRangeE => {
   /**
    * Note: we assume the min and max values for all interests in oocs.interests are the same.
@@ -152,7 +155,7 @@ function _getEffectiveDates (oocs: BtrBodsOwnershipOrControlI) {
     if (hasDates.length === 0) {
       effectiveDates.push({
         startDate: interest.startDate || '',
-        endDate: interest.endDate
+        endDate: interest.endDate,
       })
     }
   }
@@ -175,14 +178,14 @@ const _isControlSelected = (interestTypes: BodsInterestTypeE[]): boolean => {
   const keyInterests = [
     BodsInterestTypeE.SHAREHOLDING,
     BodsInterestTypeE.VOTING_RIGHTS,
-    BodsInterestTypeE.APPOINTMENT_OF_BOARD
+    BodsInterestTypeE.APPOINTMENT_OF_BOARD,
   ]
 
   return interestTypes.some(type => keyInterests.includes(type))
 }
 
 const _getSi = (
-  person: BtrBodsPersonI, oocs: BtrBodsOwnershipOrControlI, businessIdentifier: string
+  person: BtrBodsPersonI, oocs: BtrBodsOwnershipOrControlI, businessIdentifier: string,
 ): SiSchemaType => {
   const preferredName = _getSiName(person, BodsNameTypeE.ALTERNATIVE)
 
@@ -193,7 +196,7 @@ const _getSi = (
     address: _getSIAddress(bodsAddress),
     mailingAddress: {
       isDifferent: !!bodsMailingAddress,
-      address: bodsMailingAddress ? _getSIAddress(bodsMailingAddress) : undefined
+      address: bodsMailingAddress ? _getSIAddress(bodsMailingAddress) : undefined,
     },
     isControlSelected: _isControlSelected(oocs.interestTypes || []),
     controlOfDirectors: {
@@ -201,7 +204,7 @@ const _getSi = (
       significantInfluence: isControlType(oocs, ControlOfDirectorsDetailsE.SIGNIFICANT_INFLUENCE),
       indirectControl: isControlType(oocs, ControlOfDirectorsDetailsE.INDIRECT_CONTROL),
       inConcertControl: isControlType(oocs, ControlOfDirectorsDetailsE.IN_CONCERT_CONTROL),
-      actingJointly: isControlType(oocs, ControlOfDirectorsDetailsE.ACTING_JOINTLY)
+      actingJointly: isControlType(oocs, ControlOfDirectorsDetailsE.ACTING_JOINTLY),
     },
     controlOfShares: {
       controlName: 'controlOfShares',
@@ -210,7 +213,7 @@ const _getSi = (
       indirectControl: isControlType(oocs, ControlOfSharesDetailsE.INDIRECT_CONTROL),
       registeredOwner: isControlType(oocs, ControlOfSharesDetailsE.REGISTERED_OWNER),
       inConcertControl: isControlType(oocs, ControlOfSharesDetailsE.IN_CONCERT_CONTROL),
-      actingJointly: isControlType(oocs, ControlOfSharesDetailsE.ACTING_JOINTLY) // either keep it in details or
+      actingJointly: isControlType(oocs, ControlOfSharesDetailsE.ACTING_JOINTLY), // either keep it in details or
     },
     controlOfVotes: {
       controlName: 'controlOfVotes',
@@ -219,7 +222,7 @@ const _getSi = (
       indirectControl: isControlType(oocs, ControlOfVotesDetailsE.INDIRECT_CONTROL),
       registeredOwner: isControlType(oocs, ControlOfVotesDetailsE.REGISTERED_OWNER),
       inConcertControl: isControlType(oocs, ControlOfVotesDetailsE.IN_CONCERT_CONTROL),
-      actingJointly: isControlType(oocs, ControlOfVotesDetailsE.ACTING_JOINTLY) // either keep it in details or
+      actingJointly: isControlType(oocs, ControlOfVotesDetailsE.ACTING_JOINTLY), // either keep it in details or
     },
     citizenships: _getCitizenships(person),
     missingInfoReason: person.missingInfoReason,
@@ -229,13 +232,13 @@ const _getSi = (
     phoneNumber: person.phoneNumber || {},
     tax: {
       hasTaxNumber: person.hasTaxNumber,
-      taxNumber: _getTaxNumber(person)
+      taxNumber: _getTaxNumber(person),
     },
     name: {
       fullName: _getSiName(person, BodsNameTypeE.INDIVIDUAL),
       preferredName,
       isYourOwnInformation: false, // todo: fixme ?? how do we want to set this
-      isUsePreferredName: !!(preferredName.trim())
+      isUsePreferredName: !!(preferredName.trim()),
     },
     isTaxResident: _getTaxResidency(person),
     determinationOfIncapacity: person.determinationOfIncapacity || false,
@@ -246,8 +249,8 @@ const _getSi = (
     ownershipStatementId: oocs.statementID,
 
     ui: {
-      newOrUpdatedFields: []
-    }
+      newOrUpdatedFields: [],
+    },
   }
 }
 
@@ -285,7 +288,7 @@ export const getSiControlConnectionsFromBodsSubmission =
           votesInConcert: getConnectedIndividuals(oocs, ControlOfVotesDetailsE.IN_CONCERT_CONTROL),
           votesJointly: getConnectedIndividuals(oocs, ControlOfVotesDetailsE.ACTING_JOINTLY),
           directorsInConcert: getConnectedIndividuals(oocs, ControlOfDirectorsDetailsE.IN_CONCERT_CONTROL),
-          directorsJointly: getConnectedIndividuals(oocs, ControlOfDirectorsDetailsE.ACTING_JOINTLY)
+          directorsJointly: getConnectedIndividuals(oocs, ControlOfDirectorsDetailsE.ACTING_JOINTLY),
         }
 
         jointlyOrInConcertConnections.set(person.uuid, connections)

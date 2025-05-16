@@ -1,5 +1,5 @@
 import { z } from 'zod'
-import { SiSchemaType } from '~/utils/si-schema/definitions'
+import { type SiSchemaType } from '~/utils/si-schema/definitions'
 
 export const FilingSchemaBase = z.object({
   submissionType: z.nativeEnum(SubmissionTypeE),
