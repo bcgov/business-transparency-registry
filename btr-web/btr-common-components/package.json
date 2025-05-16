@@ -31,7 +31,7 @@
     ]
   },
   "devDependencies": {
-    "@nuxtjs/i18n": "^8.2.0",
+    "@nuxtjs/i18n": "^9.5.4",
     "@testing-library/vue": "^8.0.2",
     "@vitest/coverage-v8": "^1.6.1",
     "vite": "^6.3.5",

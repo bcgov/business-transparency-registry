@@ -48,8 +48,8 @@
 </template>
 
 <script setup lang="ts">
-import { ComputedRef, Ref, computed, ref, watch } from 'vue'
-import { MaybeElementRef, onClickOutside } from '@vueuse/core'
+import { type ComputedRef, type Ref, computed, ref, watch } from 'vue'
+import { type MaybeElementRef, onClickOutside } from '@vueuse/core'
 import { type UseEventBusReturn } from '@vueuse/core'
 
 const formBus = inject<UseEventBusReturn<any, string> | undefined>('form-events', undefined)

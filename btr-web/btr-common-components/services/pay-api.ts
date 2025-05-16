@@ -1,5 +1,5 @@
-import { FeeInfoI } from '~/interfaces/fees-i'
-import { FilingDataI, PayFeesApiQueryParamsI } from '~/interfaces/filling-data-i'
+import type { FeeInfoI } from '~/interfaces/fees-i'
+import type { FilingDataI, PayFeesApiQueryParamsI } from '~/interfaces/filling-data-i'
 
 const constructFeeInfoURL = (filingData: FilingDataI) => {
   const runtimeConfig = useRuntimeConfig()

@@ -2,9 +2,9 @@
 import { it, expect } from 'vitest'
 import { mountSuspended } from '@nuxt/test-utils/runtime'
 import { createI18n } from 'vue-i18n'
-import { FormError } from '#ui/types'
+import { type FormError } from '#ui/types'
 import { BcrosInputsAddress } from '#components'
-import { BtrAddressI } from '~/interfaces/btr-address-i'
+import { type  BtrAddressI } from '~/interfaces/btr-address-i'
 
 const i18n = createI18n({})
 

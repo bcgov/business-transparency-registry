@@ -31,7 +31,8 @@
     ]
   },
   "devDependencies": {
-    "@nuxtjs/i18n": "^8.2.0",
+    "@nuxtjs/i18n": "^9.5.4",
+    "eslint": "^8.57.0",
     "@testing-library/vue": "^8.0.2",
     "@vitest/coverage-v8": "^1.6.1",
     "nuxt-anchorscroll": "^1.0.5",

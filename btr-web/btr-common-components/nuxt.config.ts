@@ -1,9 +1,10 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
+  compatibilityDate: '2025-05-16',
   ssr: false,
-  ui: {
-    icons: ['mdi'] // add here more icon sets from iconifiy if needed.
-  },
+  // ui: {
+  //   icons: ['mdi'] // add here more icon sets from iconifiy if needed.
+  // },
   colorMode: {
     preference: 'light'
   },

@@ -21,7 +21,7 @@
 </template>
 
 <script setup lang="ts">
-import { Ref, ref, watch } from 'vue'
+import { type Ref, ref, watch } from 'vue'
 import VueDatePicker from '@vuepic/vue-datepicker'
 
 // props / emits

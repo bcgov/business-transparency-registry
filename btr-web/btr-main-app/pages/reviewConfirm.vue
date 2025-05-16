@@ -61,7 +61,7 @@
 <script setup lang="ts">
 import { storeToRefs } from 'pinia'
 import { z } from 'zod'
-import { SiSchemaType } from '~/utils/si-schema/definitions'
+import { type SiSchemaType } from '~/utils/si-schema/definitions'
 
 const { confirmReviewPageErrors } = storeToRefs(useConfirmReviewStore())
 

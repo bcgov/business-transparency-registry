@@ -99,7 +99,7 @@
 <script setup lang="ts">
 import { v4 as UUIDv4 } from 'uuid'
 import { type UseEventBusReturn } from '@vueuse/core'
-import { SiControlOfSchemaType } from '~/utils/si-schema/definitions'
+import { type SiControlOfSchemaType } from '~/utils/si-schema/definitions'
 
 const t = useNuxtApp().$i18n.t
 

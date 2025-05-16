@@ -56,7 +56,7 @@
 
 <script setup lang="ts">
 import { dateToString } from '../../../../btr-common-components/utils/date'
-import { StartEndDateGroupSchemaType } from '~/utils/si-schema/definitions'
+import { type StartEndDateGroupSchemaType } from '~/utils/si-schema/definitions'
 
 const dates = defineModel<StartEndDateGroupSchemaType>('startEndDates', { required: true })
 const isEndDateVisible = defineModel<boolean>('isEndDateVisible')

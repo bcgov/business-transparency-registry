@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { UseEventBusReturn } from '@vueuse/core'
-import { CitizenshipSchemaType } from '~/utils/si-schema/definitions'
+import type { CitizenshipSchemaType } from '~/utils/si-schema/definitions'
 
 const citizenships = defineModel({ type: Object as PropType<CitizenshipSchemaType>, required: true })
 

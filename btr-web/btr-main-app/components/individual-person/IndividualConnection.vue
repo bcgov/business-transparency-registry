@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { SiSchemaType } from '~/utils/si-schema/definitions'
+import { type SiSchemaType } from '~/utils/si-schema/definitions'
 import { useSiControlStore } from '~/stores/si-control-store'
-import { JointlyOrInConcertConnectionsI } from '~/interfaces/jointly-or-in-concert'
+import { type JointlyOrInConcertConnectionsI } from '~/interfaces/jointly-or-in-concert'
 
 const siControlStore = useSiControlStore()
 const { allActiveSIs, actingJointlyAndInConcert }: {

@@ -74,10 +74,10 @@
 </template>
 
 <script setup lang="ts">
-import { ref, Ref } from 'vue'
+import { ref, type Ref } from 'vue'
 import { Combobox, ComboboxInput, ComboboxOption, ComboboxOptions } from '@headlessui/vue'
-import { CanadaPostApiFindResponseItemI, CanadaPostRetrieveItemI } from '~/utils'
-import { BtrAddressI } from '~/interfaces/btr-address-i'
+import type { CanadaPostApiFindResponseItemI, CanadaPostRetrieveItemI } from '~/utils'
+import type { BtrAddressI } from '~/interfaces/btr-address-i'
 
 const runtimeConfig = useRuntimeConfig()
 

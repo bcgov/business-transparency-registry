@@ -72,7 +72,7 @@
 </template>
 
 <script setup lang="ts">
-import { PayFeesWidgetItemI } from '~/interfaces/fees-i'
+import { type PayFeesWidgetItemI } from '~/interfaces/fees-i'
 
 const props = defineProps({
   fees: { type: Array<PayFeesWidgetItemI>, required: true },

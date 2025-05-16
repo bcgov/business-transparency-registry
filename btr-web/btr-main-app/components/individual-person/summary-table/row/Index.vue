@@ -3,7 +3,7 @@ import {
   IndividualPersonSummaryTableRowActionButton,
   IndividualPersonSummaryTableRowCessationEntry
 } from '#components'
-import { SiSchemaType } from '~/utils/si-schema/definitions'
+import { type SiSchemaType } from '~/utils/si-schema/definitions'
 
 type ActionBtnT = {
   action: Function,
