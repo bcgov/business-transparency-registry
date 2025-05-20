@@ -139,9 +139,9 @@ function submit (event: FormSubmitEvent<Schema>) {
 </script>
 
 <style lang="scss">
-@import 'tailwindcss/base.css';
-@import 'tailwindcss/components.css';
-@import 'tailwindcss/utilities.css';
+@use 'tailwindcss/base.css';
+@use 'tailwindcss/components.css';
+@use 'tailwindcss/utilities.css';
 
 .bgBlueAPp {
   // example using tailwind colors inside scss

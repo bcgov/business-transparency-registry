@@ -2,7 +2,7 @@
 import { z } from 'zod'
 import { getDefaultInputFormSiBiz } from '~/utils/omit-schema/defaults'
 import {
-  SiBizInfoSchemaType,
+  type SiBizInfoSchemaType,
   SiBizInfoSchema,
   UseTranslateErrorMap
 } from '~/utils/omit-schema/definitions'

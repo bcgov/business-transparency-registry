@@ -940,7 +940,7 @@ function handleDoneButtonClick () {
 }
 
 const setIsYourOwnInformation = (event: any) => {
-  if (event.target.checked) {
+  if (event) {
     inputFormSi.name.fullName = bcrosAccount.userFullName
   } else {
     inputFormSi.name.fullName = ''

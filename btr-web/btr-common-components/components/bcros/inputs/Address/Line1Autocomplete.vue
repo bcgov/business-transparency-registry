@@ -57,7 +57,7 @@
                 'bg-gray-200 text-primary-500': active,
                 'text-gray-700': !active,
               }"
-              @click="selectFromDropdown(address, $event)"
+              @mousedown="selectFromDropdown(address, $event)"
             >
               <span
                 class="block"
@@ -100,7 +100,13 @@ const suggestedAddresses: Ref<Array<CanadaPostApiFindResponseItemI>> = ref([])
 // @ts-ignore
 const line1: Ref<string> = ref('')
 
-watch(props.modelValue, () => { line1.value = props.modelValue }, { immediate: true })
+watch(
+  () => props.modelValue,
+  (newValue: string) => {
+    line1.value = newValue
+  },
+  { immediate: true }
+)
 
 const val = ref()
 val.value = { id: 'empty' }
@@ -144,7 +150,7 @@ const getExactAddress = async (searchAddressId: string): Promise<CanadaPostRetri
       retrievedAddresses.find(addr => addr.Language === 'ENG') ||
       retrievedAddresses[0]
   }
-  return addrForLang
+  return addrForLang as CanadaPostRetrieveItemI
 }
 
 watch(line1, (newLine1: string, _: string) => {

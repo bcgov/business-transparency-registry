@@ -46,10 +46,10 @@ watch(() => props.setMinDate, (val) => { minDate.value = val || null })
 
 </script>
 <style lang="scss">
-@import '@vuepic/vue-datepicker/dist/main.css';
-@import 'tailwindcss/base';
-@import 'tailwindcss/components';
-@import 'tailwindcss/utilities';
+@use '@vuepic/vue-datepicker/dist/main.css';
+@use 'tailwindcss/base';
+@use 'tailwindcss/components';
+@use 'tailwindcss/utilities';
 
 .bcros-date-picker {
   width: 300px;

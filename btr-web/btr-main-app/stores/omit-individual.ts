@@ -1,10 +1,14 @@
-import type { CompletingPartySchemaType, OmitObscureSchemaType, SiBizInfoSchemaType } from '~/utils/omit-schema/definitions'
+import type {
+  CompletingPartySchemaType,
+  OmitObscureSchemaType,
+  SiBizInfoSchemaType
+} from '~/utils/omit-schema/definitions'
 import {
   getDefaultInputFormCompletingParty,
   getDefaultInputFormOmitObscure,
   getDefaultInputFormSiBiz
 } from '~/utils/omit-schema/defaults'
-import type  {
+import type {
   BtrBodsRequestGetI,
   BtrBodsRequestGetAllI,
   BtrBodsRequestI,

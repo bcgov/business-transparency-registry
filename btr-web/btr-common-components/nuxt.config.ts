@@ -2,9 +2,9 @@
 export default defineNuxtConfig({
   compatibilityDate: '2025-05-16',
   ssr: false,
-  // ui: {
-  //   icons: ['mdi'] // add here more icon sets from iconifiy if needed.
-  // },
+  ui: {
+    icons: ['mdi'] // add here more icon sets from iconifiy if needed.
+  },
   colorMode: {
     preference: 'light'
   },
@@ -25,7 +25,6 @@ export default defineNuxtConfig({
   i18n: {
     lazy: true,
     defaultLocale: 'en',
-    langDir: './lang',
     locales: [
       { code: 'en', file: 'en.json' }
     ]
