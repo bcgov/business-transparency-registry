@@ -1,8 +1,11 @@
 import business from '../../../fixtures/business.json'
 import json from '../../../../../btr-common-components/lang/en.json'
 
+import specificJson from '../../../../../btr-main-app/lang/en.json'
+
 describe('pages -> Add individual', () => {
   const i18nCommon = json
+  const i18nSpecific = specificJson
   beforeEach(() => {
     // setup intercepts
     cy.interceptPostsBtrApi().as('existingSIs')
@@ -18,8 +21,6 @@ describe('pages -> Add individual', () => {
   it('checks sections is your information and name are working as expected', () => {
     cy.get('[data-cy=add-new-btn]').trigger('click')
 
-    cy.get('[data-cy="isYourOwnInformation-checkbox"]').should('not.be.checked')
-
     cy.contains(i18nCommon.errors.validation.fullName.empty).should('not.exist')
 
     cy.get('[data-cy="testFullName"] input').focus()
@@ -30,7 +31,54 @@ describe('pages -> Add individual', () => {
     cy.get('[data-cy="testFullName"] input').blur()
     cy.contains(i18nCommon.errors.validation.fullName.specialCharacter).should('not.exist')
 
-    cy.get('[data-cy="isYourOwnInformation-checkbox"]').check()
+    //make sure no button selected
+    cy.get('[data-cy="declaration-button-me"]').its('class').should('contain', 'gray')
+    cy.get('[data-cy="declaration-button-parent"]').its('class').should('contain', 'gray')
+    cy.get('[data-cy="declaration-button-lawyer"]').its('class').should('contain', 'gray')
+    cy.get('[data-cy="declaration-button-none"]').its('class').should('contain', 'gray')
+
+    cy.get('[data-cy="declaration-button-me"]').click()
+    cy.get('[data-cy="declaration-button-me"]').its('class').should('contain', 'primary')
+    cy.get('[data-cy="declaration-button-parent"]').its('class').should('contain', 'gray')
+    cy.get('[data-cy="declaration-button-lawyer"]').its('class').should('contain', 'gray')
+    cy.get('[data-cy="declaration-button-none"]').its('class').should('contain', 'gray')
     cy.contains(i18nCommon.errors.validation.fullName.specialCharacter).should('not.exist')
+    cy.contains(i18nSpecific.errors.validation.declaration).should('not.exist')
+    cy.get('[data-cy="declaration-button-me"]').click()
+    cy.contains(i18nSpecific.errors.validation.declaration).should('exist')
+    cy.get('[data-cy="declaration-button-me"]').its('class').should('contain', 'gray')
+
+    cy.get('[data-cy="declaration-button-parent"]').click()
+    cy.get('[data-cy="declaration-button-me"]').its('class').should('contain', 'gray')
+    cy.get('[data-cy="declaration-button-parent"]').its('class').should('contain', 'primary')
+    cy.get('[data-cy="declaration-button-lawyer"]').its('class').should('contain', 'gray')
+    cy.get('[data-cy="declaration-button-none"]').its('class').should('contain', 'gray')
+    cy.contains(i18nCommon.errors.validation.fullName.specialCharacter).should('exist')
+    cy.contains(i18nSpecific.errors.validation.declaration).should('not.exist')
+    cy.get('[data-cy="declaration-button-parent"]').click()
+    cy.contains(i18nSpecific.errors.validation.declaration).should('exist')
+    cy.get('[data-cy="declaration-button-parent"]').its('class').should('contain', 'gray')
+
+    cy.get('[data-cy="declaration-button-lawyer"]').click()
+    cy.get('[data-cy="declaration-button-me"]').its('class').should('contain', 'gray')
+    cy.get('[data-cy="declaration-button-parent"]').its('class').should('contain', 'gray')
+    cy.get('[data-cy="declaration-button-lawyer"]').its('class').should('contain', 'primary')
+    cy.get('[data-cy="declaration-button-none"]').its('class').should('contain', 'gray')
+    cy.contains(i18nCommon.errors.validation.fullName.specialCharacter).should('exist')
+    cy.contains(i18nSpecific.errors.validation.declaration).should('not.exist')
+    cy.get('[data-cy="declaration-button-lawyer"]').click()
+    cy.contains(i18nSpecific.errors.validation.declaration).should('exist')
+    cy.get('[data-cy="declaration-button-lawyer"]').its('class').should('contain', 'gray')
+
+    cy.get('[data-cy="declaration-button-none"]').click()
+    cy.get('[data-cy="declaration-button-me"]').its('class').should('contain', 'gray')
+    cy.get('[data-cy="declaration-button-parent"]').its('class').should('contain', 'gray')
+    cy.get('[data-cy="declaration-button-lawyer"]').its('class').should('contain', 'gray')
+    cy.get('[data-cy="declaration-button-none"]').its('class').should('contain', 'primary')
+    cy.contains(i18nCommon.errors.validation.fullName.specialCharacter).should('exist')
+    cy.contains(i18nSpecific.errors.validation.declaration).should('not.exist')
+    cy.get('[data-cy="declaration-button-none"]').click()
+    cy.contains(i18nSpecific.errors.validation.declaration).should('exist')
+    cy.get('[data-cy="declaration-button-none"]').its('class').should('contain', 'gray')
   })
 })

@@ -131,7 +131,13 @@
     "less": "Less",
     "more": "More",
     "undo": "Undo",
-    "update": "Update"
+    "update": "Update",
+    "declaration": {
+      "self": "I am the significant individual identified below",
+      "parent": "I am the parent/legal guardian of the minor significant individual age 18 or under identified below",
+      "lawyer": "I am a lawyer authorized to practice in BC by the Law Society of British Columbia and have verified the identity of the significant individual below using one of the measures for verifying identity described in section 105 subsections 1 through 5 of the Proceeds of Crime (Money Laundering) and Terrorist Financing Regulations.",
+      "none": "None of the above"
+    }
   },
   "texts": {
     "requestOmitText": "You can request to have some or all of your information publicly omitted from the BC Business Transparency Registry by completing the request below. Ensure that you provide sufficient information to support your request.",
@@ -141,6 +147,8 @@
     "annualFilingNoChanges": "There are no changes to the company transparency register information",
     "annualFilingChanged": "You have already made changes. Undo or cancel the changes to select this checkbox.",
     "isYourOwnInformation": "Select this option if you are a significant individual and you are entering information for yourself.",
+    "declaration": "The registrar may request verification of a significant individual’s identity. You may be able to complete verification proactively by completing the below selection. Significant individuals not verified at this stage, may be contacted by the registrar after the filing and directed to complete identity verification procedures.",
+    "declaration2": "Please select the below statement that applies:",
     "note": "Note: ",
     "preferredName": {
       "checkbox": "This individual also has an another name they prefer to use",
@@ -288,6 +296,7 @@
     "somethingWentWrong": "Something went wrong",
     "anErrorHasOccurred": "An error has occurred, please try again later. If the error persists, contact us for more information.",
     "validation": {
+      "declaration": "A declaration must be selected",
       "report": {
         "noSIsOrAddSI": "You have to make a selection OR add a Significant Individual in order to continue",
         "addOrUpdateSIs": "You have to make an edit to the page in order to continue",
@@ -455,6 +464,7 @@
     "profileDetails": "Your Details",
     "reviewConfirm": "Review and Confirm",
     "isYourOwnInformation": "Completing Party",
+    "declaration": "Declaration",
     "individualsFullName": "Individual's Full Name",
     "controlOfShares": "Control of Shares",
     "controlOfVotes": "Control of Votes",
