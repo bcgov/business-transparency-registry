@@ -23,3 +23,4 @@ from .information_to_omit_type import InformationToOmitType
 from .address_types import AddressType
 from .request_status import RequestStatus
 from .comment_types import CommentTypes
+from .verification_status import VerificationStatus
