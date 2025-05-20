@@ -936,6 +936,70 @@ def test_post_plots_email_error(app, client, session, jwt, requests_mock):
             assert created_submission.business_identifier == json_data['businessIdentifier']
 
 
+def test_post_plots_invalid_verification(app, client, session, jwt, requests_mock):
+    """
+        Assure no submission is created for invalid verification.
+        A person cannot be verified if the account username does not match the name;
+        A person >19 years old cannot be verified by a guardian
+    """
+    requests_mock.post(app.config.get('SSO_SVC_TOKEN_URL'), json={'access_token': 'token'})
+    requests_mock.put(
+        f"{app.config.get('BOR_SVC_URL')}/internal/solr/update", json={'message': 'Update accepted'}
+    )
+
+    current_dir = os.path.dirname(__file__)
+    with open(os.path.join(current_dir, '..', '..', 'mocks', 'significantIndividualsFiling', 'valid.json')) as file:
+        json_data = json.load(file)
+
+        # setup the verification status in submission payload
+        json_data["personStatements"][0]["verificationStatus"] = "verified_by_self"
+        json_data["personStatements"][1]["verificationStatus"] = "verified_by_guardian"
+
+        # create a mismatch of account username and the SI name it is trying to verify
+        expected_name = json_data['personStatements'][0]['names'][0]['fullName']
+        username = expected_name + " something else"
+
+        identifier = json_data['businessIdentifier']
+        requests_mock.get(
+            f"{app.config.get('AUTH_SVC_URL')}/entities/{identifier}/authorizations",
+            json={'orgMembership': 'COORDINATOR', 'roles': ['edit', 'view']},
+        )
+        requests_mock.get(
+            f"{app.config.get('LEGAL_SVC_URL')}/businesses/{identifier}", json=mocked_entity_response
+        )
+        requests_mock.get(
+            f"{app.config.get('LEGAL_SVC_URL')}/businesses/{identifier}/tasks", json=todos_initial_filing
+        )
+
+        with nested_session(session):
+            auth_cache.clear()
+            clear_db(session)
+  
+            rv = client.post(
+                '/api/v1/plots',
+                json=json_data,
+                headers=create_header(
+                    jwt_manager=jwt,
+                    roles=['basic'],
+                    username=username,
+                    login_source='BCSC',
+                    **{'Accept-Version': 'v1', 'content-type': 'application/json', 'Account-Id': 1},
+                ),
+            )
+
+            assert rv.status_code == HTTPStatus.FORBIDDEN
+            assert rv.json.get('details') == [
+                {
+                    'error': f"legal name '{expected_name}' does not match login name '{username}'",
+                    'statementID': json_data['personStatements'][0]['statementID']
+                },
+                {
+                    'error': 'guardian verification is only for minors',
+                    'statementID': json_data['personStatements'][1]['statementID']
+                }
+            ]
+
+
 @pytest.mark.parametrize(
     'test_name, admin_freeze, state, expected_response, errors',
     [
@@ -1180,3 +1244,4 @@ def test_get_redacted_for_entity(app, client, session, jwt, requests_mock, sampl
         assert expected_dict == rv.json.get('payload')
         assert test_identifier == rv.json['payload'].get('businessIdentifier')
         assert s1_dict['effectiveDate'] == rv.json['payload'].get('effectiveDate')
+

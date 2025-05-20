@@ -110,7 +110,7 @@ def _validate_self_declaration(person: dict, full_name: str, login_source: str, 
     # check login source
     if login_source not in ["BCEID", "BCSC"] or (login_source == "BCEID" and "account_holder" not in roles):
         errors.append({
-            "statementId": person.get("statementId"),
+            "statementID": person.get("statementID"),
             "error": f"login source '{login_source}' does not support self verification",
         })
 
@@ -119,7 +119,7 @@ def _validate_self_declaration(person: dict, full_name: str, login_source: str, 
     legal_name = next((n.get("fullName") for n in names if n.get("type") == "individual"), None)
     if legal_name and full_name != legal_name:
         errors.append({
-            "statementId": person.get("statementId"),
+            "statementID": person.get("statementID"),
             "error": f"legal name '{legal_name}' does not match login name '{full_name}'",
         })
 
@@ -138,7 +138,7 @@ def _validate_guardian_verification(person: dict) -> list[dict]:
 
     if not is_minor:
         errors.append({
-            "statementId": person.get("statementId"),
+            "statementID": person.get("statementID"),
             "error": "guardian verification is only for minors",
         })
 
@@ -154,7 +154,7 @@ def validate_verification(person_statements: list[dict], jwt_oidc_token: dict) -
     jwt_oidc_token (dict): The decoded JWT token containing user identity and login information.
 
     Returns:
-    list[dict]: A list of validation errors, if any, with associated statementId and error message.
+    list[dict]: A list of validation errors, if any, with associated statementID and error message.
     """
     errors = []
 
@@ -170,7 +170,7 @@ def validate_verification(person_statements: list[dict], jwt_oidc_token: dict) -
             status = VerificationStatus(person.get("verificationStatus"))
         except ValueError:
             errors.append({
-                "statementId": person.get("statementId"),
+                "statementID": person.get("statementID"),
                 "error": "invalid verification status",
             })
             continue
