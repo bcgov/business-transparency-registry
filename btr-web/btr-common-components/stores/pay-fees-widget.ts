@@ -4,7 +4,7 @@ import { type Ref } from 'vue'
 import { StatusCodes } from 'http-status-codes'
 
 import type { FeeInfoI, PayFeesWidgetItemI } from '~/interfaces/fees-i'
-import { type  ErrorI } from '~/interfaces/error-i'
+import { type ErrorI } from '~/interfaces/error-i'
 import { type FilingDataI } from '~/interfaces/filling-data-i'
 
 import payApi from '~/services/pay-api'

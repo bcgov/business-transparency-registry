@@ -1,7 +1,7 @@
 import { z } from 'zod'
+import { defineStore } from 'pinia'
 import { FilingSchemaBase } from '~/interfaces/significant-individual-filing-i'
 import { getFolioValidator } from '~/utils/validators'
-import { defineStore } from 'pinia'
 
 export const useConfirmReviewStore = defineStore('confirmOrReview', () => {
   // list of zod errors
