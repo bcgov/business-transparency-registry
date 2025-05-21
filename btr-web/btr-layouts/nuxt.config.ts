@@ -5,9 +5,9 @@ export default defineNuxtConfig({
   extends: [
     '../btr-common-components'
   ],
-  // ui: {
-  //   icons: ['mdi'] // add here more icon sets from iconifiy if needed.
-  // },
+  ui: {
+    icons: ['mdi'] // add here more icon sets from iconifiy if needed.
+  },
   colorMode: {
     preference: 'light'
   },
