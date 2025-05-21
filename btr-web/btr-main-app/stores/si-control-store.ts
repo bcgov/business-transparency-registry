@@ -1,3 +1,4 @@
+import { defineStore } from 'pinia'
 import { type SiSchemaType } from '~/utils/si-schema/definitions'
 import { type JointlyOrInConcertConnectionsI } from '~/interfaces/jointly-or-in-concert'
 import { hasSharedControl } from '~/utils/significant-individual'
