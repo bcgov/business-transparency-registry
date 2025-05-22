@@ -370,7 +370,7 @@ def test_post_plots_db_mocked(app, session, client, jwt, mocker, requests_mock):
             **mocked_entity_response['business']
         },
         'owners': [
-            {'interestedParty': {'describedByPersonStatement': '1199dc30-6cd8-47fa-be79-f057348ab36b', 'hasMailingAddress': False, 'addresses': [{'type': 'residence', 'city': 'Edmonton', 'country': 'CA', 'countryName': 'Canada', 'postalCode': 'T6T 1B6', 'region': 'AB', 'street': '4323 33 St NW', 'streetAdditional': ''}], 'birthDate': '2023-11-07', 'email': 'fake@email.com', 'hasTaxNumber': True, 'identifiers': [{'id': '711 612 325', 'scheme': 'CAN-TAXID', 'schemeName': 'ITN'}], 'isComponent': False, 'isPermanentResidentCa': False, 'names': [{'fullName': 'Kial Jinnah', 'type': 'individual'}], 'nationalities': [{'code': 'CA', 'name': 'Canada'}], 'personType': 'knownPerson', 'phoneNumber': {'countryCallingCode': '1', 'countryCode2letterIso': 'CA', 'number': '7783888844'}, 'placeOfResidence': {'city': 'Edmonton', 'country': 'CA', 'countryName': 'Canada', 'postalCode': 'T6T 1B6', 'region': 'AB', 'street': '4323 33 St NW', 'streetAdditional': ''}, 'publicationDetails': {'bodsVersion': '0.3', 'publicationDate': '2024-09-11', 'publisher': {'name': 'BCROS - BC Registries and Online Services', 'url': 'https://www.bcregistry.gov.bc.ca/'}}, 'source': {'assertedBy': [{'name': 'Kial Jinnah'}], 'description': 'Using Gov BC - BTR - Web UI', 'type': ['selfDeclaration']}, 'statementDate': '2024-09-11', 'statementID': '1199dc30-6cd8-47fa-be79-f057348ab36b', 'statementType': 'personStatement', 'taxResidencies': [{'code': 'CA', 'name': 'Canada'}], 'uuid': 'a4b3844a-f68b-4092-b490-85a603f6d424'},
+            {'interestedParty': {'describedByPersonStatement': '1199dc30-6cd8-47fa-be79-f057348ab36b', 'hasMailingAddress': False, 'verificationStatus': 'unverified', 'addresses': [{'type': 'residence', 'city': 'Edmonton', 'country': 'CA', 'countryName': 'Canada', 'postalCode': 'T6T 1B6', 'region': 'AB', 'street': '4323 33 St NW', 'streetAdditional': ''}], 'birthDate': '2023-11-07', 'email': 'fake@email.com', 'hasTaxNumber': True, 'identifiers': [{'id': '711 612 325', 'scheme': 'CAN-TAXID', 'schemeName': 'ITN'}], 'isComponent': False, 'isPermanentResidentCa': False, 'names': [{'fullName': 'Kial Jinnah', 'type': 'individual'}], 'nationalities': [{'code': 'CA', 'name': 'Canada'}], 'personType': 'knownPerson', 'phoneNumber': {'countryCallingCode': '1', 'countryCode2letterIso': 'CA', 'number': '7783888844'}, 'placeOfResidence': {'city': 'Edmonton', 'country': 'CA', 'countryName': 'Canada', 'postalCode': 'T6T 1B6', 'region': 'AB', 'street': '4323 33 St NW', 'streetAdditional': ''}, 'publicationDetails': {'bodsVersion': '0.3', 'publicationDate': '2024-09-11', 'publisher': {'name': 'BCROS - BC Registries and Online Services', 'url': 'https://www.bcregistry.gov.bc.ca/'}}, 'source': {'assertedBy': [{'name': 'Kial Jinnah'}], 'description': 'Using Gov BC - BTR - Web UI', 'type': ['selfDeclaration']}, 'statementDate': '2024-09-11', 'statementID': '1199dc30-6cd8-47fa-be79-f057348ab36b', 'statementType': 'personStatement', 'taxResidencies': [{'code': 'CA', 'name': 'Canada'}], 'uuid': 'a4b3844a-f68b-4092-b490-85a603f6d424'},
              'interests': [{'details': 'controlType.shares.beneficialOwner', 'directOrIndirect': 'direct', 'share': {'exclusiveMaximum': False, 'exclusiveMinimum': False, 'maximum': 50, 'minimum': 25}, 'startDate': '2014-11-07', 'type': 'shareholding'}, {'details': 'controlType.shares.registeredOwner', 'directOrIndirect': 'direct', 'share': {'exclusiveMaximum': False, 'exclusiveMinimum': False, 'maximum': 50, 'minimum': 25}, 'startDate': '2014-11-07', 'type': 'shareholding'}, {'details': 'controlType.votes.beneficialOwner', 'directOrIndirect': 'direct', 'share': {'exclusiveMaximum': False, 'exclusiveMinimum': True, 'maximum': 75, 'minimum': 50}, 'startDate': '2014-11-07', 'type': 'votingRights'}],
              'interestTypes': ['shareholding', 'votingRights'],
              'isComponent': False,
@@ -381,7 +381,7 @@ def test_post_plots_db_mocked(app, session, client, jwt, mocker, requests_mock):
              'statementType': 'ownershipOrControlStatement',
              'subject': {'describedByEntityStatement': ''}
             },
-            {'interestedParty': {'describedByPersonStatement': '4b7863a1-4fbf-42a5-afe8-8f4a4f3ca049', 'hasMailingAddress': False, 'addresses': [{'type': 'residence', 'city': 'Vancouver', 'country': 'CA', 'countryName': 'Canada', 'postalCode': 'V6H 2T8', 'region': 'BC', 'street': 'Th-3023 Birch St', 'streetAdditional': ''}], 'birthDate': '2000-02-02', 'email': 'fake2@email.com', 'hasTaxNumber': True, 'identifiers': [{'id': '402 931 299', 'scheme': 'CAN-TAXID', 'schemeName': 'ITN'}], 'isComponent': False, 'isPermanentResidentCa': True, 'names': [{'fullName': 'Wallaby Willow', 'type': 'individual'}], 'nationalities': [{'code': 'AL', 'name': 'Albania'}, {'code': 'BZ', 'name': 'Belize'}], 'personType': 'knownPerson', 'phoneNumber': {'countryCallingCode': '1', 'countryCode2letterIso': 'CA', 'number': '2508747772'}, 'placeOfResidence': {'city': 'Vancouver', 'country': 'CA', 'countryName': 'Canada', 'postalCode': 'V6H 2T8', 'region': 'BC', 'street': 'Th-3023 Birch St', 'streetAdditional': ''}, 'publicationDetails': {'bodsVersion': '0.3', 'publicationDate': '2024-09-16', 'publisher': {'name': 'BCROS - BC Registries and Online Services', 'url': 'https://www.bcregistry.gov.bc.ca/'}}, 'source': {'assertedBy': [{'name': 'Wallaby Willow'}], 'description': 'Using Gov BC - BTR - Web UI', 'type': ['selfDeclaration']}, 'statementDate': '2024-09-16', 'statementID': '4b7863a1-4fbf-42a5-afe8-8f4a4f3ca049', 'statementType': 'personStatement', 'taxResidencies': [{'code': 'CA', 'name': 'Canada'}], 'uuid': '1a825cce-a3fa-47b2-b8c3-e2fae40ac7df'},
+            {'interestedParty': {'describedByPersonStatement': '4b7863a1-4fbf-42a5-afe8-8f4a4f3ca049', 'hasMailingAddress': False, 'verificationStatus': 'unverified', 'addresses': [{'type': 'residence', 'city': 'Vancouver', 'country': 'CA', 'countryName': 'Canada', 'postalCode': 'V6H 2T8', 'region': 'BC', 'street': 'Th-3023 Birch St', 'streetAdditional': ''}], 'birthDate': '2000-02-02', 'email': 'fake2@email.com', 'hasTaxNumber': True, 'identifiers': [{'id': '402 931 299', 'scheme': 'CAN-TAXID', 'schemeName': 'ITN'}], 'isComponent': False, 'isPermanentResidentCa': True, 'names': [{'fullName': 'Wallaby Willow', 'type': 'individual'}], 'nationalities': [{'code': 'AL', 'name': 'Albania'}, {'code': 'BZ', 'name': 'Belize'}], 'personType': 'knownPerson', 'phoneNumber': {'countryCallingCode': '1', 'countryCode2letterIso': 'CA', 'number': '2508747772'}, 'placeOfResidence': {'city': 'Vancouver', 'country': 'CA', 'countryName': 'Canada', 'postalCode': 'V6H 2T8', 'region': 'BC', 'street': 'Th-3023 Birch St', 'streetAdditional': ''}, 'publicationDetails': {'bodsVersion': '0.3', 'publicationDate': '2024-09-16', 'publisher': {'name': 'BCROS - BC Registries and Online Services', 'url': 'https://www.bcregistry.gov.bc.ca/'}}, 'source': {'assertedBy': [{'name': 'Wallaby Willow'}], 'description': 'Using Gov BC - BTR - Web UI', 'type': ['selfDeclaration']}, 'statementDate': '2024-09-16', 'statementID': '4b7863a1-4fbf-42a5-afe8-8f4a4f3ca049', 'statementType': 'personStatement', 'taxResidencies': [{'code': 'CA', 'name': 'Canada'}], 'uuid': '1a825cce-a3fa-47b2-b8c3-e2fae40ac7df'},
              'interests': [{'details': 'controlType.shares.indirectControl', 'directOrIndirect': 'indirect', 'share': {'exclusiveMaximum': False, 'exclusiveMinimum': False, 'maximum': 50, 'minimum': 25}, 'startDate': '2019-09-19', 'type': 'shareholding'}, {'details': 'controlType.votes.registeredOwner', 'directOrIndirect': 'direct', 'share': {'exclusiveMaximum': False, 'exclusiveMinimum': False, 'maximum': 50, 'minimum': 25}, 'startDate': '2019-09-19', 'type': 'votingRights'}],
              'interestTypes': ['shareholding', 'votingRights'],
              'isComponent': False,
@@ -391,7 +391,7 @@ def test_post_plots_db_mocked(app, session, client, jwt, mocker, requests_mock):
              'statementID': 'aef71bd1-8c64-4fff-a2d5-9a25b450745d',
              'statementType': 'ownershipOrControlStatement',
              'subject': {'describedByEntityStatement': ''}},
-            {'interestedParty': {'describedByPersonStatement': 'ce935e86-f4b9-4938-b12e-29c5e5cc213d', 'hasMailingAddress': False, 'addresses': [{'type': 'residence', 'city': 'Longueuil', 'country': 'CA', 'countryName': 'Canada', 'postalCode': 'J4H 3X9', 'region': 'QC', 'street': '433-405 Ch De Chambly', 'streetAdditional': ''}], 'birthDate': '2005-09-13', 'email': 'fake3@email.com', 'hasTaxNumber': False, 'identifiers': [], 'isComponent': False, 'isPermanentResidentCa': False, 'names': [{'fullName': 'Waffles Butter', 'type': 'individual'}], 'nationalities': [{'code': 'US', 'name': 'United States'}], 'personType': 'knownPerson', 'phoneNumber': {'countryCallingCode': '1', 'countryCode2letterIso': 'CA', 'number': '7784467467'}, 'placeOfResidence': {'city': 'Longueuil', 'country': 'CA', 'countryName': 'Canada', 'postalCode': 'J4H 3X9', 'region': 'QC', 'street': '433-405 Ch De Chambly', 'streetAdditional': ''}, 'publicationDetails': {'bodsVersion': '0.3', 'publicationDate': '2024-09-12', 'publisher': {'name': 'BCROS - BC Registries and Online Services', 'url': 'https://www.bcregistry.gov.bc.ca/'}}, 'source': {'assertedBy': [{'name': 'Waffles Butter'}], 'description': 'Using Gov BC - BTR - Web UI', 'type': ['selfDeclaration']}, 'statementDate': '2024-09-12', 'statementID': 'ce935e86-f4b9-4938-b12e-29c5e5cc213d', 'statementType': 'personStatement', 'taxResidencies': [], 'uuid': '839e35b8-d536-42e6-82ba-ba3c5a13582d'},
+            {'interestedParty': {'describedByPersonStatement': 'ce935e86-f4b9-4938-b12e-29c5e5cc213d', 'hasMailingAddress': False, 'verificationStatus': 'unverified', 'addresses': [{'type': 'residence', 'city': 'Longueuil', 'country': 'CA', 'countryName': 'Canada', 'postalCode': 'J4H 3X9', 'region': 'QC', 'street': '433-405 Ch De Chambly', 'streetAdditional': ''}], 'birthDate': '2005-09-13', 'email': 'fake3@email.com', 'hasTaxNumber': False, 'identifiers': [], 'isComponent': False, 'isPermanentResidentCa': False, 'names': [{'fullName': 'Waffles Butter', 'type': 'individual'}], 'nationalities': [{'code': 'US', 'name': 'United States'}], 'personType': 'knownPerson', 'phoneNumber': {'countryCallingCode': '1', 'countryCode2letterIso': 'CA', 'number': '7784467467'}, 'placeOfResidence': {'city': 'Longueuil', 'country': 'CA', 'countryName': 'Canada', 'postalCode': 'J4H 3X9', 'region': 'QC', 'street': '433-405 Ch De Chambly', 'streetAdditional': ''}, 'publicationDetails': {'bodsVersion': '0.3', 'publicationDate': '2024-09-12', 'publisher': {'name': 'BCROS - BC Registries and Online Services', 'url': 'https://www.bcregistry.gov.bc.ca/'}}, 'source': {'assertedBy': [{'name': 'Waffles Butter'}], 'description': 'Using Gov BC - BTR - Web UI', 'type': ['selfDeclaration']}, 'statementDate': '2024-09-12', 'statementID': 'ce935e86-f4b9-4938-b12e-29c5e5cc213d', 'statementType': 'personStatement', 'taxResidencies': [], 'uuid': '839e35b8-d536-42e6-82ba-ba3c5a13582d'},
              'interests': [{'details': 'controlType.shares.indirectControl', 'directOrIndirect': 'indirect', 'share': {'exclusiveMaximum': True, 'exclusiveMinimum': False, 'maximum': 25, 'minimum': 0}, 'startDate': '2021-09-07', 'type': 'shareholding'}],
              'interestTypes': ['shareholding'],
              'isComponent': False,
@@ -936,7 +936,17 @@ def test_post_plots_email_error(app, client, session, jwt, requests_mock):
             assert created_submission.business_identifier == json_data['businessIdentifier']
 
 
-def test_post_plots_invalid_verification(app, client, session, jwt, requests_mock):
+@pytest.mark.parametrize(
+    'test_name, verification_method, verification_is_valid',
+    [
+        ('self declaration - valid', 'verified_by_self', True),
+        ('self declaration - invalid due to name mismatch', 'verified_by_self', False),
+        ('verification by guardian - valid', 'verified_by_guardian', True),
+        ('verification by guardian - invalid due to age limitation', 'verified_by_guardian', False),
+        ('verification by lawyer - valid', 'verified_by_lawyer', True)
+    ]
+)
+def test_post_plots_with_verification(app, client, session, jwt, requests_mock, test_name, verification_method, verification_is_valid):
     """
         Assure no submission is created for invalid verification.
         A person cannot be verified if the account username does not match the name;
@@ -946,18 +956,24 @@ def test_post_plots_invalid_verification(app, client, session, jwt, requests_moc
     requests_mock.put(
         f"{app.config.get('BOR_SVC_URL')}/internal/solr/update", json={'message': 'Update accepted'}
     )
+    requests_mock.post(f"{app.config.get('NOTIFY_SVC_URL')}", json={})
 
     current_dir = os.path.dirname(__file__)
     with open(os.path.join(current_dir, '..', '..', 'mocks', 'significantIndividualsFiling', 'valid.json')) as file:
         json_data = json.load(file)
 
         # setup the verification status in submission payload
-        json_data["personStatements"][0]["verificationStatus"] = "verified_by_self"
-        json_data["personStatements"][1]["verificationStatus"] = "verified_by_guardian"
+        json_data["personStatements"][0]["verificationStatus"] = verification_method
 
-        # create a mismatch of account username and the SI name it is trying to verify
-        expected_name = json_data['personStatements'][0]['names'][0]['fullName']
-        username = expected_name + " something else"
+        # initialize variables and make neccesary changes to submission payload to simulate a valid or invalid verification
+        name = json_data['personStatements'][0]['names'][0]['fullName']
+        account_username = name + " something else" if not verification_is_valid else name
+        if verification_method == 'verified_by_guardian':
+            today = datetime.now().date()
+            if verification_is_valid:
+                json_data["personStatements"][0]["birthDate"] = today.strftime("%Y-%m-%d")
+            else:
+                json_data["personStatements"][0]["birthDate"] = (today - relativedelta(years=20)).strftime("%Y-%m-%d")
 
         identifier = json_data['businessIdentifier']
         requests_mock.get(
@@ -967,8 +983,19 @@ def test_post_plots_invalid_verification(app, client, session, jwt, requests_moc
         requests_mock.get(
             f"{app.config.get('LEGAL_SVC_URL')}/businesses/{identifier}", json=mocked_entity_response
         )
+        requests_mock.post(
+            f"{app.config.get('LEGAL_SVC_URL')}/businesses/{identifier}/filings", json={'message': 'Success'}
+        )
+        requests_mock.get(
+            f"{app.config.get('LEGAL_SVC_URL')}/businesses/{identifier}/addresses?addressType=deliveryAddress",
+            json=mocked_entity_address_response
+        )
         requests_mock.get(
             f"{app.config.get('LEGAL_SVC_URL')}/businesses/{identifier}/tasks", json=todos_initial_filing
+        )
+        requests_mock.get(
+            f"{app.config.get('AUTH_SVC_URL')}/entities/{identifier}",
+            json=mocked_auth_entity_contact_response
         )
 
         with nested_session(session):
@@ -981,23 +1008,28 @@ def test_post_plots_invalid_verification(app, client, session, jwt, requests_moc
                 headers=create_header(
                     jwt_manager=jwt,
                     roles=['basic'],
-                    username=username,
+                    username=account_username,
                     login_source='BCSC',
                     **{'Accept-Version': 'v1', 'content-type': 'application/json', 'Account-Id': 1},
                 ),
             )
 
-            assert rv.status_code == HTTPStatus.FORBIDDEN
-            assert rv.json.get('details') == [
-                {
-                    'error': f"legal name '{expected_name}' does not match login name '{username}'",
-                    'statementID': json_data['personStatements'][0]['statementID']
-                },
-                {
-                    'error': 'guardian verification is only for minors',
-                    'statementID': json_data['personStatements'][1]['statementID']
-                }
-            ]
+            assert rv.status_code == (HTTPStatus.CREATED if verification_is_valid else HTTPStatus.FORBIDDEN)
+
+            if verification_method == 'verified_by_self' and not verification_is_valid:
+                assert rv.json.get('details') == [
+                    {
+                        'error': f"legal name '{name}' does not match login name '{account_username}'",
+                        'statementID': json_data['personStatements'][0]['statementID']
+                    }
+                ]
+            elif verification_method == 'verified_by_guardian' and not verification_is_valid:
+                assert rv.json.get('details') == [
+                    {
+                        'error': 'guardian verification is only for minors',
+                        'statementID': json_data['personStatements'][0]['statementID']
+                    }
+                ]
 
 
 @pytest.mark.parametrize(

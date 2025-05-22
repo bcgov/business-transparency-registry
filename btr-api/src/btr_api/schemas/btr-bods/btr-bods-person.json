@@ -92,6 +92,18 @@
       },
       "propertyOrder": 10
     },
+    "verificationStatus": {
+      "title": "Verification status",
+      "description": "This describes if the person has been verified or not, and specifies the verification methods for the verified person",
+      "type": "string",
+      "enum": [
+        "verified_by_self",
+        "verified_by_guardian",
+        "verified_by_lawyer",
+        "unverified"
+      ],
+      "propertyOrder": 15
+    },
     "identifiers": {
       "title": "Identifiers",
       "description": "One or more official identifiers for this perrson. Where available, official registration numbers should be provided.",
@@ -197,7 +209,8 @@
         "phoneNumber",
         "email",
         "nationalities",
-        "names"
+        "names",
+        "verificationStatus"
       ]
     },
     {

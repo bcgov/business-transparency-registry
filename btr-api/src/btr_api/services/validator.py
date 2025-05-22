@@ -129,7 +129,7 @@ def _validate_self_declaration(person: dict, full_name: str, login_source: str, 
 def _validate_guardian_verification(person: dict) -> list[dict]:
     # validate guardian verification; only minor SIs can be verified by their parents or guardians
     errors = []
-    if birthdate := person.get("birthdate"):
+    if birthdate := person.get("birthDate"):
         birthdate = LegislationDatetime.as_legislation_timezone_from_date_str(birthdate).date()
         minor_threshold = LegislationDatetime.now() - relativedelta(years=19)
         is_minor = minor_threshold.date() < birthdate
@@ -163,17 +163,7 @@ def validate_verification(person_statements: list[dict], jwt_oidc_token: dict) -
     roles = jwt_oidc_token.get("roles", [])
 
     for person in person_statements:
-        if not person.get("verificationStatus"):
-            continue
-
-        try:
-            status = VerificationStatus(person.get("verificationStatus"))
-        except ValueError:
-            errors.append({
-                "statementID": person.get("statementID"),
-                "error": "invalid verification status",
-            })
-            continue
+        status = VerificationStatus(person.get("verificationStatus"))
 
         if status == VerificationStatus.VERIFIED_BY_SELF:
             errors += _validate_self_declaration(person, full_name, login_source, roles)

@@ -85,9 +85,9 @@ class Person(Versioned, Base):
     def is_verified(self):
         """Return True if the person is verified."""
         return self.person_json.get('verificationStatus') in [
-            VerificationStatus.VERIFIED_BY_SELF,
-            VerificationStatus.VERIFIED_BY_GUARDIAN,
-            VerificationStatus.VERIFIED_BY_LAWYER
+            VerificationStatus.VERIFIED_BY_SELF.value,
+            VerificationStatus.VERIFIED_BY_GUARDIAN.value,
+            VerificationStatus.VERIFIED_BY_LAWYER.value
         ]
 
     @classmethod
