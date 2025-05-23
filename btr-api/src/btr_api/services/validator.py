@@ -117,7 +117,7 @@ def _validate_self_declaration(person: dict, full_name: str, login_source: str, 
     # Check legal name match
     names = person.get("names", [])
     legal_name = next((n.get("fullName") for n in names if n.get("type") == "individual"), None)
-    if legal_name and full_name != legal_name:
+    if legal_name and full_name.lower() != legal_name.lower():
         errors.append({
             "statementID": person.get("statementID"),
             "error": f"legal name '{legal_name}' does not match login name '{full_name}'",

@@ -103,7 +103,5 @@ def create_header_account(jwt_manager,
                           account_id: str = 'PS12345', **kwargs):
     """Return a header containing a JWT bearer token and an account ID."""
     token = create_jwt(jwt_manager, roles=roles, username=username)
-    print(f"\nusername: {username}")
-    print(f"\ntoken: {token}")
     headers = {**kwargs, **{'Authorization': 'Bearer ' + token}, **{'Account-Id': account_id}}
     return headers
