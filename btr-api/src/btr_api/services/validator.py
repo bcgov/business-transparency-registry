@@ -78,12 +78,13 @@ def _validate_change_filing(todos: list) -> []:
     return ['Invalid filingType']
 
 
-def validate_tr_filing_for_type(submission: dict, jwt: JwtManager):
+def validate_tr_filing_for_type(submission: dict, jwt: JwtManager) -> list[str]:
     """
     Validate the filing on its type and available todos to verify if this filing type can be filed.
 
     Parameters:
-    filing (dict): The filing data to validate
+    submission (dict): The filing data to validate
+    jwt (JwtManager): The JWT manager object for authentication
 
     Returns:
     list[str]: A list of errors, if any, found during validation
@@ -92,15 +93,16 @@ def validate_tr_filing_for_type(submission: dict, jwt: JwtManager):
     business_identifier = submission['businessIdentifier']
     entity_service = EntityService(current_app)
     todos = (entity_service.get_entity_info(jwt, f'{business_identifier}/tasks')).json().get('tasks', [])
+    skip_change_and_annual_filing_validation = current_app.config.get('SKIP_CHANGE_AND_ANNUAL_FILING_VALIDATION', False)
 
     if filing_type == 'INITIAL_FILING':
         return _validate_initial_filing(todos)
 
     if filing_type == 'CHANGE_FILING':
-        return _validate_change_filing(todos)
+        return [] if skip_change_and_annual_filing_validation else _validate_change_filing(todos)
 
     if filing_type == 'ANNUAL_FILING':
-        return _validate_ar_filing(todos, submission)
+        return [] if skip_change_and_annual_filing_validation else _validate_ar_filing(todos, submission)
 
     return ['Invalid filingType']
 
