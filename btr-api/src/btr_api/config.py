@@ -123,6 +123,9 @@ class Config:  # pylint: disable=too-few-public-methods
 
     DAYS_TO_AUTO_REJECT_REQUESTS = os.getenv('DAYS_TO_AUTO_REJECT_REQUESTS', '60')
 
+    SKIP_CHANGE_AND_ANNUAL_FILING_VALIDATION = \
+        os.getenv('SKIP_CHANGE_AND_ANNUAL_FILING_VALIDATION', 'false').lower() == 'true'
+
     # Cache stuff
     CACHE_TYPE = os.getenv('CACHE_TYPE', 'FileSystemCache')
     CACHE_DIR = os.getenv('CACHE_DIR', 'cache')
@@ -195,6 +198,8 @@ class Testing(Config):  # pylint: disable=too-few-public-methods
     LEGAL_SVC_URL = 'https://test-legal-url'
     BOR_SVC_URL = 'https://test-bor-url'
     NOTIFY_SVC_URL = 'https://test-notify-api-url'
+
+    SKIP_CHANGE_AND_ANNUAL_FILING_VALIDATION = False
 
     SSO_SVC_TOKEN_URL = 'https://test-token-url'
     SVC_ACC_CLIENT_ID = 'service-account'
