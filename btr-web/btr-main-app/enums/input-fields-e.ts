@@ -34,5 +34,6 @@ export enum InputFieldsE {
   IS_TAX_RESIDENT = 'isTaxResident',
   DETERMINATION_OF_INCAPACITY = 'determinationOfIncapacity',
   PHONE_NUMBER = 'phoneNumber',
-  EFFECTIVE_DATES = 'effectiveDates'
+  EFFECTIVE_DATES = 'effectiveDates',
+  DECLARATION = 'verificationStatus'
 }
