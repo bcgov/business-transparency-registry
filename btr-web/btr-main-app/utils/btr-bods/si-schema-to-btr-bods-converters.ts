@@ -1,6 +1,7 @@
-import {
+import { BodsBtrAddressTypeE } from '~/interfaces/btr-bods/components-i'
+import type {
   BodsBtrAddressI,
-  BodsBtrAddressTypeE,
+
   BodsCountryI,
   BodsIdentifierI,
   BodsInterestI,
@@ -16,7 +17,7 @@ import {
   ControlOfVotesDetailsE
 } from '~/enums/btr-bods-e'
 import { PercentageRangeE } from '~/enums/percentage-range-e'
-import {
+import type {
   ConnectedInvidualSchemaType,
   SiControlOfDirectorsSchemaType,
   SiControlOfSchemaType,

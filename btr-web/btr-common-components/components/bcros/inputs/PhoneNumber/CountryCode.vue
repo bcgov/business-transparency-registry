@@ -58,7 +58,7 @@
 import countryList from 'country-codes-list'
 import { watch } from 'vue'
 import BcrosCountryFlag from '~/components/bcros/CountryFlag.vue'
-import { CountryListItemI } from '~/interfaces/country-dropdown-i'
+import { type CountryListItemI } from '~/interfaces/country-dropdown-i'
 
 const countryCallingCode = defineModel<string | undefined>('countryCallingCode', { required: false })
 const countryCode2letterIso = defineModel<string | undefined>('countryCode2letterIso', { required: false })

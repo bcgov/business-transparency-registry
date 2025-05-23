@@ -45,7 +45,7 @@
 
 <script setup lang="ts">
 import { usePayFeesWidget } from '../../btr-common-components/stores/pay-fees-widget'
-import { FilingDataI } from '../../btr-common-components/interfaces/filling-data-i'
+import { type FilingDataI } from '../../btr-common-components/interfaces/filling-data-i'
 
 const payFeesWidget = usePayFeesWidget()
 const filingData: FilingDataI[] = [

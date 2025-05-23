@@ -19,7 +19,7 @@
 </template>
 
 <script setup lang="ts">
-import { PopperOptions } from '#ui/types'
+import type { PopperOptions } from '#ui/types'
 
 defineProps<{
   text?: string

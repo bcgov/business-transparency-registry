@@ -1,4 +1,4 @@
-import { SiSchemaType } from '~/utils/si-schema/definitions'
+import { type SiSchemaType } from '~/utils/si-schema/definitions'
 
 export const btrSubmissionExampleMock = {
   business_identifier: 'BC0871427',

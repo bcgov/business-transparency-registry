@@ -1,6 +1,6 @@
-import { RefinementCtx, z } from 'zod'
+import { type RefinementCtx, z } from 'zod'
 import { PercentageRangeE } from '~/enums/percentage-range-e'
-import { CitizenshipSchemaType, SiNameSchemaType } from '~/utils/si-schema/definitions'
+import type { CitizenshipSchemaType, SiNameSchemaType } from '~/utils/si-schema/definitions'
 
 /**
  * Validate the Type of Director Control checkboxes.

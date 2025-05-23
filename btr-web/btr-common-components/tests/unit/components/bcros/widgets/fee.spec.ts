@@ -3,7 +3,7 @@ import { it, expect } from 'vitest'
 import { mountSuspended } from '@nuxt/test-utils/runtime'
 
 import { BcrosWidgetsFee } from '#components'
-import { FeeInfoI } from '~/interfaces/fees-i'
+import type { FeeInfoI } from '~/interfaces/fees-i'
 
 it('can mount fees component', async () => {
   const fees: FeeInfoI[] = [

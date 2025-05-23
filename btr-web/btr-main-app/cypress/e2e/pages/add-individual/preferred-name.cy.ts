@@ -1,5 +1,5 @@
 import business from '../../../fixtures/business.json'
-import json from '../../../../../btr-common-components/lang/en.json'
+import json from '../../../../../btr-common-components/i18n/locales/en.json'
 
 describe('pages -> Add individual -- preferred name', () => {
   const i18nCommon = json

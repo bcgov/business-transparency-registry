@@ -1,4 +1,4 @@
-import { RefinementCtx, z } from 'zod'
+import { type RefinementCtx, z } from 'zod'
 import { FilingSchemaBase } from '~/interfaces/significant-individual-filing-i'
 import { FilingActionE } from '#imports'
 

@@ -54,7 +54,7 @@
 </template>
 
 <script setup lang="ts">
-import { SiSchemaType } from '~/utils/si-schema/definitions'
+import type { SiSchemaType } from '~/utils/si-schema/definitions'
 
 const prop = defineProps<{ item: SiSchemaType }>()
 

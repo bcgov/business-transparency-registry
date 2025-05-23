@@ -1,4 +1,4 @@
-import { BodsInterestI, BodsPublicationDetailsI, BodsSourceI } from '~/interfaces/btr-bods/components-i'
+import type { BodsInterestI, BodsPublicationDetailsI, BodsSourceI } from '~/interfaces/btr-bods/components-i'
 import { BodsStatementTypeE, BodsInterestTypeE } from '~/enums/btr-bods-e'
 
 export interface BodsInterestedPartyI {

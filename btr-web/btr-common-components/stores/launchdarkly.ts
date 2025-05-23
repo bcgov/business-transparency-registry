@@ -1,4 +1,5 @@
-import { initialize, LDClient, LDFlagSet, LDOptions, LDMultiKindContext } from 'launchdarkly-js-client-sdk'
+import type { LDClient, LDFlagSet, LDOptions, LDMultiKindContext } from 'launchdarkly-js-client-sdk'
+import { initialize } from 'launchdarkly-js-client-sdk'
 import { defineStore } from 'pinia'
 
 export const useBcrosLaunchdarkly = defineStore('bcros/launchdarkly', () => {

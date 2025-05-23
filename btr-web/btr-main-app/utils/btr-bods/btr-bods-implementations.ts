@@ -1,4 +1,4 @@
-import { BodsPublicationDetailsI, BodsPublisherI, BodsSourceI } from '~/interfaces/btr-bods/components-i'
+import type { BodsPublicationDetailsI, BodsPublisherI, BodsSourceI } from '~/interfaces/btr-bods/components-i'
 import { BodsSourceTypeE } from '~/enums/btr-bods-e'
 
 const BCROS_URL = 'https://www.bcregistry.gov.bc.ca/'

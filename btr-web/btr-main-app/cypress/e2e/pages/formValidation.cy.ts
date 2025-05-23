@@ -2,8 +2,8 @@ describe('pages -> Form Validation', () => {
   let i18nCommon: any
   let i18n: any
   beforeEach(() => {
-    cy.readFile('../btr-common-components/lang/en.json').then((json) => { i18nCommon = json })
-    cy.readFile('lang/en.json').then((json) => { i18n = json })
+    cy.readFile('../btr-common-components/i18n/locales/en.json').then((json) => { i18nCommon = json })
+    cy.readFile('i18n/locales/en.json').then((json) => { i18n = json })
 
     cy.visitHomePageWithFakeData()
   })

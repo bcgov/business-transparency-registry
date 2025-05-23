@@ -1,4 +1,4 @@
-import { SiSchemaType } from '~/utils/si-schema/definitions'
+import { type SiSchemaType } from '~/utils/si-schema/definitions'
 import { InputFieldsE } from '~/enums/input-fields-e'
 
 const tempContainer: { [key: string]: any } = {}

@@ -1,5 +1,3 @@
-import { BtrFilingI } from '../../../../interfaces/btr-bods/btr-filing-i'
-
 describe('pages -> Control Table', () => {
   beforeEach(() => {
     cy.visitHomePageWithFakeData()
@@ -25,7 +23,7 @@ describe('pages -> Control Table', () => {
   // 1) the first SI has shares in concert with the second SI (new connection to add)
   // 2) the first SI has shares held jointly with the third SI (existing connection from previous submission)
   it('The control table is working as expected', () => {
-    cy.fixture('plotsEntityExistingSiResponse').then((siData: { payload: BtrFilingI }) => {
+    cy.fixture('plotsEntityExistingSiResponse').then((siData: { payload }) => {
       // should only display records for current active SIs
       const viewableOwnrStmnts = siData.payload.ownershipOrControlStatements.filter(
         ownrStmnt => !!ownrStmnt.interests.find(interest => !interest.endDate))

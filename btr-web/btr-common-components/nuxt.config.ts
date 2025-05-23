@@ -1,5 +1,6 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
+  compatibilityDate: '2025-05-16',
   ssr: false,
   ui: {
     icons: ['mdi'] // add here more icon sets from iconifiy if needed.
@@ -8,8 +9,7 @@ export default defineNuxtConfig({
     preference: 'light'
   },
   typescript: {
-    strict: true,
-    includeWorkspace: true
+    strict: true
   },
   devtools: { enabled: true },
   modules: [
@@ -25,7 +25,6 @@ export default defineNuxtConfig({
   i18n: {
     lazy: true,
     defaultLocale: 'en',
-    langDir: './lang',
     locales: [
       { code: 'en', file: 'en.json' }
     ]
@@ -61,12 +60,5 @@ export default defineNuxtConfig({
   },
   css: ['~/../assets/scss/global.scss'],
   vite: {
-    css: {
-      preprocessorOptions: {
-        scss: {
-          additionalData: '@use "../assets/styles/theme.scss" as *;'
-        }
-      }
-    }
   }
 })

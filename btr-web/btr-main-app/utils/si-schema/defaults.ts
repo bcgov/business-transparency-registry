@@ -1,8 +1,8 @@
 import { v4 as UUIDv4 } from 'uuid'
 import { todayIsoDateString } from '../../../btr-common-components/utils/date'
-import { AddressSchemaType, SiSchemaType } from '~/utils/si-schema/definitions'
+import type { AddressSchemaType, SiSchemaType } from '~/utils/si-schema/definitions'
 import { PercentageRangeE } from '~/enums/percentage-range-e'
-import { SignificantIndividualFilingI } from '~/interfaces/significant-individual-filing-i'
+import { type SignificantIndividualFilingI } from '~/interfaces/significant-individual-filing-i'
 import { SubmissionTypeE } from '~/enums/submission-type-e'
 
 export function getEmptyAddress (): AddressSchemaType {

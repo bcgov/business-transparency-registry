@@ -1,11 +1,11 @@
-import * as i18nCommon from '../../../../btr-common-components/lang/en.json'
-import * as i18n from '../../../lang/en.json'
+import * as i18nCommon from '../../../../btr-common-components/i18n/locales/en.json'
+import * as i18n from '../../../i18n/locales/en.json'
 describe('pages -> Request To Omit', () => {
   // let i18nCommon: any
   // let i18n: any
   beforeEach(() => {
-    // cy.readFile('../btr-common-components/lang/en.json').then((json) => { i18nCommon = json })
-    // cy.readFile('lang/en.json').then((json) => { i18n = json })
+    // cy.readFile('../btr-common-components/i18n/locales/en.json').then((json) => { i18nCommon = json })
+    // cy.readFile('i18n/locales/en.json').then((json) => { i18n = json })
     cy.visit('/request-to-omit')
   })
 

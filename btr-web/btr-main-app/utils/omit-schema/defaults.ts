@@ -1,5 +1,5 @@
 import { v4 as UUIDv4 } from 'uuid'
-import {
+import type {
   OmitSchemaType,
   CompletingPartySchemaType,
   OmitObscureSchemaType,

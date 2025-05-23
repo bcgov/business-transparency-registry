@@ -1,6 +1,6 @@
-import { PhoneSchemaType } from '../../../btr-common-components/interfaces/zod-schemas-t'
+import { type PhoneSchemaType } from '../../../btr-common-components/interfaces/zod-schemas-t'
 import { BodsPersonTypeE, BodsStatementTypeE, BodsUnspecifiedPersonDetailsTypeE } from '~/enums/btr-bods-e'
-import {
+import type {
   BodsBtrAddressI,
   BodsCountryI,
   BodsIdentifierI,

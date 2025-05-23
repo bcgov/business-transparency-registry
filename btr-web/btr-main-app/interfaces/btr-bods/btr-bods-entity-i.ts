@@ -1,5 +1,5 @@
 import { BodsEntityTypesE, BodsStatementTypeE } from '~/enums/btr-bods-e'
-import { BodsIdentifierI, BodsPublicationDetailsI, BodsSourceI } from '~/interfaces/btr-bods/components-i'
+import type { BodsIdentifierI, BodsPublicationDetailsI, BodsSourceI } from '~/interfaces/btr-bods/components-i'
 
 export interface BtrBodsEntityI {
   statementID: string,

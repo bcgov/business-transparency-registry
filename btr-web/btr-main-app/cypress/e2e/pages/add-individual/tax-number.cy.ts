@@ -3,7 +3,7 @@ describe('pages -> Add individual', () => {
 
   beforeEach(() => {
     // load the English version of the language file
-    cy.readFile('lang/en.json').then((json) => {
+    cy.readFile('i18n/locales/en.json').then((json) => {
       en = json
     })
 

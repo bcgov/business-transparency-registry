@@ -89,10 +89,10 @@
 </template>
 
 <script setup lang="ts">
-import { Ref, ref } from 'vue'
+import { type Ref, ref } from 'vue'
 import { z } from 'zod'
 import type { FormSubmitEvent } from '@nuxt/ui/dist/runtime/types'
-import { BtrAddressI } from '~/interfaces/btr-address-i'
+import type { BtrAddressI } from '~/interfaces/btr-address-i'
 import { validateEmailRfc5322Regex } from '~/utils/validation/form_inputs'
 
 const minNameLength = 1
@@ -139,9 +139,9 @@ function submit (event: FormSubmitEvent<Schema>) {
 </script>
 
 <style lang="scss">
-@import 'tailwindcss/base.css';
-@import 'tailwindcss/components.css';
-@import 'tailwindcss/utilities.css';
+@use 'tailwindcss/base.css';
+@use 'tailwindcss/components.css';
+@use 'tailwindcss/utilities.css';
 
 .bgBlueAPp {
   // example using tailwind colors inside scss

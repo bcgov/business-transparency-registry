@@ -1,4 +1,4 @@
-import json from '../../../../../btr-main-app/lang/en.json'
+import json from '../../../../../btr-main-app/i18n/locales/en.json'
 
 describe('pages -> Add individual -- preferred name', () => {
   const i18nCommon = json

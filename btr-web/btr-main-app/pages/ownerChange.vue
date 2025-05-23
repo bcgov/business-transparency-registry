@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { storeToRefs } from 'pinia'
 import { StatusCodes } from 'http-status-codes'
-import { SiSchemaType } from '~/utils/si-schema/definitions'
+import { type SiSchemaType } from '~/utils/si-schema/definitions'
 import fileSIApi from '~/services/file-significant-individual'
 
 const significantIndividuals = useSignificantIndividuals()

@@ -2,7 +2,7 @@
 import { z } from 'zod'
 import { getDefaultInputFormCompletingParty } from '~/utils/omit-schema/defaults'
 import {
-  CompletingPartySchemaType,
+  type CompletingPartySchemaType,
   CompletingPartySchema,
   UseTranslateErrorMap
 } from '~/utils/omit-schema/definitions'

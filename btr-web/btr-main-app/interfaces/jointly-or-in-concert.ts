@@ -1,4 +1,4 @@
-import { ConnectedInvidualSchemaType } from '~/utils/si-schema/definitions'
+import { type ConnectedInvidualSchemaType } from '~/utils/si-schema/definitions'
 
 export interface JointlyOrInConcertConnectionsI {
   votesInConcert: Array<ConnectedInvidualSchemaType>

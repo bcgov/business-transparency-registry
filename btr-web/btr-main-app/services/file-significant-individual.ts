@@ -1,10 +1,10 @@
 import { v4 as UUIDv4 } from 'uuid'
 
 import SiSchemaToBtrBodsConverters from '../utils/btr-bods/si-schema-to-btr-bods-converters'
-import { SignificantIndividualFilingI } from '~/interfaces/significant-individual-filing-i'
-import { IdAsNumberI } from '~/interfaces/common-ids-i'
-import { BtrBodsEntityI } from '~/interfaces/btr-bods/btr-bods-entity-i'
-import { BtrFilingI } from '~/interfaces/btr-bods/btr-filing-i'
+import { type SignificantIndividualFilingI } from '~/interfaces/significant-individual-filing-i'
+import { type IdAsNumberI } from '~/interfaces/common-ids-i'
+import { type BtrBodsEntityI } from '~/interfaces/btr-bods/btr-bods-entity-i'
+import { type BtrFilingI } from '~/interfaces/btr-bods/btr-filing-i'
 import { BodsEntityTypesE, BodsStatementTypeE } from '~/enums/btr-bods-e'
 import { SubmissionTypeE } from '~/enums/submission-type-e'
 import {
@@ -13,8 +13,8 @@ import {
   BtrBodsSources,
   BtrSourceDescriptionProvidedByBtrGovBC
 } from '~/utils/btr-bods/btr-bods-implementations'
-import { BtrBodsOwnershipOrControlI } from '~/interfaces/btr-bods/btr-bods-ownership-or-control-i'
-import { BtrBodsPersonI } from '~/interfaces/btr-bods/btr-bods-person-i'
+import { type BtrBodsOwnershipOrControlI } from '~/interfaces/btr-bods/btr-bods-ownership-or-control-i'
+import { type BtrBodsPersonI } from '~/interfaces/btr-bods/btr-bods-person-i'
 import {
   getSiControlConnectionsFromBodsSubmission,
   getSIsFromBtrBodsSubmission

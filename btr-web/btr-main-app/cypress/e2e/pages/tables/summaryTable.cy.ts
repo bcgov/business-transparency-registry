@@ -1,4 +1,3 @@
-import { BtrFilingI } from '../../../../interfaces/btr-bods/btr-filing-i'
 import { BodsInterestTypeE } from '../../../../enums/btr-bods-e'
 import { dateToString } from '../../../../../btr-common-components/utils/date'
 
@@ -17,7 +16,7 @@ describe('pages -> Summary Table', () => {
   })
 
   it('summary table body is rendered (existing SIs)', () => {
-    cy.fixture('plotsEntityExistingSiResponse').then((siData: { payload: BtrFilingI }) => {
+    cy.fixture('plotsEntityExistingSiResponse').then((siData: { payload }) => {
       // should only display records for current active SIs
       const viewableOwnrStmnts = siData.payload.ownershipOrControlStatements.filter(
         ownrStmnt => !!ownrStmnt.interests.find(interest => !interest.endDate))
