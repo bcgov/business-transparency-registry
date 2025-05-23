@@ -9,6 +9,7 @@ import {
 } from '~/interfaces/btr-bods/components-i'
 
 export interface BtrBodsPersonI {
+  verificationStatus: DeclarationTypeE,
   statementID: string
   statementType: BodsStatementTypeE, // should always be BodsStatementTypeE.PERSON_STATEMENT => personStatement
   statementDate: string

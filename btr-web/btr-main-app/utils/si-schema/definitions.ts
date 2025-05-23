@@ -1,5 +1,6 @@
 import { z } from 'zod'
 import { PercentageRangeE } from '~/enums/percentage-range-e'
+import { DeclarationTypeE } from '@/enums/declaration-type-e'
 
 const StartEndDateGroup = z.object({
   startDate: z.string().min(1),
@@ -74,6 +75,7 @@ export const AddressSchema = z.object({
 export type AddressSchemaType = z.infer<typeof AddressSchema>
 
 export const SiSchema = z.object({
+  verificationStatus: z.enum([DeclarationTypeE.self, DeclarationTypeE.parent, DeclarationTypeE.lawyer, DeclarationTypeE.none]),
   couldNotProvideMissingInfo: z.boolean(),
   missingInfoReason: z.string().optional(),
   name: SiNameSchema,

@@ -98,6 +98,7 @@ const getPersonAndOwnershipAndControlStatements = (sif: SignificantIndividualFil
       hasMailingAddress: hasFieldChanged(siSchema, InputFieldsE.MAILING_ADDRESS_IS_DIFFERENT)
         ? siSchema.mailingAddress?.isDifferent
         : undefined,
+      verificationStatus: siSchema.verificationStatus,
       birthDate: hasFieldChanged(siSchema, InputFieldsE.BIRTH_DATE) ? siSchema.birthDate : undefined,
       phoneNumber: hasFieldChanged(siSchema, InputFieldsE.PHONE_NUMBER) ? siSchema.phoneNumber : undefined,
       email: hasFieldChanged(siSchema, InputFieldsE.EMAIL) ? siSchema.email : undefined,
