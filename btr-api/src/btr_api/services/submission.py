@@ -195,7 +195,7 @@ class SubmissionService:  # pylint: disable=too-few-public-methods
                         f'Ownership statement id: {ownership_stmnt_id}',
                         HTTPStatus.BAD_REQUEST
                     )
-                # TODO: 'deep_spread' needs to be fixed #23489
+
                 current_ownership.ownership_json = deep_spread(current_ownership.ownership_json,
                                                                ownership_stmnt)
 
