@@ -57,7 +57,7 @@ from btr_api.models.submission import SubmissionSerializer
 from btr_api.services import btr_auth, btr_bor, btr_entity, btr_reg_search
 from btr_api.services import SchemaService
 from btr_api.services import SubmissionService
-from btr_api.services.validator import validate_entity, validate_tr_filing_for_type
+from btr_api.services.validator import validate_entity, validate_tr_filing_for_type, validate_verification
 from btr_api.utils import redact_information
 
 bp = Blueprint('submission', __name__, url_prefix='/plots')
@@ -150,6 +150,13 @@ def create_register():
             raise ValidationException(error='',
                                       errors=entity_errors,
                                       message='Invalid entity',
+                                      status_code=HTTPStatus.FORBIDDEN)
+
+        # validate verification; return FORBIDDEN if any significant individuals cannot be verified
+        if verification_errors := validate_verification(json_input['personStatements'], g.jwt_oidc_token_info):
+            raise ValidationException(error='',
+                                      errors=verification_errors,
+                                      message='Some significant individuals cannot be verified',
                                       status_code=HTTPStatus.FORBIDDEN)
 
         # create submission
@@ -245,6 +252,15 @@ def update_submission(sub_id: int):
                                           errors=errors,
                                           message='Invalid filing type',
                                           status_code=HTTPStatus.BAD_REQUEST)
+
+            # validate verification; return FORBIDDEN if any significant individuals cannot be verified
+            if verification_errors := validate_verification(
+                new_full_submission['personStatements'], g.jwt_oidc_token_info
+            ):
+                raise ValidationException(error='',
+                                          errors=verification_errors,
+                                          message='Some significant individuals cannot be verified',
+                                          status_code=HTTPStatus.FORBIDDEN)
 
             # create ledger record in LEAR
             try:

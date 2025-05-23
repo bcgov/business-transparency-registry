@@ -45,7 +45,7 @@ from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sql_versioning import Versioned
 
-from btr_api.enums import EmailType
+from btr_api.enums import EmailType, VerificationStatus
 from btr_api.utils.legislation_datetime import LegislationDatetime
 
 from .base import Base
@@ -81,6 +81,15 @@ class Person(Versioned, Base):
         # if birthdate is not entered then the person is treated as an adult
         return False
 
+    @property
+    def is_verified(self):
+        """Return True if the person is verified."""
+        return self.person_json.get('verificationStatus') in [
+            VerificationStatus.VERIFIED_BY_SELF.value,
+            VerificationStatus.VERIFIED_BY_GUARDIAN.value,
+            VerificationStatus.VERIFIED_BY_LAWYER.value
+        ]
+
     @classmethod
     def find_by_id(cls, person_id: int) -> Person | None:
         """Return the person by id."""
@@ -112,4 +121,4 @@ def receive_before_insert(mapper, connection, target: Person):  # pylint: disabl
     if birthdate := target.person_json.get('birthDate'):
         target.birthdate = LegislationDatetime.as_legislation_timezone_from_date_str(birthdate).date()
         # check if minor here / flip is public if necessary
-        target.is_public = target.is_minor
+        target.is_public = not target.is_minor
