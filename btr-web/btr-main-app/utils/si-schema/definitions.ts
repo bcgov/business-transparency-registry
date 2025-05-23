@@ -75,7 +75,12 @@ export const AddressSchema = z.object({
 export type AddressSchemaType = z.infer<typeof AddressSchema>
 
 export const SiSchema = z.object({
-  verificationStatus: z.enum([DeclarationTypeE.self, DeclarationTypeE.parent, DeclarationTypeE.lawyer, DeclarationTypeE.none]),
+  verificationStatus: z.enum([
+    DeclarationTypeE.self,
+    DeclarationTypeE.parent,
+    DeclarationTypeE.lawyer,
+    DeclarationTypeE.none
+  ]),
   couldNotProvideMissingInfo: z.boolean(),
   missingInfoReason: z.string().optional(),
   name: SiNameSchema,
