@@ -174,6 +174,23 @@ Cypress.Commands.add('addSingleTestSi', (profile: any) => {
   cy.get('#individual-person-preferred-name').type(profile.preferredName)
   cy.get('#individual-person-email').type(profile.email)
 
+  switch (profile.verificationStatus) {
+    case DeclarationTypeE.self:
+      cy.get('[data-cy="declaration-button-me"]').click()
+      break;
+    case DeclarationTypeE.parent:
+      cy.get('[data-cy="declaration-button-parent"]').click()
+      break;
+    case DeclarationTypeE.lawyer:
+      cy.get('[data-cy="declaration-button-lawyer"]').click()
+      break;
+    case DeclarationTypeE.none:
+      cy.get('[data-cy="declaration-button-none"]').click()
+      break;
+    default:
+      break;
+  }
+
   const controls = ['controlOfShares', 'controlOfVotes', 'controlOfDirectors']
   const percentageIndexMap = {
     [PercentageRangeE.LESS_THAN_25]: 0,
