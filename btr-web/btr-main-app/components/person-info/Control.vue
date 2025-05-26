@@ -131,7 +131,7 @@
 </template>
 
 <script setup lang="ts">
-import { SiSchemaType, SiControlOfDirectorsSchemaType } from '~/utils/si-schema/definitions'
+import type { SiSchemaType, SiControlOfDirectorsSchemaType } from '~/utils/si-schema/definitions'
 import SiSchemaToBtrBodsConverters from '~/utils/btr-bods/si-schema-to-btr-bods-converters'
 import { ControlOfSharesDetailsE, ControlOfVotesDetailsE, ControlOfDirectorsDetailsE } from '~/enums/btr-bods-e'
 import { PercentageRangeE } from '~/enums/percentage-range-e'

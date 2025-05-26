@@ -18,7 +18,7 @@
 </template>
 
 <script setup lang="ts">
-import { FormError } from '#ui/types'
+import type { FormError } from '#ui/types'
 
 defineEmits(['update:modelValue'])
 const props = defineProps({

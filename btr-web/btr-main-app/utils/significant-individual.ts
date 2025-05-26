@@ -1,4 +1,4 @@
-import { SiSchemaType } from '~/utils/si-schema/definitions'
+import { type SiSchemaType } from '~/utils/si-schema/definitions'
 
 /** Check if a significant individual has control of shares, votes, or directors that are
  * held jointly and/or exercised in concert

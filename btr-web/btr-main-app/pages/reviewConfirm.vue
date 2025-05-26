@@ -9,7 +9,7 @@
     </p>
 
     <BcrosAlertsMessage :flavour="AlertsFlavourE.INFO" data-cy="review-confirm-alert">
-      <p v-if="currentSIFiling.annualFilingNoChanges" class="py-2">
+      <div v-if="currentSIFiling.annualFilingNoChanges" class="py-2">
         <span class="font-bold">{{ $t('general.important') }}</span>
         <ul class="list-disc list-inside">
           <li>
@@ -19,7 +19,7 @@
             {{ $t('texts.reviewConfirmAlert.noChanges.text2') }}
           </li>
         </ul>
-      </p>
+      </div>
       <p v-else class="py-2">
         <BcrosI18HelperBold translation-path="texts.reviewConfirmAlert.general" />
       </p>
@@ -61,7 +61,7 @@
 <script setup lang="ts">
 import { storeToRefs } from 'pinia'
 import { z } from 'zod'
-import { SiSchemaType } from '~/utils/si-schema/definitions'
+import { type SiSchemaType } from '~/utils/si-schema/definitions'
 
 const { confirmReviewPageErrors } = storeToRefs(useConfirmReviewStore())
 

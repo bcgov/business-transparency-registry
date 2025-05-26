@@ -1,10 +1,10 @@
 import Axios from 'axios'
 import { StatusCodes } from 'http-status-codes'
 import { defineStore } from 'pinia'
-import { AccountI } from '~/interfaces/account-i'
+import { type AccountI } from '~/interfaces/account-i'
 import { ErrorCategoryE } from '~/enums/error-category-e'
-import { ErrorI } from '~/interfaces/error-i'
-import { KCUserI } from '~/interfaces/kc-user-i'
+import { type ErrorI } from '~/interfaces/error-i'
+import { type KCUserI } from '~/interfaces/kc-user-i'
 import { addAxiosInterceptors } from '~/utils/axios'
 
 /** Manages bcros account data */

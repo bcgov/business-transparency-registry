@@ -1,11 +1,11 @@
 import { defineStore } from 'pinia'
 import { v4 as UUIDv4 } from 'uuid'
-import { Ref } from 'vue'
+import { type Ref } from 'vue'
 import { StatusCodes } from 'http-status-codes'
 
-import { FeeInfoI, PayFeesWidgetItemI } from '~/interfaces/fees-i'
-import { ErrorI } from '~/interfaces/error-i'
-import { FilingDataI } from '~/interfaces/filling-data-i'
+import type { FeeInfoI, PayFeesWidgetItemI } from '~/interfaces/fees-i'
+import { type ErrorI } from '~/interfaces/error-i'
+import { type FilingDataI } from '~/interfaces/filling-data-i'
 
 import payApi from '~/services/pay-api'
 

@@ -1,5 +1,5 @@
 import { createI18n } from 'vue-i18n'
-import en from '~/lang/en.json'
+import en from '~/i18n/locales/en.json'
 
 export const mockedI18n = createI18n({
   locale: 'en',

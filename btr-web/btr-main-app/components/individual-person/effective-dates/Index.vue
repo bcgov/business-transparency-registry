@@ -33,7 +33,7 @@
 <script setup lang="ts">
 import { v4 as UUIDv4 } from 'uuid'
 import StartEndGroup from '~/components/individual-person/effective-dates/startEndGroup.vue'
-import { StartEndDateGroupSchemaType } from '~/utils/si-schema/definitions'
+import { type StartEndDateGroupSchemaType } from '~/utils/si-schema/definitions'
 
 /* eslint-disable func-call-spacing */
 const emit = defineEmits<{

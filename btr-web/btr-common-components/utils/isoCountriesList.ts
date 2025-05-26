@@ -1,4 +1,4 @@
-import { BtrCountrySubdivisionI } from '~/interfaces/btr-address-i'
+import { type BtrCountrySubdivisionI } from '~/interfaces/btr-address-i'
 
 export interface Iso3166_1Country {
   alpha_2: string

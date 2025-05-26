@@ -1,16 +1,19 @@
 import { BodsInterestTypeE, BodsNameTypeE, ControlOfSharesDetailsE } from '~/enums/btr-bods-e'
-import { BtrFilingI } from '~/interfaces/btr-bods/btr-filing-i'
-import { BtrBodsOwnershipOrControlI } from '~/interfaces/btr-bods/btr-bods-ownership-or-control-i'
-import { BtrBodsPersonI } from '~/interfaces/btr-bods/btr-bods-person-i'
-import { BodsBtrAddressI, BodsBtrAddressTypeE, BodsInterestI } from '~/interfaces/btr-bods/components-i'
-import {
+import { type BtrFilingI } from '~/interfaces/btr-bods/btr-filing-i'
+import { type BtrBodsOwnershipOrControlI } from '~/interfaces/btr-bods/btr-bods-ownership-or-control-i'
+import { type BtrBodsPersonI } from '~/interfaces/btr-bods/btr-bods-person-i'
+import type { BodsBtrAddressI, BodsInterestI } from '~/interfaces/btr-bods/components-i'
+import { BodsBtrAddressTypeE } from '~/interfaces/btr-bods/components-i'
+import type {
   AddressSchemaType,
   CountrySchemaType,
   CitizenshipSchemaType,
-  SiSchemaType, StartEndDateGroupSchemaType, ConnectedInvidualSchemaType
+  SiSchemaType,
+  StartEndDateGroupSchemaType,
+  ConnectedInvidualSchemaType
 } from '~/utils/si-schema/definitions'
 import { getEmptyAddress } from '~/utils/si-schema/defaults'
-import { JointlyOrInConcertConnectionsI } from '~/interfaces/jointly-or-in-concert'
+import { type JointlyOrInConcertConnectionsI } from '~/interfaces/jointly-or-in-concert'
 
 const _findOwnershipOrControlStatement =
   (submission: BtrFilingI, personStatementId: string): BtrBodsOwnershipOrControlI | null => {

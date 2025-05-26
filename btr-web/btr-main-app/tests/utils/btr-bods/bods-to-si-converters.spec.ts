@@ -1,7 +1,7 @@
 import { describe, expect } from 'vitest'
-import { BtrFilingI } from '~/interfaces/btr-bods/btr-filing-i'
+import { type BtrFilingI } from '~/interfaces/btr-bods/btr-filing-i'
 import { btrSubmissionExampleMock, expectedSisOutput } from '~/tests/mocks/btrSubmissionExample'
-import { SiSchemaType } from '~/utils/si-schema/definitions'
+import { type SiSchemaType } from '~/utils/si-schema/definitions'
 import { getSIsFromBtrBodsSubmission } from '~/utils/btr-bods/bods-to-si-schema-converters'
 
 describe('getSIsFromBtrBodsSubmission', () => {

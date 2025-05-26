@@ -66,7 +66,7 @@
 import { vMaska } from 'maska/vue'
 import { Mask } from 'maska'
 
-import { PhoneSchemaType } from '~/interfaces/zod-schemas-t'
+import { type PhoneSchemaType } from '~/interfaces/zod-schemas-t'
 
 const emit = defineEmits<{(e: 'country-change'): void }>()
 

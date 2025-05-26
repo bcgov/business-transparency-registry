@@ -1,7 +1,8 @@
-import { SiSchemaType } from '~/utils/si-schema/definitions'
-import { JointlyOrInConcertConnectionsI } from '~/interfaces/jointly-or-in-concert'
+import { defineStore } from 'pinia'
+import { type SiSchemaType } from '~/utils/si-schema/definitions'
+import { type JointlyOrInConcertConnectionsI } from '~/interfaces/jointly-or-in-concert'
 import { hasSharedControl } from '~/utils/significant-individual'
-import { BtrFilingI } from '~/interfaces/btr-bods/btr-filing-i'
+import { type BtrFilingI } from '~/interfaces/btr-bods/btr-filing-i'
 import fileSIApi from '~/services/file-significant-individual'
 
 export const useSiControlStore = defineStore('jointlyOrInConcert', () => {

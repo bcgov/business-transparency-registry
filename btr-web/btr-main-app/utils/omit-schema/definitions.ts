@@ -1,4 +1,4 @@
-import { z, RefinementCtx } from 'zod'
+import { z, type RefinementCtx } from 'zod'
 import { CompletingIndividualTypeE } from '~/enums/omit/completing-individual-type-e'
 import { InfoToOmitE } from '~/enums/omit/info-to-omit-e'
 import { IndividualsAtRiskE } from '~/enums/omit/individuals-at-risk-e'

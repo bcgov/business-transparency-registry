@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { getDefaultInputFormOmitObscure } from '~/utils/omit-schema/defaults'
 import {
-  OmitObscureSchemaType,
+  type OmitObscureSchemaType,
   OmitObscureSchema
 } from '~/utils/omit-schema/definitions'
 import { InfoToOmitE } from '~/enums/omit/info-to-omit-e'
