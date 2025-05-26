@@ -2,6 +2,7 @@ import 'cypress-axe'
 import './ownerChangeFormHelper'
 import { SubmissionTypeE } from '../../enums/submission-type-e'
 import { PercentageRangeE } from '../../enums/percentage-range-e'
+import { DeclarationTypeE } from '../../enums/declaration-type-e'
 
 Cypress.Commands.add('interceptPostsBtrApi', () => {
   cy.fixture('plotsEntityExistingSiResponse').then((plotsEntityExistingSiResponse) => {
@@ -177,18 +178,18 @@ Cypress.Commands.add('addSingleTestSi', (profile: any) => {
   switch (profile.verificationStatus) {
     case DeclarationTypeE.self:
       cy.get('[data-cy="declaration-button-me"]').click()
-      break;
+      break
     case DeclarationTypeE.parent:
       cy.get('[data-cy="declaration-button-parent"]').click()
-      break;
+      break
     case DeclarationTypeE.lawyer:
       cy.get('[data-cy="declaration-button-lawyer"]').click()
-      break;
+      break
     case DeclarationTypeE.none:
       cy.get('[data-cy="declaration-button-none"]').click()
-      break;
+      break
     default:
-      break;
+      break
   }
 
   const controls = ['controlOfShares', 'controlOfVotes', 'controlOfDirectors']
