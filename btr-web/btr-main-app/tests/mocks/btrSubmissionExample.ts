@@ -532,7 +532,7 @@ export const expectedSisOutput: SiSchemaType[] = [
     couldNotProvideMissingInfo: false,
     determinationOfIncapacity: false,
     missingInfoReason: '',
-    verificationStatus: 'verified_by_self',
+    verificationStatus: DeclarationTypeE.verified_by_self,
     name: {
       isYourOwnInformation: false,
       isUsePreferredName: true,
@@ -613,6 +613,7 @@ export const expectedSisOutput: SiSchemaType[] = [
   },
   {
     missingInfoReason: 'It actually really is unless it is not',
+    verificationStatus: DeclarationTypeE.verified_by_self,
     name: {
       isUsePreferredName: true,
       isYourOwnInformation: false,
@@ -691,6 +692,7 @@ export const expectedSisOutput: SiSchemaType[] = [
 
   },
   {
+    verificationStatus: DeclarationTypeE.verified_by_self,
     controlOfDirectors: {
       actingJointly: false,
       directControl: true,
