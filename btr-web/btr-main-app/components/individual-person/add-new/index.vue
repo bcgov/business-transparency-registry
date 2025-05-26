@@ -512,9 +512,9 @@
 
 <script setup lang="ts">
 import { type RefinementCtx, z } from 'zod'
+import type { FormError } from '#ui/types'
 import type { BtrCountryI } from '../../../../btr-common-components/interfaces/btr-address-i'
 import { validateEmailRfc6532Regex } from '../../../../btr-common-components/utils'
-import type { FormError } from '#ui/types'
 import {
   validateControlSelectionForSharesAndVotes,
   validateNameSuperRefineAddForm,
