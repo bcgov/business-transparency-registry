@@ -198,7 +198,7 @@ const _getSi = (
       isDifferent: !!bodsMailingAddress,
       address: bodsMailingAddress ? _getSIAddress(bodsMailingAddress) : undefined
     },
-    verificationStatus: person.verificationStatus,
+    verificationStatus: person.verificationStatus as DeclarationTypeE,
     isControlSelected: _isControlSelected(oocs.interestTypes || []),
     controlOfDirectors: {
       directControl: isControlType(oocs, ControlOfDirectorsDetailsE.DIRECT_CONTROL),

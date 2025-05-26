@@ -7,6 +7,7 @@ import type {
   BodsNameI,
   BodsPublicationDetailsI, BodsSourceI
 } from '~/interfaces/btr-bods/components-i'
+import { DeclarationTypeE } from '~/enums/declaration-type-e'
 
 export interface BtrBodsPersonI {
   verificationStatus: DeclarationTypeE,
