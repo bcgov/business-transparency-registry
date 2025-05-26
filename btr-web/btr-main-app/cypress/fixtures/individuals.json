@@ -1,5 +1,6 @@
 {
   "profile1": {
+    "verificationStatus": "verified_by_self",
     "fullName": "John Smith",
     "preferredName": "John",
     "email": "123@test.com",
@@ -51,6 +52,7 @@
     }
   },
   "profile2": {
+    "verificationStatus": "verified_by_lawyer",
     "fullName": "John Doe",
     "preferredName": "John",
     "email": "test@testemail.com",
