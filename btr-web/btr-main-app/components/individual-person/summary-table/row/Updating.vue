@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { SiSchemaType } from '~/utils/si-schema/definitions'
+import { type SiSchemaType } from '~/utils/si-schema/definitions'
 defineProps<{ si: SiSchemaType }>()
 </script>
 

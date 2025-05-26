@@ -22,7 +22,7 @@
 </template>
 
 <script setup lang="ts">
-import { Ref } from 'vue'
+import { type Ref } from 'vue'
 import { AlertsFlavourE } from '~/enums/alerts-e'
 
 const props = withDefaults(

@@ -509,9 +509,9 @@
 </template>
 
 <script setup lang="ts">
-import { RefinementCtx, z } from 'zod'
+import { type RefinementCtx, z } from 'zod'
 import type { FormError } from '#ui/types'
-import { BtrCountryI } from '../../../../btr-common-components/interfaces/btr-address-i'
+import type { BtrCountryI } from '../../../../btr-common-components/interfaces/btr-address-i'
 import { validateEmailRfc6532Regex } from '../../../../btr-common-components/utils'
 import {
   validateControlSelectionForSharesAndVotes,
@@ -525,7 +525,8 @@ import {
   SiControlOfSchema,
   SiNameSchema,
   CitizenshipSchema,
-  SiSchema, SiSchemaType,
+  SiSchema,
+  type SiSchemaType,
   TaxSchema
 } from '~/utils/si-schema/definitions'
 import { getDefaultInputFormSi, getEmptyAddress } from '~/utils/si-schema/defaults'

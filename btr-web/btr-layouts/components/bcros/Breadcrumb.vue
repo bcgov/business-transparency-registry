@@ -35,7 +35,7 @@
 const props = defineProps<{ crumbConstructors:(() => BreadcrumbI)[] }>()
 const breadcrumbs = computed(() => props.crumbConstructors.map(getCrumb => getCrumb()))
 const { redirect } = useBcrosNavigate()
-const { push } = useRouter()
+const { navigateTo } = useRouter()
 
 const back = () => {
   const crumbsLength = breadcrumbs.value.length
@@ -45,7 +45,7 @@ const back = () => {
 
 const navigate = (breadcrumb: BreadcrumbI): void => {
   if (breadcrumb.to) {
-    push(breadcrumb.to)
+    navigateTo(breadcrumb.to)
   } else if (breadcrumb.href) {
     redirect(breadcrumb.href)
   }

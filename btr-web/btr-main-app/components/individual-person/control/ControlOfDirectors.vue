@@ -64,7 +64,7 @@
 <script setup lang="ts">
 import { v4 as UUIDv4 } from 'uuid'
 import { type UseEventBusReturn } from '@vueuse/core'
-import { SiControlOfDirectorsSchemaType } from '~/utils/si-schema/definitions'
+import type { SiControlOfDirectorsSchemaType } from '~/utils/si-schema/definitions'
 
 const formBus = inject<UseEventBusReturn<any, string> | undefined>('form-events', undefined)
 

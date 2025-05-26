@@ -1,5 +1,6 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
+  compatibilityDate: '2025-05-16',
   modules: [
     'nuxt-anchorscroll'
   ],
@@ -16,7 +17,6 @@ export default defineNuxtConfig({
   i18n: {
     lazy: true,
     defaultLocale: 'en',
-    langDir: './lang',
     locales: [
       { code: 'en', file: 'en.json' }
     ]

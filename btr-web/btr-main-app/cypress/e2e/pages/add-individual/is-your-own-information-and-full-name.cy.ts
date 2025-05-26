@@ -1,5 +1,5 @@
 import business from '../../../fixtures/business.json'
-import json from '../../../../../btr-common-components/lang/en.json'
+import json from '../../../../../btr-common-components/i18n/locales/en.json'
 
 import specificJson from '../../../../../btr-main-app/lang/en.json'
 

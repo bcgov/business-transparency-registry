@@ -1,4 +1,4 @@
-import { ContactInfoI } from '~/interfaces/contact-info-i'
+import { type ContactInfoI } from '~/interfaces/contact-info-i'
 
 const contactInfo = {
   helpDesk: [

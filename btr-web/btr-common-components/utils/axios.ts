@@ -1,4 +1,4 @@
-import { AxiosInstance } from 'axios'
+import { type AxiosInstance } from 'axios'
 
 export function addAxiosInterceptors (axiosInstance: AxiosInstance): AxiosInstance {
   axiosInstance.interceptors.request.use(
