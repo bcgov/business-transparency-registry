@@ -4,7 +4,6 @@ export const btrSubmissionExampleMock = {
   business_identifier: 'BC0871427',
   effective_date: '2024-01-04',
   id: 15,
-  verificationStatus: 'verified_by_self',
   payload: {
     businessIdentifier: 'BC0871427',
     effectiveDate: '2024-01-04',
@@ -273,6 +272,7 @@ export const btrSubmissionExampleMock = {
     personStatements: [
       {
         determinationOfIncapacity: false,
+        verificationStatus: 'verified_by_self',
         addresses: [
           {
             city: 'Beamsville',
@@ -359,6 +359,7 @@ export const btrSubmissionExampleMock = {
       },
       {
         determinationOfIncapacity: false,
+        verificationStatus: 'verified_by_self',
         addresses: [
           {
             city: 'Scarborough',
@@ -443,6 +444,7 @@ export const btrSubmissionExampleMock = {
       },
       {
         determinationOfIncapacity: false,
+        verificationStatus: 'verified_by_self',
         addresses: [
           {
             city: 'Vancouver',
