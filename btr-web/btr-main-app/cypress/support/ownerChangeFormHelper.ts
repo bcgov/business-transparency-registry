@@ -2,27 +2,29 @@ import { DeclarationTypeE } from '../../enums/declaration-type-e'
 
 Cypress.Commands.add('fillOutForm', (siDataToEnter) => {
   // fill out the form
-  cy.get('#individual-person-full-name').type(siDataToEnter.fullName)
-  cy.get('[data-cy=usePreferredName').check()
-  cy.get('#individual-person-preferred-name').type(siDataToEnter.preferredName)
-  cy.get('#individual-person-email').type(siDataToEnter.email)
-
   switch (siDataToEnter.verificationStatus) {
     case DeclarationTypeE.self:
       cy.get('[data-cy="declaration-button-me"]').click()
       break
     case DeclarationTypeE.parent:
       cy.get('[data-cy="declaration-button-parent"]').click()
+      cy.get('#individual-person-full-name').type(siDataToEnter.fullName)
       break
     case DeclarationTypeE.lawyer:
       cy.get('[data-cy="declaration-button-lawyer"]').click()
+      cy.get('#individual-person-full-name').type(siDataToEnter.fullName)
       break
     case DeclarationTypeE.none:
       cy.get('[data-cy="declaration-button-none"]').click()
+      cy.get('#individual-person-full-name').type(siDataToEnter.fullName)
       break
     default:
       break
   }
+
+  cy.get('[data-cy=usePreferredName').check()
+  cy.get('#individual-person-preferred-name').type(siDataToEnter.preferredName)
+  cy.get('#individual-person-email').type(siDataToEnter.email)
 
   // enter shares and votes percentage
   cy.get('[data-cy="controlOfShares.percentage.2"]').click()

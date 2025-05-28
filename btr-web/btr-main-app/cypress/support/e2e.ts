@@ -170,10 +170,6 @@ Cypress.Commands.add('siSelectCitizenship', (citizenships: Array<BtrCountryI>) =
 
 Cypress.Commands.add('addSingleTestSi', (profile: any) => {
   cy.get('[data-cy=add-new-btn]').click()
-  cy.get('#individual-person-full-name').type(profile.fullName)
-  cy.get('[data-cy=usePreferredName').check()
-  cy.get('#individual-person-preferred-name').type(profile.preferredName)
-  cy.get('#individual-person-email').type(profile.email)
 
   switch (profile.verificationStatus) {
     case DeclarationTypeE.self:
@@ -181,16 +177,23 @@ Cypress.Commands.add('addSingleTestSi', (profile: any) => {
       break
     case DeclarationTypeE.parent:
       cy.get('[data-cy="declaration-button-parent"]').click()
+      cy.get('#individual-person-full-name').type(profile.fullName)
       break
     case DeclarationTypeE.lawyer:
       cy.get('[data-cy="declaration-button-lawyer"]').click()
+      cy.get('#individual-person-full-name').type(profile.fullName)
       break
     case DeclarationTypeE.none:
       cy.get('[data-cy="declaration-button-none"]').click()
+      cy.get('#individual-person-full-name').type(profile.fullName)
       break
     default:
       break
   }
+
+  cy.get('[data-cy=usePreferredName').check()
+  cy.get('#individual-person-preferred-name').type(profile.preferredName)
+  cy.get('#individual-person-email').type(profile.email)
 
   const controls = ['controlOfShares', 'controlOfVotes', 'controlOfDirectors']
   const percentageIndexMap = {

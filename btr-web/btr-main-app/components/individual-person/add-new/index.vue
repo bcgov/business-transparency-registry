@@ -50,7 +50,7 @@
               name="name.fullName"
               :placeholder="$t('placeholders.individualsFullName')"
               data-cy="testFullName"
-              :is-disabled="inputFormSi.name.isYourOwnInformation"
+              :is-disabled="inputFormSi.verificationStatus === DeclarationTypeE.self"
               :class="{['p-2']:isShowReasonForChange}"
               @focus="onNameFocus"
               @change="setNewOrChanged([InputFieldsE.FULL_NAME])"
@@ -939,13 +939,12 @@ function handleDoneButtonClick () {
 }
 
 const setIsYourOwnInformation = (declarationValue: string) => {
+  const prevValue = inputFormSi.verificationStatus
   inputFormSi.verificationStatus = declarationValue
-  if (inputFormSi.name.fullName === '' || inputFormSi.name.fullName === bcrosAccount.userFullName) {
-    if (declarationValue === DeclarationTypeE.self) {
-      inputFormSi.name.fullName = bcrosAccount.userFullName
-    } else {
-      inputFormSi.name.fullName = ''
-    }
+  if (declarationValue === DeclarationTypeE.self) {
+    inputFormSi.name.fullName = bcrosAccount.userFullName
+  } else if (prevValue === DeclarationTypeE.self && declarationValue !== DeclarationTypeE.self) {
+    inputFormSi.name.fullName = ''
   }
   setNewOrChanged([InputFieldsE.DECLARATION])
 }

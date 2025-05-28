@@ -1,7 +1,7 @@
 {
   "profile1": {
-    "verificationStatus": "verified_by_self",
-    "fullName": "Jon Smith",
+    "verificationStatus": "verified_by_lawyer",
+    "fullName": "John Smith",
     "preferredName": "John Smith",
     "email": "123@test.com",
     "controlOfShares": {
