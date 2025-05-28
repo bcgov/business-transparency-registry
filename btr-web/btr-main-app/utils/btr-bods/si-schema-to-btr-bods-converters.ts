@@ -340,7 +340,11 @@ const getInterests = (si: SiSchemaType, includeAll: boolean = false) => {
     const startDate = dateGroup.startDate
     const endDate = dateGroup.endDate
 
-    if (hasFieldChanged(si, InputFieldsE.CONTROL_OF_SHARES) || includeAll) {
+    if (
+      hasFieldChanged(si, InputFieldsE.CONTROL_OF_SHARES) ||
+      includeAll ||
+      (si.controlOfShares && hasFieldChanged(si, InputFieldsE.EFFECTIVE_DATES))
+    ) {
       const newInterests =
         _getInterestsOfSharesOrVotes(
           si.controlOfShares,
@@ -353,7 +357,11 @@ const getInterests = (si: SiSchemaType, includeAll: boolean = false) => {
       interests = interests.concat(newInterests)
     }
 
-    if (hasFieldChanged(si, InputFieldsE.CONTROL_OF_VOTES) || includeAll) {
+    if (
+      hasFieldChanged(si, InputFieldsE.CONTROL_OF_VOTES) ||
+      includeAll ||
+      (si.controlOfVotes && hasFieldChanged(si, InputFieldsE.EFFECTIVE_DATES))
+    ) {
       const newInterests =
         _getInterestsOfSharesOrVotes(
           si.controlOfVotes,
@@ -365,7 +373,11 @@ const getInterests = (si: SiSchemaType, includeAll: boolean = false) => {
       interests = interests.concat(newInterests)
     }
 
-    if (hasFieldChanged(si, InputFieldsE.CONTROL_OF_DIRECTORS) || includeAll) {
+    if (
+      hasFieldChanged(si, InputFieldsE.CONTROL_OF_DIRECTORS) ||
+      includeAll ||
+      (si.controlOfDirectors && hasFieldChanged(si, InputFieldsE.EFFECTIVE_DATES))
+    ) {
       const newInterests =
         _getDirectorsInterests(
           si.controlOfDirectors,

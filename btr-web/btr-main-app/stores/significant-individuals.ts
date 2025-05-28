@@ -6,7 +6,7 @@ import fileSIApi from '@/services/file-significant-individual'
 import { type SiSchemaType } from '~/utils/si-schema/definitions'
 import { getEmptySiFiling } from '~/utils/si-schema/defaults'
 import { type BtrFilingI } from '~/interfaces/btr-bods/btr-filing-i'
-import { FilingActionE, type SignificantIndividualFilingI, SubmissionTypeE } from '#imports'
+import { FilingActionE, InputFieldsE, type SignificantIndividualFilingI, SubmissionTypeE } from '#imports'
 
 /** Manages Significant */
 export const useSignificantIndividuals = defineStore('significantIndividuals', () => {
@@ -127,6 +127,7 @@ export const useSignificantIndividuals = defineStore('significantIndividuals', (
     const ceasedSI: SiSchemaType = JSON.parse(JSON.stringify(allEditableSIs.value[index]))
     const activeDateGrp = ceasedSI.effectiveDates.filter(dateGrp => !dateGrp.endDate)[0]
     activeDateGrp.endDate = cessationDate
+    ceasedSI.ui.newOrUpdatedFields.push(InputFieldsE.EFFECTIVE_DATES)
     filingUpdateSI(ceasedSI, index)
     _applyUpdatingSI(index)
   }
