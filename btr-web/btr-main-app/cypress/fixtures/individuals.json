@@ -1,8 +1,8 @@
 {
   "profile1": {
     "verificationStatus": "verified_by_self",
-    "fullName": "John Smith",
-    "preferredName": "John",
+    "fullName": "Jon Smith",
+    "preferredName": "John Smith",
     "email": "123@test.com",
     "controlOfShares": {
       "beneficialOwner": true,
@@ -104,6 +104,7 @@
     }
   },
   "profile3": {
+    "verificationStatus": "unverified",
     "fullName": "John US Doe",
     "preferredName": "John from US",
     "email": "testus@testemail.com",

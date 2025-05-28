@@ -940,10 +940,12 @@ function handleDoneButtonClick () {
 
 const setIsYourOwnInformation = (declarationValue: string) => {
   inputFormSi.verificationStatus = declarationValue
-  if (declarationValue === DeclarationTypeE.self) {
-    inputFormSi.name.fullName = bcrosAccount.userFullName
-  } else {
-    inputFormSi.name.fullName = ''
+  if (inputFormSi.name.fullName === '') {
+    if (declarationValue === DeclarationTypeE.self) {
+      inputFormSi.name.fullName = bcrosAccount.userFullName
+    } else {
+      inputFormSi.name.fullName = ''
+    }
   }
   setNewOrChanged([InputFieldsE.DECLARATION])
 }
