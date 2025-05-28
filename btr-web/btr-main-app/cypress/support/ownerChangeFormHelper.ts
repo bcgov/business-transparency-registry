@@ -1,4 +1,4 @@
-import { DeclarationTypeE } from "../../enums/declaration-type-e"
+import { DeclarationTypeE } from '../../enums/declaration-type-e'
 
 Cypress.Commands.add('fillOutForm', (siDataToEnter) => {
   // fill out the form
