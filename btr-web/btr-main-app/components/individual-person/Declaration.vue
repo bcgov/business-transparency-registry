@@ -73,7 +73,7 @@ const setDeclaration = (declarationType: DeclarationTypeE) => {
         :ui="{ rounded: 'rounded-none' }"
         @click="setDeclaration(DeclarationTypeE.parent)"
       >
-        <div class="flex items-center">
+        <div class="flex items-center justify-start">
           <div class="inline mr-2">
             <UIcon name="i-mdi-human-male-child" class="w-[40px] h-[40px]" />
           </div>

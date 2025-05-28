@@ -940,7 +940,7 @@ function handleDoneButtonClick () {
 
 const setIsYourOwnInformation = (declarationValue: string) => {
   inputFormSi.verificationStatus = declarationValue
-  if (inputFormSi.name.fullName === '') {
+  if (inputFormSi.name.fullName === '' || inputFormSi.name.fullName === bcrosAccount.userFullName) {
     if (declarationValue === DeclarationTypeE.self) {
       inputFormSi.name.fullName = bcrosAccount.userFullName
     } else {
