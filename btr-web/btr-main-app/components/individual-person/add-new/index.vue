@@ -50,7 +50,7 @@
               name="name.fullName"
               :placeholder="$t('placeholders.individualsFullName')"
               data-cy="testFullName"
-              :is-disabled="inputFormSi.verificationStatus === DeclarationTypeE.self"
+              :is-disabled="!inputFormSi && !inputFormSi.verificationStatus && inputFormSi.verificationStatus === DeclarationTypeE.self"
               :class="{['p-2']:isShowReasonForChange}"
               @focus="onNameFocus"
               @change="setNewOrChanged([InputFieldsE.FULL_NAME])"
@@ -936,6 +936,7 @@ function handleDoneButtonClick () {
   } else {
     emits('add', inputFormSi)
   }
+  inputFormSi.verificationStatus = DeclarationTypeE.not_selected
 }
 
 const setIsYourOwnInformation = (declarationValue: string) => {
