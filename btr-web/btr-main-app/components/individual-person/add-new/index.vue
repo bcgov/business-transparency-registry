@@ -936,7 +936,6 @@ function handleDoneButtonClick () {
   } else {
     emits('add', inputFormSi)
   }
-  inputFormSi.verificationStatus = DeclarationTypeE.not_selected
 }
 
 const setIsYourOwnInformation = (declarationValue: string) => {

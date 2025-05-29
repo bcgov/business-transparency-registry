@@ -409,6 +409,7 @@ describe('pages -> Summary Table', () => {
       const textEntered = 'NEW NAME'
       cy.get('#individual-person-full-name').clear().type(textEntered)
       cy.get('[data-cy=new-si-done-btn]').click()
+      cy.wait(5000)
       cy.get('[data-cy=summary-table-name]').first().invoke('text').should((textNew) => {
         expect(textNew).to.contain(textEntered)
         expect(textOrig).not.to.contain(textNew)
