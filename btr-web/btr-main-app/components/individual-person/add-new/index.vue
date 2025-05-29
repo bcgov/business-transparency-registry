@@ -50,9 +50,7 @@
               name="name.fullName"
               :placeholder="$t('placeholders.individualsFullName')"
               data-cy="testFullName"
-              :is-disabled="!inputFormSi &&
-                !inputFormSi.verificationStatus &&
-                inputFormSi.verificationStatus === DeclarationTypeE.self"
+              :is-disabled="!isEditing && inputFormSi.verificationStatus === DeclarationTypeE.self"
               :class="{['p-2']:isShowReasonForChange}"
               @focus="onNameFocus"
               @change="setNewOrChanged([InputFieldsE.FULL_NAME])"
