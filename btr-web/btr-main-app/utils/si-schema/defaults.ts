@@ -4,6 +4,7 @@ import type { AddressSchemaType, SiSchemaType } from '~/utils/si-schema/definiti
 import { PercentageRangeE } from '~/enums/percentage-range-e'
 import { type SignificantIndividualFilingI } from '~/interfaces/significant-individual-filing-i'
 import { SubmissionTypeE } from '~/enums/submission-type-e'
+import { DeclarationTypeE } from '~/enums/declaration-type-e'
 
 export function getEmptyAddress (): AddressSchemaType {
   return {
@@ -20,6 +21,7 @@ export function getEmptyAddress (): AddressSchemaType {
 
 export function getDefaultInputFormSi (): SiSchemaType {
   return {
+    verificationStatus: DeclarationTypeE.not_selected,
     name: {
       isYourOwnInformation: false,
       isUsePreferredName: false,
