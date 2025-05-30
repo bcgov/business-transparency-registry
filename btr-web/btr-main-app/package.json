@@ -3,7 +3,7 @@
   "private": true,
   "type": "module",
   "version": "0.0.1",
-  "packageManager": "pnpm@9.0.1",
+  "packageManager": "pnpm@10.11.0",
   "description": "Beneficial Ownership Registry UI - Main repo",
   "scripts": {
     "preinstall": "npx only-allow pnpm",
@@ -20,6 +20,9 @@
     "test:e2e": "cypress open",
     "test:e2e:firefox": "cypress run --browser=firefox",
     "test:e2e:chrome": "cypress run  --browser=chrome",
+    "test:pw": "playwright test",
+    "test:pw:headed": "playwright test --headed",
+    "test:pw:ui": "playwright test --ui",
     "start": "nuxt start"
   },
   "simple-git-hooks": {
@@ -31,10 +34,13 @@
     ]
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.10.1",
     "@nuxtjs/i18n": "^9.5.4",
-    "eslint": "^8.57.0",
+    "@playwright/test": "^1.52.0",
     "@testing-library/vue": "^8.0.2",
+    "@types/node": "^22.15.21",
     "@vitest/coverage-v8": "^1.6.1",
+    "eslint": "^8.57.0",
     "nuxt-anchorscroll": "^1.0.5",
     "vite": "^6.3.5",
     "vitest": "^1.6.1",
