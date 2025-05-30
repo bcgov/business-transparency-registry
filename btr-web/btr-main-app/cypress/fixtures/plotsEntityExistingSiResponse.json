@@ -398,6 +398,7 @@
         ],
         "personStatements": [
             {
+                "verificationStatus": "verified_by_self",
                 "addresses": [
                     {
                         "city": "Winnipeg",
@@ -483,6 +484,7 @@
                 "uuid": "1ce633f7-0d61-4075-bb3a-f66a797e1a14"
             },
             {
+                "verificationStatus": "verified_by_self",
                 "addresses": [
                     {
                         "city": "Fort McMurray",
@@ -557,6 +559,7 @@
                 "uuid": "752ec662-ed65-4308-b456-f7df744e09bd"
             },
             {
+                "verificationStatus": "verified_by_self",
                 "addresses": [
                     {
                         "city": "Toronto",
@@ -643,6 +646,7 @@
                 "uuid": "161f5c5e-b9ac-4fbc-a7fc-349d85e5b546"
             },
             {
+                "verificationStatus": "verified_by_self",
                 "addresses": [
                     {
                         "city": "Calgary",
@@ -721,6 +725,7 @@
                 "uuid": "979a1dbc-9131-4b45-8dad-82a7ccf517f1"
             },
             {
+                "verificationStatus": "verified_by_self",
                 "addresses": [
                     {
                         "city": "Vancouver",

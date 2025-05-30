@@ -272,6 +272,7 @@ export const btrSubmissionExampleMock = {
     personStatements: [
       {
         determinationOfIncapacity: false,
+        verificationStatus: 'verified_by_self',
         addresses: [
           {
             city: 'Beamsville',
@@ -358,6 +359,7 @@ export const btrSubmissionExampleMock = {
       },
       {
         determinationOfIncapacity: false,
+        verificationStatus: 'verified_by_self',
         addresses: [
           {
             city: 'Scarborough',
@@ -442,6 +444,7 @@ export const btrSubmissionExampleMock = {
       },
       {
         determinationOfIncapacity: false,
+        verificationStatus: 'verified_by_self',
         addresses: [
           {
             city: 'Vancouver',
@@ -529,6 +532,7 @@ export const expectedSisOutput: SiSchemaType[] = [
     couldNotProvideMissingInfo: false,
     determinationOfIncapacity: false,
     missingInfoReason: '',
+    verificationStatus: DeclarationTypeE.self,
     name: {
       isYourOwnInformation: false,
       isUsePreferredName: true,
@@ -609,6 +613,7 @@ export const expectedSisOutput: SiSchemaType[] = [
   },
   {
     missingInfoReason: 'It actually really is unless it is not',
+    verificationStatus: DeclarationTypeE.self,
     name: {
       isUsePreferredName: true,
       isYourOwnInformation: false,
@@ -687,6 +692,7 @@ export const expectedSisOutput: SiSchemaType[] = [
 
   },
   {
+    verificationStatus: DeclarationTypeE.self,
     controlOfDirectors: {
       actingJointly: false,
       directControl: true,

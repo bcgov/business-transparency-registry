@@ -10,21 +10,19 @@
       <!--  section: your information  -->
       <BcrosSection
         v-if="!editMode"
-        :section-title="$t('sectionTitles.isYourOwnInformation')"
-        data-cy="isYourOwnInformation-section"
+        :show-section-has-errors="hasErrors(['verificationStatus']) || declarationError"
+        :section-title="$t('sectionTitles.declaration')"
+        data-cy="declaration-section"
         rounded-bot
         rounded-top
       >
-        <div class="flex-col w-full">
-          <p class="pb-5">
-            {{ $t('texts.isYourOwnInformation') }}
-          </p>
+        <div id="declaration-section" class="flex-col w-full">
           <UFormGroup name="workaroundForTriggeringValidationOnEntireForm">
-            <UCheckbox
-              v-model="inputFormSi.name.isYourOwnInformation"
-              :label="$t('labels.isYourOwnInformation')"
-              data-cy="isYourOwnInformation-checkbox"
-              @change="setIsYourOwnInformation($event)"
+            <IndividualPersonDeclaration
+              :declaration-init-value="inputFormSi.verificationStatus"
+              :error="hasErrors(['verificationStatus'])"
+              @declaration-error="setDeclarationError($event)"
+              @declaration-change="setIsYourOwnInformation($event)"
             />
           </UFormGroup>
         </div>
@@ -52,7 +50,7 @@
               name="name.fullName"
               :placeholder="$t('placeholders.individualsFullName')"
               data-cy="testFullName"
-              :is-disabled="inputFormSi.name.isYourOwnInformation"
+              :is-disabled="!isEditing && inputFormSi.verificationStatus === DeclarationTypeE.self"
               :class="{['p-2']:isShowReasonForChange}"
               @focus="onNameFocus"
               @change="setNewOrChanged([InputFieldsE.FULL_NAME])"
@@ -536,6 +534,7 @@ import { CustomSiSchemaErrorMap } from '~/utils/si-schema/errorMessagesMap'
 import DeterminationOfIncapacity from '~/components/individual-person/DeterminationOfIncapacity.vue'
 import { NameChangeReasonE } from '~/enums/significant-individual/name-change-reason-e'
 import { InputFieldsE, isMinor } from '#imports'
+import { DeclarationTypeE } from '@/enums/declaration-type-e'
 
 const emits = defineEmits<{
   add: [value: SiSchemaType],
@@ -567,6 +566,7 @@ const { scrollToAnchor } = useAnchorScroll({
 const siStore = useSignificantIndividuals()
 
 const isEditing = ref(false)
+const declarationError = ref(false)
 
 const emailFieldUuid = getRandomUuid()
 const clearEmailFieldOnEdit = () => {
@@ -736,7 +736,6 @@ if (props.editMode) {
       couldNotProvideMissingInfo: z.literal(true),
       missingInfoReason: z.string().transform(s => s.trim()).pipe(z.string().min(1)),
       name: SiNameExtended,
-
       ui: z.object({
         newOrUpdatedFields: z.array(z.string())
       })
@@ -939,12 +938,19 @@ function handleDoneButtonClick () {
   }
 }
 
-const setIsYourOwnInformation = (event: any) => {
-  if (event) {
+const setIsYourOwnInformation = (declarationValue: string) => {
+  const prevValue = inputFormSi.verificationStatus
+  inputFormSi.verificationStatus = declarationValue
+  if (declarationValue === DeclarationTypeE.self) {
     inputFormSi.name.fullName = bcrosAccount.userFullName
-  } else {
+  } else if (prevValue === DeclarationTypeE.self && declarationValue !== DeclarationTypeE.self) {
     inputFormSi.name.fullName = ''
   }
+  setNewOrChanged([InputFieldsE.DECLARATION])
+}
+
+const setDeclarationError = (error: boolean) => {
+  declarationError.value = error
 }
 
 const onBlurFullNameHandler = () => {
