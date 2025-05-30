@@ -276,7 +276,15 @@ def update_submission(sub_id: int):
                 # update record in BOR (search)
                 address = btr_entity.get_entity_info(
                     None, f'{business_identifier}/addresses?addressType=deliveryAddress', token).json()
-                entity['business']['addresses'] = [address['deliveryAddress']]
+
+                address2 = btr_entity.get_entity_info(
+                    None, f'{business_identifier}/addresses?addressType=mailingAddress', token).json()
+                entity['business']['addresses'] = []
+                if address['deliveryAddress']:
+                    entity['business']['addresses'].append(address['deliveryAddress'])
+                if address2['mailingAddress']:
+                    entity['business']['addresses'].append(address2['mailingAddress'])
+
                 btr_bor.update_owners(submission, entity, token)
                 # update record in REG Search
                 btr_reg_search.update_business(submission, entity, token)
