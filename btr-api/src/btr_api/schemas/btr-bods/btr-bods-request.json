@@ -66,6 +66,16 @@
       "type": "string",
       "format": "email"
     },
+    "completingMailingAddress": {
+      "title": "Mailing address",
+      "description": "Mailing address for individual completing this request to omit.",
+      "$ref": "https://btr.gov.bc.ca/.well_known/schemas/components.json#/definitions/Address"
+    },
+    "completingPhoneNumber": {
+      "title": "Phone number",
+      "description": "A phone number for individual completing this request to omit.",
+      "$ref": "https://btr.gov.bc.ca/.well_known/schemas/components.json#/definitions/PhoneNumber"
+    },
     "status": {
       "type": "string",
       "enum": [
@@ -88,6 +98,8 @@
     "reasons",
     "completingParty",
     "completingName",
+    "completingMailingAddress",
+    "completingPhoneNumber",
     "completingEmail"
   ]
 }

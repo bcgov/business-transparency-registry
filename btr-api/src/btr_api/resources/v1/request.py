@@ -32,7 +32,7 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 """
-This module defines request-related API endpoints.
+This module defines request to omit related API endpoints.
 
 It provides endpoints to create and retrieve request objects.
 The 'get_request' and 'create_request' functions define the 'GET' and 'POST' methods respectively.
