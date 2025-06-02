@@ -22,8 +22,13 @@
       "type": "string",
       "format": "email"
     },
-    "businessIdentifier": {
-      "type": "string"
+    "businessIdentifiers": {
+      "title": "Business identifiers",
+      "description": "List of business identifiers for which data should be omitted.",
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
     },
     "informationToOmit": {
       "type": "array",
@@ -97,7 +102,7 @@
     "fullName",
     "birthdate",
     "email",
-    "businessIdentifier",
+    "businessIdentifiers",
     "informationToOmit",
     "individualAtRisk",
     "reasons",
