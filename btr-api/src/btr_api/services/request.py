@@ -90,45 +90,28 @@ class RequestService:  # pylint: disable=too-few-public-methods
         - RequestModel: A RequestModel object that represents the updated request
         """
 
-        # I dislike that I can't use a for loop here but it doesn't like to access the model with [key]
-        # even if i override __setitems__ or add a set function
-        if 'fullName' in request_dict:
-            request.full_name = request_dict['fullName']
+        field_mappings = {
+            'fullName': 'full_name',
+            'email': 'email',
+            'birthdate': 'birthdate',
+            'informationToOmit': 'information_to_omit',
+            'individualAtRisk': 'individual_at_risk',
+            'reasons': 'reasons',
+            'completingParty': 'completing_party',
+            'completingEmail': 'completing_email',
+            'completingName': 'completing_name',
+            'status': 'status'
+        }
 
-        if 'email' in request_dict:
-            request.email = request_dict['email']
+        # Update standard fields using mapping
+        for dict_key, model_attr in field_mappings.items():
+            if dict_key in request_dict:
+                setattr(request, model_attr, request_dict[dict_key])
 
-        if 'birthdate' in request_dict:
-            request.birthdate = request_dict['birthdate']
+        # Handle special case for businessIdentifiers (requires joining)
+        if 'businessIdentifiers' in request_dict:
+            request.business_identifier = ",".join(request_dict['businessIdentifiers'])
 
-        if 'businessIdentifier' in request_dict:
-            request.business_identifier = request_dict['businessIdentifier']
-
-        if 'informationToOmit' in request_dict:
-            request.information_to_omit = request_dict['informationToOmit']
-
-        if 'individualAtRisk' in request_dict:
-            request.individual_at_risk = request_dict['individualAtRisk']
-
-        if 'reasons' in request_dict:
-            request.reasons = request_dict['reasons']
-
-        if 'completingParty' in request_dict:
-            request.completing_party = request_dict['completingParty']
-
-        if 'completingEmail' in request_dict:
-            request.completing_email = request_dict['completingEmail']
-
-        if 'completingName' in request_dict:
-            request.completing_name = request_dict['completingName']
-
-        if 'status' in request_dict:
-            request.status = request_dict['status']
-
-        # for key in dict_keys:
-        #     if key in request_dict:
-        #         request[key] = request_dict[key]
-
-        request['updatedAt'] = datetime.today().strftime('%Y-%m-%dT%H:%M:%S')
+        # request['updatedAt'] = datetime.today().strftime('%Y-%m-%dT%H:%M:%S')
 
         return request
