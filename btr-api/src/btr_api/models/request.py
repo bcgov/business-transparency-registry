@@ -99,40 +99,6 @@ class Request(Versioned, Base):
     def find_by_uuid(cls, request_id: uuid.UUID) -> Request | None:
         """Return the request by id."""
         return cls.query.filter_by(uuid=request_id).one_or_none()
-    #
-    # @classmethod
-    # def __setitem__(cls, key, value):
-    #     match key:
-    #         case 'id':
-    #             cls.id = value
-    #         case 'uuid':
-    #             cls.uuid = value
-    #         case 'email':
-    #             cls.email = value
-    #         case 'birthdate':
-    #             cls.birthdate = value
-    #         case 'reasons':
-    #             cls.reasons = value
-    #         case 'fullName':
-    #             cls.full_name = value
-    #         case 'businessIdentifiers':
-    #             cls.business_identifier = value
-    #         case 'informationToOmit':
-    #             cls.information_to_omit = value
-    #         case 'individualAtRisk':
-    #             cls.individual_at_risk = value
-    #         case 'completingParty':
-    #             cls.completing_party = value
-    #         case 'completingEmail':
-    #             cls.completing_email = value
-    #         case 'completingName':
-    #             cls.completing_name = value
-    #         case 'createdAt':
-    #             cls.created_at = value
-    #         case 'updatedAt':
-    #             cls.updated_at = value
-    #         case 'status':
-    #             cls.status = value
 
 
 class RequestSerializer:
@@ -156,6 +122,8 @@ class RequestSerializer:
             'informationToOmit': request.information_to_omit,
             'individualAtRisk': request.individual_at_risk,
             'reasons': request.reasons,
+            'completingMailingAddress': request.completing_address,
+            'completingPhoneNumber': request.completing_phone,
             'supportingDocuments': request.supporting_documents,
             'completingParty': request.completing_party,
             'completingEmail': request.completing_email,
@@ -163,6 +131,4 @@ class RequestSerializer:
             'createdAt': request.created_at.isoformat(),
             'updatedAt': request.updated_at.isoformat(),
             'status': request.status,
-            "completingMailingAddress": request.completing_address,
-            "completingPhoneNumber": request.completing_phone,
         }
