@@ -76,6 +76,11 @@
       "description": "A phone number for individual completing this request to omit.",
       "$ref": "https://btr.gov.bc.ca/.well_known/schemas/components.json#/definitions/PhoneNumber"
     },
+    "supportingDocuments": {
+      "title": "Supporting documents",
+      "description": "Supporting Document name and location are stored here as dict (object) with key being name and value being path to download file.",
+      "type": "object"
+    },
     "status": {
       "type": "string",
       "enum": [

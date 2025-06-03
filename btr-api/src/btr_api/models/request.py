@@ -65,6 +65,7 @@ class Request(Versioned, Base):
     information_to_omit: Mapped[list[InformationToOmitType]] = mapped_column(ARRAY(String), nullable=False)
     individual_at_risk: Mapped[list[IndividualAtRisk]] = mapped_column(ARRAY(String), nullable=False)
     reasons: Mapped[str] = mapped_column(nullable=False)
+    supporting_documents: Mapped[dict] = mapped_column(JSONB, nullable=False, default={})
     completing_party: Mapped[CompletingParty] = mapped_column(nullable=False)
     completing_name: Mapped[str] = mapped_column(nullable=False)
     completing_email: Mapped[str] = mapped_column(nullable=False)
@@ -89,6 +90,7 @@ class Request(Versioned, Base):
         self.completing_email = data['completingEmail']
         self.completing_address = data['completingMailingAddress']
         self.completing_phone = data['completingPhoneNumber']
+        self.supporting_documents = data['supportingDocuments'] if 'supportingDocuments' in data else {}
         self.status = RequestStatus.AWAITING_REVIEW
         if 'status' in data:
             self.status = data['status']
@@ -154,6 +156,7 @@ class RequestSerializer:
             'informationToOmit': request.information_to_omit,
             'individualAtRisk': request.individual_at_risk,
             'reasons': request.reasons,
+            'supportingDocuments': request.supporting_documents,
             'completingParty': request.completing_party,
             'completingEmail': request.completing_email,
             'completingName': request.completing_name,

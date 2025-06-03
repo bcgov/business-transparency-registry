@@ -515,6 +515,10 @@ REQUEST_DICT = {
     'informationToOmit': ['ALL'],
     'individualAtRisk': ['SI'],
     'reasons': 'I have some',
+    'supportingDocuments': {
+      'legal_document_1': 'https://download.com/file.pdf',
+      'legal_document_2': 'https://download.com/file2.pdf'
+    },
     'completingParty': 'SI',
     'completingName': 'John Doe',
     'completingEmail': 'jdoe@gmail.com',

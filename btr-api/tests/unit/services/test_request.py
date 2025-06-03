@@ -29,6 +29,9 @@ def test_create_request(session, app, requests_mock):
         assert request.completing_party == REQUEST_DICT['completingParty']
         assert request.completing_name == REQUEST_DICT['completingName']
         assert request.completing_email == REQUEST_DICT['completingEmail']
+        assert request.completing_phone == REQUEST_DICT['completingPhoneNumber']
+        assert request.completing_address == REQUEST_DICT['completingMailingAddress']
+        assert request.supporting_documents == REQUEST_DICT['supportingDocuments']
 
 def test_update_request(session, app, requests_mock):
     """Assure the create request works as expected."""
