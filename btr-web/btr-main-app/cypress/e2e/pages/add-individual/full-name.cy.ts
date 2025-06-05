@@ -18,7 +18,11 @@ describe('pages -> Add individual -- preferred name', () => {
     cy.get('[data-cy="name-change-reason-radio-other"]').should('exist')
     cy.get('button[data-cy=new-si-done-btn]').focus().click()
     cy.contains(i18nCommon.errors.validation.nameChangeReason.empty).should('exist')
-    cy.get('input[data-cy="name-change-reason-radio-other"]').check()
+    cy.get('input[data-cy="name-change-reason-radio-other"]').first().check()
+
+    // clear the description modal
+    cy.get('[data-cy="declaration-modal-button-confirm"]').click()
+
     cy.contains(i18nCommon.errors.validation.nameChangeReason.empty).should('not.exist')
   })
 })
