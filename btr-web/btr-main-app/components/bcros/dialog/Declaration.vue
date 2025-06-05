@@ -3,10 +3,12 @@ import { DeclarationTypeE } from '@/enums/declaration-type-e'
 
 const t = useI18n().t
 
+/* eslint-disable func-call-spacing */
 const emit = defineEmits<{
   (e: 'declarationSet', declaration: DeclarationTypeE): void
   (e: 'update:showDeclarationModal', value: boolean): void
 }>()
+/* eslint-enable func-call-spacing */
 
 const props = defineProps<{
   declarationInitialValue: DeclarationTypeE,
@@ -18,7 +20,7 @@ const declarationError = ref<boolean>(false)
 
 const localModalState = computed({
   get: () => props.showDeclarationModal,
-  set: (value) => emit('update:showDeclarationModal', value)
+  set: value => emit('update:showDeclarationModal', value)
 })
 
 const submitDeclarationValue = () => {

@@ -3,8 +3,8 @@
     <BcrosDialogDeclaration
       :declarationInitialValue="inputFormSi.verificationStatus"
       :showDeclarationModal="showDeclarationModal"
-      @update:showDeclarationModal="showDeclarationModal=$event"
-      @declarationSet="updateDeclaration($event)"
+      @update:show-declaration-modal="showDeclarationModal=$event"
+      @declaration-set="updateDeclaration($event)"
     />
     <UForm
       ref="addIndividualForm"
