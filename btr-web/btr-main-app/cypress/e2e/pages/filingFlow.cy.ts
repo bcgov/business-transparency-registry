@@ -51,7 +51,11 @@ describe('Filing Flow', () => {
     cy.get('[data-cy="action-button"]').first().click()
     cy.get('input[data-cy="testFullName"]').focus()
     cy.get('input[data-cy="testFullName"]').type(' 123')
-    cy.get('input[data-cy="name-change-reason-radio-other"]').check()
+    cy.get('input[data-cy="name-change-reason-radio-other"]').first().check()
+
+    // clear the description modal
+    cy.get('[data-cy="declaration-modal-button-confirm"]').click()
+
     cy.get('[data-cy="annualFilingNoChanges-checkbox"]').should('be.disabled')
     cy.get('button[data-cy=new-si-done-btn]').focus().click()
 

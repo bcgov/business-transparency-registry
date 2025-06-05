@@ -108,7 +108,9 @@ describe('pages -> Beneficial Owner Change', () => {
     cy.get('[data-cy="name-change-reason-radio-other"]').should('not.exist')
     cy.get('input[data-cy="testFullName"]').focus()
     cy.get('input[data-cy="testFullName"]').type(' 123')
-    cy.get('input[data-cy="name-change-reason-radio-other"]').check()
+    cy.get('input[data-cy="name-change-reason-radio-other"]').first().check()
+    // clear the description modal
+    cy.get('[data-cy="declaration-modal-button-confirm"]').click()
     cy.get('button[data-cy=new-si-done-btn]').focus().click()
 
     cy.get('[data-cy=button-control-right-button]').eq(0).should('have.text', 'Review and Confirm')
