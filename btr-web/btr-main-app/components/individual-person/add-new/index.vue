@@ -1,5 +1,11 @@
 <template>
   <div data-cy="addIndividualPerson" class="w-full">
+    <BcrosDialogDeclaration
+      :declarationInitialValue="inputFormSi.verificationStatus"
+      :showDeclarationModal="showDeclarationModal"
+      @update:showDeclarationModal="showDeclarationModal=$event"
+      @declarationSet="updateDeclaration($event)"
+    />
     <UForm
       ref="addIndividualForm"
       :schema="formSchema"
@@ -73,6 +79,7 @@
                       :value="NameChangeReasonE.LEGAL_CHANGE"
                       name="name-change-reason-radio"
                       data-cy="name-change-reason-radio-other"
+                      @change="nameChangeChangedEvent"
                     />
                     <label for="nameChangeReason-legalChange" class="px-2" :class="{['text-red-500']:error}">
                       {{ $t('labels.nameChangeReason.legalChange') }}
@@ -83,6 +90,7 @@
                       :value="NameChangeReasonE.OTHER"
                       name="name-change-reason-radio"
                       data-cy="name-change-reason-radio-other"
+                      @change="nameChangeChangedEvent"
                     />
                     <label for="nameChangeReason-other" class="px-2" :class="{['text-red-500']:error}">
                       {{ $t('labels.nameChangeReason.other') }}
@@ -566,7 +574,21 @@ const { scrollToAnchor } = useAnchorScroll({
 const siStore = useSignificantIndividuals()
 
 const isEditing = ref(false)
+
 const declarationError = ref(false)
+const showDeclarationModal = ref(false)
+const updateDeclaration = (newValue: DeclarationTypeE) => {
+  inputFormSi.verificationStatus = newValue
+  setNewOrChanged([InputFieldsE.DECLARATION])
+}
+
+const nameChangeChangedEvent = () => {
+  const declarationIndex = inputFormSi.ui?.newOrUpdatedFields?.indexOf(InputFieldsE.DECLARATION)
+  if (declarationIndex === -1) {
+    // declaration has not been changed for this edit
+    showDeclarationModal.value = true
+  }
+}
 
 const emailFieldUuid = getRandomUuid()
 const clearEmailFieldOnEdit = () => {
@@ -597,11 +619,17 @@ const cancelNameChange = () => {
 
   if (props.index !== undefined) {
     inputFormSi.name.fullName = siStore.savedSIs[props.index]?.name?.fullName || ''
+    inputFormSi.verificationStatus = siStore.savedSIs[props.index]?.verificationStatus || DeclarationTypeE.not_selected
   }
   const index = inputFormSi.ui?.newOrUpdatedFields?.indexOf(InputFieldsE.FULL_NAME)
   if (index > -1) { // only splice array when item is found
     inputFormSi.ui.newOrUpdatedFields.splice(index, 1)
   }
+  const declarationIndex = inputFormSi.ui?.newOrUpdatedFields?.indexOf(InputFieldsE.DECLARATION)
+  if (declarationIndex > -1) { // only splice array when item is found
+    inputFormSi.ui.newOrUpdatedFields.splice(declarationIndex, 1)
+  }
+
   inputFormSi.name.isNameChanged = false
   inputFormSi.name.nameChangeReason = undefined
   clearErrors('name.nameChangeReason')
