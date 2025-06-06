@@ -1,8 +1,9 @@
 import { z } from 'zod'
+import { PhoneSchema } from '../../../btr-common-components/interfaces/zod-schemas-t'
 import { PercentageRangeE } from '~/enums/percentage-range-e'
 import { DeclarationTypeE } from '@/enums/declaration-type-e'
 
-const StartEndDateGroup = z.object({
+export const StartEndDateGroup = z.object({
   startDate: z.string().min(1),
   endDate: z.string().optional()
 })
@@ -65,13 +66,14 @@ export type CitizenshipSchemaType = z.infer<typeof CitizenshipSchema>
 
 export const AddressSchema = z.object({
   country: CountrySchema.optional(),
-  line1: z.string().min(1),
+  line1: z.string().optional(),
   line2: z.string().optional(),
-  city: z.string().min(1),
-  region: z.string().min(1),
-  postalCode: z.string().min(1),
+  city: z.string().optional(),
+  region: z.string().optional(),
+  postalCode: z.string().optional(),
   locationDescription: z.string().optional()
 })
+
 export type AddressSchemaType = z.infer<typeof AddressSchema>
 
 export const SiSchema = z.object({
@@ -99,8 +101,7 @@ export const SiSchema = z.object({
   tax: TaxSchema,
   isTaxResident: z.boolean().optional(),
   determinationOfIncapacity: z.boolean(),
-  phoneNumber: getPhoneNumberValidator(),
-
+  phoneNumber: PhoneSchema,
   effectiveDates: z.array(StartEndDateGroup).min(1),
 
   uuid: z.string().min(1),
