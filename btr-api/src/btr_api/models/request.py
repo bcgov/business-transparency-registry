@@ -61,7 +61,7 @@ class Request(Versioned, Base):
     full_name: Mapped[str] = mapped_column(nullable=False)
     email: Mapped[str] = mapped_column(nullable=False)
     birthdate: Mapped[date] = mapped_column(nullable=False)
-    business_identifier: Mapped[str] = mapped_column(nullable=False, index=True)
+    business_identifiers: Mapped[str] = mapped_column(ARRAY(String), nullable=False, index=True)
     information_to_omit: Mapped[list[InformationToOmitType]] = mapped_column(ARRAY(String), nullable=False)
     individual_at_risk: Mapped[list[IndividualAtRisk]] = mapped_column(ARRAY(String), nullable=False)
     reasons: Mapped[str] = mapped_column(nullable=False)
@@ -81,7 +81,7 @@ class Request(Versioned, Base):
         self.full_name = data['fullName']
         self.email = data['email']
         self.birthdate = data['birthdate']
-        self.business_identifier = ",".join(data['businessIdentifiers'])
+        self.business_identifiers = data['businessIdentifiers']
         self.information_to_omit = data['informationToOmit']
         self.individual_at_risk = data['individualAtRisk']
         self.reasons = data['reasons']
@@ -118,7 +118,7 @@ class RequestSerializer:
             'fullName': request.full_name,
             'email': request.email,
             'birthdate': request.birthdate,
-            'businessIdentifiers': request.business_identifier.split(","),
+            'businessIdentifiers': request.business_identifiers,
             'informationToOmit': request.information_to_omit,
             'individualAtRisk': request.individual_at_risk,
             'reasons': request.reasons,

@@ -110,7 +110,7 @@ class RequestService:  # pylint: disable=too-few-public-methods
 
         # Handle special case for businessIdentifiers (requires joining)
         if 'businessIdentifiers' in request_dict:
-            request.business_identifier = ",".join(request_dict['businessIdentifiers'])
+            request.business_identifiers = ",".join(request_dict['businessIdentifiers'])
 
         # request['updatedAt'] = datetime.today().strftime('%Y-%m-%dT%H:%M:%S')
 

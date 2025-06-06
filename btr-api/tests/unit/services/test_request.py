@@ -22,7 +22,7 @@ def test_create_request(session, app, requests_mock):
         assert request.birthdate == date.fromisoformat(REQUEST_DICT['birthdate'])
         assert request.full_name == REQUEST_DICT['fullName']
         assert request.email == REQUEST_DICT['email']
-        assert request.business_identifier == REQUEST_DICT['businessIdentifier']
+        assert request.business_identifiers == REQUEST_DICT['businessIdentifiers']
         assert request.information_to_omit == REQUEST_DICT['informationToOmit']
         assert request.individual_at_risk == REQUEST_DICT['individualAtRisk']
         assert request.reasons == REQUEST_DICT['reasons']
@@ -51,7 +51,7 @@ def test_update_request(session, app, requests_mock):
         assert request.birthdate == date.fromisoformat(REQUEST_DICT['birthdate'])
         assert request.full_name == request_dict2['fullName']
         assert request.email == request_dict2['email']
-        assert request.business_identifier == REQUEST_DICT['businessIdentifier']
+        assert request.business_identifiers == REQUEST_DICT['businessIdentifiers']
         assert request.information_to_omit == REQUEST_DICT['informationToOmit']
         assert request.individual_at_risk == REQUEST_DICT['individualAtRisk']
         assert request.reasons == REQUEST_DICT['reasons']
