@@ -511,7 +511,7 @@ REQUEST_DICT = {
     'fullName': 'John Doe',
     'email': 'jdoe@gmail.com',
     'birthdate': '1970-03-31',
-    'businessIdentifier': 'BUSID',
+    'businessIdentifiers': ['BUSID'],
     'informationToOmit': ['ALL'],
     'individualAtRisk': ['SI'],
     'reasons': 'I have some',
@@ -522,20 +522,42 @@ REQUEST_DICT = {
     'completingParty': 'SI',
     'completingName': 'John Doe',
     'completingEmail': 'jdoe@gmail.com',
-    'status': "AWAITING_REVIEW"
+    'completingMailingAddress': {
+        "streetAddress": "789 Simple St",
+        "city": "Burnaby",
+        "province": "BC",
+        "postalCode": "V5H 1X1",
+        'country': 'CA'
+    },
+    'completingPhoneNumber': {
+        'number': '+1-778-555-0789',
+        'type': 'mobile'
+    },
+    'status': 'AWAITING_REVIEW'
 }
 
 R2_DICT = {
     'fullName': 'John Doe',
     'email': 'jdoe@gmail.com',
     'birthdate': '1970-03-31',
-    'businessIdentifier': 'BUSID',
+    'businessIdentifiers': ['BUSID', 'BUSID2', 'BUS_ID_358'],
     'informationToOmit': ['ALL'],
     'individualAtRisk': ['SI'],
     'reasons': 'I have some',
     'completingParty': 'SI',
     'completingName': 'John Doe',
     'completingEmail': 'jdoe@gmail.com',
+    'completingMailingAddress': {
+        "streetAddress": "789 Simple St",
+        "city": "Burnaby",
+        "province": "BC",
+        "postalCode": "V5H 1X1",
+        'country': 'CA'
+    },
+    'completingPhoneNumber': {
+        'number': '+1-778-555-0789',
+        'type': 'mobile'
+    },
     'status': "INFO_REQUESTED"
 }
 
@@ -543,13 +565,24 @@ R3_DICT = {
     'fullName': 'John Doe',
     'email': 'jdoe@gmail.com',
     'birthdate': '1970-03-31',
-    'businessIdentifier': 'BUSID',
+    'businessIdentifiers': ['BUSID'],
     'informationToOmit': ['ALL'],
     'individualAtRisk': ['SI'],
     'reasons': 'I have some',
     'completingParty': 'SI',
     'completingName': 'John Doe',
     'completingEmail': 'jdoe@gmail.com',
+    'completingMailingAddress': {
+        "streetAddress": "789 Simple St",
+        "city": "Burnaby",
+        "province": "BC",
+        "postalCode": "V5H 1X1",
+        'country': 'CA'
+    },
+    'completingPhoneNumber': {
+        'number': '+1-778-555-0789',
+        'type': 'mobile'
+    },
     'status': "INFO_REQUESTED"
 }
 
