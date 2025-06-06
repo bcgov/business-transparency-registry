@@ -672,10 +672,7 @@ const MailingAddressSchemaEdit = z.discriminatedUnion(
 const SiSchemaAddNew = SiSchema.extend({
   couldNotProvideMissingInfo: z.literal(false),
   name: SiNameExtended,
-  isControlSelected: z.boolean().refine((val) => {
-    console.log("VALIDATING CONTROL SELECTION", val)
-    return !!val
-  }, t('errors.validation.control') + 'MMMMM'),
+  isControlSelected: z.boolean().refine((val) => { return !!val }, t('errors.validation.control')),
   controlOfShares: SiControlOfExtended,
   controlOfVotes: SiControlOfExtended,
   controlOfDirectors: SiControlOfDirectorsExtended,
