@@ -296,7 +296,7 @@ export function validatePhoneNumberSuperRefine (phoneNumber: PhoneSchemaType, ct
 }
 
 // Refine the entire SiSchema in the Edit form to apply all validation rules that are not covered by the schema itself.
-export function validateEditFormSchemaSuperRefine (schema: SiSchemaType, ctx: RefinementCtx): never {
+export function validateEditFormSchemaSuperRefine (schema: any, ctx: RefinementCtx): never {
   const t = useNuxtApp().$i18n.t
 
   // Control of Shares

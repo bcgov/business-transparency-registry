@@ -41,6 +41,7 @@
                 "interestedParty": {
                     "describedByPersonStatement": "1ce633f7-0d61-4075-bb3a-f66a797e1a14"
                 },
+                "interestTypes": ["shareholding"],
                 "interests": [
                     {
                         "details": "controlType.shares.beneficialOwner",
@@ -87,6 +88,7 @@
                 "interestedParty": {
                     "describedByPersonStatement": "752ec662-ed65-4308-b456-f7df744e09bd"
                 },
+                "interestTypes": ["shareholding"],
                 "interests": [
                     {
                         "details": "controlType.shares.registeredOwner",
@@ -151,6 +153,7 @@
                 "interestedParty": {
                     "describedByPersonStatement": "161f5c5e-b9ac-4fbc-a7fc-349d85e5b546"
                 },
+                "interestTypes": ["shareholding", "votingRights", "appointmentOfBoard"],
                 "interests": [
                     {
                         "details": "controlType.directors.indirectControl",
@@ -238,6 +241,7 @@
                 "interestedParty": {
                     "describedByPersonStatement": "fakestatementid-4959391-fjjlekf"
                 },
+                "interestTypes": ["shareholding"],
                 "interests": [
                     {
                         "details": "controlType.shares.registeredOwner",
@@ -302,6 +306,7 @@
                 "interestedParty": {
                     "describedByPersonStatement": "979a1dbc-9131-4b45-8dad-82a7ccf517f1"
                 },
+                "interestTypes": ["shareholding", "votingRights"],
                 "interests": [
                     {
                         "details": "controlType.shares.registeredOwner",
@@ -330,12 +335,6 @@
                         "type": "votingRights"
                     },
                     {
-                        "details": "something",
-                        "endDate": "2021-08-04",
-                        "startDate": "2017-08-03",
-                        "type": "otherInfluenceOrControl"
-                    },
-                    {
                         "details": "controlType.shares.registeredOwner",
                         "directOrIndirect": "direct",
                         "endDate": "2024-08-02",
@@ -360,12 +359,6 @@
                         },
                         "startDate": "2024-08-01",
                         "type": "votingRights"
-                    },
-                    {
-                        "details": "something",
-                        "endDate": "2024-08-02",
-                        "startDate": "2024-08-01",
-                        "type": "otherInfluenceOrControl"
                     }
                 ],
                 "isComponent": false,

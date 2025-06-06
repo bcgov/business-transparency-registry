@@ -672,7 +672,7 @@ const MailingAddressSchemaEdit = z.discriminatedUnion(
 const SiSchemaAddNew = SiSchema.extend({
   couldNotProvideMissingInfo: z.literal(false),
   name: SiNameExtended,
-  isControlSelected: z.boolean().refine((val) => { return !!val }, t('errors.validation.control')),
+  isControlSelected: z.boolean().refine(val => val, t('errors.validation.control')),
   controlOfShares: SiControlOfExtended,
   controlOfVotes: SiControlOfExtended,
   controlOfDirectors: SiControlOfDirectorsExtended,
@@ -707,7 +707,7 @@ let formSchema: any = z.discriminatedUnion('couldNotProvideMissingInfo', [
 
 if (props.editMode) {
   // used in the edit form; some fields are optional to support redacted data
-  const SiSchemaEdit: SiSchemaType = SiSchemaAddNew.extend({
+  const SiSchemaEdit = SiSchemaAddNew.extend({
     couldNotProvideMissingInfo: z.literal(false),
     birthDate: z.string().optional(),
     name: SiNameExtended,
