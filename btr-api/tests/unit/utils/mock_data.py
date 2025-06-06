@@ -511,7 +511,7 @@ REQUEST_DICT = {
     'fullName': 'John Doe',
     'email': 'jdoe@gmail.com',
     'birthdate': '1970-03-31',
-    'businessIdentifiers': ['BUSID'],
+    'businessIdentifiers': ['BUSID', 'BUS_ID_2', 'BUS_ID_3'],
     'informationToOmit': ['ALL'],
     'individualAtRisk': ['SI'],
     'reasons': 'I have some',

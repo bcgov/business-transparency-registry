@@ -94,6 +94,7 @@ class RequestService:  # pylint: disable=too-few-public-methods
             'fullName': 'full_name',
             'email': 'email',
             'birthdate': 'birthdate',
+            'businessIdentifiers': 'business_identifiers',
             'informationToOmit': 'information_to_omit',
             'individualAtRisk': 'individual_at_risk',
             'reasons': 'reasons',
@@ -107,11 +108,5 @@ class RequestService:  # pylint: disable=too-few-public-methods
         for dict_key, model_attr in field_mappings.items():
             if dict_key in request_dict:
                 setattr(request, model_attr, request_dict[dict_key])
-
-        # Handle special case for businessIdentifiers (requires joining)
-        if 'businessIdentifiers' in request_dict:
-            request.business_identifiers = ",".join(request_dict['businessIdentifiers'])
-
-        # request['updatedAt'] = datetime.today().strftime('%Y-%m-%dT%H:%M:%S')
 
         return request
