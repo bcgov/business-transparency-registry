@@ -387,9 +387,91 @@
                 "subject": {
                     "describedByEntityStatement": ""
                 }
+            },
+            {
+                "interestTypes": [
+                    "shareholding"
+                ],
+                "interestedParty": {
+                    "describedByPersonStatement": "d54fe479-8f35-4436-b57c-51de5df17681"
+                },
+                "interests": [
+                    {
+                    "details": "controlType.shares.registeredOwner",
+                    "directOrIndirect": "direct",
+                    "share": {
+                        "exclusiveMaximum": true,
+                        "exclusiveMinimum": false,
+                        "maximum": 25,
+                        "minimum": 0
+                    },
+                    "type": "shareholding"
+                    }
+                ],
+                "isComponent": false,
+                "publicationDetails": {
+                    "bodsVersion": "0.3",
+                    "publicationDate": "2025-05-28",
+                    "publisher": {
+                    "name": "BCROS - BC Registries and Online Services",
+                    "url": "https://www.bcregistry.gov.bc.ca/"
+                    }
+                },
+                "source": {
+                    "assertedBy": [
+                    {
+                        "name": "BCREG2 Liang FORTY"
+                    }
+                    ],
+                    "description": "Using Gov BC - BTR - Web UI",
+                    "type": [
+                    "selfDeclaration"
+                    ]
+                },
+                "statementDate": "2025-05-28",
+                "statementID": "06c5a091-6703-4909-878c-38c623eab110",
+                "statementType": "ownershipOrControlStatement",
+                "subject": {
+                    "describedByEntityStatement": ""
+                }
             }
         ],
         "personStatements": [
+            {
+                "isComponent": false,
+                "missingInfoReason": "some information is missing",
+                "names": [
+                    {
+                        "fullName": "Jane Doe",
+                        "type": "individual"
+                    }
+                ],
+                "personType": "knownPerson",
+                "publicationDetails": {
+                    "bodsVersion": "0.3",
+                    "publicationDate": "2025-05-28",
+                    "publisher": {
+                    "name": "BCROS - BC Registries and Online Services",
+                    "url": "https://www.bcregistry.gov.bc.ca/"
+                    }
+                },
+                "source": {
+                    "assertedBy": [
+                    {
+                        "name": "BCREG2 Liang FORTY"
+                    }
+                    ],
+                    "description": "Using Gov BC - BTR - Web UI",
+                    "type": [
+                        "selfDeclaration"
+                    ]
+                },
+                "statementDate": "2025-05-28",
+                "statementID": "d54fe479-8f35-4436-b57c-51de5df17681",
+                "statementType": "personStatement",
+                "uuid": "47367362-2082-44fd-8ec2-558c03726a03",
+                "verificationStatus": "unverified"
+            },
             {
                 "verificationStatus": "verified_by_self",
                 "addresses": [

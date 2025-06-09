@@ -1,6 +1,6 @@
 import { type RefinementCtx, z } from 'zod'
 import { PercentageRangeE } from '~/enums/percentage-range-e'
-import type { CitizenshipSchemaType, SiNameSchemaType, SiSchemaType } from '~/utils/si-schema/definitions'
+import type { CitizenshipSchemaType, SiNameSchemaType } from '~/utils/si-schema/definitions'
 
 /**
  * Validate the Type of Director Control checkboxes.
@@ -478,15 +478,15 @@ export function validateEditFormSchemaSuperRefine (schema: any, ctx: RefinementC
         })
       }
     }
-  }
 
-  // citizenship
-  if (schema.ui.newOrUpdatedFields.includes(InputFieldsE.CITIZENSHIPS)) {
-    ctx.path.push('citizenships')
-    validateCitizenshipSuperRefine(schema.citizenships, ctx)
-    const citizenshipPath = ctx.path.findIndex(v => v === 'citizenships')
-    if (citizenshipPath !== -1) {
-      ctx.path.splice(citizenshipPath, 1)
+    // citizenship
+    if (schema.ui.newOrUpdatedFields.includes(InputFieldsE.CITIZENSHIPS)) {
+      ctx.path.push('citizenships')
+      validateCitizenshipSuperRefine(schema.citizenships, ctx)
+      const citizenshipPath = ctx.path.findIndex(v => v === 'citizenships')
+      if (citizenshipPath !== -1) {
+        ctx.path.splice(citizenshipPath, 1)
+      }
     }
   }
 
