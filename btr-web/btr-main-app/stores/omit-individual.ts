@@ -48,7 +48,8 @@ export const useOmitIndividual = defineStore('bcros/omitIndividual', () => {
       fullName: siBiz.value.name,
       birthdate: siBiz.value.birthdate,
       email: siBiz.value.email,
-      businessIdentifier: siBiz.value.businessId,
+      // todo: (#28563) when UI ticket allows entering multiples, correct this
+      businessIdentifiers: [siBiz.value.businessId],
       informationToOmit: omitObscure.value.infoToOmit,
       individualAtRisk: omitObscure.value.individualsAtRisk,
       reasons: omitObscure.value.reasons,

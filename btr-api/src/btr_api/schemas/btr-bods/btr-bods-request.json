@@ -22,8 +22,13 @@
       "type": "string",
       "format": "email"
     },
-    "businessIdentifier": {
-      "type": "string"
+    "businessIdentifiers": {
+      "title": "Business identifiers",
+      "description": "List of business identifiers for which data should be omitted.",
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
     },
     "informationToOmit": {
       "type": "array",
@@ -66,6 +71,21 @@
       "type": "string",
       "format": "email"
     },
+    "completingMailingAddress": {
+      "title": "Mailing address",
+      "description": "Mailing address for individual completing this request to omit.",
+      "$ref": "https://btr.gov.bc.ca/.well_known/schemas/components.json#/definitions/Address"
+    },
+    "completingPhoneNumber": {
+      "title": "Phone number",
+      "description": "A phone number for individual completing this request to omit.",
+      "$ref": "https://btr.gov.bc.ca/.well_known/schemas/components.json#/definitions/PhoneNumber"
+    },
+    "supportingDocuments": {
+      "title": "Supporting documents",
+      "description": "Supporting Document name and location are stored here as dict (object) with key being name and value being path to download file.",
+      "type": "object"
+    },
     "status": {
       "type": "string",
       "enum": [
@@ -82,12 +102,14 @@
     "fullName",
     "birthdate",
     "email",
-    "businessIdentifier",
+    "businessIdentifiers",
     "informationToOmit",
     "individualAtRisk",
     "reasons",
     "completingParty",
     "completingName",
+    "completingMailingAddress",
+    "completingPhoneNumber",
     "completingEmail"
   ]
 }

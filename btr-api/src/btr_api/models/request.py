@@ -40,7 +40,7 @@ from datetime import date, datetime
 from sqlalchemy import DateTime
 from sqlalchemy.orm import Mapped, mapped_column
 from sqlalchemy.types import String
-from sqlalchemy.dialects.postgresql import ARRAY
+from sqlalchemy.dialects.postgresql import ARRAY, JSONB
 from sql_versioning import Versioned
 
 from btr_api.enums import InformationToOmitType
@@ -61,13 +61,16 @@ class Request(Versioned, Base):
     full_name: Mapped[str] = mapped_column(nullable=False)
     email: Mapped[str] = mapped_column(nullable=False)
     birthdate: Mapped[date] = mapped_column(nullable=False)
-    business_identifier: Mapped[str] = mapped_column(nullable=False, index=True)
+    business_identifiers: Mapped[str] = mapped_column(ARRAY(String), nullable=False, index=True)
     information_to_omit: Mapped[list[InformationToOmitType]] = mapped_column(ARRAY(String), nullable=False)
     individual_at_risk: Mapped[list[IndividualAtRisk]] = mapped_column(ARRAY(String), nullable=False)
     reasons: Mapped[str] = mapped_column(nullable=False)
+    supporting_documents: Mapped[dict] = mapped_column(JSONB, nullable=False, default={})
     completing_party: Mapped[CompletingParty] = mapped_column(nullable=False)
     completing_name: Mapped[str] = mapped_column(nullable=False)
     completing_email: Mapped[str] = mapped_column(nullable=False)
+    completing_address: Mapped[dict] = mapped_column(JSONB, nullable=False)
+    completing_phone: Mapped[dict] = mapped_column(JSONB, nullable=False)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False, default=utc_now)
     updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True),
                                                  nullable=False, default=utc_now, onupdate=utc_now)
@@ -78,13 +81,16 @@ class Request(Versioned, Base):
         self.full_name = data['fullName']
         self.email = data['email']
         self.birthdate = data['birthdate']
-        self.business_identifier = data['businessIdentifier']
+        self.business_identifiers = data['businessIdentifiers']
         self.information_to_omit = data['informationToOmit']
         self.individual_at_risk = data['individualAtRisk']
         self.reasons = data['reasons']
         self.completing_party = data['completingParty']
         self.completing_name = data['completingName']
         self.completing_email = data['completingEmail']
+        self.completing_address = data['completingMailingAddress']
+        self.completing_phone = data['completingPhoneNumber']
+        self.supporting_documents = data['supportingDocuments'] if 'supportingDocuments' in data else {}
         self.status = RequestStatus.AWAITING_REVIEW
         if 'status' in data:
             self.status = data['status']
@@ -93,40 +99,6 @@ class Request(Versioned, Base):
     def find_by_uuid(cls, request_id: uuid.UUID) -> Request | None:
         """Return the request by id."""
         return cls.query.filter_by(uuid=request_id).one_or_none()
-
-    @classmethod
-    def __setitem__(cls, key, value):
-        match key:
-            case 'id':
-                cls.id = value
-            case 'uuid':
-                cls.uuid = value
-            case 'email':
-                cls.email = value
-            case 'birthdate':
-                cls.birthdate = value
-            case 'reasons':
-                cls.reasons = value
-            case 'fullName':
-                cls.full_name = value
-            case 'businessIdentifier':
-                cls.business_identifier = value
-            case 'informationToOmit':
-                cls.information_to_omit = value
-            case 'individualAtRisk':
-                cls.individual_at_risk = value
-            case 'completingParty':
-                cls.completing_party = value
-            case 'completingEmail':
-                cls.completing_email = value
-            case 'completingName':
-                cls.completing_name = value
-            case 'createdAt':
-                cls.created_at = value
-            case 'updatedAt':
-                cls.updated_at = value
-            case 'status':
-                cls.status = value
 
 
 class RequestSerializer:
@@ -146,10 +118,13 @@ class RequestSerializer:
             'fullName': request.full_name,
             'email': request.email,
             'birthdate': request.birthdate,
-            'businessIdentifier': request.business_identifier,
+            'businessIdentifiers': request.business_identifiers,
             'informationToOmit': request.information_to_omit,
             'individualAtRisk': request.individual_at_risk,
             'reasons': request.reasons,
+            'completingMailingAddress': request.completing_address,
+            'completingPhoneNumber': request.completing_phone,
+            'supportingDocuments': request.supporting_documents,
             'completingParty': request.completing_party,
             'completingEmail': request.completing_email,
             'completingName': request.completing_name,
