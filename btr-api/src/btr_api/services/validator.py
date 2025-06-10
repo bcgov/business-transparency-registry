@@ -89,8 +89,7 @@ def validate_tr_filing_for_type(submission: dict, jwt: JwtManager) -> list[str]:
     Returns:
     list[str]: A list of errors, if any, found during validation
     """
-    skip_filing_validation = current_app.config.get('SKIP_CHANGE_AND_ANNUAL_FILING_VALIDATION', False)
-    if skip_filing_validation:
+    if current_app.config.get('SKIP_FILING_VALIDATION', False):
         return []
 
     filing_type = submission['filingType']
