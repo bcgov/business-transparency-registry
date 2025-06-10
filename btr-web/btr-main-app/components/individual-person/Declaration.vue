@@ -62,7 +62,7 @@ const setDeclaration = (declarationType: DeclarationTypeE) => {
           <div class="inline mr-2">
             <UIcon name="i-mdi-account-circle" class="w-[40px] h-[40px]" />
           </div>
-          <span>{{ $t('buttons.declaration.self') }}</span>
+          <span class="text-left">{{ $t('buttons.declaration.self') }}</span>
         </div>
       </UButton>
       <UButton
@@ -77,7 +77,7 @@ const setDeclaration = (declarationType: DeclarationTypeE) => {
           <div class="inline mr-2">
             <UIcon name="i-mdi-human-male-child" class="w-[40px] h-[40px]" />
           </div>
-          <span>{{ $t('buttons.declaration.parent') }}</span>
+          <span class="text-left">{{ $t('buttons.declaration.parent') }}</span>
         </div>
       </UButton>
       <UButton
@@ -92,7 +92,7 @@ const setDeclaration = (declarationType: DeclarationTypeE) => {
           <div class="inline mr-2">
             <UIcon name="i-mdi-scale-balance" class="w-[40px] h-[40px]" />
           </div>
-          <span>{{ $t('buttons.declaration.lawyer') }}</span>
+          <span class="text-left">{{ $t('buttons.declaration.lawyer') }}</span>
         </div>
       </UButton>
       <UButton
@@ -107,7 +107,7 @@ const setDeclaration = (declarationType: DeclarationTypeE) => {
           <div class="inline mr-2">
             <UIcon name="i-mdi-domain" class="w-[40px] h-[40px]" />
           </div>
-          <span>{{ $t('buttons.declaration.none') }}</span>
+          <span class="text-left">{{ $t('buttons.declaration.none') }}</span>
         </div>
       </UButton>
     </UButtonGroup>
