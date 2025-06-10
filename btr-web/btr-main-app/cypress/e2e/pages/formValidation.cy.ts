@@ -180,7 +180,7 @@ describe('pages -> Form Validation', () => {
 
   it(`When editing an existing SI with missing information, we should be able to add more information.
    trigger all errors: email, physical address, control type.`, () => {
-    cy.get('[data-cy=action-button]').eq(0).click()
+    cy.get('[data-cy=action-button]').eq(3).click()
     const email = 'new_email@email.com'
     const streetAddress = '123 Main St'
     const city = 'town'
