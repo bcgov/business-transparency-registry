@@ -11,6 +11,8 @@ describe('pages -> Control Table', () => {
     cy.get('[data-cy=action-button]').eq(0).click()
     cy.get('[data-cy="controlOfShares.jointlyOrInConcert.hasJointlyOrInConcert"]').uncheck()
     cy.get('[data-cy=new-si-done-btn]').click()
+    // wait 1 second for updating row
+    cy.wait(1000)
     cy.get('[data-cy=action-button]').eq(2).click()
     cy.get('[data-cy="controlOfShares.jointlyOrInConcert.hasJointlyOrInConcert"]').uncheck()
     cy.get('[data-cy=new-si-done-btn]').click()
@@ -103,7 +105,7 @@ describe('pages -> Control Table', () => {
     })
   })
 
-  it('A warning message is displayed when only one siginiciant individual has shared control', () => {
+  it('A warning message is displayed when only one significant individual has shared control', () => {
     // remove the shared control in the first SI
     cy.get('[data-cy=action-button]').eq(0).click()
     cy.get('[data-cy="controlOfShares.jointlyOrInConcert.hasJointlyOrInConcert"]').uncheck()

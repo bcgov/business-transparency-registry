@@ -141,4 +141,76 @@ describe('pages -> Form Validation', () => {
     cy.get('[data-cy="controlOfVotes.registeredOwner"]').check()
     cy.contains(i18n.errors.validation.sharesAndVotes.required).should('not.exist')
   })
+
+  it(`when the 'Unable to Obtain or Confirm Information' checkbox is checked, only name, declaration, and reason 
+    for missing information is required`, () => {
+    cy.get('[data-cy=add-new-btn]').click()
+    cy.get('input[data-cy="testFullName"]').focus().type('my name')
+    cy.get('[data-cy="declaration-button-none"]').click()
+    cy.get('[data-cy="isUnableToObtainOrConfirmInformationCheckbox"]').check()
+    cy.get('[data-cy="isUnableToObtainOrConfirmInformationTextArea"] >> textarea')
+      .type('Missing information reason')
+
+    cy.get('[data-cy=new-si-done-btn]').click()
+    cy.get('[data-cy="addIndividualPerson"]').should('not.exist')
+  })
+
+  it(`when editing an existing SI with full information, we should be able to delete required fields when 
+    Unable to Obtain or Confirm Information is checked`, () => {
+    cy.get('[data-cy=action-button]').eq(3).click()
+    cy.get('[data-cy="isUnableToObtainOrConfirmInformationCheckbox"]').check()
+    cy.get('[data-cy="isUnableToObtainOrConfirmInformationTextArea"] >> textarea')
+      .type('Missing information reason')
+
+    // delete email
+    cy.get('[data-cy="testEmail"] input').type('AA').blur()
+    cy.contains(i18nCommon.errors.validation.email.invalid).should('exist')
+    cy.get('[data-cy="testEmail"] input').type('{backspace}{backspace}').blur()
+
+    // delete street address
+    cy.get('[data-cy="address-street"]').type('AA').blur().type('{backspace}{backspace}').blur()
+
+    // select other citizenship without selecting any country
+    cy.get('[data-cy="citizenships-other-radio"]').click()
+
+    // should be able to save changes by clicking the Done button
+    cy.get('[data-cy=new-si-done-btn]').click()
+    cy.get('[data-cy="addIndividualPerson"]').should('not.exist')
+  })
+
+  it(`When editing an existing SI with missing information, we should be able to add more information.
+   trigger all errors: email, physical address, control type.`, () => {
+    cy.get('[data-cy=action-button]').eq(3).click()
+    const email = 'new_email@email.com'
+    const streetAddress = '123 Main St'
+    const city = 'town'
+    const postalCode = 'abc123'
+    const birthdate = '1990-01-01'
+
+    // add email
+    // when email is invalid, it should show an error
+    cy.get('[data-cy="testEmail"] input').type('AA').blur()
+    cy.contains(i18nCommon.errors.validation.email.invalid).should('exist')
+    cy.get('[data-cy="testEmail"] input').type(email).blur()
+
+    // add physical address
+    cy.get('[data-cy="address-street"]').type(streetAddress).blur()
+    cy.get('[data-cy="address-city"]').type(city).blur()
+    cy.get('[data-cy="address-postal-code"]').type(postalCode).blur()
+
+    // add birthdate
+    cy.get('input[name="birthDate"][data-cy="date-select"]').type(birthdate).blur()
+
+    // click done button
+    cy.get('[data-cy=new-si-done-btn]').click()
+    cy.get('[data-cy="addIndividualPerson"]').should('not.exist')
+
+    // verify the added information is displayed in the summary table
+    const updatedSI = cy.get('[data-cy="summary-table-row"]').first()
+    updatedSI.get('[data-cy=summary-table-details]').contains(email)
+    updatedSI.get('[data-cy=summary-table-details]').contains(streetAddress)
+    updatedSI.get('[data-cy=summary-table-details]').contains(city)
+    updatedSI.get('[data-cy=summary-table-details]').contains(postalCode)
+    updatedSI.get('[data-cy=summary-table-name]').contains(birthdate)
+  })
 })

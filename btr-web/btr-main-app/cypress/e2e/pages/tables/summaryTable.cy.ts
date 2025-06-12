@@ -40,28 +40,36 @@ describe('pages -> Summary Table', () => {
         for (const country of personStmnt?.nationalities || []) {
           cy.get('@nameItem').find(`.f-${country.code.toLowerCase()}`).should('exist')
         }
+
+        cy.get('@summaryRow').find('[data-cy=summary-table-details]').as('detailsItem')
+
         // address
-        const address = personStmnt?.addresses[0]
-        cy.get('@summaryRow')
-          .find('[data-cy=summary-table-details]').as('detailsItem')
-          .should('contain.text', address?.street)
-          .should('contain.text', address?.city)
-          .should('contain.text', address?.region)
-          .should('contain.text', address?.countryName)
-          .should('contain.text', address?.postalCode)
-          .should('contain.text', address?.locationDescription)
+        if (personStmnt?.addresses?.length) {
+          const address = personStmnt?.addresses[0]
+          cy.get('@detailsItem')
+            .should('contain.text', address?.street)
+            .should('contain.text', address?.city)
+            .should('contain.text', address?.region)
+            .should('contain.text', address?.countryName)
+            .should('contain.text', address?.postalCode)
+            .should('contain.text', address?.locationDescription)
+        }
         // tax number
         if (personStmnt?.hasTaxNumber) {
           cy.get('@detailsItem').should('contain.text', personStmnt?.identifiers[0].id)
         }
         // tax residency
-        if (personStmnt?.taxResidencies.length) {
+        if (personStmnt?.taxResidencies?.length) {
           cy.get('@detailsItem').should('contain.text', personStmnt?.taxResidencies[0].name)
         }
         // email
-        cy.get('@detailsItem').should('contain.text', personStmnt?.email)
+        if (personStmnt?.email) {
+          cy.get('@detailsItem').should('contain.text', personStmnt?.email)
+        }
         // phone
-        cy.get('@detailsItem').should('contain.text', personStmnt?.phoneNumber.number)
+        if (personStmnt?.phoneNumber?.number) {
+          cy.get('@detailsItem').should('contain.text', personStmnt?.phoneNumber?.number)
+        }
         // interests / dates
         cy.get('@summaryRow')
           .find('[data-cy=summary-table-controls]').as('controlItem')
@@ -69,6 +77,7 @@ describe('pages -> Summary Table', () => {
         cy.get('@summaryRow')
           .find('[data-cy=summary-table-dates]').as('datesItem')
           .should('exist')
+
         for (const interest of ownrStmnt.interests) {
           // control
           switch (interest.details) {
@@ -252,18 +261,18 @@ describe('pages -> Summary Table', () => {
     cy.get('[data-cy="individualsSummaryTable"]').as('summaryTable')
       .find('[data-cy="summary-table-row"]').as('summaryRow')
       .should('exist')
-      .should('have.length', 3)
+      .should('have.length', 4)
 
     cy.addTestIndividuals(false)
     // should trigger 'updating' on all rows for 1 second
     cy.get('@summaryTable').find('[data-cy="summary-table-row-updating"]')
       .should('exist')
-      .should('have.length', 4)
+      .should('have.length', 5)
       .as('rowsUpdating')
     cy.wait(1000)
     cy.get('@rowsUpdating').should('not.exist')
 
-    cy.get('@summaryRow').should('have.length', 4)
+    cy.get('@summaryRow').should('have.length', 5)
 
     cy.fixture('individuals').then((testData) => {
       cy.get('@summaryRow').first().find('[data-cy=summary-table-name]').as('nameItem')
@@ -307,12 +316,12 @@ describe('pages -> Summary Table', () => {
       // should trigger 'updating' row for 1 second
       cy.get('@summaryTable').find('[data-cy="summary-table-row-updating"]')
         .should('exist')
-        .should('have.length', 3)
+        .should('have.length', 4)
         .as('rowsUpdating')
       cy.wait(1000)
       cy.get('@rowsUpdating').should('not.exist')
       // verify removal
-      cy.get('@summaryRow').should('have.length', 3)
+      cy.get('@summaryRow').should('have.length', 4)
       cy.get('@nameItem').should('not.contain.text', testData.profile1.fullName)
       cy.get('@nameItem').find('[data-cy="name-badge"]').should('not.exist')
       cy.get('@actionButton').should('contain.text', 'Update')

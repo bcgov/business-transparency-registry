@@ -51,6 +51,7 @@ const selectOption = (index: number) => {
   if (selected.value === index) {
     selected.value = -1
     model.value = 'noSelection'
+    emit('change')
     return
   }
   selected.value = index

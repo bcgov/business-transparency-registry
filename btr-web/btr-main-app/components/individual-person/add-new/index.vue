@@ -517,15 +517,15 @@
 </template>
 
 <script setup lang="ts">
-import { type RefinementCtx, z } from 'zod'
+import { z } from 'zod'
 import type { FormError } from '#ui/types'
 import type { BtrCountryI } from '../../../../btr-common-components/interfaces/btr-address-i'
-import { validateEmailRfc6532Regex } from '../../../../btr-common-components/utils'
 import {
   validateControlSelectionForSharesAndVotes,
   validateNameSuperRefineAddForm,
   validateTaxNumberInfo,
-  validateCitizenshipSuperRefine
+  validateCitizenshipSuperRefine,
+  validateEditFormSchemaSuperRefine
 } from '~/utils/validation'
 import {
   AddressSchema,
@@ -592,14 +592,14 @@ const nameChangeChangedEvent = () => {
 
 const emailFieldUuid = getRandomUuid()
 const clearEmailFieldOnEdit = () => {
-  if (isEditing) {
+  if (isEditing.value) {
     setFieldOriginalValue(emailFieldUuid, inputFormSi.email)
     inputFormSi.email = ''
   }
 }
 const revertUnchangedEmailField = () => {
   const originalValue = getFieldOriginalValue(emailFieldUuid)
-  if (isEditing && !hasFieldChanged(inputFormSi, InputFieldsE.EMAIL) && originalValue) {
+  if (isEditing.value && !hasFieldChanged(inputFormSi, InputFieldsE.EMAIL) && originalValue) {
     inputFormSi.email = originalValue
   }
 }
@@ -641,19 +641,26 @@ const onNameFocus = () => {
   }
 }
 
-// extend existing schema with
+// ============== extend existing schemas ==============
+// add custom validation rules to each field; create three versions of schemas (add-new, edit, missing-info)
+
 const SiControlOfExtended = SiControlOfSchema.superRefine(validateControlSelectionForSharesAndVotes)
 const SiNameExtended = SiNameSchema.superRefine(validateNameSuperRefineAddForm)
+const SiControlOfDirectorsExtended = SiControlOfDirectorsSchema.superRefine(validateControlOfDirectors)
 
-const AddressSchemaExtended = AddressSchema.extend({
+const AddressSchemaAddNew = AddressSchema.extend({
   country: CountrySchema
     .optional()
     .refine((val: BtrCountryI | undefined) => {
       return val && val.name !== ''
-    }, t('errors.validation.address.country'))
+    }, t('errors.validation.address.country')),
+  line1: z.string().min(1),
+  city: z.string().min(1),
+  region: z.string().min(1),
+  postalCode: z.string().min(1)
 })
 
-const AddressSchemaExtendedEdit = AddressSchemaExtended.extend({
+const AddressSchemaEdit = AddressSchemaAddNew.extend({
   line1: z.string().optional(),
   postalCode: z.string().optional(),
   locationDescription: z.string().optional()
@@ -661,16 +668,16 @@ const AddressSchemaExtendedEdit = AddressSchemaExtended.extend({
 
 z.setErrorMap(CustomSiSchemaErrorMap)
 
-const MailingAddressSchema = z.discriminatedUnion(
+const MailingAddressSchemaAddNew = z.discriminatedUnion(
   'isDifferent',
   [
     z.object({
       isDifferent: z.literal(false),
-      address: AddressSchemaExtended.optional()
+      address: AddressSchemaAddNew.optional()
     }),
     z.object({
       isDifferent: z.literal(true),
-      address: AddressSchemaExtended
+      address: AddressSchemaAddNew
     })
   ]
 )
@@ -680,30 +687,73 @@ const MailingAddressSchemaEdit = z.discriminatedUnion(
   [
     z.object({
       isDifferent: z.literal(false),
-      address: AddressSchemaExtendedEdit.optional()
+      address: AddressSchemaEdit.optional()
     }),
     z.object({
       isDifferent: z.literal(true),
-      address: AddressSchemaExtendedEdit
+      address: AddressSchemaEdit
     })
   ]
 )
 
-const SiSchemaExtended = SiSchema.extend({
+// used in the add-new form; all fields are required with full custom validation
+const SiSchemaAddNew = SiSchema.extend({
   couldNotProvideMissingInfo: z.literal(false),
   name: SiNameExtended,
   isControlSelected: z.boolean().refine(val => val, t('errors.validation.control')),
   controlOfShares: SiControlOfExtended,
   controlOfVotes: SiControlOfExtended,
-  controlOfDirectors:
-    SiControlOfDirectorsSchema.refine(validateControlOfDirectors, getMissingControlOfDirectorsError()),
+  controlOfDirectors: SiControlOfDirectorsExtended,
   email: getEmailValidator(),
-  address: AddressSchemaExtended,
+  phoneNumber: getPhoneNumberValidator(),
+  address: AddressSchemaAddNew,
   citizenships: CitizenshipSchema.superRefine(validateCitizenshipSuperRefine),
-  mailingAddress: MailingAddressSchema,
+  mailingAddress: MailingAddressSchemaAddNew,
   tax: TaxSchema.superRefine(validateTaxNumberInfo),
   isTaxResident: z.boolean()
 })
+
+// bare minimum fields required to submit the form when missing-info checkbox is selected
+const SiSchemaMissingInfo = SiSchema.extend({
+  couldNotProvideMissingInfo: z.literal(true),
+  missingInfoReason: z.string().transform(s => s.trim()).pipe(z.string().min(1)),
+  name: SiNameExtended,
+  effectiveDates: z.array(z.object({
+    startDate: z.string().optional(),
+    endDate: z.string().optional()
+  })).optional(),
+  birthDate: z.string().optional(),
+  ui: z.object({
+    newOrUpdatedFields: z.array(z.string())
+  })
+})
+
+let formSchema: any = z.discriminatedUnion('couldNotProvideMissingInfo', [
+  SiSchemaMissingInfo,
+  SiSchemaAddNew
+])
+
+if (props.editMode) {
+  // used in the edit form; some fields are optional to support redacted data
+  const SiSchemaEdit = SiSchemaAddNew.extend({
+    couldNotProvideMissingInfo: z.literal(false),
+    birthDate: z.string().optional(),
+    name: SiNameExtended,
+    address: AddressSchemaEdit,
+    mailingAddress: MailingAddressSchemaEdit,
+    tax: TaxSchema,
+    email: z.string().optional()
+  })
+
+  formSchema = z.discriminatedUnion('couldNotProvideMissingInfo', [
+    SiSchemaEdit,
+    SiSchemaMissingInfo
+  ]).superRefine(validateEditFormSchemaSuperRefine)
+}
+
+// ============== extend schema end =============
+
+const addIndividualForm = ref()
 
 const isControlSelected = computed(() => {
   const isSelected = (control: any) => {
@@ -723,148 +773,6 @@ const isControlSelected = computed(() => {
     isSelected(inputFormSi.controlOfVotes) ||
     isSelected(inputFormSi.controlOfDirectors)
 })
-
-watch(isControlSelected, (newValue) => {
-  inputFormSi.isControlSelected = newValue
-  if (!newValue) {
-    addIndividualForm.value?.setErrors([{
-      message: t('errors.validation.control'),
-      path: 'isControlSelected'
-    }], 'isControlSelected')
-  } else {
-    addIndividualForm.value?.clear('isControlSelected')
-  }
-})
-
-let formSchema: any = z.discriminatedUnion('couldNotProvideMissingInfo', [
-  z.object({
-    couldNotProvideMissingInfo: z.literal(true),
-    missingInfoReason: z.string().transform(s => s.trim()).pipe(z.string().min(1)),
-    name: SiNameExtended,
-    ui: z.object({
-      newOrUpdatedFields: z.array(z.string())
-    })
-
-  }),
-  SiSchemaExtended
-])
-
-if (props.editMode) {
-  const SiSchemaExtendedEdit = SiSchemaExtended.extend({
-    birthDate: z.string().optional(),
-    name: SiNameExtended,
-    address: AddressSchemaExtendedEdit,
-    mailingAddress: MailingAddressSchemaEdit,
-    tax: TaxSchema,
-    email: z.string().optional()
-  })
-
-  formSchema = z.discriminatedUnion('couldNotProvideMissingInfo', [
-    z.object({
-      couldNotProvideMissingInfo: z.literal(true),
-      missingInfoReason: z.string().transform(s => s.trim()).pipe(z.string().min(1)),
-      name: SiNameExtended,
-      ui: z.object({
-        newOrUpdatedFields: z.array(z.string())
-      })
-    }),
-    SiSchemaExtendedEdit
-  ]).superRefine((schema: SiSchemaType, ctx: RefinementCtx): never => {
-    // this superRefine is to work out through the redacted data fields and validate them only on change
-    // birthdate check
-    if (schema.ui.newOrUpdatedFields.includes(InputFieldsE.BIRTH_DATE)) {
-      if (!schema.birthDate || schema.birthDate.trim() === '') {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          path: ['birthDate'],
-          message: t('errors.validation.birthDate.required')
-        })
-      }
-    }
-    // phone check // its already optional nothing to do here
-
-    // street address
-    if (schema.ui.newOrUpdatedFields.includes(InputFieldsE.ADDRESS_LINE1)) {
-      if (!schema.address || !schema.address.line1 || schema.address.line1.trim() === '') {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          path: ['address', 'line1'],
-          message: t('errors.validation.address.line1')
-        })
-      }
-    }
-    // postal code
-    if (schema.ui.newOrUpdatedFields.includes(InputFieldsE.ADDRESS_POSTAL_CODE)) {
-      if (!schema.address || !schema.address.postalCode || schema.address.postalCode.trim() === '') {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          path: ['address', 'postalCode'],
-          message: t('errors.validation.address.postalCode')
-        })
-      }
-    }
-    // location description // its already optional nothing to do here
-    if (schema.ui.newOrUpdatedFields.includes(InputFieldsE.MAILING_ADDRESS_LINE1)) {
-      if (!schema.mailingAddress.address ||
-        !schema.mailingAddress.address.line1 ||
-        schema.mailingAddress.address.line1.trim() === ''
-      ) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          path: ['mailingAddress', 'address', 'line1'],
-          message: t('errors.validation.address.line1')
-        })
-      }
-    }
-    // postal code
-    if (schema.ui.newOrUpdatedFields.includes(InputFieldsE.MAILING_ADDRESS_POSTAL_CODE)) {
-      if (!schema.mailingAddress.address ||
-        !schema.mailingAddress.address.postalCode ||
-        schema.mailingAddress.address.postalCode.trim() === ''
-      ) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          path: ['mailingAddress', 'address', 'postalCode'],
-          message: t('errors.validation.address.postalCode')
-        })
-      }
-    }
-
-    // SIN
-    if (schema.ui.newOrUpdatedFields.includes(InputFieldsE.TAX_NUMBER)) {
-      // add tax to path, so that subsequent tax validator creates erroro messages with path
-      ctx.path.push('tax')
-      validateTaxNumberInfo(schema.tax, ctx)
-      // remove tax from path so it does not add it in next ctx errors
-      const taxPath = ctx.path.findIndex(v => v === 'tax')
-      if (taxPath !== -1) {
-        ctx.path.splice(taxPath, 1)
-      }
-    }
-
-    // email
-    if (schema.ui.newOrUpdatedFields.includes(InputFieldsE.EMAIL)) {
-      if (!schema.email || schema.email.trim() === '') {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          path: ['email'],
-          message: t('errors.validation.email.empty')
-        })
-      }
-      if (!validateEmailRfc6532Regex(schema.email)) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          path: ['email'],
-          message: t('errors.validation.email.invalid')
-        })
-      }
-    }
-    return z.NEVER
-  })
-}
-// extend schema end
-
-const addIndividualForm = ref()
 
 const formChange = async () => {
   await addBtrPayFees()
@@ -1029,6 +937,19 @@ watch(inputFormSi.controlOfDirectors, (control) => {
   }
   if (!control.actingJointly) {
     inputFormSi.directorsActingJointly = []
+  }
+})
+
+watch(isControlSelected, (newValue) => {
+  inputFormSi.isControlSelected = newValue
+
+  if (!newValue && !inputFormSi.couldNotProvideMissingInfo) {
+    addIndividualForm.value?.setErrors([{
+      message: t('errors.validation.control') + 'BBB',
+      path: 'isControlSelected'
+    }], 'isControlSelected')
+  } else {
+    addIndividualForm.value?.clear('isControlSelected')
   }
 })
 </script>
