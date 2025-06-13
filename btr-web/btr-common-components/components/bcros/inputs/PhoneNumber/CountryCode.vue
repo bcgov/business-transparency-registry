@@ -1,5 +1,6 @@
 <template>
   <UInputMenu
+    ref="inputMenu"
     v-model="selectedCountry"
     v-model:query="query"
     :options="countryListOptions"
@@ -42,7 +43,6 @@
       <div
         class="w-full flex items-center gap-1"
         data-cy="countryCodeOption"
-        @click.prevent="onSelect(optionItem)"
       >
         <BcrosCountryFlag
           :tooltip-text="optionItem.countryNameLocal"
@@ -65,6 +65,7 @@ const countryCode2letterIso = defineModel<string | undefined>('countryCode2lette
 
 const selectedCountry = ref<CountryListItemI | undefined>(undefined)
 const query = ref('')
+const inputMenu = ref()
 
 const _countryListOptions =
   countryList.customList('countryCode', '{countryCallingCode},{countryNameEn},{countryNameLocal}')
@@ -108,16 +109,6 @@ const onBlur = () => {
   }
 }
 
-const onSelect = (option: CountryListItemI) => {
-  if (selectedCountry.value !== undefined &&
-    selectedCountry.value.countryCode2letterIso === option.countryCode2letterIso) {
-    selectedCountry.value = undefined
-  } else {
-    selectedCountry.value = option
-    query.value = ''
-  }
-}
-
 const selectCountry = (countryCode2letterIso: string) => {
   selectedCountry.value = countryListOptions.find(item => item.countryCode2letterIso === countryCode2letterIso)
 }
@@ -129,6 +120,20 @@ if (countryCode2letterIso.value !== undefined) {
     countryCallingCode: `+${countryCallingCode.value}`
   }
 }
+
+onMounted(() => {
+  if (inputMenu.value) {
+    inputMenu.value.onUpdate = (option: any) => {
+      if (selectedCountry.value !== undefined &&
+        selectedCountry.value.countryCode2letterIso === option.countryCode2letterIso) {
+        selectedCountry.value = undefined
+      } else {
+        selectedCountry.value = option
+        query.value = ''
+      }
+    }
+  }
+})
 
 watch(
   selectedCountry,
