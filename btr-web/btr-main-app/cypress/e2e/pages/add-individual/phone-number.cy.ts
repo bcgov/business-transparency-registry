@@ -12,8 +12,7 @@ describe('pages -> Add individual', () => {
     cy.get('[data-cy="phoneNumber.extensionCode"]').should('exist')
   })
 
-  // todo: when resolving #28518 make sure this tests is passing
-  it.skip('verify country code combobox behaviour', () => {
+  it('verify country code combobox behaviour', () => {
     // Case 1: phone country code is prepopulated when selecting country address
     cy.get('[data-cy="address-country"]')
       .click()
@@ -49,6 +48,8 @@ describe('pages -> Add individual', () => {
       .get('[data-cy="phoneNumberInput"]')
       .find('input+span .flag.f-ca')
       .should('exist')
+      .get('[data-cy="expandCountryCodeDropdown"]')
+      .click()
       .get('[data-cy="countryCodeOption"]').eq(3) // select the US
       .click()
       .get('[data-cy="phoneNumberInput"]')
@@ -56,7 +57,9 @@ describe('pages -> Add individual', () => {
       .should('exist')
 
     // Case 4: unselect a country by clicking on the option again
-    cy.get('[data-cy="countryCodeOption"]').eq(3)
+    cy.get('[data-cy="expandCountryCodeDropdown"]')
+      .click()
+      .get('[data-cy="countryCodeOption"]').eq(3)
       .click()
       .get('[data-cy="phoneNumber.countryCode"]')
       .should('have.value', '')
@@ -65,7 +68,9 @@ describe('pages -> Add individual', () => {
       .should('not.exist')
 
     // Case 5: delete the country by clicking the delete button
-    cy.get('[data-cy="countryCodeOption"]').eq(0) // select Canada
+    cy.get('[data-cy="expandCountryCodeDropdown"]')
+      .click()
+      .get('[data-cy="countryCodeOption"]').eq(0) // select Canada
       .click()
       .get('[data-cy="clearCountryCode"]') // click the 'X' button
       .click()
