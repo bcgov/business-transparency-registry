@@ -2,6 +2,7 @@
   "name": "btr-web",
   "version": "0.1.0",
   "description": "Beneficial Ownership Registry UI - Mono repo workspace",
+  "packageManager": "pnpm@11.9.0",
   "engines": {
     "node": ">=24"
   },

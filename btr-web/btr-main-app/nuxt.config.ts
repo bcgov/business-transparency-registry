@@ -38,5 +38,26 @@ export default defineNuxtConfig({
       registryDashboardURL: process.env.VUE_APP_REGISTRY_URL || '',
       businessWebURL: process.env.VUE_APP_DASHBOARD_URL || ''
     }
+  },
+  vite: {
+    css: {
+      preprocessorOptions: {
+        scss: {
+          // tailwindcss has no .scss files; CSS processing done by PostCSS plugin
+          // Vite 6 uses Sass modern API requiring canonicalize+load (not legacy importer function)
+          importers: [{
+            canonicalize (url: string) {
+              if (url.startsWith('tailwindcss')) {
+                return new URL('tailwindcss-stub:' + url)
+              }
+              return null
+            },
+            load (_canonicalUrl: URL) {
+              return { contents: '', syntax: 'scss' as const }
+            }
+          }]
+        }
+      }
+    }
   }
 })

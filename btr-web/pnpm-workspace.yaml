@@ -3,3 +3,9 @@ packages:
   - 'btr-layouts/**'
   - 'btr-main-app/**'
   - 'btr-common-components/**'
+allowBuilds:
+  '@parcel/watcher': true
+  cypress: true
+  esbuild: true
+  unrs-resolver: true
+  vue-demi: true
