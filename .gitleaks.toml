@@ -1,0 +1,8 @@
+title = "business-transparency-registry gitleaks config"
+
+# Shared rules (gitleaks defaults + password rules) come from bcgov/bcregistry-sre,
+# downloaded by the shared-gitleaks-rules hook - see .pre-commit-config.yaml and
+# https://github.com/bcgov/bcregistry-sre/tree/main/git-hooks
+# Only this repo's own false positives go below.
+[extend]
+path = ".git/info/bcregistry-sre/gitleaks-base.toml"
